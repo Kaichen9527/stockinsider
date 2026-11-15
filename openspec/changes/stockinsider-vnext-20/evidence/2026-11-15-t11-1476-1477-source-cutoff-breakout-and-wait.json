@@ -1,0 +1,633 @@
+{
+  "schemaVersion": 1,
+  "tasks": [
+    "T06",
+    "T08",
+    "T11"
+  ],
+  "scope": "read-only historical public attribution and technical comparisons",
+  "observedOn": "2026-11-15",
+  "source": {
+    "key": "wealtholic",
+    "url": "https://www.cmoney.tw/notes/note-detail.aspx?nid=1292773",
+    "authorId": 3422,
+    "articleId": 1292773,
+    "bodyAvailability": "partial",
+    "sectionSession": "2026-11-09",
+    "publishedDisplay": "2026-11-14 04:36",
+    "updatedDisplay": "2026-11-14 04:36",
+    "timezoneVerified": false,
+    "earliestTaipeiIfCurrentCivilTimezone": "2026-11-13T22:36:00+08:00",
+    "historicalTaipeiCutoff": "2026-11-13T21:30:00+08:00",
+    "sourceMeetsHistoricalCutoff": false,
+    "independentSources": 1
+  },
+  "formulas": {
+    "meanTurnoverDaysInclusive": 20,
+    "baseDaysExclusive": 25,
+    "volumeBaselineDaysExclusive": 50,
+    "volumeRatioMinimum": 1.4,
+    "ma20WaitStrictlyAbovePct": 15,
+    "relativeStrengthUnit": "stock return minus TWSE price-index return in percentage points"
+  },
+  "matchedSessions": 70,
+  "securityPricesRepeatHashesMatched": true,
+  "market": {
+    "prices": {
+      "1476": {
+        "priceRows": 70,
+        "firstDate": "2026-08-03",
+        "lastDate": "2026-11-13",
+        "sessions": [
+          {
+            "session": "2026-11-09",
+            "close": "356.00",
+            "shares": 4358587,
+            "previous25High": "355.00",
+            "previous25DepthPct": "23.802817",
+            "previous50MeanShares": "1562681.200000",
+            "meanTurnover20": "695961284.850000",
+            "qualifiesLiquidity": true,
+            "volumeRatio": "2.789172",
+            "ma20": "323.325000",
+            "premiumToMa20Pct": "10.105931",
+            "excessAbovePrevious25HighPct": "0.281690",
+            "breakout": true,
+            "overheatedMa20": false,
+            "prior25Dates": [
+              "2026-09-30",
+              "2026-11-06"
+            ],
+            "prior50Dates": [
+              "2026-08-24",
+              "2026-11-06"
+            ]
+          },
+          {
+            "session": "2026-11-10",
+            "close": "348.50",
+            "shares": 3164385,
+            "previous25High": "360.00",
+            "previous25DepthPct": "24.027778",
+            "previous50MeanShares": "1632525.840000",
+            "meanTurnover20": "687140049.400000",
+            "qualifiesLiquidity": true,
+            "volumeRatio": "1.938337",
+            "ma20": "325.250000",
+            "premiumToMa20Pct": "7.148347",
+            "excessAbovePrevious25HighPct": "-3.194444",
+            "breakout": false,
+            "overheatedMa20": false,
+            "prior25Dates": [
+              "2026-10-01",
+              "2026-11-09"
+            ],
+            "prior50Dates": [
+              "2026-08-25",
+              "2026-11-09"
+            ]
+          },
+          {
+            "session": "2026-11-11",
+            "close": "352.50",
+            "shares": 1824113,
+            "previous25High": "360.00",
+            "previous25DepthPct": "23.750000",
+            "previous50MeanShares": "1678949.700000",
+            "meanTurnover20": "683942114.650000",
+            "qualifiesLiquidity": true,
+            "volumeRatio": "1.086461",
+            "ma20": "327.275000",
+            "premiumToMa20Pct": "7.707585",
+            "excessAbovePrevious25HighPct": "-2.083333",
+            "breakout": false,
+            "overheatedMa20": false,
+            "prior25Dates": [
+              "2026-10-02",
+              "2026-11-10"
+            ],
+            "prior50Dates": [
+              "2026-08-26",
+              "2026-11-10"
+            ]
+          },
+          {
+            "session": "2026-11-12",
+            "close": "369.00",
+            "shares": 3785718,
+            "previous25High": "360.00",
+            "previous25DepthPct": "23.750000",
+            "previous50MeanShares": "1703595.820000",
+            "meanTurnover20": "730347026.200000",
+            "qualifiesLiquidity": true,
+            "volumeRatio": "2.222193",
+            "ma20": "330.150000",
+            "premiumToMa20Pct": "11.767378",
+            "excessAbovePrevious25HighPct": "2.500000",
+            "breakout": true,
+            "overheatedMa20": false,
+            "prior25Dates": [
+              "2026-10-05",
+              "2026-11-11"
+            ],
+            "prior50Dates": [
+              "2026-08-27",
+              "2026-11-11"
+            ]
+          },
+          {
+            "session": "2026-11-13",
+            "close": "386.50",
+            "shares": 4050953,
+            "previous25High": "372.00",
+            "previous25DepthPct": "26.209677",
+            "previous50MeanShares": "1761779.660000",
+            "meanTurnover20": "790141521.450000",
+            "qualifiesLiquidity": true,
+            "volumeRatio": "2.299353",
+            "ma20": "333.775000",
+            "premiumToMa20Pct": "15.796570",
+            "excessAbovePrevious25HighPct": "3.897849",
+            "breakout": true,
+            "overheatedMa20": true,
+            "prior25Dates": [
+              "2026-10-06",
+              "2026-11-12"
+            ],
+            "prior50Dates": [
+              "2026-08-28",
+              "2026-11-12"
+            ]
+          }
+        ]
+      },
+      "1477": {
+        "priceRows": 70,
+        "firstDate": "2026-08-03",
+        "lastDate": "2026-11-13",
+        "sessions": [
+          {
+            "session": "2026-11-09",
+            "close": "216.00",
+            "shares": 1570873,
+            "previous25High": "216.50",
+            "previous25DepthPct": "12.471132",
+            "previous50MeanShares": "1365941.380000",
+            "meanTurnover20": "305004465.050000",
+            "qualifiesLiquidity": true,
+            "volumeRatio": "1.150030",
+            "ma20": "207.900000",
+            "premiumToMa20Pct": "3.896104",
+            "excessAbovePrevious25HighPct": "-0.230947",
+            "breakout": false,
+            "overheatedMa20": false,
+            "prior25Dates": [
+              "2026-09-30",
+              "2026-11-06"
+            ],
+            "prior50Dates": [
+              "2026-08-24",
+              "2026-11-06"
+            ]
+          },
+          {
+            "session": "2026-11-10",
+            "close": "215.50",
+            "shares": 1975369,
+            "previous25High": "216.50",
+            "previous25DepthPct": "12.471132",
+            "previous50MeanShares": "1372574.100000",
+            "meanTurnover20": "310697244.200000",
+            "qualifiesLiquidity": true,
+            "volumeRatio": "1.439171",
+            "ma20": "208.475000",
+            "premiumToMa20Pct": "3.369709",
+            "excessAbovePrevious25HighPct": "-0.461894",
+            "breakout": false,
+            "overheatedMa20": false,
+            "prior25Dates": [
+              "2026-10-01",
+              "2026-11-09"
+            ],
+            "prior50Dates": [
+              "2026-08-25",
+              "2026-11-09"
+            ]
+          },
+          {
+            "session": "2026-11-11",
+            "close": "213.00",
+            "shares": 1019807,
+            "previous25High": "218.50",
+            "previous25DepthPct": "13.272311",
+            "previous50MeanShares": "1381091.280000",
+            "meanTurnover20": "306620277.450000",
+            "qualifiesLiquidity": true,
+            "volumeRatio": "0.738407",
+            "ma20": "208.850000",
+            "premiumToMa20Pct": "1.987072",
+            "excessAbovePrevious25HighPct": "-2.517162",
+            "breakout": false,
+            "overheatedMa20": false,
+            "prior25Dates": [
+              "2026-10-02",
+              "2026-11-10"
+            ],
+            "prior50Dates": [
+              "2026-08-26",
+              "2026-11-10"
+            ]
+          },
+          {
+            "session": "2026-11-12",
+            "close": "215.50",
+            "shares": 1753282,
+            "previous25High": "218.50",
+            "previous25DepthPct": "12.585812",
+            "previous50MeanShares": "1362606.120000",
+            "meanTurnover20": "311660331.200000",
+            "qualifiesLiquidity": true,
+            "volumeRatio": "1.286712",
+            "ma20": "209.325000",
+            "premiumToMa20Pct": "2.949958",
+            "excessAbovePrevious25HighPct": "-1.372998",
+            "breakout": false,
+            "overheatedMa20": false,
+            "prior25Dates": [
+              "2026-10-05",
+              "2026-11-11"
+            ],
+            "prior50Dates": [
+              "2026-08-27",
+              "2026-11-11"
+            ]
+          },
+          {
+            "session": "2026-11-13",
+            "close": "225.50",
+            "shares": 4474382,
+            "previous25High": "218.50",
+            "previous25DepthPct": "9.610984",
+            "previous50MeanShares": "1379514.440000",
+            "meanTurnover20": "344794089.350000",
+            "qualifiesLiquidity": true,
+            "volumeRatio": "3.243447",
+            "ma20": "210.300000",
+            "premiumToMa20Pct": "7.227770",
+            "excessAbovePrevious25HighPct": "3.203661",
+            "breakout": true,
+            "overheatedMa20": false,
+            "prior25Dates": [
+              "2026-10-06",
+              "2026-11-12"
+            ],
+            "prior50Dates": [
+              "2026-08-28",
+              "2026-11-12"
+            ]
+          }
+        ]
+      }
+    },
+    "receipts": [
+      {
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20260801&stockNo=1476&response=json",
+        "observedAt": "2026-11-15T07:22:43.592357+00:00",
+        "httpStatus": 200,
+        "sha256": "3db3a56dfaeba8dfe74b4037fe45895ffaad894bfd0bb25e4c63f2d84cf543ae",
+        "size": 2850,
+        "status": "OK",
+        "title": "115年08月 1476 儒鴻             各日成交資訊",
+        "fields": [
+          "日期",
+          "成交股數",
+          "成交金額",
+          "開盤價",
+          "最高價",
+          "最低價",
+          "收盤價",
+          "漲跌價差",
+          "成交筆數",
+          "註記"
+        ],
+        "rows": 21
+      },
+      {
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20260901&stockNo=1476&response=json",
+        "observedAt": "2026-11-15T07:22:43.718678+00:00",
+        "httpStatus": 200,
+        "sha256": "3868675b4eb317e16965cdc4ae98fde3da3289241cc97cca1a4bdc581b27d92a",
+        "size": 2753,
+        "status": "OK",
+        "title": "115年09月 1476 儒鴻             各日成交資訊",
+        "fields": [
+          "日期",
+          "成交股數",
+          "成交金額",
+          "開盤價",
+          "最高價",
+          "最低價",
+          "收盤價",
+          "漲跌價差",
+          "成交筆數",
+          "註記"
+        ],
+        "rows": 20
+      },
+      {
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20261001&stockNo=1476&response=json",
+        "observedAt": "2026-11-15T07:22:44.088715+00:00",
+        "httpStatus": 200,
+        "sha256": "83899259cc5f294056a0bdb5048967ec468227635540c9b89f8bc87ca5563755",
+        "size": 2659,
+        "status": "OK",
+        "title": "115年10月 1476 儒鴻             各日成交資訊",
+        "fields": [
+          "日期",
+          "成交股數",
+          "成交金額",
+          "開盤價",
+          "最高價",
+          "最低價",
+          "收盤價",
+          "漲跌價差",
+          "成交筆數",
+          "註記"
+        ],
+        "rows": 19
+      },
+      {
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20261101&stockNo=1476&response=json",
+        "observedAt": "2026-11-15T07:22:44.389733+00:00",
+        "httpStatus": 200,
+        "sha256": "e1f88370815f579f797f94b4c3cbfbd2b0b30628a097af8e01330418ce77d17f",
+        "size": 1824,
+        "status": "OK",
+        "title": "115年11月 1476 儒鴻             各日成交資訊",
+        "fields": [
+          "日期",
+          "成交股數",
+          "成交金額",
+          "開盤價",
+          "最高價",
+          "最低價",
+          "收盤價",
+          "漲跌價差",
+          "成交筆數",
+          "註記"
+        ],
+        "rows": 10
+      },
+      {
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20260801&stockNo=1477&response=json",
+        "observedAt": "2026-11-15T07:22:44.567743+00:00",
+        "httpStatus": 200,
+        "sha256": "4d8e91db34a501efd9a0994d39e88d3fe9ec256255d360369171b8713ce0650e",
+        "size": 2858,
+        "status": "OK",
+        "title": "115年08月 1477 聚陽             各日成交資訊",
+        "fields": [
+          "日期",
+          "成交股數",
+          "成交金額",
+          "開盤價",
+          "最高價",
+          "最低價",
+          "收盤價",
+          "漲跌價差",
+          "成交筆數",
+          "註記"
+        ],
+        "rows": 21
+      },
+      {
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20260901&stockNo=1477&response=json",
+        "observedAt": "2026-11-15T07:22:44.763377+00:00",
+        "httpStatus": 200,
+        "sha256": "f9e0e1fa15e18c52b6ba22f5613e51dcefb3cd6ffcc4833b4de343e1ae3a11dc",
+        "size": 2738,
+        "status": "OK",
+        "title": "115年09月 1477 聚陽             各日成交資訊",
+        "fields": [
+          "日期",
+          "成交股數",
+          "成交金額",
+          "開盤價",
+          "最高價",
+          "最低價",
+          "收盤價",
+          "漲跌價差",
+          "成交筆數",
+          "註記"
+        ],
+        "rows": 20
+      },
+      {
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20261001&stockNo=1477&response=json",
+        "observedAt": "2026-11-15T07:22:45.124381+00:00",
+        "httpStatus": 200,
+        "sha256": "5640fce46d9e5b456936f57ae24279be4f6472ed6bd477ab01920daa7e9b4d58",
+        "size": 2642,
+        "status": "OK",
+        "title": "115年10月 1477 聚陽             各日成交資訊",
+        "fields": [
+          "日期",
+          "成交股數",
+          "成交金額",
+          "開盤價",
+          "最高價",
+          "最低價",
+          "收盤價",
+          "漲跌價差",
+          "成交筆數",
+          "註記"
+        ],
+        "rows": 19
+      },
+      {
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20261101&stockNo=1477&response=json",
+        "observedAt": "2026-11-15T07:22:45.107757+00:00",
+        "httpStatus": 200,
+        "sha256": "c2f22fdf993a77efe40c531cbc44b18426f3ebe9d0de48e5ef5d1fe4a516e26d",
+        "size": 1813,
+        "status": "OK",
+        "title": "115年11月 1477 聚陽             各日成交資訊",
+        "fields": [
+          "日期",
+          "成交股數",
+          "成交金額",
+          "開盤價",
+          "最高價",
+          "最低價",
+          "收盤價",
+          "漲跌價差",
+          "成交筆數",
+          "註記"
+        ],
+        "rows": 10
+      }
+    ],
+    "actions": {
+      "url": "https://www.twse.com.tw/rwd/zh/exRight/TWT49U?startDate=20260801&endDate=20261113&response=json",
+      "observedAt": "2026-11-15T07:22:49.501393+00:00",
+      "httpStatus": 200,
+      "sha256": "55244ab1a96d18f498c2eac202cea58423e801c218486adfcd0ff210871549f2",
+      "size": 74742,
+      "status": "OK",
+      "title": "115年08月01日 至 115年11月13日 除權除息計算結果表",
+      "fields": [
+        "資料日期",
+        "股票代號",
+        "股票名稱",
+        "除權息前收盤價",
+        "除權息參考價",
+        "權值+息值",
+        "權/息",
+        "漲停價格",
+        "跌停價格",
+        "開盤競價基準",
+        "減除股利參考價",
+        "詳細資料",
+        "最近一次申報資料 季別/日期",
+        "最近一次申報每股 (單位)淨值",
+        "最近一次申報每股 (單位)盈餘"
+      ],
+      "rows": 381,
+      "tables": [],
+      "returnedDate": null,
+      "requestedRangeStockRows": {
+        "1476": 0,
+        "1477": 1
+      },
+      "returnedDateExtent": [
+        "115年08月03日",
+        "115年11月13日"
+      ]
+    }
+  },
+  "relativeStrength": {
+    "1476": {
+      "20": {
+        "baseSession": "2026-10-14",
+        "endSession": "2026-11-13",
+        "baseCloseRaw": "314.00",
+        "endCloseRaw": "386.50",
+        "indexBase": "48625.83",
+        "indexLast": "43675.12",
+        "cashAdjustmentApplied": false,
+        "priceAdjustmentFactor": "1.000000",
+        "stockReturnPct": "23.089172",
+        "stockUnadjustedReturnPct": "23.089172",
+        "indexReturnPct": "-10.181235",
+        "stockMinusIndexPercentagePoints": "33.270407",
+        "rawStockMinusIndexPercentagePoints": "33.270407"
+      },
+      "63": {
+        "baseSession": "2026-08-11",
+        "endSession": "2026-11-13",
+        "baseCloseRaw": "332.00",
+        "endCloseRaw": "386.50",
+        "indexBase": "45120.72",
+        "indexLast": "43675.12",
+        "cashAdjustmentApplied": false,
+        "priceAdjustmentFactor": "1.000000",
+        "stockReturnPct": "16.415663",
+        "stockUnadjustedReturnPct": "16.415663",
+        "indexReturnPct": "-3.203850",
+        "stockMinusIndexPercentagePoints": "19.619512",
+        "rawStockMinusIndexPercentagePoints": "19.619512"
+      }
+    },
+    "1477": {
+      "20": {
+        "baseSession": "2026-10-14",
+        "endSession": "2026-11-13",
+        "baseCloseRaw": "206.00",
+        "endCloseRaw": "225.50",
+        "indexBase": "48625.83",
+        "indexLast": "43675.12",
+        "cashAdjustmentApplied": false,
+        "priceAdjustmentFactor": "1.000000",
+        "stockReturnPct": "9.466019",
+        "stockUnadjustedReturnPct": "9.466019",
+        "indexReturnPct": "-10.181235",
+        "stockMinusIndexPercentagePoints": "19.647254",
+        "rawStockMinusIndexPercentagePoints": "19.647254"
+      },
+      "63": {
+        "baseSession": "2026-08-11",
+        "endSession": "2026-11-13",
+        "baseCloseRaw": "221.50",
+        "endCloseRaw": "225.50",
+        "indexBase": "45120.72",
+        "indexLast": "43675.12",
+        "cashAdjustmentApplied": true,
+        "priceAdjustmentFactor": "0.972477",
+        "stockReturnPct": "4.687167",
+        "stockUnadjustedReturnPct": "1.805869",
+        "indexReturnPct": "-3.203850",
+        "stockMinusIndexPercentagePoints": "7.891017",
+        "rawStockMinusIndexPercentagePoints": "5.009719"
+      }
+    }
+  },
+  "indexReceipts": [
+    {
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/FMTQIK?date=20260801&response=json",
+      "sha256": "824c3225784653e2d10a1e979064a0baf8f2a61c45fa4eddc10e7fd607d24b55",
+      "bytes": 2275,
+      "observedAt": "2026-11-15T07:23:57.141633+00:00",
+      "priceColumn": "發行量加權股價指數",
+      "httpStatus": 200,
+      "dataRows": 21
+    },
+    {
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/FMTQIK?date=20260901&response=json",
+      "sha256": "dc712c7f16a9d732d9d4e21606e8927cd4d78039505c3256d697a005b17394d5",
+      "bytes": 2183,
+      "observedAt": "2026-11-15T07:23:57.505341+00:00",
+      "priceColumn": "發行量加權股價指數",
+      "httpStatus": 200,
+      "dataRows": 20
+    },
+    {
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/FMTQIK?date=20261001&response=json",
+      "sha256": "23c2920bfdb3f891c6d5aed655262b5ea6d9c289752a7b0e2a434ac8d272bab9",
+      "bytes": 2119,
+      "observedAt": "2026-11-15T07:23:57.507610+00:00",
+      "priceColumn": "發行量加權股價指數",
+      "httpStatus": 200,
+      "dataRows": 19
+    },
+    {
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/FMTQIK?date=20261101&response=json",
+      "sha256": "41a9601f4b379f0263410fd8987aa76b0dcbc71a6bf460561295ccdf23c557b3",
+      "bytes": 1389,
+      "observedAt": "2026-11-15T07:23:57.859643+00:00",
+      "priceColumn": "發行量加權股價指數",
+      "httpStatus": 200,
+      "dataRows": 10
+    }
+  ],
+  "action": {
+    "receiptSha256": "55244ab1a96d18f498c2eac202cea58423e801c218486adfcd0ff210871549f2",
+    "symbol": "1477",
+    "exSession": "2026-08-17",
+    "cashDividendTwd": 6,
+    "referencePriceTwd": 212,
+    "previousCloseTwd": 218,
+    "insideRelativeStrength63": true,
+    "insideTechnicalPrior25OrVolumePrior50": false
+  },
+  "results": {
+    "eclatInitialBreakoutLevel": 355,
+    "eclatFirstNextClose": 348.5,
+    "eclatInitialNextDayHold": false,
+    "eclatLatestWait": "close_more_than_15_percent_above_MA20",
+    "makalotLatestFutureHold": "unknown",
+    "fullContentRightsEstablished": false,
+    "fullMomentumWeightAvailable": false,
+    "rankPublished": false,
+    "productionDataWritten": false
+  }
+}
