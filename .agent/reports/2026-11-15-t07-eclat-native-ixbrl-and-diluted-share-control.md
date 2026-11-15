@@ -1,0 +1,12 @@
+# T07 — Eclat 2026 Q3 native iXBRL and diluted-share control
+
+Observed November 15, 2026. A separate bounded diagnostic ran on Contabo as a non-root user against Eclat Textile (1476), using the exact parser modules from product head `f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43`.
+
+- The official MOPS consolidated iXBRL matched the prior 503,284-byte receipt. The installed TIFRS archive digest marker and the entrypoint file SHA-256 matched their pins. Arelle 2.44.7 completed with status `partial`: 524 recorded errors, 9 retained facts, and 31 locators. The error manifest and extracted instance were hashed. Four retained EPS facts match the issuer PDF: basic 6.36 and 18.70, diluted 6.35 and 18.69, for the quarter and year to date respectively. The retained iXBRL facts contained no weighted-share denominator.
+- The preceding exact PDF parser run identified 8 table locators and emitted zero facts because a validated PDF manifest was required. The PDF page 20 disclosure gives diluted weighted shares of 274,604,000 for Q3 and 274,613,000 year to date, with 274,367,000 basic weighted shares for both.
+- The exact `diluted-eps-common-income-v1` helper ran against the issuer amounts. The correct diluted denominator passed with differences of NT$430,600 for Q3 and NT$924,970 year to date. Deliberate substitution of basic shares also passed the arithmetic alone, with differences of NT$1,935,550 and NT$3,672,770. The wrong-period and wrong-scale controls failed.
+- The control isolates the arithmetic helper. The official validator also checks typed peers, source provenance, period, provider and version. Preserving an explicitly qualified diluted-share basis through the PDF/iXBRL acquisition and version binding is still required for this issuer flow. No manifest or qualified intake record was produced.
+
+The parser diagnostic used one CPU, CPU cap 115 seconds, address-space cap 1,280 MiB and parser-level offline mode. It took 81.224 seconds wall time and peaked at 1,015,840 KiB RSS. The production parser entrypoint uses a 20-second CPU/768-MiB address-space limit, so this receipt cannot validate that entrypoint's operating limits. The diagnostic contacted no production socket and imported no financial facts. It does not clear T07, the independent review HOLD, or the release gates.
+
+Prior public source and PDF receipt: [c29c743](https://github.com/Kaichen9527/stockinsider/commit/c29c743408ad2f382b507f30ea7ec2a958f1900e).

@@ -1,0 +1,224 @@
+{
+  "observedDate": "2026-11-15",
+  "issue": 392,
+  "issuer": {
+    "symbol": "1476",
+    "period": "2026-Q3"
+  },
+  "productHead": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "priorEvidenceCommit": "c29c743408ad2f382b507f30ea7ec2a958f1900e",
+  "taxonomy": {
+    "archiveDigestMarker": "4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869",
+    "entrypointSha256": "9c7839ab6a8b17204f1001c15e05bb514ec6dca08e0f92dfcf8d07fd2d7057fb",
+    "archiveRehashedInThisRun": false
+  },
+  "nativeDiagnostic": {
+    "transport": {
+      "httpStatus": 200,
+      "observedAtUtc": "2026-11-15T08:09:49.371726+00:00",
+      "mime": "; charset=iso-8859-1",
+      "bytes": 503284
+    },
+    "wallSeconds": 81.224,
+    "diagnosticCpuSecondsCap": 115,
+    "diagnosticAddressSpaceMiB": 1280,
+    "availableRamKiB": 3988956,
+    "availableDiskBytes": 26576584704,
+    "exitCode": 0,
+    "stderrHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrBytes": 0,
+    "prodSocketContacted": false,
+    "modules": [
+      "d9d9f9448d705609d3f2f55e52d635ac2a858576",
+      "7bf26154361b23e2bb3253303e31587c1023540e"
+    ],
+    "result": {
+      "inputSha256": "fcddc4aec7bf8d836c56f5303bfd129f06228e80f62336e88acaf3ffd0d0d46e",
+      "parserStatus": "partial",
+      "schemaVersion": "candidate-financial-document-parser-v2",
+      "arelleVersion": "2.44.7",
+      "missing": [
+        "arelle_validation_errors"
+      ],
+      "validation": {
+        "errorCount": 524,
+        "errorCodes": [
+          "lxml.SCHEMAV_ELEMENT_CONTENT",
+          "ix11.15.1.2:tupleMemberOrderMissing",
+          "ix11.11.1.2:tupleMemberOrderMissing",
+          "ix11.10.1.2:tupleMemberOrderMissing",
+          "xmlSchema:elementOccurrencesError",
+          "ix:tupleContent",
+          "xbrldie:PrimaryItemDimensionallyInvalidError",
+          "stockinsider:conflictingFactDuplicates"
+        ],
+        "validFactCount": 9,
+        "errorsTruncated": false
+      },
+      "taxonomyArchiveMarkerVerified": true,
+      "taxonomyEntrypointVerified": true,
+      "documentFatal": false,
+      "fullManifestKeys": [
+        "documentFatal",
+        "documentSha256",
+        "errors",
+        "extractedInstanceSha256",
+        "extractedValidationCompleted",
+        "manifestComplete",
+        "policyVersion",
+        "rejections",
+        "sourceValidationCompleted",
+        "taxonomySha256"
+      ],
+      "completeErrorCount": 524,
+      "errorCodeCounts": {
+        "lxml.SCHEMAV_ELEMENT_CONTENT": 3,
+        "ix11.15.1.2:tupleMemberOrderMissing": 32,
+        "ix11.11.1.2:tupleMemberOrderMissing": 173,
+        "ix11.10.1.2:tupleMemberOrderMissing": 154,
+        "xmlSchema:elementOccurrencesError": 78,
+        "ix:tupleContent": 39,
+        "xbrldie:PrimaryItemDimensionallyInvalidError": 30,
+        "stockinsider:conflictingFactDuplicates": 15
+      },
+      "errorManifestHash": "88f7c0832cbb5841340f44ce2a8dc56d49b6aee4471bb52bd77dbe68a73d99b4",
+      "extractedInstanceHash": "fae2bdc479ade24572e4f0d0f1b3505859704bdb7a3296486d6cddba04dc1eb8",
+      "acceptedFacts": 9,
+      "conceptCounts": {
+        "ifrs-full:CashAndCashEquivalents": 2,
+        "ifrs-full:Assets": 1,
+        "ifrs-full:ProfitLossAttributableToOwnersOfParent": 2,
+        "ifrs-full:BasicEarningsLossPerShare": 2,
+        "ifrs-full:DilutedEarningsLossPerShare": 2
+      },
+      "acceptedEPS": [
+        {
+          "xbrl_concept": "ifrs-full:BasicEarningsLossPerShare",
+          "value": "6.36",
+          "unit": "TWD_per_share",
+          "xbrl_context": "From20260701To20260930"
+        },
+        {
+          "xbrl_concept": "ifrs-full:BasicEarningsLossPerShare",
+          "value": "18.70",
+          "unit": "TWD_per_share",
+          "xbrl_context": "From20260101To20260930"
+        },
+        {
+          "xbrl_concept": "ifrs-full:DilutedEarningsLossPerShare",
+          "value": "6.35",
+          "unit": "TWD_per_share",
+          "xbrl_context": "From20260701To20260930"
+        },
+        {
+          "xbrl_concept": "ifrs-full:DilutedEarningsLossPerShare",
+          "value": "18.69",
+          "unit": "TWD_per_share",
+          "xbrl_context": "From20260101To20260930"
+        }
+      ],
+      "factFieldNames": [
+        "concept_namespace",
+        "dimension_count",
+        "duration_kind",
+        "entity_identifier",
+        "extractedFactId",
+        "factKey",
+        "period_end",
+        "period_start",
+        "sourceFactId",
+        "structuralStatus",
+        "unit",
+        "value",
+        "xValid",
+        "xbrl_concept",
+        "xbrl_context"
+      ],
+      "locators": 31,
+      "peakRssKiB": 1015840,
+      "nonRoot": true,
+      "cpuCount": 1,
+      "nice": 15,
+      "networkDisabledByParser": true
+    }
+  },
+  "productionEntrypointLimits": {
+    "cpuSeconds": 20,
+    "addressSpaceMiB": 768,
+    "exercised": false
+  },
+  "pdfDiagnostic": {
+    "parserStatus": "partial",
+    "reasonList": [
+      "validated_pdf_manifest_required"
+    ],
+    "tableLocators": 8,
+    "acceptedFinancialFacts": 0
+  },
+  "issuerWeightedShareInputs": {
+    "dilutedQuarter": 274604000,
+    "dilutedYtd": 274613000,
+    "basicQuarter": 274367000,
+    "basicYtd": 274367000
+  },
+  "epsArithmeticDiagnostic": {
+    "sourceGitBlob": "c136ff421021b4bb7df4aed5bcc82d943939e4ef",
+    "nonRoot": true,
+    "output": {
+      "policy": "diluted-eps-common-income-v1",
+      "node": "v22.23.1",
+      "result": [
+        {
+          "case": "issuer_quarter_correct",
+          "reconciled": true,
+          "difference": 430600,
+          "tolerance": 8720830,
+          "version": "diluted-eps-common-income-v1"
+        },
+        {
+          "case": "issuer_ytd_correct",
+          "reconciled": true,
+          "difference": 924970,
+          "tolerance": 25657960,
+          "version": "diluted-eps-common-income-v1"
+        },
+        {
+          "case": "issuer_quarter_wrong_basic_shares",
+          "reconciled": true,
+          "difference": 1935550,
+          "tolerance": 8720830,
+          "version": "diluted-eps-common-income-v1"
+        },
+        {
+          "case": "issuer_ytd_wrong_basic_shares",
+          "reconciled": true,
+          "difference": 3672770,
+          "tolerance": 25657960,
+          "version": "diluted-eps-common-income-v1"
+        },
+        {
+          "case": "issuer_wrong_period",
+          "reconciled": false,
+          "difference": 3387856600,
+          "tolerance": 25657960,
+          "version": "diluted-eps-common-income-v1"
+        },
+        {
+          "case": "issuer_wrong_weighted_share_scale",
+          "reconciled": false,
+          "difference": 1742422264.6,
+          "tolerance": 8720830,
+          "version": "diluted-eps-common-income-v1"
+        }
+      ]
+    }
+  },
+  "formalAccepted": false,
+  "productionFinancialWrite": false,
+  "qualifiedPdfManifestCreated": false,
+  "remaining": [
+    "Version-bound qualified PDF share provenance",
+    "Formal acquisition and intake",
+    "Independent review"
+  ]
+}
