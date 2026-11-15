@@ -1,0 +1,137 @@
+{
+  "schema": "stockinsider-contabo-t18-http-subphase-real-v1",
+  "scope": "REAL_PRODUCTION_BACKUP_2026_09_19_IN_ISOLATED_CONTABO_STAGING",
+  "subject": "1d957e28ddf4ec4995792f10fc3f8f0eaeb1a6c6",
+  "diagnosticManifestSha256": "b3713d3e439e19698eee8cafaaf6e1e86054c8ef4edc34008159d30cf41e3daa",
+  "priorTimeoutEvidence": "0b122de7e3e6c6921c141078b2eeb9422a6ae495",
+  "stagingDelta": {
+    "baselineBlobs": 51,
+    "successorBlobs": 51,
+    "changedPaths": [
+      "deployment/staging/vnext/t17_keyfd/fixed_read_proxy.py",
+      "deployment/staging/vnext/t17_keyfd/t18_same_clone.py",
+      "deployment/staging/vnext/t17_keyfd/t18_detail_http.py",
+      "deployment/staging/vnext/t17_keyfd/t18_readpoint_diagnostics.py"
+    ]
+  },
+  "admission": {
+    "status": "HOST_PREREQUISITES_VERIFIED_ONLY",
+    "keyRead": false,
+    "namespaceKernelCookiesMatched": true,
+    "productionUnchanged": true,
+    "clean": true
+  },
+  "wrongKey": {
+    "reason": "backup_authentication_failed",
+    "runnerExit": 2,
+    "databaseRestored": false,
+    "productionUnchanged": true,
+    "clean": true
+  },
+  "real": {
+    "durationSeconds": 684.087,
+    "runnerDurationSeconds": 673.945,
+    "runnerExit": 0,
+    "status": "DB_VERIFIED_FIXED_T18_EXERCISED",
+    "resourceSample": {
+      "appMemoryPeakObservedBytes": 95227904,
+      "dbMemoryPeakObservedBytes": 805310464,
+      "minimumHostAvailableMemoryBytes": 3829792768,
+      "minimumHostDiskBytes": 18009235456,
+      "minimumWorkFreeBytes": 5966016512,
+      "restMemoryPeakObservedBytes": 30089216
+    },
+    "productionSignaturesUnchanged": true,
+    "stagingUnitsRemaining": 0,
+    "stagingResourcesCleaned": true,
+    "db": {
+      "restored": true,
+      "postgresVersionNum": "170011",
+      "foreignKeys": 288,
+      "foreignKeysUnvalidated": 0,
+      "lineageGroups": 7,
+      "lineageOrphans": 0,
+      "knownLegacyUnvalidatedChecks": 3,
+      "unknownChecks": 0,
+      "knownLegacyConstraintViolations": 0,
+      "cleanup": {
+        "postmasterReaped": true,
+        "privateTreeRemoved": true,
+        "socketRemoved": true
+      }
+    },
+    "rollback": {
+      "status": "FIXED_OLD_PAIR_VERIFIED",
+      "sequence": "A_B_A",
+      "steps": [
+        {
+          "commit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+          "buildId": "8ScL_J9rBSjyekr5pb9GV",
+          "next": "16.3.4",
+          "homeHttp": 200,
+          "staticHttp": 200,
+          "originalContentDate": "2026-09-12",
+          "staleReadonly": true,
+          "actionsEnabled": false
+        },
+        {
+          "commit": "dd59817f750684b093965f539dd4de466be13077",
+          "buildId": "e2WBkpZ_wkvn0YPEkko03",
+          "next": "16.3.4",
+          "homeHttp": 200,
+          "staticHttp": 200,
+          "originalContentDate": "2026-09-12",
+          "staleReadonly": true,
+          "actionsEnabled": false
+        },
+        {
+          "commit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+          "buildId": "8ScL_J9rBSjyekr5pb9GV",
+          "next": "16.3.4",
+          "homeHttp": 200,
+          "staticHttp": 200,
+          "originalContentDate": "2026-09-12",
+          "staleReadonly": true,
+          "actionsEnabled": false
+        }
+      ],
+      "recovered": {
+        "commit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+        "buildId": "8ScL_J9rBSjyekr5pb9GV",
+        "next": "16.3.4",
+        "homeHttp": 200,
+        "staticHttp": 200,
+        "originalContentDate": "2026-09-12",
+        "staleReadonly": true,
+        "actionsEnabled": false
+      },
+      "faultHealthFailed": true,
+      "automaticRollback": "A",
+      "negativeHttpChecks": {
+        "postgrestDenied": 2,
+        "proxyDenied": 6
+      },
+      "ownedListenersClosed": true,
+      "snapshotAndConstraintsUnchanged": true
+    },
+    "detail": {
+      "status": "GAP_DETAIL_PUBLIC_JSON",
+      "profileDiagnostic": {
+        "category": "FACT_URL",
+        "reason": "URL_QUERY_HOST_POLICY"
+      },
+      "rawFactUrlPolicy": "REJECTED_QUERY_HOST_POLICY",
+      "matchingColumns": 60,
+      "matchingTables": 7,
+      "grantsChanged": 0,
+      "sourceRpcExecuted": false,
+      "httpAcceptance": "NOT_RUN_DETAIL_PROFILE_GAP",
+      "oldMetadataObjectGatePassed": true,
+      "offendingUrlHostPathAndQueryExported": false
+    },
+    "newRadarReleaseAcceptance": "NOT_RUN",
+    "fullReleaseAcceptance": false,
+    "nativeHoldRetained": true
+  },
+  "next": "Use a reviewed read-only, classified receipt to identify which historical fact source contract requires the query. Keep default denial. Omit, or canonicalize only strictly with evidence from the actual fixed reader and specific authenticated source contract. Never emit raw URLs or authorize a new host/query from its presence."
+}
