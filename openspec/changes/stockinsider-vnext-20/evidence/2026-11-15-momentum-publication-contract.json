@@ -1,0 +1,77 @@
+{
+  "schema": "stockinsider-launch-momentum-publication-contract-audit-v1",
+  "sourceCommit": "e712c23980450ea6ed3c4b9ef8cbce59d09b5b39",
+  "blobRefs": [
+    {
+      "path": "web/src/lib/vnext/worker-output.ts",
+      "start": 16,
+      "end": 23,
+      "blob": "3543aef056d34dc7359026498e7ffd90cb781b4b"
+    },
+    {
+      "path": "web/src/lib/vnext/artifact-financial-summary.ts",
+      "start": 4,
+      "end": 14,
+      "blob": "cf60612083e096e8a325df0b0d083654c5a4d0ee"
+    },
+    {
+      "path": "migrations/20261022_stockinsider_vnext_20_v1.sql",
+      "start": 234,
+      "end": 248,
+      "blob": "696343085c721f00fd44b4643c8c2ef2f90d189c"
+    },
+    {
+      "path": "migrations/20261022_stockinsider_vnext_20_v1.sql",
+      "start": 264,
+      "end": 278,
+      "blob": "696343085c721f00fd44b4643c8c2ef2f90d189c"
+    },
+    {
+      "path": "migrations/20261022_stockinsider_vnext_20_v1.sql",
+      "start": 300,
+      "end": 320,
+      "blob": "696343085c721f00fd44b4643c8c2ef2f90d189c"
+    },
+    {
+      "path": "migrations/20261023_vnext_business_criteria_v1.sql",
+      "start": 44,
+      "end": 73,
+      "blob": "a6fdebe2132d31b13cbd091a7baff4f027da2e75"
+    },
+    {
+      "path": "migrations/20261115_vnext_launch_ranking_v1.sql",
+      "start": 954,
+      "end": 998,
+      "blob": "51199dcbcdeea3912a56b2b5937fff1632270aeb"
+    },
+    {
+      "path": "migrations/20261115_vnext_launch_ranking_v1.sql",
+      "start": 1056,
+      "end": 1094,
+      "blob": "51199dcbcdeea3912a56b2b5937fff1632270aeb"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-ranking-read.ts",
+      "start": 81,
+      "end": 94,
+      "blob": "19405ea2c3232c5bda3ec1f1cd53957e4546199b"
+    }
+  ],
+  "findings": {
+    "jobAndRoster": "Launch writer iterates the existing non-exited pool. Legacy missing qualification can persist a reviewed revision as waiting; that label alone does not exclude it from launch research.",
+    "researchArtifact": "Legacy normalized author shape and private SQL require a civil valuation date and evidence-backed valuation, business and profit sections. Nullable EPS is supported with explicit gaps, but lacks an explicit absence-of-valuation contract. Reviewer must bind exact author output and affirm valuationChecked.",
+    "retainedReview": "The business receipt pins v5 provider bindings, both invocations, original preparation and current reviewed revision. Missing optional business annotation itself is supported. Keep all real reviewer identity, invocation and current source checks.",
+    "launchQualification": "Rank gate has no direct numeric EPS weight. Its source check is explicitly NULL and positive disposition coverage has no producer. Patching JSON placeholders or display gates cannot create an admissible candidate.",
+    "publicReader": "Launch writer fills financial and valuation with null for every packet, and read decoder refuses all nonnull values. Adding a genuinely reviewed financial packet requires version-consistent writer and reader changes, with the old reader/version immutable."
+  },
+  "acceptance": [
+    "A source-first, independently reviewed, real company can rank with complete market inputs (availableWeight 100), explicit unsupported or absent financial scope and no invented valuation date or number.",
+    "A financial-complete company carries original reviewed financial and valuation evidence with the same ranking, research and price cutoff. A numeric zero stays distinct from an absent value.",
+    "Missing original-source, asset, action, market, or independent review evidence retains the original date and ranking. Contradiction or proved ineligibility remains visible and cannot be omitted to manufacture a rank.",
+    "The independent reviewer can certify real absence only from the frozen preparation and attested source coverage. Caller fields, a model-authored absence claim, failed retrieval or active membership cannot supply that authority.",
+    "Legacy latest and immutable historical screens, raw source scope, signed queue receipt, quota accounting and author/reviewer identity retain their existing semantics."
+  ],
+  "observedScope": "exact source cross-read only",
+  "nativeSqlProbed": false,
+  "realRankingExecuted": false
+}
