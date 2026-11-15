@@ -1,0 +1,8 @@
+# Interrupted product Cloud work recovered
+
+The product VM hit its usage limit during turn `01a1dbf7-edbd-7634-a393-f7797b79d86d`. This branch preserves two unfinished work items from its recorded Cloud work, based on product commit `f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43`.
+
+- The financial provider source candidate and its profile were rebuilt from three recorded SQL heredocs, the recorded generator and 13 pinned GitHub inputs. All five predecessor and all five successor function-body SHA-256 digests exactly match the original Cloud output from turn `01a1dd2b-fab3-743b-b96e-7a6c743a5d93`. The full migration file has no separately recorded Cloud digest. The recovered SQL and profile are stored here as review artifacts. Native PostgreSQL execution, precise selected-fact and receipt checks, integration with the worker, and independent review remain open.
+- The latest 11764 purpose-bound design was restored from the complete addition and subsequent diff in turn `01a1dd23-5d0f-70a6-b585-248aebdb35ff`. It covers a fail-closed path from an approved resource purpose through source capture to the real breadth consumer. Rights setup, SQL/runtime implementation and tests remain open. A newly observed license receipt has its own knowledge time and cannot backdate the earlier replay.
+
+The SQL ran zero times during recovery and no system settings were changed. This branch preserves the original Cloud work and its provenance. PR #384 and the evidence registered for its release gates stay at their independently verified states. Other unpublished worktree files remain on the Cloud VM pending access and review.

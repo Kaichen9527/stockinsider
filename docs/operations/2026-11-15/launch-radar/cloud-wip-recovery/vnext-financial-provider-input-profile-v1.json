@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "vnext-financial-provider-input-source-profile-v1",
+  "nativeVerified": false,
+  "routines": [
+    {
+      "signature": "public.vnext_command_v1(text,text,jsonb)",
+      "predecessorBodySha256": "130fa80b87ece7cc9bfb59b5998078cfd76ebb852a12632706e3fc5cf7eefafb",
+      "successorBodySha256": "c85aaa009a758d7ee148973d1eb72026f3d3aa5894c998bfc1dd844464bea6e2",
+      "predecessorBytes": 45249,
+      "successorBytes": 45742,
+      "fragments": [
+        [
+          "  SELECT * INTO m FROM public.vnext_members_v1 WHERE symbol=j.symbol;\n  IF p_command IN('publish','qualification-context') AND j.state='published' THEN",
+          "  SELECT * INTO m FROM public.vnext_members_v1 WHERE symbol=j.symbol;\n  IF p_command IN('work-context','author-context','author','review-claim','review-context','review-sources','review','qualification-context','record-qualification','publish') AND EXISTS(SELECT FROM public.vnext_financial_preparation_protocols_v1 WHERE job_id=j.job_id) AND NOT public.vnext_financial_bound_current_v1(j.job_id,j.input_hash,(SELECT evidence FROM public.vnext_preparations_v1 WHERE job_id=j.job_id)) THEN RAISE EXCEPTION 'vnext_financial_provider_current_source_invalid';END IF;\n  IF p_command IN('publish','qualification-context') AND j.state='published' THEN"
+        ]
+      ]
+    },
+    {
+      "signature": "public.vnext_provider_command_v1(text,text,jsonb)",
+      "predecessorBodySha256": "b541f6c8b7441a1165f6bd537a854b0ba3a849cefa6a45107da33e8f94efdff3",
+      "successorBodySha256": "68dc31b9e67c22e3111e3da92ef5c2bfc909eda35ae8cadd1af544ed41fbd622",
+      "predecessorBytes": 15382,
+      "successorBytes": 15893,
+      "fragments": [
+        [
+          "  IF invocation.invocation_id IS NOT NULL THEN RETURN to_jsonb(invocation)||jsonb_build_object('dispatch',false); END IF;",
+          "  IF invocation.invocation_id IS NOT NULL THEN RETURN to_jsonb(invocation)||jsonb_build_object('dispatch',false); END IF;\n  IF EXISTS(SELECT FROM public.vnext_financial_preparation_protocols_v1 WHERE job_id=j.job_id) AND NOT public.vnext_financial_bound_current_v1(j.job_id,j.input_hash,member.evidence) THEN RAISE EXCEPTION 'vnext_financial_provider_current_source_invalid';END IF;"
+        ],
+        [
+          ") AND NOT public.vnext_source_evidence_current_v1(fact,j.symbol)",
+          ") AND NOT public.vnext_source_evidence_current_v1(fact,j.symbol)\n AND NOT(EXISTS(SELECT FROM public.vnext_financial_preparation_protocols_v1 WHERE job_id=j.job_id) AND EXISTS(SELECT FROM jsonb_array_elements(member.evidence->'financialProviderInput'->'facts') description WHERE description->>'factId'=fact->>'id'))"
+        ]
+      ]
+    },
+    {
+      "signature": "public.vnext_input_sources_current_v1(jsonb,text)",
+      "predecessorBodySha256": "912b039211f3624f82fa1940740b9cb47a8f0ed46817e108504b29d5a528b8e4",
+      "successorBodySha256": "dfcce6d3df804c257e7187b19449a28b11d6a91e36729fff3a52d92369df621c",
+      "predecessorBytes": 1294,
+      "successorBytes": 1677,
+      "fragments": [
+        [
+          "SELECT public.vnext_action_terms_input_current_v1(input,p_symbol) AND (SELECT public.vnext_forecast_input_current_internal_v1(input,p_symbol) AND (\n SELECT coalesce(jsonb_typeof(input->'evidence')='array' AND NOT EXISTS(SELECT FROM jsonb_array_elements(input->'evidence') source_item WHERE\n  CASE WHEN source_item->>'sourceTier'='official' THEN\n   coalesce(source_item->>'source','') !~ '^https://([A-Za-z0-9-]+\\.)?(twse\\.com\\.tw|tpex\\.org\\.tw)(/|$)' AND NOT EXISTS(\n    SELECT FROM jsonb_array_elements(coalesce(input->'financialSourceReceipts','[]'::jsonb)) descriptor WHERE descriptor->>'sourceKind'='approved_issuer_ir' AND descriptor->>'factId'=source_item->>'id'\n     AND public.vnext_provider_json_codec_v1(jsonb_path_query_array(descriptor->'originalFact','$.*')) AND source_item->>'contentHash'=encode(sha256(convert_to(public.vnext_catalog_canonical_v1(descriptor->'originalFact'),'UTF8')),'hex')\n     AND public.vnext_issuer_financial_evidence_current_v1(source_item,input,p_symbol))\n  ELSE NOT public.vnext_source_evidence_current_v1(source_item,p_symbol) END),false)\n AND NOT EXISTS(SELECT FROM public.vnext_members_v1 current_member WHERE current_member.symbol=p_symbol AND public.vnext_trading_invalid_current_v1(current_member.symbol,current_member.input_hash) ? 'proofHash')\n))",
+          "(SELECT public.vnext_action_terms_input_current_v1(input,p_symbol) AND (SELECT public.vnext_forecast_input_current_internal_v1(input,p_symbol) AND (\n SELECT coalesce(jsonb_typeof(input->'evidence')='array' AND NOT EXISTS(SELECT FROM jsonb_array_elements(input->'evidence') source_item WHERE\n  CASE WHEN source_item->>'sourceTier'='official' THEN\n   coalesce(source_item->>'source','') !~ '^https://([A-Za-z0-9-]+\\.)?(twse\\.com\\.tw|tpex\\.org\\.tw)(/|$)' AND NOT EXISTS(\n    SELECT FROM jsonb_array_elements(coalesce(input->'financialSourceReceipts','[]'::jsonb)) descriptor WHERE descriptor->>'sourceKind'='approved_issuer_ir' AND descriptor->>'factId'=source_item->>'id'\n     AND public.vnext_provider_json_codec_v1(jsonb_path_query_array(descriptor->'originalFact','$.*')) AND source_item->>'contentHash'=encode(sha256(convert_to(public.vnext_catalog_canonical_v1(descriptor->'originalFact'),'UTF8')),'hex')\n     AND public.vnext_issuer_financial_evidence_current_v1(source_item,input,p_symbol))\n  ELSE NOT public.vnext_source_evidence_current_v1(source_item,p_symbol) END),false)\n AND NOT EXISTS(SELECT FROM public.vnext_members_v1 current_member WHERE current_member.symbol=p_symbol AND public.vnext_trading_invalid_current_v1(current_member.symbol,current_member.input_hash) ? 'proofHash')\n))) AND NOT EXISTS(SELECT FROM public.vnext_financial_preparation_protocols_v1 binding JOIN public.vnext_jobs_v1 bound_job ON bound_job.job_id=binding.job_id JOIN public.vnext_preparations_v1 prep ON prep.job_id=binding.job_id WHERE bound_job.symbol=p_symbol AND prep.evidence=input AND NOT public.vnext_financial_bound_current_v1(bound_job.job_id,bound_job.input_hash,prep.evidence))"
+        ]
+      ]
+    },
+    {
+      "signature": "public.vnext_business_criteria_current_v1(uuid,text)",
+      "predecessorBodySha256": "b9e54d8adb331246d92d59336ea79f65929fd011591361aa35adf74f9cb7337a",
+      "successorBodySha256": "e774b54f1d0841348078ca5f87800cc10d95407b48aa4800147865f441ddabbc",
+      "predecessorBytes": 12114,
+      "successorBytes": 12317,
+      "fragments": [
+        [
+          " SELECT preparation.evidence INTO frozen FROM public.vnext_preparations_v1 preparation WHERE preparation.job_id=pub.job_id;",
+          " SELECT preparation.evidence INTO frozen FROM public.vnext_preparations_v1 preparation WHERE preparation.job_id=pub.job_id;\n IF EXISTS(SELECT FROM public.vnext_financial_preparation_protocols_v1 WHERE job_id=pub.job_id) AND NOT public.vnext_financial_bound_current_v1(pub.job_id,pub.input_hash,frozen) THEN RETURN NULL;END IF;"
+        ]
+      ]
+    },
+    {
+      "signature": "public.vnext_thesis_publication_guard_v1()",
+      "predecessorBodySha256": "ea1f2e137320efb230a89d88d59fde65743425ffc97f8214764d8643cb2f9ee3",
+      "successorBodySha256": "bd56ab1e0b5f812236d4456fe9d6ae531f1a51a5ce676685ede62c2573ba964b",
+      "predecessorBytes": 465,
+      "successorBytes": 722,
+      "fragments": [
+        [
+          " SELECT evidence INTO frozen FROM public.vnext_preparations_v1 WHERE job_id=NEW.job_id;",
+          " SELECT evidence INTO frozen FROM public.vnext_preparations_v1 WHERE job_id=NEW.job_id;\n IF EXISTS(SELECT FROM public.vnext_financial_preparation_protocols_v1 WHERE job_id=NEW.job_id) AND NOT public.vnext_financial_bound_current_v1(NEW.job_id,NEW.input_hash,frozen) THEN RAISE EXCEPTION 'vnext_financial_provider_current_source_invalid';END IF;"
+        ]
+      ]
+    }
+  ],
+  "comparisonParity": false,
+  "qualificationApproval": false,
+  "history": "Existing exact preparations/invocations unchanged; every new preparation requires independently verified protocol binding."
+}
