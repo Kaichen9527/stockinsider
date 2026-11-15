@@ -1,0 +1,112 @@
+{
+  "schema": "stockinsider-contabo-t18-real-bound-subtype-v1",
+  "observedAtUtc": "2026-11-15T00:52:10Z",
+  "scope": "REAL_PRODUCTION_BACKUP_ISOLATED_CONTABO_STAGING",
+  "backupArchiveDate": "2026-09-19",
+  "baselineRuntime": "fa22e9113dd5b289ee5ee948a3083b18932ee3ed",
+  "priorRealReceipt": "eeff55f3287227c0c8ff1d181fee93a3ef0c27b2",
+  "subject": "7c2cdbe9daf3c41cfaa8b9458cc985c0359e3a0a",
+  "sourceReceiptSha": "7b8f490c2bae519389c8d1fe145e6711bca0d3e6d85796073394c3eb0ce1f14b",
+  "stageManifestSha256": "0082e986b48864c913594731faa950a27c6e97ed941dad9c8a1a80b20ae100a7",
+  "stagedBlobs": {
+    "before": 51,
+    "after": 51,
+    "replaced": 1,
+    "rootChanged": false
+  },
+  "admission": {
+    "seconds": 19.027,
+    "runnerStatus": "HOST_PREREQUISITES_VERIFIED_ONLY",
+    "keyRead": false,
+    "productionUnchanged": true,
+    "clean": true
+  },
+  "invalidKey": {
+    "seconds": 22.401,
+    "runnerExit": 2,
+    "reason": "backup_authentication_failed",
+    "productionUnchanged": true,
+    "clean": true
+  },
+  "real": {
+    "seconds": 678.572,
+    "runnerExit": 0,
+    "runnerStatus": "DB_VERIFIED_FIXED_T18_EXERCISED",
+    "productionSignaturesUnchanged": true,
+    "stagingResourcesCleaned": true,
+    "stagingServiceUnitsRemaining": 0,
+    "hostMinimum": {
+      "diskBytes": 18024820736,
+      "availableMemoryBytes": 3799019520
+    },
+    "database": {
+      "restored": true,
+      "serverVersionNum": "170011",
+      "foreignKeys": 288,
+      "invalidForeignKeys": 0,
+      "lineageRelationships": 7,
+      "lineageOrphans": 0,
+      "cleanup": {
+        "postmasterReaped": true,
+        "privateTreeRemoved": true,
+        "socketRemoved": true
+      }
+    },
+    "fixedNext": {
+      "status": "FIXED_OLD_PAIR_VERIFIED",
+      "sequence": "A_B_A",
+      "faultHealthFailed": true,
+      "automaticRollback": "A",
+      "versions": [
+        {
+          "releaseSourceCommit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+          "nextVersion": "16.3.4",
+          "homeHttpStatus": 200,
+          "contentDate": "2026-09-12",
+          "readOnly": true
+        },
+        {
+          "releaseSourceCommit": "dd59817f750684b093965f539dd4de466be13077",
+          "nextVersion": "16.3.4",
+          "homeHttpStatus": 200,
+          "contentDate": "2026-09-12",
+          "readOnly": true
+        },
+        {
+          "releaseSourceCommit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+          "nextVersion": "16.3.4",
+          "homeHttpStatus": 200,
+          "contentDate": "2026-09-12",
+          "readOnly": true
+        }
+      ],
+      "negativeRequests": {
+        "postgrestDenied": 2,
+        "proxyDenied": 6
+      },
+      "ownedListenersClosed": true
+    },
+    "detail": {
+      "status": "GAP_DETAIL_PUBLIC_JSON",
+      "firstDiagnostic": {
+        "boundSubtype": "OBJECT_COUNT",
+        "category": "BOUNDS",
+        "reason": "BOUND_EXCEEDED"
+      },
+      "objectLimit": 128,
+      "firstObjectClass": "NOT_OBSERVED",
+      "actualFieldCountRetained": false,
+      "rawFactUrlPolicy": "NOT_OBSERVED",
+      "stockDetailAcceptance": "NOT_RUN_DETAIL_PROFILE_GAP",
+      "freshnessActionAcceptance": "GAP_FIXED_UI_HAS_NO_AGE_FENCE",
+      "originalRpcExecution": "NOT_GRANTED_NOT_CALLED",
+      "grantsChanged": 0
+    },
+    "gates": {
+      "nativeHoldRetained": true,
+      "newRadarReleaseAcceptance": "NOT_RUN",
+      "fullReleaseAcceptance": false
+    }
+  },
+  "followup": "Use a closed path region at the same object-count guard. Prove exact consumer semantics before any bounded compatibility change. Keep exact raw properties, object size, private records and URL policy out of the evidence."
+}
