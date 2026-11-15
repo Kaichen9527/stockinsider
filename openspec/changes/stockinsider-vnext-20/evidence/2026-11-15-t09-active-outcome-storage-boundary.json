@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "task": "T09",
+  "observedOn": "2026-11-15",
+  "scope": "production read-only schema and actual bounded counts; candidate source inspection; proposed acceptance assertions",
+  "database": {
+    "catalogTime": "2026-11-15T07:34:25.829Z",
+    "countTime": "2026-11-15T07:35:28.564Z",
+    "readOnly": true,
+    "legacyScoreSnapshotRows": 0,
+    "legacyOutcomeRows": 0,
+    "legacyOutcomeKeys": [
+      "PRIMARY KEY (outcome_id)",
+      "UNIQUE (score_snapshot_id, maturity_horizon)"
+    ],
+    "legacyOutcomeForeignKeyTargets": [
+      "opportunity_manifests_v3",
+      "opportunity_score_snapshots"
+    ],
+    "launchTrackerTableObserved": false,
+    "launchTrackerRelationNameScope": "public.vnext_launch_*(outcome|performance|tracking|ranking), ordinary or partitioned tables",
+    "foundDedicatedOutcomeTimer": false,
+    "timerSearchScope": "Contabo list-timers --all exact outcome or label candidates",
+    "dbMutationPerformed": false
+  },
+  "candidate": {
+    "commit": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+    "membershipKey": [
+      "ranking_run_id",
+      "symbol"
+    ],
+    "membershipRevisionPins": [
+      "research_revision",
+      "score_revision",
+      "qualification_revision"
+    ],
+    "snapshotClocks": [
+      "session_date",
+      "input_cutoff",
+      "published_at"
+    ],
+    "scorePricePinColumns": [
+      "observation_id",
+      "calendar_id"
+    ],
+    "scoreCorporateActionPinColumn": "snapshot_id",
+    "source": "https://github.com/Kaichen9527/stockinsider/blob/f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43/migrations/20261115_vnext_launch_ranking_v1.sql#L52-L82",
+    "legacyLabelSource": "https://github.com/Kaichen9527/stockinsider/blob/f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43/web/src/lib/opportunity-v3/outcomes.ts",
+    "legacyCronSource": "https://github.com/Kaichen9527/stockinsider/blob/f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43/web/src/app/api/internal/opportunity-run/cron/label-outcomes/route.ts"
+  },
+  "acceptanceContracts": [
+    {
+      "comparison": "previous snapshot kept",
+      "expected": [
+        "no new publish event",
+        "no repeated sample",
+        "retain original session_date"
+      ]
+    },
+    {
+      "comparison": "real new ranked member plus retries",
+      "expected": [
+        "one membership event per frozen rankingRunId and symbol",
+        "retain first-event pointer for repeated appearances",
+        "backtest cannot write live outcomes"
+      ]
+    },
+    {
+      "comparison": "next market session unknown or certified unavailable",
+      "expected": [
+        "calendar pending versus price gap versus explicitly untradable",
+        "no later fill for a certified unavailable opening",
+        "no arbitrary same-day close fill"
+      ]
+    },
+    {
+      "comparison": "both barriers in one correctly versioned daily bar",
+      "expected": [
+        "ambiguous order if valid comparable opening is between both thresholds and no verified sequence exists",
+        "open at or beyond one threshold may identify first observed market price only",
+        "execution costs and feasibility still separate"
+      ]
+    },
+    {
+      "comparison": "earlier missing price with later observed hit",
+      "expected": [
+        "indeterminate first-touch order until earlier authorized data is complete",
+        "horizon calculated from official calendar",
+        "maturity preserved across a price gap"
+      ]
+    },
+    {
+      "comparison": "same source before and after correction",
+      "expected": [
+        "freeze price, calendar, action and fee versions per observation",
+        "preserve previous output and recompute as a new observation, not a new signal"
+      ]
+    }
+  ],
+  "nativeLaunchTrackingImplemented": false,
+  "nativeLaunchTestsRun": false
+}
