@@ -1,0 +1,743 @@
+{
+  "verifiedAt": "2026-11-15T05:41:25Z",
+  "environment": "Contabo bounded public feeds, in-memory non-root; live PostgreSQL REPEATABLE READ READ ONLY with statement timeout",
+  "datasetCatalog": {
+    "tdcc": "https://data.gov.tw/dataset/11425",
+    "issuer": "https://data.gov.tw/en/datasets/18419",
+    "otcIssuer": "https://data.gov.tw/dataset/25036",
+    "recentListed": "https://data.gov.tw/dataset/11542",
+    "officialTrading": "https://wwwc.twse.com.tw/zh/listed/listed/new-listing.html",
+    "depositary": "https://wwwc.twse.com.tw/zh/focus/links.html",
+    "tibOrdinary": "https://www.twse.com.tw/zh/search.html?f=&q=6908",
+    "tibTransfer": "https://wwwc.twse.com.tw/staticFiles/news/news/tsecnews/8a8216d6933460a40193723f7325022d.pdf",
+    "suspended": "https://www.twse.com.tw/zh/listed/violations/stop.html",
+    "note1589": "https://investoredu.twse.com.tw/FileSystem/FileUpload/d0048d9a-e912-42ee-9c32-7a5bbff1d010.pdf",
+    "reducedCapital": "https://www.twse.com.tw/exchangeReport/TWTAUU?response=html"
+  },
+  "independentSource": {
+    "feeds": {
+      "tdcc": {
+        "source": "https://opendata.tdcc.com.tw/getOD.ashx?id=1-1",
+        "observedAt": "2026-11-15T05:37:13.409082+00:00",
+        "bytes": 14235611,
+        "sha256": "5d7c8f26ab48425f63f3d4f9377424535e779abc725a6706796b060ba0f70263",
+        "rows": 145052,
+        "counts": {
+          "終止上市櫃": 87899,
+          "未上市櫃": 84,
+          "上市": 42401,
+          "上櫃": 14292,
+          "興櫃": 376
+        },
+        "dates": {},
+        "examples": {
+          "2330": [
+            [
+              "上市",
+              "20261115",
+              "正常"
+            ]
+          ],
+          "4763": [
+            [
+              "上市",
+              "20261115",
+              "正常"
+            ]
+          ],
+          "5236": [
+            [
+              "上市",
+              "20261115",
+              "正常"
+            ]
+          ],
+          "5274": [
+            [
+              "上櫃",
+              "20261115",
+              "正常"
+            ]
+          ],
+          "6757": [
+            [
+              "上市",
+              "20261115",
+              "正常"
+            ]
+          ],
+          "6908": [
+            [
+              "上市",
+              "20261115",
+              "正常"
+            ]
+          ],
+          "7812": [
+            [
+              "上市",
+              "20261115",
+              "正常"
+            ]
+          ],
+          "7848": [
+            [
+              "興櫃",
+              "20261115",
+              "正常"
+            ]
+          ],
+          "8908": [
+            [
+              "上市",
+              "20261115",
+              "正常"
+            ]
+          ],
+          "9105": [
+            [
+              "上市",
+              "20261115",
+              "正常"
+            ]
+          ],
+          "0050": [
+            [
+              "上市",
+              "20261115",
+              "正常"
+            ]
+          ],
+          "00981A": [
+            [
+              "上市",
+              "20261115",
+              "正常"
+            ]
+          ],
+          "2881B": [
+            [
+              "上市",
+              "20261115",
+              "正常"
+            ]
+          ]
+        }
+      },
+      "newTwse": {
+        "source": "https://www.twse.com.tw/company/newlisting?response=open_data",
+        "observedAt": "2026-11-15T05:37:10.406182+00:00",
+        "bytes": 80284,
+        "sha256": "59c11d71af978446cdf987be80910d6ec126594944342e3d81189f11a5c23844",
+        "rows": 797,
+        "counts": {
+          "listing_date_present": 420,
+          "listing_date_and_tib_label": 37
+        },
+        "dates": {},
+        "examples": {
+          "4763": [
+            [
+              "1041109",
+              ""
+            ]
+          ],
+          "5236": [
+            [
+              "1150716",
+              "櫃轉市"
+            ]
+          ],
+          "6757": [
+            [
+              "1120815",
+              "創新板"
+            ]
+          ],
+          "6908": [
+            [
+              "1150325",
+              "創新板"
+            ]
+          ],
+          "7812": [
+            [
+              "1150922",
+              "創新板，採無面額發行"
+            ]
+          ],
+          "8908": [
+            [
+              "1151016",
+              "櫃轉市"
+            ]
+          ]
+        }
+      },
+      "twseIssuer": {
+        "source": "https://mopsfin.twse.com.tw/opendata/t187ap03_L.csv",
+        "observedAt": "2026-11-15T05:37:10.902827+00:00",
+        "bytes": 675707,
+        "sha256": "50d0acfd55501b06faacacdbc880e9579ef78dcaac331b27dc4eefd8c3701f19",
+        "rows": 1099,
+        "counts": {
+          "tib_short_label": 31
+        },
+        "dates": {
+          "1151114": 1099
+        },
+        "examples": {
+          "2330": [
+            [
+              "1151114",
+              "19940905",
+              "台積電"
+            ]
+          ],
+          "4763": [
+            [
+              "1151114",
+              "20151109",
+              "材料*-KY"
+            ]
+          ],
+          "5236": [
+            [
+              "1151114",
+              "20260716",
+              "凌陽創新"
+            ]
+          ],
+          "6757": [
+            [
+              "1151114",
+              "20230815",
+              "台灣虎航"
+            ]
+          ],
+          "6908": [
+            [
+              "1151114",
+              "20260325",
+              "宏碁遊戲-創"
+            ]
+          ],
+          "7812": [
+            [
+              "1151114",
+              "20260922",
+              "稜研科技*-創"
+            ]
+          ],
+          "8908": [
+            [
+              "1151114",
+              "20261016",
+              "欣雄"
+            ]
+          ],
+          "9105": [
+            [
+              "1151114",
+              "20030922",
+              "泰金寶-DR"
+            ]
+          ]
+        }
+      },
+      "tpexIssuer": {
+        "source": "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv",
+        "observedAt": "2026-11-15T05:37:12.255387+00:00",
+        "bytes": 553728,
+        "sha256": "cd13c1a635d725fc5c7fb6df6d08be221039d7075b476b1c9c286ecd1bd371f7",
+        "rows": 897,
+        "counts": {},
+        "dates": {
+          "1151114": 897
+        },
+        "examples": {
+          "5274": [
+            [
+              "1151114",
+              "20130430",
+              "信驊"
+            ]
+          ]
+        }
+      },
+      "twseClose": {
+        "source": "https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL?response=open_data",
+        "observedAt": "2026-11-15T05:37:11.777017+00:00",
+        "bytes": 137780,
+        "sha256": "8fc1f6407bfc06a691fac6523a9095c18ddb095648aec82183a1f44c25594542",
+        "rows": 1389,
+        "counts": {},
+        "dates": {
+          "1151113": 1389
+        },
+        "examples": {
+          "2330": [
+            [
+              "1151113",
+              "2350.00"
+            ]
+          ],
+          "4763": [
+            [
+              "1151113",
+              "42.55"
+            ]
+          ],
+          "5236": [
+            [
+              "1151113",
+              "113.00"
+            ]
+          ],
+          "6757": [
+            [
+              "1151113",
+              "59.10"
+            ]
+          ],
+          "6908": [
+            [
+              "1151113",
+              "21.80"
+            ]
+          ],
+          "7812": [
+            [
+              "1151113",
+              "50.10"
+            ]
+          ],
+          "8908": [
+            [
+              "1151113",
+              "38.80"
+            ]
+          ],
+          "9105": [
+            [
+              "1151113",
+              "7.75"
+            ]
+          ],
+          "0050": [
+            [
+              "1151113",
+              "102.50"
+            ]
+          ],
+          "00981A": [
+            [
+              "1151113",
+              "24.70"
+            ]
+          ],
+          "2881B": [
+            [
+              "1151113",
+              "60.50"
+            ]
+          ]
+        }
+      },
+      "tpexClose": {
+        "source": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW",
+        "observedAt": "2026-11-15T05:37:14.407252+00:00",
+        "bytes": 141827,
+        "sha256": "e67648bdd22dfb8f6828027cf91384813af24c6303c0ff40fa2f2d203a7b6a39",
+        "rows": 1020,
+        "counts": {},
+        "dates": {
+          "1151113": 1020
+        },
+        "examples": {
+          "5274": [
+            [
+              "1151113",
+              "12000.00"
+            ]
+          ]
+        }
+      }
+    },
+    "join": {
+      "twse": {
+        "fourDigitIssuer": 1093,
+        "fourDigitQuote": 1098,
+        "joint": 1090,
+        "fourDigitQuoteOutsideIssuer": [
+          "0050",
+          "0051",
+          "0052",
+          "0053",
+          "0055",
+          "0056",
+          "0057",
+          "0061"
+        ],
+        "fourDigitIssuerOutsideQuote": [
+          "1589",
+          "1808",
+          "3714"
+        ],
+        "tdccMarketCountsAmongLinked": {
+          "上市": 1090
+        }
+      },
+      "tpex": {
+        "fourDigitIssuer": 897,
+        "fourDigitQuote": 895,
+        "joint": 895,
+        "fourDigitQuoteOutsideIssuer": [],
+        "fourDigitIssuerOutsideQuote": [
+          "4534",
+          "4804"
+        ],
+        "tdccMarketCountsAmongLinked": {
+          "上櫃": 895
+        }
+      }
+    }
+  },
+  "actualAuthority": {
+    "latestObservedAt": "2026-11-15T06:38:11.533687+01:00",
+    "newestSourceAt": "2026-08-15T02:00:00+02:00",
+    "newestRecordedAt": "2026-08-16T05:26:36.030892+02:00",
+    "totalRows": 7914,
+    "rowsSinceSeptember": 0,
+    "readOnly": true,
+    "nativeTypedObserverTablesPresent": false,
+    "groups": [
+      {
+        "label": "observed_now",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "selected_count": 1089,
+        "instrument_type": "common_stock"
+      },
+      {
+        "label": "observed_now",
+        "exchange": "TPEX",
+        "listing_status": "active",
+        "selected_count": 890,
+        "instrument_type": "common_stock"
+      },
+      {
+        "label": "prior_close",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "selected_count": 1089,
+        "instrument_type": "common_stock"
+      },
+      {
+        "label": "prior_close",
+        "exchange": "TPEX",
+        "listing_status": "active",
+        "selected_count": 890,
+        "instrument_type": "common_stock"
+      }
+    ],
+    "selection": [
+      {
+        "label": "observed_now",
+        "symbol": "1589",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "1808",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "2330",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "3714",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "4534",
+        "exchange": "TPEX",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "4763",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "4804",
+        "exchange": "TPEX",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "5236",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "5274",
+        "exchange": "TPEX",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "6757",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "6908",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "8908",
+        "exchange": "TPEX",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "9103",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "9105",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "9110",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "observed_now",
+        "symbol": "9136",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "1589",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "1808",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "2330",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "3714",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "4534",
+        "exchange": "TPEX",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "4763",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "4804",
+        "exchange": "TPEX",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "5236",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "5274",
+        "exchange": "TPEX",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "6757",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "6908",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "8908",
+        "exchange": "TPEX",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "9103",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "9105",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "9110",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      },
+      {
+        "label": "prior_close",
+        "symbol": "9136",
+        "exchange": "TWSE",
+        "listing_status": "active",
+        "instrument_type": "common_stock",
+        "within_validity": true
+      }
+    ]
+  },
+  "mismatches": {
+    "depositaryReceiptsClassifiedCommonStock": [
+      "9103",
+      "9105",
+      "9110",
+      "9136"
+    ],
+    "alreadyTransferredVenue": {
+      "symbol": "8908",
+      "officialNewVenue": "TWSE",
+      "effectiveTradingDay": "2026-10-16",
+      "liveAuthorityVenue": "TPEX"
+    },
+    "confirmedTwseOrdinaryListingMissingAuthority": {
+      "symbol": "7812",
+      "officialNewVenue": "TWSE",
+      "effectiveTradingDay": "2026-09-22"
+    },
+    "stoppedVenueNotReflected": {
+      "symbol": "1589",
+      "officialNoTradingThroughObservation": true,
+      "liveAuthorityStatus": "active",
+      "announcedDelistingDay": "2026-11-18"
+    },
+    "typedBoardTransition": {
+      "symbol": "6757",
+      "tibStart": "2023-08-15",
+      "generalBoardStart": "2024-11-29",
+      "mopsCompanyStillReportsOriginalListedDate": true
+    },
+    "nextSessionAssetChecks": {
+      "symbol": "3714",
+      "knownCorporateActionAndResumeDate": "2026-11-16",
+      "futureTradeVerified": false
+    }
+  },
+  "rawCsvPersisted": false,
+  "databaseOrPublishWrites": false,
+  "releasesChanged": false,
+  "twoLiveSessionsPassed": false
+}
