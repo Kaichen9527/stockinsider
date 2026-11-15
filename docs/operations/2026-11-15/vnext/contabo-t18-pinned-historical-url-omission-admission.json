@@ -1,0 +1,35 @@
+{
+  "task": "T18",
+  "observedAt": "2026-11-15T16:43:34Z",
+  "candidateCommit": "01dadd860f8f38ccae39f0125f249dfa0ceaec3a",
+  "scope": "NATIVE_STAGE_ADMISSION_ONLY",
+  "sourceInventory": {
+    "stagedRuntimeFiles": 51,
+    "exactUnmodifiedFiles": 49,
+    "replacements": 2,
+    "verifiedGitCommit": "01dadd860f8f38ccae39f0125f249dfa0ceaec3a"
+  },
+  "host": {
+    "mode": "admission",
+    "runnerExit": 0,
+    "resourceSample": {
+      "appMemoryPeakObservedBytes": 187617280,
+      "dbMemoryPeakObservedBytes": 122118144,
+      "minimumHostAvailableMemoryBytes": 4047130624,
+      "minimumHostDiskBytes": 26368630784,
+      "restMemoryPeakObservedBytes": 17825792
+    },
+    "durationSeconds": 19.076,
+    "stagingResourcesCleaned": true,
+    "productionSignaturesUnchanged": true,
+    "keyRead": false,
+    "nativeHoldRetained": true
+  },
+  "runner": {
+    "runnerStatus": "HOST_PREREQUISITES_VERIFIED_ONLY",
+    "formalHoldRetained": true
+  },
+  "validatedBackupThisRun": false,
+  "historicalPinsMatchedRestoreThisRun": false,
+  "realNextDetailThisRun": false
+}
