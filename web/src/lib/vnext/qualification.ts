@@ -1,3 +1,4 @@
+import {FINANCIAL_SQL_PARITY_GAP} from './financial-observation.ts';
 import { command } from './store.ts';
 import type { VnextIdentity } from './auth.ts';
 import type { Artifact,Evidence,Review } from './research.ts';
@@ -11,6 +12,10 @@ type Row = Record<string, unknown>;
 export async function qualifyPublication(identity: VnextIdentity, jobId: unknown) {
   const context = await command(identity, 'qualification-context', { jobId });
   if (context.alreadyPublished === true) return context;
+  // Current comparison protocol has no independently enforced SQL interval/
+  // EPS-basis bridge. This is server-derived, never caller-clearable by
+  // removing optional observation metadata, inventory or supplied gap arrays.
+  const financialComparisonGaps=[FINANCIAL_SQL_PARITY_GAP];
   try {
   const client = getSupabaseServerClient();
   // Existing role-bound journal inspection returns only the immutable authored
@@ -59,12 +64,12 @@ export async function qualifyPublication(identity: VnextIdentity, jobId: unknown
   const proof = { schemaVersion: 'stockinsider-vnext-authority-proof-v1', inputHash: context.inputHash, stockId: stock.data.id,
     financialCoverage: coverage, factIds: matched.map((f) => String(f.fact_id)).sort(), officialSession: sessionRead.data.session_id,
     priceBasis: prices.priceBasis, sourceDatasetRevision: prices.sourceDatasetRevision, priceGaps: prices.missingData,
-    valuation,qualified: coverage.status === 'complete' && prices.missingData.length === 0 && prices.priceBasis?.status === 'verified' && valuation.usable,
+    valuation,financialComparisonGaps,gaps:financialComparisonGaps,qualified: financialComparisonGaps.length===0 && coverage.status === 'complete' && prices.missingData.length === 0 && prices.priceBasis?.status === 'verified' && valuation.usable,
     checkedAt: now, expiresAt: new Date(Date.parse(now) + 120000).toISOString() };
   return command(identity, 'record-qualification', { jobId, inputHash: context.inputHash, proof: { ...proof, proofHash: inputHash(proof) } });
   } catch (error) {
-    const proof = { schemaVersion: 'stockinsider-vnext-authority-proof-v1', inputHash: context.inputHash, qualified: false,
-      gaps: [error instanceof Error ? error.message : 'actual_authority_unavailable'], checkedAt: new Date().toISOString() };
+    const proof = { schemaVersion: 'stockinsider-vnext-authority-proof-v1', inputHash: context.inputHash, qualified: false, financialComparisonGaps,
+      gaps: [...financialComparisonGaps,error instanceof Error ? error.message : 'actual_authority_unavailable'], checkedAt: new Date().toISOString() };
     return command(identity, 'record-qualification', { jobId, inputHash: context.inputHash, proof: { ...proof, proofHash: inputHash(proof) } });
   }
 }

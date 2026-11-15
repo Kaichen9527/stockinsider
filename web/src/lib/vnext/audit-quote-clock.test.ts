@@ -1,3 +1,4 @@
+import {withSyntheticFinancialMetadata} from './financial-observation.test-fixture.ts';
 /** Synthetic temporal controls only; no actual quote, review or price authority. */
 import assert from 'node:assert/strict';
 import test from 'node:test';
@@ -46,12 +47,14 @@ test('missing/bare/reversed/future and microsecond-future instants refuse quote-
  assert.equal(quoteClock({...quote,availableAt:cutoff},cutoff)?.availableAt,cutoff);
 });
 test('financial source clocks survive a missing formal quote; market/roster data never borrow a quote clock',()=>{
- const fact=(id:string,key:string,value:number,period:string,availableAt:string):Evidence=>({id,key,value,period,unit:'TWD',kind:'fact',sourceTier:'official',
-  source:'https://mops.twse.com.tw/synthetic-clock-only',contentHash:inputHash(id),eventAt:'2026-10-23T16:00:00Z',availableAt});
+ const fact=(id:string,key:string,value:number,period:string,availableAt:string):Evidence=>withSyntheticFinancialMetadata({id,key,value,period,unit:'TWD',kind:'fact',sourceTier:'official',
+  source:'https://mops.twse.com.tw/synthetic-clock-only',contentHash:inputHash(id),eventAt:'2026-10-23T16:00:00Z',availableAt},period==='2026-06-30'?'2026-04-01':'2026-01-01');
  const current=[fact('revenue','quarterly_revenue',100,'2026-06-30','2026-10-23T17:10:00Z'),fact('gross','quarterly_gross_profit',40,'2026-06-30','2026-10-23T17:20:00Z'),
-  fact('prior-revenue','quarterly_revenue',100,'2026-03-31','2026-10-23T16:10:00Z'),fact('prior-gross','quarterly_gross_profit',30,'2026-03-31','2026-10-23T16:20:00Z')];
+  fact('prior-revenue','quarterly_revenue',100,'2026-03-31','2026-10-23T16:10:00Z'),fact('prior-gross','quarterly_gross_profit',30,'2026-03-31','2026-10-23T16:20:00Z'),
+  fact('cash','operating_cashflow',13,'2026-06-30','2026-10-23T17:25:00Z'),fact('income','quarterly_net_income',15,'2026-06-30','2026-10-23T17:30:00Z')];
  const result=audit({current,quote:{...quote,adjusted:false,observedAt:undefined,availableAt:undefined},market:{risk:'selective',snapshotHash:inputHash('clock-unavailable')},tradingValid:true});
- const margin=result.deepInputs.profitabilityChecklist.checks[0];assert.equal(margin.met,true);assert.equal(margin.observedAt,'2026-10-23T17:20:00Z');
+ const margin=result.deepInputs.profitabilityChecklist.checks[0];assert.equal(margin.met,null);assert.equal(margin.observedAt,'2026-10-23T17:20:00Z');
+ assert.equal(result.deepInputs.profitabilityChecklist.checks[1].met,true);assert.equal(result.deepInputs.profitabilityChecklist.checks[1].observedAt,'2026-10-23T17:30:00Z');
  assert.equal(result.deepInputs.marketLiquidityChecklist.checks[0].observedAt,'');assert.equal(result.deepInputs.marketLiquidityChecklist.checks[2].observedAt,'');
  assert.equal(result.deepScore.factors.technicalChips.value,null);
 });

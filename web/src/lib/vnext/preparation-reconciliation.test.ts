@@ -20,12 +20,23 @@ function fixture(mode='ready'){
  const state:Row={jobId,symbol:'2330',state:'running',executionId,inputHash:inputHash(original),prepared:false,deadline:'2026-10-23T01:01:00.000Z'};
  let context=original;
  const fact:Row={fact_id:'00000000-0000-4000-8000-000000000004',stock_id:stockId,fact_key:'quarterly_revenue',period_end:'2026-06-30',duration_kind:'quarterly',value:100,unit:'TWD',provider:'tpex',authority_tier:'official_filing',estimate_kind:'reported',estimate_horizon:'reported_period',source_ref:'tpex-openapi:synthetic-original',source_timestamp:sourceAt,collected_at:sourceAt,recorded_at:sourceAt,validation_status:'validated',schema_valid:true,unit_valid:true,point_in_time_valid:true,consistency_valid:true};
+ const facts:Row[]=[fact];
  const sourceUrl='https://www.tpex.org.tw/synthetic-original.json',sha='a'.repeat(64);
  const tables:Record<string,Row[]>={stocks:[{id:stockId,symbol:'2330',market:'TW'}],stock_instruments_v3:[{instrument_authority_id:'10000000-0000-4000-8000-000000000001',stock_id:stockId,symbol:'2330',exchange:'TWSE',listing_status:'active',instrument_type:'common_stock',provider:'twse',roster_version:'tw-instrument-roster-v3.0',valid_from:'2020-01-01T00:00:00Z',valid_to:null,recorded_at:sourceAt,source_timestamp:sourceAt}],
   candidate_financial_acquisition_jobs_v4:[{job_id:'synthetic-original-acquisition',stock_id:stockId,period_end:'2026-06-30',status:'terminal',terminal_reason:'complete',response_sha256:sha,source_url:sourceUrl,collected_at:sourceAt,created_at:sourceAt,updated_at:sourceAt}],
   candidate_financial_document_receipts_v6:[],candidate_financial_document_fact_links_v8:[],candidate_issuer_ir_document_queue_v4:[],
   candidate_financial_fact_provenance_v4:[{provenance_id:'synthetic-provenance',fact_id:fact.fact_id,acquisition_job_id:'synthetic-original-acquisition',source_url:sourceUrl,source_sha256:sha,locator:{source_ref:fact.source_ref,period_end:fact.period_end,fact_key:fact.fact_key},extracted_at:sourceAt,recorded_at:sourceAt}],
   tw_trading_sessions_v3:[{session_id:'2026-10-22',market:'TWSE',status:'completed',provider:'twse',open_at:'2026-10-22T01:00:00Z',close_at:'2026-10-22T05:30:00Z',source_timestamp:sourceAt,collected_at:sourceAt,recorded_at:sourceAt}]};
+ if(mode==='latest_rejected_financial'){
+  const old:Row={...fact,fact_id:'00000000-0000-4000-8000-000000000005',fact_key:'quarterly_basic_eps',period_start:'2026-07-01',period_end:'2026-09-30',unit:'TWD_per_share',value:8.11,filing_restatement_id:'SYNTHETIC_OLD',source_ref:'tpex-openapi:synthetic-old-eps'};
+  facts.push(old,{...old,fact_id:'00000000-0000-4000-8000-000000000006',value:9.99,filing_restatement_id:'SYNTHETIC_NEW',recorded_at:'2026-10-23T00:30:00Z',validation_status:'rejected',unit_valid:false});
+  tables.candidate_financial_acquisition_jobs_v4.push({...tables.candidate_financial_acquisition_jobs_v4[0],job_id:'synthetic-eps-acquisition',period_end:old.period_end});
+  tables.candidate_financial_fact_provenance_v4.push({...tables.candidate_financial_fact_provenance_v4[0],provenance_id:'synthetic-eps-provenance',fact_id:old.fact_id,acquisition_job_id:'synthetic-eps-acquisition',locator:{source_ref:old.source_ref,period_end:old.period_end,fact_key:old.fact_key}});
+  original.evidence=[{id:old.fact_id,key:old.fact_key,value:old.value,unit:old.unit,period:old.period_end,kind:'fact',sourceTier:'official',source:sourceUrl,contentHash:inputHash(old),eventAt:sourceAt,availableAt:sourceAt},
+   {id:'SYNTHETIC_SOURCE_CLUE',value:'Synthetic source clue, not a real body.',kind:'derived',sourceTier:'public',source:'https://example.org/synthetic-clue',contentHash:inputHash('synthetic clue'),eventAt:sourceAt,availableAt:sourceAt},
+   {id:'forecast:SYNTHETIC',key:'source_quarterly_diluted_eps_estimate',value:1.23,unit:'TWD_per_share',period:'2027-Q1',kind:'assumption',sourceTier:'public',source:'https://example.org/synthetic-forecast',contentHash:inputHash('synthetic forecast'),eventAt:sourceAt,availableAt:sourceAt}];
+  state.inputHash=inputHash(original);
+ }
  if(mode==='prepared' || mode==='provider_present'){state.prepared=true;context={...original,cutoff,evidence:[]};state.inputHash=inputHash(context);}
  if(mode==='expired')state.deadline='2026-10-23T00:59:59.000Z';
  if(mode==='queued')state.state='queued';
@@ -53,7 +64,7 @@ function fixture(mode='ready'){
  },rpc(name:string,args:Row){
   if(name==='vnext_action_terms_read_v1'){calls.push('action-current');assert.deepEqual(args,{p_principal:author.principal,p_job:jobId,p_execution:executionId});return Promise.resolve({data:{schemaVersion:'vnext-current-action-terms-v1',stockId,symbol:'2330',asOf:cutoff,evidence:[],receipts:[],gaps:[]},error:null});}
   if(name==='vnext_forecast_read_v1'){calls.push('forecast-current');assert.deepEqual(args,{p_principal:author.principal,p_job:jobId,p_execution:executionId});return Promise.resolve({data:{schemaVersion:'vnext-current-forecasts-v1',stockId,symbol:'2330',asOf:cutoff,evidence:[],receipts:[],gaps:[]},error:null});}
-  if(name==='read_financial_facts_for_stocks_as_of'){calls.push('financial-asof');assert.deepEqual(args.p_stock_ids,[stockId]);return {limit:async(count:number)=>{assert.equal(count,2001);return {data:mode==='empty_facts'?[]:[fact],error:mode==='facts_read_lost'?{message:'uncertain'}:null};}};}
+  if(name==='read_financial_facts_for_stocks_as_of'){calls.push('financial-asof');assert.deepEqual(args.p_stock_ids,[stockId]);return {limit:async(count:number)=>{assert.equal(count,2001);return {data:mode==='empty_facts'?[]:facts,error:mode==='facts_read_lost'?{message:'uncertain'}:null};}};}
   if(name==='vnext_provider_command_v1')return journal(String(args.p_command) as 'inspect'|'read',args.p_request as Row).then(data=>({data,error:null}));
   assert.equal(name,'vnext_command_v1');return command(String(args.p_command),args.p_request as Row).then(data=>({data,error:null}));
  }} as unknown as PreparationDependencies['client'];
@@ -84,7 +95,7 @@ function fixture(mode='ready'){
   return {inputHash:state.inputHash,frozen:true};
  }
  const deps:PreparationDependencies={client,journal,command,now:()=>cutoff,historical:async(request)=>{calls.push('historical');if(mode==='calendar_cancelled')assert.equal(request.signalSession,'');else assert.equal(request.signalSession,'2026-10-22');return historical;}};
- return {calls,state,deps,client,original,historical,command};
+ return {calls,state,deps,client,original,historical,command,readContext:()=>context};
 }
 test('READ of ready immutable receipts has no mutation and exposes only readiness/authority gaps',async()=>{
  const f=fixture();const result=await reconcilePreparation(author,{jobId},f.deps);
@@ -121,11 +132,11 @@ test('a changed execution/input or latest cancelled calendar cannot silently use
 test('shared frozen projection is byte/hash equivalent to the original admitted execute projection and does not mutate sources',()=>{
  const f=fixture();const official:Evidence={id:'fact',key:'quarterly_revenue',value:100,unit:'TWD',period:'2026-06-30',source:'https://www.tpex.org.tw/original',sourceTier:'official',kind:'fact',eventAt:sourceAt,availableAt:sourceAt,contentHash:inputHash('synthetic-fact')};
  const sources={evidence:[official],receipts:[],deferredCount:0,deferredDigest:inputHash([]),deferredDetails:[],deferredDetailsTruncated:false,gaps:[]};const before=JSON.stringify(sources);
- const frozen={...f.original,cutoff,admissionHash:f.original.hash,priceAuthority:f.historical,financialSourceReceipts:sources.receipts,financialSourceDeferrals:{count:0,digest:sources.deferredDigest,details:[],detailsTruncated:false},gaps:['prior_gap','current_price_authority_unavailable','adjusted_history_below_240'],evidence:[official]};
+ const frozen={...f.original,cutoff,admissionHash:f.original.hash,priceAuthority:f.historical,financialSourceReceipts:sources.receipts,financialObservationInventory:null,financialSourceDeferrals:{count:0,digest:sources.deferredDigest,details:[],detailsTruncated:false},gaps:['prior_gap','current_price_authority_unavailable','adjusted_history_below_240'],evidence:[official]};
  assert.deepEqual(freezeFinancialPreparation(f.original,f.historical,sources,cutoff),{inputHash:inputHash(frozen),evidence:frozen});assert.equal(JSON.stringify(sources),before);
 });
 function controllers(f:ReturnType<typeof fixture>){
- const cache=new Map<string,Record<string,unknown>>();const allowed=new Set(['http.ts','store.ts','policy.ts','auth.ts','request.ts','research.ts','catalyst-cancellation.ts','business-criteria.ts','semantic-criteria.ts','runtime.ts','factors.ts','audit-quote-clock.ts','../candidate-price-history.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','evidence-clock.ts','worker-output.ts','research-failure.ts','preparation-reconciliation.ts','forecast-current.ts','disclosed-fiscal-forecast.ts','corporate-action-terms.ts','preparation-trading-identity.ts','cached-price-factors.ts']);
+ const cache=new Map<string,Record<string,unknown>>();const allowed=new Set(['http.ts','store.ts','policy.ts','auth.ts','request.ts','research.ts','financial-observation.ts','catalyst-cancellation.ts','business-criteria.ts','semantic-criteria.ts','runtime.ts','factors.ts','audit-quote-clock.ts','../candidate-price-history.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','evidence-clock.ts','worker-output.ts','research-failure.ts','preparation-reconciliation.ts','forecast-current.ts','disclosed-fiscal-forecast.ts','corporate-action-terms.ts','preparation-trading-identity.ts','cached-price-factors.ts']);
  const load=(name:string):Record<string,unknown>=>{
   if(!allowed.has(name))throw Error(`unexpected_preparation_source:${name}`);const prior=cache.get(name);if(prior)return prior;
   const filename=new URL(name,import.meta.url);let source=fs.readFileSync(filename,'utf8');
@@ -182,4 +193,13 @@ test('actual preparation composition cannot use an older active row after an inv
   assert.equal(f.calls.some(c=>['financial-asof','historical','prepare','claim','reserve'].includes(c)),false,mode);
   assert.deepEqual(f.calls.filter(c=>c.startsWith('cache:')),['cache:stocks','cache:stock_instruments_v3']);
  }
+});
+
+test('actual cached preparation keeps rejected head visible to selector and cannot remerge withheld original EPS',async()=>{
+ const f=fixture('latest_rejected_financial'),before=JSON.stringify(f.original);
+ const result=await reconcilePreparation(author,{jobId},f.deps,true);assert.equal(result.status,'prepared');assert.equal(result.financialFacts,1);
+ const frozen=f.readContext(),evidence=frozen.evidence as Evidence[];
+ assert.equal(evidence.some(e=>e.key==='quarterly_basic_eps'),false);assert.ok(evidence.some(e=>e.id==='SYNTHETIC_SOURCE_CLUE'));
+ assert.ok(evidence.some(e=>e.id==='forecast:SYNTHETIC'&&e.kind==='assumption'));
+ assert.equal(JSON.stringify(f.original),before);assert.equal(f.calls.filter(c=>c==='prepare').length,1);
 });

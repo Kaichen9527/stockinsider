@@ -1,3 +1,4 @@
+import {financialRowsAtCutoff,replaceReportedFinancial} from './financial-observation.ts';
 import {readCurrentForecasts,type CurrentForecasts} from './forecast-current.ts';
 import {readCurrentActionTerms,validateCurrentActionTerms,type CurrentActionTerms} from './corporate-action-terms.ts';
 import type {getSupabaseServerClient} from '../supabase-server.ts';
@@ -10,7 +11,8 @@ import {currentPriceEvidence} from './cached-price-factors.ts';
 import {currentPreparationInstrument,PREPARATION_INSTRUMENT_COLUMNS} from './preparation-trading-identity.ts';
 type Row=Record<string,unknown>;
 type Client=ReturnType<typeof getSupabaseServerClient>;
-type Sources=Awaited<ReturnType<typeof resolveFinancialEvidenceSources>>;
+type SourceProjection=Awaited<ReturnType<typeof resolveFinancialEvidenceSources>>;
+type Sources=Omit<SourceProjection,'observationInventory'>&{observationInventory?:SourceProjection['observationInventory']};
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu;
 const hash=/^[a-f0-9]{64}$/u;
 const known=(value:unknown,cutoff:string)=>typeof value==='string' && Number.isFinite(Date.parse(value)) && Date.parse(value)<=Date.parse(cutoff);
@@ -27,12 +29,14 @@ export function freezeFinancialPreparation(original:Row,historical:TwEntryHistor
  if(forecasts&&Date.parse(forecasts.asOf)>Date.parse(cutoff))throw Error('vnext_forecast_future_snapshot');
  if(actionTerms&&Date.parse(actionTerms.asOf)>Date.parse(cutoff))throw Error('vnext_action_future_snapshot');
  const currentPrice=historical.priceBasis?.status==='verified'?historical.bars.at(-1):undefined;
+ const priorFinancialIds=new Set(financialSources.receipts.map(row=>String(row.factId)));
  const frozen={...original,cutoff,admissionHash:original.hash,priceAuthority:historical,financialSourceReceipts:financialSources.receipts,
   ...(forecasts?{forecastSourceReceipts:forecasts.receipts,forecastSourceAsOf:forecasts.asOf}:{}),
   ...(actionTerms?{actionTermsReceipts:actionTerms.receipts,actionTermsAsOf:actionTerms.asOf,actionTermsGaps:actionTerms.gaps}:{}),
+  financialObservationInventory:financialSources.observationInventory??null,
   financialSourceDeferrals:{count:financialSources.deferredCount,digest:financialSources.deferredDigest,details:financialSources.deferredDetails,detailsTruncated:financialSources.deferredDetailsTruncated},
   gaps:[...(Array.isArray(original.gaps)?original.gaps:[]),...financialSources.gaps,...(forecasts?.gaps||[]),...(actionTerms?.gaps||[]),...(!currentPrice?['current_price_authority_unavailable',...historical.missingData]:[])],
-  evidence:[...(Array.isArray(original.evidence)?original.evidence as Evidence[]:[]).filter(e=>!evidence.some(f=>f.id===e.id)),...evidence]};
+  evidence:[...(Array.isArray(original.evidence)?original.evidence as Evidence[]:[]).filter(e=>!replaceReportedFinancial(e,priorFinancialIds)&&!evidence.some(f=>f.id===e.id)),...evidence]};
  return {inputHash:inputHash(frozen),evidence:frozen};
 }
 export type PreparationDependencies={
@@ -103,8 +107,9 @@ async function cachedProjection(deps:PreparationDependencies,state:Row,original:
  if((jobs.data as Row[]).some(row=>row.status!=='terminal') || (receipts.data as Row[]).some(row=>row.parser_status!=='complete' || row.financial_validation_status==='pending'))return {status:'unresolved',reason:'existing_cached_financial_work_pending'};
  const official=await deps.client.rpc('read_financial_facts_for_stocks_as_of',{p_cutoff:cutoff,p_stock_ids:[stockId]}).limit(2001);
  if(official.error || !Array.isArray(official.data) || official.data.length>2000)throw Error('vnext_preparation_verified_facts_unavailable');
- const verified=(official.data as Row[]).filter(f=>f.validation_status==='validated' && f.schema_valid===true && f.unit_valid===true && f.point_in_time_valid===true && f.consistency_valid===true && ['official_primary','official_filing'].includes(String(f.authority_tier)));
- const financial=await resolveFinancialEvidenceSources(deps.client,verified,cutoff);
+ const facts=financialRowsAtCutoff(official.data,[stockId],cutoff);
+ if(!facts)throw Error('vnext_preparation_verified_facts_unavailable');
+ const financial=await resolveFinancialEvidenceSources(deps.client,facts,cutoff);
  if(!financial.evidence.length)return {status:'gap',reason:'vnext_validated_financial_data_missing',gaps:financial.gaps};
  const session=await signalSession(deps.client,exchange,cutoff);
  const historical=await deps.historical({stockId,symbol:String(state.symbol),exchange,signalSession:session,cutoff});

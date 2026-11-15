@@ -1,3 +1,4 @@
+import {financialFactGrain,financialObservation,financialObservationInventory,selectFinancialObservationHeads} from './financial-observation.ts';
 import type {getSupabaseServerClient} from '../supabase-server.ts';
 import type {Evidence} from './research.ts';
 import {inputHash} from './policy.ts';
@@ -33,6 +34,9 @@ export function financialProviderSourceUrl(value:unknown){
 export function projectFinancialEvidenceSources(facts:Row[],rows:SourceRows,cutoff:string){
  if(!Number.isFinite(Date.parse(cutoff)) || facts.length>2000)throw Error('vnext_financial_source_scope_unbounded');
  const evidence:Evidence[]=[];const receipts:Row[]=[];const deferred:Row[]=[];
+ const selection=selectFinancialObservationHeads(facts);
+ const selectedFacts=new Set(selection.heads.map(row=>String(row.fact_id)));
+ for(const fact of facts.filter(row=>selection.ambiguous.has(financialFactGrain(row))))deferred.push({factId:String(fact.fact_id),originalFactHash:inputHash(fact),key:fact.fact_key,value:fact.value,unit:fact.unit,period:fact.period_end,reason:'financial_eps_variant_selection_ambiguous'});
  for(const fact of facts){
   const reject=(reason:string)=>deferred.push({factId:String(fact.fact_id),sourceRef:fact.source_ref,originalFactHash:inputHash(fact),estimateKind:fact.estimate_kind,estimateHorizon:fact.estimate_horizon,key:fact.fact_key,value:fact.value,unit:fact.unit,period:fact.period_end,reason});
   if(fact.estimate_kind!=='reported' || fact.estimate_horizon!=='reported_period'){reject('reported_fact_authority_required_estimate_not_promoted');continue;}
@@ -62,10 +66,11 @@ export function projectFinancialEvidenceSources(facts:Row[],rows:SourceRows,cuto
   }
   const sources=new Set(candidates.map((candidate)=>JSON.stringify([candidate.sourceUrl,candidate.sourceSha256])));
   if(sources.size!==1){reject(codecUnsupported?'approved_issuer_original_fact_codec_unsupported':rows.provenance.some((row)=>row.fact_id===fact.fact_id && !financialProviderSourceUrl(row.source_url))?'provider_official_host_source_unavailable':'immutable_source_receipt_missing_or_conflicting');continue;}
-  const receipt:Row={...candidates.sort((a,b)=>inputHash(a).localeCompare(inputHash(b)))[0],classification:{estimateKind:fact.estimate_kind,estimateHorizon:fact.estimate_horizon,durationKind:fact.duration_kind,provider:fact.provider,authorityTier:fact.authority_tier}};receipts.push({...receipt,receiptHash:inputHash(receipt)});
-  evidence.push({id:String(fact.fact_id),key:String(fact.fact_key),value:fact.value,unit:String(fact.unit),period:String(fact.period_end),source:String(receipt.sourceUrl),sourceTier:'official',kind:'fact',eventAt:String(fact.source_timestamp),availableAt:[fact.source_timestamp,fact.collected_at,fact.recorded_at,...(fact.filing_published_at===undefined || fact.filing_published_at===null?[]:[fact.filing_published_at]),...(known(fact.validation_recorded_at,cutoff)?[fact.validation_recorded_at]:[]),receipt.knownAt].map(String).sort(compareEvidenceClocks).at(-1)!,contentHash:inputHash(fact)});
+  const receipt:Row={stockId:fact.stock_id,...candidates.sort((a,b)=>inputHash(a).localeCompare(inputHash(b)))[0],classification:{estimateKind:fact.estimate_kind,estimateHorizon:fact.estimate_horizon,periodStart:fact.period_start??null,periodEnd:fact.period_end,durationKind:fact.duration_kind,filingRevisionId:fact.filing_restatement_id??null,provider:fact.provider,authorityTier:fact.authority_tier}};const boundReceipt={...receipt,receiptHash:inputHash(receipt)};receipts.push(boundReceipt);
+  const metadata=financialObservation(fact,boundReceipt,cutoff);
+  if(selectedFacts.has(String(fact.fact_id)))evidence.push({id:String(fact.fact_id),key:String(fact.fact_key),value:fact.value,unit:String(fact.unit),period:String(fact.period_end),source:String(receipt.sourceUrl),sourceTier:'official',kind:'fact',eventAt:String(fact.source_timestamp),availableAt:[fact.source_timestamp,fact.collected_at,fact.recorded_at,...(fact.filing_published_at===undefined || fact.filing_published_at===null?[]:[fact.filing_published_at]),...(known(fact.validation_recorded_at,cutoff)?[fact.validation_recorded_at]:[]),receipt.knownAt].map(String).sort(compareEvidenceClocks).at(-1)!,contentHash:inputHash(fact),financial:metadata});
  }
- return {evidence,receipts,deferredCount:deferred.length,deferredDigest:inputHash(deferred),deferredDetails:deferred.slice(0,64),gaps:deferred.slice(0,64).map((row)=>`financial_source:${row.factId}:${row.reason}`),deferredDetailsTruncated:deferred.length>64};
+ return {evidence,receipts,observationInventory:financialObservationInventory(facts,receipts,selection.ambiguous,cutoff),deferredCount:deferred.length,deferredDigest:inputHash(deferred),deferredDetails:deferred.slice(0,64),gaps:[...(evidence.length?['missing_sql_financial_interval_basis_parity']:[]),...deferred.slice(0,64).map((row)=>`financial_source:${row.factId}:${row.reason}`)],deferredDetailsTruncated:deferred.length>64};
 }
 /** Bounded cache reads only, called after the existing admitted attempt begins.
  * Original table grants/RLS and structural authority are unchanged. */

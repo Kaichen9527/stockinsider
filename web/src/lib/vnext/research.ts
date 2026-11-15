@@ -1,3 +1,5 @@
+import {financialPeriodsCompatible,isFinancialQuantity} from './financial-observation.ts';
+import type {FinancialObservation} from './financial-observation.ts';
 import {businessAnnotation,businessAssessment,type BusinessAnnotation,type BusinessAssessment} from './business-criteria.ts';
 import {cancellationAnnotation,cancellationAssessment,type CancellationAnnotation,type CancellationAssessment} from './catalyst-cancellation.ts';
 import {catalystAnnotation,catalystAssessment,type CatalystAnnotation,type CatalystAssessment} from './semantic-criteria.ts';
@@ -5,7 +7,7 @@ import { artifactFinancialSummary } from './artifact-financial-summary.ts';
 import { inputHash } from './policy.ts';
 export const REQUIRED_SECTIONS = ['conclusion', 'productsRevenue', 'competitionDemand', 'profitBridge', 'cashflows', 'valuation', 'catalysts', 'falsifiers', 'technical', 'history'] as const;
 export type Evidence = { id: string; key?: string; value: unknown; unit?: string; period?: string; contentHash: string;
-  source: string; sourceTier?: 'official' | 'public' | 'operator'; eventAt: string; availableAt: string; kind: 'fact' | 'assumption' | 'derived' };
+  source: string; sourceTier?: 'official' | 'public' | 'operator'; eventAt: string; availableAt: string; kind: 'fact' | 'assumption' | 'derived'; financial?:FinancialObservation };
 export type Claim = { id: string; text: string; kind: 'fact' | 'assumption' | 'guidance' | 'derived'; evidenceIds: string[];
   semantic?:CatalystAnnotation; cancellation?:CancellationAnnotation; business?:BusinessAnnotation; numeric?: { value: number; unit: string; period: string; key: string; formula?: { operation: 'add' | 'subtract' | 'multiply' | 'divide'; evidenceIds: string[] } } };
 export type Artifact = { schemaVersion: 'stockinsider-vnext-research-v1'; model: string; modelVersion: string; inputHash: string; outputHash: string;
@@ -53,6 +55,9 @@ export function validateClaim(claim: Claim, evidence: Evidence[]) {
     const formula = number.formula;
     const operands = formula?.evidenceIds.map((id) => numeric.find((e) => e.id === id));
     if (!formula || !operands || operands.length < 2 || operands.some((e) => !e || e.period !== number.period)) return [...reasons, `claim_formula_inputs_invalid:${claim.id}`];
+    const financialOperands=operands.filter((e):e is Evidence=>Boolean(e&&isFinancialQuantity(e)));
+    if(financialOperands.length>1&&financialOperands.some(e=>!financialPeriodsCompatible(e,financialOperands[0],true)))
+      reasons.push(`claim_formula_financial_period_or_basis_unavailable:${claim.id}`);
     const values = operands.map((e) => e!.value as number);
     let result = values[0];
     if (formula.operation === 'add' || formula.operation === 'subtract') {

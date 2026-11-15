@@ -49,7 +49,7 @@ export function initialFactors(input: ScreeningInputs) {
   };
   return {...scoreFactors(factors, INITIAL_WEIGHTS),derivationVersion:INITIAL_SCORE_VERSION};
 }
-type Checklist = { checks: Array<{ key: string; met: boolean | null; provenance: string[]; observedAt: string }> };
+type Checklist = { checks: Array<{ key: string; met: boolean | null; provenance: string[]; observedAt: string; raw?:unknown }> };
 export type DeepInputs = { cutoff: string; clockVersion?:typeof AUDIT_QUOTE_CLOCK_VERSION; valuation: { current: number | null; bear: number | null; base: number | null; bull: number | null; method: string; quoteAt: string; valuationAt: string; quoteClockVersion?:typeof AUDIT_QUOTE_CLOCK_VERSION; quoteObservedAt?:string; quoteKnownAt?:string; provenance: string[] };
   profitabilityChecklist: Checklist; technicalChipsChecklist: Checklist; catalystChecklist: Checklist; marketLiquidityChecklist: Checklist };
 const CHECKLISTS = {

@@ -1,3 +1,4 @@
+import {selectFinancialObservationHeads,financialObservationInventory} from './financial-observation.ts';
 /** Cached observations for the existing operator audit. This is deliberately
  * not a publication qualification producer: no proof, expiry or writer call. */
 import type { getSupabaseServerClient } from '../supabase-server.ts';
@@ -41,7 +42,7 @@ const missingWeeklyAuthority: WeeklyFormalAuthorityGap[] = [
 export type CurrentFinancialCache = {
   cutoff: string; stockIds: string[]; evidence: Evidence[];
   revisions: Array<{ stockId: string; factId: string; recordedAt: string; validationRecordedAt: string; restatementId: string | null; contentHash: string }>;
-  receipts: Row[]; gaps: string[];
+  receipts: Row[]; gaps: string[]; observationInventory?:ReturnType<typeof financialObservationInventory>;observationInventories?:Record<string,ReturnType<typeof financialObservationInventory>>;
 };
 /** The original service-role as-of reader applies validation/structural proofs.
  * The extra row detects truncation; never treat a full page as complete. */
@@ -53,27 +54,23 @@ export async function readCurrentFinancialCache(client: Client, stockIds: string
     const result = await client.rpc('read_financial_facts_for_stocks_as_of', { p_cutoff: cutoff, p_stock_ids: stockIds }).limit(2001);
     if (result.error || !Array.isArray(result.data)) throw Error('financial_cache_unavailable');
     if (result.data.length > 2000) throw Error('financial_cache_bound_exceeded');
-    const heads = new Map<string, Row>();
-    // Select the latest revision BEFORE validation. A withdrawn/invalid newer
-    // correction must never fall back to an older validated value.
-    for (const row of result.data as Row[]) {
-      if (!stockIds.includes(String(row.stock_id)) || !uuid.test(String(row.fact_id)) || !known(row.recorded_at, cutoff)) throw Error('financial_cache_binding_invalid');
-      // Unit/start/duration are revision content, not separate identities: a
-      // correction to one of them must supersede the preceding cache row too.
-      const key = JSON.stringify([row.stock_id, row.fact_key, row.period_end, row.estimate_kind, row.estimate_horizon]);
-      const previous = heads.get(key);
-      if (!previous || micros(row.recorded_at)! > micros(previous.recorded_at)!) heads.set(key, row);
-      else if (micros(row.recorded_at) === micros(previous.recorded_at) && inputHash(row) !== inputHash(previous)) throw Error('financial_revision_conflict');
-    }
-    const selected = [...heads.values()];
+    const rows=result.data as Row[];
+    for(const row of rows)if(!stockIds.includes(String(row.stock_id))||!uuid.test(String(row.fact_id))||!known(row.recorded_at,cutoff))throw Error('financial_cache_binding_invalid');
+    // Full interval identity, never end-date-only. Unit/restatement/source stay
+    // revision attributes; an invalid newer head cannot revive an older one.
+    const selection=selectFinancialObservationHeads(rows);const selected=selection.heads;
     const valid = selected.filter(row => ['source_timestamp', 'collected_at', 'recorded_at', 'validation_recorded_at'].every(key => known(row[key], cutoff))
       && micros(row.source_timestamp)! <= micros(row.collected_at)! && micros(row.collected_at)! <= micros(row.recorded_at)!);
-    const sources = await resolveFinancialEvidenceSources(client, valid, cutoff);
+    const sources = await resolveFinancialEvidenceSources(client, rows, cutoff);
     if (sources.evidence.some(e => !known(e.eventAt, cutoff) || !known(e.availableAt, cutoff)) || sources.receipts.some(r => !known(r.factRecordedAt, cutoff) || !known(r.knownAt, cutoff))) throw Error('financial_source_cache_clock_invalid');
-    const accepted = new Set(sources.evidence.map(e => e.id));
-    return { ...base, evidence: sources.evidence, receipts: sources.receipts,
+    const validIds=new Set(valid.map(row=>String(row.fact_id)));
+    const acceptedEvidence=sources.evidence.filter(e=>validIds.has(e.id));
+    const accepted = new Set(acceptedEvidence.map(e => e.id));
+    return { ...base, evidence: acceptedEvidence, receipts: sources.receipts,
+      observationInventory:sources.observationInventory,
+      observationInventories:Object.fromEntries(stockIds.map(stockId=>[stockId,financialObservationInventory(rows.filter(row=>row.stock_id===stockId),sources.receipts,selection.ambiguous,cutoff)])),
       revisions: valid.filter(row => accepted.has(String(row.fact_id))).map(row => ({ stockId: String(row.stock_id), factId: String(row.fact_id), recordedAt: String(row.recorded_at), validationRecordedAt: String(row.validation_recorded_at), restatementId: typeof row.filing_restatement_id === 'string' ? row.filing_restatement_id : null, contentHash: inputHash(row) })),
-      gaps: [...(valid.length < selected.length ? ['financial_revision_clock_invalid'] : []), ...sources.gaps, ...(!sources.evidence.length ? ['financial_cache_missing'] : [])] };
+      gaps: [...(selection.ambiguous.size?['financial_eps_variant_selection_ambiguous']:[]),...(valid.length < selected.length ? ['financial_revision_clock_invalid'] : []), ...sources.gaps, ...(!acceptedEvidence.length ? ['financial_cache_missing'] : [])] };
   } catch (error) {
     // Only typed refusal codes leave this boundary; provider/client messages can
     // contain endpoint or credential context and are never part of the envelope.
@@ -126,7 +123,7 @@ export function currentEvidenceRead(input: {
     refusalReasons: [...new Set([...comparisonGaps,
       ...(publication === 'missing' ? ['published_revision_missing'] : publication === 'input_changed' ? ['published_revision_input_changed'] : []),
       ...eligibility.missingAuthority])],
-    financial: { revisions, receipts: financial.receipts.filter(r => ids.has(String(r.factId))) },
+    financial: { revisions, receipts: financial.receipts.filter(r => r.stockId===input.stockId), observationInventory:financial.observationInventories?.[input.stockId]??null },
     price: priceValid ? { sourceDatasetRevision: history!.sourceDatasetRevision, availableAt: history!.availableAt, session: input.signalSession, observedAt: history!.bars.at(-1)!.sourceTimestamp, adjustmentEvidenceHash: history!.priceBasis!.adjustmentEvidenceHash } : null,
     // Preserve the real quote as comparison evidence. The actual audit receives
     // no usable price while published-target/current-rights authority is absent.

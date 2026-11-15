@@ -1,3 +1,4 @@
+import {financialRowsAtCutoff} from './financial-observation.ts';
 import { getSupabaseServerClient } from '../supabase-server';
 import { explicitScope, inputHash, researchMaterialHash, vnextEnabled } from './policy.ts';
 import { eligibleClue, type Clue } from './screening.ts';
@@ -118,13 +119,11 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
       const {loadTwEntryHistoricalPriceAuthority}=await import('../tw-entry-plan-authority.ts');
       const historical=await loadTwEntryHistoricalPriceAuthority(writer.supabase,{stockId:String(stocks.data.id),symbol:context.symbol,exchange:String(instrument.data.exchange).toUpperCase() as 'TWSE'|'TPEX',signalSession:String(calendar.latestCompleted||''),cutoff:new Date().toISOString()});
       const frozenAt = new Date().toISOString();
-      const official = await writer.supabase.rpc('read_financial_facts_for_stocks_as_of', { p_cutoff: frozenAt, p_stock_ids: [stocks.data.id] }).limit(10000);
-      if (official.error) throw new Error('vnext_preparation_verified_facts_unavailable');
-      const facts = (official.data || []) as Row[];
-      const verified = facts.filter((f) => f.validation_status === 'validated' && f.schema_valid === true && f.unit_valid === true
-        && f.point_in_time_valid === true && f.consistency_valid === true && ['official_primary', 'official_filing'].includes(String(f.authority_tier)));
+      const official = await writer.supabase.rpc('read_financial_facts_for_stocks_as_of', { p_cutoff: frozenAt, p_stock_ids: [stocks.data.id] }).limit(2001);
+      const facts=financialRowsAtCutoff(official.data,[String(stocks.data.id)],frozenAt);
+      if (official.error || !facts) throw new Error('vnext_preparation_verified_facts_unavailable');
       const {resolveFinancialEvidenceSources}=await import('./financial-evidence-sources.ts');
-      const financialSources=await resolveFinancialEvidenceSources(writer.supabase,verified,frozenAt);
+      const financialSources=await resolveFinancialEvidenceSources(writer.supabase,facts,frozenAt);
       if(financialSources.evidence.length===0)throw new Error('vnext_validated_financial_data_missing');
       const original = activeReceipt.evidence as Row;
       const {readCurrentForecasts}=await import('./forecast-current.ts');

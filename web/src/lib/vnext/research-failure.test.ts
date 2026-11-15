@@ -15,11 +15,27 @@ after(()=>{if(previousEnabled===undefined)delete process.env.STOCKINSIDER_VNEXT_
  * execution or official financial readiness is asserted by this fixture. */
 function fixture(mode='empty_financial'){
  const calls:Array<{action:string;body?:Row}>=[];const cache=new Map<string,Record<string,unknown>>();
- const allowed=new Set(['store.ts','policy.ts','research.ts','catalyst-cancellation.ts','business-criteria.ts','semantic-criteria.ts','runtime.ts','factors.ts','audit-quote-clock.ts','../candidate-price-history.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','evidence-clock.ts','worker-output.ts','research-failure.ts']);
+ const allowed=new Set(['store.ts','policy.ts','research.ts','financial-observation.ts','catalyst-cancellation.ts','business-criteria.ts','semantic-criteria.ts','runtime.ts','factors.ts','audit-quote-clock.ts','../candidate-price-history.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','evidence-clock.ts','worker-output.ts','research-failure.ts']);
  const identity={principal:'synthetic-author',role:'author' as const};
  const body={jobId:'00000000-0000-4000-8000-000000000001',executionId:'00000000-0000-4000-8000-000000000002'};
- const client={from(table:string){calls.push({action:`cache:${table}`});const query={select:()=>query,eq:()=>query,or:()=>query,lte:()=>query,order:()=>query,limit:()=>query,maybeSingle:async()=>table==='stocks'?{data:mode==='stock_missing'?null:{id:'synthetic-stock',symbol:'2330',name:'Synthetic',sector:'general'},error:mode==='stock_timeout'?{message:'timeout'}:null}:{data:mode==='trading_missing'?null:{exchange:'TWSE',valid_from:'2020-01-01'},error:mode==='trading_timeout'?{message:'timeout'}:null}};return query;},rpc(name:string,args:Row){
-  if(name==='read_financial_facts_for_stocks_as_of'){calls.push({action:'financial-asof'});return {limit:async(count:number)=>{assert.equal(count,10000);return {data:mode==='financial_timeout'?null:[],error:mode==='financial_timeout'?{message:'transport timed out'}:null};}};}
+ const sourceAt='2026-10-22T06:00:00Z',sourceUrl='https://www.twse.com.tw/synthetic-period.json',sha='b'.repeat(64);
+ const old:Row={fact_id:'00000000-0000-4000-8000-000000000003',stock_id:'synthetic-stock',fact_key:'quarterly_basic_eps',period_start:'2026-07-01',period_end:'2026-09-30',duration_kind:'quarterly',value:8.11,unit:'TWD_per_share',provider:'twse',authority_tier:'official_filing',estimate_kind:'reported',estimate_horizon:'reported_period',filing_restatement_id:'SYNTHETIC_OLD',source_ref:'twse-openapi:synthetic-old-eps',source_timestamp:sourceAt,collected_at:sourceAt,recorded_at:sourceAt,validation_status:'validated',schema_valid:true,unit_valid:true,point_in_time_valid:true,consistency_valid:true};
+ const facts=mode==='newer_rejected_financial'?[old,{...old,fact_id:'00000000-0000-4000-8000-000000000004',value:9.99,filing_restatement_id:'SYNTHETIC_NEW',recorded_at:'2026-10-23T00:30:00Z',validation_status:'rejected',unit_valid:false}]:[];
+ const sourceTables:Record<string,Row[]>={
+  candidate_financial_fact_provenance_v4:[{provenance_id:'synthetic-provenance',fact_id:old.fact_id,acquisition_job_id:'synthetic-acquisition',source_url:sourceUrl,source_sha256:sha,locator:{source_ref:old.source_ref,period_end:old.period_end,fact_key:old.fact_key},extracted_at:sourceAt,recorded_at:sourceAt}],
+  candidate_financial_document_fact_links_v8:[],
+  candidate_financial_acquisition_jobs_v4:[{job_id:'synthetic-acquisition',stock_id:old.stock_id,period_end:old.period_end,status:'terminal',terminal_reason:'complete',response_sha256:sha,source_url:sourceUrl,collected_at:sourceAt,created_at:sourceAt,updated_at:sourceAt}],
+ };
+ const client={from(table:string){
+  calls.push({action:`cache:${table}`});assert.ok(['stocks','stock_instruments_v3'].includes(table)||table in sourceTables,`unexpected financial read ${table}`);
+  const filters:Array<(row:Row)=>boolean>=[];
+  const query={select:()=>query,eq:()=>query,or:()=>query,lte:()=>query,order:()=>query,limit:()=>query,
+   in:(key:string,ids:unknown[])=>{filters.push(row=>ids.includes(row[key]));return query;},
+   maybeSingle:async()=>table==='stocks'?{data:mode==='stock_missing'?null:{id:'synthetic-stock',symbol:'2330',name:'Synthetic',sector:'general'},error:mode==='stock_timeout'?{message:'timeout'}:null}:{data:mode==='trading_missing'?null:{exchange:'TWSE',valid_from:'2020-01-01'},error:mode==='trading_timeout'?{message:'timeout'}:null},
+   then(resolve:(value:unknown)=>void,reject:(error:unknown)=>void){return Promise.resolve({data:sourceTables[table].filter(row=>filters.every(filter=>filter(row))),error:null}).then(resolve,reject);}};
+  return query;
+ },rpc(name:string,args:Row){
+  if(name==='read_financial_facts_for_stocks_as_of'){calls.push({action:'financial-asof'});return {limit:async(count:number)=>{assert.equal(count,2001);return {data:mode==='financial_timeout'?null:facts,error:mode==='financial_timeout'?{message:'transport timed out'}:null};}};}
   assert.equal(name,'vnext_command_v1');const action=String(args.p_command),request=args.p_request as Row;calls.push({action,body:request});
   if(action==='claim')return {data:{execute:true,...body,symbol:'2330',session:'2026-10-22',evidence:{hash:'synthetic'}},error:null};
   if(action==='fail' && mode==='failure_receipt_lost')throw Error('synthetic mutation response lost');
@@ -79,3 +95,14 @@ test('lost failure-write response stays explicitly uncertain and is never automa
  const {store,identity,body,calls}=fixture('failure_receipt_lost');await assert.rejects(()=>store.executeResearch(identity,body),/vnext_validated_financial_data_missing;failure_receipt_uncertain/);assert.equal(calls.filter(call=>call.action==='fail').length,1);assert.equal(calls.filter(call=>call.action==='claim').length,1);assert.equal(calls.some(call=>call.action==='prepare'),false);
 });
 test('wrong role fails before writer lease or any source authority access',async()=>{const {store,body,calls}=fixture();await assert.rejects(()=>store.executeResearch({principal:'synthetic-operator',role:'operator'},body),/vnext_author_required/);assert.deepEqual(calls,[]);});
+
+test('actual ordinary preparation cannot revive a validated EPS beneath a newer rejected same-grain fact',async()=>{
+ const {store,identity,body,calls}=fixture('newer_rejected_financial');
+ await assert.rejects(()=>store.executeResearch(identity,body),/vnext_validated_financial_data_missing/);
+ const failures=calls.filter(call=>call.action==='fail');assert.equal(failures.length,1);assert.equal(failures[0].body?.permanent,true);
+ assert.equal(calls.filter(call=>call.action==='financial-asof').length,1);
+ assert.ok(calls.some(call=>call.action==='cache:candidate_financial_fact_provenance_v4'));
+ assert.ok(calls.some(call=>call.action==='cache:candidate_financial_acquisition_jobs_v4'));
+ assert.equal(calls.some(call=>['prepare','author','review'].includes(call.action)),false);
+ assert.equal(calls.filter(call=>call.action==='release').length,1);
+});
