@@ -1,0 +1,82 @@
+{
+  "verifiedAt": "2026-11-15T05:33:04Z",
+  "sourceCommit": "dbae0ee5ffbebef7d2d0159865b8686d3abc0b2f",
+  "sourceSha256": "794b7fee83c4b3838720f5f9895d76eabcbc4c9b5044ba479a06497ae8c3d9ab",
+  "scope": "Contabo isolated staging for private noncommercial verification, no credentials or billing, no public ranking input or writer",
+  "rights": {
+    "publicUseApproved": false,
+    "providerTerms": "https://finmind.github.io/PrivacyPolicy/",
+    "providerPricingAndPrivateResearchScope": "https://finmind.github.io/Pricing/",
+    "providerDataLicence": "https://finmind.github.io/Disclaimer/",
+    "exactProduct": "https://eshop.twse.com.tw/zh/product/detail/d31c1b9570ae47058ec83a0bb1ffa419"
+  },
+  "capture": [
+    {
+      "unit": "stockinsider-stage-flow-vendor-20261116.timer",
+      "localRunAt": "2026-11-16T21:27:00+08:00",
+      "persistent": false,
+      "timerState": "active",
+      "serviceState": "inactive"
+    },
+    {
+      "unit": "stockinsider-stage-flow-vendor-20261117.timer",
+      "localRunAt": "2026-11-17T21:27:00+08:00",
+      "persistent": false,
+      "timerState": "active",
+      "serviceState": "inactive"
+    }
+  ],
+  "isolation": {
+    "runtimeLimitSeconds": 40,
+    "memoryMaxBytes": 100663296,
+    "dynamicUser": true,
+    "stateDirectoryMode": "0700",
+    "executableRuntimeOnly": true,
+    "otherStockInsiderTimerStatesUnchanged": true,
+    "availableDiskBytes": 26587693056,
+    "availableMemoryBytes": 4087992320,
+    "writerInvoked": false
+  },
+  "replay": {
+    "bytes": 4819,
+    "completeVendorDates": [
+      "2026-11-02",
+      "2026-11-03",
+      "2026-11-04",
+      "2026-11-05",
+      "2026-11-06",
+      "2026-11-09",
+      "2026-11-10",
+      "2026-11-11",
+      "2026-11-12",
+      "2026-11-13"
+    ],
+    "completedAt": "2026-11-15T05:31:35.158969+00:00",
+    "cutoff": "2026-11-13T21:30:00+08:00",
+    "dataset": "TaiwanStockTotalInstitutionalInvestors",
+    "httpDate": "Sun, 15 Nov 2026 05:31:34 GMT",
+    "httpStatus": 200,
+    "marketScopeEvidence": "historical_parity_only",
+    "observedAt": "2026-11-15T05:31:35.158427+00:00",
+    "observedCategoryCount": 6,
+    "observedSameDayBeforeCutoff": false,
+    "provider": "FinMind",
+    "providerReportedMarket": null,
+    "publicUseApproved": false,
+    "rawSaved": false,
+    "requestedStart": "2026-10-31",
+    "researchReplay": true,
+    "schema": "stockinsider-private-vendor-flow-observation-v1",
+    "sessionDate": "2026-11-13",
+    "sha256": "7d5e5d5f7b5df1f28794c11cb026198de828eaca0932e116f703ff13cdca5228",
+    "sourceReportedSettledEdition": false,
+    "startedAt": "2026-11-15T05:31:35.053562+00:00",
+    "status": "SESSION_PRESENT",
+    "writerInvoked": false
+  },
+  "earlyLiveDayRefusal": "outside_live_observation_window",
+  "actualNovember16Or17CapturedYet": false,
+  "sourceReportedSettledVersion": false,
+  "sourceReportedVenue": false,
+  "anyRawDataPublished": false
+}
