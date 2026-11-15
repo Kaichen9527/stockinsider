@@ -1,0 +1,235 @@
+diff --git a/web/src/lib/vnext/launch-outcome-cycle.ts b/web/src/lib/vnext/launch-outcome-cycle.ts
+new file mode 100644
+--- /dev/null
++++ b/web/src/lib/vnext/launch-outcome-cycle.ts
+@@ -0,0 +1,116 @@
++import {loadTwLaunchOutcomeInput,type TwEntryAuthorityClient,type TwEntryForwardCalendar} from '../tw-entry-plan-authority.ts';
++import type {VnextIdentity} from './auth.ts';
++import {evidenceInstant} from './evidence-clock.ts';
++import {evaluateLaunchOutcome,LAUNCH_OUTCOME_POLICY} from './launch-outcomes.ts';
++
++type Row=Record<string,unknown>;
++type Market='TWSE'|'TPEX';
++type SignalRef={rankingRunId:string;symbol:string;market:Market;session:string};
++type Anchor=Parameters<typeof loadTwLaunchOutcomeInput>[1];
++type Writer=TwEntryAuthorityClient & {rpc:(name:string,args:Row)=>PromiseLike<{data:unknown;error:unknown}>};
++const batchLimit=16;
++
++const object=(value:unknown):value is Row=>typeof value==='object'&&value!==null&&!Array.isArray(value);
++const id=(value:unknown):value is string=>typeof value==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/u.test(value);
++const hash=(value:unknown):value is string=>typeof value==='string'&&/^[a-f0-9]{64}$/u.test(value);
++const equalClock=(left:unknown,right:unknown)=>evidenceInstant(left)!==null&&evidenceInstant(left)===evidenceInstant(right);
++
++function signalRef(value:unknown):value is SignalRef {
++  return object(value)&&id(value.rankingRunId)&&typeof value.symbol==='string'&&/^\d{4}$/u.test(value.symbol)
++    &&(value.market==='TWSE'||value.market==='TPEX')&&typeof value.session==='string'
++    &&/^\d{4}-\d{2}-\d{2}$/u.test(value.session)&&evidenceInstant(value.session+'T00:00:00Z')!==null;
++}
++
++function batchFrom(value:unknown,asOf:string) {
++  if(!object(value)||value.schemaVersion!=='vnext-launch-outcome-batch-v1'||!equalClock(value.asOf,asOf)
++    ||!object(value.calendars)||!Array.isArray(value.signals)||value.signals.length>batchLimit
++    ||typeof value.available!=='number'||!Number.isSafeInteger(value.available)||value.available<value.signals.length
++    ||(!value.signals.length&&value.available!==0)||!value.signals.every(signalRef))throw Error('launch_outcome_batch_unavailable');
++  const references:SignalRef[]=value.signals;
++  if(new Set(references.map(row=>row.rankingRunId+':'+row.symbol)).size!==references.length)throw Error('launch_outcome_batch_unavailable');
++  const calendars=new Map<Market,TwEntryForwardCalendar|null>();
++  for(const market of new Set(references.map(row=>row.market))){
++    const calendar=value.calendars[market];
++    if(calendar===null){calendars.set(market,null);continue;}
++    if(!object(calendar)||calendar.schema!=='official-calendar-acquisition-v3.14'||typeof calendar.availableAt!=='string'
++      ||!Array.isArray(calendar.calendarSessions)||!calendar.calendarSessions.length||calendar.calendarSessions.length>401
++      ||!calendar.calendarSessions.every(object)||evidenceInstant(calendar.availableAt)===null
++      ||evidenceInstant(calendar.availableAt)!>evidenceInstant(asOf)!)
++      throw Error('launch_outcome_batch_unavailable');
++    calendars.set(market,{schema:calendar.schema,availableAt:calendar.availableAt,calendarSessions:calendar.calendarSessions});
++  }
++  return {references,calendars,available:value.available};
++}
++
++function anchorFrom(value:unknown,ref:SignalRef):Anchor {
++  if(!object(value)||value.rankingRunId!==ref.rankingRunId||value.symbol!==ref.symbol||value.session!==ref.session||value.market!==ref.market
++    ||!id(value.firstRankingRunId)||!id(value.stockId)||!id(value.closeObservationId)||!id(value.calendarAuthorityId)
++    ||!hash(value.inputHash)||!hash(value.priceRevision)||!hash(value.calendarRevision)||!hash(value.actionsRevision)
++    ||typeof value.rawClose!=='string'||typeof value.cutoff!=='string'||typeof value.publishedAt!=='string')
++    throw Error('launch_outcome_anchor_unavailable');
++  return {...ref,firstRankingRunId:value.firstRankingRunId,stockId:value.stockId,closeObservationId:value.closeObservationId,
++    calendarAuthorityId:value.calendarAuthorityId,inputHash:value.inputHash,priceRevision:value.priceRevision,calendarRevision:value.calendarRevision,
++    actionsRevision:value.actionsRevision,rawClose:value.rawClose,cutoff:value.cutoff,publishedAt:value.publishedAt};
++}
++
++function replayFrom(value:unknown,ref:SignalRef,asOf:string,revision:string){
++  if(!object(value)||value.schemaVersion!=='vnext-launch-outcome-write-v1'||value.rankingRunId!==ref.rankingRunId
++    ||value.symbol!==ref.symbol||!equalClock(value.asOf,asOf)||value.policyVersion!==LAUNCH_OUTCOME_POLICY
++    ||value.inputSnapshotHash!==revision||!hash(value.snapshotHash)||typeof value.replay!=='boolean')
++    throw Error('launch_outcome_write_uncertain');
++  return value.replay;
++}
++
++/** Runs only with the caller's existing owned write lease and canonical post-close cutoff.
++ * The RPC chooses frozen signals and applied calendar receipts. No request body
++ * can supply a ranking outcome or an official price packet. */
++export async function runLaunchOutcomesWithLease(writer:Writer,principal:string,owner:string,asOf:string) {
++  const lease={p_principal:principal,p_lease_owner:owner};
++  const selected=await writer.rpc('vnext_launch_outcome_batch_v1',{...lease,p_as_of:asOf,p_limit:batchLimit});
++  if(selected.error)throw Error('launch_outcome_batch_unavailable');
++  const batch=batchFrom(selected.data,asOf);
++  let written=0,replayed=0;
++  const deferred:Partial<Record<'official_calendar_unavailable'|'frozen_anchor_unavailable'|'official_data_unavailable'|'write_unconfirmed',number>>={};
++  const defer=(reason:keyof typeof deferred)=>{deferred[reason]=(deferred[reason]??0)+1;};
++  for(const ref of batch.references){
++    const calendar=batch.calendars.get(ref.market);
++    if(!calendar){defer('official_calendar_unavailable');continue;}
++    const signal={...lease,p_run_id:ref.rankingRunId,p_symbol:ref.symbol};
++    let anchor:Anchor;
++    try{
++      const selected=await writer.rpc('vnext_launch_outcome_command_v1',signal);
++      if(selected.error)throw Error('launch_outcome_anchor_unavailable');
++      anchor=anchorFrom(selected.data,ref);
++    }catch{defer('frozen_anchor_unavailable');continue;}
++    let packet:Awaited<ReturnType<typeof loadTwLaunchOutcomeInput>>;
++    let evaluation:ReturnType<typeof evaluateLaunchOutcome>;
++    try{
++      packet=await loadTwLaunchOutcomeInput(writer,anchor,asOf,calendar);
++      evaluation=evaluateLaunchOutcome(packet);
++    }catch{defer('official_data_unavailable');continue;}
++    try{
++      const result=await writer.rpc('vnext_launch_outcome_command_v1',{...signal,p_input:packet,p_result:evaluation});
++      if(result.error)throw Error('launch_outcome_write_uncertain');
++      if(replayFrom(result.data,ref,asOf,evaluation.inputSnapshotHash))replayed++;
++      else written++;
++    }catch{defer('write_unconfirmed');}
++  }
++  return {status:'evaluated',asOf,available:batch.available,attempted:batch.references.length,
++    backlog:batch.available-batch.references.length,written,replayed,deferred} as const;
++}
++
++/** An epilogue of the existing guarded operator cycle. The ranking receipt
++ * stays valid if official outcome inputs or the later lease are unavailable. */
++export async function runLaunchOutcomeCycle(identity:VnextIdentity,asOf:string) {
++  if(identity.role!=='operator'||!identity.principal)throw Error('launch_outcome_operator_required');
++  try{
++    const {requireActiveVpsWriter}=await import('../taiwan-data-runtime.ts');
++    const writer=await requireActiveVpsWriter();
++    if(!writer.ok)return {status:'deferred',reason:'launch_outcome_writer_unavailable'} as const;
++    const {acquireProductionWriteLease,releaseProductionWriteLease}=await import('../production-write-lease.ts');
++    const lease=await acquireProductionWriteLease(300);
++    if(!lease)return {status:'deferred',reason:'launch_outcome_lease_unavailable'} as const;
++    try{return await runLaunchOutcomesWithLease(writer.supabase,identity.principal,lease,asOf);}
++    finally{await releaseProductionWriteLease(lease);}
++  }catch{return {status:'deferred',reason:'launch_outcome_batch_unavailable'} as const;}
++}
+diff --git a/web/src/lib/vnext/research-cycle.ts b/web/src/lib/vnext/research-cycle.ts
+--- a/web/src/lib/vnext/research-cycle.ts
++++ b/web/src/lib/vnext/research-cycle.ts
+@@ -9,7 +9,8 @@
+   const context=await readLaunchCycleAdmission(identity);
+   if(!context.ready)return {status:'deferred',reason:context.reason??'launch_ranking_cycle_not_ready',policyVersion:LAUNCH_RANKING_POLICY,expensiveCalls:0,scheduleEnabled:false};
+   const ranking=await publishCycleLaunchRanking(identity,context.session);
+-  return {status:'existing_reviewed_cache_only',policyVersion:LAUNCH_RANKING_POLICY,ranking,dependencies:['legacy_author_preparation_dependency'],expensiveCalls:0,scheduleEnabled:false};
++  const outcomes=context.cutoff?await(await import('./launch-outcome-cycle.ts')).runLaunchOutcomeCycle(identity,context.cutoff):null;
++  return {status:'existing_reviewed_cache_only',policyVersion:LAUNCH_RANKING_POLICY,ranking,outcomes,dependencies:['legacy_author_preparation_dependency'],expensiveCalls:0,scheduleEnabled:false};
+  }
+  const {command}=await import('./store.ts');const context=await analysisWriter(async()=>{await(await import('./calendar-sync.ts')).synchronizeCachedCalendar(identity);return command(identity,'screen-context',{});});
+  if(context.completed!==true || context.postclose!==true)return {status:'deferred',reason:'completed_postclose_session_required',scheduleEnabled:false};
+diff --git a/web/src/lib/tw-entry-plan-authority.test.ts b/web/src/lib/tw-entry-plan-authority.test.ts
+--- a/web/src/lib/tw-entry-plan-authority.test.ts
++++ b/web/src/lib/tw-entry-plan-authority.test.ts
+@@ -5,6 +5,8 @@
+ 
+ import { evaluateLaunchOutcome } from './vnext/launch-outcomes.ts';
+ 
++import { runLaunchOutcomeCycle, runLaunchOutcomesWithLease } from './vnext/launch-outcome-cycle.ts';
++
+ type Row = Record<string, unknown>;
+ const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+ const id = (value: number) => `00000000-0000-4000-8000-${String(value).padStart(12, '0')}`;
+@@ -332,3 +334,77 @@
+   assert.equal(result.research.barrier20.state, 'price_data_gap');
+   assert.equal(result.execution.nextSession, '2026-09-29');
+ });
++
++const principal = 'stage-operator';
++const owner = '00000000-0000-4000-8000-065555555555';
++
++function outcomeBatchFixture() {
++  const { anchor, annual, data } = outcomeFixture();
++  const first = { rankingRunId: anchor.rankingRunId, symbol: anchor.symbol, market: anchor.market, session: anchor.session };
++  const second = { ...first, rankingRunId: id(35001), symbol: '1234', market: 'TPEX' };
++  const response = { schemaVersion: 'vnext-launch-outcome-batch-v1', asOf: outcomeAsOf,
++    available: 3, signals: [first, second], calendars: { TWSE: annual, TPEX: null } };
++  const { client, reads } = mockClient(data);
++  return { anchor, response, client, reads };
++}
++
++test('post-close outcomes use one authorized cutoff and write only evaluated official prices', async () => {
++  const { anchor, response, client, reads } = outcomeBatchFixture();
++  const calls: string[] = [];
++  const result = await runLaunchOutcomesWithLease({ ...client, async rpc(name, args) {
++    assert.equal(args.p_lease_owner, owner);
++    assert.equal(args.p_principal, principal);
++    if (name.endsWith('batch_v1')) {
++      assert.equal(args.p_as_of, outcomeAsOf);
++      calls.push('batch');
++      return { data: response, error: null };
++    }
++    assert.equal(args.p_run_id, anchor.rankingRunId);
++    assert.equal(args.p_symbol, anchor.symbol);
++    if (!Object.hasOwn(args, 'p_input')) {
++      calls.push('anchor');
++      return { data: anchor, error: null };
++    }
++    calls.push('write');
++    const packet = args.p_input as Parameters<typeof evaluateLaunchOutcome>[0];
++    assert.equal(packet.asOf, outcomeAsOf);
++    assert.equal(packet.signal.rawClose, '100.00');
++    const computed = evaluateLaunchOutcome(packet);
++    assert.deepEqual(args.p_result, computed);
++    assert.equal(computed.research.barrier20.state, 'up_first');
++    assert.equal(computed.execution.status, 'opening_evidence_gap');
++    return { data: { schemaVersion: 'vnext-launch-outcome-write-v1', rankingRunId: anchor.rankingRunId, symbol: anchor.symbol,
++      policyVersion: computed.policyVersion, inputSnapshotHash: computed.inputSnapshotHash, snapshotHash: 'd'.repeat(64),
++      asOf: outcomeAsOf.replace('Z', '+00:00'), replay: true }, error: null };
++  } }, principal, owner, outcomeAsOf);
++  assert.deepEqual(calls, ['batch', 'anchor', 'write']);
++  assert.ok(reads.includes(tables.prices));
++  assert.deepEqual(result, { status: 'evaluated', asOf: outcomeAsOf, available: 3, attempted: 2, backlog: 1,
++    written: 0, replayed: 1, deferred: { official_calendar_unavailable: 1 } });
++});
++
++test('post-close outcomes reject a batch that uses a different cutoff before reading prices', async () => {
++  const { response, client, reads } = outcomeBatchFixture();
++  const writer = { ...client, async rpc() { return { data: { ...response, asOf: '2026-09-29T09:00:01Z' }, error: null }; } };
++  await assert.rejects(runLaunchOutcomesWithLease(writer, principal, owner, outcomeAsOf), /launch_outcome_batch_unavailable/);
++  assert.deepEqual(reads, []);
++});
++
++test('post-close outcomes keep a missing frozen anchor and unknown write distinct', async () => {
++  const { anchor, response, client } = outcomeBatchFixture();
++  const [first] = response.signals;
++  const nextAnchor = { ...anchor, rankingRunId: id(35002) };
++  response.signals = [first, { ...first, rankingRunId: nextAnchor.rankingRunId }];
++  const result = await runLaunchOutcomesWithLease({ ...client, async rpc(name, args) {
++    if (name.endsWith('batch_v1')) return { data: response, error: null };
++    if (args.p_run_id === anchor.rankingRunId) return { data: null, error: 'missing' };
++    if (!Object.hasOwn(args, 'p_input')) return { data: nextAnchor, error: null };
++    return { data: { policyVersion: 'launch-outcomes-v1' }, error: null };
++  } }, principal, owner, outcomeAsOf);
++  assert.deepEqual(result.deferred, { frozen_anchor_unavailable: 1, write_unconfirmed: 1 });
++  assert.equal(result.written, 0);
++});
++
++test('post-close outcomes cannot run under an author identity', async () => {
++  await assert.rejects(runLaunchOutcomeCycle({ role: 'author', principal: 'stage-author' }, outcomeAsOf), /launch_outcome_operator_required/);
++});
+diff --git a/web/src/lib/vnext/http.ts b/web/src/lib/vnext/http.ts
+--- a/web/src/lib/vnext/http.ts
++++ b/web/src/lib/vnext/http.ts
+@@ -61,6 +61,7 @@
+       return NextResponse.json({ok:true,policyVersion:'stockinsider-vnext-20-v1',result});
+     }
+     if(['screen','weekly-audit','dispatch','cycle'].includes(action)){
++      if(action==='cycle'&&!(await import('../internal-auth.ts')).requireExactInternalBearer(request)) throw Error('vnext_internal_bearer_required');
+       if(identity.role!=='operator')throw new Error('vnext_operator_required');
+       if(Object.keys(body).some((key)=>key!=='action'))throw new Error('vnext_cycle_closed_body');
+       const result=action==='dispatch'?await(await import('./research-dispatcher.ts')).dispatchResearchQueue(identity)

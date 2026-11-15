@@ -1,0 +1,62 @@
+{
+  "ticket": 394,
+  "baseline": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "inputEvidenceBranch": "c176877095c3438986234aeddc36a933be8e41d6",
+  "candidateOnly": true,
+  "productionModified": false,
+  "environment": "isolated Contabo staging",
+  "postgres": {
+    "postgres": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "sameCutoffCompletedExcluded": true,
+    "sameDayAfterCutoffExcluded": true,
+    "calendarReceiptsBoundToCutoff": true,
+    "calendarConflictingHeadsDeferred": true,
+    "rotationAcrossBacklogProved": true,
+    "wrongCutoffRejected": true,
+    "unauthenticatedExecuteDenied": true,
+    "disallowedBatchSizeRejected": true,
+    "networkListener": false,
+    "sqlSha256": "d37d559d5e91125e1243e732f0254c6ccb6061d7cb34881ed911d9b0be388197"
+  },
+  "node": {
+    "version": "22.23.1",
+    "passed": 22,
+    "additionalWorkerTests": 4,
+    "failed": 0,
+    "scopedStrictTypecheck": "5.9.3",
+    "patchApplies": true,
+    "patchSha256": "8499f87c9fcb1150f1ccf196e8252b5b7df7db8f661d9a3fba4fa4557ea1b126",
+    "files": {
+      "web/src/lib/vnext/launch-outcome-cycle.ts": "6a29c46d94320025f8a65816706148a507735baccc8f890f1869b8c674fc0b0a",
+      "web/src/lib/vnext/research-cycle.ts": "1e3f7fbdc258b48a6f3c63fff7a778031417605bae477eb8551facf7f9a4414d",
+      "web/src/lib/tw-entry-plan-authority.test.ts": "171c6f15c88d39506cc1b0b89ad1a9faab1becc0de065e624573fc715a283040",
+      "web/src/lib/vnext/http.ts": "00baf291a69c83dad14dc52b89f686b0fa4a3df750d9f4843fb522095471904c"
+    }
+  },
+  "execution": {
+    "usesExistingCycle": true,
+    "applicationBatchLimit": 16,
+    "physicalQueueAdded": false,
+    "liveTimerEnabled": false,
+    "usesExistingWriterLease": true,
+    "modelCalls": 0
+  },
+  "proofLimits": [
+    "applied producer receipt, cycle admission and backend records supplied by fixtures",
+    "worker official data comes from synthetic cache client",
+    "full HTTP and database deployment not executed"
+  ],
+  "inputDigests": {
+    "baseline.sql": "b44dc19e5b6d80ebcacd72073a850d7f1132cb83eb5a4df653f0a1096ee9d949",
+    "signal.sql": "f992d105153e12f94657325c8632b91e75ede1e02d93fa41aca6e765eea47b4e",
+    "auth.sql": "3cc2e9e6567c4a650d109dac6f6bc61a5f10d093f19941895dcd6981856e6885",
+    "migration.sql": "8a63202c50e1c99d864186dee17bf1433e641131d7ea0cebb1fd4c0ab345e36d",
+    "seed.sql": "0d9f0614bf05f83111a91b086258b41e1f9263729327eb6f9ed9c54583eb7ab4",
+    "fixture.mjs": "241ebb4225e3d2f64bf137d00b4248d50880a784706bd7ba2b7fcfd80542ef5a",
+    "launch-outcomes.ts": "b092e9189a099d9524e225bb15c660a5096dca5b40e8f90d3bdc05f4c0b822e8",
+    "policy.ts": "06b10f467752ad38cc8d80f5b93163aa446284f5cca5be6bb37fd186926ddab7",
+    "evidence-clock.ts": "bf587d9f77289610aa3a4c45285af5337f501aa8dd90b55ab37ac45cdc91ea2e",
+    "batch-setup.sql": "f2ead320b7f9f58f9d8bda2694a0e3539dd0e66bf5b1b9bd4b1e600fe6922914",
+    "batch.sql": "d37d559d5e91125e1243e732f0254c6ccb6061d7cb34881ed911d9b0be388197"
+  }
+}

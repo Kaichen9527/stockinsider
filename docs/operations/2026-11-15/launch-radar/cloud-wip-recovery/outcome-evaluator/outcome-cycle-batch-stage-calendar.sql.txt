@@ -1,0 +1,19 @@
+CREATE TABLE public.fixture_outcome_annual(receipt jsonb);
+CREATE FUNCTION public.vnext_launch_cycle_context_v1(p_principal text) RETURNS jsonb LANGUAGE sql STABLE AS $$
+ SELECT jsonb_build_object('ready',current_setting('fixture.cycle_ready',true)='yes',
+  'session',substring(current_setting('fixture.cycle_cutoff',true),1,10),'cutoff',current_setting('fixture.cycle_cutoff',true))
+$$;
+CREATE FUNCTION public.vnext_launch_annual_rows_internal_v1(market_name text,first_day date,last_day date,cutoff timestamptz)
+RETURNS jsonb LANGUAGE sql STABLE AS $$
+ SELECT jsonb_agg(receipt) FROM public.fixture_outcome_annual WHERE receipt#>>'{row,market}'=market_name
+  AND (receipt#>>'{row,session}')::date BETWEEN first_day AND last_day AND (receipt->>'knownAt')::timestamptz<=cutoff
+$$;
+GRANT SELECT ON public.fixture_outcome_annual TO stockinsider_vnext_owner;
+INSERT INTO public.fixture_outcome_annual
+SELECT jsonb_build_object('chunkHash',repeat('1',64),'jobId','earlier','producer',repeat('d',40),'runId','demo',
+ 'knownAt','2026-10-05T08:00:00Z','row',jsonb_build_object('market','TWSE','session',d,'status','scheduled','sourceSha256',repeat('a',64)))
+FROM unnest(ARRAY['2026-10-05','2026-10-06','2026-10-07','2026-10-08']) d;
+INSERT INTO public.fixture_outcome_annual SELECT receipt||'{"knownAt":"2026-10-06T10:00:00Z","jobId":"latest"}'::jsonb
+ FROM public.fixture_outcome_annual WHERE receipt#>>'{row,session}'='2026-10-06';
+INSERT INTO public.fixture_outcome_annual SELECT receipt||'{"knownAt":"2026-10-06T14:00:00Z","jobId":"later"}'::jsonb
+ FROM public.fixture_outcome_annual WHERE receipt#>>'{row,session}'='2026-10-07';

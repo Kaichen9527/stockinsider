@@ -1,0 +1,100 @@
+import concurrent.futures, hashlib, json, os, pathlib, resource, shutil, subprocess, tempfile, threading
+import sys
+keys=["baseline.sql","signal.sql","auth.sql","migration.sql","seed.sql","fixture.mjs","launch-outcomes.ts","policy.ts","evidence-clock.ts","batch-setup.sql","batch.sql"]
+if len(sys.argv)!=len(keys)+1:
+    raise SystemExit("Pass these input files in order: "+", ".join(keys))
+files={key:pathlib.Path(value).read_text(encoding='utf-8') for key,value in zip(keys,sys.argv[1:])}
+assert int(next(line for line in open('/proc/meminfo') if line.startswith('MemAvailable:')).split()[1])>=2621440
+assert shutil.disk_usage('/tmp').free>=15*1024**3
+prefix=['unshare','--net','--','setpriv','--reuid=65534','--regid=65534','--clear-groups','--no-new-privs','--']
+pg='/usr/lib/postgresql/17/bin/'
+def cap():
+    resource.setrlimit(resource.RLIMIT_CPU,(30,30))
+    resource.setrlimit(resource.RLIMIT_FSIZE,(128*1024**2,128*1024**2))
+run='00000000-0000-4000-8000-000000000003'
+lease='00000000-0000-4000-8000-555555555555'
+release='d'*40
+signature='public.vnext_launch_outcome_command_v1(text,uuid,uuid,text,jsonb,jsonb)'
+def quoted(value):
+    return "'"+value.replace("'","''")+"'"
+with tempfile.TemporaryDirectory(dir='/tmp',prefix='si-outcome-journal-') as d:
+    root=pathlib.Path(d)
+    os.chown(root,65534,65534)
+    for name,content in files.items():
+        (root/name).write_text(content,encoding='utf-8')
+    env={'PATH':'/usr/bin:/bin','TZ':'UTC','LANG':'C.UTF-8','PGHOST':str(root),'PGPORT':'6589','PGDATABASE':'postgres','PGUSER':'nobody'}
+    def call(program, *args, sql=None, timeout=18):
+        return subprocess.run(prefix+[program,*args],cwd=root,env=env,input=sql,encoding='utf-8',capture_output=True,timeout=timeout,preexec_fn=cap)
+    node=call('/usr/bin/node','fixture.mjs')
+    if node.returncode: raise RuntimeError(node.stderr)
+    cases=json.loads(node.stdout)
+    init=call(pg+'initdb','-A','trust','--no-sync','-D',str(root/'db'))
+    if init.returncode: raise RuntimeError(init.stderr)
+    def psql(sql, error=None):
+        p=call(pg+'psql','-X','-A','-t','-q','-v','ON_ERROR_STOP=1',sql=sql)
+        if error:
+            assert p.returncode!=0 and error in p.stderr, (error,p.stdout,p.stderr)
+        elif p.returncode:
+            raise RuntimeError(p.stderr)
+        return p.stdout.strip()
+    options='-F -p 6589 -k '+str(root)+' -c listen_addresses= -c shared_buffers=32MB -c max_connections=8'
+    start=call(pg+'pg_ctl','-w','-t','10','-D',str(root/'db'),'-l',str(root/'postgres.log'),'-o',options,'start')
+    if start.returncode:
+        raise RuntimeError(start.stderr+(root/'postgres.log').read_text())
+    try:
+        version=psql('SHOW server_version;')
+        assert psql('SHOW listen_addresses;')==''
+        psql('\n\n'.join(files[name] for name in ['baseline.sql','signal.sql','auth.sql','migration.sql','seed.sql']))
+        def session(backend='valid',role='service_role',test_release=release,writer='present'):
+            headers=json.dumps({'x-stockinsider-writer-release':test_release})
+            return 'SET fixture.backend='+quoted(backend)+'; SET fixture.writer='+quoted(writer)+'; SET request.headers='+quoted(headers)+'; SET ROLE '+role+';\n'
+        def request(which=None,principal='stage-operator',target=run,owner=lease,symbol='1234'):
+            params=[quoted(principal),quoted(owner)+'::uuid',quoted(target)+'::uuid',quoted(symbol)]
+            if which:
+                params += [quoted(json.dumps(v,separators=(',',':')))+'::jsonb' for v in cases[which]]
+            return 'SELECT public.vnext_launch_outcome_command_v1('+','.join(params)+');\n'
+        psql(files['batch-setup.sql']+files['batch.sql'])
+        cutoff1='2026-10-06T13:30:00Z'
+        cutoff2='2026-10-07T13:30:00Z'
+        def cycle(day,ready='yes'):
+            return 'SET fixture.cycle_ready='+quoted(ready)+'; SET fixture.cycle_cutoff='+quoted(day)+';'
+        def batch(day,limit=2):
+            return "SELECT public.vnext_launch_outcome_batch_v1('stage-operator',"+quoted(lease)+','+quoted(day)+','+str(limit)+');'
+        start=json.loads(psql(session()+cycle(cutoff1)+batch(cutoff1)))
+        assert start['available']==1 and start['signals'][0]['rankingRunId']==run
+        cal=start['calendars']['TWSE']
+        assert max(x['appliedOfficialReceipt']['jobId'] for x in cal['calendarSessions'])=='latest'
+        assert cal['calendarSessions'][2]['appliedOfficialReceipt']['jobId']=='earlier'
+        assert cal['availableAt']=='2026-10-06T10:00:00+00:00'
+        psql(session()+cycle(cutoff1,'no')+batch(cutoff1),'launch_outcome_cycle_cutoff_changed')
+        psql(session()+cycle(cutoff1)+batch(cutoff2),'launch_outcome_cycle_cutoff_changed')
+        psql(session()+cycle(cutoff1)+batch(cutoff1,33),'launch_outcome_batch_request')
+        psql(session(role='anon')+cycle(cutoff1)+batch(cutoff1),'permission denied for function')
+        psql(session()+cycle(cutoff1)+request('input'))
+        exhausted=json.loads(psql(session()+cycle(cutoff1)+batch(cutoff1)))
+        assert exhausted['available']==0 and exhausted['signals']==[] and exhausted['calendars']=={}
+        # A published same-day rank is ineligible before its actual publishedAt.
+        psql("SET fixture.writer='present'; SELECT public.fixture_launch_publish('00000000-0000-4000-8000-000000000004',"
+             "'00000000-0000-4000-8000-000000000005','2026-10-08',10);")
+        before_pub=json.loads(psql(session()+cycle('2026-10-08T13:30:00Z')+batch('2026-10-08T13:30:00Z')))
+        assert before_pub['available']==1 and before_pub['signals'][0]['rankingRunId']==run
+        next1='2026-10-09T13:30:00Z'
+        next2='2026-10-10T13:30:00Z'
+        rotated1=json.loads(psql(session()+cycle(next1)+batch(next1)))
+        rotated2=json.loads(psql(session()+cycle(next2)+batch(next2)))
+        assert rotated1['available']==rotated2['available']==11
+        assert len(rotated1['signals'])==len(rotated2['signals'])==2
+        assert {(row['rankingRunId'],row['symbol']) for row in rotated1['signals']}.isdisjoint({(row['rankingRunId'],row['symbol']) for row in rotated2['signals']})
+        psql("""INSERT INTO public.fixture_outcome_annual SELECT jsonb_set(receipt,'{row,status}','"holiday"')
+             FROM public.fixture_outcome_annual WHERE receipt#>>'{row,session}'='2026-10-08';""")
+        conflicted=json.loads(psql(session()+cycle(next1)+batch(next1)))
+        assert conflicted['calendars']['TWSE'] is None
+        assert psql('SELECT count(*) FROM public.vnext_launch_outcome_versions_v1;')=='1'
+        print(json.dumps({'postgres':version,'sameCutoffCompletedExcluded':True,'sameDayAfterCutoffExcluded':True,
+          'calendarReceiptsBoundToCutoff':True,'calendarConflictingHeadsDeferred':True,'rotationAcrossBacklogProved':True,
+          'wrongCutoffRejected':True,'unauthenticatedExecuteDenied':True,'disallowedBatchSizeRejected':True,
+          'networkListener':False,'sqlSha256':hashlib.sha256(files['batch.sql'].encode()).hexdigest()}),flush=True)
+
+    finally:
+        stop=call(pg+'pg_ctl','-w','-t','10','-D',str(root/'db'),'-m','immediate','stop')
+        if stop.returncode: raise RuntimeError(stop.stderr)

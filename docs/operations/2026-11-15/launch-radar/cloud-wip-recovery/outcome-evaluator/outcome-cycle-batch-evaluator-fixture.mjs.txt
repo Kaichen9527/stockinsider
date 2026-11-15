@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import {evaluateLaunchOutcome} from './launch-outcomes.ts';
+const {calendarRevision,actionsRevision,...signal}={"cutoff":"2026-10-05T13:30:00Z","market":"TWSE","symbol":"1234","session":"2026-10-05","rawClose":"100","inputHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","rankingRunId":"00000000-0000-4000-8000-000000000003","priceRevision":"1111111111111111111111111111111111111111111111111111111111111111","actionsRevision":"2222222222222222222222222222222222222222222222222222222222222222","normalizedClose":"100","calendarRevision":"3333333333333333333333333333333333333333333333333333333333333333","firstRankingRunId":"00000000-0000-4000-8000-000000000001"};
+const first='2026-10-06', second='2026-10-07', third='2026-10-08';
+const date=(day,clock)=>day+'T'+clock+'Z';
+const session=(day,status)=>({session:day,openAt:date(day,'01:00:00'),closeAt:date(day,'05:30:00'),
+  knownAt:status==='completed'?date(day,'06:05:00'):'2026-10-06T05:00:00Z',status});
+const bar=(day,high)=>({session:day,availableAt:date(day,'06:30:00'),priceRevision:day===first?'8'.repeat(64):'9'.repeat(64),
+  basisRevision:actionsRevision,rawOpen:'100',open:'100',high,low:'96',close:'100'});
+const input={scope:'published_rank',signal,asOf:date(first,'13:30:00'),calendarRevision,basisRevision:actionsRevision,
+  sessions:[session(first,'completed'),session(second,'scheduled')],bars:[bar(first,'119')],opening:null};
+const correction={...input,bars:[bar(first,'121')]};
+const next={...correction,asOf:date(second,'09:00:00'),sessions:[session(first,'completed'),session(second,'completed'),session(third,'scheduled')],bars:[...correction.bars,bar(second,'125')]};
+const stale={...input,asOf:date(first,'10:00:00')};
+const replay={...input,scope:'historical_price_replay'};
+const early={...input,asOf:'2026-10-05T13:30:00Z',sessions:[],bars:[]};
+const wrongClose={...input,signal:{...signal,rawClose:'99'}};
+const result=Object.fromEntries(Object.entries({input,correction,next,stale,replay,early,wrongClose}).map(([k,x])=>[k,[x,evaluateLaunchOutcome(x)]]));
+assert.equal(result.input[1].research.barrier20.state,'pending');
+assert.equal(result.next[1].research.barrier20.state,'up_first');
+assert.equal(result.next[1].execution.status,'opening_evidence_gap');
+console.log(JSON.stringify(result));
