@@ -1,0 +1,416 @@
+{
+  "schemaVersion": 1,
+  "task": "T02",
+  "issue": 387,
+  "relatedTask": "T03",
+  "environment": "Contabo active legacy release",
+  "kind": "read_only_production_boundary_observation",
+  "productionChangePerformed": false,
+  "http": {
+    "method": "GET",
+    "target": "active Nginx through loopback",
+    "anonymous": true,
+    "cookieOrAuthorizationSent": false,
+    "bodyRetained": false,
+    "rows": [
+      {
+        "path": "/",
+        "httpStatus": 200,
+        "contentType": "text/html",
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "setCookiePresent": false,
+        "containsPrivateArticleLinkMarker": false,
+        "containsOwnerSessionCookieMarker": false,
+        "containsPrivateArtifactSchemaMarker": false,
+        "observedAt": "2026-11-15T07:09:31.544Z"
+      },
+      {
+        "path": "/stock/5274",
+        "httpStatus": 200,
+        "contentType": "text/html",
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "setCookiePresent": false,
+        "containsPrivateArticleLinkMarker": false,
+        "containsOwnerSessionCookieMarker": false,
+        "containsPrivateArtifactSchemaMarker": false,
+        "observedAt": "2026-11-15T07:09:31.672Z"
+      },
+      {
+        "path": "/candidates",
+        "httpStatus": 404,
+        "contentType": "text/html",
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "setCookiePresent": false,
+        "containsPrivateArticleLinkMarker": false,
+        "containsOwnerSessionCookieMarker": false,
+        "containsPrivateArtifactSchemaMarker": false,
+        "observedAt": "2026-11-15T07:09:31.566Z"
+      },
+      {
+        "path": "/private-research",
+        "httpStatus": 404,
+        "contentType": "text/html",
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "setCookiePresent": false,
+        "containsPrivateArticleLinkMarker": false,
+        "containsOwnerSessionCookieMarker": false,
+        "containsPrivateArtifactSchemaMarker": false,
+        "observedAt": "2026-11-15T07:09:31.595Z"
+      },
+      {
+        "path": "/api/owner/session",
+        "httpStatus": 404,
+        "contentType": "text/html",
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "setCookiePresent": false,
+        "containsPrivateArticleLinkMarker": false,
+        "containsOwnerSessionCookieMarker": false,
+        "containsPrivateArtifactSchemaMarker": false,
+        "observedAt": "2026-11-15T07:09:31.655Z"
+      },
+      {
+        "path": "/api/owner/research",
+        "httpStatus": 404,
+        "contentType": "text/html",
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "setCookiePresent": false,
+        "containsPrivateArticleLinkMarker": false,
+        "containsOwnerSessionCookieMarker": false,
+        "containsPrivateArtifactSchemaMarker": false,
+        "observedAt": "2026-11-15T07:09:31.693Z"
+      }
+    ]
+  },
+  "database": {
+    "engine": "PostgreSQL 17",
+    "readOnlyTransactions": true,
+    "statementTimeoutSeconds": 5,
+    "endedWithRollback": true,
+    "observationTimes": [
+      "2026-11-15T07:10:00.748Z",
+      "2026-11-15T07:14:00.998Z"
+    ],
+    "rolesAndTableGrants": [
+      {
+        "relname": "private_artifact_receipts_v1",
+        "rolname": "anon",
+        "policies": 0,
+        "can_write": false,
+        "can_select": false,
+        "rolbypassrls": false,
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      {
+        "relname": "private_artifact_receipts_v1",
+        "rolname": "authenticated",
+        "policies": 0,
+        "can_write": false,
+        "can_select": false,
+        "rolbypassrls": false,
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      {
+        "relname": "private_artifact_receipts_v1",
+        "rolname": "service_role",
+        "policies": 0,
+        "can_write": false,
+        "can_select": false,
+        "rolbypassrls": true,
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      {
+        "relname": "source_document_revisions_v3",
+        "rolname": "anon",
+        "policies": 0,
+        "can_write": false,
+        "can_select": false,
+        "rolbypassrls": false,
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      {
+        "relname": "source_document_revisions_v3",
+        "rolname": "authenticated",
+        "policies": 0,
+        "can_write": false,
+        "can_select": false,
+        "rolbypassrls": false,
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      {
+        "relname": "source_document_revisions_v3",
+        "rolname": "service_role",
+        "policies": 0,
+        "can_write": true,
+        "can_select": true,
+        "rolbypassrls": true,
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      {
+        "relname": "source_identity_authorities_v3",
+        "rolname": "anon",
+        "policies": 0,
+        "can_write": false,
+        "can_select": false,
+        "rolbypassrls": false,
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      {
+        "relname": "source_identity_authorities_v3",
+        "rolname": "authenticated",
+        "policies": 0,
+        "can_write": false,
+        "can_select": false,
+        "rolbypassrls": false,
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      {
+        "relname": "source_identity_authorities_v3",
+        "rolname": "service_role",
+        "policies": 0,
+        "can_write": true,
+        "can_select": true,
+        "rolbypassrls": true,
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      {
+        "relname": "source_publication_verifications_v3",
+        "rolname": "anon",
+        "policies": 0,
+        "can_write": false,
+        "can_select": false,
+        "rolbypassrls": false,
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      {
+        "relname": "source_publication_verifications_v3",
+        "rolname": "authenticated",
+        "policies": 0,
+        "can_write": false,
+        "can_select": false,
+        "rolbypassrls": false,
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      {
+        "relname": "source_publication_verifications_v3",
+        "rolname": "service_role",
+        "policies": 0,
+        "can_write": true,
+        "can_select": true,
+        "rolbypassrls": true,
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      }
+    ],
+    "webColumnAndPublicGrants": [
+      {
+        "relname": "private_artifact_receipts_v1",
+        "rolname": "anon",
+        "schema_usage": true,
+        "any_column_select": false,
+        "any_public_table_grant": false,
+        "any_public_column_grant": false,
+        "table_delete_truncate_or_trigger": false,
+        "any_column_insert_update_or_reference": false
+      },
+      {
+        "relname": "private_artifact_receipts_v1",
+        "rolname": "authenticated",
+        "schema_usage": true,
+        "any_column_select": false,
+        "any_public_table_grant": false,
+        "any_public_column_grant": false,
+        "table_delete_truncate_or_trigger": false,
+        "any_column_insert_update_or_reference": false
+      },
+      {
+        "relname": "source_document_revisions_v3",
+        "rolname": "anon",
+        "schema_usage": true,
+        "any_column_select": false,
+        "any_public_table_grant": false,
+        "any_public_column_grant": false,
+        "table_delete_truncate_or_trigger": false,
+        "any_column_insert_update_or_reference": false
+      },
+      {
+        "relname": "source_document_revisions_v3",
+        "rolname": "authenticated",
+        "schema_usage": true,
+        "any_column_select": false,
+        "any_public_table_grant": false,
+        "any_public_column_grant": false,
+        "table_delete_truncate_or_trigger": false,
+        "any_column_insert_update_or_reference": false
+      },
+      {
+        "relname": "source_identity_authorities_v3",
+        "rolname": "anon",
+        "schema_usage": true,
+        "any_column_select": false,
+        "any_public_table_grant": false,
+        "any_public_column_grant": false,
+        "table_delete_truncate_or_trigger": false,
+        "any_column_insert_update_or_reference": false
+      },
+      {
+        "relname": "source_identity_authorities_v3",
+        "rolname": "authenticated",
+        "schema_usage": true,
+        "any_column_select": false,
+        "any_public_table_grant": false,
+        "any_public_column_grant": false,
+        "table_delete_truncate_or_trigger": false,
+        "any_column_insert_update_or_reference": false
+      },
+      {
+        "relname": "source_publication_verifications_v3",
+        "rolname": "anon",
+        "schema_usage": true,
+        "any_column_select": false,
+        "any_public_table_grant": false,
+        "any_public_column_grant": false,
+        "table_delete_truncate_or_trigger": false,
+        "any_column_insert_update_or_reference": false
+      },
+      {
+        "relname": "source_publication_verifications_v3",
+        "rolname": "authenticated",
+        "schema_usage": true,
+        "any_column_select": false,
+        "any_public_table_grant": false,
+        "any_public_column_grant": false,
+        "table_delete_truncate_or_trigger": false,
+        "any_column_insert_update_or_reference": false
+      }
+    ],
+    "routinePrivileges": [
+      {
+        "stable": true,
+        "proname": "read_v320_authorized_investanchors_revision_ids_internal",
+        "rolname": "anon",
+        "prosecdef": true,
+        "can_execute": false
+      },
+      {
+        "stable": true,
+        "proname": "read_v320_authorized_investanchors_revision_ids_internal",
+        "rolname": "authenticated",
+        "prosecdef": true,
+        "can_execute": false
+      },
+      {
+        "stable": true,
+        "proname": "read_v320_authorized_investanchors_revision_ids_internal",
+        "rolname": "legacy_correctness_rpc_owner",
+        "prosecdef": true,
+        "can_execute": true
+      },
+      {
+        "stable": true,
+        "proname": "read_v320_authorized_investanchors_revision_ids_internal",
+        "rolname": "opportunity_v3_rpc_owner",
+        "prosecdef": true,
+        "can_execute": false
+      },
+      {
+        "stable": true,
+        "proname": "read_v320_authorized_investanchors_revision_ids_internal",
+        "rolname": "service_role",
+        "prosecdef": true,
+        "can_execute": false
+      },
+      {
+        "stable": true,
+        "proname": "read_v320_revalidated_kol_retention_internal",
+        "rolname": "anon",
+        "prosecdef": true,
+        "can_execute": false
+      },
+      {
+        "stable": true,
+        "proname": "read_v320_revalidated_kol_retention_internal",
+        "rolname": "authenticated",
+        "prosecdef": true,
+        "can_execute": false
+      },
+      {
+        "stable": true,
+        "proname": "read_v320_revalidated_kol_retention_internal",
+        "rolname": "legacy_correctness_rpc_owner",
+        "prosecdef": true,
+        "can_execute": false
+      },
+      {
+        "stable": true,
+        "proname": "read_v320_revalidated_kol_retention_internal",
+        "rolname": "opportunity_v3_rpc_owner",
+        "prosecdef": true,
+        "can_execute": false
+      },
+      {
+        "stable": true,
+        "proname": "read_v320_revalidated_kol_retention_internal",
+        "rolname": "service_role",
+        "prosecdef": true,
+        "can_execute": false
+      }
+    ],
+    "routinePublicGrants": [
+      {
+        "proname": "read_v320_authorized_investanchors_revision_ids_internal",
+        "arguments": "p_source_cutoff timestamp with time zone",
+        "public_execute": false
+      },
+      {
+        "proname": "read_v320_revalidated_kol_retention_internal",
+        "arguments": "p_source_cutoff timestamp with time zone",
+        "public_execute": false
+      }
+    ],
+    "routineNameSearch": {
+      "namespace": "public",
+      "regex": "^(read_|list_|get_)(vnext_)?(private_)?owner_(research|content)",
+      "matches": 0
+    },
+    "investAnchorsRevisionAggregateOnly": {
+      "sourceRevisions": 2,
+      "nonEmptyRawPayloadCount": 2,
+      "attachedIdentityAuthorityCount": 2
+    }
+  },
+  "fixedCandidate": {
+    "commit": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+    "path": "web/src/lib/vnext/owner-oidc.ts",
+    "blob": "88852d6f8db1f17d2df4fba9502641a1c83ffa85",
+    "lines": [
+      228,
+      235
+    ],
+    "authenticatedResponse": "missing_data",
+    "connectedOwnerReader": false,
+    "contentRightsVerified": false
+  },
+  "notCovered": [
+    "candidate authenticated browser flow with real OIDC",
+    "runtime of undeployed candidate routes",
+    "other public paths or caching layers",
+    "ownership or provider permission for any stored content"
+  ],
+  "open": [
+    "owner-only minimal server-side data projection",
+    "documented content permission per source",
+    "approved HTTPS origin and exact OIDC redirect URI",
+    "end-to-end private routes and positive and negative tests on a candidate staging release"
+  ]
+}
