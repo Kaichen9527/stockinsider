@@ -1,0 +1,29 @@
+import hashlib, json, os, resource, shutil, subprocess, tempfile
+import sys
+from pathlib import Path
+
+if len(sys.argv) != 4:
+    raise SystemExit("Usage: stage-run.py STAGE_SETUP CANDIDATE_SQL STAGE_PROBE")
+sql = "\n\n".join(Path(path).read_text(encoding="utf-8") for path in sys.argv[1:]) + "\n\n"
+mem=int(next(line for line in open('/proc/meminfo') if line.startswith('MemAvailable:')).split()[1])
+assert mem>=2621440 and shutil.disk_usage('/tmp').free>=15*1024**3
+base='/usr/lib/postgresql/17/bin'
+prefix=['unshare','--net','--','setpriv','--reuid=65534','--regid=65534','--clear-groups','--no-new-privs','--']
+def cap():
+ for key,limit in [(resource.RLIMIT_CPU,28),(resource.RLIMIT_FSIZE,256*1024**2),(resource.RLIMIT_NOFILE,128)]:
+  resource.setrlimit(key,(limit,limit))
+with tempfile.TemporaryDirectory(prefix='si-stage-outcome-ledger-',dir='/tmp') as root:
+ os.chown(root,65534,65534)
+ env={'PATH':'/usr/bin:/bin','LANG':'C.UTF-8','TZ':'UTC'}
+ version=subprocess.check_output([base+'/postgres','--version'],text=True).strip()
+ init=subprocess.run(prefix+[base+'/initdb','-A','trust','-D',root+'/db','--no-sync'],encoding='utf-8',capture_output=True,timeout=30,env=env)
+ if init.returncode:raise SystemExit(init.stderr[-2000:])
+ proc=subprocess.run(prefix+[base+'/postgres','--single','-j','-D',root+'/db','-c','shared_buffers=32MB','-c','work_mem=2MB','-c','max_connections=10','postgres'],input=sql.encode(),timeout=45,capture_output=True,env=env,preexec_fn=cap)
+ err=proc.stderr.decode('utf-8','replace')
+ for line in err.splitlines():
+  if 'ERROR:' in line or 'FATAL:' in line:print(line)
+ if proc.returncode or 'ERROR:' in err or 'FATAL:' in err:raise SystemExit(2)
+ proof=[line.split('SIGNAL_LEDGER_PROOF ',1)[1] for line in err.splitlines() if 'SIGNAL_LEDGER_PROOF ' in line]
+ anchor=[line.split('SIGNAL_LEDGER_ANCHOR ',1)[1] for line in err.splitlines() if 'SIGNAL_LEDGER_ANCHOR ' in line]
+ assert len(proof)==1 and len(anchor)==1
+ print(json.dumps({'postgresVersion':version,'proof':json.loads(proof[0]),'anchor':json.loads(anchor[0]),'runnerSha256':hashlib.sha256(sql.encode()).hexdigest()}))

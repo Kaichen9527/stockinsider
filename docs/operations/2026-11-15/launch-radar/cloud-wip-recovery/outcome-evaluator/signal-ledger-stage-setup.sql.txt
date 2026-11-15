@@ -1,0 +1,105 @@
+CREATE ROLE anon NOLOGIN;
+CREATE ROLE authenticated NOLOGIN;
+CREATE ROLE service_role NOLOGIN;
+CREATE ROLE fixture_public NOLOGIN;
+CREATE ROLE stockinsider_vnext_owner NOLOGIN NOSUPERUSER NOBYPASSRLS;
+GRANT USAGE,CREATE ON SCHEMA public TO stockinsider_vnext_owner;
+GRANT USAGE ON SCHEMA public TO anon,authenticated,service_role,fixture_public;
+CREATE TABLE public.vnext_publications_v1(revision_id uuid PRIMARY KEY);
+CREATE TABLE public.tw_trading_sessions_v3(session_authority_id uuid PRIMARY KEY);
+CREATE TABLE public.opportunity_price_observations_v3(observation_id uuid PRIMARY KEY,stock_id uuid,exchange text,session_id date,
+ session_authority_id uuid NOT NULL REFERENCES public.tw_trading_sessions_v3(session_authority_id),raw_close numeric,source_timestamp timestamptz,recorded_at timestamptz);
+CREATE TABLE public.vnext_launch_score_evidence_v1(
+ score_revision uuid PRIMARY KEY DEFAULT gen_random_uuid(),research_revision uuid NOT NULL REFERENCES public.vnext_publications_v1(revision_id),
+ symbol text NOT NULL CHECK(symbol ~ '^[0-9]{4}$'),input_hash text NOT NULL CHECK(input_hash ~ '^[a-f0-9]{64}$'),
+ signal_session date NOT NULL,input_cutoff timestamptz NOT NULL,
+ policy_version text NOT NULL CHECK(policy_version='stockinsider-launch-radar-v1'),rules_version text NOT NULL CHECK(rules_version='launch-radar-comparisons-v5'),
+ arithmetic_version text NOT NULL CHECK(arithmetic_version='binary64-v1'),
+ source_inputs jsonb NOT NULL,source_hash text NOT NULL CHECK(source_hash ~ '^[a-f0-9]{64}$'),score jsonb NOT NULL,
+ recorded_at timestamptz NOT NULL DEFAULT clock_timestamp(),
+ CHECK(input_cutoff=(signal_session::text||'T21:30:00+08:00')::timestamptz)
+);
+CREATE TABLE public.vnext_launch_qualifications_v1(
+ qualification_revision uuid PRIMARY KEY DEFAULT gen_random_uuid(),score_revision uuid NOT NULL REFERENCES public.vnext_launch_score_evidence_v1,
+ research_revision uuid NOT NULL REFERENCES public.vnext_publications_v1(revision_id),symbol text NOT NULL,input_hash text NOT NULL,
+ checked_at timestamptz NOT NULL,expires_at timestamptz NOT NULL,
+ qualified boolean NOT NULL,entry_eligible boolean NOT NULL,checks jsonb NOT NULL,reasons jsonb NOT NULL,revisions jsonb NOT NULL,
+ CHECK(expires_at>checked_at AND expires_at<=checked_at+interval '120 seconds')
+);
+CREATE TABLE public.vnext_launch_ranking_snapshots_v1(
+ ordinal bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,ranking_run_id uuid NOT NULL UNIQUE,
+ previous_ranking_run_id uuid REFERENCES public.vnext_launch_ranking_snapshots_v1(ranking_run_id),
+ request_hash text NOT NULL CHECK(request_hash ~ '^[a-f0-9]{64}$'),input_hash text NOT NULL CHECK(input_hash ~ '^[a-f0-9]{64}$'),
+ input_cutoff timestamptz NOT NULL,session_date date NOT NULL,published_at timestamptz NOT NULL,
+ snapshot jsonb NOT NULL,CHECK(published_at>=input_cutoff),
+ CHECK(input_cutoff=(session_date::text||'T21:30:00+08:00')::timestamptz)
+);
+CREATE TABLE public.vnext_launch_ranking_members_v1(
+ ranking_run_id uuid NOT NULL REFERENCES public.vnext_launch_ranking_snapshots_v1(ranking_run_id),symbol text NOT NULL,
+ rank integer CHECK(rank BETWEEN 1 AND 10),research_revision uuid NOT NULL REFERENCES public.vnext_publications_v1(revision_id),
+ score_revision uuid NOT NULL REFERENCES public.vnext_launch_score_evidence_v1,qualification_revision uuid NOT NULL REFERENCES public.vnext_launch_qualifications_v1,
+ input_hash text NOT NULL,PRIMARY KEY(ranking_run_id,symbol),UNIQUE(ranking_run_id,rank)
+);
+CREATE TABLE public.vnext_launch_score_price_pins_v1(
+ score_revision uuid NOT NULL REFERENCES public.vnext_launch_score_evidence_v1,
+ observation_id uuid NOT NULL REFERENCES public.opportunity_price_observations_v3(observation_id),
+ calendar_id uuid NOT NULL REFERENCES public.tw_trading_sessions_v3(session_authority_id),
+ PRIMARY KEY(score_revision,observation_id)
+);
+CREATE UNIQUE INDEX vnext_launch_ranking_single_successor_v1 ON public.vnext_launch_ranking_snapshots_v1((coalesce(previous_ranking_run_id,'00000000-0000-0000-0000-000000000000'::uuid)));
+ALTER TABLE public.vnext_launch_score_evidence_v1 OWNER TO stockinsider_vnext_owner;
+ALTER TABLE public.vnext_launch_qualifications_v1 OWNER TO stockinsider_vnext_owner;
+ALTER TABLE public.vnext_launch_ranking_snapshots_v1 OWNER TO stockinsider_vnext_owner;
+ALTER TABLE public.vnext_launch_ranking_members_v1 OWNER TO stockinsider_vnext_owner;
+ALTER TABLE public.vnext_launch_score_price_pins_v1 OWNER TO stockinsider_vnext_owner;
+ALTER TABLE public.opportunity_price_observations_v3 ENABLE ROW LEVEL SECURITY;
+GRANT SELECT(observation_id,stock_id,exchange,session_id,session_authority_id,raw_close,source_timestamp,recorded_at)
+ ON public.opportunity_price_observations_v3 TO stockinsider_vnext_owner;
+CREATE POLICY existing_price_read ON public.opportunity_price_observations_v3 FOR SELECT TO stockinsider_vnext_owner USING(true);
+CREATE FUNCTION public.enforce_production_writer_fence() RETURNS trigger LANGUAGE plpgsql AS $fixture$
+BEGIN
+ IF current_setting('fixture.writer',true) IS DISTINCT FROM 'present' THEN RAISE EXCEPTION 'stage_fixture_writer_fence';END IF;
+ RETURN coalesce(NEW,OLD);
+END $fixture$;
+CREATE FUNCTION public.vnext_launch_csv_immutable_v1() RETURNS trigger LANGUAGE plpgsql AS $fixture$
+BEGIN RAISE EXCEPTION 'stage_fixture_immutable'; END
+$fixture$;
+-- The test driver makes rows in the same append order as the reviewed ranking writer.
+CREATE FUNCTION public.fixture_launch_publish(run_id uuid,predecessor uuid,d date,ranked_count integer,
+ attempted_rank_null boolean DEFAULT false,bad_quote boolean DEFAULT false) RETURNS void LANGUAGE plpgsql AS $fixture$
+DECLARE cutoff timestamptz:=(d::text||'T21:30:00+08:00')::timestamptz; pub timestamptz:=cutoff+interval '1 second';
+ observation uuid; session_authority uuid; score_id uuid; qualify_id uuid; research_id uuid; stock_id uuid; symbol_value text;
+ revisions jsonb; price jsonb; member jsonb; members jsonb:='[]'; deferred_candidate jsonb; bar jsonb;i integer;
+BEGIN
+ FOR i IN 1..greatest(ranked_count,1) LOOP
+  observation:=gen_random_uuid();session_authority:=gen_random_uuid();score_id:=gen_random_uuid();qualify_id:=gen_random_uuid();research_id:=gen_random_uuid();
+  symbol_value:=lpad((1233+i)::text,4,'0');
+  stock_id:=md5('fixture-stock:'||symbol_value)::uuid;
+  revisions:=jsonb_build_object('price',repeat('1',64),'actions',repeat('2',64),'calendar',repeat('3',64));
+  bar:=jsonb_build_object('session',d,'factor',1,'observationId',observation,'calendarId',session_authority,'rawClose',CASE WHEN bad_quote THEN 99 ELSE 100 END);
+  price:=jsonb_build_object('schemaVersion','launch-db-selected-price-v1','priceBasis','adjusted_to_signal_session','anchor',d,'knownAt',cutoff-interval '1 hour',
+   'priceRevision',repeat('1',64),'actionsRevision',repeat('2',64),'calendarRevision',repeat('3',64),'bars',jsonb_build_array(bar));
+  INSERT INTO public.tw_trading_sessions_v3 VALUES(session_authority);
+  INSERT INTO public.opportunity_price_observations_v3 VALUES(observation,stock_id,'TWSE',d,session_authority,100,cutoff-interval '2 hours',cutoff-interval '1 hour');
+  INSERT INTO public.vnext_publications_v1 VALUES(research_id);
+  INSERT INTO public.vnext_launch_score_evidence_v1(score_revision,research_revision,symbol,input_hash,signal_session,input_cutoff,policy_version,rules_version,arithmetic_version,source_inputs,source_hash,score)
+  VALUES(score_id,research_id,symbol_value,repeat('a',64),d,cutoff,'stockinsider-launch-radar-v1','launch-radar-comparisons-v5','binary64-v1',jsonb_build_object('price',price),repeat('b',64),'{}');
+  INSERT INTO public.vnext_launch_qualifications_v1 VALUES(qualify_id,score_id,research_id,symbol_value,repeat('a',64),
+   pub-interval '1 second',pub+interval '59 seconds',true,false,'{}','[]',revisions);
+  INSERT INTO public.vnext_launch_score_price_pins_v1 VALUES(score_id,observation,session_authority);
+  member:=jsonb_build_object('symbol',symbol_value,'rank',i,'revisionId',research_id,'inputHash',repeat('a',64),'scoreRevision',score_id,
+   'launchQualificationRevision',qualify_id,'availableWeight',100,'revisions',revisions);
+  IF ranked_count>0 THEN members:=members||jsonb_build_array(member);ELSE deferred_candidate:=member;END IF;
+ END LOOP;
+ INSERT INTO public.vnext_launch_ranking_snapshots_v1(ranking_run_id,previous_ranking_run_id,request_hash,input_hash,input_cutoff,session_date,published_at,snapshot)
+ VALUES(run_id,predecessor,repeat('d',64),repeat('a',64),cutoff,d,pub,jsonb_build_object(
+  'schemaVersion','vnext-launch-ranking-snapshot-v2','policyVersion','stockinsider-launch-radar-v1','rankingRunId',run_id,'session',d,'inputCutoff',cutoff,
+  'publishedAt',pub,'members',members));
+ FOR member IN SELECT value FROM jsonb_array_elements(CASE WHEN ranked_count=0 THEN jsonb_build_array(deferred_candidate) ELSE members END) LOOP
+  INSERT INTO public.vnext_launch_ranking_members_v1 VALUES(run_id,member->>'symbol',
+   CASE WHEN ranked_count=0 OR attempted_rank_null THEN NULL ELSE (member->>'rank')::int END,
+   (member->>'revisionId')::uuid,(member->>'scoreRevision')::uuid,(member->>'launchQualificationRevision')::uuid,member->>'inputHash');
+ END LOOP;
+END $fixture$;
+SELECT public.fixture_launch_publish('00000000-0000-4000-8000-000000000001',NULL,'2026-10-01',1);
+SELECT public.fixture_launch_publish('00000000-0000-4000-8000-000000000002','00000000-0000-4000-8000-000000000001','2026-10-02',1);

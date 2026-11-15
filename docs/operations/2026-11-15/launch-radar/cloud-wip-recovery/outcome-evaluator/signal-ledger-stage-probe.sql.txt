@@ -1,0 +1,58 @@
+
+SET fixture.writer='present';
+SELECT public.fixture_launch_publish('00000000-0000-4000-8000-000000000003','00000000-0000-4000-8000-000000000002','2026-10-05',1);
+SELECT public.fixture_launch_publish('00000000-0000-4000-8000-000000000004','00000000-0000-4000-8000-000000000003','2026-10-06',10);
+SELECT public.fixture_launch_publish('00000000-0000-4000-8000-000000000005','00000000-0000-4000-8000-000000000004','2026-10-07',0);
+SELECT public.fixture_launch_publish('00000000-0000-4000-8000-000000000006','00000000-0000-4000-8000-000000000005','2026-10-08',1);
+DO $result$
+DECLARE r uuid:='00000000-0000-4000-8000-000000000006';invalid uuid:='00000000-0000-4000-8000-000000000007';
+ earlier uuid:='00000000-0000-4000-8000-000000000001';caught boolean:=false; roles text; checks integer:=0;
+BEGIN
+ IF (SELECT count(*) FROM public.vnext_launch_outcome_signals_v1)<>12
+ OR (SELECT count(*) FROM public.vnext_launch_outcome_signals_v1 WHERE first_ranking_run_id=earlier AND symbol='1234')<>2
+ OR (SELECT count(*) FROM public.vnext_launch_outcome_signals_v1 WHERE first_ranking_run_id=ranking_run_id AND ranking_run_id=r AND symbol='1234')<>1
+ OR EXISTS(SELECT FROM public.vnext_launch_outcome_signals_v1 WHERE ranking_run_id IN(earlier,'00000000-0000-4000-8000-000000000002','00000000-0000-4000-8000-000000000005'))
+ THEN RAISE EXCEPTION 'wrong cohort counts';END IF;
+ -- Replay performs no new INSERT in the protected writer. A duplicate row
+ -- never runs the AFTER trigger even when a fixture explicitly retries the insert.
+ INSERT INTO public.vnext_launch_ranking_members_v1 SELECT * FROM public.vnext_launch_ranking_members_v1 WHERE ranking_run_id=r ON CONFLICT DO NOTHING;
+ IF (SELECT count(*) FROM public.vnext_launch_outcome_signals_v1)<>12 THEN RAISE EXCEPTION 'unintended duplicate signal';END IF;
+ BEGIN
+  PERFORM public.fixture_launch_publish(invalid,r,'2026-10-09',1,false,true);
+ EXCEPTION WHEN raise_exception THEN IF SQLERRM<>'launch_outcome_frozen_price_observation' THEN RAISE;END IF;caught:=true;END;
+ IF NOT caught OR EXISTS(SELECT FROM public.vnext_launch_ranking_snapshots_v1 WHERE ranking_run_id=invalid) THEN RAISE EXCEPTION 'bad frozen price did not roll back';END IF;
+ caught:=false;
+ BEGIN
+  PERFORM public.fixture_launch_publish(invalid,r,'2026-10-09',1,true,false);
+ EXCEPTION WHEN raise_exception THEN IF SQLERRM<>'launch_outcome_published_member_binding' THEN RAISE;END IF;caught:=true;END;
+ IF NOT caught OR EXISTS(SELECT FROM public.vnext_launch_ranking_snapshots_v1 WHERE ranking_run_id=invalid) THEN RAISE EXCEPTION 'missing ranked row did not roll back';END IF;
+ caught:=false;
+ PERFORM set_config('fixture.writer','absent',true);
+ BEGIN
+  PERFORM public.fixture_launch_publish(invalid,r,'2026-10-09',1);
+ EXCEPTION WHEN raise_exception THEN IF SQLERRM<>'stage_fixture_writer_fence' THEN RAISE;END IF;caught:=true;END;
+ IF NOT caught OR EXISTS(SELECT FROM public.vnext_launch_ranking_snapshots_v1 WHERE ranking_run_id=invalid) THEN RAISE EXCEPTION 'writer fence not enforced';END IF;
+ caught:=false;
+ PERFORM set_config('fixture.writer','present',true);
+ BEGIN
+  UPDATE public.vnext_launch_outcome_signals_v1 SET raw_close=777 WHERE ranking_run_id=r;
+ EXCEPTION WHEN raise_exception THEN IF SQLERRM<>'stage_fixture_immutable' THEN RAISE;END IF;caught:=true;END;
+ IF NOT caught OR EXISTS(SELECT FROM public.vnext_launch_outcome_signals_v1 WHERE raw_close<>100) THEN RAISE EXCEPTION 'immutable update not enforced';END IF;
+ FOREACH roles IN ARRAY ARRAY['anon','authenticated','service_role','fixture_public'] LOOP
+  IF has_table_privilege(roles,'public.vnext_launch_outcome_signals_v1','SELECT')
+   OR has_table_privilege(roles,'public.vnext_launch_outcome_signals_v1','INSERT')
+   OR has_function_privilege(roles,'public.vnext_launch_outcome_first_member_v1(uuid,text)','EXECUTE')
+   OR has_function_privilege(roles,'public.vnext_launch_outcome_seed_v1()','EXECUTE')
+  THEN RAISE EXCEPTION 'unintended direct privilege';END IF;
+  checks:=checks+4;
+ END LOOP;
+ RAISE WARNING USING MESSAGE='SIGNAL_LEDGER_PROOF '||jsonb_build_object('signalRows',12,'previousHistoryResolved',true,'createdRetroactiveRows',false,
+   'zeroMemberRunCreatesZero',true,'rankedTenCreatesTen',true,'duplicateAddsNone',true,'freshAfterExit',true,'badCloseRollback',true,
+   'missingRankRollback',true,'leaseFenceOnAtomicAppend',true,'immutableUpdateRejected',true,'directPrivilegeDenials',checks)::text;
+ RAISE WARNING USING MESSAGE='SIGNAL_LEDGER_ANCHOR '||(SELECT jsonb_build_object(
+   'rankingRunId',s.ranking_run_id,'firstRankingRunId',s.first_ranking_run_id,'symbol',s.symbol,'market',s.market,'session',s.signal_session,
+   'cutoff',to_char(s.input_cutoff AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS')||'Z','inputHash',s.input_hash,
+   'priceRevision',s.price_revision,'rawClose',s.raw_close::text,'normalizedClose',s.raw_close::text,
+   'calendarRevision',s.calendar_revision,'actionsRevision',s.actions_revision)
+   FROM public.vnext_launch_outcome_signals_v1 s WHERE s.ranking_run_id='00000000-0000-4000-8000-000000000003' AND s.symbol='1234')::text;
+END $result$;

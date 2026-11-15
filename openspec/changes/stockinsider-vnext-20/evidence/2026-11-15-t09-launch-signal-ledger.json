@@ -1,0 +1,45 @@
+{
+  "ticket": 394,
+  "scope": "isolated Contabo staging; disposable PostgreSQL cluster and synthetic writer/data fixtures",
+  "candidateOnly": true,
+  "rankingSource": {
+    "commit": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+    "sourceBlob": "51199dcbcdeea3912a56b2b5937fff1632270aeb",
+    "baselineTableDdlSha256": "62fc6410a912dc529de240a9e57fba68fdfa945002c354344869371ea683abed"
+  },
+  "artifacts": {
+    "migrationSha256": "f992d105153e12f94657325c8632b91e75ede1e02d93fa41aca6e765eea47b4e",
+    "stageSetupSha256": "b44dc19e5b6d80ebcacd72073a850d7f1132cb83eb5a4df653f0a1096ee9d949",
+    "stageProbeSha256": "da9f122f9d3ebb355957ec08c4efbdeff0d938e4554fe2be86017bd9e9b67bc6",
+    "executedRunnerInputSha256": "46578cb73b28940ccef92fdf11783456ce2f303f299fd4509019970276991368"
+  },
+  "postgres": {
+    "version": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "signalRows": 12,
+    "freshAfterExit": true,
+    "badCloseRollback": true,
+    "duplicateAddsNone": true,
+    "missingRankRollback": true,
+    "rankedTenCreatesTen": true,
+    "createdRetroactiveRows": false,
+    "directPrivilegeDenials": 16,
+    "immutableUpdateRejected": true,
+    "previousHistoryResolved": true,
+    "leaseFenceOnAtomicAppend": true,
+    "zeroMemberRunCreatesZero": true
+  },
+  "evaluator": {
+    "node": "v22.23.1",
+    "exactFrozenAnchorAccepted": true,
+    "repeatedSignal": true,
+    "openingPending": true,
+    "repeatInputHash": "6d4e2de34ec599bd2ee45e33d0f5705c040fc992b54af171e499ce6024f8c560"
+  },
+  "productionModified": false,
+  "pending": [
+    "full ranking writer integration against typed provider receipts",
+    "verified rollout history and a real published rank",
+    "forward official data, outcome persistence and scheduling",
+    "review and Cloud CI"
+  ]
+}
