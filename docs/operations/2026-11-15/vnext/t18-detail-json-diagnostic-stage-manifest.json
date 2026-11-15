@@ -1,0 +1,43 @@
+{
+  "schema": "stockinsider-t18-detail-json-diagnostic-stage-delta-v1",
+  "baselineCommit": "e2af3017c5409dab0acb20bbdac3f7e60adad668",
+  "baselineVerifiedBlobs": 51,
+  "expectedStagedBlobsAfter": 51,
+  "replace": [
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_detail_read_adapter.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "d8ba71232d4e5d92dab63b1a270c2ad05c7be4eb",
+        "sha256": "e3596f0c8cab942bd49270c609dff733ce9afe1b8a996d177f6ed579897c38c4"
+      },
+      "after": {
+        "gitBlob": "50bfcc3d9d76758741e6c18981c0cd568d044c95",
+        "sha256": "7dfdb0c4617ac5c19c9ec08776238e92f254bbd892d34eda59bd686651a5cf83"
+      }
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_detail_http.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "63ee2100a1f53d326aabb5bc9779e2850ed9a58a",
+        "sha256": "17ae50179e88e3bbb56fd356c16623f12246ada8aabff7d64eb92aee9f2bb1fa"
+      },
+      "after": {
+        "gitBlob": "af1bea3b7cdfea7a31accb65ab047a773bf91e60",
+        "sha256": "bad097fb6505ffbf634e61e2e5c562787bdae7677bd9e2f3e0d2a3d7a7d32ce7"
+      }
+    }
+  ],
+  "add": [],
+  "remove": [],
+  "fixedSourceRoot": "/run/stockinsider-t18-host-source",
+  "fixedSourceUnitRoot": "/readonly/t18-source",
+  "scope": "FIXED_ENUM_REJECTION_DIAGNOSTICS_ONLY",
+  "sqlOrUrlAcceptancePolicyChanged": false,
+  "grantsAdded": 0,
+  "originalRpcGrantedOrExecuted": false,
+  "rawFactUrlPolicyIsFirstCauseAttribution": false,
+  "nativeHoldRetained": true,
+  "onsiteNewSubject": "NOT_RUN"
+}

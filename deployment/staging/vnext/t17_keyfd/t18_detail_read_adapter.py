@@ -4,6 +4,7 @@ Internal validated-clone SQL only. Projection values stay private and scoped;
 receipt is descriptive. Unknown forwarded public JSON is a GAP. Audit-only
 provenance uses the explicit reduced context/locator projection, not invented data.
 """
+from contextlib import contextmanager
 from dataclasses import dataclass,field
 import hashlib
 import json
@@ -50,8 +51,77 @@ assert OBSERVATION_SQL.count(_tail)==1
 PROJECTION_SQL=OBSERVATION_SQL.replace(_tail,_SUFFIX)
 
 
+PROFILE_CATEGORIES=frozenset(('ENVELOPE','BOUNDS','STOCK','DETAIL','SECTION','SOURCE_LINK',
+ 'VALUATION','TECHNICAL','VALUATION_HISTORY','RESEARCH_COVERAGE','BUSINESS_PROFILE',
+ 'FORWARD_BVPS','EARNINGS_BRIDGE','COMMON_INCOME_BRIDGE','EQUITY_BRIDGE','FACTOR',
+ 'REVISION_CONTEXT','FACT','FACT_URL','PUBLIC_LOCATOR','METADATA','METADATA_DATASET'))
+PROFILE_REASONS=frozenset(('OBJECT_TYPE','UNSUPPORTED_FIELD','MISSING_FIELD','FIELD_TYPE',
+ 'UNSUPPORTED_SEMANTICS','REFERENCE_SCOPE','URL_POLICY','BOUND_EXCEEDED','SENSITIVE_PATTERN',
+ 'INVALID_PROFILE','URL_QUERY_HOST_POLICY','FACTOR_STATUS','FACTOR_GRADE','FACTOR_COUNT','FACTOR_RANGE'))
+
+
 class DetailAdapterRejected(Exception):
- def __init__(self):super().__init__('fixed_detail_read_adapter_rejected')
+ def __init__(self,reason='INVALID_PROFILE'):
+  self.category=None
+  self.reason=reason if type(reason) is str and reason in PROFILE_REASONS else 'INVALID_PROFILE'
+  super().__init__('fixed_detail_read_adapter_rejected')
+
+
+@contextmanager
+def _profile(category):
+ if category not in PROFILE_CATEGORIES:raise DetailAdapterRejected()
+ try:yield
+ except DetailAdapterRejected as error:
+  if error.category is None:error.category=category
+  raise
+ except (ValueError,TypeError,KeyError,AttributeError) as error:
+  reason='MISSING_FIELD' if isinstance(error,KeyError) else 'FIELD_TYPE' if isinstance(error,(TypeError,AttributeError)) else 'INVALID_PROFILE'
+  rejected=DetailAdapterRejected(reason);rejected.category=category
+  raise rejected from None
+
+
+def project_profile_diagnostic(value):
+ """Closed enums ONLY, never an actual field name/type/value/exception string."""
+ if (type(value) is not dict or set(value)!={'category','reason'}
+     or type(value['category']) is not str or value['category'] not in PROFILE_CATEGORIES
+     or type(value['reason']) is not str or value['reason'] not in PROFILE_REASONS):return None
+ return {'category':value['category'],'reason':value['reason']}
+
+
+RAW_FACT_URL_POLICIES=frozenset(('NOT_OBSERVED','ACCEPTED_URL_POLICY','REJECTED_URL_POLICY','REJECTED_QUERY_HOST_POLICY'))
+
+
+def project_raw_fact_url_policy(value):
+ return value if type(value) is str and value in RAW_FACT_URL_POLICIES else None
+
+
+def _raw_fact_url_policy(rows):
+ """Parallel pure observation, not first-exception attribution or authority.
+
+    Fixed bounded fact set only. No host, key, parameter, URL, index or value is
+    returned/retained. Check the unchanged raw validator, never sanitize/rewrite.
+ """
+ try:
+  facts=rows['facts']
+  if type(facts) is not list or not 1<=len(facts)<=40:return 'NOT_OBSERVED'
+  rejected=False;query_host=False
+  for fact in facts:
+   try:_url(fact['source_url'])
+   except DetailAdapterRejected as error:
+    rejected=True;query_host=query_host or error.reason=='URL_QUERY_HOST_POLICY'
+   except (ValueError,TypeError,KeyError,AttributeError):rejected=True
+  return 'REJECTED_QUERY_HOST_POLICY' if query_host else 'REJECTED_URL_POLICY' if rejected else 'ACCEPTED_URL_POLICY'
+ except (ValueError,TypeError,KeyError,AttributeError):return 'NOT_OBSERVED'
+ finally:
+  # urllib's parser cache must not retain additional diagnostic-only URLs.
+  urlsplit.cache_clear()
+
+
+def _json_gap(error,raw_fact_url_policy='NOT_OBSERVED'):
+ value=project_profile_diagnostic({'category':error.category,'reason':error.reason})
+ policy=project_raw_fact_url_policy(raw_fact_url_policy)
+ if value is None or policy is None:raise DetailAdapterRejected()
+ return None,{'status':'GAP_DETAIL_PUBLIC_JSON','profileDiagnostic':value,'rawFactUrlPolicy':policy}
 
 
 def _json(raw):
@@ -66,51 +136,54 @@ def _json(raw):
 
 
 def _bounded(value,depth=0):
- if depth>12:raise DetailAdapterRejected()
+ if depth>12:raise DetailAdapterRejected('BOUND_EXCEEDED')
  if value is None or type(value) is bool:return
  if type(value) in (int,float):
-  if not math.isfinite(value) or abs(value)>9007199254740991:raise DetailAdapterRejected()
+  if not math.isfinite(value) or abs(value)>9007199254740991:raise DetailAdapterRejected('BOUND_EXCEEDED')
  elif type(value) is str:
-  if len(value.encode())>65536 or re.search(r'-----BEGIN .*PRIVATE KEY|eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.',value):raise DetailAdapterRejected()
+  if len(value.encode())>65536:raise DetailAdapterRejected('BOUND_EXCEEDED')
+  if re.search(r'-----BEGIN .*PRIVATE KEY|eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.',value):raise DetailAdapterRejected('SENSITIVE_PATTERN')
  elif type(value) is list:
-  if len(value)>2000:raise DetailAdapterRejected()
+  if len(value)>2000:raise DetailAdapterRejected('BOUND_EXCEEDED')
   for child in value:_bounded(child,depth+1)
  elif type(value) is dict:
-  if len(value)>128:raise DetailAdapterRejected()
+  if len(value)>128:raise DetailAdapterRejected('BOUND_EXCEEDED')
   for key,child in value.items():
-   if type(key) is not str or len(key)>128:raise DetailAdapterRejected()
+   if type(key) is not str or len(key)>128:raise DetailAdapterRejected('BOUND_EXCEEDED')
    _bounded(child,depth+1)
- else:raise DetailAdapterRejected()
+ else:raise DetailAdapterRejected('FIELD_TYPE')
 
 
 def _keys(value,allowed,required=()):
- if type(value) is not dict or not set(value)<=set(allowed.split()) or not set(required.split() if isinstance(required,str) else required)<=set(value):raise DetailAdapterRejected()
+ if type(value) is not dict:raise DetailAdapterRejected('OBJECT_TYPE')
+ if not set(value)<=set(allowed.split()):raise DetailAdapterRejected('UNSUPPORTED_FIELD')
+ if not set(required.split() if isinstance(required,str) else required)<=set(value):raise DetailAdapterRejected('MISSING_FIELD')
 
 
 def _url(value):
  if value is None:return
- if type(value) is not str:raise DetailAdapterRejected()
+ if type(value) is not str:raise DetailAdapterRejected('URL_POLICY')
  p=urlsplit(value)
- if p.scheme!='https' or not p.hostname or p.username or p.password or p.fragment:raise DetailAdapterRejected()
+ if p.scheme!='https' or not p.hostname or p.username or p.password or p.fragment:raise DetailAdapterRejected('URL_POLICY')
  if p.query:
   allowed={'date','response','stockNo','selectType','year','month','season','co_id','TYPEK','step','firstin'}
-  if p.hostname not in ('www.twse.com.tw','www.tpex.org.tw','mops.twse.com.tw','mopsov.twse.com.tw'):raise DetailAdapterRejected()
+  if p.hostname not in ('www.twse.com.tw','www.tpex.org.tw','mops.twse.com.tw','mopsov.twse.com.tw'):raise DetailAdapterRejected('URL_QUERY_HOST_POLICY')
   try:params=parse_qsl(p.query,strict_parsing=True,max_num_fields=12)
-  except ValueError:raise DetailAdapterRejected() from None
-  if len(dict(params))!=len(params) or any(k not in allowed or not re.fullmatch('[A-Za-z0-9_-]{1,32}',v) for k,v in params):raise DetailAdapterRejected()
+  except ValueError:raise DetailAdapterRejected('URL_POLICY') from None
+  if len(dict(params))!=len(params) or any(k not in allowed or not re.fullmatch('[A-Za-z0-9_-]{1,32}',v) for k,v in params):raise DetailAdapterRejected('URL_POLICY')
 
 
 def _typed(value,kind):
  if value is None:return
  if kind=='number':
-  if type(value) not in (int,float):raise DetailAdapterRejected()
+  if type(value) not in (int,float):raise DetailAdapterRejected('FIELD_TYPE')
  elif kind=='text':
-  if type(value) is not str:raise DetailAdapterRejected()
+  if type(value) is not str:raise DetailAdapterRejected('FIELD_TYPE')
  elif kind=='bool':
-  if type(value) is not bool:raise DetailAdapterRejected()
+  if type(value) is not bool:raise DetailAdapterRejected('FIELD_TYPE')
  elif kind=='strings':
-  if type(value) is not list or any(type(x) is not str for x in value):raise DetailAdapterRejected()
- else:raise DetailAdapterRejected()
+  if type(value) is not list or any(type(x) is not str for x in value):raise DetailAdapterRejected('FIELD_TYPE')
+ else:raise DetailAdapterRejected('FIELD_TYPE')
 
 
 def _fields(value,numbers='',texts='',booleans='',strings=''):
@@ -121,71 +194,96 @@ def _fields(value,numbers='',texts='',booleans='',strings=''):
 
 
 def _public_shapes(rows):
- _keys(rows,'stock detail facts metadata','stock detail facts metadata')
- _keys(rows['stock'],'id symbol name','id symbol name')
+ with _profile('ENVELOPE'):
+  _keys(rows,'stock detail facts metadata','stock detail facts metadata')
+ with _profile('STOCK'):
+  _keys(rows['stock'],'id symbol name','id symbol name')
  d=rows['detail'];facts=rows['facts']
- _keys(d,DETAIL_SELECT.replace(',',' '),DETAIL_SELECT.replace(',',' '))
- for section in d['sections']:
-  _keys(section,'key title body factIds','key title body factIds');_fields(section,texts='key title body',strings='factIds')
-  if not set(section['factIds'])<=set(d['fact_ids']):raise DetailAdapterRejected()
- for source in d['source_links']:
-  _keys(source,'label url publishedAt published_at platform factIds fact_ids factId fact_id mentionIds mention_ids mentionId mention_id','label url')
-  _fields(source,texts='label url publishedAt published_at platform factId fact_id mentionId mention_id',strings='factIds fact_ids mentionIds mention_ids');_url(source['url'])
+ with _profile('DETAIL'):
+  _keys(d,DETAIL_SELECT.replace(',',' '),DETAIL_SELECT.replace(',',' '))
+ with _profile('SECTION'):
+  for section in d['sections']:
+   _keys(section,'key title body factIds','key title body factIds');_fields(section,texts='key title body',strings='factIds')
+   if not set(section['factIds'])<=set(d['fact_ids']):raise DetailAdapterRejected('REFERENCE_SCOPE')
+ with _profile('SOURCE_LINK'):
+  for source in d['source_links']:
+   _keys(source,'label url publishedAt published_at platform factIds fact_ids factId fact_id mentionIds mention_ids mentionId mention_id','label url')
+   _fields(source,texts='label url publishedAt published_at platform factId fact_id mentionId mention_id',strings='factIds fact_ids mentionIds mention_ids');_url(source['url'])
  v=d['valuation'];t=d['technical']
- _keys(v,'status currentPrice bearTarget baseTarget bullTarget probabilityWeightedTarget baseUpsidePct bearDownsidePct rewardRiskRatio method basis monthsCovered next12mBridgeComplete epsTtm forwardEps normalizedEps bookValuePerShare currentPe currentPb fairMultiple historicalPercentile historicalMultiples historicalPrices forwardBvps targetPeriodEnd researchCoverage businessProfile forwardCommonEquityBridge earningsBridge forwardCommonIncomeBridge factorEvidence unmetConditions missing')
- _fields(t,numbers='close ma20 ma60 ma120 ma240 rsi14 atr14 volumeRatio20Median',texts='sessionDate marketRegime',booleans='hardGatePassed')
- nested={'historicalMultiples','historicalPrices','forwardBvps','researchCoverage','businessProfile','forwardCommonEquityBridge','earningsBridge','forwardCommonIncomeBridge','factorEvidence'}
- _fields({k:x for k,x in v.items() if k not in nested},numbers='currentPrice bearTarget baseTarget bullTarget probabilityWeightedTarget baseUpsidePct bearDownsidePct rewardRiskRatio monthsCovered epsTtm forwardEps normalizedEps bookValuePerShare currentPe currentPb fairMultiple historicalPercentile',texts='status method basis targetPeriodEnd',booleans='next12mBridgeComplete',strings='unmetConditions missing')
- for key in ('historicalMultiples','historicalPrices'):
-  points=v.get(key)
-  if points is not None and type(points) is not list:raise DetailAdapterRejected()
-  for point in points or []:_fields(point,numbers='peRatio pbRatio close ma5 ma20 ma60 ma120 ma240',texts='date month frequency')
- if v.get('researchCoverage') is not None:
-  coverage=v['researchCoverage'];_keys(coverage,'status requiredFieldPeriods verifiedFieldPeriods completenessPct missing evaluationAt')
-  _fields({k:x for k,x in coverage.items() if k!='missing'},numbers='requiredFieldPeriods verifiedFieldPeriods completenessPct',texts='status evaluationAt')
-  if type(coverage.get('missing',[])) is not list:raise DetailAdapterRejected()
-  for missing in coverage.get('missing',[]):
-   _keys(missing,'factKey periodEnd','factKey periodEnd');_fields(missing,texts='factKey periodEnd')
- if v.get('businessProfile') is not None:_fields(v['businessProfile'],numbers='forecastHorizonMonths',texts='version businessModel primaryValuationMethod',strings='operatingSegments sourceRefs')
- if v.get('forwardBvps') is not None:_fields(v['forwardBvps'],numbers='bear base bull')
+ with _profile('VALUATION'):
+  _keys(v,'status currentPrice bearTarget baseTarget bullTarget probabilityWeightedTarget baseUpsidePct bearDownsidePct rewardRiskRatio method basis monthsCovered next12mBridgeComplete epsTtm forwardEps normalizedEps bookValuePerShare currentPe currentPb fairMultiple historicalPercentile historicalMultiples historicalPrices forwardBvps targetPeriodEnd researchCoverage businessProfile forwardCommonEquityBridge earningsBridge forwardCommonIncomeBridge factorEvidence unmetConditions missing')
+ with _profile('TECHNICAL'):
+  _fields(t,numbers='close ma20 ma60 ma120 ma240 rsi14 atr14 volumeRatio20Median',texts='sessionDate marketRegime',booleans='hardGatePassed')
+ with _profile('VALUATION'):
+  nested={'historicalMultiples','historicalPrices','forwardBvps','researchCoverage','businessProfile','forwardCommonEquityBridge','earningsBridge','forwardCommonIncomeBridge','factorEvidence'}
+  _fields({k:x for k,x in v.items() if k not in nested},numbers='currentPrice bearTarget baseTarget bullTarget probabilityWeightedTarget baseUpsidePct bearDownsidePct rewardRiskRatio monthsCovered epsTtm forwardEps normalizedEps bookValuePerShare currentPe currentPb fairMultiple historicalPercentile',texts='status method basis targetPeriodEnd',booleans='next12mBridgeComplete',strings='unmetConditions missing')
+ with _profile('VALUATION_HISTORY'):
+  for key in ('historicalMultiples','historicalPrices'):
+   points=v.get(key)
+   if points is not None and type(points) is not list:raise DetailAdapterRejected('FIELD_TYPE')
+   for point in points or []:_fields(point,numbers='peRatio pbRatio close ma5 ma20 ma60 ma120 ma240',texts='date month frequency')
+ with _profile('RESEARCH_COVERAGE'):
+  if v.get('researchCoverage') is not None:
+   coverage=v['researchCoverage'];_keys(coverage,'status requiredFieldPeriods verifiedFieldPeriods completenessPct missing evaluationAt')
+   _fields({k:x for k,x in coverage.items() if k!='missing'},numbers='requiredFieldPeriods verifiedFieldPeriods completenessPct',texts='status evaluationAt')
+   if type(coverage.get('missing',[])) is not list:raise DetailAdapterRejected('FIELD_TYPE')
+   for missing in coverage.get('missing',[]):
+    _keys(missing,'factKey periodEnd','factKey periodEnd');_fields(missing,texts='factKey periodEnd')
+ with _profile('BUSINESS_PROFILE'):
+  if v.get('businessProfile') is not None:_fields(v['businessProfile'],numbers='forecastHorizonMonths',texts='version businessModel primaryValuationMethod',strings='operatingSegments sourceRefs')
+ with _profile('FORWARD_BVPS'):
+  if v.get('forwardBvps') is not None:_fields(v['forwardBvps'],numbers='bear base bull')
  # Complete bridge/factor nested profiles are deliberately not yet reviewed.
  for key in ('earningsBridge','forwardCommonIncomeBridge'):
-  if v.get(key) is not None:
-   _keys(v[key],'status missing','status');_fields(v[key],texts='status',strings='missing')
-   if v[key]['status']!='insufficient':raise DetailAdapterRejected()
- if v.get('forwardCommonEquityBridge') is not None:raise DetailAdapterRejected()
- if v.get('factorEvidence') is not None:
-  factors=v['factorEvidence'];_keys(factors,'official broker industry_fundamentals industry_rotation_price overseas_peer overseas_price')
-  for factor in factors.values():
-   _keys(factor,'score evidenceCount coveredWeight evidenceGrade status asOf reasons','score evidenceCount coveredWeight evidenceGrade status asOf reasons')
-   _fields(factor,numbers='score evidenceCount coveredWeight evidenceGrade',texts='status asOf',strings='reasons')
-   if factor['status'] not in ('available','partial','missing') or factor['evidenceGrade'] not in (0,25,50,75,100) or type(factor['evidenceCount']) is not int or factor['evidenceCount']<0:raise DetailAdapterRejected()
-   if any(type(factor[k]) not in (int,float) or not 0<=factor[k]<=100 for k in ('score','coveredWeight')) or type(factor['reasons']) is not list:raise DetailAdapterRejected()
- p=d['provenance']
- if type(p) is not dict or p.get('trade_plan') is not None:raise DetailAdapterRejected()
- context=p['revision_context'];_keys(context,'version scores riskAction','version scores riskAction')
- _keys(context['scores'],'discovery research actionability dataConfidence','discovery research actionability dataConfidence')
- _keys(context['riskAction'],'state reasons','state reasons');_fields(context['riskAction'],texts='state',strings='reasons')
+  with _profile('EARNINGS_BRIDGE' if key=='earningsBridge' else 'COMMON_INCOME_BRIDGE'):
+   if v.get(key) is not None:
+    _keys(v[key],'status missing','status');_fields(v[key],texts='status',strings='missing')
+    if v[key]['status']!='insufficient':raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+ with _profile('EQUITY_BRIDGE'):
+  if v.get('forwardCommonEquityBridge') is not None:raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+ with _profile('FACTOR'):
+  if v.get('factorEvidence') is not None:
+   factors=v['factorEvidence'];_keys(factors,'official broker industry_fundamentals industry_rotation_price overseas_peer overseas_price')
+   for factor in factors.values():
+    _keys(factor,'score evidenceCount coveredWeight evidenceGrade status asOf reasons','score evidenceCount coveredWeight evidenceGrade status asOf reasons')
+    _fields(factor,numbers='score evidenceCount coveredWeight evidenceGrade',texts='status asOf',strings='reasons')
+    if factor['status'] not in ('available','partial','missing'):raise DetailAdapterRejected('FACTOR_STATUS')
+    if factor['evidenceGrade'] not in (0,25,50,75,100):raise DetailAdapterRejected('FACTOR_GRADE')
+    if type(factor['evidenceCount']) is not int or factor['evidenceCount']<0:raise DetailAdapterRejected('FACTOR_COUNT')
+    if any(type(factor[k]) not in (int,float) or not 0<=factor[k]<=100 for k in ('score','coveredWeight')):raise DetailAdapterRejected('FACTOR_RANGE')
+    if type(factor['reasons']) is not list:raise DetailAdapterRejected('FIELD_TYPE')
+ with _profile('REVISION_CONTEXT'):
+  p=d['provenance']
+  if type(p) is not dict or p.get('trade_plan') is not None:raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+  context=p['revision_context'];_keys(context,'version scores riskAction','version scores riskAction')
+  _keys(context['scores'],'discovery research actionability dataConfidence','discovery research actionability dataConfidence')
+  _keys(context['riskAction'],'state reasons','state reasons');_fields(context['riskAction'],texts='state',strings='reasons')
  # Explicit reduced public projection: these are the only provenance fields
  # consumed by the non-enriched pinned reader. No made-up replacement values.
- d['provenance']={'revision_context':context}
- for fact in facts:
-  _keys(fact,FACT_SELECT.replace(',',' '),FACT_SELECT.replace(',',' '))
-  _fields({k:x for k,x in fact.items() if k not in ('provenance','derivation')},numbers='value',texts='fact_id stock_id fact_key fact_kind period_end unit as_of available_at source_url');_url(fact['source_url'])
-  provenance=fact['provenance']
-  if provenance is not None and type(provenance) is not dict:raise DetailAdapterRejected()
-  fact['provenance']={k:value for k,value in (provenance or {}).items() if k in ('locator','source_locator','page','section','field')}
-  # Derivation is never read/rendered without an accepted dossier; omit it.
-  fact.pop('derivation')
-  if any(type(v) not in (str,int,float) for v in fact['provenance'].values()):raise DetailAdapterRejected()
- m=rows['metadata'];_keys(m,'publicationPhase dataCutoffAt datasetCompleteness datasetCompletenessPct shadowEligible','publicationPhase dataCutoffAt datasetCompleteness datasetCompletenessPct shadowEligible')
- _fields({k:x for k,x in m.items() if k!='datasetCompleteness'},numbers='datasetCompletenessPct',texts='publicationPhase dataCutoffAt',booleans='shadowEligible')
- if type(m['datasetCompleteness']) is not dict:raise DetailAdapterRejected()
- for key,entry in m['datasetCompleteness'].items():
-  if not re.fullmatch(r'(daily_price|daily_valuation|monthly_revenue)(:(TWSE|TPEx)(:[0-9]{4})?)?',key):raise DetailAdapterRejected()
-  _keys(entry,'terminal persistence recordsWritten recordCount rows sourceAsOf observedAt actionEligible selectedProvider selectedAuthorityTier','terminal')
-  _fields(entry,numbers='recordsWritten recordCount rows',texts='terminal persistence sourceAsOf observedAt selectedProvider selectedAuthorityTier',booleans='actionEligible')
-  if any(type(v) not in (str,int,float,bool,type(None)) for v in entry.values()):raise DetailAdapterRejected()
+ with _profile('REVISION_CONTEXT'):
+  d['provenance']={'revision_context':context}
+ with _profile('FACT'):
+  for fact in facts:
+   _keys(fact,FACT_SELECT.replace(',',' '),FACT_SELECT.replace(',',' '))
+   _fields({k:x for k,x in fact.items() if k not in ('provenance','derivation')},numbers='value',texts='fact_id stock_id fact_key fact_kind period_end unit as_of available_at source_url')
+   with _profile('FACT_URL'):_url(fact['source_url'])
+   with _profile('PUBLIC_LOCATOR'):
+    provenance=fact['provenance']
+    if provenance is not None and type(provenance) is not dict:raise DetailAdapterRejected('OBJECT_TYPE')
+    fact['provenance']={k:value for k,value in (provenance or {}).items() if k in ('locator','source_locator','page','section','field')}
+    # Derivation is never read/rendered without an accepted dossier; omit it.
+    fact.pop('derivation')
+    if any(type(v) not in (str,int,float) for v in fact['provenance'].values()):raise DetailAdapterRejected('FIELD_TYPE')
+ with _profile('METADATA'):
+  m=rows['metadata'];_keys(m,'publicationPhase dataCutoffAt datasetCompleteness datasetCompletenessPct shadowEligible','publicationPhase dataCutoffAt datasetCompleteness datasetCompletenessPct shadowEligible')
+  _fields({k:x for k,x in m.items() if k!='datasetCompleteness'},numbers='datasetCompletenessPct',texts='publicationPhase dataCutoffAt',booleans='shadowEligible')
+  if type(m['datasetCompleteness']) is not dict:raise DetailAdapterRejected('OBJECT_TYPE')
+ with _profile('METADATA_DATASET'):
+  for key,entry in m['datasetCompleteness'].items():
+   if not re.fullmatch(r'(daily_price|daily_valuation|monthly_revenue)(:(TWSE|TPEx)(:[0-9]{4})?)?',key):raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+   _keys(entry,'terminal persistence recordsWritten recordCount rows sourceAsOf observedAt actionEligible selectedProvider selectedAuthorityTier','terminal')
+   _fields(entry,numbers='recordsWritten recordCount rows',texts='terminal persistence sourceAsOf observedAt selectedProvider selectedAuthorityTier',booleans='actionEligible')
+   if any(type(v) not in (str,int,float,bool,type(None)) for v in entry.values()):raise DetailAdapterRejected('FIELD_TYPE')
 
 
 @dataclass(frozen=True,repr=False)
@@ -232,13 +330,20 @@ def prepare_detail_read(sql):
  if observation['dossierRows'] or observation['acceptedReceiptRows']:return None,{'status':'GAP_AUGMENTED_DETAIL'}
  rows=value.get('projection')
  if rows is None:return None,{'status':'GAP_DETAIL_BOUND'}
+ raw_fact_url_policy='NOT_OBSERVED'
  try:
-  _bounded(rows)
-  if type(rows['stock']['name']) is not str or not rows['stock']['name'].strip():return None,{'status':'GAP_DETAIL_PUBLIC_JSON'}
-  if rows['detail']['lifecycle_stage'] not in ('found','waiting') or rows['detail']['provenance'].get('trade_plan') is not None:
-   return None,{'status':'GAP_DETAIL_ACTION_SURFACE'}
+  with _profile('BOUNDS'):_bounded(rows)
+  raw_fact_url_policy=_raw_fact_url_policy(rows)
+  with _profile('STOCK'):
+   if type(rows['stock']['name']) is not str or not rows['stock']['name'].strip():raise DetailAdapterRejected('FIELD_TYPE')
+  with _profile('DETAIL'):
+   if rows['detail']['lifecycle_stage'] not in ('found','waiting') or rows['detail']['provenance'].get('trade_plan') is not None:
+    return None,{'status':'GAP_DETAIL_ACTION_SURFACE'}
   _public_shapes(rows)
- except (DetailAdapterRejected,ValueError,TypeError,KeyError):return None,{'status':'GAP_DETAIL_PUBLIC_JSON'}
+ except DetailAdapterRejected as error:return _json_gap(error,raw_fact_url_policy)
+ except (ValueError,TypeError,KeyError,AttributeError):
+  error=DetailAdapterRejected();error.category='ENVELOPE'
+  return _json_gap(error,raw_fact_url_policy)
  data=json.dumps(rows,ensure_ascii=False,separators=(',',':'),allow_nan=False).encode()
  if len(data)>MAX_BYTES:return None,{'status':'GAP_DETAIL_BOUND'}
  return _DetailRead(data),{'status':'PREPARED_PRIVATE_HISTORICAL_DETAIL'}

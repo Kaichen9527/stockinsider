@@ -52,9 +52,13 @@ class DetailReadAdapterTests(unittest.TestCase):
    ("UPDATE candidate_detail_snapshots SET valuation='{\"privateToken\":\"PUBLIC_SECRET_MARKER\"}'",'GAP_DETAIL_PUBLIC_JSON'),
    ("UPDATE candidate_detail_snapshots SET lifecycle_stage='actionable'",'GAP_DETAIL_ACTION_SURFACE'),
    ("UPDATE candidate_detail_snapshots SET provenance=provenance||'{\"trade_plan\":{\"schema\":\"PUBLIC\"}}'",'GAP_DETAIL_ACTION_SURFACE')]
-  for query,status in mutations:
+  for index,(query,status) in enumerate(mutations):
    self.sql(query+';')
-   read,result=self.prepare();self.assertIsNone(read);self.assertEqual(result,{'status':status})
+   read,result=self.prepare();self.assertIsNone(read)
+   expected={'status':status}
+   if status=='GAP_DETAIL_PUBLIC_JSON':expected['profileDiagnostic']={'category':('SECTION' if index==0 else 'VALUATION'),'reason':'UNSUPPORTED_FIELD'}
+   if status=='GAP_DETAIL_PUBLIC_JSON':expected['rawFactUrlPolicy']='ACCEPTED_URL_POLICY'
+   self.assertEqual(result,expected)
    self.sql("UPDATE candidate_detail_snapshots SET lifecycle_stage='found',valuation='{}',provenance=provenance-'trade_plan',sections="+fixture.quote(json.dumps([{'key':'fixture','title':'Public fixture','body':fixture.MARKER,'factIds':[fixture.FACT]}]))+';')
  def test_actual_http_exact_get_rpc_auth_and_cross_identity_rejections(self):
   read,_=self.prepare();secret,token=create_stage_jwt()
@@ -79,13 +83,13 @@ class DetailReadAdapterTests(unittest.TestCase):
   self.assertEqual(len(read.response('GET',self.target('candidate_official_facts',q))),1)
   for changed in ({**q,'fact_id':'in.(00000000-0000-4000-8000-000000000299)'},{**q,'select':'*'},{**q,'limit':'40'},{**q,'fact_id':'in.('+fixture.FACT+','+fixture.FACT+')'}):self.assertIsNone(read.response('GET',self.target('candidate_official_facts',changed)))
  def test_actual_nested_known_keys_reject_wrong_type_canaries(self):
-  for value in ({'businessProfile':{'operatingSegments':[{'privateToken':'PUBLIC_CANARY'}]}},
+  for index,value in enumerate(({'businessProfile':{'operatingSegments':[{'privateToken':'PUBLIC_CANARY'}]}},
    {'forwardBvps':{'bear':{'privateToken':'PUBLIC_CANARY'}}},
    {'historicalPrices':[{'date':'2026-09-12','close':{'privateToken':'PUBLIC_CANARY'}}]},
    {'unmetConditions':[{'privateToken':'PUBLIC_CANARY'}]},
-   {'researchCoverage':{'missing':[{'factKey':{'privateToken':'PUBLIC_CANARY'},'periodEnd':'2026-09-12'}]}}):
+   {'researchCoverage':{'missing':[{'factKey':{'privateToken':'PUBLIC_CANARY'},'periodEnd':'2026-09-12'}]}})):
    self.sql('UPDATE candidate_detail_snapshots SET valuation='+fixture.quote(json.dumps(value))+';')
-   self.assertEqual(self.prepare(),(None,{'status':'GAP_DETAIL_PUBLIC_JSON'}))
+   self.assertEqual(self.prepare(),(None,{'status':'GAP_DETAIL_PUBLIC_JSON','profileDiagnostic':{'category':('BUSINESS_PROFILE','FORWARD_BVPS','VALUATION_HISTORY','VALUATION','RESEARCH_COVERAGE')[index],'reason':'FIELD_TYPE'},'rawFactUrlPolicy':'ACCEPTED_URL_POLICY'}))
  def test_actual_source_supported_factor_and_metadata_profile(self):
   factor={'score':0,'status':'missing','evidenceCount':0,'asOf':None,'reasons':['PUBLIC_ONLY'],'coveredWeight':0,'evidenceGrade':0}
   valuation={'factorEvidence':{'official':factor,'broker':factor}}
@@ -96,7 +100,7 @@ class DetailReadAdapterTests(unittest.TestCase):
   read,result=self.prepare();self.assertIsNotNone(read);self.assertEqual(read.rows['metadata']['datasetCompleteness'],metadata)
   metadata['daily_price:TWSE']['privateToken']='PUBLIC_CANARY'
   self.sql('UPDATE taiwan_data_publication_metadata_v5 SET dataset_completeness='+fixture.quote(json.dumps(metadata))+';')
-  self.assertEqual(self.prepare(),(None,{'status':'GAP_DETAIL_PUBLIC_JSON'}))
+  self.assertEqual(self.prepare(),(None,{'status':'GAP_DETAIL_PUBLIC_JSON','profileDiagnostic':{'category':'METADATA_DATASET','reason':'UNSUPPORTED_FIELD'},'rawFactUrlPolicy':'ACCEPTED_URL_POLICY'}))
  def test_actual_pinned_api_loader_sdk_nextresponse_over_private_sql_http(self):
   read,_=self.prepare();secret,token=create_stage_jwt()
   modules=os.environ.get('T18_PUBLIC_TEST_NODE_MODULES',str(ROOT/'web/node_modules'))

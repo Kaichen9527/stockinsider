@@ -1,0 +1,125 @@
+{
+  "schema": "stockinsider-t18-detail-json-diagnostic-source-receipt-v1",
+  "recordedAtUtc": "2026-11-15T00:04:20.767370Z",
+  "baselineCommit": "e2af3017c5409dab0acb20bbdac3f7e60adad668",
+  "scope": "DIAGNOSTIC_ONLY_NO_COMPATIBILITY_OR_ACCEPTANCE_CHANGE",
+  "newOnsiteSubject": "NOT_RUN",
+  "nativeHoldRetained": true,
+  "preservedEvidence": {
+    "nativeGapReceiptCommit": "cc139b9d06e4fcc031def93c48af078cf1ed9953",
+    "nativeGapReceiptGitBlob": "840eba03be384834773045c0ad26b410df921f82",
+    "nativeDurationSeconds": 706.331,
+    "publicControlEvidenceCommit": "79119dec1e1d86bba321288f5b4c426cdae66dbd",
+    "publicControlIsCloneFirstExceptionProof": false,
+    "oldSuccessReceiptsUnchanged": true,
+    "previousCloneFirstException": "UNKNOWN_UNTIL_NEW_ONSITE_DIAGNOSTIC"
+  },
+  "manifest": {
+    "path": "docs/operations/2026-11-15/vnext/t18-detail-json-diagnostic-stage-manifest.json",
+    "sha256": "2e8ab5c41142cd10f6db4d56091100074257549829ccbe5f0940fb3a9cf4e613",
+    "replace": 2,
+    "add": 0,
+    "expectedStagedBlobsAfter": 51
+  },
+  "runtimeSha256": {
+    "t18_detail_read_adapter.py": "7dfdb0c4617ac5c19c9ec08776238e92f254bbd892d34eda59bd686651a5cf83",
+    "t18_detail_http.py": "bad097fb6505ffbf634e61e2e5c562787bdae7677bd9e2f3e0d2a3d7a7d32ce7"
+  },
+  "diagnosticContract": {
+    "categories": [
+      "BOUNDS",
+      "BUSINESS_PROFILE",
+      "COMMON_INCOME_BRIDGE",
+      "DETAIL",
+      "EARNINGS_BRIDGE",
+      "ENVELOPE",
+      "EQUITY_BRIDGE",
+      "FACT",
+      "FACTOR",
+      "FACT_URL",
+      "FORWARD_BVPS",
+      "METADATA",
+      "METADATA_DATASET",
+      "PUBLIC_LOCATOR",
+      "RESEARCH_COVERAGE",
+      "REVISION_CONTEXT",
+      "SECTION",
+      "SOURCE_LINK",
+      "STOCK",
+      "TECHNICAL",
+      "VALUATION",
+      "VALUATION_HISTORY"
+    ],
+    "reasons": [
+      "BOUND_EXCEEDED",
+      "FACTOR_COUNT",
+      "FACTOR_GRADE",
+      "FACTOR_RANGE",
+      "FACTOR_STATUS",
+      "FIELD_TYPE",
+      "INVALID_PROFILE",
+      "MISSING_FIELD",
+      "OBJECT_TYPE",
+      "REFERENCE_SCOPE",
+      "SENSITIVE_PATTERN",
+      "UNSUPPORTED_FIELD",
+      "UNSUPPORTED_SEMANTICS",
+      "URL_POLICY",
+      "URL_QUERY_HOST_POLICY"
+    ],
+    "rawFactUrlPolicies": [
+      "ACCEPTED_URL_POLICY",
+      "NOT_OBSERVED",
+      "REJECTED_QUERY_HOST_POLICY",
+      "REJECTED_URL_POLICY"
+    ],
+    "dataDerivedKeysValuesIdsTypesSqlOrUrlsExported": false,
+    "rawPolicyIsFirstExceptionAttribution": false,
+    "diagnosticsGrantRuntimeAuthority": false,
+    "onlyPublicJsonGapMayCarryDiagnostics": true,
+    "strictSecondProjection": true,
+    "additionalDiagnosticParserCacheCleared": true
+  },
+  "verification": {
+    "actualPostgresVersion": "PostgreSQL17.11 (Debian17.11-0+deb13u1)",
+    "combinedT17T18": {
+      "passed": 210,
+      "seconds": 98.674
+    },
+    "independentActualPgDiagnostics": {
+      "passed": 10,
+      "seconds": 13.169
+    },
+    "baselineAcceptanceRejectionMatrixCases": 14,
+    "baselinePublicBlob": "d8ba71232d4e5d92dab63b1a270c2ad05c7be4eb",
+    "independentSourceReview": {
+      "remainingP0": 0,
+      "remainingP1": 0,
+      "frozenHashesVerified": true
+    },
+    "unchangedSqlAndRequestConstants": 8,
+    "projectionSqlSha256": "ec8876222dbb422aea43e1485abd4faad70809877c3458e6be8b14f33d444a15",
+    "actualSyntheticPgCleanupVerified": true,
+    "privateHttpAndPinnedSourceComponentRegressionRetained": true,
+    "noRealDataKeyOrRootContaboActions": true,
+    "webBuild": {
+      "exitCode": 127,
+      "status": "NEXT_EXECUTABLE_MISSING_IN_ISOLATED_CHECKOUT",
+      "canonicalBridge": "PASS"
+    }
+  },
+  "unchangedBoundaries": {
+    "urlHostQueryAcceptanceRules": true,
+    "sqlProjection": true,
+    "maximumPrivateProjectionBytes": 524288,
+    "grantRoleAndOriginalRpcDenials": true,
+    "rootUnitBrokerAndFdContracts": true,
+    "releasePinsAndBytes": true,
+    "credential900And300Limits": true,
+    "originalDbDailyAndEightNegatives": true
+  },
+  "firstCauseAcceptance": "ONSITE_ENUM_OBSERVATION_REQUIRED",
+  "detailHttpAcceptance": "NOT_RUN_BY_THIS_DIAGNOSTIC_SUBJECT",
+  "freshnessActionAcceptance": "GAP_FIXED_UI_HAS_NO_AGE_FENCE",
+  "siteNewRadarAndFormalGatesRetained": true
+}

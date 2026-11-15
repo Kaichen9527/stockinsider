@@ -103,7 +103,19 @@ def exercise_detail_http(app,releases,read):
 
 def project_detail_http(value):
  if type(value) is not dict or value.get('status') not in STATUSES:return None
- if value['status']!='HISTORICAL_DETAIL_HTTP_VERIFIED':return dict(value) if set(value)=={'status'} else None
+ if value['status']!='HISTORICAL_DETAIL_HTTP_VERIFIED':
+  if set(value)=={'status'}:return {'status':value['status']}
+  if value['status']=='GAP_DETAIL_PUBLIC_JSON' and set(value) in ({'status','profileDiagnostic'},{'status','profileDiagnostic','rawFactUrlPolicy'}):
+   from .t18_detail_read_adapter import project_profile_diagnostic,project_raw_fact_url_policy
+   diagnostic=project_profile_diagnostic(value['profileDiagnostic'])
+   if diagnostic is not None:
+    result={'status':value['status'],'profileDiagnostic':diagnostic}
+    if 'rawFactUrlPolicy' in value:
+     policy=project_raw_fact_url_policy(value['rawFactUrlPolicy'])
+     if policy is None:return None
+     result['rawFactUrlPolicy']=policy
+    return result
+  return None
  from .t18_release_assets import RELEASE_PINS
  expected={'status','steps','originalDatesPreserved','identityScope','readerTransport','detailPostgrestAcceptance','originalRpcExecution','freshnessActionAcceptance','siteAcceptance','newRadarAcceptance'}
  if set(value)!=expected or value['originalDatesPreserved'] is not True:return None

@@ -1,0 +1,111 @@
+{
+  "schema": "stockinsider-t18-historical-detail-contabo-receipt-v1",
+  "scope": "REAL_CONTABO_VALIDATED_CLONE_WITH_FIXED_OLD_RELEASE_PAIR_AND_CLOSED_DETAIL_PROFILE",
+  "observedAtUtc": "2026-11-14 23:47:17 UTC",
+  "backupArchiveDate": "2026-09-19",
+  "subject": "e2af3017c5409dab0acb20bbdac3f7e60adad668",
+  "baselineSuccessfulSubject": "5359a946a43373dbf5233fdc56467c946685679a",
+  "baselineEvidence": "4998a2a4be77ea7c87351b27268aa50eec3177d2",
+  "exactStagedFiles": {
+    "baseline": 49,
+    "after": 51,
+    "replace": 5,
+    "add": 2,
+    "rootLauncherChanged": false
+  },
+  "noKey": {
+    "status": "HOST_PREREQUISITES_VERIFIED_ONLY",
+    "seconds": 17.38,
+    "keyRead": false,
+    "clean": true,
+    "productionSignaturesUnchanged": true
+  },
+  "invalid": {
+    "result": "backup_authentication_failed",
+    "seconds": 19.267,
+    "runnerExit": 2,
+    "restored": false,
+    "clean": true,
+    "productionSignaturesUnchanged": true
+  },
+  "real": {
+    "exit": 0,
+    "runnerExit": 0,
+    "status": "DB_VERIFIED_FIXED_T18_EXERCISED",
+    "elapsedSeconds": 706.331,
+    "runnerSeconds": 695.086,
+    "productionSignaturesUnchanged": true,
+    "stagingResourcesCleaned": true,
+    "minDiskBytes": 18029903872,
+    "minAvailableMemoryBytes": 3880091648,
+    "database": {
+      "restored": true,
+      "version": "170011",
+      "foreignKeys": 288,
+      "invalidForeignKeys": 0,
+      "lineageRelations": 7,
+      "lineageOrphans": 0,
+      "privateCleanup": {
+        "postmasterReaped": true,
+        "privateTreeRemoved": true,
+        "socketRemoved": true
+      }
+    },
+    "oldPair": {
+      "next": "FIXED_OLD_PAIR_VERIFIED",
+      "sequence": "A_B_A",
+      "faultHealthFailed": true,
+      "automaticRollback": "A",
+      "deniedRequests": {
+        "postgrestDenied": 2,
+        "proxyDenied": 6
+      },
+      "cleanup": true,
+      "steps": [
+        {
+          "sourceCommit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+          "nextVersion": "16.3.4",
+          "contentDate": "2026-09-12",
+          "snapshotPublishedDate": "2026-09-19",
+          "homeStatus": 200,
+          "staleReadonly": true
+        },
+        {
+          "sourceCommit": "dd59817f750684b093965f539dd4de466be13077",
+          "nextVersion": "16.3.4",
+          "contentDate": "2026-09-12",
+          "snapshotPublishedDate": "2026-09-19",
+          "homeStatus": 200,
+          "staleReadonly": true
+        },
+        {
+          "sourceCommit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+          "nextVersion": "16.3.4",
+          "contentDate": "2026-09-12",
+          "snapshotPublishedDate": "2026-09-19",
+          "homeStatus": 200,
+          "staleReadonly": true
+        }
+      ]
+    },
+    "detail": {
+      "privateDbObservation": "OBSERVED_PINNED_DETAIL_SCOPE",
+      "matchingTables": 7,
+      "matchingColumns": 60,
+      "sections": 6,
+      "facts": 9,
+      "dossierRows": 0,
+      "acceptedReceiptRows": 0,
+      "http": "GAP_DETAIL_PUBLIC_JSON",
+      "reasonPrecision": "BROAD_PUBLIC_JSON_PROFILE_ONLY",
+      "detailRequestsAccepted": false,
+      "freshnessAction": "GAP_FIXED_UI_HAS_NO_AGE_FENCE",
+      "originalRpcExecution": "NOT_GRANTED_NOT_CALLED",
+      "grantsChanged": 0
+    },
+    "nativeHold": true,
+    "newRadarReleaseAcceptance": "NOT_RUN",
+    "fullReleaseAcceptance": false
+  },
+  "next": "Preserve strict fail-closed validation and add fixed schema-path/type category diagnostics without values, arbitrary keys, private IDs or DB changes. Compare any supported extension with the frozen consumer before further review and replay."
+}
