@@ -1,0 +1,202 @@
+{
+  "date": "2026-11-15",
+  "sourceCommit": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "recoveredSqlCommit": "40fe8738cd5768b67269f7085e31014d2a84e0da",
+  "earlierParserClockEvidence": "72f0215a36743fd38c056343bc656812b2afe573",
+  "dependencyGitBlobs": {
+    "web/src/lib/vnext/preparation-reconciliation.ts": {
+      "oid": "2f6ddfc2897a3dfcfca0798d7b067838ce4b4176",
+      "bytes": 16885
+    },
+    "web/src/lib/vnext/financial-observation.ts": {
+      "oid": "bc09446bcd1caee38039b8184f59d5b5aab5feb1",
+      "bytes": 11536
+    },
+    "web/src/lib/vnext/forecast-current.ts": {
+      "oid": "dfcc7cad15fda51307d5b17b5544cb73dda911ff",
+      "bytes": 5941
+    },
+    "web/src/lib/vnext/corporate-action-terms.ts": {
+      "oid": "b757a15ed69580d67ca2cda47e32df457205e820",
+      "bytes": 15351
+    },
+    "web/src/lib/vnext/policy.ts": {
+      "oid": "a8441d87c99c1edf6ebfed991b58b346f917b32b",
+      "bytes": 5423
+    },
+    "web/src/lib/vnext/financial-evidence-sources.ts": {
+      "oid": "7a565b9fe6cf448aab878f1b410ac63ae0be5918",
+      "bytes": 14017
+    },
+    "web/src/lib/vnext/cached-price-factors.ts": {
+      "oid": "71a6f14edfa2e1e8cb3a9f07dc30814b5c70ef59",
+      "bytes": 4342
+    },
+    "web/src/lib/vnext/preparation-trading-identity.ts": {
+      "oid": "fe7bcc1e0c4c9fff871a5d4e2d6cf2d7f7d90f13",
+      "bytes": 4721
+    },
+    "web/src/lib/vnext/evidence-clock.ts": {
+      "oid": "fa27138f5dd8f6ce823a91e2fd4be84cfe76fac9",
+      "bytes": 1287
+    },
+    "web/src/lib/candidate-price-history.ts": {
+      "oid": "066dc146fb3b5aa3f5bf789fdc7abbd7e192b751",
+      "bytes": 8934
+    },
+    "web/src/lib/vnext/disclosed-fiscal-forecast.ts": {
+      "oid": "458c3faf1f7c5eb1b44c68e8ef1ef6a51a91ec2e",
+      "bytes": 12546
+    },
+    "web/src/lib/vnext/worker-output.ts": {
+      "oid": "3543aef056d34dc7359026498e7ffd90cb781b4b",
+      "bytes": 5987
+    },
+    "web/src/lib/vnext/citations.ts": {
+      "oid": "2fb776e380e525bbdff780b2fd15ba14a49d9774",
+      "bytes": 2780
+    },
+    "web/src/lib/vnext/research.ts": {
+      "oid": "47e8b5d2d20aff851fae02900d29012c4f4e4e33",
+      "bytes": 11047
+    },
+    "web/src/lib/public-source-url.ts": {
+      "oid": "c4f7ea17bc1415638b4ef782d147d580d2a190fa",
+      "bytes": 1954
+    },
+    "web/src/lib/vnext/business-criteria.ts": {
+      "oid": "225b5eff80fe7972a2151f7142e61932487eda0c",
+      "bytes": 9102
+    },
+    "web/src/lib/vnext/catalyst-cancellation.ts": {
+      "oid": "db4bed5735d4788bad2167b1f85c2327fd4e801f",
+      "bytes": 10359
+    },
+    "web/src/lib/vnext/semantic-criteria.ts": {
+      "oid": "05c3b755af4f5f8f02eefd9aeb34b247285ccd6f",
+      "bytes": 10923
+    },
+    "web/src/lib/vnext/artifact-financial-summary.ts": {
+      "oid": "cf60612083e096e8a325df0b0d083654c5a4d0ee",
+      "bytes": 2994
+    }
+  },
+  "readController": {
+    "node": "v22.23.1",
+    "nonRoot": true,
+    "proof": {
+      "legacyReceiptKnownAt": "2026-10-22T06:00:00.100001Z",
+      "currentReceiptKnownAt": "2026-10-22T06:00:00.100002Z",
+      "receiptHashChanged": true,
+      "inputHashChanged": true,
+      "summaries": [
+        {
+          "name": "legacy_prepared_read",
+          "status": "prepared",
+          "reason": null,
+          "nextAction": "automatic",
+          "calls": [
+            "inspect",
+            "work-context",
+            "read"
+          ],
+          "resultUsesOriginalStoredInputHash": true,
+          "reinvoke": false,
+          "automaticResume": false
+        },
+        {
+          "name": "legacy_prepared_resume",
+          "status": "prepared",
+          "reason": null,
+          "nextAction": "automatic",
+          "calls": [
+            "inspect",
+            "work-context",
+            "read"
+          ],
+          "resultUsesOriginalStoredInputHash": true,
+          "reinvoke": false,
+          "automaticResume": false
+        },
+        {
+          "name": "legacy_committed_provider_invocation",
+          "status": "prepared",
+          "reason": null,
+          "nextAction": "recover",
+          "calls": [
+            "inspect",
+            "work-context",
+            "read"
+          ],
+          "resultUsesOriginalStoredInputHash": true,
+          "reinvoke": false,
+          "automaticResume": false
+        },
+        {
+          "name": "legacy_context_replaced_by_new",
+          "status": "unresolved",
+          "reason": "frozen_preparation_binding_invalid",
+          "nextAction": "preparation-read",
+          "calls": [
+            "inspect",
+            "work-context",
+            "read"
+          ],
+          "resultUsesOriginalStoredInputHash": true,
+          "reinvoke": false,
+          "automaticResume": false
+        },
+        {
+          "name": "new_prepared_read",
+          "status": "prepared",
+          "reason": null,
+          "nextAction": "automatic",
+          "calls": [
+            "inspect",
+            "work-context",
+            "read"
+          ],
+          "resultUsesOriginalStoredInputHash": true,
+          "reinvoke": false,
+          "automaticResume": false
+        },
+        {
+          "name": "legacy_revoked_work_context",
+          "status": "unresolved",
+          "reason": "active_work_context_unavailable",
+          "nextAction": "preparation-read",
+          "calls": [
+            "inspect",
+            "work-context"
+          ],
+          "resultUsesOriginalStoredInputHash": true,
+          "reinvoke": false,
+          "automaticResume": false
+        }
+      ]
+    }
+  },
+  "isolatedNativeTrigger": {
+    "nativeVersion": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "backendExit": 0,
+    "result": {
+      "newBindingRows": 1,
+      "legacyBindingRows": 0,
+      "bindingIsImmutable": true,
+      "newBoundPacketAccepted": true,
+      "newMissingBothRejected": true,
+      "newMissingProviderRejected": true,
+      "newSubstitutedPacketAccepted": false,
+      "legacyImmutablePacketAccepted": true,
+      "legacySubstitutedPacketAccepted": false
+    },
+    "closedErrors": [],
+    "scope": "native trigger and bound validation with synthetic as-of row response",
+    "productionSocketContacted": false,
+    "sqlSha256": "7148405428d9f8a8faebc72178b69fb362a01a7090c20e8f08f52ce32aa78b8b"
+  },
+  "patchedSourceOnProduction": false,
+  "fullWriterIntegrated": false,
+  "independentReviewPassed": false,
+  "temporaryFilesRemoved": true
+}

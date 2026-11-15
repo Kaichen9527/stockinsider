@@ -1,0 +1,57 @@
+import {projectFinancialEvidenceSources} from './web/src/lib/vnext/financial-evidence-sources.ts';
+import {inputHash} from './web/src/lib/vnext/policy.ts';
+import {projectFinancialEvidenceSources as projectCurrent} from './web/src/lib/vnext/financial-evidence-sources-probe.ts';
+import {freezeFinancialPreparation,reconcilePreparation} from './web/src/lib/vnext/preparation-reconciliation.ts';
+const stock='00000000-0000-4000-8000-000000000003',fid='00000000-0000-4000-8000-000000000004',doc='00000000-0000-4000-8000-000000000005',rid='00000000-0000-4000-8000-000000000006',parser='00000000-0000-4000-8000-000000000007',provenance='00000000-0000-4000-8000-000000000008',job='00000000-0000-4000-8000-000000000009';
+const at='2026-10-22T06:00:00.100001Z',later='2026-10-22T06:00:00.100002Z',cutoff='2026-10-22T07:00:00.000000Z';
+const afterCutoff='2026-10-22T07:00:00.000001Z', period='2026-06-30', hash='a'.repeat(64),manifest='b'.repeat(64);
+const examples=[
+ {label:'openapi',provider:'tpex',url:'https://www.tpex.org.tw/synthetic-source.json',parserTime:null,issuer:false},
+ {label:'official_document_same_clock',provider:'mops',url:'https://mopsfin.twse.com.tw/synthetic-source.xhtml',parserTime:at,issuer:false},
+ {label:'official_document_parser_later',provider:'mops',url:'https://mopsfin.twse.com.tw/synthetic-source.xhtml',parserTime:later,issuer:false},
+ {label:'official_document_parser_post_cutoff',provider:'mops',url:'https://mopsfin.twse.com.tw/synthetic-source.xhtml',parserTime:afterCutoff,issuer:false},
+ {label:'issuer_document_parser_later',provider:'mops',url:'https://www.nanya.com/synthetic-vnext-ir/source.xhtml',parserTime:later,issuer:true}
+];
+const outputs=[];
+for(const {label,provider,url,parserTime,issuer} of examples){
+ const sourceRef=parserTime?'issuer-document:'+hash+':'+ 'c'.repeat(64):'tpex-openapi:synthetic-original';
+ const fact={fact_id:fid,stock_id:stock,fact_key:'quarterly_revenue',period_start:'2026-04-01',period_end:period,duration_kind:'quarterly',value:100.25,unit:'TWD',provider,authority_tier:'official_filing',estimate_kind:'reported',estimate_horizon:'reported_period',filing_published_at:at,source_timestamp:at,collected_at:at,filing_restatement_id:null,source_ref:sourceRef,recorded_at:at,validation_status:'validated',schema_valid:true,unit_valid:true,point_in_time_valid:true,consistency_valid:true,upstream_provider:null,validation_recorded_at:at};
+ const rows={provenance:[],jobs:[],links:[],receipts:[],documents:[],issuerDomains:[],parserEvidence:[]};
+ rows.provenance.push({provenance_id:provenance,fact_id:fid,acquisition_job_id:parserTime?null:job,issuer_document_id:parserTime?doc:null,source_url:url,source_sha256:hash,locator:parserTime?{parser_evidence_id:parser,manifest_sha256:manifest,response_url:url}:{source_ref:sourceRef,period_end:period,fact_key:fact.fact_key},extracted_at:at,recorded_at:at});
+ if(parserTime){
+  rows.links.push({receipt_id:rid,fact_id:fid,fact_recorded_at:at,evidence_id:parser,created_at:at});
+  rows.receipts.push({receipt_id:rid,stock_id:stock,issuer_document_id:doc,source_url:url,period_end:period,document_sha256:hash,receipt_status:'accepted',parser_status:'complete',published_at:at,accepted_at:at,completed_at:at,parser_evidence_id:parser,financial_validation_status:'validated'});
+  rows.documents.push({document_id:doc,stock_id:stock,document_url:url,document_sha256:hash,acquisition_status:'fetched',collected_at:at,recorded_at:at});
+  rows.parserEvidence.push({evidence_id:parser,receipt_id:rid,document_sha256:hash,manifest_sha256:manifest,recorded_at:parserTime});
+  if(issuer)rows.issuerDomains.push({stock_id:stock,host:'www.nanya.com',approved_at:at});
+ }else rows.jobs.push({job_id:job,stock_id:stock,period_end:period,status:'terminal',terminal_reason:'complete',response_sha256:hash,source_url:url,created_at:at,collected_at:at,updated_at:at});
+ 
+ if(label!=='official_document_parser_later')continue;
+ const previous=projectFinancialEvidenceSources([fact],rows,cutoff),latest=projectCurrent([fact],rows,cutoff);
+ const owner={principal:'synthetic-author',role:'author'};
+ const jobId='11111111-1111-4111-8111-111111111111', execution='22222222-2222-4222-8222-222222222222';
+ const seed={symbol:'2408',hash:inputHash('synthetic-authority-admission'),evidence:[],gaps:[]}, history={priceBasis:null,bars:[],missingData:[]};
+ const old=freezeFinancialPreparation(seed,history,previous,cutoff);
+ const updated=freezeFinancialPreparation(seed,history,latest,cutoff);
+ const original=new Map([['legacy',old],['new',updated]]);
+ const scenarios=[['legacy_prepared_read','legacy',false,false,false],['legacy_prepared_resume','legacy',true,false,false],['legacy_committed_provider_invocation','legacy',true,true,false],['legacy_context_replaced_by_new','legacy',true,false,true],['new_prepared_read','new',false,false,false],['legacy_revoked_work_context','legacy',true,false,false]];
+ const summaries=[];
+ for(const [name,version,resume,invocation,swap] of scenarios){
+   const calls=[], stored=original.get(version), state={jobId,symbol:'2408',state:'running',executionId:execution,inputHash:stored.inputHash,deadline:'2026-10-22T07:10:00.000000Z',prepared:true};
+   const context={inputHash:stored.inputHash,evidence:swap?updated.evidence:stored.evidence};
+   const deps={
+    now:()=>cutoff,
+    client:{from(){calls.push('forbidden_cache');throw Error('unexpected_cache');},rpc(){calls.push('forbidden_rpc');throw Error('unexpected_rpc');}},
+    historical(){calls.push('forbidden_historical');throw Error('unexpected_prices');},
+    async command(action){calls.push(action);if(action!=='work-context')throw Error('unexpected_command');if(name==='legacy_revoked_work_context')throw Error('vnext_research_original_rights_no_longer_current');return context;},
+    async journal(action){calls.push(action);return action==='inspect'?state:invocation?{dispatch:false,invocation_id:'33333333-3333-4333-8333-333333333333',job_id:jobId,execution_id:execution,input_hash:stored.inputHash,principal:owner.principal,task:'author',state:'uncertain'}:{dispatch:false};}
+   };
+   const result=await reconcilePreparation(owner,{jobId,action:resume?'resume-preparation':'preparation-read'},deps,resume);
+   summaries.push({name,status:result.status,reason:result.reason??null,nextAction:result.nextAction,calls,resultUsesOriginalStoredInputHash:result.inputHash===stored.inputHash,reinvoke:result.reinvoke,automaticResume:result.automaticResume});
+ }
+ const nextPacket={...updated.evidence,financialProviderInput:{schemaVersion:'vnext-financial-provider-input-v1',facts:[{factId:fact.fact_id,factRecordedAt:fact.recorded_at,originalFact:fact,receiptHash:latest.receipts[0].receiptHash}]}};
+ outputs.push({old,updated,nextPacket,inputHashWithProvider:inputHash(nextPacket),fixture:{fact,cutoff,sqlRows:{...rows,parsers:rows.parserEvidence,domains:rows.issuerDomains,facts:[fact],current:[fact],prices:[]}},legacyReceiptKnownAt:previous.receipts[0].knownAt,currentReceiptKnownAt:latest.receipts[0].knownAt,
+  receiptHashChanged:previous.receipts[0].receiptHash!==latest.receipts[0].receiptHash,inputHashChanged:old.inputHash!==updated.inputHash,summaries});
+}
+if(outputs.length!==1)throw Error('Expected one frozen preparation pair');
+console.log(JSON.stringify({node:process.version,nonRoot:process.getuid()!==0,proof:outputs[0]}));
