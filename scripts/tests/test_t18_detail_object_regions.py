@@ -75,7 +75,8 @@ class ObjectRegionTests(unittest.TestCase):
   self.assertGreaterEqual(data['equivalenceCases'],50);self.assertGreaterEqual(data['negativeCases'],7)
   self.assertFalse(data['liveImported']);self.assertFalse(data['liveBoundRelaxed'])
   self.assertEqual(data['actualMetadataRegion'],'NOT_OBSERVED');self.assertNotIn(CANARY,result.stdout)
-  # The design remains inert: current exact map object is still refused.
+  # The original general bound remains intact; runtime composition has its own
+  # raw-source validation before this unchanged general function is invoked.
   self.reject({'metadata':{'datasetCompleteness':large()}},'METADATA_DATASET_MAP')
 
 
@@ -99,6 +100,9 @@ class ObjectRegionPgTests(unittest.TestCase):
    with patch.object(m,'_raw_fact_url_policy',side_effect=AssertionError('url_probe_must_not_run')) as probe:
     read,result=m.prepare_detail_read(self.sql);probe.assert_not_called()
    expected={'status':'GAP_DETAIL_PUBLIC_JSON','profileDiagnostic':{'category':'BOUNDS','reason':'BOUND_EXCEEDED','boundSubtype':'OBJECT_COUNT','boundRegion':region},'rawFactUrlPolicy':'NOT_OBSERVED'}
+   # Numeric raw-map keys are now rejected by source validation before generic
+   # bounds. Their rejection is retained; valid source maps are tested separately.
+   if region=='METADATA_DATASET_MAP':expected['profileDiagnostic']={'category':'METADATA_DATASET','reason':'UNSUPPORTED_SEMANTICS'}
    self.assertIsNone(read);self.assertEqual(result,expected);self.assertEqual(project_detail_http(result),expected)
    self.assertEqual(before,self.fixture.fingerprint());self.assertNotIn(CANARY,json.dumps(result))
    self.assertEqual(self.sql("SELECT count(*) FROM pg_roles WHERE rolname LIKE 't18%'"),'2')

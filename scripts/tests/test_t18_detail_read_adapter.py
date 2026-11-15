@@ -97,10 +97,10 @@ class DetailReadAdapterTests(unittest.TestCase):
    'monthly_revenue:TWSE:1111':{'terminal':'http_error','actionEligible':False,'selectedProvider':None,'selectedAuthorityTier':None,'persistence':'not_persisted'}}
   self.sql('UPDATE candidate_detail_snapshots SET valuation='+fixture.quote(json.dumps(valuation))+';')
   self.sql('UPDATE taiwan_data_publication_metadata_v5 SET dataset_completeness='+fixture.quote(json.dumps(metadata))+';')
-  read,result=self.prepare();self.assertIsNotNone(read);self.assertEqual(read.rows['metadata']['datasetCompleteness'],metadata)
+  read,result=self.prepare();self.assertIsNotNone(read);self.assertEqual(read.rows['metadata']['datasetCompleteness'],{'daily_price':{'terminal':'complete'},'daily_valuation':{'terminal':'missing'}})
   metadata['daily_price:TWSE']['privateToken']='PUBLIC_CANARY'
   self.sql('UPDATE taiwan_data_publication_metadata_v5 SET dataset_completeness='+fixture.quote(json.dumps(metadata))+';')
-  self.assertEqual(self.prepare(),(None,{'status':'GAP_DETAIL_PUBLIC_JSON','profileDiagnostic':{'category':'METADATA_DATASET','reason':'UNSUPPORTED_FIELD'},'rawFactUrlPolicy':'ACCEPTED_URL_POLICY'}))
+  self.assertEqual(self.prepare(),(None,{'status':'GAP_DETAIL_PUBLIC_JSON','profileDiagnostic':{'category':'METADATA_DATASET','reason':'UNSUPPORTED_FIELD'},'rawFactUrlPolicy':'NOT_OBSERVED'}))
  def test_actual_pinned_api_loader_sdk_nextresponse_over_private_sql_http(self):
   read,_=self.prepare();secret,token=create_stage_jwt()
   modules=os.environ.get('T18_PUBLIC_TEST_NODE_MODULES',str(ROOT/'web/node_modules'))

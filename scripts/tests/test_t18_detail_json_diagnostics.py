@@ -32,8 +32,9 @@ class DetailJsonDiagnosticTests(unittest.TestCase):
  def test_actual_metadata_unknown_field_type_dataset_semantics_and_no_keys_exported(self):
   for entry,category,reason in (({CANARY:CANARY,'terminal':'complete'},'METADATA_DATASET','UNSUPPORTED_FIELD'),
    ({'terminal':{CANARY:CANARY}},'METADATA_DATASET','FIELD_TYPE')):
-   self.gap('UPDATE taiwan_data_publication_metadata_v5 SET dataset_completeness='+fixture.quote(json.dumps({'daily_price:TWSE':entry}))+';',category,reason)
-  self.gap('UPDATE taiwan_data_publication_metadata_v5 SET dataset_completeness='+fixture.quote(json.dumps({CANARY:{'terminal':'complete'}}))+';','METADATA_DATASET','UNSUPPORTED_SEMANTICS')
+   entry={'actionEligible':False,'selectedProvider':None,'selectedAuthorityTier':None,'persistence':'not_persisted',**entry}
+   self.gap('UPDATE taiwan_data_publication_metadata_v5 SET dataset_completeness='+fixture.quote(json.dumps({'daily_price:TWSE':entry}))+';',category,reason,raw='NOT_OBSERVED')
+  self.gap('UPDATE taiwan_data_publication_metadata_v5 SET dataset_completeness='+fixture.quote(json.dumps({CANARY:{'terminal':'complete'}}))+';','METADATA_DATASET','UNSUPPORTED_SEMANTICS',raw='NOT_OBSERVED')
  def test_actual_section_and_technical_rejects_classified_not_relaxed(self):
   rows=m._json(self.sql(m.PROJECTION_SQL))['projection']
   section=copy.deepcopy(rows['detail']['sections']);section[0][CANARY]=CANARY

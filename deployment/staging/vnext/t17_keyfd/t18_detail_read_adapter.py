@@ -7,6 +7,7 @@ provenance uses the explicit reduced context/locator projection, not invented da
 from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass,field
+import datetime
 import hashlib
 import json
 import math
@@ -113,7 +114,7 @@ def _profile(category):
  except DetailAdapterRejected as error:
   if error.category is None:error.category=category
   raise
- except (ValueError,TypeError,KeyError,AttributeError) as error:
+ except (ValueError,TypeError,KeyError,AttributeError,OverflowError,RecursionError) as error:
   reason='MISSING_FIELD' if isinstance(error,KeyError) else 'FIELD_TYPE' if isinstance(error,(TypeError,AttributeError)) else 'INVALID_PROFILE'
   rejected=DetailAdapterRejected(reason);rejected.category=category
   raise rejected from None
@@ -185,7 +186,7 @@ def _json(raw):
    value[key]=item
   return value
  try:return json.loads(raw,object_pairs_hook=pairs,parse_constant=lambda _:(_ for _ in ()).throw(DetailAdapterRejected()))
- except (ValueError,UnicodeError,TypeError):raise DetailAdapterRejected() from None
+ except (ValueError,UnicodeError,TypeError,RecursionError,OverflowError):raise DetailAdapterRejected() from None
 
 
 def _bounded(value,depth=0):
@@ -246,6 +247,122 @@ def _fields(value,numbers='',texts='',booleans='',strings=''):
  for keys,kind in ((numbers,'number'),(texts,'text'),(booleans,'bool'),(strings,'strings')):
   for key in keys.split():
    if key in value:_typed(value[key],kind)
+
+
+# A staging-only raw-map budget, NOT a larger general object bound and NOT an
+# assertion about cumulative historical map cardinality. The wire/SQL byte caps
+# still apply before this map is examined. Unknown entries are never discarded.
+RAW_MARKET_MAP_MAX_ENTRIES=4096
+_MARKET_DATASETS=('daily_price','daily_valuation')
+_RAW_DATASET_KEY=re.compile(r'(daily_price|daily_valuation|monthly_revenue|financial_statement|institutional_flow|margin_short|market_index|stock_master|trading_calendar):(TWSE|TPEX)(:[0-9]{4})?')
+_RAW_TERMINALS=frozenset(('complete','empty','timeout','usage_limited','auth_failed','http_error','network_error','schema_invalid','not_configured','conflict','stale'))
+_RAW_ENTRY_FIELDS='terminal actionEligible selectedProvider selectedAuthorityTier persistence'
+_PROGRESS_COUNTS=('expected','completed','failed','failedCandidate','failedCritical','queued','running','missing','retrying')
+_PROGRESS_BOOLS=('ready','settled','researchReady')
+
+
+def _metadata_timestamp(value):
+ # Validate, never normalize/replace an official source date.
+ if (type(value) is not str or not re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{1,6})?(Z|[+-][0-9]{2}:[0-9]{2})',value)):
+  raise DetailAdapterRejected('FIELD_TYPE')
+ try:
+  parsed=datetime.datetime.fromisoformat(value.replace('Z','+00:00'))
+  offset=value[-6:]
+  if value.endswith('Z'):return
+  hours,minutes=int(offset[1:3]),int(offset[4:])
+  if minutes>59 or hours>14 or (hours==14 and minutes):raise ValueError()
+  if parsed.utcoffset() is None:raise ValueError()
+ except ValueError:raise DetailAdapterRejected('FIELD_TYPE') from None
+
+
+def _raw_refresh_progress(entry):
+ fields=set(_PROGRESS_COUNTS+_PROGRESS_BOOLS+('scopeSource','cutoffAt'))
+ if type(entry) is not dict:raise DetailAdapterRejected('OBJECT_TYPE')
+ if set(entry) not in (fields,fields|{'contractVersion'}):raise DetailAdapterRejected('UNSUPPORTED_FIELD')
+ if any(type(entry[k]) is not int or not 0<=entry[k]<=9007199254740991 for k in _PROGRESS_COUNTS):raise DetailAdapterRejected('FIELD_TYPE')
+ if any(type(entry[k]) is not bool for k in _PROGRESS_BOOLS):raise DetailAdapterRejected('FIELD_TYPE')
+ source=entry['scopeSource']
+ if type(source) is not str or source not in ('registered_scope','phase_queue'):raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+ if source=='registered_scope':_metadata_timestamp(entry['cutoffAt'])
+ elif entry['cutoffAt'] is not None:raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+ if 'contractVersion' in entry:
+  version=entry['contractVersion']
+  if source=='phase_queue':
+   if version is not None:raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+  elif type(version) is not str or not re.fullmatch(r'taiwan-data-provider-v[0-9]{1,4}',version):raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+ expected,completed,failed=(entry[k] for k in ('expected','completed','failed'))
+ settled=expected>0 and completed+failed==expected
+ if (expected!=completed+failed+entry['queued']+entry['running']+entry['missing']
+     or failed!=entry['failedCandidate']+entry['failedCritical'] or entry['retrying']>entry['queued']
+     or entry['ready']!=(expected>0 and completed==expected) or entry['settled']!=settled
+     or entry['researchReady']!=(settled and entry['failedCritical']==0)):
+  raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+
+
+def _project_market_metadata(rows):
+ """Fully validate private raw metadata, then emit only fixed reader terminals.
+
+ No raw mutation, caller selector, SQL, RPC, authority, URL rewrite or public raw
+ diagnostics. All raw entries (including ignored datasets/progress) are checked.
+ """
+ with _profile('ENVELOPE'):_keys(rows,'stock detail facts metadata','stock detail facts metadata')
+ with _profile('METADATA'):
+  metadata=rows['metadata']
+  _keys(metadata,'publicationPhase dataCutoffAt datasetCompleteness datasetCompletenessPct shadowEligible','publicationPhase dataCutoffAt datasetCompleteness datasetCompletenessPct shadowEligible')
+  _fields({k:v for k,v in metadata.items() if k!='datasetCompleteness'},numbers='datasetCompletenessPct',texts='publicationPhase dataCutoffAt',booleans='shadowEligible')
+  if type(metadata['datasetCompletenessPct']) not in (int,float) or type(metadata['shadowEligible']) is not bool:raise DetailAdapterRejected('FIELD_TYPE')
+  if not 0<=metadata['datasetCompletenessPct']<=100:raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+  if metadata['publicationPhase']!='final':raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+  _metadata_timestamp(metadata['dataCutoffAt'])
+  raw_map=metadata['datasetCompleteness']
+  if type(raw_map) is not dict:raise DetailAdapterRejected('OBJECT_TYPE')
+  if len(json.dumps(metadata,ensure_ascii=False,separators=(',',':'),allow_nan=False).encode())>MAX_BYTES:raise DetailAdapterRejected('BOUND_EXCEEDED')
+  if len(raw_map)>RAW_MARKET_MAP_MAX_ENTRIES:raise DetailAdapterRejected('BOUND_EXCEEDED')
+ states={dataset:[] for dataset in _MARKET_DATASETS};progress=None
+ for key,entry in raw_map.items():
+  with _profile('BOUNDS'):
+   if type(key) is not str or len(key)>128:raise DetailAdapterRejected('BOUND_EXCEEDED',bound_subtype='KEY_BOUND')
+   # Same depth/size/sensitive/number checks on ALL raw entry contents, before
+   # omission. Only the exact raw dataset-map container has a separate budget.
+   with _bound_scope('DESCENDANT','METADATA_OTHER'):_bounded(entry,3)
+  with _profile('METADATA_DATASET'):
+   if key=='_refresh_scope_v6':_raw_refresh_progress(entry);progress=entry;continue
+   matched=_RAW_DATASET_KEY.fullmatch(key)
+   if matched is None:raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+   _keys(entry,_RAW_ENTRY_FIELDS,_RAW_ENTRY_FIELDS)
+   _fields(entry,texts='terminal selectedProvider selectedAuthorityTier persistence',booleans='actionEligible')
+   if type(entry['terminal']) is not str:raise DetailAdapterRejected('FIELD_TYPE')
+   if entry['terminal'] not in _RAW_TERMINALS:raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+   if type(entry['actionEligible']) is not bool:raise DetailAdapterRejected('FIELD_TYPE')
+   provider,tier=entry['selectedProvider'],entry['selectedAuthorityTier']
+   if provider is None:
+    if tier is not None:raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+   elif (type(provider) is not str or provider not in ('twse','tpex','finmind') or type(tier) is not str
+         or tier!=('finmind_fallback' if provider=='finmind' else 'official_primary')
+         or (provider in ('twse','tpex') and provider!=matched[2].lower())):
+    raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+   if type(entry['persistence']) is not str or entry['persistence'] not in ('persisted','not_persisted'):raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+   if entry['terminal']=='complete':
+    if entry['actionEligible'] is not True or entry['persistence']!='persisted' or provider is None:raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+   elif entry['actionEligible'] is not False or entry['persistence']!='not_persisted':raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+   dataset=matched[1]
+   if dataset in states:states[dataset].append(entry['terminal'])
+ if progress is not None:
+  # Exact nonnegative HALF_UP rounding from the fixed SQL writer, with no float
+  # recomputation of an emitted value. Scope is validated, never exposed/used to
+  # manufacture a terminal or replace the preserved original percent.
+  expected,completed=progress['expected'],progress['completed']
+  hundredths=(0 if not expected else 10000 if completed==expected
+    else min(9999,(20000*completed+expected)//(2*expected)))
+  with _profile('METADATA'):
+   if metadata['shadowEligible'] is not False or metadata['datasetCompletenessPct']!=hundredths/100:raise DetailAdapterRejected('UNSUPPORTED_SEMANTICS')
+ summary={}
+ for dataset,terminals in states.items():
+  terminal=('missing' if not terminals else 'complete' if all(x=='complete' for x in terminals)
+    else 'conflict' if 'conflict' in terminals else 'stale' if 'stale' in terminals
+    else next(x for x in terminals if x!='complete'))
+  summary[dataset]={'terminal':terminal}
+ return {**rows,'metadata':{**metadata,'datasetCompleteness':summary}}
 
 
 def _public_shapes(rows):
@@ -376,7 +493,12 @@ class _DetailRead:
 def prepare_detail_read(sql):
  """Only the live scoped engine calls this; no exported pin/readiness selector."""
  raw=sql(PROJECTION_SQL)
- if type(raw) not in (str,bytes) or len(raw)>MAX_BYTES*2:raise DetailAdapterRejected()
+ if type(raw) not in (str,bytes):raise DetailAdapterRejected()
+ if len(raw)>MAX_BYTES*2:raise DetailAdapterRejected()
+ try:
+  if type(raw) is bytes:raw=raw.decode('utf-8')
+  if len(raw.encode('utf-8'))>MAX_BYTES*2:raise DetailAdapterRejected()
+ except UnicodeError:raise DetailAdapterRejected() from None
  value=_json(raw);_keys(value,'observation projection','observation projection');observation=project_candidate_detail_observation(value.get('observation'))
  if observation is None:raise DetailAdapterRejected()
  status='GAP_DETAIL_SCOPE'
@@ -387,6 +509,7 @@ def prepare_detail_read(sql):
  if rows is None:return None,{'status':'GAP_DETAIL_BOUND'}
  raw_fact_url_policy='NOT_OBSERVED'
  try:
+  rows=_project_market_metadata(rows)
   with _profile('BOUNDS'):_bounded(rows)
   raw_fact_url_policy=_raw_fact_url_policy(rows)
   with _profile('STOCK'):

@@ -1,0 +1,131 @@
+{
+  "schema": "stockinsider-t18-market-metadata-source-receipt-v1",
+  "recordedAtUtc": "2026-11-15T01:44:11.127986Z",
+  "baselineCommit": "bf84f09651f5e21b5b183656aebd90bddd958627",
+  "runtimeBaselineCommit": "539578407acf883e89922a23a2bb5cd0349b71bf",
+  "scope": "SYNTHETIC_CLOUD_SOURCE_AND_PG_COMPONENT_VERIFICATION",
+  "newOnsiteSubject": "NOT_RUN",
+  "nativeHoldRetained": true,
+  "preservedEvidence": {
+    "commit": "bf84f09651f5e21b5b183656aebd90bddd958627",
+    "path": "docs/operations/2026-11-15/vnext/contabo-t18-historical-market-dataset-map-bound.json",
+    "gitBlob": "ee29d3df2e8676632c21ea833a592bde7ae0eaf5",
+    "branchIncludedBeforePublication": true,
+    "notOverwrittenByDelta": true,
+    "actualObservedFirstRegion": "METADATA_DATASET_MAP",
+    "actualObservedSubtype": "OBJECT_COUNT",
+    "observedRawFactUrlPolicy": "NOT_OBSERVED",
+    "actualRawProfileConformance": "UNKNOWN_PENDING_ONSITE",
+    "nextUrlOrShapeAcceptance": "UNKNOWN_PENDING_ONSITE"
+  },
+  "manifest": {
+    "path": "docs/operations/2026-11-15/vnext/t18-market-metadata-stage-manifest.json",
+    "sha256": "0c60ba5963a0e2679c13efc24d6917131f252ae270383eb6486615e2cf2f4f71",
+    "replace": 1,
+    "add": 0,
+    "expectedStagedBlobsAfter": 51
+  },
+  "runtimeSha256": "bff0464abb41741fa4b2695bd91b654303a73016498cdb0cf94258e58646cb0b",
+  "rawPolicy": {
+    "rawWireByteCap": 1048576,
+    "rawMetadataByteCap": 524288,
+    "rawMapEntryBudget": 4096,
+    "genericObjectCap": 128,
+    "strictUtf8BeforeJsonParse": true,
+    "duplicateDecodedJsonKeysRejected": true,
+    "sourceTableTypeAndSingleIdentityRequired": true,
+    "everyRawEntryValidatedBeforeOmission": true,
+    "sourceDatasetClasses": 9,
+    "entryFieldsRequired": 5,
+    "knownProgressShapes": [
+      14,
+      15
+    ],
+    "explicitTerminalEnums": 11,
+    "progressPctAndShadowConsistencyRequired": true,
+    "unknownStructureDiscarded": false,
+    "genericBoundAndUrlPredicatesChanged": false,
+    "dateValuesRewritten": false,
+    "rawMetadataMutatedOrExposed": false,
+    "knownOutputDatasetClasses": 2,
+    "knownOutputEntryFields": 1,
+    "sourceProfileRestrictions": {
+      "maximumTimezoneOffset": "14:00",
+      "maximumFractionalSecondDigits": 6,
+      "maximumContractVersionDigits": 4
+    },
+    "fullHistoricalAcquisitionAttested": false
+  },
+  "verification": {
+    "actualPostgresVersion": "PostgreSQL17.11 (Debian17.11-0+deb13u1)",
+    "focusedAdapterDiagnosticAndNewTests": {
+      "passed": 50,
+      "seconds": 39.105
+    },
+    "t18Regression": {
+      "passed": 163,
+      "seconds": 93.89
+    },
+    "t17Regression": {
+      "passed": 75,
+      "seconds": 25.395
+    },
+    "frozenConsumerDifferentialMatrixCases": 274,
+    "frozenLargeMapComparisons": "PASS_SYNTHETIC_PRIMITIVE_AND_PG",
+    "frozenConsumerBlob": "d98636ebceeb53899f133bb8729cd899becc292c",
+    "frozenSourceOnlyCompositionTestsRetained": true,
+    "independentSecurityReview": {
+      "primitiveTests": 9,
+      "primitiveSeconds": 0.923,
+      "actualPgTestMethods": 3,
+      "actualPgSeconds": 4.866,
+      "actualPgSdkNextResponseComponentMethods": 1,
+      "actualPgSdkNextResponseSeconds": 2.147,
+      "remainingP0": 0,
+      "remainingP1": 0,
+      "runtimeSha256Verified": true
+    },
+    "independentSemanticAndHistoricalSourceReview": {
+      "primitiveTests": 9,
+      "differentialMatrixCases": 274,
+      "status": "PASS_SUPPORTED_PROFILE",
+      "actualNativeOrPrivateDataAccess": false
+    },
+    "unchangedGenericBoundAndUrlAst": true,
+    "unchangedSqlQueryAndSizeConstants": 8,
+    "projectionSqlSha256": "ec8876222dbb422aea43e1485abd4faad70809877c3458e6be8b14f33d444a15",
+    "actualPgLargeMapPrepared": true,
+    "actualPgOriginalRowsCatalogGrantsDatesIdentityUnchanged": true,
+    "actualPgDuplicateIdentityAndWrongSourceTypeRefused": true,
+    "actualPgIgnoredEntryPoisonRefusedBeforeUrlProbe": true,
+    "actualPgOriginalRpcExecuteDenied": true,
+    "actualPgFollowingUrlPolicyRefusalPreserved": true,
+    "actualPgOwnedCleanupVerified": true,
+    "actualSdkAndNextResponse": "PINNED_SOURCE_COMPONENT_ONLY",
+    "rootContaboTrueBackupOrProductionActions": false,
+    "webBuild": {
+      "exitCode": 127,
+      "status": "NEXT_EXECUTABLE_MISSING_IN_ISOLATED_CHECKOUT",
+      "canonicalBridge": "PASS_FIVE_CANONICAL_MODULES"
+    }
+  },
+  "publicSourceProfiles": {
+    "queueDrainRouteBlob": "86957cbe2072a2afe7165476d8d051e224a15163",
+    "providerBlob": "44402d6507f80fade3e8ccca68408435402f106e",
+    "historicalQueueDrainBlob": "b795bfd42e70d068be7fee0de1693798c135db34",
+    "historicalCandidateRefreshBlob": "ccc67695e7d0a7f1989a41b9b6ecc72d5ad52014",
+    "progress14MigrationBlob": "ae331876c731f412898dd0a9b616855ebeef9e13",
+    "progress15MigrationBlob": "8ee81b3b18f4effe71dd53dc5e66cee2c646632a"
+  },
+  "unchangedBoundaries": {
+    "sqlAndUrlPolicies": true,
+    "grantsRolesOriginalRpc": true,
+    "rootUnitsBrokerAndFd": true,
+    "credentialLimitsAndHostBudget": true,
+    "releasePinsAndBytes": true,
+    "oldDbDailyChecksAndCleanup": true
+  },
+  "metadataWireResponse": "VALIDATED_SEMANTIC_PROJECTION_NOT_RAW_BYTE_EQUIVALENCE",
+  "detailHttpAcceptance": "NOT_RUN_BY_THIS_SUBJECT",
+  "siteNewRadarAndFormalGatesRetained": true
+}
