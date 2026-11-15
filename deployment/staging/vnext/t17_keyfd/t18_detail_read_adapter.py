@@ -229,6 +229,36 @@ def _url(value):
   if len(dict(params))!=len(params) or any(k not in allowed or not re.fullmatch('[A-Za-z0-9_-]{1,32}',v) for k,v in params):raise DetailAdapterRejected('URL_POLICY')
 
 
+# Private staging pins. All three must match the genuine restored clone.
+_PINNED_HISTORICAL_SOURCE_SCOPE=(
+ '1a2c6998470e3978b1e8aa96029b47b5084116101eea6a2c35bdc9065316e4e7',
+ '56ea4878e70260f11ce6570584616b75c0abf00f58926dec8a844d51274ef239',
+ '58b3e425635a601a4b761d8901cb0b1a7c3404d1314cd7c89bb075e661013cd8',
+)
+_HISTORY_HTTPS_VENDOR_QUERY=re.compile(r'^https://(?:[a-z0-9.-]+\.)?finmindtrade\.com/[^?#]+\?[^#]+$',re.I)
+
+
+def _omit_pinned_historical_fact_links(rows,observation):
+ """Keep source URLs unavailable on one restored historical revision only."""
+ observed=tuple(observation[key] for key in ('snapshotSha256','detailSha256','factsSha256'))
+ if observed!=_PINNED_HISTORICAL_SOURCE_SCOPE:return 0
+ facts=rows['facts']
+ if (len(facts)!=9 or observation['factIds']!=9 or rows['detail']['id']!=observation['revisionId']
+     or rows['stock']['symbol']!=observation['stockSymbol']
+     or rows['detail']['session_date']!=observation['sessionDate']):return 0
+ rejected=[]
+ for fact in facts:
+  value=fact['source_url']
+  try:_url(value)
+  except DetailAdapterRejected as error:
+   if error.reason!='URL_QUERY_HOST_POLICY' or not _HISTORY_HTTPS_VENDOR_QUERY.fullmatch(value):return 0
+   rejected.append(fact)
+ if len(rejected)!=4:return 0
+ # The adapter owns this copy. SQL rows and the persisted revision are untouched.
+ for fact in rejected:fact['source_url']=None
+ return len(rejected)
+
+
 def _typed(value,kind):
  if value is None:return
  if kind=='number':
@@ -461,6 +491,7 @@ def _public_shapes(rows):
 @dataclass(frozen=True,repr=False)
 class _DetailRead:
  _payload:bytes=field(repr=False)
+ historical_fact_source_links_withheld:int=0
  @property
  def rows(self):return _json(self._payload)  # independent private copy
  def response(self,method,target,body=b''):
@@ -517,6 +548,9 @@ def prepare_detail_read(sql):
   with _profile('DETAIL'):
    if rows['detail']['lifecycle_stage'] not in ('found','waiting') or rows['detail']['provenance'].get('trade_plan') is not None:
     return None,{'status':'GAP_DETAIL_ACTION_SURFACE'}
+  withheld=0
+  if raw_fact_url_policy=='REJECTED_QUERY_HOST_POLICY':
+   withheld=_omit_pinned_historical_fact_links(rows,observation)
   _public_shapes(rows)
  except DetailAdapterRejected as error:return _json_gap(error,raw_fact_url_policy)
  except (ValueError,TypeError,KeyError,AttributeError):
@@ -524,4 +558,4 @@ def prepare_detail_read(sql):
   return _json_gap(error,raw_fact_url_policy)
  data=json.dumps(rows,ensure_ascii=False,separators=(',',':'),allow_nan=False).encode()
  if len(data)>MAX_BYTES:return None,{'status':'GAP_DETAIL_BOUND'}
- return _DetailRead(data),{'status':'PREPARED_PRIVATE_HISTORICAL_DETAIL'}
+ return _DetailRead(data,withheld),{'status':'PREPARED_PRIVATE_HISTORICAL_DETAIL'}

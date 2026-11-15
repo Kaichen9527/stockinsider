@@ -1,0 +1,35 @@
+{
+  "schema": "stockinsider-t18-historical-url-omission-stage-delta-v1",
+  "parentCommit": "c5b6d05a9ff1daeec39adaa85b40f4ffa4e535eb",
+  "liveRuntimeBaseline": "1d957e28ddf4ec4995792f10fc3f8f0eaeb1a6c6",
+  "runtimeFiles": 51,
+  "unmodifiedBlobsChecked": 49,
+  "replace": [
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_detail_read_adapter.py",
+      "mode": "0444",
+      "before": {
+        "gitBlob": "9e50c9f93ffe93509074f2ffdd961232bbda71f2",
+        "sha256": "bff0464abb41741fa4b2695bd91b654303a73016498cdb0cf94258e58646cb0b"
+      },
+      "after": {
+        "sha256": "da74dc76ff2beed7d3a26bc3d559ff116b123cbd5604c4b6a9cb0409519be2b6",
+        "gitBlob": "bfbada5afe31f7ead52cc2bb63dc9fad9df5d101"
+      }
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_detail_http.py",
+      "mode": "0444",
+      "before": {
+        "gitBlob": "77475141d47f80c0bfbe84a1784da93708caa4f0",
+        "sha256": "5301d227875a40bd5674b1023451b7525453aa42f91b4b41b5f14fba8f3b3981"
+      },
+      "after": {
+        "sha256": "633829fee24d86d2185111be74a198ee8453813d20c121fbcbc2a8ce4f91e7b5",
+        "gitBlob": "886aca2dd7b3fab917f9a7b3005cbf58d4f7f9d8"
+      }
+    }
+  ],
+  "scope": "PINNED_RESTORED_HISTORICAL_FACT_LINK_OMISSION_AND_HTTP_VERIFICATION",
+  "formalHoldRetained": true
+}

@@ -200,6 +200,7 @@ def exercise_detail_http(app,releases,read):
    except Exception:
     if primary_error is None:raise
  return {'status':'HISTORICAL_DETAIL_HTTP_VERIFIED','steps':steps,'originalDatesPreserved':True,
+  'historicalFactSourceLinksWithheld':read.historical_fact_source_links_withheld,
   'identityScope':'SINGLE_PUBLISHED_REVISION','readerTransport':'VALIDATED_CLONE_SQL_PRIVATE_ADAPTER',
   'detailPostgrestAcceptance':'NOT_RUN','originalRpcExecution':'NOT_GRANTED_NOT_CALLED',
   'freshnessActionAcceptance':'GAP_FIXED_UI_HAS_NO_AGE_FENCE','siteAcceptance':'NOT_RUN','newRadarAcceptance':'NOT_RUN'}
@@ -222,7 +223,9 @@ def project_detail_http(value):
   return None
  from .t18_release_assets import RELEASE_PINS
  expected={'status','steps','originalDatesPreserved','identityScope','readerTransport','detailPostgrestAcceptance','originalRpcExecution','freshnessActionAcceptance','siteAcceptance','newRadarAcceptance'}
- if set(value)!=expected or value['originalDatesPreserved'] is not True:return None
+ if set(value) not in (expected,expected|{'historicalFactSourceLinksWithheld'}) or value['originalDatesPreserved'] is not True:return None
+ withheld=value.get('historicalFactSourceLinksWithheld',0)
+ if type(withheld) is not int or withheld not in (0,4):return None
  constants={'identityScope':'SINGLE_PUBLISHED_REVISION','readerTransport':'VALIDATED_CLONE_SQL_PRIVATE_ADAPTER','detailPostgrestAcceptance':'NOT_RUN',
  'originalRpcExecution':'NOT_GRANTED_NOT_CALLED','freshnessActionAcceptance':'GAP_FIXED_UI_HAS_NO_AGE_FENCE','siteAcceptance':'NOT_RUN','newRadarAcceptance':'NOT_RUN'}
  if any(value[k]!=v for k,v in constants.items()) or type(value['steps']) is not list or len(value['steps'])!=2:return None

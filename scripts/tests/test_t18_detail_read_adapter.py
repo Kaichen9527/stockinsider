@@ -180,6 +180,11 @@ class DetailReadAdapterTests(unittest.TestCase):
    return 400,{},b'{"error":"PUBLIC_INVALID"}'
   with patch.object(controller,'_http',side_effect=http):result=checks.exercise_detail_http(Broker(),releases,read)
   self.assertIsNotNone(project_detail_http(result));self.assertNotIn(fixture.MARKER,json.dumps(result))
+  self.assertEqual(result['historicalFactSourceLinksWithheld'],0)
+  for count in (True,-1,1,5):
+   self.assertIsNone(project_detail_http({**result,'historicalFactSourceLinksWithheld':count}))
+  self.assertIsNotNone(project_detail_http({**result,'historicalFactSourceLinksWithheld':4}))
+  self.assertIsNotNone(project_detail_http({k:v for k,v in result.items() if k!='historicalFactSourceLinksWithheld'}))
   class CleanupFails:
    def request(self,op):
     if op=='STOP_NEXT':raise OSError('PUBLIC_CLEANUP_CANARY')
@@ -187,6 +192,61 @@ class DetailReadAdapterTests(unittest.TestCase):
   with patch.object(controller,'_http',side_effect=TimeoutError('PUBLIC_HTTP_CANARY')),patch.object(checks.time,'sleep'):
    with self.assertRaises(diag.ReadpointRejected) as error:checks.exercise_detail_http(CleanupFails(),releases,read)
   self.assertEqual(error.exception.diagnostic,{'phase':'candidate_detail_http','errorClass':'timeout'})
+
+ def archived_url_scope(self):
+  self.sql(f"""INSERT INTO candidate_official_facts
+   SELECT ('00000000-0000-4000-8000-000000000' || (310+i)::text)::uuid,
+    stock_id, fact_key, fact_kind, period_end, value+i, unit, as_of, available_at,
+    CASE WHEN i<=4 THEN 'https://api.finmindtrade.com/archive?dataset=public'||i::text
+         WHEN i=5 THEN 'https://www.twse.com.tw/report?date=20260912'
+         ELSE 'https://example.invalid/archived-'||i::text END,
+    provenance,derivation
+    FROM candidate_official_facts CROSS JOIN generate_series(1,8) i WHERE fact_id='{fixture.FACT}';
+   UPDATE candidate_detail_snapshots SET fact_ids=(
+     SELECT jsonb_agg(fact_id ORDER BY fact_id) FROM candidate_official_facts);
+  """)
+  return self.historical_pins()
+ def historical_pins(self):
+  current=fixture.m.assess_candidate_detail(self.sql)
+  self.assertEqual(current['status'],'OBSERVED_PINNED_DETAIL_SCOPE')
+  return tuple(current[k] for k in ('snapshotSha256','detailSha256','factsSha256'))
+
+ def test_pinned_scope_withholds_only_four_urls_without_mutating_clone(self):
+  pins=self.archived_url_scope()
+  before=self.fixture.fingerprint()
+  denial={'status':'GAP_DETAIL_PUBLIC_JSON','profileDiagnostic':{'category':'FACT_URL','reason':'URL_QUERY_HOST_POLICY'},
+    'rawFactUrlPolicy':'REJECTED_QUERY_HOST_POLICY'}
+  self.assertEqual(self.prepare(),(None,denial))
+  with patch.object(m,'_PINNED_HISTORICAL_SOURCE_SCOPE',pins):
+   read,result=self.prepare()
+   self.assertEqual(result,{'status':'PREPARED_PRIVATE_HISTORICAL_DETAIL'})
+   self.assertEqual(read.historical_fact_source_links_withheld,4)
+   self.assertEqual(sum(f['source_url'] is None for f in read.rows['facts']),4)
+   self.assertEqual(len(read.rows['facts']),9)
+   self.assertIn('https://www.twse.com.tw/report?date=20260912',[f['source_url'] for f in read.rows['facts']])
+   self.assertEqual(sorted(f['value'] for f in read.rows['facts']),list(range(123,132)))
+   self.assertTrue(all(f['available_at'].startswith('2026-09-11') for f in read.rows['facts']))
+   for i in range(3):
+    changed=tuple('a'*64 if j==i else v for j,v in enumerate(pins))
+    with patch.object(m,'_PINNED_HISTORICAL_SOURCE_SCOPE',changed):self.assertEqual(self.prepare(),(None,denial))
+  self.assertEqual(self.fixture.fingerprint(),before)
+  self.assertEqual(self.sql("SELECT count(*) FROM candidate_official_facts WHERE source_url LIKE 'https://api.finmindtrade.com/%';"),'4')
+
+ def test_pinned_scope_never_omits_unknown_queries_or_separate_links(self):
+  self.archived_url_scope()
+  self.sql("UPDATE candidate_official_facts SET source_url='https://unrecognized.example/report?date=20260912' WHERE source_url LIKE '%dataset=public1';")
+  with patch.object(m,'_PINNED_HISTORICAL_SOURCE_SCOPE',self.historical_pins()):
+   read,result=self.prepare()
+   self.assertIsNone(read)
+   self.assertEqual(result['profileDiagnostic'],{'category':'FACT_URL','reason':'URL_QUERY_HOST_POLICY'})
+  self.sql("UPDATE candidate_official_facts SET source_url='https://api.finmindtrade.com/archive?dataset=public1' WHERE source_url LIKE 'https://unrecognized.example/%';")
+  self.sql("UPDATE candidate_detail_snapshots SET source_links="+fixture.quote(json.dumps([
+   {'label':'Separate link','url':'https://api.finmindtrade.com/archive?dataset=public1'}]))+';')
+  with patch.object(m,'_PINNED_HISTORICAL_SOURCE_SCOPE',self.historical_pins()):
+   read,result=self.prepare()
+   self.assertIsNone(read)
+   self.assertEqual(result['profileDiagnostic'],{'category':'SOURCE_LINK','reason':'URL_QUERY_HOST_POLICY'})
+
  def test_receipt_projection_rejects_rows_extra_fields_and_fake_status(self):
   for bad in ({'status':'PREPARED_PRIVATE_HISTORICAL_DETAIL'},{'status':'GAP_DETAIL_SCOPE','rows':fixture.MARKER},True):self.assertIsNone(project_detail_http(bad))
   self.assertEqual(project_detail_http({'status':'GAP_DETAIL_SCOPE'}),{'status':'GAP_DETAIL_SCOPE'})

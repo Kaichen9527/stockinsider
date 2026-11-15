@@ -1,0 +1,48 @@
+{
+  "task": "T18",
+  "baseline": "c5b6d05a9ff1daeec39adaa85b40f4ffa4e535eb",
+  "observedAt": "2026-11-15T16:40:37Z",
+  "sourcePins": {
+    "source": "Contabo active database, bounded repeatable read, read only. Candidate fingerprints required to match independently on isolated restore",
+    "backupCutoff": "2026-09-19T09:56:31.498Z",
+    "historicalAvailabilityDate": "2026-09-14",
+    "snapshotSha256": "1a2c6998470e3978b1e8aa96029b47b5084116101eea6a2c35bdc9065316e4e7",
+    "detailSha256": "56ea4878e70260f11ce6570584616b75c0abf00f58926dec8a844d51274ef239",
+    "factsSha256": "58b3e425635a601a4b761d8901cb0b1a7c3404d1314cd7c89bb075e661013cd8",
+    "classCounts": [
+      {
+        "class": "exchange_query",
+        "count": 1
+      },
+      {
+        "class": "no_query",
+        "count": 4
+      },
+      {
+        "class": "vendor_query",
+        "count": 4
+      }
+    ],
+    "factCount": 9,
+    "dossierCount": 0,
+    "acceptedReceiptCount": 0
+  },
+  "nativeFixtures": {
+    "pgMajor": 17,
+    "passed": 9,
+    "isolated": "Non-root with private network and loopback only",
+    "caseCoverage": [
+      "exact triple pin required",
+      "four blocked fact URLs withheld while nine facts remain",
+      "allowed exchange URL retained",
+      "rows unchanged",
+      "alternate unknown query family and rejected separate link remain gaps",
+      "rollback reader and URL/HTML verifier regression",
+      "legacy receipt and closed count 0 or 4"
+    ]
+  },
+  "noRawUrlsOrCredentialDataPublished": true,
+  "realCloneMatchedPinsThisStep": false,
+  "formalHoldRetained": true,
+  "productionChanged": false
+}
