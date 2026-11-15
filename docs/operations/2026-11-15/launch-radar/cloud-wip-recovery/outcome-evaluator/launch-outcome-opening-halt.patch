@@ -1,0 +1,166 @@
+diff --git a/web/src/lib/vnext/launch-opening-halt.ts b/web/src/lib/vnext/launch-opening-halt.ts
+new file mode 100644
+--- /dev/null
++++ b/web/src/lib/vnext/launch-opening-halt.ts
+@@ -0,0 +1,99 @@
++import {createHash} from 'node:crypto';
++import {decodeLicensedCsvRecords} from './licensed-csv-decoder.ts';
++import {evidenceInstant} from './evidence-clock.ts';
++import type {LaunchOutcomeInput} from './launch-outcomes.ts';
++
++const feeds={
++  TWSE:{dataset:11677,url:'https://www.twse.com.tw/exchangeReport/TWTAWU?response=open_data'},
++  TPEX:{dataset:48665,url:'https://www.tpex.org.tw/openapi/v1/tpex_spendi_history'},
++} as const;
++const csvHeaders=['編號','證券代號','證券名稱','暫停交易日期','暫停交易時間','恢復交易日期','恢復交易時間'];
++const jsonKeys=['Date','Serial','SecuritiesCompanyCode','CompanyName','DateOfSuspendedTrading',
++  'TimeOfSuspendedTrading','DateOfResumedTrading','TimeOfResumedTrading'];
++const maxRows=6000;
++const maxBytes=512*1024;
++type Market=keyof typeof feeds;
++type Row={symbol:string;startDate:string;startTime:string;endDate:string;endTime:string};
++type Capture={market:Market;url:string;observedAt:string;recordedAt:string;sha256:string;body:Uint8Array};
++type Event={kind:'suspend'|'resume';at:string};
++const sha=(value:Uint8Array|string)=>createHash('sha256').update(value).digest('hex');
++const isObject=(value:unknown):value is Record<string,unknown>=>!!value&&typeof value==='object'&&!Array.isArray(value);
++
++function readRows(market:Market,body:Uint8Array):Row[]{
++  const text=new TextDecoder('utf-8',{fatal:true}).decode(body);
++  if(market==='TWSE'){
++    const [header,...rows]=decodeLicensedCsvRecords(text,maxRows+1);
++    if(!header||JSON.stringify(header)!==JSON.stringify(csvHeaders)||rows.some(row=>row.length!==header.length))
++      throw Error('launch_opening_twse_halt_schema');
++    return rows.map(([,symbol,,startDate,startTime,endDate,endTime])=>({symbol,startDate,startTime,endDate,endTime}));
++  }
++  const rows:unknown=JSON.parse(text);
++  if(!Array.isArray(rows)||rows.length>maxRows)throw Error('launch_opening_tpex_halt_schema');
++  return rows.map((row:unknown)=>{
++    if(!isObject(row)||Object.keys(row).length!==jsonKeys.length||!jsonKeys.every(key=>typeof row[key]==='string'))
++      throw Error('launch_opening_tpex_halt_schema');
++    return {symbol:String(row.SecuritiesCompanyCode),startDate:String(row.DateOfSuspendedTrading),
++      startTime:String(row.TimeOfSuspendedTrading),endDate:String(row.DateOfResumedTrading),endTime:String(row.TimeOfResumedTrading)};
++  });
++}
++
++function parseClock(date:string,time:string):string|null{
++  if(date===''&&time==='')return null;
++  if(!/^\d{7}$/u.test(date)||!/^\d{6}$/u.test(time))throw Error('launch_opening_halt_event_clock');
++  const year=Number(date.slice(0,3))+1911;
++  const iso=`${year}-${date.slice(3,5)}-${date.slice(5,7)}T${time.slice(0,2)}:${time.slice(2,4)}:${time.slice(4,6)}+08:00`;
++  if(evidenceInstant(iso)===null)throw Error('launch_opening_halt_event_clock');
++  return iso;
++}
++
++function matchingInterval(rows:Row[],symbol:string,opening:bigint){
++  const byTime=new Map<string,Event>();
++  for(const row of rows.filter(row=>row.symbol===symbol)){
++    const start=parseClock(row.startDate,row.startTime);
++    const end=parseClock(row.endDate,row.endTime);
++    const events:Event[]=[];
++    if(start)events.push({kind:'suspend',at:start});
++    if(end)events.push({kind:'resume',at:end});
++    for(const event of events){
++      if(byTime.has(event.at)&&byTime.get(event.at)?.kind!==event.kind)throw Error('launch_opening_halt_event_conflict');
++      byTime.set(event.at,event);
++    }
++  }
++  let started:string|null=null;
++  let match:{from:string;until:string}|null=null;
++  for(const event of [...byTime.values()].sort((a,b)=>a.at.localeCompare(b.at))){
++    if(event.kind==='suspend'){
++      if(started!==null)throw Error('launch_opening_halt_interval_conflict');
++      started=event.at;
++    }else if(started!==null){
++      const from=evidenceInstant(started)!,until=evidenceInstant(event.at)!;
++      if(from<=opening&&opening<until)match={from:started,until:event.at};
++      started=null;
++    }
++  }
++  return match;
++}
++
++/** Only a paired official halt/resumption spanning the first regular-session
++ * opening can prove this negative. A missing announcement or a daily price
++ * cannot prove an auction fill. Caller supplies the stored capture's actual
++ * observation and recording clocks from the trusted producer. */
++export function deriveLaunchSuspendedOpening(input:LaunchOutcomeInput,capture:Capture):LaunchOutcomeInput['opening'] {
++  const {market,symbol}=input.signal;
++  const next=input.sessions.find(session=>session.status!=='cancelled');
++  const asOf=evidenceInstant(input.asOf),observed=evidenceInstant(capture.observedAt),recorded=evidenceInstant(capture.recordedAt);
++  if(!next||next.status!=='completed'||market!==capture.market||!/^\d{4}$/u.test(symbol)
++    ||asOf===null||observed===null||recorded===null||!(observed<=recorded&&recorded<=asOf))return null;
++  const opening=evidenceInstant(next.openAt),close=evidenceInstant(next.closeAt);
++  if(opening===null||close===null||opening>=close||close>asOf||opening>observed)return null;
++  if(capture.url!==feeds[market].url||capture.body.length<2||capture.body.length>maxBytes||sha(capture.body)!==capture.sha256)
++    throw Error('launch_opening_halt_capture_invalid');
++  const match=matchingInterval(readRows(market,capture.body),symbol,opening);
++  if(!match)return null;
++  if(evidenceInstant(match.until)!>=close&&input.bars.some(bar=>bar.session===next.session))
++    throw Error('launch_opening_halt_full_session_conflicts_with_price');
++  const revision=sha(JSON.stringify(['tw-exchange-halt-open-v1',market,feeds[market].dataset,
++    capture.sha256,capture.observedAt,capture.recordedAt,symbol,next.session,next.openAt,match]));
++  return {session:next.session,knownAt:capture.recordedAt,revision,status:'unfillable',
++    rawOpen:null,priceRevision:null,reason:'suspended'};
++}
+diff --git a/web/src/lib/vnext/launch-opening-halt.test.ts b/web/src/lib/vnext/launch-opening-halt.test.ts
+new file mode 100644
+--- /dev/null
++++ b/web/src/lib/vnext/launch-opening-halt.test.ts
+@@ -0,0 +1,57 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import {createHash} from 'node:crypto';
++import {deriveLaunchSuspendedOpening} from './launch-opening-halt.ts';
++import {evaluateLaunchOutcome,type LaunchOutcomeInput} from './launch-outcomes.ts';
++
++const policyRevision='b'.repeat(64);
++const source='https://www.twse.com.tw/exchangeReport/TWTAWU?response=open_data';
++const header='編號,證券代號,證券名稱,暫停交易日期,暫停交易時間,恢復交易日期,恢復交易時間';
++const rowCapture=(line:string,clocks={observedAt:'2026-11-15T10:00:00Z',recordedAt:'2026-11-15T10:00:01Z'})=>{
++  const body=Buffer.from(header+'\n'+line+'\n','utf8');
++  return {market:'TWSE' as const,url:source,sha256:createHash('sha256').update(body).digest('hex'),body,...clocks};
++};
++const next={session:'2026-11-13',openAt:'2026-11-13T01:00:00Z',closeAt:'2026-11-13T05:30:00Z',
++  knownAt:'2026-11-13T07:00:00Z',status:'completed' as const};
++const input:LaunchOutcomeInput={scope:'historical_price_replay',asOf:'2026-11-15T10:01:00Z',basisRevision:policyRevision,calendarRevision:policyRevision,
++ signal:{rankingRunId:'00000000-0000-4000-8000-000000000010',firstRankingRunId:'00000000-0000-4000-8000-000000000010',
++  market:'TWSE',symbol:'5310',session:'2026-11-12',cutoff:'2026-11-12T13:30:00Z',priceRevision:policyRevision,inputHash:policyRevision,
++  rawClose:'100',normalizedClose:'100'},
++ sessions:[next],bars:[],opening:null};
++
++test('halt spans the first regular open and stays separate from the research pricing gap',()=>{
++  const capture=rowCapture('1,5310,範例,1151113,080000,1151116,080000');
++  const opening=deriveLaunchSuspendedOpening(input,capture);
++  assert.equal(opening?.reason,'suspended');
++  assert.equal(opening?.knownAt,capture.recordedAt);
++  const result=evaluateLaunchOutcome({...input,opening});
++  assert.equal(result.execution.status,'unfillable');
++  assert.equal(result.execution.nextSession,next.session);
++  assert.equal(result.execution.fill,null);
++  assert.equal(result.research.barrier20.state,'price_data_gap');
++});
++
++test('no linked halt interval gives no fill and a resumption at the auction is not a halt',()=>{
++  for(const row of ['1,5310,範例,1151113,080000,,','1,5310,範例,1151113,080000,1151113,090000',
++    '1,5330,範例,1151113,080000,1151116,080000','1,5310,範例,1151113,090001,1151116,080000']){
++    assert.equal(deriveLaunchSuspendedOpening(input,rowCapture(row)),null);
++  }
++});
++test('a later capture is excluded from a past cutoff and invalid source bytes are refused',()=>{
++  const capture=rowCapture('1,5310,範例,1151113,080000,1151116,080000');
++  assert.equal(deriveLaunchSuspendedOpening({...input,asOf:'2026-11-13T13:30:00Z'},capture),null);
++  assert.throws(()=>deriveLaunchSuspendedOpening(input,{...capture,sha256:'a'.repeat(64)}),/launch_opening_halt_capture_invalid/);
++  assert.throws(()=>deriveLaunchSuspendedOpening(input,{...capture,url:'https://example.com/trades'}),/launch_opening_halt_capture_invalid/);
++});
++
++test('a later intraday resumption does not move the assumed purchase and full-day price conflicts are refused',()=>{
++  const price={session:next.session,rawOpen:'110',open:'110',high:'112',low:'109',close:'111',
++    priceRevision:policyRevision,basisRevision:policyRevision,availableAt:next.knownAt};
++  assert.equal(deriveLaunchSuspendedOpening({...input,bars:[price]},rowCapture('1,5310,範例,1151113,080000,1151113,110000'))?.reason,'suspended');
++  assert.throws(()=>deriveLaunchSuspendedOpening({...input,bars:[price]},rowCapture('1,5310,範例,1151113,080000,1151116,080000')),
++    /launch_opening_halt_full_session_conflicts_with_price/);
++});
++test('ambiguous paired times are refused rather than promoting a halt candidate',()=>{
++  const source='1,5310,範例,1151113,080000,1151116,080000\n2,5310,範例,1151113,083000,1151116,080000';
++  assert.throws(()=>deriveLaunchSuspendedOpening(input,rowCapture(source)),/launch_opening_halt_interval_conflict/);
++});

@@ -1,0 +1,123 @@
+{
+  "ticket": 394,
+  "previousEvidence": "1b5ae2befd98d4ced30b2af42cc5d773e83f3512",
+  "candidateOnly": true,
+  "environment": "isolated Contabo staging, official feeds and offline verification",
+  "productionModified": false,
+  "paidDataUsed": false,
+  "manifest": {
+    "patchSha256": "f038430e41375672493ccca8b3e4c7d75e1bd68acc19260f46e1c61497d653e1",
+    "replayProbeSha256": "c5e50186db9fac377e95efa32a49c8bb573afe70df4c79242172281026fe903f",
+    "files": {
+      "web/src/lib/vnext/launch-opening-halt.ts": "0cbedc56602d8024cf3f2e1385cb680b316c9929017ce7c179db82d65dd36ae9",
+      "web/src/lib/vnext/launch-opening-halt.test.ts": "f4e90ad9f9588d6bcb5f1fa111e09bf304a47adbb5ce9f50145ebc1783a6c285"
+    }
+  },
+  "tests": {
+    "unit": 5,
+    "pass": 5,
+    "fail": 0,
+    "node": "22.23.1",
+    "strictScopedTypescript": "5.9.3"
+  },
+  "rights": {
+    "TWSE": {
+      "dataset": 11677,
+      "url": "https://data.gov.tw/dataset/11677"
+    },
+    "TPEX": {
+      "dataset": 48665,
+      "url": "https://data.gov.tw/dataset/48665"
+    },
+    "license": "Taiwan Open Government Data License v1"
+  },
+  "actualSources": [
+    {
+      "market": "TWSE",
+      "symbol": "2314",
+      "session": "2026-11-10",
+      "status": "unfillable",
+      "reason": "suspended",
+      "missingEvidenceState": "opening_evidence_gap",
+      "laterCaptureRejectedAtHistoricalCutoff": true,
+      "capture": {
+        "observedAt": "2026-11-15T11:13:23.125932+00:00",
+        "recordedAt": "2026-11-15T11:13:23.126359+00:00",
+        "url": "https://www.twse.com.tw/exchangeReport/TWTAWU?response=open_data",
+        "sha256": "1bdd6daf1607f4485c8c021915b42ad0addc9ed4e39decbc5ee2c68c271a10f8",
+        "bytes": 169,
+        "eventRows": [
+          [
+            "1151110",
+            "080000",
+            "1151111",
+            "080000"
+          ]
+        ]
+      },
+      "revision": "019b1387736e83b1ef5fa94f8a5fc2ae172579755ba9529c150f37b307e93f47"
+    },
+    {
+      "market": "TPEX",
+      "symbol": "1788",
+      "session": "2026-06-18",
+      "status": "unfillable",
+      "reason": "suspended",
+      "missingEvidenceState": "opening_evidence_gap",
+      "laterCaptureRejectedAtHistoricalCutoff": true,
+      "capture": {
+        "observedAt": "2026-11-15T11:13:23.444417+00:00",
+        "recordedAt": "2026-11-15T11:13:23.444959+00:00",
+        "url": "https://www.tpex.org.tw/openapi/v1/tpex_spendi_history",
+        "sha256": "9304decac4d91517e9ae8128f2bb2a972ec4e4e47b810e91a580d07d9ed297be",
+        "bytes": 80226,
+        "eventRows": [
+          [
+            "1150618",
+            "080000",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "1150622",
+            "080000"
+          ]
+        ]
+      },
+      "revision": "d028441975a561cd8f94bd13e723f393cd684b2d1c1d42217ce27da1b6210788"
+    },
+    {
+      "market": "TPEX",
+      "symbol": "4174",
+      "session": "2026-11-13",
+      "status": "opening_evidence_gap",
+      "reason": null,
+      "missingEvidenceState": "opening_evidence_gap",
+      "laterCaptureRejectedAtHistoricalCutoff": true,
+      "capture": {
+        "observedAt": "2026-11-15T11:13:23.444417+00:00",
+        "recordedAt": "2026-11-15T11:13:23.444959+00:00",
+        "url": "https://www.tpex.org.tw/openapi/v1/tpex_spendi_history",
+        "sha256": "9304decac4d91517e9ae8128f2bb2a972ec4e4e47b810e91a580d07d9ed297be",
+        "bytes": 80226,
+        "eventRows": [
+          [
+            "1151113",
+            "080000",
+            "",
+            ""
+          ]
+        ]
+      },
+      "revision": null
+    }
+  ],
+  "proofLimits": [
+    "historic opening halt only",
+    "synthetic signal and close for diagnostic replay",
+    "original market rows observed on capture timestamp, excluded at earlier replay cutoff",
+    "auction fill and scheduled supply pipeline not validated"
+  ]
+}

@@ -1,0 +1,29 @@
+import {readFileSync} from 'node:fs';
+import assert from 'node:assert/strict';
+import {deriveLaunchSuspendedOpening} from './launch-opening-halt.ts';
+import {evaluateLaunchOutcome} from './launch-outcomes.ts';
+const inputs=JSON.parse(readFileSync('observations.json','utf8'));
+const tag='a'.repeat(64),run='00000000-0000-4000-8000-000000000981';
+const result=[];
+for(const observed of inputs){
+ const {market,symbol,signalSession,session,bodyPath,observedAt,recordedAt,url,sha256,bytes,eventRows}=observed;
+ const capture={market,body:readFileSync(bodyPath),observedAt,recordedAt,url,sha256};
+ const input={scope:'historical_price_replay',asOf:recordedAt,calendarRevision:tag,basisRevision:tag,
+   signal:{symbol,market,session:signalSession,cutoff:signalSession+'T13:30:00Z',rawClose:'100',normalizedClose:'100',
+     rankingRunId:run,firstRankingRunId:run,inputHash:tag,priceRevision:tag},
+   sessions:[{session,openAt:session+'T01:00:00Z',closeAt:session+'T05:30:00Z',knownAt:session+'T07:00:00Z',status:'completed'}],
+   opening:null,bars:[]};
+ const opening=deriveLaunchSuspendedOpening(input,capture);
+ const completed=evaluateLaunchOutcome({...input,opening});
+ assert.equal(completed.execution.status,observed.expected,market+':'+symbol);
+ if(observed.expected==='unfillable')assert.equal(opening?.reason,'suspended');
+ else assert.equal(opening,null);
+ assert.equal(completed.execution.nextSession,session);
+ assert.equal(completed.execution.fill,null);
+ assert.equal(deriveLaunchSuspendedOpening({...input,asOf:session+'T13:30:00Z'},capture),null);
+ assert.equal(evaluateLaunchOutcome(input).execution.status,'opening_evidence_gap');
+ result.push({market,symbol,session,status:completed.execution.status,reason:completed.execution.reason,
+  missingEvidenceState:evaluateLaunchOutcome(input).execution.status,laterCaptureRejectedAtHistoricalCutoff:true,
+  capture:{observedAt,recordedAt,url,sha256,bytes,eventRows},revision:opening?.revision??null});
+}
+console.log('HALT_FEED_REPLAY '+JSON.stringify(result));
