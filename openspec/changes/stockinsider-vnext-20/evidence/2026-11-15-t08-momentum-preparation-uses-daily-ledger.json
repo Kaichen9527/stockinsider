@@ -1,0 +1,66 @@
+{
+  "date": "2026-11-15",
+  "productSource": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "scope": "contabo isolated non-root native SQL branches and actual TypeScript classifier",
+  "sourceLocations": {
+    "web/src/lib/vnext/store.ts": [
+      96,
+      127,
+      147
+    ],
+    "web/src/lib/vnext/preparation-reconciliation.ts": [
+      112,
+      113,
+      114,
+      151
+    ],
+    "web/src/lib/vnext/research-cycle.ts": [
+      7,
+      12,
+      19
+    ]
+  },
+  "native": {
+    "version": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "sqlResult": {
+      "exitedMembers": 4,
+      "failedFinance": 4,
+      "fifthDeferred": {
+        "reason": "daily_budget",
+        "execute": false
+      },
+      "syntheticSessions": true,
+      "fifthStillUnstarted": true,
+      "invalidTradeRejected": true,
+      "wrongExecutionRejected": true,
+      "actualDatabaseClockUsed": true,
+      "permanentRetriesRejected": 4,
+      "startedOnSyntheticSession": 4,
+      "failuresWithAttemptConsumed": 4,
+      "claimReplaysWithoutExecution": 4
+    },
+    "backendExit": 0,
+    "errorCount": 0,
+    "closedErrors": [],
+    "sourceSqlSha256": "adcbba13f3174c2bf15f2c217196d14ee484f67ec29923a059b5721c745387d7",
+    "admissionMemoryKiB": 3964292,
+    "admissionDiskBytes": 26573205504,
+    "productionContacted": false,
+    "node": {
+      "node": "v22.23.1",
+      "nonRoot": true,
+      "results": {
+        "vnext_validated_financial_data_missing": "permanent",
+        "vnext_financial_preparation_incomplete": "uncertain",
+        "provider_http_429": "transient",
+        "vnext_stock_authority_missing": "permanent"
+      }
+    },
+    "initialCapsuleError": "single-user blank-line statement framing"
+  },
+  "realMarketCloseUsed": false,
+  "fullNativeWorkerUsed": false,
+  "paidProviderCalls": 0,
+  "primaryFeatureChanged": false,
+  "formalGateCleared": false
+}

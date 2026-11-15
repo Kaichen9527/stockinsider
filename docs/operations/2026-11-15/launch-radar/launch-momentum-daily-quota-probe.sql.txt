@@ -1,0 +1,104 @@
+CREATE TABLE public.vnext_sessions_v1(session_date date PRIMARY KEY,close_at timestamptz NOT NULL,completed boolean NOT NULL DEFAULT false);
+
+CREATE TABLE public.vnext_members_v1(symbol text PRIMARY KEY CHECK(symbol ~ '^[0-9]{4}$'), state text NOT NULL CHECK(state IN('researching','waiting','eligible','exited')),
+ input_hash text NOT NULL CHECK(input_hash ~ '^[a-f0-9]{64}$'), evidence jsonb NOT NULL, admitted_session date NOT NULL REFERENCES public.vnext_sessions_v1,
+ contraindication boolean NOT NULL DEFAULT false, last_failure_hash text, failures integer NOT NULL DEFAULT 0, exit_reason text, updated_at timestamptz NOT NULL DEFAULT clock_timestamp());
+
+CREATE TABLE public.vnext_jobs_v1(job_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),request_key text NOT NULL UNIQUE, symbol text NOT NULL REFERENCES public.vnext_members_v1,
+ input_hash text NOT NULL, admission_hash text NOT NULL,state text NOT NULL DEFAULT 'queued' CHECK(state IN('queued','running','authored','reviewing','published','failed','rejected')),
+ session_date date NOT NULL REFERENCES public.vnext_sessions_v1, retry_of uuid REFERENCES public.vnext_jobs_v1, attempt_no integer NOT NULL DEFAULT 0 CHECK(attempt_no BETWEEN 0 AND 1),
+ execution_id uuid, author_principal text, reviewer_execution uuid, reviewer_principal text, sources_read_at timestamptz,
+ started_at timestamptz, deadline_at timestamptz, finished_at timestamptz, author_result jsonb, reviewer_result jsonb, error text, created_at timestamptz NOT NULL DEFAULT clock_timestamp());
+
+CREATE FUNCTION public.vnext_trading_invalid_current_v1(symbol text,input_hash text) RETURNS jsonb LANGUAGE sql AS $$ SELECT CASE WHEN symbol='0006' THEN '{"proofHash":"synthetic-trade-rejection"}'::jsonb ELSE '{}'::jsonb END $$;
+
+CREATE FUNCTION public.stockinsider_stage_claim_failure_probe(p_role text,p_principal text,p_command text,r jsonb) RETURNS jsonb LANGUAGE plpgsql AS $body$
+DECLARE s date; role_name text:=p_role; j public.vnext_jobs_v1; m public.vnext_members_v1; prior public.vnext_jobs_v1; count_started integer; answer jsonb;
+BEGIN
+ SELECT max(session_date) INTO s FROM public.vnext_sessions_v1 WHERE completed;
+ PERFORM pg_advisory_xact_lock(64221022);
+ IF p_command='probe_placeholder' THEN RAISE EXCEPTION 'unsupported probe operation'; 
+ ELSIF p_command='claim' THEN
+  IF s<>(clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date THEN RETURN jsonb_build_object('execute',false,'reason','not_official_trading_day'); END IF;
+  IF role_name<>'author' THEN RAISE EXCEPTION 'vnext_author_required'; END IF;
+  SELECT * INTO j FROM public.vnext_jobs_v1 WHERE job_id=(r->>'jobId')::uuid FOR UPDATE;
+  IF j.job_id IS NULL THEN RAISE EXCEPTION 'vnext_job_missing'; END IF;
+  SELECT * INTO m FROM public.vnext_members_v1 WHERE symbol=j.symbol;
+  IF m.state='exited' OR m.contraindication OR m.input_hash<>j.input_hash THEN RAISE EXCEPTION 'vnext_admission_invalid'; END IF;
+  IF public.vnext_trading_invalid_current_v1(j.symbol,j.input_hash) ? 'proofHash' THEN RAISE EXCEPTION 'vnext_claim_confirmed_trading_invalid';END IF;
+  IF j.state<>'queued' THEN RETURN jsonb_build_object('replay',true,'state',j.state,'execute',false); END IF;
+  SELECT count(*) INTO count_started FROM public.vnext_jobs_v1 WHERE session_date=s AND started_at IS NOT NULL;
+  IF count_started>=4 THEN RETURN jsonb_build_object('execute',false,'reason','daily_budget'); END IF;
+  UPDATE public.vnext_jobs_v1 SET state='running',session_date=s,started_at=clock_timestamp(),execution_id=gen_random_uuid(),deadline_at=clock_timestamp()+interval '120 seconds',author_principal=p_principal WHERE job_id=j.job_id RETURNING * INTO j;
+  UPDATE public.vnext_members_v1 SET state='researching',exit_reason=NULL,updated_at=clock_timestamp() WHERE symbol=j.symbol;
+  answer:=jsonb_build_object('execute',true,'jobId',j.job_id,'symbol',j.symbol,'inputHash',j.input_hash,'executionId',j.execution_id,'session',s,'evidence',m.evidence);
+ ELSIF p_command IN('fail','retry') THEN
+  SELECT * INTO j FROM public.vnext_jobs_v1 WHERE job_id=(r->>'jobId')::uuid FOR UPDATE;
+  IF j.job_id IS NULL THEN RAISE EXCEPTION 'vnext_job_missing'; END IF;
+  SELECT * INTO m FROM public.vnext_members_v1 WHERE symbol=j.symbol;
+  IF p_command='probe_placeholder' THEN RAISE EXCEPTION 'unsupported probe operation';
+  ELSIF p_command='fail' THEN
+   IF role_name<>'author' OR j.author_principal IS DISTINCT FROM p_principal OR j.execution_id::text IS DISTINCT FROM r->>'executionId' OR j.state<>'running' THEN RAISE EXCEPTION 'vnext_failure_binding'; END IF;
+   UPDATE public.vnext_jobs_v1 SET state='failed',error=r->>'reason',finished_at=clock_timestamp() WHERE job_id=j.job_id;
+   UPDATE public.vnext_members_v1 SET failures=failures+1,last_failure_hash=j.input_hash,
+    state=CASE WHEN r->>'permanent'='true' OR failures>=1 THEN 'exited' ELSE 'waiting' END,exit_reason=CASE WHEN r->>'permanent'='true' OR failures>=1 THEN 'research_failed' ELSE 'research_failed_retry_available' END,updated_at=clock_timestamp() WHERE symbol=j.symbol;
+   answer:=jsonb_build_object('failed',true,'attemptConsumed',true);
+  ELSE
+   IF role_name<>'operator' OR j.state<>'failed' OR j.attempt_no>=1 OR m.state='exited' OR m.contraindication THEN RAISE EXCEPTION 'vnext_retry_forbidden'; END IF;
+   SELECT * INTO prior FROM public.vnext_jobs_v1 WHERE retry_of=j.job_id;
+   IF prior.job_id IS NOT NULL THEN RETURN jsonb_build_object('jobId',prior.job_id,'replay',true); END IF;
+   SELECT count(*) INTO count_started FROM public.vnext_jobs_v1 WHERE session_date=s AND (started_at IS NOT NULL OR state='queued');
+   IF count_started>=4 THEN RETURN jsonb_build_object('deferred','daily_budget'); END IF;
+   INSERT INTO public.vnext_jobs_v1(request_key,symbol,input_hash,admission_hash,session_date,retry_of,attempt_no) VALUES(j.request_key||':retry',j.symbol,j.input_hash,j.admission_hash,s,j.job_id,1) RETURNING * INTO prior;
+   answer:=jsonb_build_object('jobId',prior.job_id);
+  END IF;
+ ELSE RAISE EXCEPTION 'unsupported probe operation';
+ END IF;
+ RETURN answer;
+END
+$body$;
+
+DO $proof$ 
+DECLARE s date:=(clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date; i int; j uuid; p jsonb; f jsonb; replay jsonb; fifth jsonb; field text; failures int:=0; blockedReplay int:=0; rejectedRetry int:=0; invalidTrade boolean:=false; wrongExecution boolean:=false;
+BEGIN
+ INSERT INTO public.vnext_sessions_v1 VALUES(s-1,clock_timestamp()-interval '2 days',true),(s,clock_timestamp()-interval '1 hour',true);
+ FOR i IN 1..6 LOOP
+  INSERT INTO public.vnext_members_v1(symbol,state,input_hash,evidence,admitted_session)
+    VALUES(lpad(i::text,4,'0'),'researching',repeat('a',64),jsonb_build_object('synthetic',true),CASE WHEN i=5 THEN s-1 ELSE s END);
+  INSERT INTO public.vnext_jobs_v1(request_key,symbol,input_hash,admission_hash,session_date)
+    VALUES('synthetic-probe:'||i,lpad(i::text,4,'0'),repeat('a',64),repeat('a',64),CASE WHEN i=5 THEN s-1 ELSE s END);
+ END LOOP;
+ SELECT job_id INTO j FROM public.vnext_jobs_v1 WHERE symbol='0006';
+ BEGIN
+  PERFORM public.stockinsider_stage_claim_failure_probe('author','probe-author','claim',jsonb_build_object('jobId',j));
+ EXCEPTION WHEN raise_exception THEN
+  IF SQLERRM<>'vnext_claim_confirmed_trading_invalid' THEN RAISE;END IF;invalidTrade:=true;
+ END;
+ FOR i IN 1..4 LOOP
+  SELECT job_id INTO j FROM public.vnext_jobs_v1 WHERE symbol=lpad(i::text,4,'0');
+  p:=public.stockinsider_stage_claim_failure_probe('author','probe-author','claim',jsonb_build_object('jobId',j));
+  IF p->>'execute' IS DISTINCT FROM 'true' THEN RAISE EXCEPTION 'probe_missing_claim'; END IF;
+  replay:=public.stockinsider_stage_claim_failure_probe('author','probe-author','claim',jsonb_build_object('jobId',j));
+  IF replay->>'replay' IS DISTINCT FROM 'true' OR replay->>'execute' IS DISTINCT FROM 'false' THEN RAISE EXCEPTION 'probe_replay_requested'; END IF; blockedReplay:=blockedReplay+1;
+  IF i=1 THEN
+   BEGIN
+    PERFORM public.stockinsider_stage_claim_failure_probe('author','probe-author','fail',jsonb_build_object('jobId',j,'executionId','00000000-0000-4000-8000-000000000099','permanent',true,'reason','vnext_validated_financial_data_missing'));
+   EXCEPTION WHEN raise_exception THEN IF SQLERRM<>'vnext_failure_binding' THEN RAISE; END IF;wrongExecution:=true; END;
+  END IF;
+  f:=public.stockinsider_stage_claim_failure_probe('author','probe-author','fail',jsonb_build_object('jobId',j,'executionId',p->>'executionId','permanent',true,'reason','vnext_validated_financial_data_missing'));
+  IF f->>'attemptConsumed' IS DISTINCT FROM 'true' THEN RAISE EXCEPTION 'probe_attempt_not_consumed'; END IF;failures:=failures+1;
+  BEGIN
+   PERFORM public.stockinsider_stage_claim_failure_probe('operator','probe-operator','retry',jsonb_build_object('jobId',j));
+  EXCEPTION WHEN raise_exception THEN IF SQLERRM<>'vnext_retry_forbidden' THEN RAISE; END IF;rejectedRetry:=rejectedRetry+1;
+  END;
+ END LOOP;
+ SELECT job_id INTO j FROM public.vnext_jobs_v1 WHERE symbol='0005';fifth:=public.stockinsider_stage_claim_failure_probe('author','probe-author','claim',jsonb_build_object('jobId',j));
+ RAISE WARNING USING MESSAGE='STOCKINSIDER_QUOTA_PROBE '||jsonb_build_object(
+ 'actualDatabaseClockUsed',true,'syntheticSessions',true,'invalidTradeRejected',invalidTrade,'wrongExecutionRejected',wrongExecution,
+ 'failuresWithAttemptConsumed',failures,'claimReplaysWithoutExecution',blockedReplay,'permanentRetriesRejected',rejectedRetry,
+ 'startedOnSyntheticSession',(SELECT count(*) FROM public.vnext_jobs_v1 WHERE session_date=s AND started_at IS NOT NULL),
+ 'failedFinance',(SELECT count(*) FROM public.vnext_jobs_v1 WHERE state='failed' AND error='vnext_validated_financial_data_missing'),
+ 'exitedMembers',(SELECT count(*) FROM public.vnext_members_v1 WHERE state='exited'),'fifthDeferred',fifth,
+ 'fifthStillUnstarted',(SELECT started_at IS NULL FROM public.vnext_jobs_v1 WHERE symbol='0005'))::text;
+END $proof$;
+
