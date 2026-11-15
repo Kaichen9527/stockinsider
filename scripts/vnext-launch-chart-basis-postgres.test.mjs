@@ -302,9 +302,119 @@ END $adjusted$;
 UPDATE public.vnext_launch_score_evidence_v1 s SET source_inputs=o.source_inputs, source_hash=o.source_hash
 FROM fixture_original_score o WHERE s.score_revision=o.score_revision;
 `;
+const volumeSetup = `
+ALTER TABLE public.vnext_launch_ranking_snapshots_v1 ADD COLUMN snapshot jsonb;
+UPDATE public.vnext_launch_ranking_snapshots_v1 SET snapshot=jsonb_build_object('cutoff','2024-02-29T13:30:00+00:00');
+
+CREATE TABLE public.vnext_source_policies_v1(source text,scope text,enabled boolean,valid_until timestamptz);
+INSERT INTO public.vnext_source_policies_v1 VALUES('official','official_original',true,'infinity');
+CREATE TABLE public.vnext_launch_csv_captures_v1(
+ capture_id uuid PRIMARY KEY,attempt_id uuid,artifact_hash text,dataset_id integer,request_key text,source_url text,
+ observed_at timestamptz,recorded_at timestamptz,available_at timestamptz,rights_binding_hash text,coverage text,pool_targets jsonb,pool_revision text
+);
+CREATE TABLE public.vnext_launch_csv_ready_acks_v1(capture_id uuid PRIMARY KEY,ack_id uuid,recorded_at timestamptz);
+CREATE TABLE public.vnext_launch_csv_outcomes_v1(attempt_id uuid,capture_id uuid,outcome text);
+CREATE TABLE public.vnext_launch_csv_attempts_v1(attempt_id uuid PRIMARY KEY,job_id uuid);
+CREATE TABLE public.vnext_launch_csv_bindings_v1(job_id uuid,dataset_id integer);
+CREATE TABLE public.vnext_launch_csv_facts_v1(
+ capture_id uuid,session_date date,symbol text,raw_open numeric,raw_high numeric,raw_low numeric,raw_close numeric,shares bigint,fact_hash text,
+ PRIMARY KEY(capture_id,session_date,symbol)
+);
+GRANT SELECT ON public.vnext_source_policies_v1,public.vnext_launch_csv_captures_v1,public.vnext_launch_csv_ready_acks_v1,
+ public.vnext_launch_csv_outcomes_v1,public.vnext_launch_csv_attempts_v1,public.vnext_launch_csv_bindings_v1,
+ public.vnext_launch_csv_facts_v1 TO stockinsider_vnext_owner;
+CREATE TABLE public.fixture_chart_captures AS
+ SELECT md5('capture'||session_id::text)::uuid capture_id,md5('attempt'||session_id::text)::uuid attempt_id,
+  md5('job'||session_id::text)::uuid job_id,md5('ack'||session_id::text)::uuid ack_id,session_id,
+  public.vnext_launch_csv_profile_v1(11371,session_id::text) profile,close_at,recorded_at
+ FROM public.tw_trading_sessions_v3 WHERE market='TPEX' AND status='completed';
+INSERT INTO public.vnext_launch_csv_captures_v1
+ SELECT capture_id,attempt_id,repeat('c',64),11371,session_id::text,profile->>'sourceUrl',
+  close_at+interval '5 minutes',recorded_at,recorded_at,
+  (SELECT public.vnext_launch_csv_hash_v1(to_jsonb(p)) FROM public.vnext_source_policies_v1 p),profile->>'coverage',
+  '[{"symbol":"2330","inputHash":"fixture","state":"active"}]'::jsonb,repeat('d',64)
+ FROM public.fixture_chart_captures;
+INSERT INTO public.vnext_launch_csv_ready_acks_v1 SELECT capture_id,ack_id,recorded_at+interval '5 minutes' FROM public.fixture_chart_captures;
+INSERT INTO public.vnext_launch_csv_outcomes_v1 SELECT attempt_id,capture_id,'complete' FROM public.fixture_chart_captures;
+INSERT INTO public.vnext_launch_csv_attempts_v1 SELECT attempt_id,job_id FROM public.fixture_chart_captures;
+INSERT INTO public.vnext_launch_csv_bindings_v1 SELECT job_id,11371 FROM public.fixture_chart_captures;
+INSERT INTO public.vnext_launch_csv_facts_v1 SELECT capture_id,session_id,'2330',101,105,98,103,
+ CASE session_id WHEN '2024-02-29' THEN 0 WHEN '2024-02-28' THEN NULL ELSE 30500 END,repeat('c',64)
+ FROM public.fixture_chart_captures;
+`;
+const verifyVolume = `
+-- Freeze a score by using the same real 240-day price/action validation.
+CREATE TEMP TABLE fixture_volume_original AS SELECT * FROM public.vnext_launch_score_evidence_v1;
+DO $volume$
+DECLARE item public.vnext_launch_score_evidence_v1; price jsonb; packet jsonb; chart jsonb; chart_id uuid:=md5('TPEXrun')::uuid;
+ counter integer; old_day date:='2021-03-05';
+BEGIN
+ SELECT * INTO item FROM public.vnext_launch_score_evidence_v1 WHERE score_revision=md5('TPEXscore')::uuid;
+ price:=public.vnext_launch_price_v1(md5('otc')::uuid,item.symbol,'TPEX',item.source_inputs->'calendar',item.input_cutoff);
+ IF price IS NULL OR price ? 'gap' THEN RAISE EXCEPTION 'fixture missing actual price scoring inputs';END IF;
+ UPDATE public.vnext_launch_score_evidence_v1
+ SET source_inputs=item.source_inputs||jsonb_build_object('price',price),
+     source_hash=public.vnext_launch_csv_hash_v1(item.source_inputs||jsonb_build_object('price',price))
+ WHERE score_revision=item.score_revision;
+ packet:=public.vnext_launch_chart_volume_internal_v1(chart_id,'2330');
+ chart:=packet->'chart';
+ IF chart IS NULL OR packet->>'datasetId'<>'11371' OR packet->>'volumeBasis'<>'tpex_11371_report_excluding_fixed_price_v1'
+  OR chart->>'schemaVersion'<>'launch-frozen-chart-v1' OR chart->>'cutoff'<>'2024-02-29T13:30:00+00:00'
+  OR chart->>'priceRevision' IS DISTINCT FROM price->>'priceRevision'
+  OR chart->>'actionsRevision' IS DISTINCT FROM price->>'actionsRevision'
+  OR coalesce(chart->>'seriesRevision','')!~'^[a-f0-9]{64}$'
+  OR chart->'candles'->-1->'volume' IS DISTINCT FROM '0'::jsonb
+  OR chart->'candles'->-2->'volume' IS DISTINCT FROM 'null'::jsonb
+  OR chart->'candles'->-3->'volume' IS DISTINCT FROM '30500'::jsonb
+  OR jsonb_array_length(packet->'sourcePins')<>jsonb_array_length(chart->'candles')
+  OR public.vnext_launch_chart_volume_internal_v1(md5('TWSErun')::uuid,'2330') IS NOT NULL
+  THEN RAISE EXCEPTION 'chart lost the approved clock, source, score or volume distinction';END IF;
+ SELECT count(*) INTO counter FROM jsonb_object_keys(chart);
+ IF counter<>11 OR EXISTS(SELECT FROM jsonb_array_elements(chart->'candles') r
+  WHERE (SELECT count(*) FROM jsonb_object_keys(r))<>6 OR NOT(r ?& ARRAY['time','open','high','low','close','volume']))
+  THEN RAISE EXCEPTION 'chart contains private or extra fields';END IF;
+ IF has_function_privilege('anon','public.vnext_launch_chart_volume_internal_v1(uuid,text)','EXECUTE')
+  OR has_function_privilege('authenticated','public.vnext_launch_chart_volume_internal_v1(uuid,text)','EXECUTE')
+  OR has_function_privilege('service_role','public.vnext_launch_chart_volume_internal_v1(uuid,text)','EXECUTE')
+  THEN RAISE EXCEPTION 'unexpected new public RPC grant';END IF;
+
+ BEGIN
+  UPDATE public.vnext_launch_csv_ready_acks_v1 SET recorded_at='2024-03-01T13:30Z' WHERE capture_id=md5('capture'||old_day::text)::uuid;
+  IF public.vnext_launch_chart_volume_internal_v1(chart_id,'2330') IS NOT NULL
+   THEN RAISE EXCEPTION 'after-cutoff acknowledgement was accepted';END IF;
+  RAISE SQLSTATE 'P1001';
+ EXCEPTION WHEN SQLSTATE 'P1001' THEN NULL;
+ END;
+ BEGIN
+  UPDATE public.vnext_launch_csv_facts_v1 SET raw_open=102 WHERE capture_id=md5('capture'||old_day::text)::uuid;
+  IF public.vnext_launch_chart_volume_internal_v1(chart_id,'2330') IS NOT NULL
+   THEN RAISE EXCEPTION 'different official candle inherited public rights';END IF;
+  RAISE SQLSTATE 'P1001';
+ EXCEPTION WHEN SQLSTATE 'P1001' THEN NULL;
+ END;
+ BEGIN
+  UPDATE public.vnext_launch_csv_captures_v1 SET coverage='tpex_11370_all_sessions_v1' WHERE capture_id=md5('capture'||old_day::text)::uuid;
+  IF public.vnext_launch_chart_volume_internal_v1(chart_id,'2330') IS NOT NULL
+   THEN RAISE EXCEPTION 'different volume scope was accepted';END IF;
+  RAISE SQLSTATE 'P1001';
+ EXCEPTION WHEN SQLSTATE 'P1001' THEN NULL;
+ END;
+ BEGIN
+  UPDATE public.vnext_source_policies_v1 SET enabled=false;
+  IF public.vnext_launch_chart_volume_internal_v1(chart_id,'2330') IS NOT NULL
+   THEN RAISE EXCEPTION 'revoked permissions were accepted';END IF;
+  RAISE SQLSTATE 'P1001';
+ EXCEPTION WHEN SQLSTATE 'P1001' THEN NULL;
+ END;
+END $volume$;
+UPDATE public.vnext_launch_score_evidence_v1 s SET source_inputs=o.source_inputs, source_hash=o.source_hash
+FROM fixture_volume_original o WHERE s.score_revision=o.score_revision;
+`;
 const baseline = fs.readFileSync(new URL('../migrations/20261115_vnext_launch_ranking_v1.sql',import.meta.url),'utf8');
 const migration = fs.readFileSync(new URL('../migrations/20261116_20_vnext_launch_chart_basis_v1.sql',import.meta.url),'utf8');
 const adjustment = fs.readFileSync(new URL('../migrations/20261116_21_vnext_launch_chart_adjustment_v1.sql',import.meta.url),'utf8');
+const source = fs.readFileSync(new URL('../migrations/20261115_vnext_launch_source_facts_v1.sql',import.meta.url),'utf8');
+const chartVolume = fs.readFileSync(new URL('../migrations/20261116_22_vnext_launch_chart_volume_v1.sql',import.meta.url),'utf8');
 const extractFunction = (name) => {
   const start = baseline.indexOf('CREATE FUNCTION public.'+name+'(');
   assert.ok(start >= 0, name);
@@ -313,7 +423,7 @@ const extractFunction = (name) => {
   return baseline.slice(start,end+8);
 };
 
-test('native launch chart preserves pricing cutoffs, immutable score overlap, CA-D1 and private ACLs',()=>{
+test('native launch chart preserves pricing cutoffs, CA-D1, licensed share volume and private ACLs',()=>{
   const directory = fs.mkdtempSync(path.join(os.tmpdir(),'stockinsider-launch-chart-pg-'));
   const data = path.join(directory,'data');
   const socket = path.join(directory,'socket');
@@ -348,6 +458,13 @@ test('native launch chart preserves pricing cutoffs, immutable score overlap, CA
       extractFunction('vnext_launch_action_day_v1') + '\n' + extractFunction('vnext_launch_price_v1'));
     sql(adjustment);
     sql(verifyAdjustment);
+    const profileStart = source.indexOf('CREATE FUNCTION public.vnext_launch_csv_profile_v1(');
+    const profileEnd = source.indexOf('END $profile$;',profileStart);
+    assert.ok(profileStart >= 0 && profileEnd > profileStart);
+    sql(source.slice(profileStart,profileEnd+'END $profile$;'.length) +'\n' +
+      volumeSetup + extractFunction('vnext_launch_source_fact_v1'));
+    sql(chartVolume);
+    sql(verifyVolume);
     sql(verify);
   } finally {
     if (started) run('pg_ctl',['-D',data,'-w','-m','immediate','stop']);
