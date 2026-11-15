@@ -1,0 +1,123 @@
+{
+  "schema": "stockinsider-contabo-t18-real-bound-diagnostic-v1",
+  "subject": "fa22e9113dd5b289ee5ee948a3083b18932ee3ed",
+  "baselineSubject": "e2af3017c5409dab0acb20bbdac3f7e60adad668",
+  "observedAtUtc": "2026-11-15T00:22:19Z",
+  "backupArchiveDate": "2026-09-19",
+  "scope": "REAL_PRODUCTION_BACKUP_ISOLATED_CONTABO_STAGING",
+  "exactStage": {
+    "baselineBlobs": 51,
+    "afterBlobs": 51,
+    "replace": 2,
+    "add": 0,
+    "stageManifestSha256": "2e8ab5c41142cd10f6db4d56091100074257549829ccbe5f0940fb3a9cf4e613",
+    "rootLauncherChanged": false
+  },
+  "admission": {
+    "status": "HOST_PREREQUISITES_VERIFIED_ONLY",
+    "seconds": 19.215,
+    "keyRead": false,
+    "unchanged": true,
+    "cleaned": true
+  },
+  "wrongKey": {
+    "reason": "backup_authentication_failed",
+    "seconds": 19.189,
+    "runnerExit": 2,
+    "unchanged": true,
+    "cleaned": true
+  },
+  "real": {
+    "runnerExit": 0,
+    "status": "DB_VERIFIED_FIXED_T18_EXERCISED",
+    "seconds": 647.218,
+    "runnerSeconds": 635.127,
+    "productionSignaturesUnchanged": true,
+    "stagingResourcesCleaned": true,
+    "stagingServiceUnitsRemaining": 0,
+    "minDiskBytes": 18025881600,
+    "minAvailableMemoryBytes": 3773198336,
+    "minWorkBackingBytes": 5967790080,
+    "database": {
+      "restored": true,
+      "postgresVersionNum": "170011",
+      "foreignKeys": 288,
+      "allUnvalidatedConstraints": 3,
+      "invalidForeignKeys": 0,
+      "historicalProfileCount": 3,
+      "lineageRelations": 7,
+      "orphans": 0,
+      "cleanup": {
+        "postmasterReaped": true,
+        "privateTreeRemoved": true,
+        "socketRemoved": true
+      }
+    },
+    "fixedOldPair": {
+      "status": "FIXED_OLD_PAIR_VERIFIED",
+      "sequence": "A_B_A",
+      "failedHealthDuringFault": true,
+      "automaticRollback": "A",
+      "negativeHttpChecks": {
+        "postgrestDenied": 2,
+        "proxyDenied": 6
+      },
+      "ownedListenersClosed": true,
+      "steps": [
+        {
+          "sourceCommit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+          "nextVersion": "16.3.4",
+          "homeStatus": 200,
+          "contentDate": "2026-09-12",
+          "snapshotPublishedDate": "2026-09-19",
+          "staleReadonly": true,
+          "actionsEnabled": false
+        },
+        {
+          "sourceCommit": "dd59817f750684b093965f539dd4de466be13077",
+          "nextVersion": "16.3.4",
+          "homeStatus": 200,
+          "contentDate": "2026-09-12",
+          "snapshotPublishedDate": "2026-09-19",
+          "staleReadonly": true,
+          "actionsEnabled": false
+        },
+        {
+          "sourceCommit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+          "nextVersion": "16.3.4",
+          "homeStatus": 200,
+          "contentDate": "2026-09-12",
+          "snapshotPublishedDate": "2026-09-19",
+          "staleReadonly": true,
+          "actionsEnabled": false
+        }
+      ]
+    },
+    "detail": {
+      "status": "GAP_DETAIL_PUBLIC_JSON",
+      "firstDiagnostic": {
+        "category": "BOUNDS",
+        "reason": "BOUND_EXCEEDED"
+      },
+      "rawFactUrlPolicy": "NOT_OBSERVED",
+      "rawFactPolicyReached": false,
+      "exactInnerLimit": "UNKNOWN",
+      "matchingTables": 7,
+      "matchingColumns": 60,
+      "sections": 6,
+      "facts": 9,
+      "dossiers": 0,
+      "acceptedReceipts": 0,
+      "originalRpc": "NOT_GRANTED_NOT_CALLED",
+      "grantsChanged": 0,
+      "httpAcceptance": "NOT_RUN_DETAIL_PROFILE_GAP",
+      "freshnessAction": "GAP_FIXED_UI_HAS_NO_AGE_FENCE"
+    },
+    "lastGates": {
+      "nativeHoldRetained": true,
+      "newRadarReleaseAcceptance": "NOT_RUN",
+      "fullReleaseAcceptance": false
+    }
+  },
+  "followup": "Identify the first BOUNDS subtype using fixed enums under the existing fail-closed budget. Keep raw fact URL unobserved in the observed run. Reconcile any subsequent named historical field with the frozen consumer and independently review before acceptance."
+}
