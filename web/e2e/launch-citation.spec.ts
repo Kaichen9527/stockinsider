@@ -26,6 +26,7 @@ test('actual SSR and readonly public GET retain explicit licensed attribution an
   await expect(sources).toContainText(citation.publicRights.attribution);await expect(sources.getByRole('link',{name:citation.publicRights.license})).toHaveAttribute('href','https://data.gov.tw/license');
 });
 test('actual SSR and public GET reject member, encoded secrets, tracking, unknown rights and unbound metadata without echo',async({page,request})=>{
+  test.slow(); // This matrix performs 42 serial SSR navigations per device.
   const modes=[...[...unsafeCitationUrls,...unknownRightsCitationUrls].map((_,i)=>`citation_${i}`),
     ...['missing_rights','wrong_license','wrong_binding','unknown_revision','private_extra','wrong_attribution'].map(name=>`citation_${name}`)];
   for(const mode of modes){

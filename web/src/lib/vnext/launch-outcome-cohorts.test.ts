@@ -6,19 +6,9 @@ import {createRequire} from 'node:module';
 import ts from 'typescript';
 import {parseLaunchOutcomeCohorts,readLaunchOutcomeCohorts,type LaunchOutcomeCohorts} from './launch-outcome-cohorts.ts';
 
-const barrier={upFirst:0,downFirst:0,orderUnknown:0,notHit:0,pending:0,waitingObservation:0,dataGap:0};
-const opening={filled:0,unfillable:0,pending:0,evidenceGap:0,waitingObservation:0};
-const horizons=[20,60,120].map(days=>({days,ready:0,pending:0,waitingObservation:0,dataGap:0,withBenchmark:0,meanReturnPct:null,meanExcessPct:null}));
-const emptyTrack={barrier20:barrier,horizons};
-const first={cohort:'first',signals:2,observed:1,opening:{...opening,unfillable:1,waitingObservation:1},
- research:{barrier20:{...barrier,waitingObservation:1,dataGap:1},horizons:horizons.map(row=>({...row,waitingObservation:1,dataGap:1}))},
- execution:emptyTrack};
-const mature=(meanReturnPct:number,meanExcessPct:number)=>horizons.map(row=>row.days===20?{...row,ready:1,withBenchmark:1,meanReturnPct,meanExcessPct}:{...row,pending:1});
-const repeat={cohort:'repeat',signals:1,observed:1,opening:{...opening,filled:1},
- research:{barrier20:{...barrier,upFirst:1},horizons:mature(20,10)},
- execution:{barrier20:{...barrier,orderUnknown:1},horizons:mature(0,-3)}};
-const document={schemaVersion:'vnext-launch-outcome-cohorts-v1',fromSession:'2025-11-14',throughSession:'2026-11-13',
-  observedThrough:'2026-11-13T13:30:00Z',cohorts:[first,repeat]};
+import {outcomeCohortFixture} from './launch-outcome.test-fixture.ts';
+
+const {document,first,repeat,emptyTrack,barrier,opening}=outcomeCohortFixture;
 
 test('public cohort parser preserves unknown, unfillable and true zero separately',()=>{
   const summary=parseLaunchOutcomeCohorts(document);

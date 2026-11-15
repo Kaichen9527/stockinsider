@@ -6,18 +6,9 @@ import vm from 'node:vm';
 import ts from 'typescript';
 import {parsePublicLaunchOutcome,readLaunchOutcomeProjection,type PublicLaunchOutcome} from './launch-outcome-public.ts';
 
-const ref={rankingRunId:'00000000-0000-4000-8000-000000000003',symbol:'1234',signalSession:'2026-10-05'};
-const first='00000000-0000-4000-8000-000000000001';
-const base={...ref,schemaVersion:'vnext-launch-outcome-public-v1',policyVersion:'launch-outcomes-v1',firstRankingRunId:first,
-  state:'ready',asOf:'2026-11-05T13:30:00+00:00',outcomeRevision:'a'.repeat(64)};
-const unavailableBenchmark={benchmarkReturnPct:null,marketExcessPct:null,netMarketExcessPct:null};
-const period={...unavailableBenchmark,horizon:20,state:'ready',terminalSession:'2026-11-02',grossReturnPct:0,netReturnPct:null};
-const waiting={...unavailableBenchmark,horizon:60,state:'pending',terminalSession:null,grossReturnPct:null,netReturnPct:null};
-const gap={...unavailableBenchmark,horizon:120,state:'calendar_gap',terminalSession:null,grossReturnPct:null,netReturnPct:null};
-const barrier={state:'order_unknown',session:'2026-10-12'};
-const completed={...base,research:{barrier20:barrier,horizons:[period,waiting,gap]},
-  execution:{status:'modeled_fill',nextSession:'2026-10-06',reason:null,grossBarrier20:barrier,
-    netBarrier20:{state:'down_first',session:'2026-10-09'},horizons:[{...period,grossReturnPct:20,netReturnPct:19.25,benchmarkReturnPct:10,marketExcessPct:10,netMarketExcessPct:9.25},waiting,gap]}};
+import {outcomeFixture} from './launch-outcome.test-fixture.ts';
+
+const {ref,base,completed,period,waiting,gap}=outcomeFixture;
 
 test('performance projection binds the frozen run, stock, and session and rejects nested private keys',()=>{
   const projected=parsePublicLaunchOutcome(completed,ref);
