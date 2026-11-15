@@ -160,8 +160,151 @@ BEGIN
   THEN RAISE EXCEPTION 'late annual provenance hid historical calendar gap';END IF;
 END $verify$;
 `;
+const actionSetup = `
+CREATE TABLE public.opportunity_corporate_action_snapshots_v3(
+ snapshot_id uuid PRIMARY KEY,exchange text,session_id date,session_authority_id uuid,
+ corporate_action_version text,provider text,collected_at timestamptz,recorded_at timestamptz,declared_event_count integer,dataset_hash text
+);
+CREATE TABLE public.opportunity_corporate_action_feed_evidence_v3(
+ snapshot_id uuid,feed_ordinal integer,feed_identity text,response_sha256 text,response_byte_count integer,parsed_row_count integer,recorded_at timestamptz
+);
+CREATE TABLE public.opportunity_corporate_action_events_v3(
+ snapshot_id uuid,event_ordinal integer,symbol text,event_kind text,feed_identity text,pre_action_reference_price numeric,
+ post_action_reference_price numeric,daily_adjustment_factor numeric,source_row_ref text,recorded_at timestamptz
+);
+CREATE TABLE public.fixture_action_terms(snapshot_id uuid,ordinal integer,receipt jsonb);
+CREATE INDEX fixture_snapshot_venue ON public.opportunity_corporate_action_snapshots_v3(exchange,session_id);
+CREATE INDEX fixture_feeds_id ON public.opportunity_corporate_action_feed_evidence_v3(snapshot_id);
+CREATE INDEX fixture_events_id ON public.opportunity_corporate_action_events_v3(snapshot_id);
+GRANT SELECT ON public.opportunity_corporate_action_snapshots_v3,public.opportunity_corporate_action_feed_evidence_v3,
+ public.opportunity_corporate_action_events_v3 TO opportunity_v3_rpc_owner;
+GRANT SELECT ON public.fixture_action_terms TO stockinsider_vnext_owner;
+
+-- This adapter provides fixtures for the output of the independently tested
+-- publisher and terms reader. It does not give the data any production rights.
+CREATE FUNCTION public.vnext_action_terms_current_internal_v1(p_stock uuid,p_symbol text,p_cutoff timestamptz) RETURNS jsonb
+LANGUAGE sql STABLE AS $$
+ SELECT jsonb_build_object('receipts',coalesce(jsonb_agg(receipt),'[]'::jsonb))
+ FROM public.fixture_action_terms WHERE (receipt->'source'->>'knownAt')::timestamptz<=p_cutoff
+$$;
+CREATE TABLE public.fixture_adjustment_inputs AS
+ SELECT md5(market||session_id::text)::uuid snapshot_id,market,session_id,session_authority_id,lower(market) provider,
+  collected_at,recorded_at,
+  CASE WHEN market='TWSE' THEN CASE session_id
+   WHEN '2022-09-01' THEN 10::numeric WHEN '2023-01-02' THEN 10::numeric WHEN '2023-12-04' THEN 30::numeric END
+  END post_price,
+  CASE market WHEN 'TWSE' THEN ARRAY['twse:twt49u:v1','twse:twtauu:v1','twse:twtb8u:v1']
+   ELSE ARRAY['tpex:exright-cal:v1','tpex:reduction-reference:v1','tpex:change-reference:v1'] END feeds
+ FROM public.tw_trading_sessions_v3 WHERE status='completed';
+
+INSERT INTO public.opportunity_corporate_action_feed_evidence_v3
+ SELECT f.snapshot_id,n-1,feed,repeat('a',64),512,CASE WHEN n=3 AND f.post_price IS NOT NULL THEN 1 ELSE 0 END,f.recorded_at
+ FROM public.fixture_adjustment_inputs f CROSS JOIN LATERAL unnest(f.feeds) WITH ORDINALITY q(feed,n);
+INSERT INTO public.opportunity_corporate_action_events_v3
+ SELECT snapshot_id,0,'2330','par_value_change',feeds[3],100,post_price,post_price/100,
+   public.vnext_launch_csv_hash_v1(jsonb_build_array('corporate-action-source-row-v3.1',market,session_id,'2330',
+    'par_value_change',100,post_price,feeds[3])),recorded_at
+ FROM public.fixture_adjustment_inputs WHERE post_price IS NOT NULL;
+
+SET timezone='UTC';
+INSERT INTO public.opportunity_corporate_action_snapshots_v3
+ SELECT f.snapshot_id,f.market,f.session_id,f.session_authority_id,'tw-corporate-action-v3.1',f.provider,f.collected_at,
+  f.recorded_at,CASE WHEN f.post_price IS NULL THEN 0 ELSE 1 END,
+  public.vnext_launch_csv_hash_v1(jsonb_build_array('corporate-action-snapshot-v3.1',
+   f.market,f.session_id,f.session_authority_id,'tw-corporate-action-v3.1',f.provider,to_char(f.collected_at,'YYYY-MM-DD"T"HH24:MI:SS')||'+00:00',
+   (SELECT jsonb_agg(jsonb_build_array(e.feed_identity,e.response_byte_count,e.response_sha256,e.parsed_row_count) ORDER BY e.feed_ordinal)
+    FROM public.opportunity_corporate_action_feed_evidence_v3 e WHERE e.snapshot_id=f.snapshot_id),
+   (SELECT coalesce(jsonb_agg(jsonb_build_array(e.symbol,e.event_kind,e.pre_action_reference_price,e.post_action_reference_price,e.feed_identity,e.source_row_ref)
+    ORDER BY e.event_ordinal),'[]'::jsonb) FROM public.opportunity_corporate_action_events_v3 e WHERE e.snapshot_id=f.snapshot_id)))
+ FROM public.fixture_adjustment_inputs f;
+INSERT INTO public.fixture_action_terms
+ SELECT snapshot_id,event_ordinal,jsonb_build_object('event',jsonb_build_object('snapshotId',snapshot_id,'ordinal',event_ordinal,'kind',event_kind),
+  'terms',jsonb_build_object('cashDividendPerOldShare',0,'cashReturnPerOldShare',0,'subscriptionCashPerOldShare',0),
+  'source',jsonb_build_object('knownAt',recorded_at),'receiptHash',repeat('b',64))
+ FROM public.opportunity_corporate_action_events_v3;
+`;
+const verifyAdjustment = `
+CREATE TEMP TABLE fixture_original_score AS SELECT * FROM public.vnext_launch_score_evidence_v1;
+DO $adjusted$
+DECLARE v text; result jsonb; price jsonb; item record; saved_cutoff timestamptz:='2024-02-29T13:30Z';
+ expected_factor double precision:=0.1::double precision*0.1::double precision*0.3::double precision;
+BEGIN
+ FOR item IN SELECT * FROM public.vnext_launch_score_evidence_v1 LOOP
+  v:=item.source_inputs->'price'->'rawRows'->0->>'exchange';
+  price:=public.vnext_launch_price_v1((item.source_inputs->'price'->'rawRows'->0->>'stock_id')::uuid,item.symbol,v,item.source_inputs->'calendar',saved_cutoff);
+  IF price IS NULL OR price ? 'gap' THEN RAISE EXCEPTION 'fixture must use actual frozen price authority, got %',price->>'gap';END IF;
+  UPDATE public.vnext_launch_score_evidence_v1 s
+  SET source_inputs=item.source_inputs||jsonb_build_object('price',price),
+      source_hash=public.vnext_launch_csv_hash_v1(item.source_inputs||jsonb_build_object('price',price))
+  WHERE s.score_revision=item.score_revision;
+ END LOOP;
+
+ FOR v IN SELECT unnest(ARRAY['TWSE','TPEX']) LOOP
+  result:=public.vnext_launch_chart_adjusted_internal_v1(md5(v||'run')::uuid,'2330');
+  IF result IS NULL OR result->>'schemaVersion'<>'launch-chart-private-adjusted-v1'
+   OR jsonb_array_length(result->'bars')-jsonb_array_length(result->'actionPins')<>1
+   OR result->>'displayFrom'<>'2021-02-28' OR result ? 'candles'
+   OR (result->'bars'->-1->>'factor')::double precision<>1
+   OR (result->>'knownAt')::timestamptz>saved_cutoff THEN RAISE EXCEPTION 'wrong adjusted chart basis for %',v;END IF;
+  IF (result->'bars'->0->>'factor')::double precision IS DISTINCT FROM
+   (CASE v WHEN 'TWSE' THEN expected_factor ELSE 1::double precision END)
+   THEN RAISE EXCEPTION 'chronological binary64 factor or identity changed';END IF;
+ END LOOP;
+
+ IF has_function_privilege('anon','public.vnext_launch_chart_adjusted_internal_v1(uuid,text)','EXECUTE')
+  OR has_function_privilege('authenticated','public.vnext_launch_chart_adjusted_internal_v1(uuid,text)','EXECUTE')
+  OR has_function_privilege('service_role','public.vnext_launch_chart_adjusted_internal_v1(uuid,text)','EXECUTE')
+  THEN RAISE EXCEPTION 'unexpected public adjustment grant';END IF;
+
+ BEGIN
+  UPDATE public.fixture_action_terms SET receipt=jsonb_set(receipt,'{terms,cashDividendPerOldShare}','1')
+  WHERE snapshot_id=md5('TWSE2022-09-01')::uuid;
+  IF public.vnext_launch_chart_adjusted_internal_v1(md5('TWSErun')::uuid,'2330') IS NOT NULL
+   THEN RAISE EXCEPTION 'unresolved cash was applied';END IF;
+  RAISE SQLSTATE 'P1001';
+ EXCEPTION WHEN SQLSTATE 'P1001' THEN NULL;
+ END;
+ BEGIN
+  DELETE FROM public.opportunity_corporate_action_feed_evidence_v3 WHERE snapshot_id=md5('TWSE2022-09-01')::uuid AND feed_ordinal=1;
+  IF public.vnext_launch_chart_adjusted_internal_v1(md5('TWSErun')::uuid,'2330') IS NOT NULL
+   THEN RAISE EXCEPTION 'missing older feed treated as a known action';END IF;
+  RAISE SQLSTATE 'P1001';
+ EXCEPTION WHEN SQLSTATE 'P1001' THEN NULL;
+ END;
+ BEGIN
+  UPDATE public.fixture_action_terms SET receipt=jsonb_set(receipt,'{source,knownAt}','"2024-03-01T13:30Z"')
+  WHERE snapshot_id=md5('TWSE2022-09-01')::uuid;
+  IF public.vnext_launch_chart_adjusted_internal_v1(md5('TWSErun')::uuid,'2330') IS NOT NULL
+   THEN RAISE EXCEPTION 'future terms filled an old gap';END IF;
+  RAISE SQLSTATE 'P1001';
+ EXCEPTION WHEN SQLSTATE 'P1001' THEN NULL;
+ END;
+ BEGIN
+  UPDATE public.fixture_action_terms SET receipt=jsonb_set(receipt,'{receiptHash}',to_jsonb(repeat('c',64)))
+  WHERE snapshot_id=md5('TWSE2023-12-04')::uuid;
+  IF public.vnext_launch_chart_adjusted_internal_v1(md5('TWSErun')::uuid,'2330') IS NOT NULL
+   THEN RAISE EXCEPTION 'chart accepted a different receipt than the score';END IF;
+  RAISE SQLSTATE 'P1001';
+ EXCEPTION WHEN SQLSTATE 'P1001' THEN NULL;
+ END;
+ BEGIN
+  UPDATE public.vnext_launch_score_evidence_v1
+  SET source_inputs=jsonb_set(source_inputs,'{price,bars,239,close}','999')
+  WHERE score_revision=md5('TWSEscore')::uuid;
+  UPDATE public.vnext_launch_score_evidence_v1 SET source_hash=public.vnext_launch_csv_hash_v1(source_inputs)
+  WHERE score_revision=md5('TWSEscore')::uuid;
+  IF public.vnext_launch_chart_adjusted_internal_v1(md5('TWSErun')::uuid,'2330') IS NOT NULL
+   THEN RAISE EXCEPTION 'chart did not compare the exact adjusted overlapping bars';END IF;
+  RAISE SQLSTATE 'P1001';
+ EXCEPTION WHEN SQLSTATE 'P1001' THEN NULL;
+ END;
+END $adjusted$;
+UPDATE public.vnext_launch_score_evidence_v1 s SET source_inputs=o.source_inputs, source_hash=o.source_hash
+FROM fixture_original_score o WHERE s.score_revision=o.score_revision;
+`;
 const baseline = fs.readFileSync(new URL('../migrations/20261115_vnext_launch_ranking_v1.sql',import.meta.url),'utf8');
 const migration = fs.readFileSync(new URL('../migrations/20261116_20_vnext_launch_chart_basis_v1.sql',import.meta.url),'utf8');
+const adjustment = fs.readFileSync(new URL('../migrations/20261116_21_vnext_launch_chart_adjustment_v1.sql',import.meta.url),'utf8');
 const extractFunction = (name) => {
   const start = baseline.indexOf('CREATE FUNCTION public.'+name+'(');
   assert.ok(start >= 0, name);
@@ -170,7 +313,7 @@ const extractFunction = (name) => {
   return baseline.slice(start,end+8);
 };
 
-test('native launch chart basis preserves predecessor calendar, cutoff, row bindings and private ACLs',()=>{
+test('native launch chart preserves pricing cutoffs, immutable score overlap, CA-D1 and private ACLs',()=>{
   const directory = fs.mkdtempSync(path.join(os.tmpdir(),'stockinsider-launch-chart-pg-'));
   const data = path.join(directory,'data');
   const socket = path.join(directory,'socket');
@@ -198,6 +341,13 @@ test('native launch chart basis preserves predecessor calendar, cutoff, row bind
       'GRANT EXECUTE ON FUNCTION public.vnext_launch_price_rows_internal_v1(uuid,text,date,date,timestamptz) TO stockinsider_vnext_owner;\n' +
       seed);
     sql(migration);
+    const finiteStart = baseline.indexOf('CREATE FUNCTION public.vnext_launch_finite_v1(');
+    const finiteEnd = baseline.indexOf('\n$$;',finiteStart);
+    assert.ok(finiteStart >= 0 && finiteEnd > finiteStart);
+    sql(actionSetup + baseline.slice(finiteStart,finiteEnd+4) + '\n' +
+      extractFunction('vnext_launch_action_day_v1') + '\n' + extractFunction('vnext_launch_price_v1'));
+    sql(adjustment);
+    sql(verifyAdjustment);
     sql(verify);
   } finally {
     if (started) run('pg_ctl',['-D',data,'-w','-m','immediate','stop']);

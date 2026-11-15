@@ -134,7 +134,7 @@ END $$;
 
 CREATE FUNCTION public.vnext_launch_action_day_v1(market_name text,calendar_id uuid,day date,target text,cutoff timestamptz) RETURNS jsonb
 LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public SET timezone='UTC' SET extra_float_digits=3 AS $$
-DECLARE selected public.opportunity_corporate_action_snapshots_v3;feeds jsonb;events jsonb;f jsonb;e jsonb;
+DECLARE selected public.opportunity_corporate_action_snapshots_v3;feeds jsonb;events jsonb;feed_item jsonb;event_item jsonb;
  expected text[];feed_tuples jsonb;event_tuples jsonb;timestamp_text text;fingerprint text;i integer;known_at timestamptz;target_event jsonb;
 BEGIN
  IF market_name NOT IN('TWSE','TPEX') OR calendar_id IS NULL OR day IS NULL OR cutoff IS NULL OR cutoff>statement_timestamp() THEN RETURN NULL;END IF;
@@ -156,29 +156,29 @@ BEGIN
   ELSE ARRAY['tpex:exright-cal:v1','tpex:reduction-reference:v1','tpex:change-reference:v1'] END;
  known_at:=selected.recorded_at;
  FOR i IN 0..2 LOOP
-  f:=feeds->i;
-  IF (f->>'feed_ordinal')::integer<>i OR f->>'feed_identity'<>expected[i+1] OR f->>'response_sha256'!~'^[a-f0-9]{64}$'
-   OR (f->>'response_byte_count')::integer NOT BETWEEN 0 AND 8388608 OR (f->>'parsed_row_count')::integer NOT BETWEEN 0 AND 20000
-   OR (f->>'recorded_at')::timestamptz>cutoff THEN RETURN NULL;END IF;
-  known_at:=greatest(known_at,(f->>'recorded_at')::timestamptz);
+  feed_item:=feeds->i;
+  IF (feed_item->>'feed_ordinal')::integer<>i OR feed_item->>'feed_identity'<>expected[i+1] OR feed_item->>'response_sha256'!~'^[a-f0-9]{64}$'
+   OR (feed_item->>'response_byte_count')::integer NOT BETWEEN 0 AND 8388608 OR (feed_item->>'parsed_row_count')::integer NOT BETWEEN 0 AND 20000
+   OR (feed_item->>'recorded_at')::timestamptz>cutoff THEN RETURN NULL;END IF;
+  known_at:=greatest(known_at,(feed_item->>'recorded_at')::timestamptz);
  END LOOP;
  i:=0;
- FOR e IN SELECT value FROM jsonb_array_elements(events) LOOP
-  IF (e->>'event_ordinal')::integer<>i OR e->>'symbol'!~'^[0-9A-Za-z]{2,12}$' OR (i>0 AND (e->>'symbol') COLLATE "C"<=(events->(i-1)->>'symbol') COLLATE "C")
-   OR e->>'event_kind' NOT IN('ex_right_dividend','capital_reduction','par_value_change')
-   OR e->>'feed_identity'<>expected[array_position(ARRAY['ex_right_dividend','capital_reduction','par_value_change'],e->>'event_kind')]
-   OR NOT public.vnext_launch_finite_v1((e->>'pre_action_reference_price')::double precision)
-   OR NOT public.vnext_launch_finite_v1((e->>'post_action_reference_price')::double precision)
-   OR NOT public.vnext_launch_finite_v1((e->>'daily_adjustment_factor')::double precision)
-   OR (e->>'pre_action_reference_price')::double precision<=0 OR (e->>'post_action_reference_price')::double precision<=0
-   OR (e->>'daily_adjustment_factor')::double precision<=0 OR (e->>'recorded_at')::timestamptz>cutoff
-   OR abs((e->>'daily_adjustment_factor')::double precision-(e->>'post_action_reference_price')::double precision/(e->>'pre_action_reference_price')::double precision)>=1e-10::double precision
+ FOR event_item IN SELECT value FROM jsonb_array_elements(events) LOOP
+  IF (event_item->>'event_ordinal')::integer<>i OR event_item->>'symbol'!~'^[0-9A-Za-z]{2,12}$' OR (i>0 AND (event_item->>'symbol') COLLATE "C"<=(events->(i-1)->>'symbol') COLLATE "C")
+   OR event_item->>'event_kind' NOT IN('ex_right_dividend','capital_reduction','par_value_change')
+   OR event_item->>'feed_identity'<>expected[array_position(ARRAY['ex_right_dividend','capital_reduction','par_value_change'],event_item->>'event_kind')]
+   OR NOT public.vnext_launch_finite_v1((event_item->>'pre_action_reference_price')::double precision)
+   OR NOT public.vnext_launch_finite_v1((event_item->>'post_action_reference_price')::double precision)
+   OR NOT public.vnext_launch_finite_v1((event_item->>'daily_adjustment_factor')::double precision)
+   OR (event_item->>'pre_action_reference_price')::double precision<=0 OR (event_item->>'post_action_reference_price')::double precision<=0
+   OR (event_item->>'daily_adjustment_factor')::double precision<=0 OR (event_item->>'recorded_at')::timestamptz>cutoff
+   OR abs((event_item->>'daily_adjustment_factor')::double precision-(event_item->>'post_action_reference_price')::double precision/(event_item->>'pre_action_reference_price')::double precision)>=1e-10::double precision
    THEN RETURN NULL;END IF;
-  IF e->>'source_row_ref'<>public.vnext_launch_csv_hash_v1(jsonb_build_array('corporate-action-source-row-v3.1',market_name,day,e->>'symbol',e->>'event_kind',
-    e->'pre_action_reference_price',e->'post_action_reference_price',e->>'feed_identity'))
+  IF event_item->>'source_row_ref'<>public.vnext_launch_csv_hash_v1(jsonb_build_array('corporate-action-source-row-v3.1',market_name,day,event_item->>'symbol',event_item->>'event_kind',
+    event_item->'pre_action_reference_price',event_item->'post_action_reference_price',event_item->>'feed_identity'))
    THEN RETURN jsonb_build_object('gap','launch_action_numeric_hash_codec_unavailable');END IF;
-  IF e->>'symbol'=target THEN target_event:=e;END IF;
-  known_at:=greatest(known_at,(e->>'recorded_at')::timestamptz);i:=i+1;
+  IF event_item->>'symbol'=target THEN target_event:=event_item;END IF;
+  known_at:=greatest(known_at,(event_item->>'recorded_at')::timestamptz);i:=i+1;
  END LOOP;
  SELECT jsonb_agg(jsonb_build_array(f->>'feed_identity',f->'response_byte_count',f->>'response_sha256',f->'parsed_row_count') ORDER BY (f->>'feed_ordinal')::integer)
  INTO feed_tuples FROM jsonb_array_elements(feeds) f;
@@ -599,7 +599,7 @@ GRANT EXECUTE ON FUNCTION public.vnext_launch_price_rows_internal_v1(uuid,text,d
 CREATE FUNCTION public.vnext_launch_price_v1(stock uuid,target text,market_name text,calendar jsonb,cutoff timestamptz) RETURNS jsonb
 LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public SET timezone='UTC' SET extra_float_digits=3 AS $$
 DECLARE sessions jsonb:=calendar->'sessions';raw_rows jsonb;selected_rows jsonb:='[]'::jsonb;action_rows jsonb:='[]'::jsonb;
- c jsonb;p jsonb;a jsonb;e jsonb;terms jsonb;receipt jsonb;factor double precision;adjusted jsonb:='[]'::jsonb;bar jsonb;value double precision;
+ c jsonb;p jsonb;a jsonb;e jsonb;terms jsonb;receipt jsonb;factor double precision;adjusted jsonb:='[]'::jsonb;bar jsonb;
  known_at timestamptz;day date;first_day date;signal_day date;i integer;j integer;
 BEGIN
  IF stock IS NULL OR target!~'^[0-9]{4}$' OR market_name NOT IN('TWSE','TPEX') OR sessions IS NULL OR jsonb_array_length(sessions)<>240 THEN RETURN NULL;END IF;
