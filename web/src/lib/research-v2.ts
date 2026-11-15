@@ -10,7 +10,10 @@ import { THREADS_CANONICAL_ORIGIN } from './source-auth';
 import { APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS, UNAVAILABLE_TELEGRAM_PUBLIC_CHANNELS, authorizedPodcastRssAllowlist, podcastContentAnalyzable } from './source-policy';
 import { bullTalkLicenseReadiness, parseLicensedBullTalkFeed } from './bulltalk-feed';
 import { THREADS_KEYWORD_SEARCH_URL, assertThreadsKeywordSearchEndpoint } from './threads-api';
-import { derivePodcastLedgerSemantics, parsePodcastNamespaceFeed, parsePublisherChapters, parsePublisherTranscript, type TimedPodcastSegment } from './podcast-rss';
+import {
+  derivePodcastLedgerSemantics, locatePodcastStockMentions, parsePodcastNamespaceFeed, podcastStockCodes,
+  selectTimedPublisherTranscript, type PodcastArtifactReference,
+} from './podcast-rss';
 import { fetchTextWithRetry, sourceFetchFailureCode } from './source-fetch';
 import { assertThreadsPublicSearchReady, threadsTokenRegistryMetadata } from './threads-token';
 import { mergeThreadsRunMetadata, normalizeThreadsAuthor, normalizeThreadsCursor, normalizeThreadsPermalink, summarizeThreadsAuthors, threadsMarketQueries } from './threads-discovery';
@@ -5359,7 +5362,7 @@ type PodcastEpisodeCandidate = {
   platform: 'youtube' | 'rss' | 'apple_podcast' | 'spotify' | 'other';
   sourceMode?: string;
   rssUrl?: string | null;
-  transcript?: { url: string; type: string; language: string | null } | null;
+  transcripts?: PodcastArtifactReference[];
   chapters?: { url: string; type: string; language: string | null } | null;
 };
 
@@ -5393,7 +5396,7 @@ function parseRssItems(xmlText: string) {
       description: episode.description,
       platform: 'rss',
       sourceMode: 'publisher_rss',
-      transcript: episode.transcript,
+      transcripts: episode.transcripts,
       chapters: episode.chapters,
     }));
   }
@@ -5586,37 +5589,12 @@ function approvedPodcastArtifactUrl(value: string, rssUrl: string | null | undef
   return parsed;
 }
 
-async function fetchPublisherPodcastArtifact(
-  reference: NonNullable<PodcastEpisodeCandidate['transcript']>,
-  rssUrl: string | null | undefined,
-  parser: (type: string, body: string) => TimedPodcastSegment[],
-): Promise<TimedPodcastSegment[]> {
+async function fetchPublisherPodcastArtifact(reference: PodcastArtifactReference, rssUrl: string | null | undefined) {
   const endpoint = approvedPodcastArtifactUrl(reference.url, rssUrl);
-  const allowedOrigins = new Set<string>([endpoint.origin]);
-  const response = await fetchPinnedHttpsText({ url: endpoint, allowedOrigins, maxBytes: 2_000_000, timeoutMs: 12_000,
-    headers: { accept: reference.type, 'user-agent': 'StockInsider/2.3 Publisher-Podcast-Metadata' },
+  const response = await fetchPinnedHttpsText({ url: endpoint, allowedOrigins: new Set([endpoint.origin]),
+    maxBytes: 2_000_000, timeoutMs: 12_000, headers: { accept: reference.type, 'user-agent': 'StockInsider/2.3 Publisher-Podcast-Metadata' },
   });
-  return parser(reference.type, response.body);
-}
-
-async function loadPublisherPodcastSegments(episode: PodcastEpisodeCandidate): Promise<{
-  segments: TimedPodcastSegment[];
-  source: 'publisher_transcript' | 'publisher_chapters' | null;
-  failure: string | null;
-}> {
-  try {
-    if (episode.transcript) {
-      const segments = await fetchPublisherPodcastArtifact(episode.transcript, episode.rssUrl, parsePublisherTranscript);
-      if (segments.length > 0) return { segments, source: 'publisher_transcript', failure: null };
-    }
-    if (episode.chapters) {
-      const segments = await fetchPublisherPodcastArtifact(episode.chapters, episode.rssUrl, parsePublisherChapters);
-      if (segments.length > 0) return { segments, source: 'publisher_chapters', failure: null };
-    }
-    return { segments: [], source: null, failure: null };
-  } catch (error) {
-    return { segments: [], source: null, failure: compactText((error as Error).message).slice(0, 200) };
-  }
+  return response.body;
 }
 
 async function fetchYoutubeTranscript(videoId: string) {
@@ -5688,9 +5666,7 @@ async function transcribeWithWhisper(audioUrl: string): Promise<{ text: string; 
 function extractPodcastInsights(text: string, validSymbols: Set<string>) {
   // Publication years and episode numbers are not tickers. Metadata must
   // contain an explicit stock marker before it can create a weak signal.
-  const symbols = unique(Array.from(text.matchAll(/(?:台股|股票(?:代號)?|股號|標的|ticker|TWSE|TPEX)\s*[:：#]?\s*([1-9]\d{3})\b/giu))
-    .map((match) => match[1])
-    .filter((symbol) => validSymbols.has(symbol))).slice(0, 20);
+  const symbols = podcastStockCodes(text, validSymbols).slice(0, 20);
   const thesisPhrases = text.match(/[^。！？]*(?:看好|看多|目標|進場|買進|上漲|突破)[^。！？]*/g) || [];
   const riskPhrases = text.match(/[^。！？]*(?:風險|看空|看壞|下跌|停損|謹慎|回檔)[^。！？]*/g) || [];
   return {
@@ -5773,9 +5749,11 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
       let kolTranscriptsReady = 0;
       for (const ep of uniqueEpisodes) {
         const recordedContentRights = Boolean(ep.rssUrl && podcastContentAnalyzable(ep.rssUrl));
-        const publisherContent = await loadPublisherPodcastSegments(ep);
-        const contentAnalyzable = recordedContentRights || publisherContent.segments.length > 0;
-        const timedSegments = publisherContent.segments.slice(0, 1000);
+        const publisherContent = await selectTimedPublisherTranscript(recordedContentRights, ep.transcripts ?? [],
+          reference => fetchPublisherPodcastArtifact(reference, ep.rssUrl));
+        const transcript = publisherContent.status === 'ready' ? publisherContent : null;
+        const contentAnalyzable = transcript !== null;
+        const locators = transcript ? locatePodcastStockMentions(transcript.segments, validSymbols) : [];
         const { data: storedEpisode, error } = await supabase.from('podcast_episodes').upsert(
           {
             source_entity_id: sourceEntityId,
@@ -5789,7 +5767,7 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
             audio_url: null,
             external_id: extractYoutubeVideoId(ep.link) || null,
             published_at: ep.pubDate,
-            transcript_status: publisherContent.source === 'publisher_transcript' ? 'ready' : 'transcript_unavailable',
+            transcript_status: transcript ? 'ready' : 'transcript_unavailable',
             content_analyzable: contentAnalyzable,
             index_updated_at: nowIso(),
             metadata: {
@@ -5799,15 +5777,16 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
               rss_url: ep.rssUrl || null,
               index_updated: true,
               content_analyzable: contentAnalyzable,
-              content_rights_basis: publisherContent.segments.length > 0 ? 'publisher_provided_namespace_artifact'
-                : recordedContentRights ? 'recorded_creator_rights' : 'rss_index_only',
+              content_rights_basis: recordedContentRights ? 'recorded_creator_content_rights' : 'rss_index_only',
               description: ep.description || null,
               audio_reference_url: ep.audioUrl || null,
               audio_copied: false,
-              transcript_reference: ep.transcript || null,
-              chapters_reference: ep.chapters || null,
-              timed_segments: timedSegments,
-              publisher_artifact_failure: publisherContent.failure,
+              transcript_reference: transcript ? { type: transcript.reference.type, language: transcript.reference.language } : null,
+              transcript_artifact_sha256: transcript?.artifactHash ?? null,
+              spoken_locator_version: transcript ? 'podcast-spoken-locator-v1' : null,
+              spoken_stock_mentions: locators,
+              chapter_index_available: Boolean(ep.chapters),
+              publisher_artifact_failure: transcript ? null : publisherContent.status,
             },
             updated_at: nowIso(),
           },
@@ -5816,18 +5795,18 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
         if (error && !String(error.message).includes('duplicate')) throw new Error(error.message);
         totalEpisodes += 1;
 
-        if (contentAnalyzable) analyzableEpisodes += 1;
-        const contentText = publisherContent.segments.length > 0
-          ? publisherContent.segments.map((segment) => `[${segment.startSeconds}s] ${segment.text}`).join('\n')
-          : recordedContentRights ? compactText(`${ep.title}。${ep.description || ''}`) : '';
-        if (publisherContent.source === 'publisher_transcript' && storedEpisode?.id && contentText) {
+        if (!transcript) continue;
+        analyzableEpisodes += 1;
+        const symbols = locators.map(item => item.symbol);
+        if (storedEpisode?.id) {
+          const contentText = transcript.segments.map(segment => `[${segment.startSeconds}s] ${segment.text}`).join('\n');
           const transcriptInsights = extractPodcastInsights(contentText, validSymbols);
           const { error: transcriptError } = await supabase.from('podcast_transcripts').upsert({
             podcast_episode_id: storedEpisode.id,
             transcript_text: contentText.slice(0, 50_000),
-            language: ep.transcript?.language || null,
+            language: transcript.reference.language,
             transcript_source: 'rss',
-            extracted_mentions: transcriptInsights.symbols,
+            extracted_mentions: symbols,
             extracted_thesis: transcriptInsights.thesis,
             extracted_risks: transcriptInsights.risks,
             confidence: 0.66,
@@ -5838,39 +5817,37 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
           kolTranscriptsReady += 1;
         }
 
-        // A public RSS item is an index. Claim extraction is separately
-        // permissioned by a publisher namespace artifact or recorded rights.
-        if (!contentAnalyzable) continue;
-        const weakText = compactText(contentText);
-        const weakInsights = extractPodcastInsights(weakText, validSymbols);
-        for (const symbol of weakInsights.symbols) matchedSymbols.add(symbol);
-        if (weakInsights.symbols.length > 0) {
+        for (const symbol of symbols) matchedSymbols.add(symbol);
+        if (symbols.length > 0 && ep.pubDate) {
+          // The shared source document retains only a derived mention and its
+          // position. It can link back to the public episode without carrying
+          // transcript text or an artifact URL into public or shared payloads.
+          const locatorText = locators.map(item => `股票代號 ${item.symbol}，${item.startSeconds}–${item.endSeconds} 秒`).join('。');
           const docsWritten = await upsertSourceRawDocuments([{
             sourceEntityId,
             platform: 'podcast',
             documentUrl: ep.link,
-            title: `[Podcast內容] ${kolName}: ${ep.title}`,
-            summary: weakText.slice(0, 600),
-            contentText: weakText.slice(0, 3000),
+            title: `[Podcast口述定位] ${kolName}: ${ep.title}`,
+            summary: locatorText.slice(0, 600),
+            contentText: locatorText,
             publishedAt: ep.pubDate,
-            symbols: weakInsights.symbols,
-            sentimentLabel: weakInsights.thesis.length > 0 ? 'bullish' : weakInsights.risks.length > 0 ? 'bearish' : 'neutral',
-            confidence: publisherContent.source === 'publisher_transcript' ? 0.6
-              : publisherContent.source === 'publisher_chapters' ? 0.45 : 0.34,
+            symbols,
+            sentimentLabel: 'neutral',
+            confidence: 0.6,
             metadata: {
               connector: 'podcast_sync',
-              evidence_class: publisherContent.source === 'publisher_transcript'
-                ? 'kol_av_transcript_signal' : 'kol_av_weak_signal',
+              evidence_class: 'kol_av_transcript_signal',
               kol_name: kolName,
-              weak_signal_only: publisherContent.source !== 'publisher_transcript',
+              weak_signal_only: true,
               source_mode: ep.sourceMode || null,
               rss_url: ep.rssUrl || null,
               index_updated: true,
               content_analyzable: true,
-              timed_segments: timedSegments,
-              content_source: publisherContent.source || 'recorded_rights_metadata',
-              license_basis: publisherContent.segments.length > 0
-                ? 'creator_published_podcast_namespace_artifact' : 'recorded_creator_content_rights',
+              spoken_locator_version: 'podcast-spoken-locator-v1',
+              spoken_stock_mentions: locators,
+              transcript_artifact_sha256: transcript.artifactHash,
+              content_source: 'publisher_transcript',
+              license_basis: 'recorded_creator_content_rights',
             },
           }]);
           weakSignalsWritten += docsWritten;

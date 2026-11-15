@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 export const PODCAST_NAMESPACE = 'https://podcastindex.org/namespace/1.0';
 
 export type PodcastArtifactReference = {
@@ -14,6 +16,7 @@ export type PodcastNamespaceEpisode = {
   audioUrl: string | null;
   description: string | null;
   transcript: PodcastArtifactReference | null;
+  transcripts: PodcastArtifactReference[];
   chapters: PodcastArtifactReference | null;
 };
 
@@ -85,7 +88,10 @@ export function parsePodcastNamespaceFeed(xml: string): PodcastNamespaceEpisode[
       }
       return null;
     };
-    const transcriptAttrs = namespacedTag('transcript');
+    const transcripts = [...body.matchAll(/<([A-Za-z_][\w.-]*):transcript\b([^>]*)\/?\s*>/gu)]
+      .filter(match => namespacePrefixes.includes(match[1]))
+      .map(match => approvedArtifactReference(match[2], true))
+      .filter((reference): reference is PodcastArtifactReference => reference !== null);
     const chapterAttrs = namespacedTag('chapters');
     const enclosureAttrs = (/<enclosure\b([^>]*)\/?\s*>/iu.exec(body) || [])[1] || '';
     return [{
@@ -95,55 +101,129 @@ export function parsePodcastNamespaceFeed(xml: string): PodcastNamespaceEpisode[
       publishedAt: element(body, ['pubDate', 'published', 'updated']),
       audioUrl: attribute(enclosureAttrs, 'url'),
       description: element(body, ['description', 'summary', 'itunes:summary']),
-      transcript: transcriptAttrs ? approvedArtifactReference(transcriptAttrs, true) : null,
+      transcript: transcripts[0] ?? null,
+      transcripts,
       chapters: chapterAttrs ? approvedArtifactReference(chapterAttrs, false) : null,
     }];
   });
 }
 
-function parseClock(value: string): number | null {
-  const parts = value.trim().replace(',', '.').split(':').map(Number);
-  if (parts.some((part) => !Number.isFinite(part)) || parts.length < 2 || parts.length > 3) return null;
-  const seconds = parts.length === 3 ? parts[0] * 3600 + parts[1] * 60 + parts[2] : parts[0] * 60 + parts[1];
-  return seconds >= 0 ? seconds : null;
+function mediaType(value: string) {
+  return value.split(';')[0].trim().toLowerCase();
+}
+
+function parseClock(value: string, isVtt: boolean): number {
+  const match = isVtt
+    ? /^(?:(\d{2,}):)?([0-5]\d):([0-5]\d)\.(\d{3})$/u.exec(value)
+    : /^(\d{2,}):([0-5]\d):([0-5]\d),(\d{3})$/u.exec(value);
+  if (!match) throw Error('podcast_transcript_cue_invalid');
+  return Number(match[1] ?? 0) * 3600 + Number(match[2]) * 60 + Number(match[3]) + Number(match[4]) / 1000;
+}
+
+function timedTranscriptType(mimeType: string) {
+  return ['text/vtt', 'application/x-subrip', 'application/srt', 'application/json'].includes(mediaType(mimeType));
 }
 
 export function parsePublisherTranscript(type: string, body: string): TimedPodcastSegment[] {
-  if (Buffer.byteLength(body, 'utf8') > 2_000_000) throw new Error('podcast_transcript_too_large');
-  const normalizedType = type.split(';')[0].trim().toLowerCase();
-  if (normalizedType === 'text/vtt' || normalizedType === 'application/x-subrip' || normalizedType === 'application/srt') {
-    return body.split(/\r?\n\r?\n/gu).flatMap((block) => {
-      const lines = block.split(/\r?\n/gu).map((line) => line.trim()).filter(Boolean);
-      const timingIndex = lines.findIndex((line) => line.includes('-->'));
-      if (timingIndex < 0) return [];
-      const [rawStart, rawEnd] = lines[timingIndex].split('-->').map((value) => value.trim().split(/\s/u)[0]);
-      const startSeconds = parseClock(rawStart);
-      const endSeconds = parseClock(rawEnd);
-      const text = lines.slice(timingIndex + 1).join(' ').replace(/<[^>]+>/gu, '').trim();
-      return startSeconds === null || !text ? [] : [{ startSeconds, endSeconds, text }];
-    }).slice(0, 5000);
+  if (Buffer.byteLength(body, 'utf8') > 2_000_000) throw Error('podcast_transcript_too_large');
+  const normalizedType = mediaType(type);
+  if (!timedTranscriptType(type)) throw Error('podcast_transcript_type_not_supported');
+  const segments = normalizedType === 'application/json' ? jsonTranscript(body) : captionTranscript(body, normalizedType === 'text/vtt');
+  if (segments.length > 5000) throw Error('podcast_transcript_too_many_cues');
+  let previous = 0;
+  for (const cue of segments) {
+    if (!Number.isFinite(cue.startSeconds) || cue.startSeconds < previous || !Number.isFinite(cue.endSeconds)
+      || cue.endSeconds === null || cue.endSeconds <= cue.startSeconds || !cue.text) throw Error('podcast_transcript_cue_invalid');
+    previous = cue.startSeconds;
   }
-  if (normalizedType === 'application/json') {
-    const value = JSON.parse(body) as unknown;
-    const rows = Array.isArray(value) ? value
-      : value && typeof value === 'object' && Array.isArray((value as { segments?: unknown }).segments)
-        ? (value as { segments: unknown[] }).segments : [];
-    return rows.flatMap((raw) => {
-      if (!raw || typeof raw !== 'object') return [];
-      const row = raw as Record<string, unknown>;
-      const startSeconds = Number(row.startTime ?? row.start ?? row.start_seconds);
-      const endValue = row.endTime ?? row.end ?? row.end_seconds;
-      const endSeconds = endValue == null ? null : Number(endValue);
-      const text = String(row.body ?? row.text ?? row.title ?? '').replace(/\s+/gu, ' ').trim();
-      return Number.isFinite(startSeconds) && startSeconds >= 0 && text
-        ? [{ startSeconds, endSeconds: Number.isFinite(endSeconds) ? endSeconds : null, text }] : [];
-    }).slice(0, 5000);
+  return segments;
+}
+
+function jsonTranscript(body: string): TimedPodcastSegment[] {
+  const value = JSON.parse(body) as unknown;
+  const rows = Array.isArray(value) ? value
+    : value && typeof value === 'object' && 'segments' in value && Array.isArray(value.segments) ? value.segments : null;
+  if (!rows) throw Error('podcast_transcript_cue_invalid');
+  if (rows.length > 5000) throw Error('podcast_transcript_too_many_cues');
+  return rows.map(raw => {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw Error('podcast_transcript_cue_invalid');
+    const row = raw as Record<string, unknown>;
+    const startSeconds = row.startTime ?? row.start ?? row.start_seconds;
+    const endSeconds = row.endTime ?? row.end ?? row.end_seconds;
+    const text = row.body ?? row.text;
+    if (typeof startSeconds !== 'number' || typeof endSeconds !== 'number' || typeof text !== 'string') {
+      throw Error('podcast_transcript_cue_invalid');
+    }
+    return { startSeconds, endSeconds, text: decodeXml(text.replace(/<[^>]+>/gu, '')) };
+  });
+}
+
+function captionTranscript(body: string, isVtt: boolean): TimedPodcastSegment[] {
+  const blocks = body.replace(/^\uFEFF/u, '').replace(/\r\n?/gu, '\n').trimEnd().split(/\n[ \t]*\n+/u);
+  if (isVtt) {
+    const header = blocks.shift() ?? '';
+    if (!/^WEBVTT(?:[ \t][^\n]*)?(?:\n|$)/u.test(header) || header.includes('-->')) throw Error('podcast_transcript_header_invalid');
   }
-  if (normalizedType === 'text/plain' || normalizedType === 'text/html') {
-    const text = (normalizedType === 'text/html' ? body.replace(/<[^>]+>/gu, ' ') : body).replace(/\s+/gu, ' ').trim();
-    return text ? [{ startSeconds: 0, endSeconds: null, text }] : [];
+  const segments: TimedPodcastSegment[] = [];
+  for (const block of blocks) {
+    if (!block.trim() || isVtt && /^(?:NOTE(?:[ \t]|\n|$)|STYLE(?:\n|$)|REGION(?:\n|$))/u.test(block)) continue;
+    if (segments.length === 5000) throw Error('podcast_transcript_too_many_cues');
+    const lines = block.split('\n');
+    const timingIndex = lines[0].includes('-->') ? 0 : 1;
+    const timing = /^(\S+)[ \t]+-->[ \t]+(\S+)(?:[ \t]+[^\n]*)?$/u.exec(lines[timingIndex]?.trim() ?? '');
+    if (!timing) throw Error('podcast_transcript_cue_invalid');
+    segments.push({
+      startSeconds: parseClock(timing[1], isVtt), endSeconds: parseClock(timing[2], isVtt),
+      text: decodeXml(lines.slice(timingIndex + 1).join(' ').replace(/<[^>]+>/gu, '')),
+    });
   }
-  throw new Error('podcast_transcript_type_not_supported');
+  return segments;
+}
+
+type TranscriptResult =
+  | { status: 'ready'; reference: PodcastArtifactReference; artifactHash: string; segments: TimedPodcastSegment[] }
+  | { status: 'rights_required' | 'timed_transcript_missing' | 'timed_transcript_unavailable' };
+
+export async function selectTimedPublisherTranscript(
+  contentRights: boolean,
+  references: readonly PodcastArtifactReference[],
+  read: (reference: PodcastArtifactReference) => Promise<string>,
+): Promise<TranscriptResult> {
+  if (!contentRights) return { status: 'rights_required' };
+  const candidates = [...new Map(references.filter(item => timedTranscriptType(item.type))
+    .map(item => [item.url + '\n' + mediaType(item.type), item] as const)).values()].slice(0, 3);
+  if (!candidates.length) return { status: 'timed_transcript_missing' };
+
+  for (const reference of candidates) {
+    try {
+      const body = await read(reference);
+      const segments = parsePublisherTranscript(reference.type, body);
+      if (segments.length) {
+        return { status: 'ready', reference, segments, artifactHash: createHash('sha256').update(body).digest('hex') };
+      }
+    } catch {
+      // A malformed or unavailable timed track must not suppress another
+      // approved rendition of the same episode or expose its raw URL.
+    }
+  }
+  return { status: 'timed_transcript_unavailable' };
+}
+
+export function podcastStockCodes(text: string, validSymbols: ReadonlySet<string>): string[] {
+  return [...new Set(Array.from(text.matchAll(/(?:台股|股票(?:代號)?|股號|標的|ticker|TWSE|TPEX)\s*[:：#]?\s*([1-9]\d{3})\b/giu))
+    .map(match => match[1]).filter(symbol => validSymbols.has(symbol)))];
+}
+
+export function locatePodcastStockMentions(segments: readonly TimedPodcastSegment[], validSymbols: ReadonlySet<string>) {
+  const found = new Map<string, { symbol: string; startSeconds: number; endSeconds: number }>();
+  for (const segment of segments) {
+    if (segment.endSeconds === null) continue;
+    for (const symbol of podcastStockCodes(segment.text, validSymbols)) {
+      if (!found.has(symbol)) found.set(symbol, { symbol, startSeconds: segment.startSeconds, endSeconds: segment.endSeconds });
+      if (found.size === 20) return [...found.values()];
+    }
+  }
+  return [...found.values()];
 }
 
 export function parsePublisherChapters(type: string, body: string): TimedPodcastSegment[] {

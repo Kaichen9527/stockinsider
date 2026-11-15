@@ -1,0 +1,31 @@
+{
+  "task": "T05",
+  "basis": "60da66cf53ea0067e29791d77b6f309595262744",
+  "observedAt": "2026-11-15T16:13:59Z",
+  "environment": "Disposable Contabo staging; Node 22.14.0 with test processes unprivileged and network isolated",
+  "node": {
+    "tests": 13,
+    "pass": 13,
+    "failed": 0,
+    "committedAdapterTests": 11,
+    "isolatedActualSyncFixtureTests": 2,
+    "scopedStrictTypeScript": "passed",
+    "wholeResearchV2Syntax": "passed",
+    "testedResearchV2GitBlob": "bf9ec26dd37e23af1fa1c41109737511b257a77b"
+  },
+  "coverage": [
+    "grant before timed artifact fetch",
+    "multiple transcript formats and fallback",
+    "reject chapter, metadata, untimed, invalid and reversed times",
+    "allow zero start and valid overlap",
+    "strict per-cue stock matching and first locator",
+    "bounded track attempts and cue inventory",
+    "preserve publisher date and URL",
+    "no transcript body or artifact URL in shared source or episode metadata"
+  ],
+  "realEpisodeContentAcquired": false,
+  "providerGrantsChanged": false,
+  "productionChanged": false,
+  "additionalTranscriptionSpending": false,
+  "next": "Obtain approved creator transcript or permission for full time-coded audio analysis, then run actual evidence-to-candidate and independent review."
+}
