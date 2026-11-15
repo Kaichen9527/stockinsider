@@ -44,7 +44,7 @@ type Amounts = { buy: number; sell: number; net: number };
 
 function validateSubtotal(total: Amounts, parts: Amounts[]) {
   for (const field of ['buy', 'sell', 'net'] as const) {
-    const sum = parts.reduce((acc, part) => acc + BigInt(part[field]), 0n);
+    const sum = parts.reduce((acc, part) => acc + BigInt(part[field]), BigInt(0));
     if (sum !== BigInt(total[field])) refuse();
   }
 }
@@ -119,7 +119,7 @@ export function parseTpexMarketFlowReplay(input: unknown, files: ReadonlyMap<str
     if (page.rawSha256 !== parsed.rawSha256) refuse();
     return { ...parsed, capturedAt: page.capturedAt, officialPublishedAt: null };
   });
-  const sum = receipts.reduce((acc, row) => acc + BigInt(row.foreignExcludingDealersNetTwd), 0n);
+  const sum = receipts.reduce((acc, row) => acc + BigInt(row.foreignExcludingDealersNetTwd), BigInt(0));
   const fiveDayTwd = Number(sum);
   if (!Number.isSafeInteger(fiveDayTwd)) refuse();
   return {
@@ -190,7 +190,7 @@ export function parseTwseMarketFlowCsv(day: string, bytes: Uint8Array) {
 }
 
 function sumSafeMoney(amounts: number[]) {
-  const value = Number(amounts.reduce((sum, amount) => sum + BigInt(amount), 0n));
+  const value = Number(amounts.reduce((sum, amount) => sum + BigInt(amount), BigInt(0)));
   if (!Number.isSafeInteger(value)) refuse();
   return value;
 }

@@ -13,7 +13,7 @@ const headers = ['資料日期', '證券代號', '證券名稱', '變更交易',
   '分盤或管理股票撮合循環時間', '停止交易', '財務重點專區'];
 const flag = (value: string) => value === '' || value === 'Ｙ';
 const checkDate = (day: string) => /^\d{4}-\d{2}-\d{2}$/u.test(day) && evidenceInstant(day + 'T00:00:00Z') !== null;
-const taipeiDate = (at: bigint) => new Date(Number(at / 1000n) + 28_800_000).toISOString().slice(0, 10);
+const taipeiDate = (at: bigint) => new Date(Number(at / BigInt(1000)) + 28_800_000).toISOString().slice(0, 10);
 
 type Capture = { datasetId: number; url: string; receivedAt: string; bytes: number; sha256: string; body: Uint8Array };
 

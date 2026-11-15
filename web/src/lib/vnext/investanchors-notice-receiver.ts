@@ -136,7 +136,7 @@ function checkMessage(message: unknown, id: string, start: number, end: number, 
   const value = row(message);
   if (value?.id !== id || typeof value.internalDate !== 'string' || !/^\d{12,14}$/u.test(value.internalDate)) return { kind: 'invalid_message' };
   const received = Number(value.internalDate);
-  if (received < start || received >= end || BigInt(received) * 1000n > observed) return { kind: 'outside_window' };
+  if (received < start || received >= end || BigInt(received) * BigInt(1000) > observed) return { kind: 'outside_window' };
   const payload = row(value.payload);
   if (!payload) return { kind: 'invalid_message' };
   if (!receiverReportsPublisher(payload)) return { kind: 'unverified_sender' };
@@ -161,7 +161,7 @@ export async function collectInvestAnchorsNotices(
 ) {
   const window = planInvestAnchorsMailboxDay(day);
   const started = evidenceInstant(deps.now());
-  if (started === null || started < BigInt(window.startMs) * 1000n || key.byteLength !== 32
+  if (started === null || started < BigInt(window.startMs) * BigInt(1000) || key.byteLength !== 32
     || !Number.isSafeInteger(limits.readBudget) || limits.readBudget < 0 || limits.readBudget > SOURCE_DAY_LIMIT) {
     throw Error('investanchors_mailbox_input_invalid');
   }
@@ -210,7 +210,7 @@ export async function collectInvestAnchorsNotices(
     }
     notices.sort((a, b) => a.receivedAt.localeCompare(b.receivedAt) || a.noticeKey.localeCompare(b.noticeKey));
     const scanStatus = deferred > 0 ? 'deferred' as const
-      : started >= BigInt(window.endMs) * 1000n ? 'scanned' as const : 'open_day' as const;
+      : started >= BigInt(window.endMs) * BigInt(1000) ? 'scanned' as const : 'open_day' as const;
     return { scanStatus, reason: null, checkpointDay: scanStatus === 'scanned' ? window.day : null,
       notices, checkedKeys, deferred, rejected, articleAuthority: false as const, sourceAuthority: false as const };
   } catch {

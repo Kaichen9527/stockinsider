@@ -17,7 +17,7 @@ export async function runLaunchWeeklyThesisAudit(identity:VnextIdentity){
  if(identity.role!=='operator'||!identity.principal)throw Error('vnext_operator_required');
  const {launchRankingEnabled}=await import('./launch-ranking-read.ts');
  if(!launchRankingEnabled())throw Error('launch_ranking_disabled');
- return analysisWriter(async()=>{
+ return analysisWriter(async(leaseOwner)=>{
   const {getSupabaseServerClient}=await import('../supabase-server.ts');
   const reply=await getSupabaseServerClient().rpc('vnext_launch_weekly_audit_due_v1',{p_principal:identity.principal});
   const due=reply.data as Row|null;
@@ -27,8 +27,8 @@ export async function runLaunchWeeklyThesisAudit(identity:VnextIdentity){
   if(due.status!=='due')return {status:due.status,reviewed:0};
   if(typeof due.session!=='string'||!/^\d{4}-\d{2}-\d{2}$/u.test(due.session)||due.activeCount===0)
    throw Error('vnext_launch_weekly_context_unavailable');
-  const result=await auditActiveTheses(identity,{launchSession:due.session},work=>work());
-  if(result.reviewed!==due.activeCount||result.receipt?.reviewed!==due.activeCount)
+  const result=await auditActiveTheses(identity,{launchSession:due.session},work=>work(leaseOwner));
+  if(result.reviewed!==due.activeCount||!('receipt' in result)||result.receipt?.reviewed!==due.activeCount)
    throw Error('vnext_launch_weekly_receipt_uncertain');
   return {status:'recorded',reviewed:result.reviewed};
  });

@@ -71,7 +71,7 @@ function civil(value: string, roc = false) {
 }
 
 function taipei(instant: bigint) {
-  return new Date(Number(instant / 1000n) + 28_800_000).toISOString().slice(0, 10);
+  return new Date(Number(instant / BigInt(1000)) + 28_800_000).toISOString().slice(0, 10);
 }
 
 const sha256 = (bytes: Uint8Array | string) => createHash('sha256').update(bytes).digest('hex');
