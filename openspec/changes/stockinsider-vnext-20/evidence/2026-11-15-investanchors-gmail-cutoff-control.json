@@ -1,0 +1,44 @@
+{
+  "schema": "stockinsider-investanchors-gmail-cutoff-control-v1",
+  "observedUtc": "2026-11-15 05:15:30 UTC",
+  "scope": "manual read-only connected Gmail source check, matched publisher filters",
+  "positive": {
+    "providerDate": "2026-11-12",
+    "clockFormat": "string",
+    "dkimPass": true,
+    "publisherDomain": true,
+    "multipart": true,
+    "subjectPrefixLooksPublisher": true,
+    "matchWindow": [
+      "2026-11-13",
+      "2026-11-14",
+      "2026-11-15"
+    ],
+    "memberArticleEndToEndPreviouslyVerified": "83270700158df0683f0eac820055cff0a1956799"
+  },
+  "receiverWindowControls": [
+    {
+      "from": "2026-11-12T00:00:00+08:00",
+      "queryForm": "epoch seconds",
+      "messageCount": 1,
+      "complete": true
+    },
+    {
+      "from": "2026-11-13T00:00:00+08:00",
+      "queryForm": "epoch seconds",
+      "messageCount": 0,
+      "complete": true
+    },
+    {
+      "from": "2026-11-15T00:00:00+08:00",
+      "queryForm": "epoch seconds",
+      "messageCount": 0,
+      "complete": true
+    }
+  ],
+  "pageTokensOutstanding": false,
+  "classification": "successful filtered scan with zero new publisher notices from Nov 13 in this mailbox",
+  "publishedPrivateFields": 0,
+  "productionCursorChanged": false,
+  "backgroundWriterInvoked": false
+}
