@@ -1,0 +1,211 @@
+{
+  "schema": "stockinsider-listed-valuation-source-vintage-control-v1",
+  "scope": "actual source capture and deterministic evidence boundaries, no model/ranking/production writes",
+  "company": {
+    "symbol": "2317",
+    "companyQ3Release": "https://www.honhai.com/zh-tw/press-center/press-releases/latest-news/2153",
+    "quarterlyDeck": "https://image.honhai.com/upload/202611/law_talk/Hon%20Hai%203Q26%20Results_Chinese_20261112_2728.pdf",
+    "issuerAnnouncementPage": "https://www.honhai.com/en-us/investor-relations/investor-relations-activities/investor-conference/109",
+    "issuerEventIndex": "https://www.honhai.com/en-us/investor-relations/investor-relations-activities/investor-conference",
+    "eventDay": "2026-11-12",
+    "eventDetailListedDay": "2026-11-04",
+    "eventDetailListedDayAloneNotDataPublication": true,
+    "epsStandaloneQ3Twd": "5.51",
+    "epsCumulativeNineMonthsTwd": "13.35",
+    "currentMopsCsvColumnUsesCumulative": true,
+    "citedIssuerStandaloneAmountsMillionsTwd": {
+      "operatingIncome": 115350,
+      "nonOperating": 3362,
+      "pretax": 118712,
+      "taxExpense": 27811,
+      "parentNetIncome": 77524
+    },
+    "inferredRoundedNonControllingNetProfitMillionsTwd": 13377,
+    "currentFilingListScope": "official issuer/type/year doc.twse input; found Q1/Q2 consolidated filings only at fetch; no statement on archive outside this exact list",
+    "officialListEnc": "cp950",
+    "officialListRows": 4,
+    "sameFiscalLabelDoesNotProveExactEPSPeriod": true
+  },
+  "governmentOpenIncomeStatement": "https://data.gov.tw/dataset/91998",
+  "governmentOpenDatedValuation": "https://data.gov.tw/dataset/11764",
+  "methodology": "https://accessibility.twse.com.tw/zh/trading/historical/bwibbu.html",
+  "sources": [
+    {
+      "name": "registeredLatestPE",
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data",
+      "sha256": "6b03cce558971759c4edc94c0ee39b434d5dd841002ec227140c490a94e8133c",
+      "bytes": 79265,
+      "observedAt": "2026-11-15T02:17:27.147740+00:00",
+      "header": [
+        "日期",
+        "證券代號",
+        "證券名稱",
+        "收盤價",
+        "殖利率(%)",
+        "股利年度",
+        "本益比",
+        "股價淨值比",
+        "財報年/季"
+      ],
+      "rows": [
+        [
+          "20261113",
+          "2258",
+          "鴻華先進-創",
+          "28.40",
+          "",
+          "114",
+          "",
+          "4.79",
+          "2026Q3"
+        ],
+        [
+          "20261113",
+          "2317",
+          "鴻海",
+          "241.00",
+          "2.98",
+          "114",
+          "15.89",
+          "1.77",
+          "2026Q2"
+        ]
+      ]
+    },
+    {
+      "name": "registeredPriorPE",
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261112",
+      "sha256": "e33124a061b3b80d4bf66e6830ec7a5937421c0a1e045f9dd2a28635630579ef",
+      "bytes": 79277,
+      "observedAt": "2026-11-15T02:17:27.345496+00:00",
+      "header": [
+        "日期",
+        "證券代號",
+        "證券名稱",
+        "收盤價",
+        "殖利率(%)",
+        "股利年度",
+        "本益比",
+        "股價淨值比",
+        "財報年/季"
+      ],
+      "rows": [
+        [
+          "20261112",
+          "2258",
+          "鴻華先進-創",
+          "28.05",
+          "",
+          "114",
+          "",
+          "4.73",
+          "2026Q3"
+        ],
+        [
+          "20261112",
+          "2317",
+          "鴻海",
+          "240.00",
+          "2.99",
+          "114",
+          "15.82",
+          "1.76",
+          "2026Q2"
+        ]
+      ]
+    },
+    {
+      "name": "listedIncomeCsv",
+      "url": "https://mopsfin.twse.com.tw/opendata/t187ap06_L_ci.csv",
+      "sha256": "302d9c64dcea2cf88f6b99794ec0cc6743a7b210094bfb6c4ff465776de7b8a7",
+      "bytes": 275934,
+      "observedAt": "2026-11-15T02:17:28.340261+00:00",
+      "header": [
+        "出表日期",
+        "年度",
+        "季別",
+        "公司代號",
+        "公司名稱",
+        "營業收入",
+        "營業成本",
+        "原始認列生物資產及農產品之利益（損失）",
+        "生物資產當期公允價值減出售成本之變動利益（損失）",
+        "營業毛利（毛損）",
+        "未實現銷貨（損）益",
+        "已實現銷貨（損）益",
+        "營業毛利（毛損）淨額",
+        "營業費用",
+        "其他收益及費損淨額",
+        "營業利益（損失）",
+        "營業外收入及支出",
+        "稅前淨利（淨損）",
+        "所得稅費用（利益）",
+        "繼續營業單位本期淨利（淨損）",
+        "停業單位損益",
+        "合併前非屬共同控制股權損益",
+        "本期淨利（淨損）",
+        "其他綜合損益（淨額）",
+        "合併前非屬共同控制股權綜合損益淨額",
+        "本期綜合損益總額",
+        "淨利（淨損）歸屬於母公司業主",
+        "淨利（淨損）歸屬於共同控制下前手權益",
+        "淨利（淨損）歸屬於非控制權益",
+        "綜合損益總額歸屬於母公司業主",
+        "綜合損益總額歸屬於共同控制下前手權益",
+        "綜合損益總額歸屬於非控制權益",
+        "基本每股盈餘（元）"
+      ],
+      "rows": [
+        {
+          "出表日期": "1151115",
+          "年度": "115",
+          "季別": "3",
+          "公司代號": "2258",
+          "營業收入": "4885756.00",
+          "本期淨利（淨損）": "-3026011.00",
+          "淨利（淨損）歸屬於母公司業主": "-3026011.00",
+          "基本每股盈餘（元）": "-1.73"
+        },
+        {
+          "出表日期": "1151115",
+          "年度": "115",
+          "季別": "3",
+          "公司代號": "2317",
+          "營業收入": "7661061739.00",
+          "本期淨利（淨損）": "217913014.00",
+          "淨利（淨損）歸屬於母公司業主": "187416909.00",
+          "基本每股盈餘（元）": "13.35"
+        }
+      ]
+    }
+  ],
+  "officialDocumentList": {
+    "name": "officialList",
+    "url": "https://doc.twse.com.tw/server-java/t57sb01?co_id=2317&colorchg=1&mtype=A&step=1&year=115",
+    "observedAt": "2026-11-15T02:16:08.685890+00:00",
+    "sha256": "c0b94ef8d9f53241aafa8be7829a90160f9faf7e45f0a3a39806339e2a947806",
+    "bytes": 5056,
+    "mime": "text/html",
+    "matches": []
+  },
+  "acceptedCloseControls": [
+    "2026-11-12",
+    "2026-11-13"
+  ],
+  "exchangeMultipleUsesReportedVintagesAndTTMBasis": true,
+  "observedVintageFor2317": "2026Q2 at both closes despite issuer Q3 released 2026-11-12",
+  "nonPositiveControl": {
+    "symbol": "2258",
+    "incomeCumulativeBasicEps": "-1.73",
+    "valuationReportUnderlyingRightInScope": "2026Q3",
+    "peFieldBlankOnBothDates": true,
+    "modelForwardPeState": "NOT_EVALUATED"
+  },
+  "keepSeparate": [
+    "price observation time",
+    "as-reported valuation multiple and underlying vintage",
+    "issuer actual fiscal duration",
+    "forecast EPS and selected forward multiple",
+    "actual ingestion availability"
+  ]
+}
