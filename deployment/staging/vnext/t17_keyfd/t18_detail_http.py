@@ -107,12 +107,18 @@ def _expected_sources(rows):
  return sources,separate
 
 
-def _check_page_links(parser,detail):
+def _check_page_links(parser,detail,step=None):
  from .t18_same_clone import FixedRollbackRejected
  expected=Counter(source['url'] for field in ('sources','sourceLinks') for source in detail[field])
- if parser.invalid_anchor or Counter(parser.anchors)!=expected:
-  raise FixedRollbackRejected('historical_detail_page_links_changed')
-
+ observed=Counter(parser.anchors)
+ if not parser.invalid_anchor and observed==expected:return
+ if step:
+  failure=('page_link_markup' if parser.invalid_anchor else
+           'page_links_changed' if (expected-observed) and (observed-expected) else
+           'page_links_missing' if expected-observed else 'page_links_unexpected')
+  with http_subphase(step+'_'+failure):
+   raise FixedRollbackRejected('historical_detail_page_links_changed')
+ raise FixedRollbackRejected('historical_detail_page_links_changed')
 
 def _check_payload(body,rows):
  from .t18_same_clone import FixedRollbackRejected
@@ -172,17 +178,28 @@ def exercise_detail_http(app,releases,read):
     with http_subphase(step+'_payload'):detail=_check_payload(body,rows)
     with http_subphase(step+'_page'):
      status,_,markup=_http(3000,'GET',page)
-     parser=_VisibleText();parser.feed(markup.decode('utf-8'));parser.close();visible=' '.join(parser.text)
-     _check_page_links(parser,detail)
+     if status!=200:raise FixedRollbackRejected('historical_detail_page_http_failed')
+    with http_subphase(step+'_page_markup'):
+     parser=_VisibleText();parser.feed(markup.decode('utf-8'));parser.close()
+     visible=' '.join(parser.text)
+    _check_page_links(parser,detail,step)
+    with http_subphase(step+'_page_identity'):
+     if 'REVISION-BOUND RESEARCH' not in visible or symbol not in visible:
+      raise FixedRollbackRejected('historical_detail_page_identity_failed')
+    with http_subphase(step+'_page_sections'):
+     sections=[x for x in d['sections'] if x['key']!='sources']
+     if parser.articles<len(sections):raise FixedRollbackRejected('historical_detail_page_sections_failed')
+    with http_subphase(step+'_page_prose'):
      def normalized(x):return re.sub(r'\s+',' ',x).strip()
      def public_text(x):return re.sub(r'[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}','尚待確認',x,flags=re.I)
-     sections=[x for x in d['sections'] if x['key']!='sources']
+     page_text=normalized(visible)
+     if any(normalized(public_text(x[k])) not in page_text for x in sections for k in ('title','body')):
+      raise FixedRollbackRejected('historical_detail_page_prose_failed')
+    with http_subphase(step+'_page_dates'):
      from datetime import datetime,timezone,timedelta
      dates=[datetime.fromisoformat(d[k].replace('Z','+00:00')).replace(tzinfo=timezone.utc) if k=='session_date' else datetime.fromisoformat(d[k].replace('Z','+00:00')) for k in ('session_date','as_of','available_at')]
      labels=[str(x.astimezone(timezone(timedelta(hours=8))).year)+'/'+str(x.astimezone(timezone(timedelta(hours=8))).month)+'/'+str(x.astimezone(timezone(timedelta(hours=8))).day) for x in dates]
-     if (status!=200 or parser.articles<len(sections) or 'REVISION-BOUND RESEARCH' not in visible
-         or any(normalized(public_text(x[k])) not in normalized(visible) for x in sections for k in ('title','body'))
-         or symbol not in visible or any(x not in visible for x in labels)):raise FixedRollbackRejected('historical_detail_page_content_failed')
+     if any(x not in visible for x in labels):raise FixedRollbackRejected('historical_detail_page_dates_failed')
     other_symbol='0001' if symbol=='0000' else '0000'
     negatives=(api+'&revision='+revision,api.replace(revision,'invalid'),api.replace(revision,'00000000-0000-4000-8000-000000000000'),api.replace('/'+symbol+'/', '/'+other_symbol+'/'))
     with http_subphase(step+'_identity'):

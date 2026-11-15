@@ -1,0 +1,32 @@
+{
+  "task": "T18",
+  "base": "4acb918c9c8dc94b465903646c4542c0639fd7f9",
+  "previousNativeCandidate": "01dadd860f8f38ccae39f0125f249dfa0ceaec3a",
+  "observedAt": "2026-11-15T17:01:55Z",
+  "testedBlobs": {
+    "deployment/staging/vnext/t17_keyfd/t18_detail_read_adapter.py": "bfbada5afe31f7ead52cc2bb63dc9fad9df5d101",
+    "deployment/staging/vnext/t17_keyfd/t18_detail_http.py": "82367b7407d2b4b650ee320e0b83dda76432b713",
+    "deployment/staging/vnext/t17_keyfd/t18_readpoint_diagnostics.py": "95288662e5d445a330d4c679d5ac26fe06526ed4",
+    "scripts/tests/test_t18_detail_read_adapter.py": "fa331a6f7502c61e488696842e1b3f945f380fa8",
+    "scripts/tests/test_t18_http_subphases.py": "e3dc9d13f8b5f643a9d72db73ae703731ba6b268"
+  },
+  "passed": 11,
+  "failures": 0,
+  "isolated": "Unprivileged on Contabo, private network with only loopback",
+  "distinctPageDiagnostics": [
+    "http",
+    "markup",
+    "link markup",
+    "missing links",
+    "changed links",
+    "unexpected links",
+    "revision identity",
+    "section count",
+    "prose",
+    "dates"
+  ],
+  "keepsPriorDetailPageDiagnosticForHistoricalReceipts": true,
+  "receiptExportsRawData": false,
+  "actualBackupRunWithNewDiagnostics": false,
+  "formalHoldRetained": true
+}

@@ -14,7 +14,8 @@ HTTP_STEPS=('aba_first_a','aba_b','aba_return_a','fault_b','rollback_a')
 HTTP_SUBPHASES=frozenset(('proxy_start','proxy_stop','proxy_denial_probes','rest_target_readiness','rest_denial_probes',
  'fault_inject','fault_observe','sequence_final_stop','detail_final_stop','app_broker_shutdown','rest_broker_shutdown',
  'broker_ports_closed','app_transport_close')+tuple(s+'_'+op for s in HTTP_STEPS for op in ('start','stop','static_select','daily','home','static'))
- +tuple(s+'_'+op for s in ('detail_a','detail_b') for op in ('start','api','payload','page','identity','stop')))
+ +tuple(s+'_'+op for s in ('detail_a','detail_b') for op in ('start','api','payload','page','page_markup','page_link_markup','page_links_changed','page_links_missing',
+  'page_links_unexpected','page_identity','page_sections','page_prose','page_dates','identity','stop')))
 HTTP_COMPLETED=('detailPreparationCompleted','detailReadPrepared','detailPreparationGap','detailBoundsGap','proxyStarted','proxyStopped',
  'proxyDenialsPassed','restTargetResponded','restDenialsPassed','firstAHealthPassed','bHealthPassed','returnAHealthPassed',
  'faultBReady','faultObserved','rollbackAHealthPassed','detailHttpPassed','appShutdownAcknowledged','restShutdownAcknowledged','appTransportClosed')

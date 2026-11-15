@@ -185,6 +185,28 @@ class DetailReadAdapterTests(unittest.TestCase):
    self.assertIsNone(project_detail_http({**result,'historicalFactSourceLinksWithheld':count}))
   self.assertIsNotNone(project_detail_http({**result,'historicalFactSourceLinksWithheld':4}))
   self.assertIsNotNone(project_detail_http({k:v for k,v in result.items() if k!='historicalFactSourceLinksWithheld'}))
+  page='<main>REVISION-BOUND RESEARCH 1111 2026/9/12<article>Public fixture '+fixture.MARKER+'</article><div hidden><a href="'+f['source_url']+'">source</a></div></main>'
+  failures=(
+   ('page',503,page.encode()),
+   ('page_markup',200,bytes([255])),
+   ('page_link_markup',200,page.replace('href="','href="https://unrecognized.invalid/" href="',1).encode()),
+   ('page_links_missing',200,page.replace(f['source_url'],'/').encode()),
+   ('page_links_changed',200,page.replace(f['source_url'],'https://unrecognized.invalid/').encode()),
+   ('page_links_unexpected',200,page.replace('</main>','<a href="https://unrecognized.invalid/">extra</a></main>').encode()),
+   ('page_identity',200,page.replace('REVISION-BOUND RESEARCH','changed').encode()),
+   ('page_sections',200,page.replace('article>','section>').encode()),
+   ('page_prose',200,page.replace(fixture.MARKER,'PUBLIC_DIFFERENT').encode()),
+   ('page_dates',200,page.replace('2026/9/12','2026/9/13').encode()),
+  )
+  for subphase,status,malformed in failures:
+   def altered_http(port,method,target):
+    return (status,{},malformed) if target.startswith('/stock/') else http(port,method,target)
+   with self.subTest(subphase=subphase),patch.object(controller,'_http',side_effect=altered_http),diag.http_trace():
+    with self.assertRaises(diag.ReadpointRejected) as failure:
+     checks.exercise_detail_http(Broker(),releases,read)
+    self.assertEqual(failure.exception.diagnostic['httpSubphase'],'detail_a_'+subphase)
+    self.assertIsNotNone(diag.project_readpoint_diagnostic(failure.exception.diagnostic))
+    self.assertNotIn(fixture.MARKER,json.dumps(failure.exception.diagnostic))
   class CleanupFails:
    def request(self,op):
     if op=='STOP_NEXT':raise OSError('PUBLIC_CLEANUP_CANARY')

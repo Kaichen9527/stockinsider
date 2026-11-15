@@ -1,0 +1,70 @@
+{
+  "task": "T18",
+  "candidateCommit": "01dadd860f8f38ccae39f0125f249dfa0ceaec3a",
+  "stagingRuntime": "Real archived production artifact retained on Contabo, three isolated services with registered backup custody",
+  "hostDurationSeconds": 700.896,
+  "keyHandoff": "Configured previously approved key file to existing direct one-time stdin; zero key material retained in receipt",
+  "authenticatedCloneReachedFixedHttp": true,
+  "releaseAApiValueAndLinkChecksReachedEnd": true,
+  "releaseADetailPageVerified": false,
+  "releaseBDetailPageAttempted": false,
+  "launcherReceipt": {
+    "brokerDiagnostics": {},
+    "durationSeconds": 700.896,
+    "keyRead": true,
+    "mode": "real",
+    "nativeHoldRetained": true,
+    "productionSignaturesUnchanged": true,
+    "resourceSample": {
+      "appMemoryPeakObservedBytes": 95633408,
+      "dbMemoryPeakObservedBytes": 805306368,
+      "minimumHostAvailableMemoryBytes": 3852312576,
+      "minimumHostDiskBytes": 17776885760,
+      "minimumWorkFreeBytes": 5966000128,
+      "restMemoryPeakObservedBytes": 29933568
+    },
+    "runner": {
+      "databaseRestored": false,
+      "durationSeconds": 683.93,
+      "nativeHoldRetained": true,
+      "readpointDiagnostics": {
+        "completedStages": {
+          "appShutdownAcknowledged": true,
+          "appTransportClosed": true,
+          "bHealthPassed": true,
+          "detailBoundsGap": false,
+          "detailHttpPassed": false,
+          "detailPreparationCompleted": true,
+          "detailPreparationGap": false,
+          "detailReadPrepared": true,
+          "faultBReady": true,
+          "faultObserved": true,
+          "firstAHealthPassed": true,
+          "proxyDenialsPassed": true,
+          "proxyStarted": true,
+          "proxyStopped": true,
+          "restDenialsPassed": true,
+          "restShutdownAcknowledged": true,
+          "restTargetResponded": true,
+          "returnAHealthPassed": true,
+          "rollbackAHealthPassed": true
+        },
+        "errorClass": "rejected",
+        "httpSubphase": "detail_a_page",
+        "ownedCloneCleanupVerified": true,
+        "phase": "candidate_detail_http"
+      },
+      "reason": "t18_candidate_detail_http_failed",
+      "schema": "stockinsider-staging-next-rollback-v1",
+      "status": "REJECTED"
+    },
+    "runnerExit": 2,
+    "schema": "stockinsider-t18-host-launcher-v1",
+    "stagingAccounts": "RESERVED_LOCKED_NOLOGIN",
+    "stagingResourcesCleaned": true
+  },
+  "finalLauncherRejection": "fixed_runner_outcome_unexpected",
+  "sshExit": 2,
+  "priorT17RestoreEvidenceRetained": true,
+  "nativeHoldRetained": true
+}
