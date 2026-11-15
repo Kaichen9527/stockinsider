@@ -1,0 +1,89 @@
+{
+  "verifiedAt": "2026-11-15T05:55:57Z",
+  "sourceCommit": "86b518ec8def3b58b1b4a7512c3ffee0ee2336cf",
+  "installedSha256": "114db9b87b117156a0230d1407f233072a4a97ff6d345ca00cba9d1c2fa9c559",
+  "retainedPriorSourceSha256": "a4c7997f797eda1e5a057b2421746e5cf0eb11905d7a937fa6d32a6a999eede1",
+  "rehearsal": {
+    "rehearsal": true,
+    "liveEarlyRefused": true,
+    "reports": {
+      "twse_reported_close": {
+        "datasetId": 11764,
+        "requestedAt": "2026-11-15T05:54:32.316282+00:00",
+        "beforeCutoff": false,
+        "observedAt": "2026-11-15T05:54:33.692814+00:00",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "bytes": 79265,
+        "sha256": "6b03cce558971759c4edc94c0ee39b434d5dd841002ec227140c490a94e8133c",
+        "dataRows": 1086,
+        "sessionIdentity": "EXACT_PAYLOAD_DAY",
+        "usableRecords": 1085,
+        "timelySessionPayload": false,
+        "saved": true,
+        "rawShaRechecked": true
+      },
+      "tpex_stock_institutional_shares": {
+        "datasetId": 11856,
+        "requestedAt": "2026-11-15T05:54:32.811177+00:00",
+        "beforeCutoff": false,
+        "observedAt": "2026-11-15T05:54:33.438441+00:00",
+        "httpStatus": 200,
+        "contentType": "application/csv",
+        "bytes": 142887,
+        "sha256": "dabfc58353c59e619bd25391eb945ae3a8f0c115533fce0c1717d5dd7d149ed0",
+        "dataRows": 896,
+        "sessionIdentity": "EXACT_PAYLOAD_DAY",
+        "usableRecords": 896,
+        "scope": "individual_institutional_shares",
+        "timelySessionPayload": false,
+        "saved": true,
+        "rawShaRechecked": true
+      },
+      "tpex_all_session_quote": {
+        "datasetId": 11370,
+        "requestedAt": "2026-11-15T05:54:33.294133+00:00",
+        "beforeCutoff": false,
+        "observedAt": "2026-11-15T05:54:35.497546+00:00",
+        "httpStatus": 200,
+        "contentType": "application/csv",
+        "bytes": 1998356,
+        "sha256": "51c8a90f766f9416a3991273f1c20ad5ea83b15696da5c813a736440d3cde55a",
+        "dataRows": 13807,
+        "sessionIdentity": "EXACT_PAYLOAD_DAY",
+        "usableRecords": 6103,
+        "scope": "all_session_quote_and_turnover",
+        "timelySessionPayload": false,
+        "saved": true,
+        "rawShaRechecked": true
+      }
+    },
+    "pairMatchedSymbols": 896,
+    "focus5274And6488BothPresent": true
+  },
+  "measuredPeakRssKiB": 56940,
+  "matchingSameDateRegisteredAndDatedVolumeSha256": true,
+  "licenseCatalog": [
+    "https://data.gov.tw/dataset/11856",
+    "https://data.gov.tw/dataset/11370"
+  ],
+  "stage": {
+    "unitClockAsiaTaipei": "21:28",
+    "days": [
+      "2026-11-16",
+      "2026-11-17"
+    ],
+    "enabledTimers": 2,
+    "servicesActive": 0,
+    "timerPropertiesIdentical": true,
+    "priorProgramRetained": true,
+    "dynamicUnprivilegedUser": true,
+    "memoryCapBytes": 100663296,
+    "runtimeCapSeconds": 60,
+    "stateDirectoryMode": "0700"
+  },
+  "rawPublicReportSavedInRepo": false,
+  "writerInvoked": false,
+  "productionServiceChange": false,
+  "sessionFinalAcceptance": false
+}
