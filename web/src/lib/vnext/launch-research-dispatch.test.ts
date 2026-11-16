@@ -77,3 +77,19 @@ test('rejects malformed context and operator-controlled dates', async () => {
     assert.deepEqual(f.writes, []);
   }
 });
+
+
+test('scheduled industry collection runs for a confirmed session even on an empty research queue', async () => {
+  const empty = fixture([queue([], [])]);
+  const days: string[] = [];
+  const result = await dispatchLaunchQueue({
+    ...empty.deps,
+    async captureIndustry(day) {
+      days.push(day);
+      return { status: 'processed', written: 1, replayed: 0, deferred: 1 };
+    },
+  });
+  assert.deepEqual(days, [session]);
+  assert.deepEqual(result.industryCapture, { status: 'processed', written: 1, replayed: 0, deferred: 1 });
+  assert.equal(empty.modelChecks(), 0);
+});

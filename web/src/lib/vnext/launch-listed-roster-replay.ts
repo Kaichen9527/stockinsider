@@ -106,6 +106,33 @@ function readCompanyRoster(bytes: Uint8Array, venue: Venue) {
   return { sourceDate, listings, rawRows: rows.length };
 }
 
+export function projectLaunchIndustryRows(
+  bodies: Record<Venue, Uint8Array>,
+  symbols: readonly string[],
+  observedAt: string,
+) {
+  const observed = evidenceInstant(observedAt);
+  if (observed === null || symbols.length > 20 || new Set(symbols).size !== symbols.length
+    || !symbols.every(fourDigitCompany)) refuse();
+  const twse = readCompanyRoster(bodies.TWSE, 'TWSE');
+  const tpex = readCompanyRoster(bodies.TPEX, 'TPEX');
+  if (twse.sourceDate !== tpex.sourceDate || twse.sourceDate > taipei(observed)) refuse();
+  const reportDate = twse.sourceDate;
+  const rows = symbols.slice().sort().flatMap(symbol => {
+    const listed = twse.listings.get(symbol);
+    const otc = tpex.listings.get(symbol);
+    if ((!listed && !otc) || (listed && otc)) return [];
+    const issuer = (listed ?? otc)!;
+    if (issuer.industryCode === null || issuer.listingDate > reportDate) return [];
+    return [{ symbol, market: listed ? 'TWSE' : 'TPEX', code: issuer.industryCode }];
+  });
+  return {
+    reportDate, rows,
+    twseSha256: sha256(bodies.TWSE),
+    tpexSha256: sha256(bodies.TPEX),
+  };
+}
+
 type CustodyRecord = { market: string; status: string };
 
 function readCustodyRoster(bytes: Uint8Array) {

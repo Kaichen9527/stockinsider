@@ -28,7 +28,10 @@ test('pure projection is not actual predecessor permission, unknown scope/hash r
 });
 test('current scope query exact ccc source; no apply call from entry before independent review',()=>{
  const source=fs.readFileSync('scripts/vnext-source-namespace-candidate.mjs','utf8'),entry=fs.readFileSync('scripts/vnext-routine-http.test.mjs','utf8');
- assert.ok(entry.includes(JSON.stringify(SOURCE_SCOPE_SQL)));assert.equal(entry.includes('applySourceNamespaceEngineeringCandidate'),false);
+ assert.ok(source.includes(JSON.stringify(SOURCE_SCOPE_SQL)));
+ assert.match(entry,/import\s*\{[^}]*\bSOURCE_SCOPE_SQL\b[^}]*\}\s*from '\.\/vnext-source-namespace-candidate\.mjs'/u);
+ assert.ok(entry.includes('client.query(SOURCE_SCOPE_SQL)'));
+ assert.equal(entry.includes('applySourceNamespaceEngineeringCandidate'),false);
  const apply=source.slice(source.indexOf('export async function applySourceNamespaceEngineeringCandidate'));
  assert.ok(apply.indexOf('deriveSourceNamespacePost')<apply.indexOf('client.query(SOURCE_NAMESPACE_GRANT)'));
  assert.ok(apply.indexOf('same(after.catalog,expected.catalog)')<apply.indexOf("client.query('COMMIT')"));

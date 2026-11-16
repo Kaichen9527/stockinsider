@@ -12,6 +12,7 @@ const dispatchMigration='migrations/20261117_36_vnext_launch_research_dispatch_v
 const calendarMigration='migrations/20261117_37_vnext_launch_scheduled_calendar_v1.sql';
 const poolMigration='migrations/20261117_38_vnext_launch_candidate_pool_history_v1.sql';
 const industryMigration='migrations/20261117_39_vnext_launch_candidate_industry_v1.sql';
+const industryCaptureMigration='migrations/20261117_40_vnext_launch_industry_capture_v1.sql';
 const writerRelease='1'.repeat(40);
 const operator='synthetic-launch-operator';
 const author='synthetic-launch-author';
@@ -55,6 +56,25 @@ await test('launch policy is bound to the shared job and its prepared revision i
   await x.writer.query(roster.predecessor);
   await x.writer.query(roster.migration);
   await x.writer.query(fs.readFileSync(industryMigration,'utf8'));
+  const sources = fs.readFileSync('migrations/20261115_vnext_launch_source_facts_v1.sql', 'utf8');
+  function sourceFunction(name) {
+    const start = sources.indexOf('CREATE FUNCTION public.' + name + '(');
+    assert.ok(start >= 0);
+    const end = sources.indexOf('$$;', sources.indexOf('AS $$', start) + 5);
+    assert.ok(end > start);
+    return sources.slice(start, end + 3);
+  }
+  await x.writer.query(sourceFunction('vnext_launch_csv_immutable_v1'));
+  await x.writer.query(sourceFunction('vnext_launch_csv_pool_v1'));
+  await x.writer.query(sourceFunction('vnext_launch_csv_backend_v1'));
+  await x.writer.query('ALTER FUNCTION public.vnext_launch_csv_pool_v1() OWNER TO stockinsider_vnext_owner');
+  const { owner: artifactOwner } = (await x.writer.query(
+    "SELECT pg_get_userbyid(relowner) AS owner FROM pg_class WHERE oid='public.private_artifact_receipts_v1'::regclass"
+  )).rows[0];
+  assert.match(artifactOwner, /^[a-z_]+$/u);
+  await x.writer.query('ALTER FUNCTION public.vnext_launch_csv_backend_v1(uuid,text,integer) OWNER TO ' + artifactOwner);
+  await x.writer.query('GRANT EXECUTE ON FUNCTION public.vnext_launch_csv_backend_v1(uuid,text,integer) TO stockinsider_vnext_owner');
+  await x.writer.query(fs.readFileSync(industryCaptureMigration,'utf8'));
   await x.writer.query("INSERT INTO public.vnext_principals_v1(principal,role,enabled) VALUES($1,'operator',true),($2,'author',true),($3,'author',true)",[operator,author,distinct]);
   const at=new Date().toISOString(),day=taipeiDate(at);
   await x.writer.query("INSERT INTO public.vnext_sessions_v1(session_date,close_at,completed) VALUES($1,clock_timestamp()-interval '1 hour',true)",[day]);
@@ -138,6 +158,59 @@ await test('launch policy is bound to the shared job and its prepared revision i
   assert.equal(withOfficialCode.code, '36');
   await addIndustry(newStock,'TPEX','91','unknown',offset(newClock,2000),newClock);
   assert.equal((await poolIndustry()).current.rows[0].industrySnapshot,null);
+  const backend = '10000000-0000-4000-8000-000000000001';
+  const runner = '10000000-0000-4000-8000-000000000002';
+  const lease = '10000000-0000-4000-8000-000000000003';
+  await x.writer.query(
+    "INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,status,configuration_hash) VALUES ($1,'opportunity_runner',clock_timestamp()-interval '10 minutes','active',repeat('1',64))",
+    [runner]);
+  await x.writer.query(
+    "INSERT INTO public.stockinsider_backend_identities_v1(backend_id,principal_id,release_id,status,valid_from) VALUES ($1,$2,$3,'active',clock_timestamp()-interval '10 minutes')",
+    [backend, runner, writerRelease]);
+  await x.writer.query(
+    "INSERT INTO public.stockinsider_data_plane_settings_v1(singleton,identity_fence_enabled,activated_at,activated_by) VALUES (true,true,clock_timestamp(),'synthetic') ON CONFLICT(singleton) DO UPDATE SET identity_fence_enabled=true,activated_at=excluded.activated_at,activated_by=excluded.activated_by");
+  await x.writer.query("INSERT INTO public.production_writer_releases(release_id,writer_kind,active,activated_at) VALUES ($1,'vps',true,clock_timestamp())",[writerRelease]);
+  await x.writer.query("INSERT INTO public.production_write_leases(lease_key,owner_id,acquired_at,expires_at) VALUES ('production-data-plane',$1,clock_timestamp(),clock_timestamp()+interval '5 minutes')",[lease]);
+  const intake = async (capture=null,principal=operator,leaseOwner=lease)=>{
+   const connection=await x.connect();
+   try {
+    await connection.query('SET ROLE service_role');
+    await connection.query("SELECT set_config('request.headers',$1,false),set_config('request.jwt.claims',$2,false)",[
+      JSON.stringify({'x-stockinsider-backend-id':backend,'x-stockinsider-runner-principal':runner,'x-stockinsider-writer-release':writerRelease}),
+      '{"role":"service_role"}',
+    ]);
+    return (await connection.query('SELECT public.vnext_launch_industry_capture_command_v1($1,$2,$3,$4) AS result',
+      [principal,leaseOwner,day,capture])).rows[0].result;
+   } finally { await x.close(connection); }
+  };
+  await assert.rejects(()=>intake(null,author),/launch_industry_writer_or_scope_unavailable/u);
+  await assert.rejects(()=>intake(null,operator,runner),/launch_csv_exact_owned_lease_required/u);
+  const intakeScope = await intake();
+  assert.deepEqual(intakeScope.symbols, ['2383','2409']);
+  const capture = {
+    poolRevision: intakeScope.poolRevision,
+    reportDate: day,
+    observedAt: new Date().toISOString(),
+    twseSha256: 'a'.repeat(64),
+    tpexSha256: 'b'.repeat(64),
+    rows: [
+      {symbol:'2383',market:'TPEX',code:'36'},
+      {symbol:'2409',market:'TPEX',code:'24'},
+    ],
+  };
+  await assert.rejects(()=>intake({...capture,poolRevision:'f'.repeat(64)}),/launch_industry_capture_invalid/u);
+  assert.deepEqual(await intake(capture), {written:1,replayed:0,deferred:1});
+  assert.deepEqual(await intake(capture), {written:0,replayed:1,deferred:1});
+  const contradictory={...capture,rows:[{symbol:'2383',market:'TPEX',code:'37'}]};
+  assert.deepEqual(await intake(contradictory), {written:0,replayed:0,deferred:2});
+  const observedIndustry=(await x.writer.query(
+    "SELECT public.vnext_launch_candidate_industry_resolved_v1('2383',statement_timestamp()) AS result")).rows[0].result;
+  assert.equal(observedIndustry.code,'36');
+  assert.equal((await poolIndustry()).current.rows[0].industrySnapshot,null);
+  await assert.rejects(()=>service('SELECT count(*) AS result FROM public.vnext_launch_industry_capture_v1'),{code:'42501'});
+  await x.writer.query("DELETE FROM public.production_write_leases WHERE owner_id=$1",[lease]);
+  await x.writer.query("DELETE FROM public.production_writer_releases WHERE release_id=$1",[writerRelease]);
+  await x.writer.query("UPDATE public.stockinsider_data_plane_settings_v1 SET identity_fence_enabled=false,activated_at=null,activated_by=null");
   await assert.rejects(()=>service('SELECT public.vnext_launch_candidate_industry_v1($1,$2) AS result',['2383',snapshot.current.cutoff]),{code:'42501'});
   assert.equal(JSON.stringify(snapshot).includes('synthetic_private'),false);
   await assert.rejects(()=>service('SELECT count(*) AS result FROM public.vnext_launch_ranking_snapshots_v1'),{code:'42501'});

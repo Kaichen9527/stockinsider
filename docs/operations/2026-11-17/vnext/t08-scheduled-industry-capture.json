@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "launch-industry-scheduled-parser-witness-v1",
+  "scope": "actual MOPS HTTP through the scheduled fetch/parser; capture payload recorded locally without a database",
+  "session": "2026-11-17",
+  "reportDate": "2026-11-16",
+  "observedAt": "2026-11-16T22:26:25.469Z",
+  "twseSha256": "22e14a9414f445440e770f8759c70131e0efc0dc20d8066fd40021fb5e20facc",
+  "tpexSha256": "21db83542776807708d23cf8a4433817eabc2885b6ddaba325a783c13df49254",
+  "recognizedSamples": [
+    {
+      "symbol": "2330",
+      "market": "TWSE",
+      "code": "24"
+    },
+    {
+      "symbol": "6488",
+      "market": "TPEX",
+      "code": "24"
+    }
+  ],
+  "rawProviderPayloadPersisted": false,
+  "databaseWrites": false,
+  "validation": {
+    "nodeTestsPassed": 23,
+    "typescriptPassed": true,
+    "focusedLintPassed": true,
+    "sourceNamespaceContractTestsPassed": 9,
+    "postgresNativeSuitePassed": true,
+    "postgresNativeScope": "actual PostgreSQL 17.11 with synthetic issuer and snapshot data",
+    "exactBackendAndWriteLeaseRequired": true,
+    "wrongMarketDeferred": true,
+    "repeatedReportReplayed": true,
+    "conflictingSameDateReportDeferred": true,
+    "olderPublishedCutoffUnchanged": true,
+    "directServiceTableReadsRejected": true,
+    "formalServiceSignaturesAndReleasePointerUnchanged": true
+  }
+}

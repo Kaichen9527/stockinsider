@@ -1,12 +1,13 @@
 import type { VnextIdentity } from './auth.ts';
+import type { LaunchIndustryCapture } from './launch-industry-capture.ts';
 import { isHistoryDate } from '../candidate-price-history.ts';
 import { isTaiwanRefreshResearchReady } from '../taiwan-candidate-refresh.ts';
 
 type Job = { job_id: string };
 type Queue = { session: string; queued: Job[]; transientFailures: Job[] };
-type Receipt = { status: 'deferred'; reason: string } | {
+type Receipt = ({ status: 'deferred'; reason: string } | {
   status: 'processed'; session: string; attempted: number; published: number; stopped: boolean;
-};
+}) & { industryCapture?: LaunchIndustryCapture };
 
 const stop = (reason: string): Receipt => ({ status: 'deferred', reason });
 
@@ -34,6 +35,7 @@ function readContext(data: unknown): Queue | string {
 export async function dispatchLaunchQueue(deps: {
   context(): Promise<unknown>;
   progress(session: string): Promise<unknown>;
+  captureIndustry?(session: string): Promise<LaunchIndustryCapture>;
   workerReady(): Promise<void>;
   retry(jobId: string): Promise<Record<string, unknown>>;
   run(jobId: string): Promise<Record<string, unknown>>;
@@ -41,10 +43,12 @@ export async function dispatchLaunchQueue(deps: {
   const scope = readContext(await deps.context());
   if (typeof scope === 'string') return stop(scope);
   const { session, queued, transientFailures } = scope;
+  const captured = await deps.captureIndustry?.(session);
+  const industry = captured ? { industryCapture: captured } : {};
   if (!queued.length && !transientFailures.length) {
-    return { status: 'processed', session, attempted: 0, published: 0, stopped: false };
+    return { status: 'processed', session, attempted: 0, published: 0, stopped: false, ...industry };
   }
-  if (!isTaiwanRefreshResearchReady(await deps.progress(session))) return stop('launch_research_final_data_unready');
+  if (!isTaiwanRefreshResearchReady(await deps.progress(session))) return { ...stop('launch_research_final_data_unready'), ...industry };
   await deps.workerReady();
 
   let attempted = 0;
@@ -76,7 +80,7 @@ export async function dispatchLaunchQueue(deps: {
     const result = await deps.run(jobId);
     if (result.status === 'published' && result.replay !== true) published++;
   }
-  return { status: 'processed', session, attempted, published, stopped };
+  return { status: 'processed', session, attempted, published, stopped, ...industry };
 }
 
 export async function runScheduledLaunchResearch(identity: VnextIdentity): Promise<Receipt> {
@@ -112,6 +116,14 @@ export async function runScheduledLaunchResearch(identity: VnextIdentity): Promi
       const { synchronizeScheduledLaunchCalendar } = await import('./calendar-sync.ts');
       const ready = await analysisWriter(() => synchronizeScheduledLaunchCalendar(identity));
       return ready ? readDispatchContext() : data;
+    },
+    async captureIndustry(session) {
+      try {
+        const { captureLaunchIndustries } = await import('./launch-industry-capture.ts');
+        return await analysisWriter(lease => captureLaunchIndustries(writer.supabase, identity.principal, lease, session));
+      } catch {
+        return { status: 'unavailable' };
+      }
     },
     async progress(session) {
       const { data, error } = await writer.supabase.rpc('read_taiwan_data_refresh_progress_v6', {

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { decodeLicensedCsvRecords } from './licensed-csv-decoder.ts';
+import { captureLaunchIndustries } from './launch-industry-capture.ts';
 import { LISTED_ROSTER_REPLAY_SCHEMA, analyzeListedRosterReplay, parseListedRosterReplay } from './launch-listed-roster-replay.ts';
 
 const mops = [
@@ -167,4 +168,45 @@ test('private review preserves code-level conflicts and strips names and raw cus
   for (const row of shifted.otc) row[0] = '1151112';
   const invalid = shifted.write();
   assert.equal(analyzeListedRosterReplay(invalid.value, invalid.files).reviews, null);
+});
+
+
+test('active-pool capture reads only the two fixed issuers feeds and submits codes without names or bodies', async () => {
+  const input = fixture();
+  input.listed[0][5] = '36';
+  input.listed[1][5] = '24'; // 2330 appears on both feeds.
+  input.listed[2][5] = '24'; // Future listing.
+  input.otc[0][5] = '91'; // Unsupported code.
+  const { value, files } = input.write();
+  const calls: Array<{name: string; args: Record<string, unknown>}> = [];
+  const symbols = [sampleSymbol, '2330', '2718', '5274'];
+  const send = { async rpc(name: string, args: Record<string, unknown>) {
+    calls.push({ name, args });
+    return { error: null, data: args.p_capture
+      ? { written: 1, replayed: 0, deferred: 3 }
+      : { poolRevision: 'c'.repeat(64), symbols } };
+  } };
+  const fetched: string[] = [];
+  const fetchPage: typeof fetch = async (input, init) => {
+    const url = String(input);
+    const read = value.responses.slice(0, 2).find(item => item.url === url);
+    assert.ok(read);
+    assert.equal(init?.redirect, 'error');
+    fetched.push(url);
+    const response = new Response(Buffer.from(files.get(read.body.path)!), {headers: {'content-type': 'text/csv'}});
+    Object.defineProperty(response, 'url', { value: url });
+    return response;
+  };
+  assert.deepEqual(await captureLaunchIndustries(send, 'operator', 'lease', '2026-11-13', fetchPage, () => capture),
+    { status: 'processed', written: 1, replayed: 0, deferred: 3 });
+  assert.deepEqual(fetched, sourceUrls.slice(0, 2));
+  assert.deepEqual(calls.map(call => call.name), ['vnext_launch_industry_capture_command_v1', 'vnext_launch_industry_capture_command_v1']);
+  assert.deepEqual(calls[1].args.p_capture, {
+    reportDate: '2026-11-13', observedAt: capture, poolRevision: 'c'.repeat(64),
+    twseSha256: value.responses[0].sha256, tpexSha256: value.responses[1].sha256,
+    rows: [{ symbol: sampleSymbol, market: 'TWSE', code: '36' }],
+  });
+  await assert.rejects(captureLaunchIndustries(send, 'operator', 'lease', '2026-11-13', async () => new Response('', {status: 403}), () => capture),
+    /launch_industry_source_unavailable/);
+  assert.equal(calls.length, 3);
 });
