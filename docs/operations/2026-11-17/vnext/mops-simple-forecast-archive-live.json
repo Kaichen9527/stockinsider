@@ -1,0 +1,174 @@
+{
+  "task": "T07 original MOPS annual guidance acquisition",
+  "base": "5383c4e177497f02e4c32e3862b98a8477400a2b",
+  "scope": "Archive-only original consolidated four-quarter disclosure with directly reported annual point or range",
+  "environment": {
+    "kind": "Contabo isolated staging",
+    "node": "22.14.0",
+    "next": "16.3.4"
+  },
+  "captures": [
+    {
+      "status": "archive_observed",
+      "schemaVersion": "vnext-mops-simple-forecast-capture-v1",
+      "symbol": "2412",
+      "market": "TWSE",
+      "publishedDate": "2026-01-23",
+      "knownAt": "2026-11-16T17:16:43.295Z",
+      "sourcePage": "https://mopsov.twse.com.tw/mops/web/t163sb10",
+      "listingReceipt": {
+        "sha256": "f0302e074bae52729f7a28aa187e1ce7f4b675f54107486c35b380ef8c1a5771",
+        "bytes": 4268,
+        "acquiredAt": "2026-11-16T17:16:42.997Z"
+      },
+      "detailReceipt": {
+        "sha256": "91a112da1ac56737cfcfa77b23560c7f2be57aa00302e060bf16aa895190325d",
+        "bytes": 18580,
+        "acquiredAt": "2026-11-16T17:16:43.295Z"
+      },
+      "observation": {
+        "issuerName": "中華電信股份有限公司",
+        "year": 2026,
+        "unit": "TWD_per_share",
+        "classification": "issuer_disclosed_forecast",
+        "shareBasis": null,
+        "denominatorShares": null,
+        "quarters": [
+          {
+            "quarter": 1,
+            "eps": {
+              "kind": "point",
+              "value": 1.16
+            }
+          },
+          {
+            "quarter": 2,
+            "eps": {
+              "kind": "point",
+              "value": 1.19
+            }
+          },
+          {
+            "quarter": 3,
+            "eps": {
+              "kind": "range",
+              "low": 1.22,
+              "high": 1.32
+            }
+          },
+          {
+            "quarter": 4,
+            "eps": {
+              "kind": "range",
+              "low": 1.25,
+              "high": 1.35
+            }
+          }
+        ],
+        "annual": {
+          "kind": "range",
+          "low": 4.82,
+          "high": 5.02
+        }
+      }
+    },
+    {
+      "status": "archive_observed",
+      "schemaVersion": "vnext-mops-simple-forecast-capture-v1",
+      "symbol": "4904",
+      "market": "TWSE",
+      "publishedDate": "2026-02-26",
+      "knownAt": "2026-11-16T17:16:44.812Z",
+      "sourcePage": "https://mopsov.twse.com.tw/mops/web/t163sb10",
+      "listingReceipt": {
+        "sha256": "bf8ecc5f27017f958f292982bd08b8ee53cf13a410c2b08c808946bbaa4afee8",
+        "bytes": 4268,
+        "acquiredAt": "2026-11-16T17:16:44.486Z"
+      },
+      "detailReceipt": {
+        "sha256": "13a35f23a12787aa08a87f58e2208dc480ff33f362094599d8f7ee43f825f32c",
+        "bytes": 15754,
+        "acquiredAt": "2026-11-16T17:16:44.812Z"
+      },
+      "observation": {
+        "issuerName": "遠傳電信股份有限公司",
+        "year": 2026,
+        "unit": "TWD_per_share",
+        "classification": "issuer_disclosed_forecast",
+        "shareBasis": null,
+        "denominatorShares": null,
+        "quarters": [
+          {
+            "quarter": 1,
+            "eps": {
+              "kind": "point",
+              "value": 0.95
+            }
+          },
+          {
+            "quarter": 2,
+            "eps": {
+              "kind": "point",
+              "value": 0.95
+            }
+          },
+          {
+            "quarter": 3,
+            "eps": {
+              "kind": "point",
+              "value": 0.97
+            }
+          },
+          {
+            "quarter": 4,
+            "eps": {
+              "kind": "point",
+              "value": 1.06
+            }
+          }
+        ],
+        "annual": {
+          "kind": "point",
+          "value": 3.93
+        }
+      }
+    }
+  ],
+  "repeatedCapture": {
+    "symbol": "2412",
+    "firstKnownAt": "2026-11-16T17:16:14.228Z",
+    "listingAndDetailHashesMatch": true,
+    "observationsMatch": true
+  },
+  "rejected": {
+    "symbol": "2454",
+    "year": 2026,
+    "reason": "multiple_or_revised_filings_need_reconciliation",
+    "detailRequestMade": false
+  },
+  "checks": {
+    "node": {
+      "passed": 23,
+      "failed": 0,
+      "logSha256": "76a8ffe0fbc91fb3e2b10cee394fb3931014d867b2cd481733728b1b9af5317a"
+    },
+    "typescript": "passed",
+    "eslintChangedFiles": "passed",
+    "productionBuild": {
+      "status": "passed",
+      "logSha256": "9adf8ecd59d9b428a860a946bb9f2637b9f5377c2a9584a7ebe504108f6fee3f"
+    }
+  },
+  "authority": {
+    "productionChanged": false,
+    "providerRequests": 0,
+    "rawBodiesInGit": false,
+    "newForecastAdmitted": false,
+    "existingHold": "retained"
+  },
+  "pending": [
+    "Current-source rights and latest revision reconciliation",
+    "Native frozen research input and independent review",
+    "Reviewed valuation scenario outputs"
+  ]
+}

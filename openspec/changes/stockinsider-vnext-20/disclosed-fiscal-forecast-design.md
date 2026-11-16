@@ -71,3 +71,25 @@ Material comparison keeps forecast type, period, value, publication time, source
 and a digest of the original fiscal statement. An updated set of share
 assumptions can therefore require review even if the EPS is unchanged. Repeated
 acquisition of the same content preserves the material hash.
+
+## MOPS simple-format original forecast source
+
+The MOPS archive adapter fetches the official list and the identified original
+detail by the fixed filing query. It binds the issuer code, ROC report year,
+season mask, sequence, and declared publication date across the two responses.
+Each capture preserves receipt time, byte count and both original response
+digests. The original content can be supplied privately to later source
+validation. The diagnostic command writes the structured capture receipt.
+
+The supported form is one original consolidated filing covering four stated
+quarters with a separately declared annual total. Duplicate or revised filings
+require reconciliation before selection. Each EPS cell keeps a point value or
+its exact reported lower and upper bounds. The annual figure comes from the
+annual cell. Share basis and forecast denominator stay unknown when absent.
+All five periods are classified within the company forecast disclosure.
+
+The archive reader provides historical source evidence. Freshness, current
+rights, latest revision and immutable preparation admission still belong to the
+existing data authorities. The capture clock of any new retrieval must be
+retained for point-in-time evaluation. Promoting a range into reviewed forward
+valuation requires further source and scenario validation.
