@@ -1,0 +1,76 @@
+{
+  "schema": "stockinsider-t06-twse-cash20-v1",
+  "recordedAt": "2026-11-16T13:46:00Z",
+  "baseCommit": "5723c66766665025a11948c4e499a3222bd8eb40",
+  "scope": "isolated Contabo PostgreSQL and production application build",
+  "cashWindow": {
+    "datasetId": 11549,
+    "currency": "TWD",
+    "sessions": 20,
+    "minimumTotalNtd": 1000000000,
+    "minimumDailyAverageNtd": 50000000,
+    "usesExactExchangeCalendar": true,
+    "requiresReadyAtCutoff": true,
+    "countsReportedZero": true,
+    "missingIsUnknown": true,
+    "checksCurrentSourceHead": true,
+    "privateSnapshotAndFactPins": true,
+    "doesNotSubstituteForScoreOrSourceRights": true
+  },
+  "calendarFailure": {
+    "reproduced": true,
+    "conflictingAlias": "a",
+    "sqlstate": "42702",
+    "fixedWithQualifiedAnnualReceiptAlias": true
+  },
+  "migrations": {
+    "predecessors": {
+      "vnext_launch_rank_preflight_v1": "2103b9f80c5448a4e0b64a57fe308c5caa0e5af496dd919f2802522d5c51a3f8",
+      "vnext_launch_qualification_checks_v1": "5fc7333c3bccbfd19c2594757e0c0e68b88815eaac5af8766dfd5b7d57876a14",
+      "vnext_launch_ranking_command_v1": "5731bb3ea67e59373cc764bac2d8126527c9f56cf8e7a5886dd364267bfb3a96",
+      "vnext_launch_live_v1": "50dfa600cb93e04617c5ad114dd43ba4164bea10952af57a6b59fab3e3769432",
+      "vnext_launch_cash_calendar_internal_v1": "7e05007d2e8996e958e946e56d687d3a1332037e3b12e82dabc7b5323320d6e0"
+    },
+    "successors": {
+      "vnext_launch_rank_preflight_v1": "9b7f095a4a2a0aed5dc6c61ebee6fee9bbc38cd07759c3def8480ff251d7267e",
+      "vnext_launch_qualification_checks_v1": "a2f1af06f96c0021d4d9ca6d29ca50bf23d8aa050a3810408ffbbbeb207c7e24",
+      "vnext_launch_ranking_command_v1": "1b0243ea4da21ae1ad84ac55b36cc8475f7b799bc94ced4749ef0431347ffdd3",
+      "vnext_launch_live_v1": "5ae26c7d2036552e997dbbb1001bcc9c65cde7500e686c3c007ee25b47f4f516",
+      "vnext_launch_cash_calendar_internal_v1": "43c05496d31f90c464c0bfe67a33c3a238d57e79f4883432381d38d166489ec4"
+    },
+    "fiveRoutineMetadataUnchanged": true
+  },
+  "native": {
+    "node": "22.23.1",
+    "postgres": 17,
+    "completed": true,
+    "privateNetwork": true,
+    "productionDataUsed": false,
+    "fixtures": [
+      "19 of 20 sessions stays unknown",
+      "unacknowledged on-time payload stays unknown",
+      "reported zero operand and exact one-billion-NTD sum passes liquidity only",
+      "same 20 sessions required in chronological order",
+      "one NTD below gate gives known exclusion",
+      "post-cutoff source-head change demotes the window",
+      "TPEX path remains eligible for its original known exclusion"
+    ],
+    "scratchRemoved": true
+  },
+  "build": {
+    "next": "16.3.4",
+    "typescriptPassed": true,
+    "staticPages": 92,
+    "exit": 0,
+    "scratchRemoved": true
+  },
+  "realPriorCapture": {
+    "session": "2026-11-16",
+    "confirmedRows": 1390,
+    "observedOfficialSource": true,
+    "verified20SessionSourceSet": false,
+    "realRankingPublished": false
+  },
+  "productionTouched": false,
+  "releaseHoldRetained": true
+}
