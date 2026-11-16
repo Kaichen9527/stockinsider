@@ -81,12 +81,17 @@ Each capture preserves receipt time, byte count and both original response
 digests. The original content can be supplied privately to later source
 validation. The diagnostic command writes the structured capture receipt.
 
-The supported form is one original consolidated filing covering four stated
-quarters with a separately declared annual total. Duplicate or revised filings
-require reconciliation before selection. Each EPS cell keeps a point value or
-its exact reported lower and upper bounds. The annual figure comes from the
-annual cell. Share basis and forecast denominator stay unknown when absent.
-All five periods are classified within the company forecast disclosure.
+The supported form is an original consolidated full-year or individual-quarter
+filing. Scope is keyed by issuer, report year and the declared four-position
+season mask before considering revision sequence. Other quarters are separate
+filings. Multiple rows for the requested mask require revision reconciliation.
+When no exact scope exists, the reader returns an unavailable result.
+
+Each EPS cell keeps its point value or both original bounds. The earlier periods
+shown in an individual-quarter filing are comparative values of unverified
+accounting status. A displayed total in that filing is cumulative through the
+selected quarter. Full-year EPS comes from the full-year disclosure. Share
+basis and forecast denominator stay unknown when absent.
 
 The archive reader provides historical source evidence. Freshness, current
 rights, latest revision and immutable preparation admission still belong to the

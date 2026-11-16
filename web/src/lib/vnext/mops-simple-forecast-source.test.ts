@@ -38,7 +38,7 @@ test('original filing preserves each declared period and the independent signed 
  assert.deepEqual(parseMopsSimpleForecastDetail(detail.replace('1.1 ~ 3.4','-1.25 ~ -0.12'),scope,release).annual,{kind:'range',low:-1.25,high:-0.12});
 });
 
-test('today cannot fall back to the original when the list has multiple releases or ambiguous scope',()=>{
+test('same-scope releases and invalid listing identity cannot select a filing',()=>{
  assert.equal(parseMopsSimpleForecastIndex(reportIndex(''),scope),null);
  for(const invalid of [reportIndex(entry+entry),reportIndex(entry.replace('原編','修正')),reportIndex(entry.replace('SEQ_NO.value="0"','SEQ_NO.value="9"')),
   reportIndex(entry).replace('2412','2454'),reportIndex(entry).replace('115/01/23','115/02/30')])
@@ -82,4 +82,53 @@ test('read path refuses changed origin or type, oversize and invalid identifiers
   assert.equal(requests,1);
  }
  await assert.rejects(()=>readMopsSimpleForecast({...scope,symbol:'2412&year=116'},async()=>{throw Error('unexpected_io');}),/scope_invalid/u);
+});
+
+const q3={...scope,quarter:3 as const};
+const q3Entry=entry.replace('一、二、三、四','三').replace('115/01/23','115/07/31').replace('DURS.value="1111"','DURS.value="0010"');
+const q2Entry=entry.replace('一、二、三、四','二').replace('115/01/23','115/04/30').replace('DURS.value="1111"','DURS.value="0100"');
+const q3Detail=detail.replace('●第一季●第二季●第三季●第四季','○第一季○第二季●第三季○第四季')
+ .replace('115/01/23','115/07/31').replace('<th>第四季(註一)<br>○查核(核閱數)<br>○自結數<br>○預測數</th>','')
+ .replace('<td>0.7 ~ 2.2</td>','').replace('<td>1.1 ~ 3.4</td>','<td>0.7 ~ 1.0</td>');
+
+test('different quarter masks with sequence zero have independent identity and provide no annual forecast',()=>{
+ const listing=reportIndex(q3Entry+q2Entry);
+ assert.equal(parseMopsSimpleForecastIndex(listing,scope),null);
+ const choice=parseMopsSimpleForecastIndex(listing,q3)!;
+ assert.equal(choice.publishedDate,'2026-07-31');
+ assert.deepEqual(choice.coveredQuarters,[3]);
+ assert.equal(choice.coverageMask,'0010');
+ assert.equal(parseMopsSimpleForecastIndex(listing,{...scope,quarter:2})?.coverageMask,'0100');
+ assert.deepEqual(parseMopsSimpleForecastIndex(reportIndex(q3Entry+entry),scope)?.coveredQuarters,[1,2,3,4]);
+ const correction=q3Entry.replace('<td>0</td><td>原編</td>','<td>1</td><td>更正</td>');
+ assert.throws(()=>parseMopsSimpleForecastIndex(reportIndex(q3Entry+correction),q3),/multiple_or_revised_filings_need_reconciliation/u);
+ assert.equal(parseMopsSimpleForecastIndex(reportIndex(q3Entry+correction+entry),scope)?.coverageMask,'1111');
+});
+
+test('Q3 separates earlier displayed comparatives, Q3 forecast and published cumulative across Q1 through Q3',()=>{
+ const filing=parseMopsSimpleForecastIndex(reportIndex(q3Entry+q2Entry),q3)!;
+ const read=parseMopsSimpleForecastDetail(q3Detail,q3,filing);
+ assert.deepEqual(read.quarters,[{quarter:3,eps:{kind:'range',low:1.2,high:1.5}}]);
+ assert.deepEqual(read.comparativeQuarters,[{quarter:1,eps:{kind:'point',value:0}},{quarter:2,eps:{kind:'point',value:-0.5}}]);
+ assert.deepEqual(read.displayedCumulative,{throughQuarter:3,eps:{kind:'range',low:0.7,high:1}});
+ assert.equal(read.annual,null);
+ assert.throws(()=>parseMopsSimpleForecastDetail(detail,q3,filing),/detail_scope_mismatch/u);
+ assert.throws(()=>parseMopsSimpleForecastDetail(q3Detail,scope,filing),/detail_scope_mismatch/u);
+});
+
+test('quarter acquisition sends only the selected mask and no detail request when requested annual is absent',async()=>{
+ const calls:URLSearchParams[]=[];
+ const transport:typeof fetch=async(_url,init)=>{
+  const body=new URLSearchParams(String(init!.body));
+  calls.push(body);
+  return response(body.get('step')==='3'?q3Detail:reportIndex(q3Entry+q2Entry));
+ };
+ const result=await readMopsSimpleForecast(q3,transport);
+ assert.ok(result);
+ assert.deepEqual(result.coveredQuarters,[3]);
+ assert.equal(calls[1].get('DURS'),'0010');
+ assert.equal(result.observation.annual,null);
+ calls.length=0;
+ assert.equal(await readMopsSimpleForecast(scope,transport),null);
+ assert.equal(calls.length,1);
 });
