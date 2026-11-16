@@ -1,0 +1,125 @@
+{
+  "recordedAt": "2026-11-16T14:20:12+08:00",
+  "workItem": "T09",
+  "sourceHead": "94840424064d7d98a7508fc0fcdc11e3282279c8",
+  "scope": "Official publicly downloadable format samples cross-checked with an official historical daily report from Contabo. Read-only, no credential or raw file persisted or published.",
+  "links": {
+    "tpexProduct": "https://eshop.tpex.org.tw/zh/product/detail/2c92e0139984eab70199892c78bf0004",
+    "tpexFormat": "https://eshop.tpex.org.tw/uploadFile/upload/product/2c92e0139984eab70199892f7fcf0005.pdf",
+    "tpexSample": "https://eshop.tpex.org.tw/uploadFile/upload/product/2c92e0139984eab70199892fbfab0006.TXT",
+    "tpexDaily": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?date=2023%2F09%2F15&code=3105&response=json",
+    "twseProduct": "https://eshop.twse.com.tw/zh/product/detail/0000000063ce6ab00163d860b694000a",
+    "fugleStream": "https://developer.fugle.tw/docs/data/websocket-api/market-data-channels/trades/",
+    "fuglePlan": "https://developer.fugle.tw/docs/pricing/",
+    "shioaji": "https://sinotrade.github.io/zh/tutor/market_data/historical/"
+  },
+  "tpex": {
+    "market": "TPEX",
+    "session": "2023-09-15",
+    "symbol": "3105",
+    "sourceShape": {
+      "paddingBothBlank": 0,
+      "dates": {
+        "20230915": 9164
+      },
+      "distinctSymbols": 1,
+      "tradeTypeCounts": {
+        "0": 7210,
+        "2": 1954
+      }
+    },
+    "rawTapeSha256": "2f3fbe0b93ba71b624c24e9bae273af804092ea49fd8c6e0509d455b7762470e",
+    "rawTapeBytes": 632316,
+    "recordBytesBeforeCrLf": 67,
+    "firstRegularMatching": {
+      "timeTaipei": "09:00:14.019624",
+      "priceTwd": "142.00",
+      "distinctPairedTrades": 44,
+      "shares": 51000
+    },
+    "reconciliation": {
+      "matchKey": [
+        "market",
+        "date",
+        "symbol",
+        "tradeType",
+        "time",
+        "tradeNumber"
+      ],
+      "matchedBuySellPriceAndSharesForEveryGroup": true,
+      "totalMatches": 4582,
+      "totalShares": 6313078,
+      "officialDayLots": "6,313",
+      "officialDayMatches": "4,582",
+      "officialDayOpen": "142.00",
+      "dailyDataSha256": "84e3e6416342707dd37add2b9ce537afd0fd56d82d6687099db225d68ca4ca46",
+      "dailyMatchCountExact": true,
+      "dailyShareCountAtReportedThousandSharePrecision": true,
+      "openMatchesOfficialDay": true,
+      "byTradeType": {
+        "0": {
+          "afterRegularCloseGroups": 6,
+          "afterRegularCloseShares": 6000,
+          "groups": 3605,
+          "paired": 3605,
+          "sideShares": 6259000
+        },
+        "2": {
+          "afterRegularCloseGroups": 20,
+          "afterRegularCloseShares": 738,
+          "groups": 977,
+          "paired": 977,
+          "sideShares": 54078
+        }
+      }
+    }
+  },
+  "twse": {
+    "sample": {
+      "completeDailyTapeVerified": false,
+      "dates": {
+        "20250508": 20
+      },
+      "distinctSymbols": 1,
+      "fullyPairedGroups": 9,
+      "groups": 11,
+      "rows": 20,
+      "sha256": "fb81e410436da0c43b2ef5ab9b1fa239907657e29868c1f2da8e9cce6a9fdada",
+      "tradeTypes": {
+        "0": 20
+      },
+      "width": 68
+    },
+    "documentFields": {
+      "entry": {
+        "position": 42,
+        "width": 8
+      },
+      "quantity": {
+        "position": 50,
+        "width": 9
+      },
+      "dateTime": {
+        "position": 17,
+        "width": 12
+      }
+    },
+    "specSha256": "9791efc840f301a41148803cfd401bad99862eadeca464f631a39496a208282c",
+    "unpairedGroups": 2
+  },
+  "providerPaths": {
+    "fullMarketHistorical": [
+      "TWSE and TPEx sell historical execution files. Their public sample downloads were used only to check format and evidence. Purchasable periods and rights must be confirmed with the exchanges; the product page is not a grant for automated or public use."
+    ],
+    "fugle": "WebSocket trades offers an explicit opening and trial marker with size and timestamp. The current free plan has five subscriptions. Verify account entitlement, storage and derived-publication rights, market/symbol status, signed starting baseline, uninterrupted opening coverage and 10 concurrent subscriptions before treating it as a production data source. No account or order action was taken.",
+    "shioaji": "Historical ticks provides timestamp, actual price, and size for completed dates and uses separate account and market-data authorization. Opening-auction marking and coverage are not documented on this historical endpoint; reconcile the first match and separately prove opening-session completeness."
+  },
+  "acceptance": {
+    "observedOfficialSampleAt": "2026-11-16T14:20:12+08:00",
+    "noBackdating": true,
+    "noSignalCreated": true,
+    "noExecutionRecorded": true,
+    "tokenOrSubscriptionSpent": false,
+    "stillRequired": "Authorized recent first-opening data for the actual next completed session of a real frozen ranking, with market and traded quantity semantics and license verified."
+  }
+}

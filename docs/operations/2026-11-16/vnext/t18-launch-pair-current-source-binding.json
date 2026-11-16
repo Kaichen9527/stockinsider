@@ -1,0 +1,37 @@
+{
+  "recordedAt": "2026-11-16T14:20:12+08:00",
+  "workItem": "T18",
+  "engineeringHead": "94840424064d7d98a7508fc0fcdc11e3282279c8",
+  "packages": [
+    {
+      "pinnedSource": "f67548d87f2563608aa1469c14e6976d52a866cc",
+      "verifiedManifest": "a980d41f1f76c6e96a9dcb7349df129606ec37c234850933297dca7b9bac266a",
+      "nextVersion": "16.3.4",
+      "buildIdSha256": "bdb8a05d5a7f0838083079b684106b72179f74a7a67cf6e4c8f4955198a4063d",
+      "invokedApplication": false
+    },
+    {
+      "pinnedSource": "948bb9e448eda468bb618f78ec6b0ca1d691d0d5",
+      "verifiedManifest": "7baa6bab4e6140c41b1fa7cb9ac96cac23e1746f2e017ef3be3291d42115b1be",
+      "nextVersion": "16.3.4",
+      "buildIdSha256": "7c89ceb6b054f6cb741cf5dc200977fb3860463c498df65eb2882db9a59517f9",
+      "invokedApplication": false
+    }
+  ],
+  "newestPackageAppAndMigrationTreesMatchEngineeringHead": {
+    "web": "db9f7de8db692aba6b76f5583a2726a9c7e9a64a",
+    "migrations": "bf496a3b2bf9f4344e2182cfa62bbff446a6cfc6",
+    "deployment": "49b61c1c61c43db4e5f6b3cc6e5d043b305f8086",
+    "package-lock.json": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+  },
+  "wholeRepositoryTreeIdentical": false,
+  "boundedChangesAfterNewestPackage": "Diagnostic documents and migration runner/test changes. Executable JavaScript returned by the Next.js bundle is bound to the package's pinned source commit, not relabeled with the engineering HEAD.",
+  "rollbackAdmissibility": {
+    "requiredLaunchReadpoint": "FROZEN_RANK_ROWS_OBSERVED",
+    "authoritativeHarnessCommit": "005a94e2bd99ed4d3d8964220ef41efb7575bda6",
+    "latestAuthenticClone": "DB_VERIFIED_T18_GAP",
+    "latestLaunchRollback": "NOT_RUN",
+    "reason": "Original verified migrations and a genuine frozen launch ranking are still required. The legacy archive cannot serve as evidence of a later real launch ranking."
+  },
+  "productionChanged": false
+}
