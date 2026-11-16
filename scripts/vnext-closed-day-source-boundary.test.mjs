@@ -21,5 +21,8 @@ test('original fiscal helper and fatal business calendar gate are retained',()=>
  assert.equal(ends.length,1);
  assert.ok(starts[0]<ends[0]);
  const calendarBoundary=lines.slice(starts[0],ends[0]+1).join('\n')+'\n';
- assert.equal(hash(calendarBoundary),'2ac8f10207812876a9f78c566ace4ddbba212005cb4893cc7ee2aadbdae995fc');
+ const observedClock='signalSession:sync.latestCompleted,cutoff:await historicalCutoff()';
+ assert.equal(calendarBoundary.split(observedClock).length,2);
+ const originalBoundary=calendarBoundary.replace(observedClock,'signalSession:sync.latestCompleted,cutoff:await clock()');
+ assert.equal(hash(originalBoundary),'2ac8f10207812876a9f78c566ace4ddbba212005cb4893cc7ee2aadbdae995fc');
 });

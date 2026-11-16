@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
 import {randomUUID,randomBytes} from 'node:crypto';
+import {setTimeout as delay} from 'node:timers/promises';
 import {workerFixture,hash} from './vnext-worker-fixture.mjs';
 import {installActionTermsCandidate,proveActionTermsOriginals} from './vnext-action-terms-native-fixture.mjs';
 import {installPublishedTargetReadCandidate} from './vnext-published-target-read-native-fixture.mjs';
@@ -16,6 +17,7 @@ import {validateOfficialFinancialFact} from '../web/src/lib/official-financial-v
 import {resolveFinancialEvidenceSources} from '../web/src/lib/vnext/financial-evidence-sources.ts';
 import {loadTwEntryHistoricalPriceAuthority} from '../web/src/lib/tw-entry-plan-authority.ts';
 import {inputHash} from '../web/src/lib/vnext/policy.ts';
+import {evidenceKnownAt} from '../web/src/lib/vnext/evidence-clock.ts';
 import {binding} from './vnext-synthetic-research-vectors.mjs';
 import {PREPARATION_INSTRUMENT_COLUMNS} from '../web/src/lib/vnext/preparation-trading-identity.ts';
 export const preparationLineage={"path":"scripts/vnext-issuer-ir-postgres.test.mjs","sourceSha256":"1a61d92a43fcda82ad6fd9b6da00525c5861558701b644720e993709076db545","fragments":[{"start":24856,"end":28353,"firstLine":135,"lastLine":145,"sha256":"28b8f89c5ba24b112ddaed0c583e7b02d0a22263cfb845f809aaabbc66b8e6ee"},{"start":28359,"end":29701,"firstLine":147,"lastLine":151,"sha256":"34546104f9f8012fbc67720e735147c884aabe05cac1204582cae4a1727dc17f"}],"scope":"exact original legal RPC prefix copied; no old test entry import or execution"};
@@ -43,6 +45,17 @@ export async function preparationHttpFixture(){
  const x=await workerFixture();const trace=[],connections=new Set(),sockets=new Set();let pending=0,active=false,armed=false,loss=null;
  const releaseId='c'.repeat(40),keys={bridge:randomBytes(32).toString('hex'),author:randomBytes(32).toString('hex'),operator:randomBytes(32).toString('hex'),reviewer:randomBytes(32).toString('hex')};
  const clock=async()=>(await x.observer.query('SELECT to_jsonb(clock_timestamp()) AS value')).rows[0].value;
+ // PostgreSQL exposes microseconds while the app observes the same wall
+ // clock in milliseconds. Preserve the DB cutoff and wait for it to be known.
+ const historicalCutoff=async()=>{
+  const cutoff=await clock();
+  const expires=performance.now()+250;
+  while(!evidenceKnownAt(cutoff,new Date().toISOString())){
+   if(performance.now()>=expires)throw Error('preparation_historical_cutoff_not_yet_known');
+   await delay(1);
+  }
+  return cutoff;
+ };
  async function query(sql,args=[],{readonly=false,headers={}}={}){
   const c=await x.connect();connections.add(c);pending++;let transactionSettled=false;
   // Listen BEFORE each query. A rejected SELECT in an explicit transaction
@@ -241,7 +254,7 @@ export async function preparationHttpFixture(){
   const historicalDay=(await x.observer.query("SELECT d::date::text AS day FROM generate_series((clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date-8,(clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date,interval'1 day')d WHERE extract(isodow FROM d)<6 AND (d::date+time'13:30') AT TIME ZONE 'Asia/Taipei'<=clock_timestamp() ORDER BY d DESC LIMIT 1")).rows[0].day;
   for(const day of [...new Set([civil.today,historicalDay])])for(const [market,provider]of [['TWSE','twse'],['TPEX','tpex']])await x.writer.query("INSERT INTO public.tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,provider,source_timestamp,collected_at,source_ref) VALUES($1,$2,$3,$4,$5,'completed',$6,$7,$7,'synthetic-preparation-calendar-not-acquired')",[randomUUID(),day,market,day+'T01:00:00Z',day+'T05:30:00Z',provider,await clock()]);
   const sync=(await query("SELECT public.vnext_cached_admission_v1($1,'sync-calendar','{}'::jsonb) AS result",[preparationPrincipals.operator])).rows[0].result;const completed=Date.parse(sync.sourceCutoff)>=Date.parse(civil.today+'T05:30:00Z');const selected=(await x.observer.query('SELECT completed FROM public.vnext_sessions_v1 WHERE session_date=$1',[civil.today])).rows[0];assert.equal(selected.completed,completed);
-  const historical=await loadTwEntryHistoricalPriceAuthority(cache,{stockId,symbol:'2408',exchange:'TWSE',signalSession:sync.latestCompleted,cutoff:await clock()});assert.equal(historical.priceBasis,null);assert.ok(historical.missingData.includes('adjusted_history_below_240'));
+  const historical=await loadTwEntryHistoricalPriceAuthority(cache,{stockId,symbol:'2408',exchange:'TWSE',signalSession:sync.latestCompleted,cutoff:await historicalCutoff()});assert.equal(historical.priceBasis,null);assert.ok(historical.missingData.includes('adjusted_history_below_240'));
   assert.deepEqual((await x.observer.query('SELECT * FROM public.stockinsider_data_plane_settings_v1')).rows,[]);await x.writer.query("INSERT INTO public.production_writer_releases(release_id,writer_kind,active,activated_at) VALUES($1,'vps',true,clock_timestamp())",[releaseId]);active=true;
   x.save('preparation-fixture-authority',{lineage:preparationLineage,stockId,documentReceipt,facts,projected,historical,syntheticCalendar:{civil,historicalDay,completed,sync},actualArelle:false,acquiredFiling:false,modelInvocations:0,formalFinancialApproval:false});
  }

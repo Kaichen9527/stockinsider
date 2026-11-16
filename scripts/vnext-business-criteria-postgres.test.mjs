@@ -1,7 +1,8 @@
 /** Actual future fresh PG/current-public component acceptance. Sources/model are
  * synthetic; no old test entry is imported, no financial/semantic approval. */
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {randomUUID} from 'node:crypto';
-import {workerFixture,hash} from './vnext-worker-fixture.mjs';import {roles,binding,input,authorOutput,reviewerOutput,day} from './vnext-synthetic-research-vectors.mjs';
+import {workerFixture,hash} from './vnext-worker-fixture.mjs';import {roles,binding,day} from './vnext-synthetic-research-vectors.mjs';
+import {scalarInput as input,scalarAuthorOutput as authorOutput,scalarReviewerOutput as reviewerOutput} from './vnext-native-scalar-research-fixture.mjs';
 import {inputHash} from '../web/src/lib/vnext/policy.ts';import {runResearchWorker} from '../web/src/lib/vnext/worker-core.ts';import {BUSINESS_WORKER_PROFILE} from '../web/src/lib/vnext/worker-prompts.ts';import {BUSINESS_CRITERIA,businessChecklist} from '../web/src/lib/vnext/business-criteria.ts';import {extractContentBatch} from '../web/src/lib/vnext/permitted-content.ts';import {auditPublishedThesis} from '../web/src/lib/vnext/thesis-audit.ts';import {publicHome} from '../web/src/lib/vnext/public-contract.ts';
 const candidate='migrations/20261023_vnext_business_criteria_v1.sql',profile=JSON.parse(fs.readFileSync('scripts/opportunity-v3/vnext-business-criteria-profile-v1.json','utf8'));
 const versions=['vnext-research-worker-v1','vnext-research-worker-v2','vnext-research-worker-v3','vnext-research-worker-v4','vnext-research-worker-v5'];assert.deepEqual(profile.promptConstraint.newVersions,versions);
@@ -32,9 +33,65 @@ await test('current original-bound competitive/thesis-risk components with no sc
  const b=role=>({...binding(role),promptVersion:BUSINESS_WORKER_PROFILE.version,instructions:BUSINESS_WORKER_PROFILE[role]});const originals=new Map(),publications=new Map();
  const constraints=async()=>(await query("SELECT oid,to_jsonb(c)-'oid'-'conbin' AS metadata,pg_get_constraintdef(oid) AS definition FROM pg_constraint c WHERE conrelid='public.vnext_provider_bindings_v1'::regclass ORDER BY conname",[],{readonly:true})).rows;
  const thesis=(action,body)=>query('SELECT public.vnext_thesis_command_v1($1,$2,$3::jsonb) AS result',[roles.operator.principal,action,JSON.stringify(body)],{role:'service_role'}).then(r=>r.rows[0].result);
- const provider={invoke:async(request,id)=>{const doc=JSON.parse(request.input);providerCalls.push({id,task:doc.task,symbol:doc.symbol,requestHash:inputHash(request)});let output;if(doc.task==='author'){output=authorOutput();const e=originals.get(doc.symbol);for(const criterion of BUSINESS_CRITERIA)output.claims.push({id:'synthetic-'+criterion,text:'Synthetic original-backed inference with an explicit competitive limitation and falsifier; this is not real semantic approval or bounded investment loss.',kind:'assumption',evidenceIds:[e.id],business:{schemaVersion:'vnext-business-annotation-v1',criterion,outcome:criterion==='thesis_risk_analysis'?'unknown':doc.symbol==='2409'?'met':'not_met',symbol:doc.symbol,evidenceId:e.id,contentHash:e.contentHash,field:'statement',startCp:0,endCp:Array.from(e.value.statement).length,quote:e.value.statement}});for(const section of Object.values(output.sections)){section.claimIds.push(...output.claims.slice(2).map(c=>c.id));section.evidenceIds.push(e.id);}}
-  else{output=reviewerOutput(doc);for(const check of output.claimChecks){const claim=doc.authorArtifact.claims.find(c=>c.id===check.claimId);if(claim.business)check.businessAssessment={schemaVersion:'vnext-business-assessment-v1',annotation:structuredClone(claim.business),assessment:claim.business.outcome==='unknown'?'insufficient':'supported_inference',reason:'Synthetic independent-role source quote/issuer/hash comparison with explicit inference limits; not an actual model, semantic review or risk bound.'};}}
-  return {status:'completed',responseId:'resp_business_'+id.replaceAll('-',''),raw:{synthetic:true},output};},lookup:async()=>{throw Error('no automatic extra model call');}};
+ const sourceOnlySymbol='2383';
+ const provider={
+  async invoke(request,id){
+   const doc=JSON.parse(request.input);
+   providerCalls.push({id,task:doc.task,symbol:doc.symbol,requestHash:inputHash(request)});
+   const evidence=originals.get(doc.symbol);
+   const sourceOnly=doc.symbol===sourceOnlySymbol;
+   if(sourceOnly)assert.deepEqual(doc.evidence.evidence,[evidence]);
+   let output;
+   if(doc.task==='author'){
+    output=authorOutput();
+    if(sourceOnly){
+     output.claims=[];
+     output.annualEps=null;
+     output.gaps.push('annual_eps_missing');
+     for(const section of Object.values(output.sections)){
+      section.text='Synthetic source-only analysis. Financial estimates and valuation are unavailable.';
+      section.claimIds=[];
+      section.evidenceIds=[];
+     }
+    }
+    const claims=BUSINESS_CRITERIA.map(criterion=>({
+     id:'synthetic-'+criterion,
+     text:'Synthetic original-backed inference with an explicit competitive limitation and falsifier; this is not real semantic approval or bounded investment loss.',
+     kind:'assumption',
+     evidenceIds:[evidence.id],
+     business:{
+      schemaVersion:'vnext-business-annotation-v1',criterion,
+      outcome:criterion==='thesis_risk_analysis'?'unknown':sourceOnly?'not_met':'met',
+      symbol:doc.symbol,evidenceId:evidence.id,contentHash:evidence.contentHash,
+      field:'statement',startCp:0,endCp:Array.from(evidence.value.statement).length,quote:evidence.value.statement,
+     },
+    }));
+    output.claims.push(...claims);
+    for(const section of Object.values(output.sections)){
+     section.claimIds.push(...claims.map(claim=>claim.id));
+     section.evidenceIds.push(evidence.id);
+    }
+   }else{
+    output=sourceOnly?{
+     approved:true,findings:[],factsChecked:true,valuationChecked:true,claimsChecked:true,
+     claimChecks:doc.authorArtifact.claims.map(claim=>({
+      claimId:claim.id,verdict:'supported',reason:'Synthetic source comparison; the valuation gap remains.',
+      sources:[{id:evidence.id,contentHash:evidence.contentHash}],
+     })),
+    }:reviewerOutput(doc);
+    for(const check of output.claimChecks){
+     const claim=doc.authorArtifact.claims.find(item=>item.id===check.claimId);
+     if(claim.business)check.businessAssessment={
+      schemaVersion:'vnext-business-assessment-v1',annotation:structuredClone(claim.business),
+      assessment:claim.business.outcome==='unknown'?'insufficient':'supported_inference',
+      reason:'Synthetic independent-role source quote, issuer and hash comparison with explicit inference limits.',
+     };
+    }
+   }
+   return {status:'completed',responseId:'resp_business_'+id.replaceAll('-',''),raw:{synthetic:true},output};
+  },
+  async lookup(){throw Error('no automatic extra model call');},
+ };
  const deps={author:b('author'),reviewer:b('reviewer'),provider,journal:(i,a,v)=>rpc(i,a,v,true),command:async(i,a,v)=>{const result=await rpc(i,a,v);if(a==='review-sources'){const before=await snapshot();await rpc(i,'reserve',{jobId:v.jobId,executionId:v.executionId,businessReceipt:{validated:true}},true,{expected:{code:'P0001',message:/^vnext_business_reserve_fields$/u}});assert.deepEqual(await snapshot(),before);await connection(async(c,status)=>{await statement(c,"UPDATE public.vnext_provider_bindings_v1 SET prompt_version='vnext-research-worker-v3' WHERE principal=$1",[i.principal],status);await statement(c,'SET LOCAL ROLE service_role',[],status);await statement(c,'SELECT public.vnext_provider_command_v1($1,$2,$3::jsonb)',[i.principal,'reserve',JSON.stringify(v)],status,{code:'P0001',message:/^vnext_business_profile_binding$/u});},{transaction:true});assert.deepEqual(await snapshot(),before);}return result;},prepare:async(i,v)=>{const claimed=await rpc(i,'claim',v);assert.equal(claimed.execute,true);const evidence={...claimed.evidence,admissionHash:claimed.inputHash,syntheticPreparation:true},h=inputHash(evidence);await rpc(i,'prepare',{jobId:v.jobId,executionId:claimed.executionId,inputHash:h,evidence});return {...claimed,inputHash:h,evidence};},authorReceipt:(i,v)=>rpc(i,'author',v),reviewReceipt:(i,v)=>rpc(i,'review',v),publish:async(i,v)=>{const context=await rpc(i,'qualification-context',{jobId:v.jobId});if(!context.alreadyPublished){const proof={schemaVersion:'stockinsider-vnext-authority-proof-v1',inputHash:context.inputHash,qualified:false,gaps:['synthetic-no-financial-model-authority']};await rpc(i,'record-qualification',{jobId:v.jobId,inputHash:context.inputHash,proof:{...proof,proofHash:inputHash(proof)}});}return rpc(i,'publish',v);},withWriterLease:async work=>work()};
  try{
  await step('complete predecessor+candidate COMMIT with only three body changes, two owner-only helpers and prompt constraint delta',async()=>{
@@ -52,7 +109,7 @@ await test('current original-bound competitive/thesis-risk components with no sc
   for(const symbol of ['2409','2383']){const at=new Date().toISOString(),url='https://mops.twse.com.tw/synthetic-business-'+symbol,text='🔬'+symbol+'合成工程原文：公司披露共同研發安排及競品替代風險；需求、客戶集中與合理估值仍未知。此文不是實際取得或實際語意審查，不構成投資風險界線。';const result=await extractContentBatch([{id:'synthetic-business-'+symbol,source:'official',scope:'official_original',url,eventAt:at,publishedAt:at,eventBasis:'source_publication',availableAt:at,symbols:[symbol],originalRoot:url,authorRoot:'synthetic-one-publisher',body:text}],at,source);assert.equal(result.selected,1);assert.deepEqual(result.rejected,[]);const projected=(await source('source-projection',{symbols:[symbol]}))[symbol];const e=projected.evidence.find(e=>e.value.statement===text);assert.ok(e);originals.set(symbol,e);}
  });
  await step('two genuine worker pipelines use distinct configured synthetic roles, exact originals and v5 immutable journals',async()=>{
-  for(const symbol of ['2409','2383']){const value=input(symbol);value.cutoff=new Date().toISOString();value.evidence.push(originals.get(symbol));value.hash=inputHash({...value,hash:undefined});const queued=await rpc(roles.operator,'enqueue',{symbols:[symbol],requestKey:'synthetic-business-'+symbol,inputs:{[symbol]:value}}),jobId=queued.jobs.find(j=>j.jobId).jobId;assert.equal((await runResearchWorker(jobId,deps)).status,'published');const after=await snapshot(),pub=after.vnext_publications_v1.rows.find(p=>p.job_id===jobId);assert.ok(pub);assert.equal(pub.qualification.qualified,false);publications.set(symbol,pub);const beforeReplay=await snapshot(),calls=providerCalls.length;assert.equal((await runResearchWorker(jobId,deps,true)).replay,true);assert.deepEqual(await snapshot(),beforeReplay);assert.equal(providerCalls.length,calls);x.save('worker-'+symbol,{after,publication:pub,actualModel:false,actualSemanticReview:false});}
+  for(const symbol of ['2409','2383']){const value=input(symbol);value.cutoff=new Date().toISOString();if(symbol===sourceOnlySymbol)value.evidence=[];value.evidence.push(originals.get(symbol));value.hash=inputHash({...value,hash:undefined});const queued=await rpc(roles.operator,'enqueue',{symbols:[symbol],requestKey:'synthetic-business-'+symbol,inputs:{[symbol]:value}}),jobId=queued.jobs.find(j=>j.jobId).jobId;assert.equal((await runResearchWorker(jobId,deps)).status,'published');const after=await snapshot(),pub=after.vnext_publications_v1.rows.find(p=>p.job_id===jobId);assert.ok(pub);assert.equal(pub.qualification.qualified,false);assert.equal(pub.content.annualEps,symbol===sourceOnlySymbol?null:10);assert.equal(pub.content.nextFourQuarterEps,null);publications.set(symbol,pub);const beforeReplay=await snapshot(),calls=providerCalls.length;assert.equal((await runResearchWorker(jobId,deps,true)).replay,true);assert.deepEqual(await snapshot(),beforeReplay);assert.equal(providerCalls.length,calls);x.save('worker-'+symbol,{after,publication:pub,actualModel:false,actualSemanticReview:false});}
   assert.equal(providerCalls.length,4);
  });
  await step('current server context, actual audit/record and public READ expose labelled components without restoring missing score groups',async()=>{
