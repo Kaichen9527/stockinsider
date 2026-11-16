@@ -129,7 +129,7 @@ test('reader uses a single known read RPC and verifies the allowlist without ret
 test('industry filters use the last recorded snapshot classification and report incomplete coverage',()=>{
  const input=poolPacket();
  const oldIndustry={revisionId:id(13),code:'24',knownAt:'2026-11-12T12:00:00Z'};
- const currentIndustry={revisionId:id(14),code:'33',knownAt:'2026-11-16T12:00:00Z'};
+ const currentIndustry={revisionId:id(14),code:'36',knownAt:'2026-11-16T12:00:00Z'};
  const v2={...input,schemaVersion:'launch-candidate-pool-history-v2',
   current:{...input.current,rows:[{...input.current.rows[0],industrySnapshot:null},{...input.current.rows[1],industrySnapshot:currentIndustry}]},
   previous:{...input.previous,rows:input.previous.rows.map(row=>({...row,industrySnapshot:oldIndustry}))}};
@@ -139,7 +139,7 @@ test('industry filters use the last recorded snapshot classification and report 
  assert.equal(all.rows[1].industrySnapshot,null);
  assert.equal(all.rows[2].industrySnapshot?.label,'數位雲端');
  assert.deepEqual(launchCandidatePoolPage(v2,query('industry=半導體'),poolReadAt).rows.map(row=>row.symbol),['2300']);
- assert.deepEqual(launchCandidatePoolPage(v2,query('industry=33'),poolReadAt).rows.map(row=>row.symbol),['2302']);
+ assert.deepEqual(launchCandidatePoolPage(v2,query('industry=36'),poolReadAt).rows.map(row=>row.symbol),['2302']);
  assert.equal(launchCandidatePoolPage(v2,query('industry=99'),poolReadAt).availability,'filtered_projection_unavailable');
  assert.throws(()=>launchCandidatePoolPage({...v2,previous:{...v2.previous,rows:[{...v2.previous.rows[0], industrySnapshot:currentIndustry}]}},
    query(),poolReadAt),/projection_invalid/u);

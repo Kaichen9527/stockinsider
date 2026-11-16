@@ -132,6 +132,12 @@ await test('launch policy is bound to the shared job and its prepared revision i
   assert.equal(withIndustry.previous.rows[0].industrySnapshot.code,'24');
   await addIndustry(newStock,'TPEX','23','oil_gas_electricity',newClock,newClock);
   assert.equal((await poolIndustry()).current.rows[0].industrySnapshot,null);
+  const cloudIndustry = await addIndustry(newStock,'TPEX','36','unknown',offset(newClock,1000),newClock);
+  const withOfficialCode = (await poolIndustry()).current.rows[0].industrySnapshot;
+  assert.equal(withOfficialCode.revisionId, cloudIndustry);
+  assert.equal(withOfficialCode.code, '36');
+  await addIndustry(newStock,'TPEX','91','unknown',offset(newClock,2000),newClock);
+  assert.equal((await poolIndustry()).current.rows[0].industrySnapshot,null);
   await assert.rejects(()=>service('SELECT public.vnext_launch_candidate_industry_v1($1,$2) AS result',['2383',snapshot.current.cutoff]),{code:'42501'});
   assert.equal(JSON.stringify(snapshot).includes('synthetic_private'),false);
   await assert.rejects(()=>service('SELECT count(*) AS result FROM public.vnext_launch_ranking_snapshots_v1'),{code:'42501'});

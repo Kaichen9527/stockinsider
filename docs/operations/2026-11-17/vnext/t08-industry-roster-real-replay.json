@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "listed-industry-cutoff-witness-v1",
+  "scope": "read_only_actual_official_feeds_in_contabo_staging",
+  "targetSession": "2026-11-17",
+  "cutoff": "2026-11-16T21:56:49.132Z",
+  "receipts": [
+    {
+      "datasetId": 18419,
+      "url": "https://mopsfin.twse.com.tw/opendata/t187ap03_L.csv",
+      "name": "上市公司基本資料",
+      "owner": "金融監督管理委員會證券期貨局／臺灣證券交易所",
+      "license": "Taiwan Open Government Data License 1.0",
+      "licenseUrl": "https://data.gov.tw/license",
+      "sourceDate": "2026-11-16",
+      "receivedAt": "2026-11-16T21:56:48.281Z",
+      "bytes": 675725,
+      "sha256": "22e14a9414f445440e770f8759c70131e0efc0dc20d8066fd40021fb5e20facc"
+    },
+    {
+      "datasetId": 25036,
+      "url": "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv",
+      "name": "上櫃公司基本資料",
+      "owner": "金融監督管理委員會證券期貨局／證券櫃檯買賣中心",
+      "license": "Taiwan Open Government Data License 1.0",
+      "licenseUrl": "https://data.gov.tw/license",
+      "sourceDate": "2026-11-16",
+      "receivedAt": "2026-11-16T21:56:49.130Z",
+      "bytes": 554352,
+      "sha256": "21db83542776807708d23cf8a4433817eabc2885b6ddaba325a783c13df49254"
+    },
+    {
+      "datasetId": 11425,
+      "url": "https://opendata.tdcc.com.tw/getOD.ashx?id=1-1",
+      "name": "證券基本資料",
+      "owner": "金融監督管理委員會證券期貨局／臺灣集中保管結算所",
+      "license": "Taiwan Open Government Data License 1.0",
+      "licenseUrl": "https://data.gov.tw/license",
+      "sourceDate": "2026-11-16",
+      "receivedAt": "2026-11-16T21:56:48.389Z",
+      "bytes": 14223476,
+      "sha256": "6183b6224c74035d67e47d04996cd0ab7a9a477a24c2915b8c35c5a6c8c38fa2"
+    }
+  ],
+  "comparableSourceDates": true,
+  "sameSessionByCutoff": false,
+  "industryCoverage": {
+    "TWSE": {
+      "recognized": 1088,
+      "categoryCount": 32,
+      "unknown": 4,
+      "categoryCoverage": {
+        "32": 0,
+        "33": 0,
+        "35": 27,
+        "36": 13,
+        "37": 18,
+        "38": 12
+      }
+    },
+    "TPEX": {
+      "recognized": 898,
+      "categoryCount": 28,
+      "unknown": 0,
+      "categoryCoverage": {
+        "32": 26,
+        "33": 4,
+        "35": 19,
+        "36": 27,
+        "37": 9,
+        "38": 25
+      }
+    }
+  },
+  "officialMappingSources": [
+    "https://eshop.twse.com.tw/zh/news/detail/0000000087e9b84901886b8d31700023",
+    "https://www.tpex.org.tw/storage/regular_system/%E6%96%B0%E7%89%88%E6%94%B6%E5%B8%82%E5%BE%8C%E4%BA%A4%E6%98%93%E8%B3%87%E8%A8%8A%E6%A0%BC%E5%BC%8F%E8%AA%AA%E6%98%8E%28V1.33%E7%89%88%29.pdf?t=20251127"
+  ],
+  "pastCutoff": "2026-11-16T21:30:00+08:00",
+  "industryCoverageAtPastCutoff": null,
+  "persistedProviderPayloads": false,
+  "databaseWrites": false
+}

@@ -27,7 +27,8 @@ function csv(rows: string[][]) {
 
 function company(symbol: string, listingDay = '20001123', reportDay = '1151113') {
   const row = Array<string>(mops.length).fill('');
-  row[0] = reportDay; row[1] = symbol; row[2] = 'SYNTHETIC, "private name"'; row[15] = listingDay;
+  row[0] = reportDay; row[1] = symbol; row[2] = 'SYNTHETIC, "private name"';
+  row[15] = listingDay;
   return row;
 }
 
@@ -115,6 +116,32 @@ test('refuses mismatched byte receipts, host paths, ambiguous company/custody ro
     const n = f.write();
     assert.throws(() => parseListedRosterReplay(n.value, n.files), { name: 'Error' }, variant);
   }
+});
+
+test('classifies only corroborated identities from a timely snapshot, preserving unknown values', () => {
+  const input = fixture();
+  input.listed[0][5] = '36';
+  input.listed[1][5] = '24'; // Conflicting venue.
+  input.listed[2][5] = '24'; // Future listing.
+  input.listed[5][5] = '24'; // Custodian restricted.
+  input.otc[0][5] = '99';
+  const {value, files} = input.write();
+  const result = parseListedRosterReplay(value, files);
+  assert.deepEqual(result.industriesAtCutoff, {
+    TWSE: {byCode: {'36': 1}, unknown: 0},
+    TPEX: {byCode: {}, unknown: 1},
+  });
+  value.responses[1].receivedAt = '2026-11-13T13:30:00.000001Z';
+  assert.equal(parseListedRosterReplay(value, files).industriesAtCutoff, null);
+  value.responses[1].receivedAt = '2026-11-12T15:59:59Z';
+  assert.equal(parseListedRosterReplay(value, files).industriesAtCutoff, null);
+
+  for (const response of value.responses) response.receivedAt = '2026-11-16T01:00:00Z';
+  value.targetSession = '2026-11-16';
+  value.cutoff = '2026-11-16T21:30:00+08:00';
+  const laterSession = parseListedRosterReplay(value, files);
+  assert.equal(laterSession.sameSessionByCutoff, false);
+  assert.deepEqual(laterSession.industriesAtCutoff, result.industriesAtCutoff);
 });
 
 test('keeps the shared decoder default at 32 columns', () => {

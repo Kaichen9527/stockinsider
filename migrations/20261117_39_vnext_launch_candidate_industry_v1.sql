@@ -23,8 +23,12 @@ BEGIN
  ORDER BY assignment.recorded_at DESC,assignment.assignment_authority_id LIMIT 1;
  IF chosen.assignment_authority_id IS NULL OR chosen.status<>'active'
   OR chosen.provider::text IS DISTINCT FROM lower(venue::text)
-  OR chosen.taxonomy_version<>'tw-sector-taxonomy-v3.0' OR chosen.canonical_sector_key='unknown'
-  OR chosen.official_industry_code!~'^[0-9]{2}$'
+  OR chosen.taxonomy_version<>'tw-sector-taxonomy-v3.0'
+  -- Display uses the provider's documented code. Older canonical scoring
+  -- keys used a different mapping for newer and venue-specific categories.
+  OR chosen.official_industry_code NOT IN(
+    '01','02','03','04','05','06','08','09','10','11','12','14','15','16','17','18','20',
+    '21','22','23','24','25','26','27','28','29','30','31','32','33','35','36','37','38')
   OR NOT isfinite(chosen.recorded_at) OR NOT isfinite(chosen.source_timestamp) OR NOT isfinite(chosen.valid_from)
   OR chosen.source_timestamp>chosen.recorded_at
   OR (chosen.valid_to IS NOT NULL AND (NOT isfinite(chosen.valid_to) OR chosen.valid_to<=p_cutoff))

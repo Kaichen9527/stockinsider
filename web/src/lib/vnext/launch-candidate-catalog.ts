@@ -1,6 +1,8 @@
 import {types} from 'node:util';
 import {sha256Canonical} from '../opportunity-v3/canonical.ts';
 import {evidenceInstant} from './evidence-clock.ts';
+import {launchPoolIndustryLabels} from './launch-industry-labels.ts';
+export {launchPoolIndustryLabels} from './launch-industry-labels.ts';
 import {candidateEpochFixturePage,type CandidateEpochEvent} from './candidate-epoch-journal.ts';
 
 /** Synthetic projection only. No producer, public-metadata grant, DB or writer. */
@@ -131,14 +133,6 @@ type PoolRow = { position: number; symbol: string; state: PoolState; observedAt:
 type PoolRef = { id: string; cutoff: string };
 type PoolSnapshot = PoolRef & {
   rows: Array<{ symbol: string; state: 'waiting' | 'eligible'; industrySnapshot: Industry | null }>;
-};
-export const launchPoolIndustryLabels: Readonly<Record<string, string>> = {
-  '01': '水泥', '02': '食品', '03': '塑膠', '04': '紡織纖維', '05': '電機機械', '06': '電器電纜',
-  '08': '玻璃陶瓷', '09': '造紙', '10': '鋼鐵', '11': '橡膠', '12': '汽車', '14': '建材營造',
-  '15': '航運', '16': '觀光餐旅', '17': '金融保險', '18': '貿易百貨', '20': '其他',
-  '21': '化學', '22': '生技醫療', '23': '油電燃氣', '24': '半導體', '25': '電腦及週邊設備',
-  '26': '光電', '27': '通信網路', '28': '電子零組件', '29': '電子通路', '30': '資訊服務',
-  '31': '其他電子', '32': '綠能環保', '33': '數位雲端', '34': '運動休閒', '35': '居家生活',
 };
 const poolGaps = ['public_source_clue_producer_not_connected',
   'full_candidate_history_not_proven', 'between_snapshot_transitions_not_available'];

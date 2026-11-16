@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { evidenceInstant } from './evidence-clock.ts';
 import { decodeLicensedCsvRecords } from './licensed-csv-decoder.ts';
+import { launchPoolIndustryLabels } from './launch-industry-labels.ts';
 
 export const LISTED_ROSTER_REPLAY_SCHEMA = 'launch-listed-roster-source-replay-v1';
 export const LISTED_ROSTER_MAX_BYTES = 20_000_000;
@@ -86,16 +87,20 @@ function readRecords(bytes: Uint8Array, headers: string[], maximumRows: number) 
 }
 
 function readCompanyRoster(bytes: Uint8Array, venue: Venue) {
+  if (bytes.byteLength > MOPS_MAX_BYTES) refuse();
   const headers = companyHeaders.map((field, index) => index === 15 ? sources[venue].listingField : field);
   const rows = readRecords(bytes, headers, 4_000);
   const sourceDate = civil(rows[0][0], true);
   const codes = new Set<string>();
-  const listings = new Map<string, string>();
+  const listings = new Map<string, { listingDate: string; industryCode: string | null }>();
   for (const row of rows) {
     const symbol = row[1];
     if (civil(row[0], true) !== sourceDate || !/^[0-9A-Z]{4,6}$/u.test(symbol) || codes.has(symbol)) refuse();
     codes.add(symbol);
-    if (fourDigitCompany(symbol)) listings.set(symbol, civil(row[15]));
+    if (fourDigitCompany(symbol)) listings.set(symbol, {
+      listingDate: civil(row[15]),
+      industryCode: Object.hasOwn(launchPoolIndustryLabels, row[5]) ? row[5] : null,
+    });
   }
   if (!listings.size) refuse();
   return { sourceDate, listings, rawRows: rows.length };
@@ -138,10 +143,12 @@ function compareCatalogs(venue: Venue, companies: ReturnType<typeof readCompanyR
   alternate: ReturnType<typeof readCompanyRoster>, custody: ReturnType<typeof readCustodyRoster>, sourceDate: string) {
   const expected = sources[venue].custodyVenue;
   const confirmed: string[] = [];
+  const industryCounts: Record<string, number> = {};
+  let unknownIndustryCount = 0;
   const reviews = [];
   const gaps = { crossVenueCompanyClaim: 0, futureListing: 0, custodyMissing: 0, custodyMarketMismatch: 0,
     custodyStatusRestricted: 0, custodyOnly: 0 };
-  for (const [code, listingDate] of [...companies.listings].sort(([a], [b]) => a.localeCompare(b))) {
+  for (const [code, {listingDate, industryCode}] of [...companies.listings].sort(([a], [b]) => a.localeCompare(b))) {
     const state = custody.entries.get(code);
     let finding: keyof typeof gaps | 'corroborated';
     if (alternate.listings.has(code)) finding = 'crossVenueCompanyClaim';
@@ -150,8 +157,11 @@ function compareCatalogs(venue: Venue, companies: ReturnType<typeof readCompanyR
     else if (state.market !== expected) finding = 'custodyMarketMismatch';
     else if (state.status !== '正常') finding = 'custodyStatusRestricted';
     else finding = 'corroborated';
-    if (finding === 'corroborated') confirmed.push(code);
-    else gaps[finding]++;
+    if (finding === 'corroborated') {
+      confirmed.push(code);
+      if (industryCode === null) unknownIndustryCount++;
+      else industryCounts[industryCode] = (industryCounts[industryCode] ?? 0) + 1;
+    } else gaps[finding]++;
     reviews.push({ code, listingDate, finding, custodyMarket: state?.market ?? null });
   }
   for (const [code, state] of [...custody.entries].sort(([a], [b]) => a.localeCompare(b))) {
@@ -169,6 +179,8 @@ function compareCatalogs(venue: Venue, companies: ReturnType<typeof readCompanyR
       gaps,
     },
     reviews,
+    industryCounts,
+    unknownIndustryCount,
   };
 }
 
@@ -206,15 +218,19 @@ export function analyzeListedRosterReplay(value: unknown, files: ReadonlyMap<str
       licenseUrl: 'https://data.gov.tw/license', sourceDate: sourceDates[index], receivedAt: feed.receivedAt,
       bytes: feed.bytes.byteLength, sha256: feed.sha256 };
   });
-  const sameSessionByCutoff = comparableSourceDates && sourceDates[0] === value.targetSession && feeds.every(row => {
+  const availableByCutoff = comparableSourceDates && feeds.every((row, index) => {
     const instant = evidenceInstant(row.receivedAt)!;
-    return instant <= cutoff && taipei(instant) === value.targetSession;
+    return instant <= cutoff && sourceDates[index] <= taipei(instant);
   });
+  const sameSessionByCutoff = availableByCutoff && sourceDates[0] === value.targetSession;
   const summary = {
     schema: LISTED_ROSTER_REPLAY_SCHEMA, targetSession: value.targetSession, cutoff: value.cutoff,
     scope: 'company_and_custody_reconciliation', comparableSourceDates, sameSessionByCutoff,
     qualified: false, custodianRows: custody.rawRows, custodianOtherFourDigitRows: custody.nonCompanyFourDigit,
     receipts, venues: compared ? { TWSE: compared.TWSE.summary, TPEX: compared.TPEX.summary } : null,
+    industriesAtCutoff: availableByCutoff && compared ? Object.fromEntries(venueKeys.map(venue => [venue, {
+      byCode: compared[venue].industryCounts, unknown: compared[venue].unknownIndustryCount,
+    }])) : null,
   };
   const reviews = compared ? { TWSE: compared.TWSE.reviews, TPEX: compared.TPEX.reviews } : null;
   return { summary, reviews };
