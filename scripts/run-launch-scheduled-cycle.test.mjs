@@ -34,7 +34,8 @@ test('Taipei boundaries remain fixed across European DST', () => {
   for (const date of ['2026-11-16', '2026-07-13']) {
     for (const [utc, slot] of [
       ['00:14:59', null], ['00:15:00', 'morning'], ['00:25:00', 'morning'],
-      ['00:59:59', 'morning'], ['01:00:00', null], ['13:29:59', null],
+      ['00:59:59', 'morning'], ['01:00:00', null], ['12:54:59', null], ['12:55:00', 'research'],
+      ['13:09:59', 'research'], ['13:10:00', null], ['13:29:59', null],
       ['13:30:00', 'postclose'], ['13:40:39', 'postclose'], ['15:59:59', 'postclose'],
     ]) {
       assert.deepEqual(launchScheduledSlot(new Date(date + 'T' + utc + 'Z')), { sessionDate: date, slot });
@@ -101,6 +102,35 @@ test('morning refuses a publication receipt for a different session', () => {
   assert.throws(run, { message: 'launch_market_background_wrong_scope' });
 });
 
+test('20:55 uses only protected dispatch and keeps the 21:30 publication separate', () => {
+  const result = { status: 'processed', session: day, attempted: 2, published: 1, stopped: false };
+  const enabled = { env: { ...active, STOCKINSIDER_LAUNCH_RESEARCH_DISPATCH_ENABLED: 'true' } };
+  const at = day + 'T12:55:00Z';
+  const normal = plan(at, [{ ok: true, policyVersion, result }], enabled);
+  assert.deepEqual(normal.run(), { slot: 'research', sessionDate: day, status: 'processed', attempted: 2, published: 1, stopped: false });
+  assert.deepEqual(normal.calls, [{
+    endpoint: '/api/internal/vnext-research', payload: { action: 'launch-research-dispatch' }, timeoutMs: 720_000,
+  }]);
+  const disabled = plan(at);
+  assert.equal(disabled.run().reason, 'launch_research_dispatch_disabled');
+  assert.deepEqual(disabled.calls, []);
+  const gap = { status: 'deferred', reason: 'launch_research_final_data_unready' };
+  assert.equal(plan(at, [{ ok: true, policyVersion, result: gap }], enabled).run().reason, gap.reason);
+  for (const changed of [{ ...result, session: '2026-11-13' }, { ...result, attempted: 5 }]) {
+    assert.throws(plan(at, [{ ok: true, policyVersion, result: changed }], enabled).run,
+      { message: 'launch_research_dispatch_wrong_scope' });
+  }
+});
+
+test('scheduled dispatch is exact internal operator POST with no caller dates, jobs or model', async () => {
+  const source = await readFile(new URL('../web/src/lib/vnext/http.ts', import.meta.url), 'utf8');
+  const block = source.slice(source.indexOf("if(action==='launch-research-dispatch')"), source.indexOf("if(action==='launch-cycle'"));
+  assert.match(block, /entrypoint!=='vnext-research'\|\|identity.role!=='operator'.*requireExactInternalBearer/u);
+  assert.match(block, /Object.keys\(body\).some\(key=>key!=='action'\)/u);
+  assert.match(block, /runScheduledLaunchResearch\(identity\)/u);
+  assert.match(block, /'cache-control':'no-store'/u);
+});
+
 test('evening drains only the current Taipei date before calling the launch-only cycle', () => {
   const { calls, run } = plan(day + 'T13:40:39Z', [complete, evening]);
   assert.deepEqual(run(), { slot: 'postclose', sessionDate: day, weeklyAudit: 'current', status: 'published' });
@@ -162,7 +192,7 @@ test('preliminary mode keeps existing five datasets and queue scope without a pu
   assert.deepEqual(calls[1].payload, { limit: 100, maxBatches: 30, requireComplete: true, phase: 'preliminary' });
 });
 
-test('the one candidate timer owns both Taipei slots and neither service calls the legacy publisher', async () => {
+test('the one candidate timer owns all three Taipei slots and neither service calls the legacy publisher', async () => {
   const dir = new URL('../deployment/vps/launch-radar-schedule/', import.meta.url);
   const [timer, service, prep] = await Promise.all([
     readFile(new URL('stockinsider-research-cycle.timer', dir), 'utf8'),
@@ -171,6 +201,7 @@ test('the one candidate timer owns both Taipei slots and neither service calls t
   ]);
   assert.deepEqual(timer.match(/^OnCalendar=.*$/gm), [
     'OnCalendar=*-*-* 08:15:00 Asia/Taipei',
+    'OnCalendar=*-*-* 20:55:00 Asia/Taipei',
     'OnCalendar=*-*-* 21:30:00 Asia/Taipei',
   ]);
   assert.match(timer, /^Unit=stockinsider-research-cycle.service$/m);

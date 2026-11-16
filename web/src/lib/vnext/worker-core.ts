@@ -24,14 +24,17 @@ function matchesBinding(row: WorkerRow, binding: WorkerBinding) {
 function journalMatches(row: WorkerRow, binding: WorkerBinding) {
  return row.provider===binding.provider && row.model===binding.model && row.model_version===binding.modelVersion && row.credential_identity===binding.credentialIdentity && row.prompt_version===binding.promptVersion;
 }
-/** Trusted composition seam for VM fixtures and the fixed production adapter.
- * Never takes a provider, principal, model, URL or raw result from an HTTP body. */
-export async function runResearchWorker(jobId: string, deps: WorkerDependencies, recovery = false): Promise<WorkerRow> {
- if (!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu.test(jobId)) throw new Error('vnext_worker_job_id_invalid');
+export async function verifyWorkerBindings(deps: Pick<WorkerDependencies, 'author' | 'reviewer' | 'journal'>) {
  if([deps.author,deps.reviewer].some(b=>b.promptVersion==='vnext-research-worker-v5')&&[deps.author,deps.reviewer].some(b=>b.promptVersion!=='vnext-research-worker-v5'))throw Error('vnext_worker_business_profile_pair_required');
  if([deps.author,deps.reviewer].some(b=>b.promptVersion==='vnext-research-worker-v4')&&[deps.author,deps.reviewer].some(b=>b.promptVersion!=='vnext-research-worker-v4'))throw Error('vnext_worker_cancellation_profile_pair_required');
  if(deps.author.identity.role!=='author' || deps.reviewer.identity.role!=='reviewer' || deps.author.identity.principal===deps.reviewer.identity.principal) throw new Error('vnext_worker_distinct_identities_required');
  for (const binding of [deps.author,deps.reviewer]) if (!matchesBinding(await deps.journal(binding.identity,'binding',{}),binding)) throw new Error('vnext_worker_server_binding_mismatch');
+}
+/** Trusted composition seam for VM fixtures and the fixed production adapter.
+ * Never takes a provider, principal, model, URL or raw result from an HTTP body. */
+export async function runResearchWorker(jobId: string, deps: WorkerDependencies, recovery = false): Promise<WorkerRow> {
+ if (!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu.test(jobId)) throw new Error('vnext_worker_job_id_invalid');
+ await verifyWorkerBindings(deps);
  let state=await deps.journal(deps.author.identity,'inspect',{jobId});
  if(state.state==='published') return { status:'published',revisionId:state.revisionId,replay:true };
  if(['failed','rejected'].includes(String(state.state))) {

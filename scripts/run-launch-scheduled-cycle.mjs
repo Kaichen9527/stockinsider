@@ -14,7 +14,9 @@ const drainScope = { limit: 100, maxBatches: 30, requireComplete: true };
 
 export function launchScheduledSlot(now) {
   const [sessionDate, time] = taipei.format(now).split(' ');
-  const slot = time >= '21:30' ? 'postclose' : time >= '08:15' && time < '09:00' ? 'morning' : null;
+  const slot = time >= '21:30' ? 'postclose'
+    : time >= '20:55' && time < '21:10' ? 'research'
+    : time >= '08:15' && time < '09:00' ? 'morning' : null;
   return { sessionDate, slot };
 }
 
@@ -93,6 +95,30 @@ export function runLaunchScheduledCycle({
       }
     }
     return { slot, sessionDate, status, ...(noticeScan ? { noticeScan, currentNoticeScan } : {}) };
+  }
+
+  if (slot === 'research') {
+    if (env.STOCKINSIDER_LAUNCH_RESEARCH_DISPATCH_ENABLED !== 'true') {
+      return { slot, sessionDate, status: 'deferred', reason: 'launch_research_dispatch_disabled' };
+    }
+    const { policyVersion, result } = request(
+      researchEndpoint, { action: 'launch-research-dispatch' }, 720_000, 'launch_research_dispatch_failed',
+    );
+    if (policyVersion !== launchPolicy) throw new Error('launch_research_dispatch_wrong_scope');
+    if (result?.status === 'deferred' && [
+      'launch_research_dispatch_disabled', 'launch_research_writer_unavailable',
+      'launch_research_mode_unavailable', 'launch_research_window_closed',
+      'launch_research_official_session_missing', 'launch_research_both_venue_calendar_missing',
+      'launch_research_final_data_unready',
+    ].includes(result.reason)) {
+      return { slot, sessionDate, status: result.status, reason: result.reason };
+    }
+    if (result?.status !== 'processed' || result.session !== sessionDate || !Number.isInteger(result.attempted)
+      || result.attempted < 0 || result.attempted > 4 || !Number.isInteger(result.published)
+      || result.published < 0 || result.published > result.attempted || typeof result.stopped !== 'boolean') {
+      throw new Error('launch_research_dispatch_wrong_scope');
+    }
+    return { slot, sessionDate, status: result.status, attempted: result.attempted, published: result.published, stopped: result.stopped };
   }
 
   const weekly = call(researchEndpoint, { action: 'launch-weekly-audit' }, 120_000, env);
