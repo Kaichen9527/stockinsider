@@ -1,0 +1,95 @@
+{
+  "schema": "stockinsider-t18-legacy-evaluation-check-impact-v1",
+  "recordedDateTaipei": "2026-11-16",
+  "backupSourceDate": "2026-09-19",
+  "canonicalMigrationSource": "bb549e859ba3ae5241eec3a14bdcd84b3ac70d55",
+  "fixedTemporaryAuditAdapterSha256": "2f5bbdc0c4d727669734519b32bf851c861645844ac09a02a241e8fc418903bb",
+  "authenticatedClone": true,
+  "originalForeignKeyCount": 288,
+  "compatibilityAudit": {
+    "catalog": {
+      "catalogSha256": "25b482967b2e41aee5b1722d1bc6f313f96d9e9423d1cb732736696ce1d15606",
+      "checkType": true,
+      "exactKnownLaterCheck": false,
+      "present": true,
+      "validated": true
+    },
+    "counts": {
+      "checkedRows": 72,
+      "label13": 0,
+      "label14": 36,
+      "label17": 0,
+      "label18": 0,
+      "label19": 30,
+      "noSchemaLabel": 0,
+      "rejectedByV314": 36,
+      "rejectedByV3196": 6
+    },
+    "readOnly": true
+  },
+  "canonicalConstraintComparison": {
+    "scope": "only native PostgreSQL 17.11 deparse of three source-defined constraint predicates",
+    "archiveCatalogDefinitionSha256": "25b482967b2e41aee5b1722d1bc6f313f96d9e9423d1cb732736696ce1d15606",
+    "candidates": [
+      {
+        "name": "20260811_actionability_recovery_v3_14.sql",
+        "labels": [
+          "legacy-radar-v3.13.0",
+          "legacy-radar-v3.14.0"
+        ],
+        "sha256": "43771e50c0e59d2c1e7ed310a6a204283fc782cbd7e0f10f1de87d36389874af",
+        "postgresDefinitionSha256": "d3eff2a252f0ba9dc613abbc734c23a4ffa1be238ac7867ea589f0327886c496",
+        "matchesArchivedValidatedCatalogDefinition": false
+      },
+      {
+        "name": "20260828_kol_first_runtime_recovery_v3_20.sql",
+        "labels": [
+          "legacy-radar-v3.13.0",
+          "legacy-radar-v3.14.0",
+          "legacy-radar-v3.17.0",
+          "legacy-radar-v3.18.0",
+          "legacy-radar-v3.19.0",
+          "legacy-radar-v3.20.0"
+        ],
+        "sha256": "987eafaa934c375437ca5495891148d3619f101fa538d379b221c37921edfbc2",
+        "postgresDefinitionSha256": "25b482967b2e41aee5b1722d1bc6f313f96d9e9423d1cb732736696ce1d15606",
+        "matchesArchivedValidatedCatalogDefinition": true
+      },
+      {
+        "name": "20260828_legacy_evaluation_schema_v3_19_6.sql",
+        "labels": [
+          "legacy-radar-v3.13.0",
+          "legacy-radar-v3.14.0",
+          "legacy-radar-v3.17.0",
+          "legacy-radar-v3.18.0",
+          "legacy-radar-v3.19.0"
+        ],
+        "sha256": "7eaa03624dfed1548313ea745e5446248ca303cceb4762278708267b429d7093",
+        "postgresDefinitionSha256": "58f725351ebfd558662154867137d751fa989711975b8a03df46786637752441",
+        "matchesArchivedValidatedCatalogDefinition": false
+      }
+    ]
+  },
+  "comparisonResourcesCleaned": true,
+  "exactInstalledSuccessor": "20260828_kol_first_runtime_recovery_v3_20.sql",
+  "inferredV320Count": 6,
+  "v320CountBasis": "72 total, no null labels, 66 counted within earlier five labels; validated live clone constraint exactly matches six-label v3.20 definition",
+  "financialCommitted": false,
+  "publicationCommitted": false,
+  "currentReleaseRollbackCompleted": false,
+  "productionSignaturesIdentical": true,
+  "isolatedResourcesCleaned": true,
+  "cleanup": {
+    "temporaryRunnerRemoved": true,
+    "freeBytesAfterCleanup": 26139668480
+  },
+  "resourceSamples": {
+    "appMemoryPeakObservedBytes": 18890752,
+    "dbMemoryPeakObservedBytes": 805310464,
+    "minimumHostAvailableMemoryBytes": 4349288448,
+    "minimumHostDiskBytes": 17337356288,
+    "minimumWorkFreeBytes": 5967761408,
+    "restMemoryPeakObservedBytes": 18882560
+  },
+  "releaseHoldRetained": true
+}
