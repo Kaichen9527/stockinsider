@@ -21,3 +21,9 @@ Reuse the exact evidence clock to validate selected/predecessor/successor cutoff
 The protected reviewer handoff is a maker-authored request only: distinct original PR subject/current protection subject, exact immutable commit/tree/range/graph and existing allowed evidence paths. It cannot create an approval, legal reviewer identity, ref or retry. Independent protected review remains absent. No prepare/review/track or native/HOLD operation is part of this batch.
 
 Relevant source/unit/synthetic regressions, VM types/lint/full build and version-bound sanitized receipts are required before pushing the existing protection branch. Synthetic transports never count as real coverage or source/model/publication acceptance. External legal-source/model/two-session/CI/staging/restore/iCloud/release gates remain. Coordinator reports the outer Cloud draft did not retain the auth key and Contabo NeedsLogin; no key/config/connection/rebuild action is authorized in this development slice.
+
+## Launch-policy saved pool observations
+
+The candidate page now reads immutable published launch snapshots and their adjacent versions through a separately projected service-role RPC. The saved pool view filters by Taipei observation date and snapshot state. A symbol present only in the earlier snapshot shows its last saved observation and an absence in the selected snapshot. The cursor binds the selected snapshot, predecessor, filters and page size. A newly published successor does not reorder the page.
+
+The database exposes only stock codes and public snapshot states for this view. The page reports the narrower coverage explicitly. Source-mention and industry filters defer until a disclosure-safe producer can supply those fields. Rights-bound unadmitted mentions and exact admission/exit events remain required for the complete catalog.

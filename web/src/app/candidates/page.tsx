@@ -11,7 +11,7 @@ const statusLabels = { researching: '研究中', waiting: '等待', eligible: '�
 export default async function CandidatesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const launch=launchRankingEnabled();
   const params=await searchParams;
-  const newStatus=['recorded_active_epoch','recorded_exited_epoch','admission_history_unknown'];
+  const newStatus=['recorded_active_epoch','recorded_exited_epoch','admission_history_unknown','snapshot_waiting','snapshot_eligible','absent_from_successor'];
   const explicitlyNew=params.catalogId!==undefined||typeof params.status==='string'&&newStatus.includes(params.status);
   if(explicitlyNew||launch&&params.rankingRunId===undefined&&params.cursor===undefined)return <LaunchCandidateCatalog searchParams={params} enabled={launch}/>;
   if (!rankingEnabled()) notFound();

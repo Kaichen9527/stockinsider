@@ -5,7 +5,7 @@ import {candidateEpochFixturePage,type CandidateEpochEvent} from './candidate-ep
 
 /** Synthetic projection only. No producer, public-metadata grant, DB or writer. */
 export const LAUNCH_CANDIDATE_FIXTURE='launch-source-candidate-projection-fixture-v1';
-const statuses=['recorded_active_epoch','recorded_exited_epoch','admission_history_unknown'] as const;
+const statuses=['recorded_active_epoch','recorded_exited_epoch','admission_history_unknown','snapshot_waiting','snapshot_eligible','absent_from_successor'] as const;
 type Status=typeof statuses[number];
 type Row=Record<string,unknown>;
 export type LaunchCandidateQuery={catalogId:string|null;limit:number;cursor:string|null;filters:{date:string|null;source:string|null;industry:string|null;status:Status|null}};
@@ -118,10 +118,126 @@ export function launchCandidateFixturePage(value:unknown,query:LaunchCandidateQu
  const nextCursor=tail&&remaining.length>page.length?Buffer.from(JSON.stringify({version:1,catalogId:value.catalogId,catalogHash,cutoff:value.cutoff,filtersHash,after:tail.position})).toString('base64url'):null;
  return {...base,availability:'ready' as const,rows:page.map(row=>withdrawn.has(row.rowId)?{position:row.position,state:'redacted' as const}:row),nextCursor};
 }
-/** Hard disabled, including when arbitrary environment flags are set. There is
- * no producer/RPC/client/fixture adapter and no public metadata grant here. */
-export function readLaunchCandidateCatalog(_query:LaunchCandidateQuery){
- return {schemaVersion:'launch-source-candidate-read-v1' as const,availability:'producer_unavailable' as const,activation:'disabled_not_connected' as const,
+function poolProducerUnavailable(activation:'disabled_not_connected'|'snapshot_unavailable'='snapshot_unavailable'){
+ return {schemaVersion:'launch-source-candidate-read-v1' as const,availability:'producer_unavailable' as const,activation,
   rows:[],nextCursor:null,coverage:{sourceComplete:false,membershipComplete:false,sourceFrom:null,membershipFrom:null,preActivationHistory:'unavailable'},
   sourceAuthority:false,entryAuthority:false,publicationAuthority:false,gaps:['public_metadata_publication_binding_producer_missing','production_mutation_hooks_not_connected','full_candidate_history_not_proven']};
+}
+
+const poolStates = ['snapshot_waiting', 'snapshot_eligible', 'absent_from_successor'] as const;
+type PoolState = typeof poolStates[number];
+type PoolRow = { position: number; symbol: string; state: PoolState; observedAt: string; lastSeenAt: string };
+type PoolRef = { id: string; cutoff: string };
+type PoolSnapshot = PoolRef & { rows: Array<{ symbol: string; state: 'waiting' | 'eligible' }> };
+const poolGaps = ['public_source_clue_producer_not_connected', 'industry_metadata_not_available',
+  'full_candidate_history_not_proven', 'between_snapshot_transitions_not_available'];
+
+function poolRef(value: unknown): PoolRef {
+  if (!exact(value, 'id cutoff') || !uuid(value.id) || !clock(value.cutoff)) return fail();
+  return { id: value.id, cutoff: value.cutoff as string };
+}
+function poolSnapshot(value: unknown): PoolSnapshot {
+  if (!exact(value, 'id cutoff rows') || !Array.isArray(value.rows) || value.rows.length > 20) return fail();
+  const header = poolRef({ id: value.id, cutoff: value.cutoff });
+  const seen = new Set<string>();
+  const rows: PoolSnapshot['rows'] = [];
+  for (const item of value.rows) {
+    if (!exact(item, 'symbol state') || typeof item.symbol !== 'string' || !/^\d{4}$/u.test(item.symbol)
+      || (item.state !== 'waiting' && item.state !== 'eligible') || seen.has(item.symbol)) return fail();
+    seen.add(item.symbol);
+    rows.push({ symbol: item.symbol, state: item.state });
+  }
+  return { ...header, rows };
+}
+function poolCursor(value: string, catalogId: string, catalogHash: string, filtersHash: string, cutoff: string) {
+  let cursor: unknown;
+  try {
+    const encoded = Buffer.from(value, 'base64url');
+    if (encoded.toString('base64url') !== value) return fail();
+    cursor = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(encoded));
+  } catch { return fail(); }
+  if (!exact(cursor, 'version catalogId catalogHash cutoff filtersHash after') || cursor.version !== 1
+    || cursor.catalogId !== catalogId || cursor.catalogHash !== catalogHash
+    || cursor.cutoff !== cutoff || cursor.filtersHash !== filtersHash
+    || !Number.isInteger(cursor.after) || Number(cursor.after) < 1) return fail();
+  return Number(cursor.after);
+}
+
+/** Only previously published pool observations enter the projection. A symbol
+ * absent from the successor establishes an interval between observations. */
+export function launchCandidatePoolPage(value: unknown, query: LaunchCandidateQuery, readAt = new Date().toISOString()) {
+  const q = parsedQuery(query);
+  data(value);
+  if (!exact(value, 'schemaVersion current previous next') || value.schemaVersion !== 'launch-candidate-pool-history-v1') return fail();
+  const current = poolSnapshot(value.current);
+  const previous = value.previous === null ? null : poolSnapshot(value.previous);
+  const next = value.next === null ? null : poolRef(value.next);
+  if (!clock(readAt) || (q.catalogId !== null && q.catalogId !== current.id)
+    || (q.cursor !== null && q.catalogId === null) || evidenceInstant(current.cutoff)! > evidenceInstant(readAt)!
+    || (previous && (previous.id === current.id || evidenceInstant(previous.cutoff)! >= evidenceInstant(current.cutoff)!))
+    || (next && (next.id === current.id || next.id === previous?.id || evidenceInstant(next.cutoff)! <= evidenceInstant(current.cutoff)!
+      || evidenceInstant(next.cutoff)! > evidenceInstant(readAt)!))) return fail();
+
+  const asRef = ({ id, cutoff }: PoolRef) => ({ id, cutoff });
+  const before = previous ? asRef(previous) : null;
+  const rows: Omit<PoolRow, 'position'>[] = current.rows.map(row => ({
+    symbol: row.symbol, state: row.state === 'waiting' ? 'snapshot_waiting' : 'snapshot_eligible',
+    observedAt: current.cutoff, lastSeenAt: current.cutoff,
+  }));
+  const inPool = new Set(rows.map(row => row.symbol));
+  if (previous) for (const row of previous.rows) {
+    if (!inPool.has(row.symbol)) rows.push({
+      symbol: row.symbol, state: 'absent_from_successor', observedAt: current.cutoff, lastSeenAt: previous.cutoff,
+    });
+  }
+  rows.sort((a, b) => a.symbol.localeCompare(b.symbol));
+  const entries = rows.map((row, index) => ({ ...row, position: index + 1 }));
+  const catalogHash = sha256Canonical({ schema: value.schemaVersion, current: asRef(current), previous: before, rows: entries });
+  const filtersHash = sha256Canonical({ filters: q.filters, limit: q.limit });
+  const base = {
+    schemaVersion: 'launch-source-candidate-read-v1' as const,
+    scope: 'saved_adjacent_launch_pool_snapshots' as const, dateBasis: 'snapshot_observation' as const,
+    catalogId: current.id, catalogHash, cutoff: current.cutoff, previousSnapshot: before, nextSnapshot: next,
+    coverage: { sourceComplete: false, membershipComplete: false, sourceFrom: null, membershipFrom: null, preActivationHistory: 'unavailable' },
+    sourceAuthority: false, entryAuthority: false, publicationAuthority: false, gaps: poolGaps,
+  };
+  if (q.filters.source || q.filters.industry || (q.filters.status && !poolStates.includes(q.filters.status as PoolState))) {
+    return { ...base, availability: 'filtered_projection_unavailable' as const, rows: [], nextCursor: null };
+  }
+
+  const after = q.cursor ? poolCursor(q.cursor, current.id, catalogHash, filtersHash, current.cutoff) : null;
+  const date = new Date(Date.parse(current.cutoff) + 8 * 3_600_000).toISOString().slice(0, 10);
+  const filtered = entries.filter(row => (!q.filters.date || q.filters.date === date)
+    && (!q.filters.status || q.filters.status === row.state));
+  if (after !== null && !filtered.some(row => row.position === after)) return fail();
+  const remaining = filtered.filter(row => after === null || row.position > after);
+  const page = remaining.slice(0, q.limit);
+  const nextCursor = remaining.length > q.limit
+    ? Buffer.from(JSON.stringify({ version: 1, catalogId: current.id, catalogHash, cutoff: current.cutoff,
+      filtersHash, after: page[page.length - 1].position })).toString('base64url')
+    : null;
+  return { ...base, availability: 'ready' as const, rows: page, nextCursor };
+}
+
+type PoolReader = { rpc: (name: 'vnext_launch_candidate_pool_history_v1', args: { p_catalog_id: string | null }) =>
+  PromiseLike<{ data: unknown; error: unknown }> };
+
+/** The service-role adapter reads saved observations. No source acquisitions,
+ * writes, models or legacy ranking fallback are used by this path. */
+export async function readLaunchCandidateCatalog(query: LaunchCandidateQuery, client?: PoolReader) {
+  const q = parsedQuery(query);
+  if (!client) {
+    const { launchRankingEnabled } = await import('./launch-ranking-read.ts');
+    if (!launchRankingEnabled()) return poolProducerUnavailable('disabled_not_connected');
+    try {
+      const { getSupabaseServerClient } = await import('../supabase-server.ts');
+      client = getSupabaseServerClient();
+    } catch { return poolProducerUnavailable(); }
+  }
+  if (q.cursor !== null && q.catalogId === null) return fail();
+  let result;
+  try { result = await client.rpc('vnext_launch_candidate_pool_history_v1', { p_catalog_id: q.catalogId }); }
+  catch { return poolProducerUnavailable(); }
+  if (result.error || result.data === null) return poolProducerUnavailable();
+  return launchCandidatePoolPage(result.data, q);
 }

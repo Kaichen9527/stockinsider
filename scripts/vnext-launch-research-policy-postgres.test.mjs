@@ -9,6 +9,7 @@ const policy='stockinsider-launch-radar-v1';
 const migration='migrations/20261117_35_vnext_launch_research_policy_v1.sql';
 const dispatchMigration='migrations/20261117_36_vnext_launch_research_dispatch_v1.sql';
 const calendarMigration='migrations/20261117_37_vnext_launch_scheduled_calendar_v1.sql';
+const poolMigration='migrations/20261117_38_vnext_launch_candidate_pool_history_v1.sql';
 const writerRelease='1'.repeat(40);
 const operator='synthetic-launch-operator';
 const author='synthetic-launch-author';
@@ -43,6 +44,11 @@ await test('launch policy is bound to the shared job and its prepared revision i
   await x.writer.query(exact('CREATE FUNCTION public.vnext_launch_today_calendar_internal_v1(', 'CREATE FUNCTION public.vnext_launch_cycle_context_v1('));
   await x.writer.query(fs.readFileSync(dispatchMigration,'utf8'));
   await x.writer.query(fs.readFileSync(calendarMigration,'utf8'));
+  await x.writer.query(exact('CREATE TABLE public.vnext_launch_ranking_snapshots_v1(', 'CREATE TABLE public.vnext_launch_ranking_members_v1('));
+  await x.writer.query('ALTER TABLE public.vnext_launch_ranking_snapshots_v1 OWNER TO stockinsider_vnext_owner');
+  await x.writer.query('ALTER TABLE public.vnext_launch_ranking_snapshots_v1 ENABLE ROW LEVEL SECURITY');
+  await x.writer.query('REVOKE ALL ON public.vnext_launch_ranking_snapshots_v1 FROM PUBLIC,anon,authenticated,service_role');
+  await x.writer.query(fs.readFileSync(poolMigration,'utf8'));
   await x.writer.query("INSERT INTO public.vnext_principals_v1(principal,role,enabled) VALUES($1,'operator',true),($2,'author',true),($3,'author',true)",[operator,author,distinct]);
   const at=new Date().toISOString(),day=taipeiDate(at);
   await x.writer.query("INSERT INTO public.vnext_sessions_v1(session_date,close_at,completed) VALUES($1,clock_timestamp()-interval '1 hour',true)",[day]);
@@ -79,6 +85,28 @@ await test('launch policy is bound to the shared job and its prepared revision i
   assert.deepEqual(await context(author,writerRelease),{session:null,reason:'launch_research_mode_unavailable'});
   assert.deepEqual(await context(operator,'0'.repeat(40)),{session:null,reason:'launch_research_mode_unavailable'});
   assert.deepEqual((await x.writer.query("SELECT has_function_privilege('anon','public.vnext_launch_dispatch_context_v1(text,text)','EXECUTE') AS anonymous,has_function_privilege('authenticated','public.vnext_launch_dispatch_context_v1(text,text)','EXECUTE') AS authenticated")).rows[0],{anonymous:false,authenticated:false});
+  const pool=(id=null)=>service('SELECT public.vnext_launch_candidate_pool_history_v1($1) AS result',[id]);
+  assert.equal(await pool(),null);
+  const oldest='00000000-0000-4000-8000-000000000101',recent='00000000-0000-4000-8000-000000000102';
+  const addSnapshot=(id,previous,n,rows)=>x.writer.query(
+   "INSERT INTO public.vnext_launch_ranking_snapshots_v1(ranking_run_id,previous_ranking_run_id,request_hash,input_hash,input_cutoff,session_date,published_at,snapshot) " +
+   "SELECT $1,$2,repeat('7',64),repeat('8',64),(day+time'21:30') AT TIME ZONE 'Asia/Taipei',day,(day+time'21:31') AT TIME ZONE 'Asia/Taipei',$4 " +
+   "FROM (SELECT (statement_timestamp() AT TIME ZONE 'Asia/Taipei')::date-$3::integer AS day) dates",
+   [id,previous,n,{policyVersion:policy,candidates:rows,debug:'synthetic_private_debug'}]);
+  await addSnapshot(oldest,null,3,[{symbol:'2409',state:'eligible',reasons:['synthetic_private_reason']}]);
+  await addSnapshot(recent,oldest,2,[{symbol:'2383',state:'waiting',privateSource:'synthetic_private_source'}]);
+  const snapshot=await pool();
+  assert.equal(snapshot.current.id,recent);assert.equal(snapshot.previous.id,oldest);assert.equal(snapshot.next,null);
+  assert.deepEqual(snapshot.current.rows,[{symbol:'2383',state:'waiting'}]);
+  assert.deepEqual(snapshot.previous.rows,[{symbol:'2409',state:'eligible'}]);
+  assert.deepEqual((await pool(oldest)).next,{id:recent,cutoff:snapshot.current.cutoff});
+  assert.equal(await pool('00000000-0000-4000-8000-000000000199'),null);
+  assert.equal(JSON.stringify(snapshot).includes('synthetic_private'),false);
+  await assert.rejects(()=>service('SELECT count(*) AS result FROM public.vnext_launch_ranking_snapshots_v1'),{code:'42501'});
+  assert.deepEqual((await x.writer.query("SELECT has_function_privilege('anon','public.vnext_launch_candidate_pool_history_v1(uuid)','EXECUTE') anon,has_function_privilege('authenticated','public.vnext_launch_candidate_pool_history_v1(uuid)','EXECUTE') authenticated")).rows[0],{anon:false,authenticated:false});
+  await x.writer.query('UPDATE public.vnext_launch_ranking_mode_v1 SET enabled=false');
+  assert.equal(await pool(recent),null);
+  await x.writer.query('UPDATE public.vnext_launch_ranking_mode_v1 SET enabled=true');
   const deferral=await context(operator,writerRelease);
   assert.equal(deferral.session,null);
   assert.ok(['launch_research_window_closed','launch_research_both_venue_calendar_missing'].includes(deferral.reason));

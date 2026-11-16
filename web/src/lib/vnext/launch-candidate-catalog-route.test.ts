@@ -15,8 +15,7 @@ function synthetic(){
  return {schemaVersion:LAUNCH_CANDIDATE_FIXTURE,scope:'synthetic_only',catalogId:id(900),cutoff,coverage:{sourceComplete:false,membershipComplete:false,sourceFrom:null,membershipFrom:null,preActivationHistory:'unavailable'},clues,
   membership:{schemaVersion:EPOCH_FIXTURE_SCHEMA,policyVersion:POLICY.version,cutoff,coverage:{complete:false,preActivationHistory:'unavailable'},activation:'disabled_not_connected',events}};
 }
-/** Compile the ACTUAL route. The controlled fixture seam exists only in this
- * VM import mock; production has no env/URL/argument fixture or RPC adapter. */
+/** Compile the actual route with an injected read adapter. */
 function actualRoute(reader:(query:LaunchCandidateQuery)=>unknown=readLaunchCandidateCatalog){
  const source=fs.readFileSync(new URL('../../app/api/launch/candidates/route.ts',import.meta.url),'utf8');
  const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}});
@@ -29,7 +28,7 @@ function actualRoute(reader:(query:LaunchCandidateQuery)=>unknown=readLaunchCand
  },isolatedModule,isolatedModule.exports);
  return {reads:()=>reads,get:(q='')=>isolatedModule.exports.GET(new Request(`http://127.0.0.1/api/launch/candidates${q?'?'+q:''}`))};
 }
-test('ACTUAL publicroute staysharddisabled despiteflags andhasno runtimefixture/URL/RPC/backfill/work interface',async()=>{
+test('actual public route refuses missing saved launch data and fixture or write parameters',async()=>{
  const route=actualRoute();const response=await route.get();assert.equal(response.status,503);assert.equal(response.headers.get('cache-control'),'no-store');
  const body=await response.json();assert.equal(body.result.availability,'producer_unavailable');assert.equal(body.result.activation,'disabled_not_connected');assert.deepEqual(body.result.rows,[]);
  assert.equal(body.result.coverage.sourceComplete,false);assert.equal(body.result.publicationAuthority,false);assert.equal(route.reads(),1);

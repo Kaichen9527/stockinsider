@@ -18,6 +18,7 @@ on:
       - 'migrations/20261117_35_vnext_launch_research_policy_v1.sql'
       - 'migrations/20261117_36_vnext_launch_research_dispatch_v1.sql'
       - 'migrations/20261117_37_vnext_launch_scheduled_calendar_v1.sql'
+      - 'migrations/20261117_38_vnext_launch_candidate_pool_history_v1.sql'
       - 'deployment/vps/launch-radar-schedule/**'
       - 'scripts/run-launch-scheduled-cycle*.mjs'
       - 'openspec/changes/stockinsider-vnext-20/**'

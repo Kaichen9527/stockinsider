@@ -6,7 +6,7 @@ import {createRequire} from 'node:module';
 import React from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
 import ts from 'typescript';
-import {LAUNCH_CANDIDATE_FIXTURE,launchCandidateQuery,launchCandidateFixturePage,readLaunchCandidateCatalog,type LaunchCandidateQuery} from './launch-candidate-catalog.ts';
+import {LAUNCH_CANDIDATE_FIXTURE,launchCandidateQuery,launchCandidateFixturePage,launchCandidatePoolPage,readLaunchCandidateCatalog,type LaunchCandidateQuery} from './launch-candidate-catalog.ts';
 import {candidateQuery,candidateRankingRunId,candidateHistoryPage,candidateDetailHref} from './candidate-page.ts';
 import {EPOCH_FIXTURE_SCHEMA,type CandidateEpochEvent} from './candidate-epoch-journal.ts';
 import {POLICY} from './policy.ts';
@@ -63,7 +63,7 @@ test('ACTUALcanonicalpage defaultOFF retainsoldhistory/namedcursor/cursor-only i
  const off=actualPage(false);assert.match(await off.render(),/尚未涵蓋未入池候選/u);assert.deepEqual(off.counts(),{oldReads:1,newReads:0});
 });
 test('ACTUALcanonicalpage newplain istruthfullyunavailable withno legacyfallback; explicitnewOFF isdisabled',async()=>{
- const on=actualPage(true),html=await on.render();assert.match(html,/正式生產者尚未接線/u);assert.match(html,/這不代表沒有候選/u);assert.ok(!html.includes('vnext-candidates'));assert.deepEqual(on.counts(),{oldReads:0,newReads:1});
+ const on=actualPage(true),html=await on.render();assert.match(html,/無法讀取已發布的新版研究池快照/u);assert.match(html,/這不代表沒有候選/u);assert.ok(!html.includes('vnext-candidates'));assert.deepEqual(on.counts(),{oldReads:0,newReads:1});
  const off=actualPage(false,readLaunchCandidateCatalog,false);assert.match(await off.render({catalogId:id(900)}),/新候選目錄尚未啟用/u);assert.deepEqual(off.counts(),{oldReads:0,newReads:0});
 });
 test('ACTUALcanonicalpage mixednew/old orduplicatequeryrejects withoutreader; newtokenmissingcatalogId neverbecomeslatest',async()=>{
@@ -90,4 +90,20 @@ test('ACTUALSSR withdrawalleavespositiononly andstaticfilteroptions; no symbol/s
  const html=await f.render({catalogId:p.catalogId,limit:'20',cursor:base.nextCursor});assert.match(html,/此位置的公開資訊已撤回/u);assert.match(html,/<td>21<\/td>/u);
  for(const secret of ['2320','withdrawn_private_source','2026-11-12',p.clues[20].id])assert.ok(!html.includes(secret));
  for(const source of ['withdrawn_private_source','does_not_match']){const result=await f.render({catalogId:p.catalogId,source});assert.match(result,/無法安全提供篩選結果/u);assert.ok(!result.includes('<table'));}
+});
+
+test('canonical page renders saved pool states and pins the next page',async()=>{
+ const p={schemaVersion:'launch-candidate-pool-history-v1',
+  current:{id:id(960),cutoff,rows:[{symbol:'2300',state:'waiting'},{symbol:'2301',state:'eligible'}]},
+  previous:{id:id(959),cutoff:'2026-11-13T13:30:00Z',rows:[{symbol:'2299',state:'eligible'}]},next:null};
+ const f=actualPage(true,q=>launchCandidatePoolPage(p,q,now));
+ const first=await f.render({limit:'1'});
+ for(const label of ['快照日期','本版未出現','確切離池時間與原因未保存','較早版本'])assert.ok(first.includes(label));
+ const href=/href="([^"]+)"[^>]*>下一頁/u.exec(first)?.[1]?.replaceAll('&amp;','&');
+ assert.ok(href);
+ const params=Object.fromEntries(new URL(href,'http://127.0.0.1').searchParams);
+ assert.equal(params.catalogId,p.current.id);
+ const second=await f.render(params);
+ assert.match(second,/快照當時等待/u);
+ assert.ok(!second.includes('2299'));
 });

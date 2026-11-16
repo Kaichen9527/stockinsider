@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {LAUNCH_CANDIDATE_FIXTURE,launchCandidateQuery,launchCandidateFixturePage,readLaunchCandidateCatalog} from './launch-candidate-catalog.ts';
+import {LAUNCH_CANDIDATE_FIXTURE,launchCandidateQuery,launchCandidateFixturePage,launchCandidatePoolPage,readLaunchCandidateCatalog} from './launch-candidate-catalog.ts';
 import {EPOCH_FIXTURE_SCHEMA,type CandidateEpochEvent} from './candidate-epoch-journal.ts';
 import {POLICY} from './policy.ts';
 const id=(n:number)=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
@@ -54,11 +54,11 @@ test('withdrawal preserves onlyposition/state andneverdrops/refills; ANYwithdraw
   const result=page(p,query(filter),withdrawn);assert.equal(result.availability,'filtered_projection_unavailable');assert.deepEqual(result.rows,[]);assert.equal(result.nextCursor,null);
  }
 });
-test('private/unknown scope is excluded BEFOREmaterialization; fixturebinding isnot a runtimepublicmetadata grant',()=>{
+test('private/unknown scope is excluded BEFOREmaterialization; fixturebinding isnot a runtimepublicmetadata grant',async()=>{
  const p=fixture();Object.assign(p.clues[0],{publication:null});const first=page(p,query('limit=20'));assert.equal(first.rows.length,20);
  assert.ok(first.rows.every(row=>!('symbol' in row)||row.symbol!=='2300'));
  assert.throws(()=>page(p,query(),rights([p.clues[0].id])),/projection_invalid/u);
- assert.equal(readLaunchCandidateCatalog(query()).availability,'producer_unavailable');assert.equal(readLaunchCandidateCatalog(query()).publicationAuthority,false);
+ assert.equal((await readLaunchCandidateCatalog(query())).availability,'producer_unavailable');assert.equal((await readLaunchCandidateCatalog(query())).publicationAuthority,false);
  const visible=fixture(),before=page(visible,query('limit=20'));
  visible.clues.push({...visible.clues[0],id:id(999),symbol:'9999'});Object.assign(visible.clues.at(-1)!,{publication:null});
  visible.membership.events.push({...visible.membership.events[0],symbol:'9999',eventId:id(9997),epochId:id(9997)});
@@ -74,4 +74,54 @@ test('futures, forgedcoverage, duplicates, privateextras, malformedepochchain an
  const sparse=fixture();sparse.clues=Array(201);assert.throws(()=>page(sparse),/projection_invalid/u);
  const extra=fixture();Object.assign(extra.clues,{privateValue:'sentinel'});assert.throws(()=>page(extra),/projection_invalid/u);
  for(const invalid of ['limit=21','limit=0','source=x&source=y','mode=fixture','date=2026-02-30'])assert.throws(()=>query(invalid),/projection_invalid/u);
+});
+
+const poolPacket = () => ({
+ schemaVersion:'launch-candidate-pool-history-v1',
+ current:{id:id(2),cutoff:'2026-11-16T13:30:00Z',rows:[{symbol:'2301',state:'waiting'},{symbol:'2302',state:'eligible'}]},
+ previous:{id:id(1),cutoff:'2026-11-13T13:30:00Z',rows:[{symbol:'2301',state:'eligible'},{symbol:'2300',state:'waiting'}]},
+ next:null as {id:string;cutoff:string}|null,
+});
+const poolReadAt = '2026-11-18T13:31:00Z';
+test('saved pool observes waiting, eligible and absence while leaving unpublished metadata unknown',()=>{
+ const projected=launchCandidatePoolPage(poolPacket(),query(),poolReadAt);
+ assert.deepEqual(projected.rows.map(row=>[row.symbol,row.state]),[
+  ['2300','absent_from_successor'],['2301','snapshot_waiting'],['2302','snapshot_eligible'],
+ ]);
+ assert.equal(projected.rows[0].lastSeenAt,'2026-11-13T13:30:00Z');
+ assert.equal(projected.rows[0].observedAt,'2026-11-16T13:30:00Z');
+ assert.equal(projected.coverage.membershipComplete,false);
+ assert.equal(projected.entryAuthority,false);
+ assert.equal(launchCandidatePoolPage(poolPacket(),query('status=snapshot_waiting&date=2026-11-16'),poolReadAt).rows[0].symbol,'2301');
+ assert.equal(launchCandidatePoolPage(poolPacket(),query('date=2026-11-17'),poolReadAt).rows.length,0);
+ for(const filters of ['source=ptt','industry=半導體','status=admission_history_unknown']){
+  const result=launchCandidatePoolPage(poolPacket(),query(filters),poolReadAt);
+  assert.equal(result.availability,'filtered_projection_unavailable');
+  assert.deepEqual(result.rows,[]);
+ }
+});
+test('pool cursor pins predecessor and filters and survives a later successor',()=>{
+ const old=poolPacket(),first=launchCandidatePoolPage(old,query('limit=1'),poolReadAt);
+ assert.ok(first.nextCursor);
+ const params='catalogId='+first.catalogId+'&limit=1&cursor='+first.nextCursor;
+ const later={...poolPacket(),next:{id:id(3),cutoff:'2026-11-17T13:30:00Z'}};
+ const next=launchCandidatePoolPage(later,query(params),poolReadAt);
+ assert.equal(next.rows[0].symbol,'2301');
+ assert.equal(next.nextSnapshot?.id,id(3));
+ assert.throws(()=>launchCandidatePoolPage(later,query(params+'&status=snapshot_waiting'),poolReadAt),/projection_invalid/u);
+ later.previous.id=id(4);
+ assert.throws(()=>launchCandidatePoolPage(later,query(params),poolReadAt),/projection_invalid/u);
+ assert.throws(()=>launchCandidatePoolPage(old,query('limit=1&cursor='+first.nextCursor),poolReadAt),/projection_invalid/u);
+});
+test('reader uses a single known read RPC and verifies the allowlist without returning unknown fields',async()=>{
+ const calls:unknown[]=[];
+ const input=poolPacket();
+ const client={rpc:async(name:string,args:unknown)=>{calls.push([name,args]);return {data:input,error:null};}};
+ const result=await readLaunchCandidateCatalog(query('catalogId='+input.current.id),client);
+ assert.equal(result.availability,'ready');
+ assert.deepEqual(calls,[['vnext_launch_candidate_pool_history_v1',{p_catalog_id:input.current.id}]]);
+ const poisoned={...input,current:{...input.current,rows:[{...input.current.rows[0],note:'private'}]}};
+ await assert.rejects(()=>readLaunchCandidateCatalog(query(),{rpc:async()=>({data:poisoned,error:null})}),/projection_invalid/u);
+ const unavailable=await readLaunchCandidateCatalog(query(),{rpc:async()=>({data:null,error:null})});
+ assert.equal(unavailable.availability,'producer_unavailable');
 });
