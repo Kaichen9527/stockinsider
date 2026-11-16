@@ -1,0 +1,135 @@
+{
+  "schema": "stockinsider-t18-public-schema-restore-provenance-v1",
+  "dayUtc": "2026-11-16",
+  "archiveDate": "2026-09-19",
+  "candidateRevision": "b9f4449a657ecbb7a77d40f4e62485d1480cdc15",
+  "harnessRevision": "005a94e2bd99ed4d3d8964220ef41efb7575bda6",
+  "stageAdapterSha256": "53f6bcd2b3c28496b70503795c960570a79f66a0ef17e4b90cf00ae95de09b98",
+  "reference": {
+    "manifest": {
+      "nativeAclReference": true,
+      "bytes": 82898,
+      "sha256": "a59cd6b79b3194db98f536f5c028240a009192428d5edc5d3e1d3bbbf545d822"
+    },
+    "nativeTail": {
+      "locale": "C",
+      "stage": "publication-prefix",
+      "steps": 26,
+      "status": "committed",
+      "tailOrderedSha256": "edc46d48235d1542426c2ba729e24265d1722d757070a8ed5f97061ec843798e",
+      "predecessorSha256": "63677c0b92f9778f316dd5e7f68a8dd93f9d78fe2c013d7272417c1806ee33e4"
+    },
+    "lineage": {
+      "locale": "C",
+      "stage": "capture_restore",
+      "capturedSchemaSha256": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731"
+    },
+    "dbServer": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)"
+  },
+  "nativeControl": {
+    "archiveComparison": {
+      "archiveMatchesOrigin": true,
+      "narrowPublic": false,
+      "narrowRoles": [
+        true,
+        true,
+        true,
+        false
+      ],
+      "narrowToc": 1,
+      "widePublic": false,
+      "wideRoles": [
+        true,
+        true,
+        true,
+        false
+      ],
+      "widerToc": 1
+    },
+    "archiveSchemaCommands": [
+      {
+        "syntheticArchive": "wider",
+        "publicSchemaStatements": [
+          "REVOKE USAGE ON SCHEMA public FROM PUBLIC;",
+          "GRANT USAGE ON SCHEMA public TO anon;",
+          "GRANT USAGE ON SCHEMA public TO authenticated;",
+          "GRANT USAGE ON SCHEMA public TO service_role;"
+        ]
+      },
+      {
+        "syntheticArchive": "narrower",
+        "publicSchemaStatements": [
+          "REVOKE USAGE ON SCHEMA public FROM PUBLIC;",
+          "GRANT USAGE ON SCHEMA public TO anon;",
+          "GRANT USAGE ON SCHEMA public TO authenticated;",
+          "GRANT USAGE ON SCHEMA public TO service_role;"
+        ]
+      }
+    ],
+    "nativeControl": {
+      "stage": "native_public_schema_restore_control",
+      "freshDefaultPublicUsage": true,
+      "plainTocEntries": 0,
+      "wideTocEntries": 1,
+      "narrowTocEntries": 1,
+      "archiveAclCanOverrideTemplate": true,
+      "revokeMatchesNarrowProfile": true,
+      "explicitSiteRoleUsagePreserved": true,
+      "unrelatedRoleUsageRemoved": true,
+      "rollbackRestoredOriginal": true,
+      "idempotent": true,
+      "tcpDisabled": true,
+      "usedProductionArchive": false
+    },
+    "scratchCleaned": true
+  },
+  "authenticRestore": {
+    "authenticated": true,
+    "checks": {
+      "foreignKeys": 288,
+      "rlsTables": 193
+    },
+    "publicSchemaAcl": {
+      "bootstrappedPublicUsage": true,
+      "compatibilityPublicUsage": true,
+      "filteredTocEntries": 1,
+      "initialPublicUsage": true,
+      "restoredPublicUsage": true,
+      "tocEntries": 1
+    },
+    "scopedTransactionalRevoke": {
+      "namespaceUnchanged": true,
+      "publicUsageRemoved": true,
+      "recognized": true,
+      "reviewedRolesEquivalent": true,
+      "rollbackRestoredOriginal": true,
+      "scopedAclEqual": true,
+      "tested": true
+    },
+    "transactionPersisted": false,
+    "publicationPredecessor": {
+      "expectedSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+      "observedSha256": "f659690731faa2867c319824978777312b42314786655d4eb0efd9140e801528",
+      "relations": 989,
+      "roles": 30,
+      "routines": 301,
+      "types": 824
+    },
+    "publicationStop": "publication_tail_predecessor_namespace_mismatch",
+    "financialCommitted": true,
+    "publicationCommitted": false,
+    "nextRollback": "NOT_RUN",
+    "holdRetained": true
+  },
+  "host": {
+    "productionSignaturesMatched": true,
+    "minDiskBytes": 17312583680,
+    "minMemoryAvailableBytes": 4242604032,
+    "cleanup": {
+      "scratchRootsRemoved": 4,
+      "allStagingUnitsInactive": true,
+      "diskBytes": 26120028160,
+      "memoryAvailableBytes": 4484575232
+    }
+  }
+}
