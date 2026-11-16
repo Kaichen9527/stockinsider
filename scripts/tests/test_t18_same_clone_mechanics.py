@@ -166,6 +166,22 @@ class SameCloneMechanicsOnlyTests(unittest.TestCase):
             raw['launchReadpoint']['unreviewed']='PUBLIC_TEST_REJECTED'
             self.assertIsNone(project_exercise(raw))
 
+    def test_core_rehearsal_projects_only_disabled_install_and_exact_predecessors(self):
+        from deployment.staging.vnext.t17_keyfd import t18_core_migration_rehearsal as core
+        root=Path(__file__).resolve().parents[2]
+        migration=(root/'migrations'/core._LEGACY_NAME).read_bytes()
+        self.assertEqual(hashlib.sha256(migration).hexdigest(),core._LEGACY_SHA256)
+        query=core._legacy_probe_sql(migration)
+        self.assertTrue(query.rstrip().endswith(b'ROLLBACK;'))
+        self.assertNotIn(b'EXECUTE replace',query)
+        for target in core._LEGACY_EXPECTED:self.assertIn(target.encode('ascii'),query)
+        result={'status':'CORE_INSTALLED_DISABLED','core':core._CORE_OK,
+                'legacyPredecessors':dict.fromkeys(core._LEGACY_EXPECTED,'MISSING'),'probeRolledBack':True}
+        self.assertEqual(core.project_core_rehearsal(result),result)
+        self.assertIsNone(core.project_core_rehearsal({**result,'probeRolledBack':False}))
+        changed={**core._CORE_OK,'modeEnabled':True}
+        self.assertIsNone(core.project_core_rehearsal({**result,'core':changed}))
+
     def test_launch_projection_binds_restored_cutoff_and_member_pins(self):
         expected={'rankingRunId':'00000000-0000-4000-8000-000000000001',
             'session':'2026-11-13','cutoff':'2026-11-13T13:30:00Z','headSha256':'0'*64,

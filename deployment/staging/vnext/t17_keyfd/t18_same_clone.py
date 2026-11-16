@@ -518,7 +518,11 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
                  'candidateDetailHttp':{'status':'GAP_DETAIL_SCOPE'}}
             if observation['status']=='SCHEMA_MISSING':
                 with readpoint_phase('radar_readpoint'):
-                    gap['migrationPrerequisites']=_observe_launch_migration_markers(sql)
+                    from .t18_core_migration_rehearsal import rehearse_core_migration
+                    markers=_observe_launch_migration_markers(sql)
+                    gap['migrationPrerequisites']=markers
+                    core=rehearse_core_migration(sql,markers)
+                    if core is not None:gap['coreMigrationRehearsal']=core
             return gap
         with readpoint_phase('snapshot_dates'):dates=_expected_launch_binding(sql,observation)
     else:

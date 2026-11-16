@@ -6,6 +6,7 @@ from .t18_reader_roles import ROLE_COUNTS,LAUNCH_ROLE_COUNTS
 from .fixed_read_proxy import METRICS
 from .t18_release_assets import RELEASE_PINS,LAUNCH_RELEASE_PINS
 from .t18_same_clone import project_launch_migration_markers
+from .t18_core_migration_rehearsal import project_core_rehearsal
 
 MAX_COUNT=8*1024**3
 HEALTH_KEYS=set('sourceCommit buildId nextVersion homeStatus homeBytes homeAcceptance dailyAcceptance staticStatus staticSha256 dailyBytes dailySha256 contentDate snapshotPublishedDate staleReadonly actionsEnabled'.split())
@@ -99,6 +100,9 @@ def project_exercise(value):
         if launch['status']=='SCHEMA_MISSING':
             expected.add('migrationPrerequisites')
             if project_launch_migration_markers(value.get('migrationPrerequisites')) is None:return None
+            if 'coreMigrationRehearsal' in value:
+                expected.add('coreMigrationRehearsal')
+                if project_core_rehearsal(value['coreMigrationRehearsal']) is None:return None
         return {**value,'launchReadpoint':launch} if set(value)==expected else None
     observation=project_radar_reader_observation(value.get('readerObservation'))
     if observation is None:return None
