@@ -6,7 +6,16 @@ import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {rosterHeadFixtureSql} from './vnext-launch-roster-head-fixture.mjs';
 
+const rosterSchema=fs.readFileSync(new URL('../migrations/20260724_source_led_opportunity_engine_v3.sql',import.meta.url),'utf8');
+const schemaLines=rosterSchema.split('\n').map(line=>line.trim());
+const rosterTypes=['stock_exchange_v3','instrument_type_v3','listing_status_v3','official_roster_provider_v3'].map(name=>{
+ const declarations=schemaLines.filter(line=>line.startsWith('CREATE TYPE '+name+' AS ENUM (')&&line.endsWith(');'));
+ assert.equal(declarations.length,1,'missing or ambiguous roster type '+name);
+ return declarations[0];
+}).join('\n');
+
 const fixture = `
+${rosterTypes}
 CREATE ROLE anon;
 CREATE ROLE authenticated;
 CREATE ROLE service_role;
@@ -14,8 +23,9 @@ CREATE ROLE opportunity_v3_rpc_owner;
 CREATE ROLE stockinsider_vnext_owner;
 CREATE TABLE public.stock_instruments_v3(
  instrument_authority_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
- stock_id uuid NOT NULL,symbol text NOT NULL,exchange text NOT NULL,
- instrument_type text NOT NULL,listing_status text NOT NULL,provider text NOT NULL,roster_version text NOT NULL,
+ stock_id uuid NOT NULL,symbol text NOT NULL,exchange public.stock_exchange_v3 NOT NULL,
+ instrument_type public.instrument_type_v3 NOT NULL,listing_status public.listing_status_v3 NOT NULL,
+ provider public.official_roster_provider_v3 NOT NULL,roster_version text NOT NULL,
  source_timestamp timestamptz NOT NULL,recorded_at timestamptz NOT NULL,valid_from timestamptz NOT NULL,valid_to timestamptz
 );
 ALTER TABLE public.stock_instruments_v3 OWNER TO opportunity_v3_rpc_owner;
@@ -71,7 +81,8 @@ test('native screening and ranking resolve the same scoped head across appended 
 
     sql(`INSERT INTO public.stock_instruments_v3(stock_id,symbol,exchange,instrument_type,listing_status,provider,roster_version,
       source_timestamp,recorded_at,valid_from,valid_to)
-     SELECT md5(stock_key)::uuid,symbol,exchange,kind,status,lower(exchange),'tw-instrument-roster-v3.0',
+     SELECT md5(stock_key)::uuid,symbol,exchange::public.stock_exchange_v3,kind::public.instrument_type_v3,
+       status::public.listing_status_v3,lower(exchange)::public.official_roster_provider_v3,'tw-instrument-roster-v3.0',
        CASE WHEN valid_to IS NULL THEN '2026-11-14T05:30Z' ELSE '2026-11-01T00:00Z' END::timestamptz,
        CASE WHEN valid_to IS NULL THEN '2026-11-14T05:31Z' ELSE '2026-11-01T00:01Z' END::timestamptz,
        CASE WHEN valid_to IS NULL THEN '2026-11-14T05:30Z' ELSE '2026-11-01T00:00Z' END::timestamptz,

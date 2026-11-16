@@ -37,7 +37,7 @@ BEGIN
  -- instrument type remain visible so ranking can record a known exclusion.
  IF head.roster_version IS DISTINCT FROM 'tw-instrument-roster-v3.0'
   OR head.exchange IS NULL OR head.exchange NOT IN('TWSE','TPEX')
-  OR head.provider IS DISTINCT FROM lower(head.exchange::text) OR NOT isfinite(head.source_timestamp)
+  OR head.provider::text IS DISTINCT FROM lower(head.exchange::text) OR NOT isfinite(head.source_timestamp)
   OR NOT isfinite(head.recorded_at) OR head.valid_from IS NULL OR NOT isfinite(head.valid_from)
   OR head.source_timestamp>head.recorded_at OR head.valid_from>cutoff
   OR (head.valid_to IS NOT NULL AND (NOT isfinite(head.valid_to) OR head.valid_to<=cutoff))
