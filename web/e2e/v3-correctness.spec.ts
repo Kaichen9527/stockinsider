@@ -23,6 +23,9 @@ test('PCR-024 exercises the decision matrix at 320px, 200% zoom, keyboard, reduc
   await page.setViewportSize({ width: 320, height: 900 });
   await page.emulateMedia({ reducedMotion: 'reduce', colorScheme: 'light' });
   await page.goto('/v3-correctness-fixture');
+  const privateResearch = page.getByRole('navigation', { name: '帳號入口' }).getByRole('link', { name: '私人研究' });
+  await expect(privateResearch).toHaveAttribute('href', '/private-research');
+  expect((await privateResearch.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(44);
   await page.evaluate(() => { document.documentElement.style.zoom = '2'; });
 
   const articles = page.getByRole('article');
@@ -91,15 +94,15 @@ test('PCR-024 exercises the decision matrix at 320px, 200% zoom, keyboard, reduc
 
   await page.evaluate(() => { document.body.tabIndex = -1; document.body.focus(); });
   await page.keyboard.press('Tab');
-  const keyboardFocus = await page.evaluate(() => {
-    const element = document.activeElement as HTMLElement | null;
-    const box = element?.getBoundingClientRect();
-    return { text: element?.textContent ?? '', tag: element?.tagName ?? '', height: box?.height ?? 0, outline: element ? getComputedStyle(element).outlineStyle : 'none' };
-  });
-  expect(keyboardFocus.tag).toBe('A');
-  expect(keyboardFocus.text).toMatch(/深度分析/u);
-  expect(keyboardFocus.height).toBeGreaterThanOrEqual(44);
-  expect(keyboardFocus.outline).not.toBe('none');
+  await expect(privateResearch).toBeFocused();
+  await expect(privateResearch).not.toHaveCSS('outline-style', 'none');
+
+  await page.keyboard.press('Tab');
+  const detail = page.getByRole('link', { name: /深度分析/u }).first();
+  await expect(detail).toBeFocused();
+  expect(await detail.evaluate(element => element.tagName)).toBe('A');
+  expect((await detail.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(44);
+  await expect(detail).not.toHaveCSS('outline-style', 'none');
 
   const lightBackground = await page.locator('main').evaluate((element) => getComputedStyle(element).backgroundColor);
   await page.emulateMedia({ reducedMotion: 'reduce', colorScheme: 'dark' });
