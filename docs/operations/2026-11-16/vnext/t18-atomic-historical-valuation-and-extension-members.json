@@ -1,0 +1,200 @@
+{
+  "recordedAt": "2026-11-16T15:09:43+08:00",
+  "task": "T18",
+  "engineeringSource": "b5a5ae724125166875dffe806f82af9c47a7a540",
+  "harnessCommit": "005a94e2bd99ed4d3d8964220ef41efb7575bda6",
+  "stageAdapterSha256": "1516aeac4038d4267a8e1970393f12eabf06518be360864bd6e31095d93bdf90",
+  "fileSha256": {
+    "scripts/opportunity-v3/t18-historical-valuation-bridge.mjs": "27fbb6d7029684fa099a58bcd636cb199f0bcdc9af809ec118c1868e324ea771",
+    "scripts/opportunity-v3/research-publication-tail-atomic-client.mjs": "749ad15ee3b032665873500dbc2d09644e53e700db8de751ef7e68ac19902a35",
+    "scripts/opportunity-v3/t18-historical-valuation-bridge-native.test.mjs": "69bdac89881e5eaecd372c90de8bcf1c65c86092f934112641127a695efb3070"
+  },
+  "verify": {
+    "nativeAndGuardTests": 22,
+    "failed": 0,
+    "webProductionBuildExit": 0,
+    "env": "Contabo isolated staging fallback; authentic archive sealed by fixed harness"
+  },
+  "authenticBackup": {
+    "date": "2026-09-19",
+    "databaseBytes": 2258785971,
+    "foreignKeys": 288,
+    "financialCommitted": true,
+    "publicationCommitted": false,
+    "valuationBridge": {
+      "rolledBack": true,
+      "rowCountsUnchanged": true,
+      "sourceSha256": "3341e1b34f0c94adad78950ebd7092af6233cdac79abb684ce739d3530314d52",
+      "status": "applied",
+      "verifiedChecks": 3
+    },
+    "reason": "publication_tail_predecessor_namespace_mismatch",
+    "publicationPredecessor": {
+      "expectedSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+      "observedSha256": "55cbb8bcf6f5d9bad5a4147734c6ced8a0c22661072e21bb32c0ed97a11fcb15",
+      "relations": 989,
+      "roles": 31,
+      "routines": 301,
+      "types": 824
+    },
+    "unappliedPublicationSteps": 26,
+    "nextRollback": "NOT_RUN",
+    "holdRetained": true
+  },
+  "extensionInventory": {
+    "allMatched": true,
+    "counts": {
+      "relations": {
+        "extra": 2,
+        "matched": 2
+      },
+      "routines": {
+        "extra": 13,
+        "matched": 13
+      },
+      "types": {
+        "extra": 4,
+        "matched": 4
+      }
+    },
+    "hits": [
+      {
+        "extension": "pg_stat_statements",
+        "identity": "pg_stat_statements",
+        "identitySha256": "aeca4e66fb3e16be12f8b00d7cbea698a406800d7260237b0de93d3507a9aaf6",
+        "kind": "relations"
+      },
+      {
+        "extension": "pg_stat_statements",
+        "identity": "pg_stat_statements_info",
+        "identitySha256": "3450893556bf798183da16022cd62cad439df52f8ee0ccb3751170a4aa16ca12",
+        "kind": "relations"
+      },
+      {
+        "extension": "pg_stat_statements",
+        "identity": "extensions.pg_stat_statements(boolean)",
+        "identitySha256": "1e07e1a6f7267bf692d108f085a074139be42dbbd9e916f01ae35816b22bccf3",
+        "kind": "routines"
+      },
+      {
+        "extension": "pg_stat_statements",
+        "identity": "extensions.pg_stat_statements_info()",
+        "identitySha256": "8f1dc8e1ebc568794b33d125c3266262cd749a82d8f0bc926a26d9fb3abe897e",
+        "kind": "routines"
+      },
+      {
+        "extension": "pg_stat_statements",
+        "identity": "extensions.pg_stat_statements_reset(oid,oid,bigint,boolean)",
+        "identitySha256": "60beada839fbaea5c9a6b4e6dd688f29aeafc054bd11f8fec1fbd98298cebc94",
+        "kind": "routines"
+      },
+      {
+        "extension": "pg_stat_statements",
+        "identity": "_pg_stat_statements",
+        "identitySha256": "20663203d25c8d0fc47a6da2d45dbd24441f6a4394d65d7e22ddfa2edb8d4b3b",
+        "kind": "types"
+      },
+      {
+        "extension": "pg_stat_statements",
+        "identity": "_pg_stat_statements_info",
+        "identitySha256": "4aaa06ee75cf855039d75dbae1fc3d853af8323779c2b2170820fb3808eeb930",
+        "kind": "types"
+      },
+      {
+        "extension": "pg_stat_statements",
+        "identity": "pg_stat_statements",
+        "identitySha256": "0d256c52191321b5971670c0fd28d5314493f5c8be6e637cafdb872b9301d4e9",
+        "kind": "types"
+      },
+      {
+        "extension": "pg_stat_statements",
+        "identity": "pg_stat_statements_info",
+        "identitySha256": "075fb3288e3f1bb6ed469550d38f3c6ea967103b39c4d5d41674d2dbb86e6035",
+        "kind": "types"
+      },
+      {
+        "extension": "uuid-ossp",
+        "identity": "extensions.uuid_generate_v1()",
+        "identitySha256": "092b6268954c2de6f06b69b08bddd69fe81cb97d873b68c97e5004670090c88e",
+        "kind": "routines"
+      },
+      {
+        "extension": "uuid-ossp",
+        "identity": "extensions.uuid_generate_v1mc()",
+        "identitySha256": "73035b827326e370268ccfd6f223797027bcd9f0414be0aa36ef91fa55816e71",
+        "kind": "routines"
+      },
+      {
+        "extension": "uuid-ossp",
+        "identity": "extensions.uuid_generate_v3(uuid,text)",
+        "identitySha256": "2bd64101fa5ba7f238b3f617ba442d765eaf72f6acbea106770d147a93bd3216",
+        "kind": "routines"
+      },
+      {
+        "extension": "uuid-ossp",
+        "identity": "extensions.uuid_generate_v4()",
+        "identitySha256": "38581f61712ee7c898072bb0d53870712d90d15a0a5ffab2e044e5cd9349ffa3",
+        "kind": "routines"
+      },
+      {
+        "extension": "uuid-ossp",
+        "identity": "extensions.uuid_generate_v5(uuid,text)",
+        "identitySha256": "89a4f5dce468da425c7bb4a2ec389e904015552223a169b875ebeecd0328a80b",
+        "kind": "routines"
+      },
+      {
+        "extension": "uuid-ossp",
+        "identity": "extensions.uuid_nil()",
+        "identitySha256": "a8d583cb414c99299e36fc1600f054f8902fb6068fefc50f20c4f27aea4cdc34",
+        "kind": "routines"
+      },
+      {
+        "extension": "uuid-ossp",
+        "identity": "extensions.uuid_ns_dns()",
+        "identitySha256": "7169e54af532f24942ac15c3d516ce95eb9709e8f64c4fc3e6ed3b0c8e721b56",
+        "kind": "routines"
+      },
+      {
+        "extension": "uuid-ossp",
+        "identity": "extensions.uuid_ns_oid()",
+        "identitySha256": "83939977d9312171746952ed684fdb75dfda743744de40be95dd136e6777bf0a",
+        "kind": "routines"
+      },
+      {
+        "extension": "uuid-ossp",
+        "identity": "extensions.uuid_ns_url()",
+        "identitySha256": "880aaaf51120746deaf7dfd5a3a480dacc4a8cff6e06156a1393d44f0bcd5c11",
+        "kind": "routines"
+      },
+      {
+        "extension": "uuid-ossp",
+        "identity": "extensions.uuid_ns_x500()",
+        "identitySha256": "67d6152291de5137d1e44b93763d559a4615fb9ed125fce329c9d21f682f325c",
+        "kind": "routines"
+      }
+    ],
+    "versions": {
+      "pg_stat_statements": "1.11",
+      "uuid-ossp": "1.1"
+    }
+  },
+  "extensionScope": "Full set of additional relation, routine and type identities compared against the exact native reviewed baseline. Extension ownership was observed through pg_depend. Identity coverage does not attest other catalog fields, owners, role memberships or ACL equivalence.",
+  "formalSignaturesUnchanged": true,
+  "scratch": {
+    "temporaryDirectoriesAbsent": 3,
+    "diskBeforeBytes": 25909194752,
+    "diskAfterBytes": 26124144640,
+    "stagingUnitsInactive": true,
+    "buildScratchRemoved": true,
+    "availableDiskAfterBuildBytes": 26123563008
+  },
+  "resources": {
+    "appMemoryPeakObservedBytes": 18735104,
+    "dbMemoryPeakObservedBytes": 805310464,
+    "minimumHostAvailableMemoryBytes": 4280311808,
+    "minimumHostDiskBytes": 17316089856,
+    "minimumWorkFreeBytes": 5935996928,
+    "restMemoryPeakObservedBytes": 18731008
+  },
+  "next": "Prove the effective schema/role/ACL differences and prepare independently reviewed isolated compatibility. Keep the exact predecessor gate and the real-rank rollback admission."
+}
