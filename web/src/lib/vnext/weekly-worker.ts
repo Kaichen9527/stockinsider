@@ -20,7 +20,13 @@ export async function runLaunchWeeklyThesisAudit(identity:VnextIdentity){
  if(!launchRankingEnabled())throw Error('launch_ranking_disabled');
  return analysisWriter(async(leaseOwner)=>{
   const {getSupabaseServerClient}=await import('../supabase-server.ts');
-  const reply=await getSupabaseServerClient().rpc('vnext_launch_weekly_audit_due_v1',{p_principal:identity.principal});
+  const client=getSupabaseServerClient();
+  const readDue=()=>client.rpc('vnext_launch_weekly_audit_due_v1',{p_principal:identity.principal});
+  let reply=await readDue();
+  if(!reply.error&&reply.data?.status==='deferred'){
+   const {synchronizeScheduledLaunchCalendar}=await import('./calendar-sync.ts');
+   if(await synchronizeScheduledLaunchCalendar(identity))reply=await readDue();
+  }
   const due=reply.data as Row|null;
   if(reply.error||!due||!['due','empty','current','deferred'].includes(String(due.status))
     ||typeof due.activeCount!=='number'||!Number.isInteger(due.activeCount)||due.activeCount<0||due.activeCount>20)

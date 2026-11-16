@@ -16,3 +16,19 @@ export async function synchronizeExecutionCalendar(){
  if(identity?.role!=='operator')throw new Error('vnext_operator_calendar_binding_missing');
  return synchronizeCachedCalendar(identity);
 }
+
+/** Called only inside the existing writer lease. The DB chooses its current
+ * Taipei slot and compares both source heads before recording a session. */
+export async function synchronizeScheduledLaunchCalendar(identity: VnextIdentity) {
+ if(identity.role!=='operator'||!identity.principal)throw Error('vnext_operator_calendar_required');
+ const {requireActiveVpsWriter}=await import('../taiwan-data-runtime.ts');
+ const writer=await requireActiveVpsWriter();
+ if(!writer.ok)throw Error('launch_scheduled_calendar_writer_unavailable');
+ const {data,error}=await writer.supabase.rpc('vnext_launch_sync_scheduled_calendar_v1',{
+  p_principal:identity.principal,p_writer_release:writer.releaseId,
+ });
+ if(error||!data||!['deferred','ready','synced'].includes(data.status)) {
+  throw Error('launch_scheduled_calendar_unavailable');
+ }
+ return data.status!=='deferred';
+}

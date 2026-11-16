@@ -17,6 +17,7 @@ on:
       - 'migrations/20261116_28_vnext_launch_roster_heads_v1.sql'
       - 'migrations/20261117_35_vnext_launch_research_policy_v1.sql'
       - 'migrations/20261117_36_vnext_launch_research_dispatch_v1.sql'
+      - 'migrations/20261117_37_vnext_launch_scheduled_calendar_v1.sql'
       - 'deployment/vps/launch-radar-schedule/**'
       - 'scripts/run-launch-scheduled-cycle*.mjs'
       - 'openspec/changes/stockinsider-vnext-20/**'
@@ -59,6 +60,7 @@ jobs:
           mkdir -m 700 /tmp/stockinsider-vnext-ci
           mkdir -m 700 /tmp/stockinsider-vnext-oct22-private
           node --experimental-strip-types web/src/lib/vnext/launch-research-dispatch.test.ts | tee /tmp/stockinsider-vnext-ci/launch-research-dispatch.tap
+          node --experimental-strip-types web/src/lib/vnext/launch-cutover.test.ts | tee /tmp/stockinsider-vnext-ci/launch-cutover.tap
           node --experimental-strip-types web/src/lib/vnext/vnext.test.ts | tee /tmp/stockinsider-vnext-ci/pure.tap
           node --experimental-strip-types web/src/lib/vnext/discovery.test.ts | tee /tmp/stockinsider-vnext-ci/discovery.tap
           node --experimental-strip-types web/src/lib/vnext/screening-instrument-identity.test.ts | tee /tmp/stockinsider-vnext-ci/screening-instrument-source.tap

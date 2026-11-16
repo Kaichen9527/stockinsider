@@ -1,6 +1,7 @@
 /** Finite synthetic provider failure proof; no HTTP/model/production credential. */
 import assert from 'node:assert/strict';
-import{roles,binding,input,authorOutput,reviewerOutput}from'./vnext-synthetic-research-vectors.mjs';
+import{binding}from'./vnext-synthetic-research-vectors.mjs';
+import{scalarInput as input,scalarAuthorOutput as authorOutput,scalarReviewerOutput as reviewerOutput}from'./vnext-native-scalar-research-fixture.mjs';
 import{runResearchWorker}from'../web/src/lib/vnext/worker-core.ts';
 import{inputHash}from'../web/src/lib/vnext/policy.ts';
 export async function proveTerminalFailureLifecycle(x){

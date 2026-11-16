@@ -13,7 +13,7 @@ const run='00000000-0000-4000-8000-000000000001',identity={principal:'SYNTHETIC_
 const token='SYNTHETIC_INTERNAL_TEST_TOKEN',policy='stockinsider-launch-radar-v1';
 /** Actual HTTP/cycle/lowest writer functions; synthetic transports prove
  * dispatch and zero work, never a real DB lease/SQL/publication acceptance. */
-function fixture(newMode=true,options:{ready?:boolean;admissionError?:boolean;failNew?:boolean}={}){
+function fixture(newMode=true,options:{ready?:boolean;admissionError?:boolean;failNew?:boolean;calendarSync?:boolean}={}){
   const calls:string[]=[],cache=new Map<string,Row>(),mocks=new Map<string,unknown>();let active=false;
   const environment={STOCKINSIDER_VNEXT_ENABLED:'true',INTERNAL_API_KEY:token,CRON_SECRET:'SYNTHETIC_CRON_ONLY',STOCKINSIDER_VNEXT_OPERATOR_PRINCIPAL:identity.principal,
     STOCKINSIDER_VNEXT_AUTHOR_KEY:'SYNTHETIC_AUTHOR_ONLY',STOCKINSIDER_VNEXT_AUTHOR_PRINCIPAL:'SYNTHETIC_AUTHOR'};
@@ -23,10 +23,15 @@ function fixture(newMode=true,options:{ready?:boolean;admissionError?:boolean;fa
   const payload={asOf:'2026-11-13T13:30:00Z',hotThemes:[],opportunities:[],reports:[]},stages={found:[],waiting:[],actionable:[]};
   const client={rpc:async(name:string)=>{calls.push(`rpc:${name}`);return {data:name==='publish_radar_public_snapshots'?{homeId:'SYNTHETIC_HOME',dailyId:'SYNTHETIC_DAILY'}:name==='read_taiwan_data_publication_metadata_v5'?{dataCutoffAt:payload.asOf,datasetCompletenessPct:100}:{published:true},error:null};}};
   put('lib/vnext/launch-ranking-read.ts',{launchRankingEnabled:()=>newMode,LAUNCH_RANKING_POLICY:policy,LAUNCH_RANKING_RULES:'launch-radar-comparisons-v5',readLaunchRankingSnapshot:async()=>{calls.push('unexpected-new-read');throw Error('unexpected');}});
+  put('lib/vnext/launch-outcome-cycle.ts',{runLaunchOutcomeCycle:async()=>{calls.push('launch-outcome');return null;}});
   put('lib/vnext/ranking-read.ts',{rankingEnabled:()=>true,readRankingSnapshot:async()=>{calls.push('old-ranking-read');return {snapshot:null};}});
   put('lib/supabase-server.ts',{getSupabaseServerClient:()=>{calls.push('db-client');return client;}});
   put('lib/vnext/analysis-runtime.ts',{analysisWriter:async(work:()=>Promise<unknown>)=>{calls.push('legacy-writer');return work();}});
-  put('lib/vnext/calendar-sync.ts',{synchronizeCachedCalendar:async()=>{calls.push('legacy-calendar');}});
+  let launchCalendarSynced=false;
+  put('lib/vnext/calendar-sync.ts',{
+    synchronizeCachedCalendar:async()=>{calls.push('legacy-calendar');},
+    synchronizeScheduledLaunchCalendar:async()=>{calls.push('launch-calendar');return launchCalendarSynced=options.calendarSync===true;},
+  });
   put('lib/vnext/store.ts',{command:async()=>{calls.push('legacy-context');return {completed:true,postclose:true,session:'2026-11-13'};}});
   put('lib/vnext/cached-admission.ts',{cachedAdmissionBody:()=>{calls.push('unexpected-admission');},currentReceiptBody:()=>[]});
   for(const [file,method] of [['source-window-worker.ts','runSourceWindowWorker'],['market-ai-worker.ts','runMarketInterpretation'],['weekly-worker.ts','runWeeklyThesisAudit'],['research-dispatcher.ts','dispatchResearchQueue']] as const)
@@ -52,7 +57,7 @@ function fixture(newMode=true,options:{ready?:boolean;admissionError?:boolean;fa
     },isolatedModule,isolatedModule.exports);return isolatedModule.exports;
   }
   const actualNew=load('lib/vnext/launch-ranking-command.ts'),closed=actualNew.launchRankingPublishRequest as(value:unknown)=>Row;
-  put('lib/vnext/launch-ranking-command.ts',{...actualNew,readLaunchCycleAdmission:async()=>{calls.push('launch-admission');if(options.admissionError)throw Error('launch_ranking_cycle_context_unavailable');return {ready:options.ready??false,reason:options.ready?null:'source_producer_not_ready',session:options.ready?'2026-11-13':null,cutoff:options.ready?'2026-11-13T21:30:00+08:00':null,policyVersion:policy};},
+  put('lib/vnext/launch-ranking-command.ts',{...actualNew,readLaunchCycleAdmission:async()=>{calls.push('launch-admission');if(options.admissionError)throw Error('launch_ranking_cycle_context_unavailable');const ready=options.ready||launchCalendarSynced;return {ready,reason:ready?null:options.calendarSync===undefined?'source_producer_not_ready':'launch_today_official_session_missing',session:ready?'2026-11-13':null,cutoff:ready?'2026-11-13T21:30:00+08:00':null,policyVersion:policy};},
     publishCycleLaunchRanking:async()=>{calls.push('launch-cycle-publish');return {published:false,retained:true};},
     publishLaunchRanking:async(_actor:unknown,value:unknown)=>{calls.push('launch-entry');closed(value);if(options.failNew)throw Error('synthetic_new_writer_rejected');if(active)throw Error('launch_ranking_owned_lease_unavailable');active=true;try{await new Promise(resolve=>setTimeout(resolve,0));calls.push('launch-write');return {published:true,policyVersion:policy};}finally{active=false;}}});
   return {load,calls,payload,stages,context,request(body:unknown,bearer=token,extra:Record<string,string>={}){return new Request('http://localhost/api/internal/vnext-research',{method:'POST',headers:{authorization:`Bearer ${bearer}`,...extra},body:JSON.stringify(body)});}};
@@ -80,11 +85,21 @@ test('actual newcycle notready or uncertain admission starts no oldwriter/calend
     const f=fixture(true,{ready:mode==='ready',admissionError:mode==='error'}),cycle=f.load('lib/vnext/research-cycle.ts').runPostcloseResearchCycle as(actor:unknown)=>Promise<Row>;
     if(mode==='error')await assert.rejects(cycle(identity),/context_unavailable/u);
     else {const result=await cycle(identity);assert.equal(result.policyVersion,policy);assert.equal(result.expensiveCalls,0);if(mode==='ready')assert.deepEqual(Array.from(result.dependencies as string[]),['legacy_author_preparation_dependency']);else assert.equal(result.status,'deferred');}
-    assert.deepEqual(f.calls,mode==='ready'?['launch-admission','launch-cycle-publish']:['launch-admission']);
+    assert.deepEqual(f.calls,mode==='ready'?['launch-admission','launch-cycle-publish','launch-outcome']:['launch-admission']);
   }
   const f=fixture(true,{ready:true}),http=f.load('lib/vnext/http.ts').vnextRoute as Http;
   assert.equal((await(await http(f.request({action:'cycle'}),'vnext-research'))!.json()).policyVersion,policy);
   const before=f.calls.length;assert.equal((await http(f.request({action:'cycle',symbols:[]}),'vnext-research'))!.status,409);assert.equal(f.calls.length,before);
+});
+test('actual launch cycle retries admission only after the scheduled calendar confirms today',async()=>{
+  for(const calendarSync of [true,false]){
+    const f=fixture(true,{calendarSync}),cycle=f.load('lib/vnext/research-cycle.ts').runPostcloseResearchCycle as(actor:unknown)=>Promise<Row>;
+    const result=await cycle(identity);
+    assert.equal(result.status,calendarSync?'existing_reviewed_cache_only':'deferred');
+    assert.deepEqual(f.calls,calendarSync
+      ?['launch-admission','legacy-writer','launch-calendar','launch-admission','launch-cycle-publish','launch-outcome']
+      :['launch-admission','legacy-writer','launch-calendar']);
+  }
 });
 test('actual oldcycle OFF preserves its original source/market/audit/dispatch/oldranking chain',async()=>{
   const f=fixture(false),cycle=f.load('lib/vnext/research-cycle.ts').runPostcloseResearchCycle as(actor:unknown)=>Promise<Row>;await cycle(identity);

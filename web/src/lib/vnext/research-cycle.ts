@@ -6,7 +6,13 @@ export async function runPostcloseResearchCycle(identity:VnextIdentity){
  if(identity.role!=='operator')throw new Error('vnext_operator_required');
  if(launchRankingEnabled()){
   const {readLaunchCycleAdmission,publishCycleLaunchRanking}=await import('./launch-ranking-command.ts');
-  const context=await readLaunchCycleAdmission(identity);
+  let context=await readLaunchCycleAdmission(identity);
+  if(context.reason==='launch_today_official_session_missing'){
+   const {synchronizeScheduledLaunchCalendar}=await import('./calendar-sync.ts');
+   if(await analysisWriter(()=>synchronizeScheduledLaunchCalendar(identity))){
+    context=await readLaunchCycleAdmission(identity);
+   }
+  }
   if(!context.ready)return {status:'deferred',reason:context.reason??'launch_ranking_cycle_not_ready',policyVersion:LAUNCH_RANKING_POLICY,expensiveCalls:0,scheduleEnabled:false};
   const ranking=await publishCycleLaunchRanking(identity,context.session);
   const outcomes=context.cutoff?await(await import('./launch-outcome-cycle.ts')).runLaunchOutcomeCycle(identity,context.cutoff):null;

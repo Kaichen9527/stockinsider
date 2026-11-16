@@ -91,6 +91,14 @@ export async function runScheduledLaunchResearch(identity: VnextIdentity): Promi
     import('./store.ts'), import('./analysis-runtime.ts'), import('./automatic-worker.ts'),
   ]);
   const dispatchStarted = performance.now();
+  let calendarSyncTried = false;
+  const readDispatchContext = async () => {
+    const { data, error } = await writer.supabase.rpc('vnext_launch_dispatch_context_v1', {
+      p_principal: identity.principal, p_writer_release: writer.releaseId,
+    });
+    if (error) throw Error('launch_research_dispatch_context_unavailable');
+    return data;
+  };
   return dispatchLaunchQueue({
     async context() {
       // Leave five minutes for in-flight author and review work inside the
@@ -98,11 +106,12 @@ export async function runScheduledLaunchResearch(identity: VnextIdentity): Promi
       if (performance.now() - dispatchStarted >= 7 * 60_000) {
         return { session: null, reason: 'launch_research_window_closed' };
       }
-      const { data, error } = await writer.supabase.rpc('vnext_launch_dispatch_context_v1', {
-        p_principal: identity.principal, p_writer_release: writer.releaseId,
-      });
-      if (error) throw Error('launch_research_dispatch_context_unavailable');
-      return data;
+      const data = await readDispatchContext();
+      if (data?.reason !== 'launch_research_official_session_missing' || calendarSyncTried) return data;
+      calendarSyncTried = true;
+      const { synchronizeScheduledLaunchCalendar } = await import('./calendar-sync.ts');
+      const ready = await analysisWriter(() => synchronizeScheduledLaunchCalendar(identity));
+      return ready ? readDispatchContext() : data;
     },
     async progress(session) {
       const { data, error } = await writer.supabase.rpc('read_taiwan_data_refresh_progress_v6', {
