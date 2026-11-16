@@ -1,0 +1,40 @@
+{
+  "schema": "stockinsider-t03-investanchors-member-content-witness-v1",
+  "observedAt": "2026-11-16T13:20:54Z",
+  "timezone": "Asia/Taipei",
+  "mail": {
+    "day": "2026-11-16",
+    "readOnlyConnector": true,
+    "exactSenderDomainVerified": true,
+    "dkimVerified": true,
+    "matches": 1,
+    "afterMorningNewMatches": 0,
+    "completePage": true,
+    "subjectFingerprintUsedInMemoryOnly": true
+  },
+  "publisher": {
+    "uniqueLinkedMemberArticle": true,
+    "exactRenderedTitleMatch": true,
+    "displayedOriginalDate": "2026-11-15",
+    "substantiveBodyParagraphs": 17,
+    "primaryIssuer": "foreign",
+    "directTaiwanIssuerQualificationEstablished": false,
+    "evidenceTypesObserved": [
+      "reported results",
+      "management commentary"
+    ]
+  },
+  "disposition": {
+    "newTaiwanCandidates": 0,
+    "notificationDateUsedAsOriginalDate": false,
+    "modelRuns": 0,
+    "researchWrites": 0
+  },
+  "scope": {
+    "method": "manual witness through existing member login",
+    "unattendedOAuthVerified": false,
+    "unattendedPublisherAccessVerified": false,
+    "productionWrites": false,
+    "privateArticleDataRetainedInGit": false
+  }
+}
