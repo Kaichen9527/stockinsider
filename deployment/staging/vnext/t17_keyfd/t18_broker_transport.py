@@ -20,6 +20,7 @@ import struct
 import threading
 import time
 from .staging_admission import _mounts
+from .t18_release_assets import LAUNCH_RELEASE_PINS, RELEASE_PINS
 
 BROKER_ROOT='/run/t18-broker'
 CONTROL_PATH=BROKER_ROOT+'/control.sock'
@@ -35,7 +36,7 @@ SHORT_REQUEST_SECONDS=15
 START_REQUEST_SECONDS=60
 OPS=frozenset(('HELLO','CONFIGURE','START_A','START_B','STOP_NEXT','FAULT_NEXT','SHUTDOWN'))
 REST_OPS=frozenset(('HELLO','CONFIGURE','SHUTDOWN'))
-COMMITS=('169aad1b6cfa747f78ae3464b614f43c0749d806','dd59817f750684b093965f539dd4de466be13077')
+COMMITS=frozenset(commit for commit,_ in (*RELEASE_PINS,*LAUNCH_RELEASE_PINS))
 RESPONSE_FIELDS=frozenset(('op','status','sourceCommit','buildId','postgrestVersion',
                           'nextVersion','nextRunning','postgrestRunning','networkNamespaceCookie'))
 STATUS={'HELLO':'READY','CONFIGURE':'CONFIGURED','START_A':'STARTED','START_B':'STARTED',

@@ -89,6 +89,20 @@ class BrokerTransportTests(unittest.TestCase):
                 client.close();t.join(timeout=3);server.close()
             self.assertFalse(t.is_alive());self.assertEqual(seen,[{'op':'HELLO'}])
 
+    def test_accepts_start_receipts_for_both_fixed_release_pairs(self):
+        for pair in (m.RELEASE_PINS, m.LAUNCH_RELEASE_PINS):
+            for op, (commit, _) in zip(('START_A', 'START_B'), pair, strict=True):
+                with self.subTest(op=op, commit=commit):
+                    value = {**response(op), 'sourceCommit': commit, 'buildId': 'fixed-build',
+                             'nextVersion': '16.3.4', 'nextRunning': True}
+                    self.assertEqual(m._response(json.dumps(value).encode(), op)['sourceCommit'], commit)
+
+    def test_rejects_start_receipt_for_unpinned_release(self):
+        value = {**response('START_A'), 'sourceCommit': '0' * 40, 'buildId': 'fixed-build',
+                 'nextVersion': '16.3.4', 'nextRunning': True}
+        with self.assertRaisesRegex(m.BrokerTransportRejected, '^broker_response_rejected$'):
+            m._response(json.dumps(value).encode(), 'START_A')
+
     def test_secret_fields_cannot_be_echoed_or_reported(self):
         secret='PUBLIC_FAKE_SECRET_DO_NOT_ECHO'
         invalid=response();invalid['stageJwt']=secret
