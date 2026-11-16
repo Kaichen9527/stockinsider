@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "vnext-twse-snapshot-integration-profile-v1",
+  "scope": "Integrated source-only tests using synthetic transport. Original source and migration evidence remains bound to the historical profile.",
+  "historicalProfile": {
+    "path": "scripts/opportunity-v3/vnext-twse-snapshot-profile-v1.json",
+    "sha256": "e2a43d7ada5536cade2641f47f5606e6afc5d5b9f3659857dabbf6fe454b36bb",
+    "originalSourceCommit": "d9a7340cb8d9c6ce332003d813f5859fcfc15f06"
+  },
+  "runtimeRevisions": [
+    {
+      "path": "web/src/lib/research-v2.ts",
+      "revision": "fee68fb6a12ee5cfd719b59a3f91e411cbe9de4d",
+      "sha256": "ce4b7fa6ddbc1905a2417b4bf00acefac5ff2e461a0cfbb765da4bad29f9f499"
+    },
+    {
+      "path": "web/src/lib/vnext/source-worker.ts",
+      "revision": "c5cbf170b927155d5fabb040cbfcf3fd8fbbee94",
+      "sha256": "db2e9f65f2e1b6c8e9935a38ad74f5e838b1459ab6c8b92db5c1670329d4ff20"
+    },
+    {
+      "path": "web/src/lib/vnext/cached-source-admission.ts",
+      "revision": "c5cbf170b927155d5fabb040cbfcf3fd8fbbee94",
+      "sha256": "e17c3199b1ca67ee81fb940bae42d31a1c78a2f46f8a4b3364481a47e146b37c"
+    }
+  ],
+  "nativeEvidenceForCurrentRuntime": false,
+  "liveAcquisitionVerified": false
+}
