@@ -4,6 +4,7 @@ import {executeFinancialVpsOperatorPrerequisite} from './financial-vps-operator-
 import {assertOperatorFlags,financialOperatorActionIdentity,assertOperatorPlan,assertOperatorReviewBinding} from './financial-vps-operator-binding.mjs';
 import {OWNERSHIP_PRELUDE,makeFinancialExistingSchemaProfile,assertFinancialExistingSchemaPlan,assertFinancialProfileFlags,assertFinancialProfileReviewBinding} from './financial-existing-schema-profile.mjs';
 import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
+import { SOURCE_SEED_MIGRATION, lockSatisfiedV320SourceSeed, verifySatisfiedV320SourceSeed } from './v320-source-seed-replay.mjs';
 import { v320ConstraintReplays, lockV320Constraint, preserveV320Constraints, verifyV320Constraint } from './legacy-v320-constraint-replay.mjs';
 import { FINANCIAL_TAIL, selectFinancialHistoryChain, assertFinancialReviewBinding, assertInstalledFinancialHistoryPlan, verifyFinancialHistoryPostconditions } from './financial-history-install-guard.mjs';
 
@@ -466,6 +467,7 @@ async function applyReviewedMigrationPlanToClient(client,plan,options,{operatorP
   const supersededMigrations=[];
   let operatorAction=null;
   const retainedChecks=new Map();
+  let retainedSourceSeed=null;
   try {
     const lockResult=await client.query("SELECT pg_try_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0)) AS locked");
     if(lockResult.rows[0]?.locked!==true) throw new Error('migration_install_busy');
@@ -497,17 +499,23 @@ async function applyReviewedMigrationPlanToClient(client,plan,options,{operatorP
           if(oid!==null)retainedChecks.set(profile,oid);
         }
       }
+      if(options.financialExistingSchemaProfile===true && migration.relativePath===SOURCE_SEED_MIGRATION) {
+        retainedSourceSeed=await lockSatisfiedV320SourceSeed(client,migration);
+        if(retainedSourceSeed)continue;
+      }
       const sql=preserveV320Constraints(migration,retainedChecks);
       await client.query(migrationBodyInAtomicTransaction(sql));
     }
     for(const [profile,oid] of retainedChecks)await verifyV320Constraint(client,profile,oid);
+    if(retainedSourceSeed)await verifySatisfiedV320SourceSeed(client,retainedSourceSeed);
     const verified=await verifyReviewedMigrationPostconditions(client, options);
     await client.query('COMMIT');
     transactionOpen=false;
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
       sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
       orderedChainSha256:plan.chainSha256,...(operatorAction?{operatorPrerequisite:{...plan.operatorPrerequisite,result:operatorAction}}:{}),...(plan.financialExistingSchemaProfile?{orderedProfileSha256:plan.financialExistingSchemaProfile.orderedProfileSha256,preludes:plan.financialExistingSchemaProfile.preludes.map(({relativePath,sha256})=>[relativePath,sha256])}:{}),migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
-      supersededMigrations:Object.freeze(supersededMigrations),verified});
+      supersededMigrations:Object.freeze(supersededMigrations),
+      ...(retainedSourceSeed?{alreadySatisfiedMigrations:Object.freeze([SOURCE_SEED_MIGRATION])}:{}),verified});
   } catch(error) {
     primaryFailed=true;
     throw error;

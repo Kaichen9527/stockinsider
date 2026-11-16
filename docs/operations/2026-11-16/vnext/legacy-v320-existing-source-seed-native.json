@@ -1,0 +1,58 @@
+{
+  "schema": "stockinsider-t18-v320-existing-source-seed-native-v1",
+  "testedTaipeiDate": "2026-11-16",
+  "baseCommit": "ae3be2666e4b78d9b56fce4d12384ceab9e80269",
+  "unitTests": {
+    "passed": 5,
+    "failed": 0
+  },
+  "locales": [
+    {
+      "locale": "C.UTF-8",
+      "existingSeed": {
+        "locale": "C.UTF-8",
+        "stage": "native_existing_seed_contract",
+        "noSeedExecution": true,
+        "matchingDataVerified": true,
+        "missingAuthorityRejected": true,
+        "unexpectedExecutionGrantRejected": true
+      },
+      "capturedSchemaFinal": {
+        "locale": "C.UTF-8",
+        "stage": "installed-state",
+        "enabled": false,
+        "legacyFenced": true,
+        "routines": 15,
+        "jobs": 0,
+        "publications": 0,
+        "rls": 18
+      },
+      "exit": 0
+    },
+    {
+      "locale": "C",
+      "existingSeed": {
+        "locale": "C",
+        "stage": "native_existing_seed_contract",
+        "noSeedExecution": true,
+        "matchingDataVerified": true,
+        "missingAuthorityRejected": true,
+        "unexpectedExecutionGrantRejected": true
+      },
+      "capturedSchemaFinal": {
+        "locale": "C",
+        "stage": "installed-state",
+        "enabled": false,
+        "legacyFenced": true,
+        "routines": 15,
+        "jobs": 0,
+        "publications": 0,
+        "rls": 18
+      },
+      "exit": 0
+    }
+  ],
+  "temporaryClustersRemoved": true,
+  "archiveOpened": false,
+  "snapshotMutationAuthorized": false
+}
