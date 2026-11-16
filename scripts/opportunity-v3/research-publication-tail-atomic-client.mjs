@@ -4,22 +4,33 @@ import {migrationBodyInAtomicTransaction}from './atomic-migration-chain.mjs';
 import {assertResearchPublicationCatalog}from './research-publication-catalog.mjs';
 import {verifyFinancialHistoryPostconditions}from './financial-history-install-guard.mjs';
 import {assertContaboValuationBridgeStage,stageContaboHistoricalValuation}from './t18-historical-valuation-bridge.mjs';
+import {stageT18SealedArchivePredecessor} from './t18-sealed-archive-predecessor.mjs';
 export const TAIL_SHARED_LOCK="SELECT pg_try_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0)) AS locked";
 const unlock="SELECT pg_advisory_unlock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))";
 /** Exclusive injected engineering client only; no connection/CLI/attestation/production authorization. */
-export async function applyPublicationTailToEngineeringClient(client,rows,{contaboHistoricalValuation=false}={}){
+export async function applyPublicationTailToEngineeringClient(client,rows,{contaboHistoricalValuation=false,contaboSealedArchive=false}={}){
  let locked=false,open=false,primary,valuationBridge;
  try{
   // Materialize immutable SQL strings before the first query; caller buffers cannot change later.
   if(!Array.isArray(rows))throw Error('publication_tail_selection_invalid');
   const owned=rows.map(r=>{const {relativePath,sha256,bytes}=r;if(!Buffer.isBuffer(bytes))throw Error('publication_tail_selection_invalid');return{relativePath,sha256,bytes:Buffer.from(bytes)};});
   const bodies=assertPublicationTailSelection(owned).map(r=>({path:r.relativePath,sql:migrationBodyInAtomicTransaction(r.bytes.toString('utf8'))}));
+  if (contaboSealedArchive === true && contaboHistoricalValuation === true)
+    throw Error('publication_tail_staging_profiles_conflict');
+  if (contaboSealedArchive === true) await assertContaboValuationBridgeStage(client, {sealedArchivePeer: true});
   if(contaboHistoricalValuation===true)await assertContaboValuationBridgeStage(client);
   if((await client.query(TAIL_SHARED_LOCK)).rows?.[0]?.locked!==true)throw Error('publication_tail_install_busy');locked=true;
   await client.query('BEGIN ISOLATION LEVEL READ COMMITTED');open=true;
   await client.query("SET LOCAL statement_timeout='30s'; SET LOCAL lock_timeout='2s'");
-  if(contaboHistoricalValuation===true)valuationBridge=await stageContaboHistoricalValuation(client);
-  const predecessor=await assertPublicationTailPredecessor(client);
+  let predecessor;
+  if (contaboSealedArchive === true) {
+   const staged = await stageT18SealedArchivePredecessor(client);
+   predecessor = staged.predecessor;
+   valuationBridge = staged.valuation;
+  } else {
+   if(contaboHistoricalValuation===true)valuationBridge=await stageContaboHistoricalValuation(client);
+   predecessor = await assertPublicationTailPredecessor(client);
+  }
   for(const body of bodies)await client.query(body.sql);
   const installed=await assertResearchPublicationCatalog(client,'installed');
   await verifyFinancialHistoryPostconditions(client);

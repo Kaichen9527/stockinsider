@@ -17,6 +17,23 @@ const checkNames=checkProfiles.map(([,name])=>name);
 const stageIdentitySql=
  "SELECT current_database()='t17_restored' AND current_user='si-t18-db' AND session_user='si-t18-db' "+
  "AND inet_server_addr() IS NULL AND current_setting('listen_addresses')='' AND current_setting('port')='6551' AS isolated";
+const sealedArchivePeerIdentitySql = `SELECT
+  current_database()='t17_restored' AND current_user='postgres' AND session_user='postgres'
+  AND SYSTEM_USER='peer:si-t18-db' AND inet_server_addr() IS NULL
+  AND current_setting('listen_addresses')='' AND current_setting('port')='6551'
+  AND current_setting('server_version_num')::int BETWEEN 170000 AND 179999
+  AND current_setting('data_directory') ~ '^/run/t18-db-work/t17-owned-restore-[a-z0-9_]+/data$'
+  AND current_setting('unix_socket_directories')=regexp_replace(current_setting('data_directory'),'/data$','/socket')
+  AND (SELECT rolpassword IS NULL AND rolsuper AND rolcanlogin FROM pg_catalog.pg_authid WHERE rolname='postgres')
+  AND (SELECT count(*)=4 AND bool_and(error IS NULL) AND bool_and(database=ARRAY['all']::text[])
+     AND count(*) FILTER (WHERE rule_number=1 AND type='local' AND auth_method='peer'
+       AND user_name=ARRAY['postgres']::text[] AND options=ARRAY['map=t18_peer']::text[])=1
+     AND count(*) FILTER (WHERE type='local' AND auth_method='reject' AND user_name=ARRAY['all']::text[])=1
+     AND count(*) FILTER (WHERE type='host' AND auth_method='reject' AND user_name=ARRAY['all']::text[])=2
+     FROM pg_catalog.pg_hba_file_rules)
+  AND (SELECT count(*)=1 AND count(*) FILTER (WHERE map_name='t18_peer' AND sys_name='si-t18-db'
+        AND pg_username='postgres' AND error IS NULL)=1 FROM pg_catalog.pg_ident_file_mappings)
+  AS isolated`;
 const profileSql=
  "SELECT t.relname AS name, c.conname AS constraint, c.convalidated AS validated, "+
  "pg_get_constraintdef(c.oid,true) AS definition FROM pg_constraint c JOIN pg_class t ON t.oid=c.conrelid "+
@@ -26,8 +43,9 @@ const profileSql=
 const countSql="SELECT (SELECT count(*)::text FROM public.candidate_research_run_items) AS research_items, "+
  "(SELECT count(*)::text FROM public.valuation_snapshots) AS valuations";
 
-export async function assertContaboValuationBridgeStage(client) {
-  if((await client.query(stageIdentitySql)).rows?.[0]?.isolated!==true)
+export async function assertContaboValuationBridgeStage(client, {sealedArchivePeer = false} = {}) {
+  const identitySql = sealedArchivePeer === true ? sealedArchivePeerIdentitySql : stageIdentitySql;
+  if((await client.query(identitySql)).rows?.[0]?.isolated!==true)
     throw Error('contabo_valuation_bridge_stage_required');
 }
 
@@ -46,8 +64,8 @@ function matches(rows,shaIndex) {
 /** Runs inside the publication transaction on its owned staging client.
  * The final catalog gate and caller determine whether this transaction commits.
  * Statement and lock timeouts belong to the transaction owner. */
-export async function stageContaboHistoricalValuation(client) {
-  await assertContaboValuationBridgeStage(client);
+export async function stageContaboHistoricalValuation(client, options) {
+  await assertContaboValuationBridgeStage(client, options);
   const bytes=readFileSync(new URL(sourcePath,import.meta.url));
   if(createHash('sha256').update(bytes).digest('hex')!==sourceSha256)
     throw Error('contabo_valuation_bridge_source_changed');
