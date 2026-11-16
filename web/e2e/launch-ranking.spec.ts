@@ -78,3 +78,32 @@ test('openpage automaticallydemotes shortqualification withoutreadingorrenewingp
   await expect(page.getByTestId('launch-ranked-member')).toHaveCount(1);await expect(page.getByTestId('launch-top10')).toHaveAttribute('data-ranking-run-id',run!);
   const after=await(await request.get(bridge+'/__fixture/stats')).json();expect(after.reads).toBe(before.reads);expect(after.controls).toBe(before.controls);expect(after.unsupported).toBe(0);
 });
+
+test('ranked detail and API show only the same-run reported EPS projection',async({page,request})=>{
+  for(const mode of ['reported_eps','reported_eps_private']){
+    expect((await request.post(bridge+'/__fixture/control',{headers,data:{mode}})).ok()).toBeTruthy();
+    await page.goto('/');
+    const href=await page.getByRole('link',{name:'5274',exact:true}).getAttribute('href');
+    expect(href).toBeTruthy();
+    await page.goto(href!);
+    const region=page.getByRole('region',{name:'基本面與估值'});
+    await expect(region).toBeVisible();
+    await expect(region).toContainText('尚無可公開的 EPS 預估');
+    const run=new URL(href!,page.url()).searchParams.get('launchRunId');
+    const response=await request.get('/api/launch-ranking',{params:{rankingRunId:run!,symbol:'5274'}});
+    expect(response.ok()).toBeTruthy();
+    const payload=await response.json();
+    expect(payload.result.detail.rankingRunId).toBe(run);
+    expect(payload.result.snapshot.members[0].totalScore).toBe(100);
+    expect(JSON.stringify(payload)).not.toContain('SYNTHETIC_PRIVATE_FINANCIAL_ONLY');
+    if(mode==='reported_eps'){
+      await expect(region).toContainText('2026-07-01 至 2026-09-30');
+      await expect(region).toContainText('稀釋 EPS -0.125');
+      await expect(region.getByRole('link',{name:'公開資訊觀測站原件'})).toHaveAttribute('href',/co_id=5274&year=2026&season=3$/u);
+      expect(payload.result.detail.reportedEps[0].amount).toBe(-0.125);
+    }else{
+      await expect(region).toContainText('財報資料目前無法讀取');
+      expect(payload.result.detail.reportedEps).toBeUndefined();
+    }
+  }
+});

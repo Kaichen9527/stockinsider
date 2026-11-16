@@ -31,7 +31,16 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
         remainingMs={Math.max(0,Math.min(120000,Date.parse(read.current.find(row=>row.symbol===member.symbol)?.expiresAt??'')-Date.parse(read.readAt)))}/>
       <section aria-label="發動評分" className="rounded-xl border border-slate-300 p-4"><h2 className="font-semibold">已確認分數 {member.totalScore.toFixed(1)} / 100</h2>
         <p className="mt-2">技術 {member.technicalScore.toFixed(1)} / 70 · 籌碼 {member.components.chips.toFixed(1)} / 20 · 市場 {member.components.market.toFixed(1)} / 10。分數不是機率。</p>
-        <p className="mt-2">基本面與估值：尚無可用資料，獨立於此分數呈現。</p>
+      </section>
+      <section aria-label="基本面與估值" className="rounded-xl border border-slate-300 p-4">
+        <h2 className="font-semibold">基本面與估值</h2>
+        {detail.reportedEps?.length?<><p className="mt-2">榜單研究所採用的財報 EPS，單位為新台幣／股。</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5">
+            {detail.reportedEps.map(fact=><li key={fact.periodStart+':'+fact.basis}>
+              {fact.periodStart} 至 {fact.periodEnd}　{fact.basis==='basic'?'基本 EPS':'稀釋 EPS'} {fact.amount}　<a href={fact.sourceUrl} className="underline">公開資訊觀測站原件</a>
+            </li>)}
+          </ul></>:<p className="mt-2">{detail.reportedEps?'此榜單版本無可公開的官方財報 EPS。':'財報資料目前無法讀取。'}</p>}
+        <p className="mt-2">此榜單版本尚無可公開的 EPS 預估、本益比或目標價情境。</p>
       </section>
       <section aria-label="榜單價格圖表" className="min-w-0 rounded-xl border border-slate-300 p-4">
         <h2 className="font-semibold">價格走勢</h2>

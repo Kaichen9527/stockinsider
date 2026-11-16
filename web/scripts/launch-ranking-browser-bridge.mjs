@@ -7,7 +7,7 @@ import {launchRankingFixture,LAUNCH_TEST_RUN} from '../src/lib/vnext/launch-rank
 import {unsafeCitationUrls,unknownRightsCitationUrls} from '../src/lib/vnext/launch-citation.test-fixture.ts';
 const args=process.argv.slice(2);
 if(args.length!==2||args[0]!=='--port'||!/^\d{4,5}$/.test(args[1])||Number(args[1])<1024||Number(args[1])>65535)throw Error('launch_test_bridge_arguments');
-const modes=new Set(['ready','chart','empty','not_published','producer_unavailable','schema_unavailable','outage','expired','short_expiry','partial','private','wrong_policy']);
+const modes=new Set(['ready','chart','empty','not_published','producer_unavailable','schema_unavailable','outage','expired','short_expiry','partial','private','wrong_policy','reported_eps','reported_eps_private']);
 const outcomeModes=new Set(['outcome_ready','outcome_unfillable','outcome_evidence_gap','outcome_private']);
 for(const name of outcomeModes)modes.add(name);
 const unsafeCitations=[...unsafeCitationUrls,...unknownRightsCitationUrls];
@@ -54,6 +54,19 @@ const server=http.createServer(async(request,response)=>{
       }
       if(query.p_symbol===null)result.detail=null;
       return json(response,200,result);
+    }
+    if(request.method==='POST'&&request.url==='/rest/v1/rpc/vnext_launch_reported_eps_v1'){
+      const query=await body(request);
+      if(Object.keys(query).sort().join('|')!=='p_ranking_run_id|p_symbol'
+        ||query.p_ranking_run_id!==LAUNCH_TEST_RUN||query.p_symbol!=='5274')return json(response,400,{code:'SYNTHETIC_CLOSED_QUERY'});
+      companionReads++;
+      if(!['reported_eps','reported_eps_private'].includes(mode))return json(response,200,null);
+      const member=packet.snapshot.members[0];
+      const fact={basis:'diluted',periodStart:'2026-07-01',periodEnd:'2026-09-30',amount:-0.125,filedAt:'2026-10-22T06:00:00Z',knownAt:'2026-10-22T07:00:00Z',
+        sourceUrl:'https://mopsov.twse.com.tw/server-java/FileDownLoad?step=9&functionName=t164sb01&report_id=C&co_id=5274&year=2026&season=3'};
+      if(mode==='reported_eps_private')fact.privateSource='SYNTHETIC_PRIVATE_FINANCIAL_ONLY';
+      return json(response,200,{schemaVersion:'vnext-launch-reported-eps-v1',rankingRunId:LAUNCH_TEST_RUN,
+        symbol:member.symbol,revisionId:member.revisionId,inputHash:member.inputHash,cutoff:packet.snapshot.cutoff,facts:[fact]});
     }
     if(request.method==='POST'&&request.url==='/rest/v1/rpc/vnext_launch_morning_public_v1'){
       const query=await body(request);

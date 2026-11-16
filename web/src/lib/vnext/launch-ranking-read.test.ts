@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {parseLaunchRankingRead,readLaunchRankingTransport,launchRankingMemberCurrent,launchDetailQuery} from './launch-ranking-read.ts';
+import {parseLaunchRankingRead,parseLaunchReportedEps,readLaunchRankingTransport,launchRankingMemberCurrent,launchDetailQuery} from './launch-ranking-read.ts';
 import {launchRankingFixture,LAUNCH_TEST_NOW,LAUNCH_TEST_RUN} from './launch-ranking.test-fixture.ts';
 
 test('new launch read acceptsTop0/1/10 and nullablefinancials under its own exact policy, neverlegacy or partial80',()=>{
@@ -134,4 +134,27 @@ test('nonplain/proxy/accessor RPC objects refuse without runninghooks or leaking
   assert.throws(()=>parseLaunchRankingRead(new Proxy(packet,{get(){hooks++;throw Error('hook');}}),{},LAUNCH_TEST_NOW),/contract_invalid/u);
   Object.defineProperty(packet.snapshot.members[0],'totalScore',{get(){hooks++;return 100;},enumerable:true});
   assert.throws(()=>parseLaunchRankingRead(packet,{},LAUNCH_TEST_NOW),/contract_invalid/u);assert.equal(hooks,0);
+});
+
+test('reported MOPS EPS holds exact ranking and research bindings, dates and public endpoints',()=>{
+  const fixture=launchRankingFixture(1);
+  const snapshot=fixture.snapshot!;
+  const member=snapshot.members[0];
+  const binding={rankingRunId:snapshot.rankingRunId,cutoff:snapshot.cutoff,session:snapshot.session,symbol:member.symbol,revisionId:member.revisionId,inputHash:member.inputHash};
+  const eps={basis:'basic',periodStart:'2026-07-01',periodEnd:'2026-09-30',amount:0,filedAt:'2026-11-03T06:00:00Z',knownAt:'2026-11-03T07:00:00Z',
+    sourceUrl:'https://mopsov.twse.com.tw/server-java/FileDownLoad?step=9&functionName=t164sb01&report_id=C&co_id='+member.symbol+'&year=2026&season=3'};
+  const facts=[eps,{...eps,basis:'diluted',amount:-0.125},{...eps,periodStart:'2026-01-01',amount:4}];
+  const packet={schemaVersion:'vnext-launch-reported-eps-v1',rankingRunId:binding.rankingRunId,cutoff:binding.cutoff,symbol:binding.symbol,
+    revisionId:binding.revisionId,inputHash:binding.inputHash,facts};
+  assert.deepEqual(parseLaunchReportedEps(packet,binding),facts);
+  assert.deepEqual(parseLaunchReportedEps(null,binding),[]);
+  for(const changed of [
+    {...packet,rankingRunId:member.revisionId},{...packet,revisionId:snapshot.rankingRunId},{...packet,inputHash:'b'.repeat(64)},
+    {...packet,cutoff:'2026-11-13T13:29:59Z'},{...packet,privateBrief:'redacted'},
+    {...packet,facts:[eps,eps]},{...packet,facts:[eps,{...eps,periodStart:'2026-04-01'},facts[2]]},
+    {...packet,facts:[{...eps,sourceUrl:eps.sourceUrl+'&tracking=private'}]},
+    {...packet,facts:[{...eps,knownAt:'2026-11-13T13:30:00.000001Z'}]},
+    {...packet,facts:[{...eps,filedAt:'2026-09-29T07:00:00Z'}]},
+    {...packet,facts:[{...eps,receiptId:'redacted'}]},
+  ])assert.throws(()=>parseLaunchReportedEps(changed,binding),/launch_ranking_contract_invalid/u);
 });
