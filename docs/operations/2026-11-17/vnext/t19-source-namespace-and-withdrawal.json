@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "vnext-source-namespace-and-withdrawal-witness-v1",
+  "scope": "synthetic isolated PostgreSQL and installed-browser staging tests",
+  "sourceNamespace": {
+    "predecessorHashesMatched": 3,
+    "rosterFunctionsAdded": 2,
+    "otherScopeNamespaceAndCatalogMetadataUnchanged": true,
+    "directSourceOwnerReachabilityUnchanged": true,
+    "unexpectedMetadataDeltaRejected": true,
+    "additionalSourceOwnerFunctionPrivilegeRejected": true,
+    "sourceOwnerHasPublicSchemaUsage": false,
+    "sourcePermissionCandidateApplied": false,
+    "actualSourceExtractStillPending": true
+  },
+  "historyBrowser": {
+    "nextVersion": "16.3.4",
+    "existingPrebuiltBuildLabel": "23106ce",
+    "buildIdSha256": "886b180fb160e4dda833bf8dfe36c160e00a9949891968e195835ac9ed64889c",
+    "requiredServerFilesSha256": "b5cc9cb84801f1587224a06af0661e091e2c5cc25009cfe7ae03732aa6b1888f",
+    "exactNewHeadBuildVerified": false,
+    "databaseLifecycleTestsPassed": 7,
+    "fixtureSource": "fresh actual PostgreSQL with synthetic originals including rights withdrawal",
+    "desktopPassed": true,
+    "mobilePassed": true,
+    "checks": [
+      "same immutable content and revision",
+      "each named article section",
+      "durable EPS and ratio",
+      "rights withdrawal status",
+      "pinned history link",
+      "no horizontal overflow"
+    ]
+  },
+  "productionServiceSignaturesAndReleasePointerMatched": true
+}
