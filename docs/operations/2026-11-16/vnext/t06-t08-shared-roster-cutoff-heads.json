@@ -1,0 +1,70 @@
+{
+  "schema": "stockinsider-roster-cutoff-heads-v1",
+  "recordedAt": "2026-11-16T12:39:00Z",
+  "baseCommit": "ffa811b386e3421ef7e7907b2ed7876d0781b3e9",
+  "environment": "Contabo isolated ad hoc staging",
+  "changes": [
+    "migrations/20261116_28_vnext_launch_roster_heads_v1.sql",
+    "web/src/lib/vnext/screening-instrument-identity.ts",
+    "web/src/lib/vnext/screening-instrument-identity.test.ts",
+    "web/src/lib/vnext/discovery.test.ts",
+    "web/src/lib/vnext/trading-invalidity-discovery.test.ts",
+    "scripts/vnext-launch-instrument-head-postgres.test.mjs"
+  ],
+  "workItems": [
+    391,
+    393
+  ],
+  "scope": "Shared PostgreSQL roster identity snapshot for existing screening and ranking. No official roster refresh or ranked publication.",
+  "readOnlyRetainedHistory": {
+    "actualRetainedRows": 880,
+    "copiedInputSha256": "aa4b83ab87e0a7d19ceec531686a74575f253258f00c27c4bd4ead1859d998dd",
+    "existingActualHeads": 220,
+    "formalReadOnly": true,
+    "headsAfterSyntheticAppend": 220,
+    "historicalCutoffUnchanged": true,
+    "onlyStagingRecordsAppended": true,
+    "retainedScope": 220,
+    "rowsAfterSyntheticAppend": 1100,
+    "sameOriginalCutoffCount": 220
+  },
+  "nativePostgrest": {
+    "postgrest": "PostgREST 16.3",
+    "nativeHttpProjectionStatus": 200,
+    "nativeHttpKeys": 220,
+    "anonymousDeniedStatus": 401,
+    "directRelationDeniedStatus": 403,
+    "invalidScopeStatus": 400,
+    "maximumPostgrestRowsNotUsedAsRosterHistoryCap": true
+  },
+  "postgresFixture": {
+    "scope": 220,
+    "historyRows": 1426,
+    "originalPerSymbolCapReproduced": true,
+    "currentStatementClockAccepted": true,
+    "oldRoutineOidOwnerAclAndSettingsUnchanged": true,
+    "retainedPastCutoff": true,
+    "marketChangeKeepsId": true,
+    "equalHeadClockConflict": true,
+    "bothCrossIdentityDirections": true,
+    "suspensionAndNonOrdinaryPreserved": true,
+    "scopedRestOnly": true
+  },
+  "application": {
+    "focusedTestsPassed": 25,
+    "targetedLintPassed": true,
+    "typeScriptPassed": true,
+    "nextVersion": "16.3.4",
+    "staticPages": 92,
+    "productionBuildPassed": true
+  },
+  "isolatedScratchRemoved": true,
+  "productionWrites": false,
+  "appliedToProduction": false,
+  "releaseHoldRetained": true,
+  "pending": [
+    "import the actual new official roster through the shared guarded writer",
+    "eligible source and model, real ranked snapshots and adjacent trading sessions",
+    "independent review and deployment"
+  ]
+}
