@@ -40,7 +40,16 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
               {fact.periodStart} 至 {fact.periodEnd}　{fact.basis==='basic'?'基本 EPS':'稀釋 EPS'} {fact.amount}　<a href={fact.sourceUrl} className="underline">公開資訊觀測站原件</a>
             </li>)}
           </ul></>:<p className="mt-2">{detail.reportedEps?'此榜單版本無可公開的官方財報 EPS。':'財報資料目前無法讀取。'}</p>}
-        <p className="mt-2">此榜單版本尚無可公開的 EPS 預估、本益比或目標價情境。</p>
+        {detail.issuerEpsEstimates?.length ? <>
+          <h3 className="mt-4 font-medium">公司來源的季度 EPS 預估</h3>
+          <p className="mt-2">單位為新台幣／股。下列預估依原研究版本保留各季期間。</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5">
+            {detail.issuerEpsEstimates.map(fact => <li key={fact.periodStart + '/' + fact.periodEnd}>
+              {fact.periodStart} 至 {fact.periodEnd}　稀釋 EPS 預估 {fact.amount}　<a href={fact.sourceUrl} className="underline">公開資訊觀測站來源</a>
+            </li>)}
+          </ul>
+        </> : <p className="mt-2">{detail.issuerEpsEstimates ? '此榜單版本無可公開的季度 EPS 預估。' : '季度 EPS 預估目前無法讀取。'}</p>}
+        <p className="mt-2">本益比與目標價情境缺少可公開的估值依據。</p>
       </section>
       <section aria-label="榜單價格圖表" className="min-w-0 rounded-xl border border-slate-300 p-4">
         <h2 className="font-semibold">價格走勢</h2>

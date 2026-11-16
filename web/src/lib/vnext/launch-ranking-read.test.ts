@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {parseLaunchRankingRead,parseLaunchReportedEps,readLaunchRankingTransport,launchRankingMemberCurrent,launchDetailQuery} from './launch-ranking-read.ts';
+import {parseLaunchRankingRead,parseLaunchReportedEps,parseLaunchIssuerEpsEstimates,readLaunchRankingTransport,launchRankingMemberCurrent,launchDetailQuery} from './launch-ranking-read.ts';
 import {launchRankingFixture,LAUNCH_TEST_NOW,LAUNCH_TEST_RUN} from './launch-ranking.test-fixture.ts';
 
 test('new launch read acceptsTop0/1/10 and nullablefinancials under its own exact policy, neverlegacy or partial80',()=>{
@@ -157,4 +157,32 @@ test('reported MOPS EPS holds exact ranking and research bindings, dates and pub
     {...packet,facts:[{...eps,filedAt:'2026-09-29T07:00:00Z'}]},
     {...packet,facts:[{...eps,receiptId:'redacted'}]},
   ])assert.throws(()=>parseLaunchReportedEps(changed,binding),/launch_ranking_contract_invalid/u);
+});
+
+
+test('issuer EPS forecast is pinned to the researched quarter and rejects substituted or private values',()=>{
+ const binding={rankingRunId:'00000000-0000-4000-8000-000000000011',symbol:'2454',
+   revisionId:'00000000-0000-4000-8000-000000000012',inputHash:'a'.repeat(64),cutoff:'2026-11-16T13:30:00Z',session:'2026-11-16'};
+ const estimate={periodStart:'2026-10-01',periodEnd:'2026-12-31',amount:0,publishedAt:'2026-10-30T09:00:00Z',
+   knownAt:'2026-11-16T09:00:00Z',sourceUrl:'https://mops.twse.com.tw/issuer-forecast'};
+ const packet={schemaVersion:'vnext-launch-issuer-eps-estimates-v1',rankingRunId:binding.rankingRunId,
+   symbol:binding.symbol,revisionId:binding.revisionId,inputHash:binding.inputHash,cutoff:binding.cutoff,estimates:[estimate]};
+ assert.deepEqual(parseLaunchIssuerEpsEstimates(packet,binding),[estimate]);
+ assert.deepEqual(parseLaunchIssuerEpsEstimates({...packet,estimates:[{...estimate,amount:-0.25}]},binding)[0].amount,-0.25);
+ assert.deepEqual(parseLaunchIssuerEpsEstimates(null,binding),[]);
+ for(const invalid of [
+   {...packet,revisionId:'00000000-0000-4000-8000-000000000013'},
+   {...packet,cutoff:'2026-11-16T13:31:00Z'},
+   {...packet,estimates:[estimate,estimate]},
+   ...[
+     {sourceUrl:'https://mops.twse.com.tw/member/forecast'},
+     {sourceUrl:'https://mops.twse.com.tw@private.example/forecast'},
+     {sourceUrl:'https://mops.twse.com.tw/forecast?private_token=synthetic'},
+     {knownAt:'2026-11-16T13:30:00.000001Z'},
+     {periodEnd:'2026-09-30'},
+     {internalNotes:'private evidence'},
+   ].map(changes=>({...packet,estimates:[{...estimate,...changes}]})),
+ ]){
+   assert.throws(()=>parseLaunchIssuerEpsEstimates(invalid,binding),/launch_ranking_contract_invalid/);
+ }
 });

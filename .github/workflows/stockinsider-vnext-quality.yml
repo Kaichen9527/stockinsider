@@ -21,6 +21,7 @@ on:
       - 'migrations/20261117_38_vnext_launch_candidate_pool_history_v1.sql'
       - 'migrations/20261117_39_vnext_launch_candidate_industry_v1.sql'
       - 'migrations/20261117_40_vnext_launch_industry_capture_v1.sql'
+      - 'migrations/20261117_41_vnext_launch_issuer_eps_estimates_v1.sql'
       - 'deployment/vps/launch-radar-schedule/**'
       - 'scripts/run-launch-scheduled-cycle*.mjs'
       - 'openspec/changes/stockinsider-vnext-20/**'
@@ -175,6 +176,15 @@ jobs:
           node --experimental-strip-types scripts/vnext-launch-research-policy-postgres.test.mjs > /tmp/stockinsider-vnext-ci/launch-research-policy.private.log 2>&1 || status=$?
           python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/launch-research-policy.private.log /tmp/stockinsider-vnext-ci/launch-research-policy.tap
           test "$status" = 0
+          docker exec "$container" createdb -U postgres vnext_issuer_eps
+          python3 - <<'PYCODE' | docker exec -i "$container" psql -X -q -v ON_ERROR_STOP=1 -U postgres -d vnext_issuer_eps
+          from pathlib import Path
+          migration = Path('migrations/20261117_41_vnext_launch_issuer_eps_estimates_v1.sql')
+          fixture = Path('scripts/vnext-launch-issuer-eps-native.test.sql').read_text()
+          marker = '\\ir ../' + migration.as_posix()
+          assert fixture.count(marker) == 1
+          print(fixture.replace(marker, migration.read_text()))
+          PYCODE
       - name: Genuine captured-prefix legacy coexistence and concurrent mode fence
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-legacy-full-04

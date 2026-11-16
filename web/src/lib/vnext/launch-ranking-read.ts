@@ -35,8 +35,9 @@ export type LaunchRankingChart = {
   cutoff:string;throughSession:string;displayFrom:string;warmupSessions:239;candles:LaunchChartCandle[];
 };
 export type LaunchReportedEps = {basis:'basic'|'diluted';periodStart:string;periodEnd:string;amount:number;filedAt:string;knownAt:string;sourceUrl:string};
+export type LaunchIssuerEpsEstimate={periodStart:string;periodEnd:string;amount:number;publishedAt:string;knownAt:string;sourceUrl:string};
 export type LaunchRankingDetail = {arithmeticVersion:typeof LAUNCH_RANKING_ARITHMETIC;rankingRunId:string;symbol:string;revisionId:string;scoreRevision:string;launchQualificationRevision:string;inputHash:string;
-  summary:string|null;scoreEvidence:LaunchRankingRule[];citations:LaunchPublicCitation[];chart:LaunchRankingChart|null;reportedEps?:LaunchReportedEps[]};
+  summary:string|null;scoreEvidence:LaunchRankingRule[];citations:LaunchPublicCitation[];chart:LaunchRankingChart|null;reportedEps?:LaunchReportedEps[];issuerEpsEstimates?:LaunchIssuerEpsEstimate[]};
 export type LaunchRankingRead = {availability:'ready'|'not_published'|'producer_unavailable'|'not_found'|'schema_unavailable'|'unavailable';reason:string|null;
   readAt:string;snapshot:LaunchRankingSnapshot|null;current:LaunchRankingCurrent[];detail:LaunchRankingDetail|null};
 type Row=Record<string,unknown>;
@@ -269,14 +270,52 @@ async function readReportedEps(client:{rpc:(name:'vnext_launch_reported_eps_v1',
     return result.error?undefined:parseLaunchReportedEps(result.data,binding);
   }catch{return undefined;}
 }
+export function parseLaunchIssuerEpsEstimates(value:unknown,binding:Parameters<typeof parseLaunchReportedEps>[1]):LaunchIssuerEpsEstimate[] {
+  if (value === null) return [];
+  envelope(value);
+  if (!exact(value,'schemaVersion rankingRunId symbol revisionId inputHash cutoff estimates')
+    || value.schemaVersion !== 'vnext-launch-issuer-eps-estimates-v1'
+    || value.rankingRunId !== binding.rankingRunId || value.symbol !== binding.symbol
+    || value.revisionId !== binding.revisionId || value.inputHash !== binding.inputHash
+    || !stamp(value.cutoff) || evidenceInstant(value.cutoff) !== evidenceInstant(binding.cutoff)
+    || !Array.isArray(value.estimates) || value.estimates.length > 4) invalid();
+  let previous = '';
+  return value.estimates.map(item => {
+    if (!exact(item,'periodStart periodEnd amount publishedAt knownAt sourceUrl')
+      || !date(item.periodStart) || !date(item.periodEnd) || item.periodStart > item.periodEnd
+      || !/(?:03-31|06-30|09-30|12-31)$/u.test(item.periodEnd) || item.periodEnd <= binding.session
+      || !number(item.amount) || !stamp(item.publishedAt) || !stamp(item.knownAt)
+      || evidenceInstant(item.publishedAt)! > evidenceInstant(item.knownAt)!
+      || evidenceInstant(item.knownAt)! > evidenceInstant(binding.cutoff)!
+      || typeof item.sourceUrl !== 'string' || !/^https:\/\/mops(?:ov)?\.twse\.com\.tw\/[A-Za-z0-9._/-]+$/u.test(item.sourceUrl)
+      || /(?:paid|member|premium|subscription|login|authenticate)/iu.test(item.sourceUrl)) invalid();
+    const {periodStart,periodEnd,amount,publishedAt,knownAt,sourceUrl} = item;
+    const period = periodStart + '/' + periodEnd;
+    if (period <= previous) invalid();
+    previous = period;
+    return {periodStart,periodEnd,amount,publishedAt,knownAt,sourceUrl};
+  });
+}
+async function readIssuerEpsEstimates(
+  client: {rpc:(name:'vnext_launch_issuer_eps_estimates_v1',args:{p_ranking_run_id:string;p_symbol:string})=>PromiseLike<{data:unknown;error:unknown}>},
+  binding: Parameters<typeof parseLaunchIssuerEpsEstimates>[1],
+) {
+  try {
+    const result = await client.rpc('vnext_launch_issuer_eps_estimates_v1',{
+      p_ranking_run_id:binding.rankingRunId,p_symbol:binding.symbol,
+    });
+    return result.error ? undefined : parseLaunchIssuerEpsEstimates(result.data,binding);
+  } catch { return undefined; }
+}
 export async function readLaunchRankingSnapshot(query:{rankingRunId?:string;symbol?:string}={}):Promise<LaunchRankingRead> {
   if(!launchRankingEnabled())throw Error('launch_ranking_disabled');
   const {getSupabaseServerClient}=await import('../supabase-server.ts');
   const client=getSupabaseServerClient();
   const result=await readLaunchRankingTransport(client,query);
   if(result.availability!=='ready'||!result.detail||!result.snapshot)return result;
-  const reportedEps=await readReportedEps(client,{...result.detail,cutoff:result.snapshot.cutoff,session:result.snapshot.session});
-  return {...result,detail:{...result.detail,reportedEps}};
+  const binding={...result.detail,cutoff:result.snapshot.cutoff,session:result.snapshot.session};
+  const [reportedEps,issuerEpsEstimates]=await Promise.all([readReportedEps(client,binding),readIssuerEpsEstimates(client,binding)]);
+  return {...result,detail:{...result.detail,reportedEps,issuerEpsEstimates}};
 }
 /** A named launch link never becomes a legacy or latest lookup on failure. */
 export function launchDetailQuery(query:Record<string,string|string[]|undefined>) {
