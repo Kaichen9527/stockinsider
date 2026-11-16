@@ -9,3 +9,9 @@ Actual current financial/price requalification for already-published research st
 The independent chart slice changes both actual domain supplied timeframe callsites from fixed row chunks to the existing Taiwan-calendar helper. Raw prices/source/actions and240/1320/520 gates are retained; no acquisition or backfill is introduced by GET. Without supplied cutoff/period metadata the UI keeps completion/coverage unknown. Full three-year history/warmup and comprehensive gap metadata remain unfinished.
 
 Contabo work is source/document/local dry-run only. No destination connection, network change, secret/key file access, private key generation, production operation, old-VM or iCloud action is authorized by this slice. Owner console may return only public ED25519 key/fingerprint/host metadata. Supported narrow TCP22 route, secure isolated identity custody and exact trusted host config remain prerequisites, not inferred from HTTP networking or historical identity.
+
+## Official disposition review at launch ranking
+
+The licensed TWSE 29082 and TPEx 11396 resources use the existing source queue, writer lease and separate committed-ready acknowledgement. A positive restriction is based on the announced effective period for the official completed same-market session. The ranking preflight retains the capture, confirmed fact and calendar revision for an excluded candidate. The candidate remains waiting and may qualify in later sessions.
+
+A missing row, an empty report, a late acknowledgment, a corrected report or a withdrawn source policy provides no unrestricted-venue evidence. Disposition notices cover one trading restriction category. Suspension, original source, complete weights, and independently reviewed release qualification still have their existing gates.

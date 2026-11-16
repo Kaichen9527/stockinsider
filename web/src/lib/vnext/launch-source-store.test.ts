@@ -7,18 +7,21 @@ import ts from 'typescript';
 import { drainLaunchSourceWithDependencies, classifyLaunchSourceJob, recoverLaunchSourceWithDependencies, parseLaunchSourcePlan, type LaunchSourceDependencies } from './launch-source-store.ts';
 import { tpexMarketFlowCsvUrl, TPEX_MARKET_FLOW_MAX_BYTES } from './launch-market-foreign-flow.ts';
 import { tpexInstitutionalVolumeCsvUrl } from './launch-institutional-volume.ts';
+import { launchDispositionSource } from './launch-disposition-status.ts';
 import { twseHistoricalCloseCsvUrl } from './launch-breadth-replay.ts';
 import { parseLaunchIndexBackfillPlan } from './launch-index-backfill.ts';
 
 const id=(value:number)=>`00000000-0000-4000-8000-${String(value).padStart(12,'0')}`;
 const now='2026-11-14T08:00:00Z',url=tpexInstitutionalVolumeCsvUrl('2026-11-13');
 /** Synthetic transport bytes; this mock does NOT execute/approve SQL facts. */
-function fixture(mode='success',datasetId:11370|11743|11764|11549=11370){
+function fixture(mode='success',datasetId:11370|11743|11764|11549|29082|11396=11370){
   const body=mode==='oversized_market_cash'?Buffer.alloc(TPEX_MARKET_FLOW_MAX_BYTES+1,65):Buffer.from('SYNTHETIC CSV\r\n"quoted, cell","value"\r\n');
-  const sourceUrl=datasetId===11743?tpexMarketFlowCsvUrl('2026-11-13'):datasetId===11764?twseHistoricalCloseCsvUrl('2026-11-13')
+  const actualDay=(datasetId===11549||datasetId===29082||datasetId===11396)&&mode!=='stale_twse_turnover'?'2026-11-14':'2026-11-13';
+  const sourceUrl=datasetId===29082?launchDispositionSource('TWSE',actualDay).url:datasetId===11396?launchDispositionSource('TPEX').url
+    :datasetId===11743?tpexMarketFlowCsvUrl('2026-11-13'):datasetId===11764?twseHistoricalCloseCsvUrl('2026-11-13')
     :datasetId===11549?'https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL?response=open_data':url;
   const events:string[]=[],owner=id(1);
-  const claimed={jobId:id(2),attemptId:id(3),datasetId,requestKey:datasetId===11549&&mode!=='stale_twse_turnover'?'2026-11-14':'2026-11-13',sourceUrl,deadlineAt:'2026-11-14T08:02:00Z'};
+  const claimed={jobId:id(2),attemptId:id(3),datasetId,requestKey:actualDay,sourceUrl,deadlineAt:'2026-11-14T08:02:00Z'};
   const captured:Buffer[]=[];
   const deps:LaunchSourceDependencies={now:()=>now,
     acquireLease:async()=>{events.push('acquire');return mode==='no_lease'?null:owner;},
@@ -71,6 +74,19 @@ test('TWSE 11549 requests the catalog-linked latest-feed URL only on the claimed
     assert.equal(outcome.outcomes[0].status,'failed',mode);
     assert.equal(bad.events.includes('put'),false,mode);
     assert.equal(bad.events.includes('fetch'),mode==='generic_content_type',mode);
+  }
+});
+test('disposition datasets use their exact official endpoint with ordinary owned append and ready',async()=>{
+  for(const dataset of [29082,11396] as const){
+    const f=fixture('success',dataset),result=await drainLaunchSourceWithDependencies(f.deps);
+    assert.equal(result.outcomes[0].status,'recorded');
+    assert.equal(result.sourceAuthority,false);
+    assert.deepEqual(f.captured,[f.body]);
+    assert.ok(f.events.includes('ready'));
+    const stale=fixture('stale_twse_turnover',dataset),rejected=await drainLaunchSourceWithDependencies(stale.deps);
+    assert.equal(rejected.outcomes[0].status,'failed');
+    assert.ok(!stale.events.includes('fetch'));
+    assert.ok(!stale.events.includes('put'));
   }
 });
 test('missing/wrong owned lease, expired claim or forged endpoint performs zero source/artifact IO',async()=>{
