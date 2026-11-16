@@ -2,11 +2,13 @@ import { createHash } from 'node:crypto';
 import { evidenceInstant } from './evidence-clock.ts';
 import { decodeLicensedCsvRecords } from './licensed-csv-decoder.ts';
 
+export const TWSE_DISPOSITION_FIELDS = ['編號', '公布日期', '證券代號', '證券名稱', '累計', '處置條件', '處置起迄時間', '處置措施', '處置內容', '備註'] as const;
+
 const profiles = {
   TWSE: {
     datasetId: 29082,
     url: 'https://www.twse.com.tw/announcement/punish?response=open_data',
-    fields: ['編號', '公布日期', '證券代號', '證券名稱', '累計', '處置條件', '處置起迄時間', '處置措施', '處置內容', '備註'],
+    fields: TWSE_DISPOSITION_FIELDS,
     indexes: { notice: 1, symbol: 2, period: 6 },
     period: /^([0-9]{3})\/([0-9]{2})\/([0-9]{2})～([0-9]{3})\/([0-9]{2})\/([0-9]{2})$/u,
   },
@@ -79,11 +81,13 @@ export function inspectLaunchDisposition(market: Market, capture: Capture, sessi
   const current = notices.filter(row => row.starts <= session && session <= row.ends);
   if (dated && current.length !== notices.length) return refuse();
   const timely = taipeiDate(observed) === session && recorded <= through;
+  const observedRestrictedSymbols = new Set(current.map(row => row.symbol));
   return {
     summary: { datasetId: profile.datasetId, market, session, sha256, bytes: body.byteLength,
       observedAt: capture.observedAt, recordedAt: capture.recordedAt, requestScope: dated ? 'exact_session' : 'current_feed',
       publishedNotices: notices.length,
       noticesInEffect: current.length, usableAtCutoff: timely, completeAbsenceProved: false as const },
-    restrictedSymbols: new Set(timely ? current.map(row => row.symbol) : []),
+    restrictedSymbols: new Set(timely ? observedRestrictedSymbols : []),
+    observedRestrictedSymbols,
   };
 }
