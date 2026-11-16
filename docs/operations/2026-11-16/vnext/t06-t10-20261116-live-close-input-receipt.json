@@ -1,0 +1,221 @@
+{
+  "schema": "stockinsider-real-close-staging-inputs-v1",
+  "recordedAt": "2026-11-16T13:29:23Z",
+  "session": "2026-11-16",
+  "cutoff": "2026-11-16T21:30:00+08:00",
+  "environment": "Contabo isolated staging",
+  "actualMarketTime": true,
+  "stages": {
+    "listed-roster": {
+      "startLogged": true,
+      "successfulExitLogged": true,
+      "failureLogged": false,
+      "receiptSha256": "062abb31ca395ac79120444564fe491af33714563aec6f65ccd381268ee74209"
+    },
+    "close-observer": {
+      "startLogged": true,
+      "successfulExitLogged": true,
+      "failureLogged": false,
+      "receiptSha256": "0faeebbec78d6dbfb109da11ed390fa5790e622cf7cb5894b790cb79648cb838"
+    },
+    "flow-vendor": {
+      "startLogged": true,
+      "successfulExitLogged": true,
+      "failureLogged": false,
+      "receiptSha256": "257c5193826b3234e3c7dc483710f619e20625e1b9e6b88d9adda3cac6c7163a"
+    },
+    "close-supplement": {
+      "startLogged": true,
+      "successfulExitLogged": true,
+      "failureLogged": false,
+      "receiptSha256": "f9b315940a837434f2d67ae527fe294d0fe3f8af2c1ed192b7f2b3e7167779ac"
+    }
+  },
+  "core": {
+    "tpex_issuers": {
+      "datasetId": 25036,
+      "observedAt": "2026-11-16T13:26:06.129780+00:00",
+      "sourceDate": "2026-11-16",
+      "rowCount": 898,
+      "bytes": 554352,
+      "sha256": "21db83542776807708d23cf8a4433817eabc2885b6ddaba325a783c13df49254",
+      "timelySessionPayload": true
+    },
+    "tpex_market_foreign_flow": {
+      "datasetId": 11743,
+      "observedAt": "2026-11-16T13:26:05.961494+00:00",
+      "sourceDate": "2026-11-16",
+      "rowCount": 8,
+      "bytes": 630,
+      "sha256": "26b0a4d49eaa4b352afa988e0f8611bb8e5fa45beddc1ae8de944efbe307522b",
+      "timelySessionPayload": true
+    },
+    "tpex_quotes": {
+      "datasetId": 11371,
+      "observedAt": "2026-11-16T13:26:04.819802+00:00",
+      "sourceDate": "2026-11-16",
+      "rowCount": 1022,
+      "bytes": 142120,
+      "sha256": "cbdaf6b09fb2094558bc05b0c58ea59764d1abf80bfbe199a573f8ceb05cdbae",
+      "timelySessionPayload": true
+    },
+    "twse_issuers": {
+      "datasetId": 18419,
+      "observedAt": "2026-11-16T13:26:04.920424+00:00",
+      "sourceDate": "2026-11-16",
+      "rowCount": 1099,
+      "bytes": 675725,
+      "sha256": "22e14a9414f445440e770f8759c70131e0efc0dc20d8066fd40021fb5e20facc",
+      "timelySessionPayload": true
+    },
+    "twse_quotes": {
+      "datasetId": 11549,
+      "observedAt": "2026-11-16T13:26:04.532532+00:00",
+      "sourceDate": "2026-11-16",
+      "rowCount": 1390,
+      "bytes": 139108,
+      "sha256": "568dad96c525b1dae3f72e4fc1f94edc3491c1fee988fc8a97d0fb9e13433000",
+      "timelySessionPayload": true
+    }
+  },
+  "supplement": {
+    "tpex_all_session_quote": {
+      "datasetId": 11370,
+      "observedAt": "2026-11-16T13:28:08.286656+00:00",
+      "sessionIdentity": "EXACT_PAYLOAD_DAY",
+      "dataRows": 13843,
+      "usableRecords": 5279,
+      "bytes": 1994345,
+      "sha256": "2eec91e27c14901d8bba7c91767da1f653705a55b1d8ed14a6e88b612fa42568",
+      "timelySessionPayload": true
+    },
+    "tpex_disposition": {
+      "datasetId": 11396,
+      "observedAt": "2026-11-16T13:28:03.649786+00:00",
+      "sessionIdentity": "CURRENT_FEED_ANNOUNCED_OVERLAPS",
+      "dataRows": 7,
+      "usableRecords": 5,
+      "bytes": 6932,
+      "sha256": "c75339a624da52950c5d82d9c76e0992cdbaaa5e44050ef187aff83685032081",
+      "timelySessionPayload": false,
+      "completeAbsenceProved": false
+    },
+    "tpex_halt_notice": {
+      "datasetId": 48664,
+      "observedAt": "2026-11-16T13:28:04.491111+00:00",
+      "sessionIdentity": "EXACT_PAYLOAD_DAY",
+      "dataRows": 1,
+      "usableRecords": 1,
+      "bytes": 102,
+      "sha256": "2a2a5f108512d41605f141d876cef3b5aefd2080c444836be4212671e8f69e43",
+      "timelySessionPayload": true,
+      "completeAbsenceProved": false
+    },
+    "tpex_stock_institutional_shares": {
+      "datasetId": 11856,
+      "observedAt": "2026-11-16T13:28:05.966655+00:00",
+      "sessionIdentity": "EXACT_PAYLOAD_DAY",
+      "dataRows": 908,
+      "usableRecords": 908,
+      "bytes": 148248,
+      "sha256": "4fef3e40d2e41c35634a99fdfa5b2cca51cbfa9e29eb958491530c5deae485b5",
+      "timelySessionPayload": true
+    },
+    "twse_disposition": {
+      "datasetId": 29082,
+      "observedAt": "2026-11-16T13:28:04.233502+00:00",
+      "sessionIdentity": "DATED_QUERY_WITH_OVERLAPS",
+      "dataRows": 2,
+      "usableRecords": 2,
+      "bytes": 2575,
+      "sha256": "3e18e3b0f0d1de5c15fca10c7c534fb11afada88179e464c42cf2ae8017a2c84",
+      "timelySessionPayload": false,
+      "completeAbsenceProved": false
+    },
+    "twse_reported_close": {
+      "datasetId": 11764,
+      "observedAt": "2026-11-16T13:28:04.221296+00:00",
+      "sessionIdentity": "EXACT_PAYLOAD_DAY",
+      "dataRows": 1087,
+      "usableRecords": 1084,
+      "bytes": 79311,
+      "sha256": "481fd292b4008a5fce87b2182d85a29d898a2f651c31c971323471601d7b3c19",
+      "timelySessionPayload": true
+    }
+  },
+  "roster": {
+    "venues": {
+      "TWSE": {
+        "companyRows": 1099,
+        "companyCodes": 1093,
+        "excludedOtherCodes": 6,
+        "corroboratedCodes": 1092,
+        "corroboratedSetHash": "160898df3a68b13cccb5257ac9d7a1945a60c62cf23a1e6ba6f385ca3a035c37",
+        "gaps": {
+          "crossVenueCompanyClaim": 0,
+          "futureListing": 0,
+          "custodyMissing": 0,
+          "custodyMarketMismatch": 1,
+          "custodyStatusRestricted": 0,
+          "custodyOnly": 0
+        }
+      },
+      "TPEX": {
+        "companyRows": 898,
+        "companyCodes": 898,
+        "excludedOtherCodes": 0,
+        "corroboratedCodes": 898,
+        "corroboratedSetHash": "340f0488b8acc503e3cf8813ec95f2ada7eb207f9b6123654ca80b5295ad530f",
+        "gaps": {
+          "crossVenueCompanyClaim": 0,
+          "futureListing": 0,
+          "custodyMissing": 0,
+          "custodyMarketMismatch": 0,
+          "custodyStatusRestricted": 0,
+          "custodyOnly": 0
+        }
+      }
+    },
+    "tpexPositiveSuspensions": 1,
+    "tpexCompleteAbsenceProved": false,
+    "reviewOnly": true,
+    "retainedProjectionSha256": "8f8429b69e1770dfbead06ff4d4aba564e52756e68be83ac9ba8f678ae878c1d",
+    "listingStatusCase": {
+      "code": "1808",
+      "officialVenue": "TWSE",
+      "observedCustodyConflict": "terminated",
+      "issuerPublicNoticeAt": "2026-09-15T17:41:50+08:00",
+      "issuerSuspensionFrom": "2026-11-12",
+      "issuerSuspensionThrough": "2026-11-20",
+      "issuerScheduledNewListingDate": "2026-11-23",
+      "liveTwseQuoteRows": 0,
+      "issuerNotice": "https://www.runlong.com.tw/upload/stakeholder/infor/infor/1150915_%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E7%8F%BE%E9%87%91%E6%B8%9B%E8%B3%87%E6%8F%9B%E7%99%BC%E8%82%A1%E7%A5%A8%E4%BD%9C%E6%A5%AD%E8%A8%88%E7%95%AB%E5%8F%8A%E6%B8%9B%E8%B3%87%E6%8F%9B%E7%A5%A8%E5%9F%BA%E6%BA%96%E6%97%A5%E7%AD%89%E7%9B%B8%E9%97%9C%E4%BA%8B%E5%AE%9C.pdf"
+    }
+  },
+  "vendor": {
+    "sameDayBeforeCutoff": true,
+    "settledEdition": false,
+    "marketDeclared": false,
+    "marketScopeEvidence": "historical_parity_only",
+    "publicUseApproved": false,
+    "rawIntegrityVerified": true
+  },
+  "externalTurnoverCrossCheck": {
+    "repository": "https://github.com/joy40217/TWSE-daily",
+    "firstDate": "2026-10-16",
+    "lastDate": "2026-11-16",
+    "datedFiles": 20,
+    "numericAmountMatchesOnCurrentDay": 1099,
+    "archiveAndOfficialBytesIdentical": false,
+    "historicalOctober20FileFirstCommitAt": "2026-10-29T09:24:34Z",
+    "approvedForRanking": false
+  },
+  "publication": {
+    "writerInvoked": false,
+    "registryWrite": false,
+    "rankingComputed": false,
+    "productionTouched": false,
+    "secondLiveSessionScheduled": "2026-11-17",
+    "twoAdjacentFullFlowVerified": false
+  }
+}
