@@ -1,0 +1,203 @@
+{
+  "schema": "stockinsider-t18-v320-coded-replay-real-backup-v1",
+  "testedTaipeiDate": "2026-11-16",
+  "candidateSourceCommit": "ae07f61be555d01b9ba5dc61ff8cf557bf35b749",
+  "backupSourceDate": "2026-09-19",
+  "authenticatedClone": true,
+  "stageAdapterSha256": "04301ee73427fe5d00bca4cb492541bdfe31205afe0f0485e72a3d666bf00c1c",
+  "publishedCandidateSourceComparedByteForByte": [
+    {
+      "path": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+      "exactPublishedBytes": true
+    },
+    {
+      "path": "scripts/opportunity-v3/legacy-evaluation-constraint-replay.mjs",
+      "exactPublishedBytes": true
+    },
+    {
+      "path": "scripts/opportunity-v3/legacy-evaluation-constraint-replay.test.mjs",
+      "exactPublishedBytes": true
+    }
+  ],
+  "webChecks": {
+    "build": {
+      "step": "web_build",
+      "exit": 0,
+      "evidence": [
+        "✓ Compiled successfully in 60s",
+        "  Generating static pages using 3 workers (0/92) ...",
+        "  Generating static pages using 3 workers (23/92) ",
+        "  Generating static pages using 3 workers (46/92) ",
+        "  Generating static pages using 3 workers (69/92) ",
+        "✓ Generating static pages using 3 workers (92/92) in 821ms"
+      ],
+      "diskFreeBytes": 24520736768
+    },
+    "summary": {
+      "baseSource": "141c77fe0ca4d28647525c3ff3a6abac1b3acc29",
+      "scope": "isolated_compatibility_candidate_and_existing_web_tree",
+      "syntax": [
+        0,
+        0,
+        0
+      ],
+      "npm": 0,
+      "webBuild": 0,
+      "typecheck": 0,
+      "lint": 0
+    },
+    "temporaryWorkspaceRemoved": true
+  },
+  "genuineBackupCheck": {
+    "checks": {
+      "foreignKeys": 288,
+      "rlsTables": 193
+    },
+    "databaseBytes": 2258785971,
+    "lineage": null,
+    "schema": "stockinsider-owned-db-restore-v1"
+  },
+  "obtainedMigrationResult": {
+    "evaluationPreservation": {
+      "afterRows": 72,
+      "beforeRows": 72,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    },
+    "financialCommitted": false,
+    "observed": {},
+    "phase": "financial",
+    "publicationCommitted": false,
+    "reason": "",
+    "sqlstate": "23514",
+    "status": "REJECTED",
+    "trace": {
+      "constraint": "legacy_runtime_failure_diagnostics_v3_14_invariant_code_check",
+      "constraintReported": true,
+      "errorLine": null,
+      "migration": "migrations/20260827_runtime_diagnostic_contract_v3_19_1.sql",
+      "migrationSha256": "c5d6f4f5bbd3705c26803adba27de62ed15130096c01f57ed849991bcab42af2",
+      "publicErrorToken": null,
+      "targetTable": "legacy_runtime_failure_diagnostics_v3_14"
+    }
+  },
+  "otherStaticDowngradeCandidates": {
+    "candidateSourceCommit": "ae07f61be555d01b9ba5dc61ff8cf557bf35b749",
+    "migrationsScanned": 49,
+    "staticCheckDeclarations": 18,
+    "conditionalOlderVocabularyCandidates": [
+      {
+        "table": "legacy_decision_revision_evaluations_v3_13",
+        "constraint": "legacy_evaluation_schema_v314_check",
+        "laterOnlyComparedWithFirst": [
+          "legacy-radar-v3.17.0",
+          "legacy-radar-v3.18.0",
+          "legacy-radar-v3.19.0",
+          "legacy-radar-v3.20.0"
+        ],
+        "replayOrder": [
+          {
+            "order": 4,
+            "source": "migrations/20260811_actionability_recovery_v3_14.sql",
+            "line": 447,
+            "sourceSha256": "43771e50c0e59d2c1e7ed310a6a204283fc782cbd7e0f10f1de87d36389874af",
+            "checkTokenValues": [
+              "schema",
+              "legacy-radar-v3.13.0",
+              "legacy-radar-v3.14.0"
+            ],
+            "expressionSha256": "39569a486b835284380bee6c5b30adcb597e8231e3eea340d5163c5a8e613c09"
+          },
+          {
+            "order": 26,
+            "source": "migrations/20260828_legacy_evaluation_schema_v3_19_6.sql",
+            "line": 13,
+            "sourceSha256": "7eaa03624dfed1548313ea745e5446248ca303cceb4762278708267b429d7093",
+            "checkTokenValues": [
+              "schema",
+              "legacy-radar-v3.13.0",
+              "legacy-radar-v3.14.0",
+              "legacy-radar-v3.17.0",
+              "legacy-radar-v3.18.0",
+              "legacy-radar-v3.19.0"
+            ],
+            "expressionSha256": "7c8dd343304dd3057340cc5a72e4a4164988f9ed22ae06c195ec0ea2e43a8f26"
+          },
+          {
+            "order": 32,
+            "source": "migrations/20260828_kol_first_runtime_recovery_v3_20.sql",
+            "line": 12,
+            "sourceSha256": "987eafaa934c375437ca5495891148d3619f101fa538d379b221c37921edfbc2",
+            "checkTokenValues": [
+              "schema",
+              "legacy-radar-v3.13.0",
+              "legacy-radar-v3.14.0",
+              "legacy-radar-v3.17.0",
+              "legacy-radar-v3.18.0",
+              "legacy-radar-v3.19.0",
+              "legacy-radar-v3.20.0"
+            ],
+            "expressionSha256": "bbf442335bea47e9551ec42ff1f754157c0eab9ab69f2cddc931a960d3811c14"
+          }
+        ]
+      },
+      {
+        "table": "legacy_runtime_failure_diagnostics_v3_14",
+        "constraint": "legacy_runtime_failure_diagnostics_v3_14_invariant_code_check",
+        "laterOnlyComparedWithFirst": [
+          "lease_expired"
+        ],
+        "replayOrder": [
+          {
+            "order": 23,
+            "source": "migrations/20260827_runtime_diagnostic_contract_v3_19_1.sql",
+            "line": 9,
+            "sourceSha256": "c5d6f4f5bbd3705c26803adba27de62ed15130096c01f57ed849991bcab42af2",
+            "checkTokenValues": [
+              "candidate_seed_membership_missing",
+              "database_constraint_rejected",
+              "provider_timeout",
+              "authentication_rejected",
+              "projection_supersession_conflict",
+              "data_integrity_failure"
+            ],
+            "expressionSha256": "d9de3f612467b765b54ffe894bbd3425fec4a9527b69f59973dfbe0b36166af5"
+          },
+          {
+            "order": 32,
+            "source": "migrations/20260828_kol_first_runtime_recovery_v3_20.sql",
+            "line": 30,
+            "sourceSha256": "987eafaa934c375437ca5495891148d3619f101fa538d379b221c37921edfbc2",
+            "checkTokenValues": [
+              "candidate_seed_membership_missing",
+              "database_constraint_rejected",
+              "provider_timeout",
+              "authentication_rejected",
+              "projection_supersession_conflict",
+              "data_integrity_failure",
+              "lease_expired"
+            ],
+            "expressionSha256": "cb86a5057a865213372bc275d3a71d0258c429a1a7645200577e8c598126766a"
+          }
+        ]
+      }
+    ],
+    "scope": "literal ALTER TABLE ADD CHECK declarations with additional quoted tokens; catalog binding and genuine counts required"
+  },
+  "latestNextRollback": "NOT_RUN",
+  "officialSignaturesIdentical": true,
+  "nativeHoldRetained": true,
+  "stageResourcesCleaned": true,
+  "cleanup": {
+    "temporaryRunnerRemoved": true,
+    "freeBytesAfterCleanup": 26138705920
+  },
+  "resourceSamples": {
+    "appMemoryPeakObservedBytes": 18874368,
+    "dbMemoryPeakObservedBytes": 805310464,
+    "minimumHostAvailableMemoryBytes": 4473737216,
+    "minimumHostDiskBytes": 17336360960,
+    "minimumWorkFreeBytes": 5967491072,
+    "restMemoryPeakObservedBytes": 18882560
+  }
+}
