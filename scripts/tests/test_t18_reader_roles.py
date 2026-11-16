@@ -133,5 +133,15 @@ class ReaderRoleTests(unittest.TestCase):
         with self.assertRaises(m.FixedReaderRolesRejected):
             m.install_fixed_reader_roles(lambda _:None,allow_launch_reads=1)
 
+    def test_launch_readpoint_works_with_the_owned_clone_psql_options(self):
+        from deployment.staging.vnext.t17_keyfd import t18_same_clone as clone
+        def query(statement):
+            return self.runpg('psql',['-X','-A','-t','-v','ON_ERROR_STOP=1','-d','t17_restored'],
+                              statement).stdout.decode().strip()
+        self.assertEqual(query(b'BEGIN READ ONLY; SELECT false::text; COMMIT;').splitlines(),
+                         ['BEGIN','false','COMMIT'])
+        self.assertEqual(clone._observe_launch_readpoint(query),
+                         {'status':'SCHEMA_MISSING','session':None,'ranked':None})
+
 
 if __name__=='__main__':unittest.main()

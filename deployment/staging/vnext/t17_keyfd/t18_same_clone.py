@@ -23,7 +23,8 @@ from .t18_release_assets import is_launch_release_pair
 from .fixed_read_proxy import start_fixed_read_proxy,SNAPSHOT_SELECT,STATE_SELECT,_BoundedResponse
 from .t18_readpoint_diagnostics import http_trace,http_subphase,http_completed
 
-LAUNCH_SCHEMA_SQL=b"""
+LAUNCH_SCHEMA_SQL=br"""
+\set QUIET 1
 BEGIN READ ONLY;
 SELECT (
  to_regclass('public.vnext_mode_v1') IS NOT NULL AND
@@ -35,7 +36,8 @@ SELECT (
 )::text;
 COMMIT;
 """
-LAUNCH_HEAD_SQL=b"""
+LAUNCH_HEAD_SQL=br"""
+\set QUIET 1
 BEGIN READ ONLY;
 WITH head AS (
  SELECT ranking_run_id,session_date FROM public.vnext_launch_ranking_snapshots_v1
@@ -55,7 +57,8 @@ SELECT jsonb_build_object(
 );
 COMMIT;
 """
-LAUNCH_BINDING_SQL=b"""
+LAUNCH_BINDING_SQL=br"""
+\set QUIET 1
 BEGIN READ ONLY;
 WITH head AS (
  SELECT ranking_run_id,session_date,input_cutoff,snapshot FROM public.vnext_launch_ranking_snapshots_v1
