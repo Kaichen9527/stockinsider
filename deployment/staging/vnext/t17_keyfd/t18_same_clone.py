@@ -79,11 +79,51 @@ LAUNCH_API='/api/launch-ranking'
 LAUNCH_BINDING_KEYS=frozenset(('rank','symbol','revisionId','scoreRevision','launchQualificationRevision','inputHash'))
 LAUNCH_UUID=re.compile(r'[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}')
 LAUNCH_DIGEST=re.compile(r'[0-9a-f]{64}')
-LAUNCH_MIGRATION_MARKERS=frozenset(('writerFence','opportunityOwner','marketCalendar','priceHistory','corporateActionHistory','vnextCore','vnextWorker','sourceAuthority','businessAuthority','tradingAuthority','actionTermsAuthority','nativeCsvReady','launchRankingRead','launchOutcomeRead'))
+LAUNCH_MIGRATION_MARKERS=frozenset((
+    'writerFence',
+    'opportunityOwner',
+    'marketCalendar',
+    'priceHistory',
+    'corporateActionHistory',
+    'vnextCore',
+    'vnextWorker',
+    'sourceAuthority',
+    'businessAuthority',
+    'tradingAuthority',
+    'actionTermsAuthority',
+    'nativeCsvReady',
+    'launchRankingRead',
+    'launchOutcomeRead',
+    'refreshQueue',
+    'privateArtifactReceipts',
+    'vnextOwner',
+    'catalogCanonicalPinned',
+    'backendRequestGuardPinned',
+    'artifactRegistrationPinned',
+    'writerFenceGuardPinned',
+))
+# Match the catalog requirements of 20261115_vnext_launch_source_facts_v1.
+# An object may exist on the old backup and still fail the exact guard check.
 LAUNCH_MIGRATION_PROBE_SQL=br"""
 \set QUIET 1
 BEGIN READ ONLY;
 SET LOCAL search_path=pg_catalog;
+WITH expected(marker,signature,body_hash,result_type,returns_set,defaults) AS (VALUES
+ ('backendRequestGuardPinned','public.assert_stockinsider_backend_request_v1(boolean)','23f9db45de277921113fc088fb3f9fe2e46474fe7aafbc84163f89351188e453','uuid',false,1),
+ ('artifactRegistrationPinned','public.register_private_artifact_receipt_v1(text,bigint,text,text,jsonb)','0e4c72c288d5041b770f78315018b0a724b1814a51c75eb10c06b4606644798f','record',true,1),
+ ('writerFenceGuardPinned','public.enforce_production_writer_fence()','8230515bef78902c9f955f5c87a77f8b04ef02fa22525a5c4828849f56a9273a','trigger',false,0)
+), guards AS (
+ SELECT e.marker,EXISTS(
+  SELECT FROM pg_proc p JOIN pg_language l ON l.oid=p.prolang
+  WHERE p.oid=to_regprocedure(e.signature)
+   AND p.proowner=(SELECT relowner FROM pg_class WHERE oid=to_regclass('public.private_artifact_receipts_v1'))
+   AND p.prosecdef AND p.prokind='f' AND l.lanname='plpgsql' AND p.proretset=e.returns_set
+   AND p.prorettype=to_regtype(e.result_type) AND p.pronargdefaults=e.defaults AND p.provariadic=0
+   AND p.provolatile='v' AND p.proparallel='u' AND NOT p.proisstrict AND NOT p.proleakproof
+   AND p.proconfig=ARRAY['search_path=public, pg_temp']
+   AND encode(sha256(convert_to(p.prosrc,'UTF8')),'hex')=e.body_hash
+ ) AS matches FROM expected e
+)
 SELECT jsonb_build_object(
  'writerFence',(to_regprocedure('public.enforce_production_writer_fence()') IS NOT NULL),
  'opportunityOwner',(EXISTS(SELECT FROM pg_roles WHERE rolname='opportunity_v3_rpc_owner' AND NOT (rolcanlogin OR rolsuper OR rolbypassrls OR rolcreaterole OR rolcreatedb OR rolreplication) AND rolconfig IS NULL)),
@@ -98,8 +138,18 @@ SELECT jsonb_build_object(
  'actionTermsAuthority',(to_regprocedure('public.vnext_action_terms_current_internal_v1(uuid,text,timestamptz)') IS NOT NULL),
  'nativeCsvReady',(to_regclass('public.vnext_launch_csv_ready_acks_v1') IS NOT NULL AND to_regprocedure('public.vnext_launch_csv_backend_v1(uuid,text,integer)') IS NOT NULL),
  'launchRankingRead',(to_regprocedure('public.vnext_launch_ranking_read_v1(uuid,text)') IS NOT NULL),
- 'launchOutcomeRead',(to_regprocedure('public.vnext_launch_outcome_public_v1(uuid,text)') IS NOT NULL)
-);
+ 'launchOutcomeRead',(to_regprocedure('public.vnext_launch_outcome_public_v1(uuid,text)') IS NOT NULL),
+ 'refreshQueue',(to_regclass('public.taiwan_data_refresh_queue_v5') IS NOT NULL),
+ 'privateArtifactReceipts',(to_regclass('public.private_artifact_receipts_v1') IS NOT NULL),
+ 'vnextOwner',(EXISTS(SELECT FROM pg_roles r WHERE rolname='stockinsider_vnext_owner'
+  AND NOT (rolcanlogin OR rolsuper OR rolbypassrls OR rolcreatedb OR rolcreaterole OR rolreplication)
+  AND rolconfig IS NULL
+  AND NOT EXISTS(SELECT FROM pg_auth_members m WHERE m.member=r.oid OR m.roleid=r.oid)
+  AND NOT EXISTS(SELECT FROM pg_db_role_setting d WHERE d.setrole=r.oid AND d.setconfig IS NOT NULL))),
+ 'catalogCanonicalPinned',(EXISTS(SELECT FROM pg_proc p WHERE p.oid=to_regprocedure('public.vnext_catalog_canonical_v1(jsonb)')
+  AND pg_get_userbyid(p.proowner)='stockinsider_vnext_owner' AND NOT p.prosecdef
+  AND encode(sha256(convert_to(p.prosrc,'UTF8')),'hex')='597081dda160ac0e369b5f5306bee102caac5b78b19cd82583e0e9408cc4f464'))
+) || (SELECT jsonb_object_agg(marker,matches) FROM guards);
 COMMIT;
 """
 MAX_HTTP=2*1024**2
