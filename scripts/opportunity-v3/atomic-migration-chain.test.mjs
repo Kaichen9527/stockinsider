@@ -74,3 +74,28 @@ test('atomic scanner rejects additional documented commands that cannot run in a
     assert.throws(()=>migrationBodyInAtomicTransaction(sql), /migration_nontransactional_statement/u);
   }
 });
+
+test('opt-in accepts only an outer READ COMMITTED wrapper matching the caller transaction', () => {
+  const options = {allowReadCommittedWrapper: true};
+  const body = "DO $fn$ BEGIN PERFORM 1; END $fn$;";
+  const wrapped = "BEGIN ISOLATION LEVEL READ COMMITTED;\n"+body+"\nCOMMIT;";
+  assert.throws(() => migrationBodyInAtomicTransaction(wrapped), /migration_embedded_transaction_control/u);
+  assert.equal(migrationBodyInAtomicTransaction(wrapped, options).trim(), body);
+  for (const sql of [
+    'BEGIN ISOLATION LEVEL SERIALIZABLE; SELECT 1; COMMIT;',
+    'BEGIN READ ONLY; SELECT 1; COMMIT;',
+    'BEGIN ISOLATION LEVEL READ COMMITTED READ ONLY; SELECT 1; COMMIT;',
+    'BEGIN ISOLATION LEVEL READ COMMITTED; SELECT 1; COMMIT; SELECT 2;',
+    'BEGIN ISOLATION LEVEL READ COMMITTED; BEGIN; SELECT 1; COMMIT;'
+  ]) assert.throws(() => migrationBodyInAtomicTransaction(sql, options), /migration_embedded_transaction_control/u);
+});
+
+test('provider and financial summary match the explicit READ COMMITTED wrapper', () => {
+  for (const migration of ['20261022_vnext_provider_worker_v1.sql', '20261022_vnext_financial_summary_v1.sql']) {
+    const sql = fs.readFileSync(new URL('../../migrations/'+migration, import.meta.url), 'utf8');
+    const body = migrationBodyInAtomicTransaction(sql, {allowReadCommittedWrapper: true});
+    assert.match(body, /pg_advisory_xact_lock\(64221022\)/u);
+    assert.doesNotMatch(body, /^\s*BEGIN ISOLATION LEVEL/mu);
+    assert.doesNotMatch(body, /\bCOMMIT;\s*$/iu);
+  }
+});

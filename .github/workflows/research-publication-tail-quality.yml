@@ -64,6 +64,7 @@ jobs:
             scripts/opportunity-v3/research-publication-tail-extraction.test.mjs \
             scripts/opportunity-v3/research-publication-tail-entry-guard.test.mjs \
             scripts/opportunity-v3/t18-sealed-archive-predecessor.test.mjs \
+            scripts/opportunity-v3/atomic-migration-chain.test.mjs \
             2>&1 | tee "$RESEARCH_TAIL_CI_EVIDENCE/pure.stdout"
       - name: Verify captured-schema guarded tail transaction
         shell: bash
