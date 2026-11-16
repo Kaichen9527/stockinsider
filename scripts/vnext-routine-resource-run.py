@@ -52,6 +52,7 @@ def process(pid):
 pg_start = process(pg_pid)['start']
 seen = {}
 
+# Linux may report ESRCH when procfs entries disappear between enumeration and read.
 def tree(roots):
     pending, result = list(roots), {}
     while pending:
@@ -70,9 +71,9 @@ def tree(roots):
             for task in tasks:
                 try:
                     pending.extend(map(int, (task / 'children').read_text().split()))
-                except FileNotFoundError:
+                except (FileNotFoundError, ProcessLookupError):
                     pass
-        except FileNotFoundError:
+        except (FileNotFoundError, ProcessLookupError):
             pass
     return result
 
@@ -116,7 +117,7 @@ for (pid, start), before in seen.items():
     try:
         current = process(pid)
         post.append({'pid': pid, 'originalStart': start, 'sameProcess': current['start'] == start, 'state': current['state'], 'rssBytes': current['rssBytes'], 'scope': 'PG still owned/running until outer trap' if pid == pg_pid else 'supervisor still active' if pid == os.getpid() else 'observed; zombie is not absent'})
-    except FileNotFoundError:
+    except (FileNotFoundError, ProcessLookupError):
         post.append({'pid': pid, 'originalStart': start, 'absent': True})
 result = {'command': command, 'start': started, 'end': now(), 'exit': code, 'initialFree': initial, 'finalFree': free(), 'floor': FLOOR, 'nextWorksetReference': RESERVE, 'referenceNotUpperBound': True, 'sampledNotInstantaneous': True, 'sampledNodeAndOwnedPgTreePeakRssBytes': peak, 'resourceViolation': violation, 'samples': samples, 'processPostObservation': post, 'ownedPg': {'containerId': identity[0], 'pid': pg_pid, 'start': pg_start, 'image': IMAGE, 'actualVersion': pg_version, 'actualBinarySha256': pg_binary}, 'nodeSha256': node_sha256, 'cleanup': 'test finally plus outer exact-owned-container trap; no data removal'}
 (OUTPUT / 'receipt.json').write_text(json.dumps(result, indent=2) + '\n')
