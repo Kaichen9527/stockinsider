@@ -4,7 +4,7 @@ import {executeFinancialVpsOperatorPrerequisite} from './financial-vps-operator-
 import {assertOperatorFlags,financialOperatorActionIdentity,assertOperatorPlan,assertOperatorReviewBinding} from './financial-vps-operator-binding.mjs';
 import {OWNERSHIP_PRELUDE,makeFinancialExistingSchemaProfile,assertFinancialExistingSchemaPlan,assertFinancialProfileFlags,assertFinancialProfileReviewBinding} from './financial-existing-schema-profile.mjs';
 import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
-import { V314_ACTIONABILITY_MIGRATION, lockInstalledV320EvaluationCheck, preserveV320EvaluationCheck, verifyV320EvaluationCheck } from './legacy-evaluation-constraint-replay.mjs';
+import { v320ConstraintReplays, lockV320Constraint, preserveV320Constraints, verifyV320Constraint } from './legacy-v320-constraint-replay.mjs';
 import { FINANCIAL_TAIL, selectFinancialHistoryChain, assertFinancialReviewBinding, assertInstalledFinancialHistoryPlan, verifyFinancialHistoryPostconditions } from './financial-history-install-guard.mjs';
 
 import { createHash } from 'node:crypto';
@@ -465,7 +465,7 @@ async function applyReviewedMigrationPlanToClient(client,plan,options,{operatorP
   let primaryFailed=false;
   const supersededMigrations=[];
   let operatorAction=null;
-  let retainedEvaluationCheck=null;
+  const retainedChecks=new Map();
   try {
     const lockResult=await client.query("SELECT pg_try_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0)) AS locked");
     if(lockResult.rows[0]?.locked!==true) throw new Error('migration_install_busy');
@@ -490,15 +490,17 @@ async function applyReviewedMigrationPlanToClient(client,plan,options,{operatorP
         supersededMigrations.push(migration.relativePath);
         continue;
       }
-      if(options.financialExistingSchemaProfile===true && migration.relativePath===V314_ACTIONABILITY_MIGRATION) {
-        retainedEvaluationCheck=await lockInstalledV320EvaluationCheck(client);
+      if(options.financialExistingSchemaProfile===true) {
+        for(const profile of v320ConstraintReplays) {
+          if(migration.relativePath!==profile.firstMigration)continue;
+          const oid=await lockV320Constraint(client,profile);
+          if(oid!==null)retainedChecks.set(profile,oid);
+        }
       }
-      const sql=retainedEvaluationCheck
-        ? preserveV320EvaluationCheck(migration)
-        : migration.bytes.toString('utf8');
+      const sql=preserveV320Constraints(migration,retainedChecks);
       await client.query(migrationBodyInAtomicTransaction(sql));
     }
-    if(retainedEvaluationCheck)await verifyV320EvaluationCheck(client,retainedEvaluationCheck);
+    for(const [profile,oid] of retainedChecks)await verifyV320Constraint(client,profile,oid);
     const verified=await verifyReviewedMigrationPostconditions(client, options);
     await client.query('COMMIT');
     transactionOpen=false;
