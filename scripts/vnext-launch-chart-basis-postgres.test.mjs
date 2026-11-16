@@ -511,6 +511,7 @@ END $freeze$;
 `;
 const baseline = fs.readFileSync(new URL('../migrations/20261115_vnext_launch_ranking_v1.sql',import.meta.url),'utf8');
 const migration = fs.readFileSync(new URL('../migrations/20261116_20_vnext_launch_chart_basis_v1.sql',import.meta.url),'utf8');
+const breadth = fs.readFileSync(new URL('../migrations/20261116_12_vnext_launch_supported_breadth_v1.sql',import.meta.url),'utf8');
 const adjustment = fs.readFileSync(new URL('../migrations/20261116_21_vnext_launch_chart_adjustment_v1.sql',import.meta.url),'utf8');
 const source = fs.readFileSync(new URL('../migrations/20261115_vnext_launch_source_facts_v1.sql',import.meta.url),'utf8');
 const chartVolume = fs.readFileSync(new URL('../migrations/20261116_22_vnext_launch_chart_volume_v1.sql',import.meta.url),'utf8');
@@ -556,6 +557,14 @@ test('native launch chart preserves the cutoff, pins lineage, and gates the immu
     assert.ok(finiteStart >= 0 && finiteEnd > finiteStart);
     sql(actionSetup + baseline.slice(finiteStart,finiteEnd+4) + '\n' +
       extractFunction('vnext_launch_action_day_v1') + '\n' + extractFunction('vnext_launch_price_v1'));
+    const aliasStart = breadth.indexOf('DO $action_aliases$');
+    const aliasEnd = breadth.indexOf('END $action_aliases$;',aliasStart);
+    assert.ok(aliasStart >= 0 && aliasEnd > aliasStart);
+    const actionMetadata = () => sql(`SELECT to_jsonb(p)-'prosrc' FROM pg_proc p
+      WHERE oid='public.vnext_launch_action_day_v1(text,uuid,date,text,timestamptz)'::regprocedure;`);
+    const beforeAliases = actionMetadata();
+    sql(breadth.slice(aliasStart,aliasEnd+'END $action_aliases$;'.length));
+    assert.equal(actionMetadata(),beforeAliases);
     sql(adjustment);
     sql(verifyAdjustment);
     const profileStart = source.indexOf('CREATE FUNCTION public.vnext_launch_csv_profile_v1(');

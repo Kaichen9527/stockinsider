@@ -11,7 +11,7 @@ DECLARE target oid:=to_regprocedure('public.vnext_launch_action_day_v1(text,uuid
  original text; definition text; metadata jsonb; changed text;
 BEGIN
  SELECT prosrc,pg_get_functiondef(oid),to_jsonb(p)-'prosrc' INTO original,definition,metadata FROM pg_proc p WHERE oid=target;
- IF encode(sha256(convert_to(original,'UTF8')),'hex') IS DISTINCT FROM 'c07bcd37733ac56bc19ceae90042e8def5c567324a41f8ae3d2cfab58e76179a'
+ IF encode(sha256(convert_to(original,'UTF8')),'hex') IS DISTINCT FROM 'e91a4f123784a6482051d5426a2e5d4784983b5b9b7259bf48b190a61ef04407'
   THEN RAISE EXCEPTION 'launch_supported_breadth_action_predecessor_changed';END IF;
  changed:=replace(replace(original,$old_feeds$ SELECT coalesce(jsonb_agg(to_jsonb(f) ORDER BY feed_ordinal),'[]'::jsonb) INTO feeds
  FROM public.opportunity_corporate_action_feed_evidence_v3 f WHERE snapshot_id=selected.snapshot_id;
@@ -31,7 +31,7 @@ BEGIN
  INTO feed_tuples FROM jsonb_array_elements(feeds) feed_row;
  SELECT coalesce(jsonb_agg(jsonb_build_array(event_row->>'symbol',event_row->>'event_kind',event_row->'pre_action_reference_price',event_row->'post_action_reference_price',event_row->>'feed_identity',event_row->>'source_row_ref') ORDER BY (event_row->>'event_ordinal')::integer),'[]'::jsonb)
  INTO event_tuples FROM jsonb_array_elements(events) event_row;$new_tuples$);
- IF encode(sha256(convert_to(changed,'UTF8')),'hex') IS DISTINCT FROM '0b5d1e53c7da5ca564ab3f56a818ce6d9358c677ae89f71b10619058e02b4775'
+ IF encode(sha256(convert_to(changed,'UTF8')),'hex') IS DISTINCT FROM '91a6d39a1c2eb20d9b8b0547eb06f93f8928d3fb782248ddb6478b0cf3cb4b44'
   THEN RAISE EXCEPTION 'launch_supported_breadth_action_successor_changed';END IF;
  EXECUTE replace(definition,original,changed);
  IF (SELECT to_jsonb(p)-'prosrc' FROM pg_proc p WHERE oid=target) IS DISTINCT FROM metadata

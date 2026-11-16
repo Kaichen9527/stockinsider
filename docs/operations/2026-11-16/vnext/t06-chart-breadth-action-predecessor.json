@@ -1,0 +1,35 @@
+{
+  "schema": "stockinsider-t06-chart-breadth-action-predecessor-v1",
+  "recordedAt": "2026-11-16T13:16:09Z",
+  "baseCommit": "e6b247e617ab41c090fd8257c6ba2895eee8c143",
+  "scope": "isolated Contabo staging, schema-only PostgreSQL replay and Next.js build",
+  "corporateAction": {
+    "supersededSha256": "c07bcd37733ac56bc19ceae90042e8def5c567324a41f8ae3d2cfab58e76179a",
+    "currentPredecessorSha256": "e91a4f123784a6482051d5426a2e5d4784983b5b9b7259bf48b190a61ef04407",
+    "correctedSuccessorSha256": "91a6d39a1c2eb20d9b8b0547eb06f93f8928d3fb782248ddb6478b0cf3cb4b44",
+    "sourceChange": "20261115 chart-path local variable rename",
+    "sameExactReplacementAnchors": true,
+    "numericChecksUnchanged": true
+  },
+  "postgres": {
+    "version": "17.11",
+    "orderedReplaySteps": 52,
+    "actionAggregateRewriteApplied": true,
+    "exactReaderDigestsPreserved": true,
+    "publishingDisabled": true,
+    "rolledBack": true,
+    "regressionSuitesPassed": 1,
+    "trackedProcedureMetadataPreserved": true,
+    "scratchRemoved": true
+  },
+  "build": {
+    "nextVersion": "16.3.4",
+    "typescript": "passed",
+    "staticPages": 92,
+    "exit": 0,
+    "scratchRemoved": true
+  },
+  "openedProductionBackup": false,
+  "productionTouched": false,
+  "genuineRankingVerified": false
+}
