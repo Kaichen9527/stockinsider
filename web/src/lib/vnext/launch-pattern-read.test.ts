@@ -4,6 +4,7 @@ import test from 'node:test';
 import { loadTwEntryHistoricalPriceAuthority, type TwEntryAuthorityClient, type TwEntryAuthorityRequest } from '../tw-entry-plan-authority.ts';
 import { evidenceInstant } from './evidence-clock.ts';
 import { readLaunchPatterns } from './launch-pattern-read.ts';
+import { parseTwseLimitReplay, twseLimitReplayUrls } from './launch-twse-daily-limit.ts';
 
 type Row = Record<string, unknown>;
 const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -292,5 +293,66 @@ test('TPEx integer thousand-share normalization cannot mint native-share proof; 
     assert.equal(result.evidence.missingData.includes('launch_share_volume_candidate_action_within_51'), action);
     assert.equal(result.arithmetic.breakout.volumeRatio, null);
     assert.equal(result.arithmetic.contraction.volumeContractionRatio, null);
+  }
+});
+
+function twseLimitCaptures(session: string) {
+  const urls = twseLimitReplayUrls(session);
+  const row = ['2330', 'Synthetic issuer', '110.00', '100.00', '90.00', '99.00', '0.00', '', '', '1150923', '可'];
+  const report = {
+    stat: 'OK', date: session.replaceAll('-', ''), selectType: 'ALLBUT0999',
+    fields: ['證券代號', '證券名稱', '漲停價', '開盤競價基準', '跌停價', '開盤競價基準',
+      '收盤價', '買進揭示價', '賣出揭示價', '最近成交日', '可否零股交易'],
+    groups: [{ start: 0, span: 2, title: '' }, { start: 2, span: 3, title: '本日' },
+      { start: 5, span: 4, title: '前日' }, { start: 9, span: 2, title: '' }],
+    total: 1, data: [row.slice()],
+  };
+  const capture = (url: string, text: string, time = session + 'T09:00:00Z') => {
+    const body = Buffer.from(text);
+    return { url, body, sha256: createHash('sha256').update(body).digest('hex'), observedAt: time, recordedAt: time };
+  };
+  const header = '證券代號,證券名稱,本日漲停價,本日開盤競價基準,本日跌停價,前日開盤競價基準,前日收盤價,前日買進揭示價,前日賣出揭示價,最近成交日,可否零股交易';
+  return { urls, report,
+    csv: capture(urls.csv, [header, row.join(',')].join('\n')),
+    json: (value = report, time?: string) => capture(urls.json, JSON.stringify(value), time),
+  };
+}
+
+test('TWSE dated limits use current reference and bind one-price upper limit to the selected close', async () => {
+  const { data, request } = fixture();
+  const inputs = twseLimitCaptures(request.signalSession);
+  const token = parseTwseLimitReplay(request.signalSession, request.symbol, inputs.csv, inputs.json());
+  const { client } = mockClient(data);
+  assert.equal((await readLaunchPatterns(client, request, undefined, undefined, undefined, token))
+    .arithmetic.waiting.onePriceLimitLocked, false);
+  Object.assign(data[tables.prices].at(-1)!, { raw_open: 110, raw_high: 110, raw_low: 110, raw_close: 110 });
+  const result = await readLaunchPatterns(client, request, undefined, undefined, undefined, token);
+  assert.equal(result.arithmetic.waiting.onePriceLimitLocked, true);
+  assert.ok(result.arithmetic.waiting.reasons.includes('official_one_price_limit_locked'));
+  assert.equal(result.rankingAuthority, false);
+});
+
+test('TWSE limit replay refuses mismatched session, repeated symbol, column-group swap and different prices', () => {
+  const session = '2026-09-24', a = twseLimitCaptures(session);
+  const parse = (json: ReturnType<typeof a.json>, csv = a.csv) => parseTwseLimitReplay(session, '2330', csv, json);
+  assert.throws(() => parse(a.json({ ...a.report, date: '20260925' })), /limit_report_unverified/u);
+  assert.throws(() => parse(a.json(), { ...a.csv, url: a.urls.csv.split('&date=')[0] }), /limit_report_unverified/u);
+  assert.throws(() => parse(a.json(), { ...a.csv, sha256: '0'.repeat(64) }), /limit_report_unverified/u);
+  assert.throws(() => parse(a.json({ ...a.report, data: [...a.report.data, ...a.report.data], total: 2 })), /limit_report_unverified/u);
+  const groups = a.report.groups.map(group => ({ ...group, title: group.title === '本日' ? '前日' : group.title }));
+  assert.throws(() => parse(a.json({ ...a.report, groups })), /limit_report_unverified/u);
+  const row = a.report.data[0].slice();
+  row[2] = '111.00';
+  assert.throws(() => parse(a.json({ ...a.report, data: [row] })), /limit_report_unverified/u);
+});
+
+test('late or unbranded TWSE limit evidence does not clear waiting uncertainty', async () => {
+  const { data, request } = fixture(), a = twseLimitCaptures(request.signalSession);
+  const token = parseTwseLimitReplay(request.signalSession, request.symbol, a.csv,
+    a.json(a.report, '2026-09-24T12:00:00.000001Z'));
+  for (const value of [token, { upperLimit: 110, onePriceLocked: false }]) {
+    const result = await readLaunchPatterns(mockClient(data).client, request, undefined, undefined, undefined, value);
+    assert.equal(result.arithmetic.waiting.onePriceLimitLocked, null);
+    assert.ok(result.gaps.includes('twse_official_limit_replay_binding_missing'));
   }
 });

@@ -3,13 +3,14 @@ import { launchPatternFixture } from './launch-patterns.ts';
 import { scoreLaunchReadEvidence } from './launch-score.ts';
 import { bindLaunchOfficialReplay, type LaunchOfficialReplayRead } from './launch-official-replay.ts';
 import { bindTpexNativeShareReplay, isNativeShareReplay, resolveNativeVolumeOverlay, nativeVolumeContext, type NativeVolumeOverlay } from './launch-native-volume.ts';
+import { bindTwseLimitReplay } from './launch-twse-daily-limit.ts';
 import { bindTpexInstitutionalVolumeReplay, isInstitutionalVolumeReplay } from './launch-institutional-volume.ts';
 
 /** Thin read-only consumer of the existing official selection protocol. No
  * client/provider is constructed here, and no acquisition/writer is invoked.
  * Selected-cache validation feeds offline arithmetic, never external authority. */
 export async function readLaunchPatterns(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest, replay?: LaunchOfficialReplayRead,
-  nativeReplay?: unknown, institutionalReplay?: unknown) {
+  nativeReplay?: unknown, institutionalReplay?: unknown, twseLimitReplay?: unknown) {
   const evidence = await loadTwLaunchPatternReadEvidence(client, request);
   let nativeVolumeOverlay: NativeVolumeOverlay | null = null; const nativeGaps: string[] = [];
   if (nativeReplay !== undefined) {
@@ -32,14 +33,14 @@ export async function readLaunchPatterns(client: TwEntryAuthorityClient, request
     }
   }
   const calendar = evidence.calendar;
+  const officialLimit = bindTwseLimitReplay(twseLimitReplay, request, evidence);
   const arithmetic = launchPatternFixture({
     cutoff: request.cutoff, market: request.exchange, symbol: request.symbol, stockId: request.stockId, history: evidence.history,
     calendar: { completeness: calendar?.status === 'validated_selected_window' ? 'complete_fixture' : 'unknown',
       revisionId: calendar?.revisionId ?? '', availableAt: calendar?.availableAt ?? request.cutoff,
       sessions: calendar?.sessions.map(row => ({ session: row.session, closeAt: row.closeAt })) ?? [] },
     volumeBasis: null, nativeVolumeOverlay, nativeVolumeSelection: evidence, actionsRevision: evidence.corporateActions?.revisionId ?? null,
-    // No caller booleans, guessed benchmarks/limits or retrospective breakout
-    // event are promoted into this selected-evidence path.
+    ...(officialLimit ? { officialLimit } : {}),
   });
   const launchScore = scoreLaunchReadEvidence(request, { evidence, arithmetic, nativeVolumeOverlay }, replayBinding.external);
   const replayGaps = replayBinding.gaps.filter(gap => !launchScore.revisions.chipDenominator
@@ -48,6 +49,6 @@ export async function readLaunchPatterns(client: TwEntryAuthorityClient, request
     publicationAuthority: false as const, entryAuthority: false as const, rankingAuthority: false as const,
     evidence, arithmetic, nativeVolumeOverlay, launchScore,
     officialReplay: replay ? { parserVersion: replay.parserVersion, attributions: replayBinding.attributions, gaps: replayGaps, sourceAuthority: false as const } : null,
-    gaps: [...new Set([...evidence.missingData.filter(gap => !native || gap !== 'launch_tpex_exact_native_share_volume_51_not_proven'), ...arithmetic.gaps, ...replayGaps, ...nativeGaps, ...institutionalGaps,
+    gaps: [...new Set([...(twseLimitReplay !== undefined && !officialLimit ? ['twse_official_limit_replay_binding_missing'] : []), ...evidence.missingData.filter(gap => !native || gap !== 'launch_tpex_exact_native_share_volume_51_not_proven'), ...arithmetic.gaps, ...replayGaps, ...nativeGaps, ...institutionalGaps,
       'external_acquisition_and_actual_database_not_verified'])].sort() };
 }

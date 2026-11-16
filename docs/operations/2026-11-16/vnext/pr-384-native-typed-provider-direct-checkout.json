@@ -1,0 +1,22 @@
+{
+  "schema": "stockinsider-pr384-original-native-typed-provider-direct-checkout-v1",
+  "dateTaipei": "2026-11-16",
+  "testedSource": "1fae92a511f66fa7fd83506e0aa14c23152cb72b",
+  "testedTree": "01c25b3bbf85d9155760c2a014aa0d59bb627a32",
+  "scope": "isolated Contabo staging, exact checked-out source and build, no read-only fixture override",
+  "nextJs": "16.3.4",
+  "postgresql": "17.11",
+  "node": "22.14.0",
+  "fullBuild": "passed",
+  "tests": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "tapSha256": "3404a022c2e8c824da21453bfe105aeaa4027761445b2ca8fc6892c83524dab6"
+  },
+  "clusterStoppedCleanly": true,
+  "formalServiceAndTimerSignaturesEqual": true,
+  "providerPostCount": 0,
+  "requiredFormalCIComplete": false,
+  "releaseHoldRetained": true
+}

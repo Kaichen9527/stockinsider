@@ -1,0 +1,212 @@
+{
+  "schema": "stockinsider-twse-date-bound-price-limit-replay-v1",
+  "dateTaipei": "2026-11-16",
+  "source": {
+    "dataset": 11873,
+    "catalog": "https://data.gov.tw/en/datasets/11873",
+    "license": "https://data.gov.tw/license",
+    "licensedCsv": "https://www.twse.com.tw/exchangeReport/TWT84U?response=open_data",
+    "datedHumanReport": "https://www.twse.com.tw/zh/trading/delivery/twt84u.html",
+    "quoteDataset": "https://data.gov.tw/dataset/11549",
+    "diagnosticUsesDatedJsonAsCrossCheck": true,
+    "reportFieldBinding": "Current market reference is group 本日, zero-based positions 2–4. The repeated opening-reference label at position 5 belongs to 前日."
+  },
+  "officialCrossChecks": {
+    "dates": [
+      {
+        "kind": "undatedCSV",
+        "rows": 1091,
+        "recentTradeDates": [
+          "1151109",
+          "1151113",
+          "1151116"
+        ],
+        "url": "https://www.twse.com.tw/exchangeReport/TWT84U?response=open_data",
+        "observedAt": "2026-11-16T15:16:44.538161+00:00",
+        "bytes": 135472,
+        "sha256": "b74a55310bcfa9d99d776cacfb7826f165d91cd6a8128a274202f2ae89441ebb"
+      },
+      {
+        "kind": "datedCompare",
+        "date": "20261113",
+        "csv": {
+          "url": "https://www.twse.com.tw/exchangeReport/TWT84U?response=open_data&date=20261113",
+          "observedAt": "2026-11-16T15:16:45.765696+00:00",
+          "bytes": 131380,
+          "sha256": "e3ed5a0cf7a6af3c1ed54d4e568d499ef102ce24a1ee5d7f3e5bef315cd34532"
+        },
+        "json": {
+          "url": "https://www.twse.com.tw/rwd/zh/variation/TWT84U?date=20261113&selectType=ALLBUT0999&response=json",
+          "observedAt": "2026-11-16T15:16:46.544867+00:00",
+          "bytes": 136171,
+          "sha256": "89413a275f148d7684c3b8aea69b815bafc96b9d3739eefaf4e4492cd1a80b6e"
+        },
+        "csvCodeCount": 1090,
+        "jsonCodeCount": 1090,
+        "sameCodeSet": true,
+        "sameLimitsAndReferences": true,
+        "sameRecentTrades": false,
+        "sameOddLotFlags": true,
+        "defaultCSVCompleteSameDay": false,
+        "defaultCommonLimitDifferences": 1056,
+        "previousCloseZeroCases": 2
+      },
+      {
+        "kind": "datedCompare",
+        "date": "20261116",
+        "csv": {
+          "url": "https://www.twse.com.tw/exchangeReport/TWT84U?response=open_data&date=20261116",
+          "observedAt": "2026-11-16T15:16:48.121864+00:00",
+          "bytes": 131469,
+          "sha256": "7882553a5b9e4a0a120dd2fe58cb785aba62b959d0316e17e21e2bcfd45cab43"
+        },
+        "json": {
+          "url": "https://www.twse.com.tw/rwd/zh/variation/TWT84U?date=20261116&selectType=ALLBUT0999&response=json",
+          "observedAt": "2026-11-16T15:16:49.354717+00:00",
+          "bytes": 136272,
+          "sha256": "27144b7957c9bcddc576de1e6f1b7ba9eb2e4477b9367a03a13ca52bc6f32305"
+        },
+        "csvCodeCount": 1091,
+        "jsonCodeCount": 1091,
+        "sameCodeSet": true,
+        "sameLimitsAndReferences": false,
+        "sameRecentTrades": false,
+        "sameOddLotFlags": true,
+        "defaultCSVCompleteSameDay": false,
+        "defaultCommonLimitDifferences": 1053,
+        "previousCloseZeroCases": 1
+      },
+      {
+        "kind": "datedCompare",
+        "date": "20261117",
+        "csv": {
+          "url": "https://www.twse.com.tw/exchangeReport/TWT84U?response=open_data&date=20261117",
+          "observedAt": "2026-11-16T15:16:52.040448+00:00",
+          "bytes": 135472,
+          "sha256": "b74a55310bcfa9d99d776cacfb7826f165d91cd6a8128a274202f2ae89441ebb"
+        },
+        "json": {
+          "url": "https://www.twse.com.tw/rwd/zh/variation/TWT84U?date=20261117&selectType=ALLBUT0999&response=json",
+          "observedAt": "2026-11-16T15:16:54.828027+00:00",
+          "bytes": 140260,
+          "sha256": "0275c7e38a43c15db9dac33533cd2a8baf3011f87f7b66fbf38c0fbba528ff5e"
+        },
+        "csvCodeCount": 1091,
+        "jsonCodeCount": 1091,
+        "sameCodeSet": true,
+        "sameLimitsAndReferences": true,
+        "sameRecentTrades": false,
+        "sameOddLotFlags": true,
+        "defaultCSVCompleteSameDay": true,
+        "defaultCommonLimitDifferences": 0,
+        "previousCloseZeroCases": 3
+      }
+    ],
+    "numericComparison20261116": {
+      "kind": "datedCompare",
+      "date": "20261116",
+      "csv": {
+        "url": "https://www.twse.com.tw/exchangeReport/TWT84U?response=open_data&date=20261116",
+        "observedAt": "2026-11-16T15:18:20.093500+00:00",
+        "bytes": 131469,
+        "sha256": "7882553a5b9e4a0a120dd2fe58cb785aba62b959d0316e17e21e2bcfd45cab43"
+      },
+      "json": {
+        "url": "https://www.twse.com.tw/rwd/zh/variation/TWT84U?date=20261116&selectType=ALLBUT0999&response=json",
+        "observedAt": "2026-11-16T15:18:21.047311+00:00",
+        "bytes": 136272,
+        "sha256": "27144b7957c9bcddc576de1e6f1b7ba9eb2e4477b9367a03a13ca52bc6f32305"
+      },
+      "csvCodeCount": 1091,
+      "jsonCodeCount": 1091,
+      "sameCodeSet": true,
+      "differentByNumericField": [
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "referenceDifferenceExamples": [
+        [
+          "3714",
+          [
+            "105.50",
+            "96.20",
+            "86.60",
+            "",
+            ""
+          ],
+          [
+            "105.50",
+            "96.20",
+            "86.60",
+            "--",
+            "--"
+          ]
+        ]
+      ],
+      "sameRecentTrades": false,
+      "sameOddLotFlags": true,
+      "defaultCSVCompleteSameDay": false,
+      "defaultCommonLimitDifferences": 1053,
+      "previousCloseZeroCases": 1
+    },
+    "currentThreePricesMatchAcrossAll1091Codes": true,
+    "nov16DefaultPriceTupleDifferences": 1053,
+    "undatedCsvExactMatchesNov17DatedCsv": true,
+    "scope": "Limited to these response editions. Prior trade date, HTTP Date and undated endpoints are insufficient session binding."
+  },
+  "liveReceipt": {
+    "scope": "actual_staging_reports_and_offline_selected_bar_control",
+    "session": "2026-11-16",
+    "symbol": "6614",
+    "quotedClose": 40.5,
+    "upperLimit": 40.5,
+    "onePriceAtUpperLimit": true,
+    "originalCutoffAccepted": false,
+    "diagnosticAsOf": "2026-11-16T15:23:36.435Z",
+    "revisionId": "5567eefcac1652208cf7bef9e1c6f2746a8c602188e567ab6551380a856b6d0c",
+    "captures": [
+      {
+        "url": "https://www.twse.com.tw/exchangeReport/TWT84U?response=open_data&date=20261116",
+        "bytes": 131469,
+        "sha256": "7882553a5b9e4a0a120dd2fe58cb785aba62b959d0316e17e21e2bcfd45cab43",
+        "observedAt": "2026-11-16T15:23:36.377Z",
+        "recordedAt": "2026-11-16T15:23:36.377Z"
+      },
+      {
+        "url": "https://www.twse.com.tw/rwd/zh/variation/TWT84U?date=20261116&selectType=ALLBUT0999&response=json",
+        "bytes": 136272,
+        "sha256": "27144b7957c9bcddc576de1e6f1b7ba9eb2e4477b9367a03a13ca52bc6f32305",
+        "observedAt": "2026-11-16T15:23:36.162Z",
+        "recordedAt": "2026-11-16T15:23:36.162Z"
+      },
+      {
+        "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL?response=open_data",
+        "bytes": 139108,
+        "sha256": "568dad96c525b1dae3f72e4fc1f94edc3491c1fee988fc8a97d0fb9e13433000",
+        "observedAt": "2026-11-16T15:23:36.380Z",
+        "recordedAt": "2026-11-16T15:23:36.380Z"
+      }
+    ],
+    "productionAuthority": false
+  },
+  "execution": {
+    "venue": "isolated Contabo staging",
+    "node": "22.14.0",
+    "next": "16.3.4",
+    "tests": {
+      "passed": 36,
+      "total": 36,
+      "rawTapSha256": "f69c6ac4cbcf49b477cbc0e5b1838fa9841e71566a011d26d7981daa86ec1545"
+    },
+    "lint": "passed targeted",
+    "typescript": "passed",
+    "build": "passed, static generation 92/92",
+    "noProductionWrites": true,
+    "publicationAuthority": false,
+    "fullRankingVerified": false,
+    "recordedBeforeOriginalCutoff": false
+  }
+}
