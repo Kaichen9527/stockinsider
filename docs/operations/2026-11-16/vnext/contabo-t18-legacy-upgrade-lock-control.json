@@ -1,0 +1,73 @@
+{
+  "schema": "stockinsider-t18-legacy-upgrade-lock-pressure-v1",
+  "ownerTimezone": "Asia/Taipei",
+  "recordedDate": "2026-11-16",
+  "genuineBackup": {
+    "sourceDate": "2026-09-19",
+    "authenticatedByExistingCustodianDescriptor": true,
+    "databaseReceipt": {
+      "checks": {
+        "foreignKeys": 288,
+        "rlsTables": 193
+      },
+      "databaseBytes": 2258785971,
+      "lineage": null,
+      "schema": "stockinsider-owned-db-restore-v1"
+    },
+    "guardResult": {
+      "financialCommitted": false,
+      "observed": {},
+      "phase": "financial",
+      "publicationCommitted": false,
+      "reason": "",
+      "sqlstate": "53200",
+      "status": "REJECTED"
+    },
+    "coreResult": "CORE_INSTALLED_DISABLED",
+    "launchReadpoint": "SCHEMA_MISSING",
+    "latestFixedReleaseRollback": "NOT_RUN",
+    "productionSignaturesIdentical": true,
+    "nativeHoldRetained": true,
+    "stagingCleaned": true,
+    "resourceSamples": {
+      "appMemoryPeakObservedBytes": 18821120,
+      "dbMemoryPeakObservedBytes": 805310464,
+      "minimumHostAvailableMemoryBytes": 4457594880,
+      "minimumHostDiskBytes": 17337704448,
+      "minimumWorkFreeBytes": 5966036992,
+      "restMemoryPeakObservedBytes": 18882560
+    }
+  },
+  "schemaOnlyControl": {
+    "sourceDate": "2026-10-11",
+    "sourceCommit": "bb549e859ba3ae5241eec3a14bdcd84b3ac70d55",
+    "locale": "C",
+    "maxConnections": 4,
+    "changedSetting": "max_locks_per_transaction",
+    "defaultCase": {
+      "maxLocksPerTransaction": 64,
+      "exit": 3,
+      "locale": "C",
+      "stage": "rejected",
+      "phase": "capture_restore",
+      "code": "53200",
+      "reason": "out of shared memory",
+      "maxLocksHint": true,
+      "sharedMemory": true
+    },
+    "higherCase": {
+      "maxLocksPerTransaction": 256,
+      "exit": 0,
+      "locale": "C",
+      "stage": "installed-state",
+      "enabled": false,
+      "legacyFenced": true,
+      "routines": 15,
+      "jobs": 0,
+      "publications": 0,
+      "rls": 18
+    },
+    "scratchRemoved": true
+  },
+  "fullRealBackupUpgradeVerified": false
+}
