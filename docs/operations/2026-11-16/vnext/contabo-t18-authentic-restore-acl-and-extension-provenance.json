@@ -1,0 +1,263 @@
+{
+  "recordedAt": "2026-11-16T14:10:12+08:00",
+  "workItem": "T18",
+  "protectedPullRequest": 384,
+  "migrationSourceCommit": "c7056504b9976c758481e4ef46b071968ef1b390",
+  "stageHarnessCommit": "005a94e2bd99ed4d3d8964220ef41efb7575bda6",
+  "stageAdapterSha256": "b9004cac05756dba9f3864699ae0d91e25f34e1f15e76e528fafd8bb30e1c250",
+  "authenticClone": {
+    "backupDate": "2026-09-19",
+    "databaseBytes": 2258785971,
+    "foreignKeys": 288,
+    "rowLevelSecurityTables": 193,
+    "financialCommitted": true,
+    "publicationCommitted": false,
+    "namespacePredecessor": {
+      "expectedSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+      "observedSha256": "55cbb8bcf6f5d9bad5a4147734c6ced8a0c22661072e21bb32c0ed97a11fcb15",
+      "relations": 989,
+      "roles": 31,
+      "routines": 301,
+      "types": 824
+    },
+    "originalGuardRejection": "publication_tail_predecessor_namespace_mismatch",
+    "pendingPublicationMigrations": 26,
+    "nextRollback": "NOT_RUN",
+    "formalSignaturesUnchanged": true,
+    "stagingResourcesCleaned": true,
+    "holdRetained": true
+  },
+  "publicSchemaAcl": {
+    "boundaryObservations": {
+      "archivePublicAclEntries": 1,
+      "bootstrap": {
+        "aclNull": false,
+        "create": false,
+        "usage": true
+      },
+      "compatibility": {
+        "aclNull": false,
+        "create": false,
+        "usage": true
+      },
+      "disarmed": {
+        "aclNull": false,
+        "create": false,
+        "usage": true
+      },
+      "initial": {
+        "aclNull": false,
+        "create": false,
+        "usage": true
+      },
+      "restored": {
+        "aclNull": false,
+        "create": false,
+        "usage": true
+      },
+      "selectedPublicAclEntries": 1
+    },
+    "interpretation": "The newly created database already had direct PUBLIC USAGE. Bootstrap, archive import, compatibility migration, and disarm ended with the same flag. The authenticated archive had one schema-specific ACL TOC entry and the filter kept it. These snapshots do not distinguish whether that entry explicitly regranted the privilege or left it present."
+  },
+  "authLiveTransaction": {
+    "migration": "migrations/20260920_auo_forward_bvps_pb_contract_v1.sql",
+    "migrationSha256": "3341e1b34f0c94adad78950ebd7092af6233cdac79abb684ce739d3530314d52",
+    "beforeProfilesMatch": true,
+    "guardAfterBoth": "publication_tail_predecessor_namespace_mismatch",
+    "guardAfterValuation": "publication_tail_predecessor_namespace_mismatch",
+    "publicUsageRevoked": true,
+    "reviewedProfilesMatch": true,
+    "rolledBack": true,
+    "rowCountsUnchanged": true
+  },
+  "installedExtensionIdentityControl": {
+    "postgresVersion": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "method": "Independently installed the two packaged extensions in a small Unix-only PostgreSQL 17 control. Enumerated extension-owned objects with pg_depend and reproduced the SHA-256 key construction for the catalog comparison. The control used no archive, production connection, or additional persistent data.",
+    "archivedExtraIdentityCount": {
+      "relations": 2,
+      "routines": 13,
+      "types": 4
+    },
+    "comparedReportedHashes": {
+      "relations": {
+        "native": 2,
+        "published": 2,
+        "matched": 2
+      },
+      "routines": {
+        "native": 13,
+        "published": 12,
+        "matched": 12
+      },
+      "types": {
+        "native": 4,
+        "published": 4,
+        "matched": 4
+      }
+    },
+    "matches": [
+      {
+        "kind": "relations",
+        "version": "1.11",
+        "identity": "pg_stat_statements",
+        "extension": "pg_stat_statements",
+        "identitySha256": "aeca4e66fb3e16be12f8b00d7cbea698a406800d7260237b0de93d3507a9aaf6",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "relations",
+        "version": "1.11",
+        "identity": "pg_stat_statements_info",
+        "extension": "pg_stat_statements",
+        "identitySha256": "3450893556bf798183da16022cd62cad439df52f8ee0ccb3751170a4aa16ca12",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "routines",
+        "version": "1.11",
+        "identity": "extensions.pg_stat_statements(boolean)",
+        "extension": "pg_stat_statements",
+        "identitySha256": "1e07e1a6f7267bf692d108f085a074139be42dbbd9e916f01ae35816b22bccf3",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "routines",
+        "version": "1.11",
+        "identity": "extensions.pg_stat_statements_info()",
+        "extension": "pg_stat_statements",
+        "identitySha256": "8f1dc8e1ebc568794b33d125c3266262cd749a82d8f0bc926a26d9fb3abe897e",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "routines",
+        "version": "1.11",
+        "identity": "extensions.pg_stat_statements_reset(oid,oid,bigint,boolean)",
+        "extension": "pg_stat_statements",
+        "identitySha256": "60beada839fbaea5c9a6b4e6dd688f29aeafc054bd11f8fec1fbd98298cebc94",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "types",
+        "version": "1.11",
+        "identity": "_pg_stat_statements",
+        "extension": "pg_stat_statements",
+        "identitySha256": "20663203d25c8d0fc47a6da2d45dbd24441f6a4394d65d7e22ddfa2edb8d4b3b",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "types",
+        "version": "1.11",
+        "identity": "_pg_stat_statements_info",
+        "extension": "pg_stat_statements",
+        "identitySha256": "4aaa06ee75cf855039d75dbae1fc3d853af8323779c2b2170820fb3808eeb930",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "types",
+        "version": "1.11",
+        "identity": "pg_stat_statements",
+        "extension": "pg_stat_statements",
+        "identitySha256": "0d256c52191321b5971670c0fd28d5314493f5c8be6e637cafdb872b9301d4e9",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "types",
+        "version": "1.11",
+        "identity": "pg_stat_statements_info",
+        "extension": "pg_stat_statements",
+        "identitySha256": "075fb3288e3f1bb6ed469550d38f3c6ea967103b39c4d5d41674d2dbb86e6035",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "routines",
+        "version": "1.1",
+        "identity": "extensions.uuid_generate_v1()",
+        "extension": "uuid-ossp",
+        "identitySha256": "092b6268954c2de6f06b69b08bddd69fe81cb97d873b68c97e5004670090c88e",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "routines",
+        "version": "1.1",
+        "identity": "extensions.uuid_generate_v1mc()",
+        "extension": "uuid-ossp",
+        "identitySha256": "73035b827326e370268ccfd6f223797027bcd9f0414be0aa36ef91fa55816e71",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "routines",
+        "version": "1.1",
+        "identity": "extensions.uuid_generate_v3(uuid,text)",
+        "extension": "uuid-ossp",
+        "identitySha256": "2bd64101fa5ba7f238b3f617ba442d765eaf72f6acbea106770d147a93bd3216",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "routines",
+        "version": "1.1",
+        "identity": "extensions.uuid_generate_v4()",
+        "extension": "uuid-ossp",
+        "identitySha256": "38581f61712ee7c898072bb0d53870712d90d15a0a5ffab2e044e5cd9349ffa3",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "routines",
+        "version": "1.1",
+        "identity": "extensions.uuid_generate_v5(uuid,text)",
+        "extension": "uuid-ossp",
+        "identitySha256": "89a4f5dce468da425c7bb4a2ec389e904015552223a169b875ebeecd0328a80b",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "routines",
+        "version": "1.1",
+        "identity": "extensions.uuid_nil()",
+        "extension": "uuid-ossp",
+        "identitySha256": "a8d583cb414c99299e36fc1600f054f8902fb6068fefc50f20c4f27aea4cdc34",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "routines",
+        "version": "1.1",
+        "identity": "extensions.uuid_ns_dns()",
+        "extension": "uuid-ossp",
+        "identitySha256": "7169e54af532f24942ac15c3d516ce95eb9709e8f64c4fc3e6ed3b0c8e721b56",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "routines",
+        "version": "1.1",
+        "identity": "extensions.uuid_ns_oid()",
+        "extension": "uuid-ossp",
+        "identitySha256": "83939977d9312171746952ed684fdb75dfda743744de40be95dd136e6777bf0a",
+        "reportedIdentityMatch": true
+      },
+      {
+        "kind": "routines",
+        "version": "1.1",
+        "identity": "extensions.uuid_ns_url()",
+        "extension": "uuid-ossp",
+        "identitySha256": "880aaaf51120746deaf7dfd5a3a480dacc4a8cff6e06156a1393d44f0bcd5c11",
+        "reportedIdentityMatch": true
+      }
+    ],
+    "unconfirmedNativeCandidate": {
+      "kind": "routines",
+      "version": "1.1",
+      "identity": "extensions.uuid_ns_x500()",
+      "extension": "uuid-ossp",
+      "identitySha256": "67d6152291de5137d1e44b93763d559a4615fb9ed125fce329c9d21f682f325c",
+      "reportedIdentityMatch": false
+    },
+    "limitation": "The authentic predecessor report capped routine examples at 12. All published routine hashes match, and the thirteenth native extension signature is only a candidate. Names alone do not attest exact production extension version, owner, ACL or definition."
+  },
+  "cleanup": {
+    "temporaryDirectoriesAbsent": 2,
+    "diskBeforeBytes": 25915305984,
+    "diskAfterBytes": 26127011840,
+    "stagingUnitsInactive": true,
+    "minimumHostDiskDuringRunBytes": 17285607424,
+    "minimumAvailableHostMemoryDuringRunBytes": 4269740032
+  },
+  "next": "Close the remaining per-object differences with an exact isolated predecessor profile that preserves legitimate extensions and production ACLs, obtain independent review, then exercise the publication tail and fixed Next.js rollback."
+}
