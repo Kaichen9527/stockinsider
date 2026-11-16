@@ -7,6 +7,7 @@ import ts from 'typescript';
 import { drainLaunchSourceWithDependencies, classifyLaunchSourceJob, recoverLaunchSourceWithDependencies, parseLaunchSourcePlan, type LaunchSourceDependencies } from './launch-source-store.ts';
 import { tpexMarketFlowCsvUrl, TPEX_MARKET_FLOW_MAX_BYTES } from './launch-market-foreign-flow.ts';
 import { tpexInstitutionalVolumeCsvUrl } from './launch-institutional-volume.ts';
+import { TPEX_DAILY_STATUS_SOURCE } from './launch-tpex-daily-status.ts';
 import { launchDispositionSource } from './launch-disposition-status.ts';
 import { twseHistoricalCloseCsvUrl } from './launch-breadth-replay.ts';
 import { parseLaunchIndexBackfillPlan } from './launch-index-backfill.ts';
@@ -14,10 +15,10 @@ import { parseLaunchIndexBackfillPlan } from './launch-index-backfill.ts';
 const id=(value:number)=>`00000000-0000-4000-8000-${String(value).padStart(12,'0')}`;
 const now='2026-11-14T08:00:00Z',url=tpexInstitutionalVolumeCsvUrl('2026-11-13');
 /** Synthetic transport bytes; this mock does NOT execute/approve SQL facts. */
-function fixture(mode='success',datasetId:11370|11743|11764|11549|29082|11396=11370){
+function fixture(mode='success',datasetId:11370|11743|11764|11549|29082|11396|11736=11370){
   const body=mode==='oversized_market_cash'?Buffer.alloc(TPEX_MARKET_FLOW_MAX_BYTES+1,65):Buffer.from('SYNTHETIC CSV\r\n"quoted, cell","value"\r\n');
-  const actualDay=(datasetId===11549||datasetId===29082||datasetId===11396)&&mode!=='stale_twse_turnover'?'2026-11-14':'2026-11-13';
-  const sourceUrl=datasetId===29082?launchDispositionSource('TWSE',actualDay).url:datasetId===11396?launchDispositionSource('TPEX').url
+  const actualDay=(datasetId===11549||datasetId===29082||datasetId===11396||datasetId===11736)&&mode!=='stale_twse_turnover'?'2026-11-14':'2026-11-13';
+  const sourceUrl=datasetId===11736?TPEX_DAILY_STATUS_SOURCE.url:datasetId===29082?launchDispositionSource('TWSE',actualDay).url:datasetId===11396?launchDispositionSource('TPEX').url
     :datasetId===11743?tpexMarketFlowCsvUrl('2026-11-13'):datasetId===11764?twseHistoricalCloseCsvUrl('2026-11-13')
     :datasetId===11549?'https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL?response=open_data':url;
   const events:string[]=[],owner=id(1);
@@ -76,8 +77,8 @@ test('TWSE 11549 requests the catalog-linked latest-feed URL only on the claimed
     assert.equal(bad.events.includes('fetch'),mode==='generic_content_type',mode);
   }
 });
-test('disposition datasets use their exact official endpoint with ordinary owned append and ready',async()=>{
-  for(const dataset of [29082,11396] as const){
+test('exchange status datasets use their exact official endpoint with ordinary owned append and ready',async()=>{
+  for(const dataset of [29082,11396,11736] as const){
     const f=fixture('success',dataset),result=await drainLaunchSourceWithDependencies(f.deps);
     assert.equal(result.outcomes[0].status,'recorded');
     assert.equal(result.sourceAuthority,false);

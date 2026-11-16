@@ -7,6 +7,7 @@ import { officialLicensedCsvUrl } from './launch-official-replay.ts';
 import { tpexNativeShareCsvUrl } from './launch-native-volume.ts';
 import { tpexInstitutionalVolumeCsvUrl } from './launch-institutional-volume.ts';
 import { tpexMarketFlowCsvUrl, TPEX_MARKET_FLOW_MAX_BYTES } from './launch-market-foreign-flow.ts';
+import { TPEX_DAILY_STATUS_SOURCE } from './launch-tpex-daily-status.ts';
 import { launchDispositionSource } from './launch-disposition-status.ts';
 import { twseHistoricalCloseCsvUrl } from './launch-breadth-replay.ts';
 import { evidenceInstant, evidenceKnownAt } from './evidence-clock.ts';
@@ -15,13 +16,16 @@ import { parseLaunchIndexBackfillPlan, type LaunchIndexBackfillPlan } from './la
 
 type Row=Record<string,unknown>;
 type Client={rpc(name:string,body:Row):PromiseLike<{data:unknown;error:unknown}>};
-type Job={jobId:string;attemptId:string;datasetId:11370|11371|11856|11391|11755|11743|11764|11549|29082|11396;requestKey:string;sourceUrl:string;deadlineAt:string};
+type Job={jobId:string;attemptId:string;datasetId:11370|11371|11856|11391|11755|11743|11764|11549|29082|11396|11736;requestKey:string;sourceUrl:string;deadlineAt:string};
 const uuid=(value:unknown):value is string=>typeof value==='string'&&/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/u.test(value);
 const row=(value:unknown):value is Row=>!!value&&typeof value==='object'&&!Array.isArray(value);
 const exact=(value:unknown,keys:string):value is Row=>row(value)&&Object.keys(value).sort().join(' ')===keys.split(' ').sort().join(' ');
 export const launchSourcesEnabled=()=>vnextEnabled()&&process.env.STOCKINSIDER_VNEXT_LAUNCH_SOURCES_ENABLED==='true';
 function profile(datasetId:unknown,key:unknown){
   if(typeof key!=='string')throw Error('launch_source_profile_invalid');
+  if(datasetId===11736&&/^20\d{2}-\d{2}-\d{2}$/u.test(key)&&evidenceInstant(key+'T00:00:00Z')!==null){
+    return {sourceUrl:TPEX_DAILY_STATUS_SOURCE.url,maximumBytes:TPEX_DAILY_STATUS_SOURCE.maxBytes};
+  }
   if((datasetId===29082||datasetId===11396)&&/^20\d{2}-\d{2}-\d{2}$/u.test(key)&&evidenceInstant(key+'T00:00:00Z')!==null){
     const resource=datasetId===29082?launchDispositionSource('TWSE',key):launchDispositionSource('TPEX');
     return {sourceUrl:resource.url,maximumBytes:resource.maxBytes};
@@ -78,7 +82,7 @@ async function bytesOf(response:Response,maximum:number){
   if(length<2)throw Error('launch_source_response_rejected');
   return Buffer.concat(chunks,length);
 }
-const sessionBoundDatasets = new Set<number>([11549, 29082, 11396]);
+const sessionBoundDatasets = new Set<number>([11549, 29082, 11396, 11736]);
 async function consume(deps:LaunchSourceDependencies,owner:string,claimed:Job){
   let phase:'transport'|'artifact'|'complete'='transport';let bytes:Buffer|undefined;
   try{
