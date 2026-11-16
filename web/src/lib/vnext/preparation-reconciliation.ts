@@ -6,6 +6,7 @@ import type {TwEntryHistoricalAuthorityResult} from '../tw-entry-plan-authority.
 import type {VnextIdentity} from './auth.ts';
 import type {Evidence} from './research.ts';
 import {inputHash} from './policy.ts';
+import {LAUNCH_RANKING_POLICY} from './launch-ranking-read.ts';
 import {FINANCIAL_PROVIDER_PROTOCOL,resolveFinancialEvidenceSources} from './financial-evidence-sources.ts';
 import {currentPriceEvidence} from './cached-price-factors.ts';
 import {currentPreparationInstrument,PREPARATION_INSTRUMENT_COLUMNS} from './preparation-trading-identity.ts';
@@ -26,6 +27,13 @@ export function partialMopsSymbolFromWorkContext(context: Row, symbol: string, p
   throw Error('vnext_financial_partial_mops_context_invalid');
  }
  return symbol;
+}
+export function launchFinancialAbsenceAllowed(context:Row,protocol:FinancialProviderProtocol){
+ const marker=(context.evidence as Row|null)?.researchPolicyVersion;
+ if(marker===undefined&&context.researchPolicyVersion===undefined)return false;
+ if(marker!==LAUNCH_RANKING_POLICY||context.researchPolicyVersion!==LAUNCH_RANKING_POLICY||protocol!==FINANCIAL_PROVIDER_PROTOCOL)
+  throw Error('vnext_launch_research_policy_unavailable');
+ return true;
 }
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu;
 const hash=/^[a-f0-9]{64}$/u;
@@ -52,7 +60,7 @@ export function freezeFinancialPreparation(original:Row,historical:TwEntryHistor
   ...(actionTerms?{actionTermsReceipts:actionTerms.receipts,actionTermsAsOf:actionTerms.asOf,actionTermsGaps:actionTerms.gaps}:{}),
   financialObservationInventory:financialSources.observationInventory??null,
   financialSourceDeferrals:{count:financialSources.deferredCount,digest:financialSources.deferredDigest,details:financialSources.deferredDetails,detailsTruncated:financialSources.deferredDetailsTruncated},
-  gaps:[...(Array.isArray(original.gaps)?original.gaps:[]),...financialSources.gaps,...(forecasts?.gaps||[]),...(actionTerms?.gaps||[]),...(!currentPrice?['current_price_authority_unavailable',...historical.missingData]:[])],
+  gaps:[...(Array.isArray(original.gaps)?original.gaps:[]),...financialSources.gaps,...(original.researchPolicyVersion===LAUNCH_RANKING_POLICY&&financialSources.evidence.length===0?['launch_fundamentals_unavailable']:[]),...(forecasts?.gaps||[]),...(actionTerms?.gaps||[]),...(!currentPrice?['current_price_authority_unavailable',...historical.missingData]:[])],
   evidence:[...(Array.isArray(original.evidence)?original.evidence as Evidence[]:[]).filter(e=>!replaceReportedFinancial(e,priorFinancialIds)&&!evidence.some(f=>f.id===e.id)),...evidence]};
  return {inputHash:inputHash(frozen),evidence:frozen};
 }
@@ -69,7 +77,7 @@ async function currentContext(deps:PreparationDependencies,state:Row){
  const context=await deps.command('work-context',{jobId:state.jobId,executionId:state.executionId});
  if(context.inputHash!==state.inputHash || !context.evidence || typeof context.evidence!=='object' || Array.isArray(context.evidence))throw Error('vnext_preparation_context_changed');
  const protocol=financialProtocolFromWorkContext(context);
- return {evidence:context.evidence as Row,protocol,partialMopsSymbol:partialMopsSymbolFromWorkContext(context,String(state.symbol),protocol)};
+ return {evidence:context.evidence as Row,protocol,financeOptional:launchFinancialAbsenceAllowed(context,protocol),partialMopsSymbol:partialMopsSymbolFromWorkContext(context,String(state.symbol),protocol)};
 }
 async function readJournal(deps:PreparationDependencies,state:Row,identity:VnextIdentity){
  const record=await deps.journal('read',{jobId:state.jobId,executionId:state.executionId});
@@ -103,7 +111,7 @@ async function signalSession(client:Client,exchange:string,cutoff:string){
  }
  return [...heads.values()].filter(row=>row.status==='completed' && known(row.close_at,cutoff)).map(row=>String(row.session_id)).sort().at(-1)||'';
 }
-async function cachedProjection(deps:PreparationDependencies,state:Row,original:Row,cutoff:string,identity:VnextIdentity,protocol:FinancialProviderProtocol,partialMopsSymbol:string|null){
+async function cachedProjection(deps:PreparationDependencies,state:Row,original:Row,cutoff:string,identity:VnextIdentity,protocol:FinancialProviderProtocol,partialMopsSymbol:string|null,financeOptional:boolean){
  const stocks=await deps.client.from('stocks').select('id,symbol,market').eq('symbol',String(state.symbol)).eq('market','TW').maybeSingle();
  if(stocks.error)throw Error('vnext_stock_authority_read_uncertain');
  if(!stocks.data)return {status:'gap',reason:'vnext_stock_authority_missing'};
@@ -140,7 +148,7 @@ async function cachedProjection(deps:PreparationDependencies,state:Row,original:
    && typeof row.acquisition_job_id==='string' && verifiedReceipts.has(row.receipt_id)).map(row=>row.acquisition_job_id));
   if(pendingJobs.some(job=>!explainedJobs.has(job.job_id)))return pendingResult;
  }
- if(!financial.evidence.length)return {status:'gap',reason:'vnext_validated_financial_data_missing',gaps:financial.gaps};
+ if(!financial.evidence.length&&!financeOptional)return {status:'gap',reason:'vnext_validated_financial_data_missing',gaps:financial.gaps};
  const session=await signalSession(deps.client,exchange,cutoff);
  const historical=await deps.historical({stockId,symbol:String(state.symbol),exchange,signalSession:session,cutoff});
  const forecasts=await readCurrentForecasts(deps.client,identity,String(state.jobId),String(state.executionId));
@@ -173,12 +181,12 @@ export async function reconcilePreparation(identity:VnextIdentity,body:Row,deps:
  }
  if(journal.invocation_id)return unresolved('provider_invocation_already_exists',descriptor);
  let cached:Row;
- try{cached=await cachedProjection(deps,state,context.evidence,now(),identity,context.protocol,context.partialMopsSymbol);}catch{return unresolved('cached_financial_authority_unresolved',descriptor);}
+ try{cached=await cachedProjection(deps,state,context.evidence,now(),identity,context.protocol,context.partialMopsSymbol,context.financeOptional);}catch{return unresolved('cached_financial_authority_unresolved',descriptor);}
  // Recheck original rights/admission and the exact execution after all reads.
  let after:Row;
  try{
   const latest=await currentContext(deps,state);
-  if(latest.protocol!==context.protocol||latest.partialMopsSymbol!==context.partialMopsSymbol)return unresolved('financial_provider_protocol_changed',descriptor);
+  if(latest.protocol!==context.protocol||latest.financeOptional!==context.financeOptional||latest.partialMopsSymbol!==context.partialMopsSymbol)return unresolved('financial_provider_protocol_changed',descriptor);
   after=await deps.journal('inspect',{jobId});journal=await readJournal(deps,state,identity);
  }catch{return unresolved('active_work_context_changed',descriptor);}
  if(!sameExecution(state,after) || journal.invocation_id || Date.parse(state.deadline)<=Date.parse(now()))return unresolved('original_execution_changed_or_expired',descriptor);

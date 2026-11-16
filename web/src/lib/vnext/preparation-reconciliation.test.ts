@@ -17,7 +17,10 @@ const cutoff='2026-10-23T01:00:00.000Z',sourceAt='2026-10-22T06:00:00.000Z';
  * does not prove real financial authority, leases, SQL or a model invocation. */
 function fixture(mode='ready'){
  const calls:string[]=[];
+ const launchPolicy='stockinsider-launch-radar-v1';
+ const launch=mode.startsWith('launch_');
  const original:Row={hash:inputHash('synthetic-admission'),evidence:[],gaps:['prior_gap']};
+ if(launch)original.researchPolicyVersion=launchPolicy;
  const state:Row={jobId,symbol:'2330',state:'running',executionId,inputHash:inputHash(original),prepared:false,deadline:'2026-10-23T01:01:00.000Z'};
  let context=original;
  const fact:Row={fact_id:'00000000-0000-4000-8000-000000000004',stock_id:stockId,fact_key:'quarterly_revenue',period_end:'2026-06-30',duration_kind:'quarterly',value:100,unit:'TWD',provider:'tpex',authority_tier:'official_filing',estimate_kind:'reported',estimate_horizon:'reported_period',source_ref:'tpex-openapi:synthetic-original',source_timestamp:sourceAt,collected_at:sourceAt,recorded_at:sourceAt,validation_status:'validated',schema_valid:true,unit_valid:true,point_in_time_valid:true,consistency_valid:true};
@@ -82,7 +85,7 @@ function fixture(mode='ready'){
  },rpc(name:string,args:Row){
   if(name==='vnext_action_terms_read_v1'){calls.push('action-current');assert.deepEqual(args,{p_principal:author.principal,p_job:jobId,p_execution:executionId});return Promise.resolve({data:{schemaVersion:'vnext-current-action-terms-v1',stockId,symbol:'2330',asOf:cutoff,evidence:[],receipts:[],gaps:[]},error:null});}
   if(name==='vnext_forecast_read_v1'){calls.push('forecast-current');assert.deepEqual(args,{p_principal:author.principal,p_job:jobId,p_execution:executionId});return Promise.resolve({data:{schemaVersion:'vnext-current-forecasts-v1',stockId,symbol:'2330',asOf:cutoff,evidence:[],receipts:[],gaps:[]},error:null});}
-  if(name==='read_financial_facts_for_stocks_as_of'){calls.push('financial-asof');assert.deepEqual(args.p_stock_ids,[stockId]);return {limit:async(count:number)=>{assert.equal(count,2001);return {data:mode==='empty_facts'?[]:facts,error:mode==='facts_read_lost'?{message:'uncertain'}:null};}};}
+  if(name==='read_financial_facts_for_stocks_as_of'){calls.push('financial-asof');assert.deepEqual(args.p_stock_ids,[stockId]);return {limit:async(count:number)=>{assert.equal(count,2001);return {data:mode==='empty_facts'||launch?[]:facts,error:mode==='facts_read_lost'||mode==='launch_unreadable'?{message:'uncertain'}:null};}};}
   if(name==='vnext_provider_command_v1')return journal(String(args.p_command) as 'inspect'|'read',args.p_request as Row).then(data=>({data,error:null}));
   assert.equal(name,'vnext_command_v1');return command(String(args.p_command),args.p_request as Row).then(data=>({data,error:null}));
  }} as unknown as PreparationDependencies['client'];
@@ -103,7 +106,7 @@ function fixture(mode='ready'){
  }
  async function command(action:string,body:Row){
   calls.push(action);assert.ok(['work-context','prepare'].includes(action),`forbidden operation ${action}`);assert.equal(body.jobId,jobId);assert.equal(body.executionId,executionId);
-  if(action==='work-context'){if(mode==='rights_withdrawn')throw Error('vnext_research_original_rights_no_longer_current');return {inputHash:state.inputHash,evidence:context};}
+  if(action==='work-context'){if(mode==='rights_withdrawn')throw Error('vnext_research_original_rights_no_longer_current');return {inputHash:state.inputHash,evidence:context,...(launch?{financialProviderProtocol:FINANCIAL_PROVIDER_PROTOCOL,...(mode==='launch_unbound'?{}:{researchPolicyVersion:launchPolicy})}:{})};}
   if(state.prepared===true){if(body.inputHash!==state.inputHash)throw Error('vnext_frozen_preparation_conflict');return {inputHash:state.inputHash,replay:true};}
   state.prepared=true;state.inputHash=body.inputHash;context=body.evidence as Row;
   if(mode==='prepare_response_lost')throw Error('uncertain committed mutation response');
@@ -281,4 +284,21 @@ test('actual cached preparation keeps rejected head visible to selector and cann
  assert.equal(evidence.some(e=>e.key==='quarterly_basic_eps'),false);assert.ok(evidence.some(e=>e.id==='SYNTHETIC_SOURCE_CLUE'));
  assert.ok(evidence.some(e=>e.id==='forecast:SYNTHETIC'&&e.kind==='assumption'));
  assert.equal(JSON.stringify(f.original),before);assert.equal(f.calls.filter(c=>c==='prepare').length,1);
+});
+
+test('authoritative launch work prepares with empty financial facts and recovers the same frozen revision',async()=>{
+ const f=fixture('launch_empty');
+ const ready=await reconcilePreparation(author,{jobId},f.deps);
+ assert.equal(ready.status,'ready');assert.equal(ready.financialFacts,0);assert.equal(ready.entryEligible,false);
+ const prepared=await reconcilePreparation(author,{jobId},f.deps,true);
+ assert.equal(prepared.status,'prepared');
+ assert.deepEqual(f.readContext().financialProviderInput,{schemaVersion:FINANCIAL_PROVIDER_PROTOCOL,facts:[]});
+ assert.ok((f.readContext().gaps as string[]).includes('launch_fundamentals_unavailable'));
+ assert.equal((await reconcilePreparation(author,{jobId},f.deps,true)).inputHash,prepared.inputHash);
+ assert.equal(f.calls.filter(call=>call==='prepare').length,1);
+ for(const mode of ['launch_unbound','launch_unreadable']){
+  const refused=fixture(mode);
+  assert.equal((await reconcilePreparation(author,{jobId},refused.deps,true)).status,'unresolved');
+  assert.equal(refused.calls.includes('prepare'),false);
+ }
 });

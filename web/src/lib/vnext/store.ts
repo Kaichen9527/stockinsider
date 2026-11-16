@@ -33,10 +33,19 @@ export function normalizedInput(symbol: string, value: Row, audit?:TrustedThesis
 }
 export async function command(identity: VnextIdentity, command: string, request: Row) {
   if (!vnextEnabled() || !identity.principal) throw new Error('vnext_authority_not_configured');
-  const result = await getSupabaseServerClient().rpc('vnext_command_v1', { p_principal: identity.principal, p_command: command, p_request: request });
+  const client=getSupabaseServerClient();
+  const result = await client.rpc('vnext_command_v1', { p_principal: identity.principal, p_command: command, p_request: request });
   if (result.error) throw new Error(`vnext_authority_rejected:${result.error.message}`);
   if (!result.data || typeof result.data !== 'object') throw new Error('vnext_authority_receipt_missing');
-  return result.data as Row;
+  const receipt=result.data as Row;
+  if(command!=='work-context'||(receipt.evidence as Row|null)?.researchPolicyVersion===undefined)return receipt;
+  const {LAUNCH_RANKING_POLICY}=await import('./launch-ranking-read.ts');
+  if(identity.role!=='author'||(receipt.evidence as Row).researchPolicyVersion!==LAUNCH_RANKING_POLICY)throw Error('vnext_launch_research_policy_unavailable');
+  const policy=await client.rpc('vnext_launch_research_policy_v1',{
+    p_principal:identity.principal,p_job:request.jobId,p_execution:request.executionId,p_input_hash:receipt.inputHash,
+  });
+  if(policy.error||policy.data?.researchPolicyVersion!==LAUNCH_RANKING_POLICY)throw Error('vnext_launch_research_policy_unavailable');
+  return {...receipt,researchPolicyVersion:LAUNCH_RANKING_POLICY};
 }
 export async function enqueue(identity: VnextIdentity, body: Row, entrypoint: string, audits?:Record<string,TrustedThesisAdmission>) {
   const symbols = explicitScope(body.symbols ?? (body.symbol ? [body.symbol] : undefined));
@@ -47,7 +56,13 @@ export async function enqueue(identity: VnextIdentity, body: Row, entrypoint: st
     const value = raw?.[symbol]; if (!value) throw new Error('vnext_frozen_input_required');
     inputs[symbol] = normalizedInput(symbol, value, audits?.[symbol]);
   }
-  return (await import('./cached-admission.ts')).cachedAdmissionCommand(identity,'enqueue',{symbols,inputs,requestKey:body.requestKey,entrypoint});
+  const request={symbols,inputs,requestKey:body.requestKey,entrypoint};
+  const enabled=process.env.STOCKINSIDER_LAUNCH_RANKING_ENABLED==='true'&&(await import('./launch-ranking-read.ts')).launchRankingEnabled();
+  if(!enabled)return (await import('./cached-admission.ts')).cachedAdmissionCommand(identity,'enqueue',request);
+  if(identity.role!=='operator'||!identity.principal)throw Error('vnext_launch_research_operator_required');
+  const result=await getSupabaseServerClient().rpc('vnext_launch_enqueue_research_v1',{p_principal:identity.principal,p_request:request});
+  if(result.error||!result.data||typeof result.data!=='object')throw Error('vnext_launch_research_admission_unavailable');
+  return result.data as Row;
 }
 export async function submitAuthor(identity: VnextIdentity, body: Row) {
   // Original evidence is returned by an authenticated author claim; it is read
@@ -96,6 +111,14 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
     receipt = await command(identity, 'claim', { jobId: body.jobId });
     if (receipt.execute !== true) return receipt;
     const activeReceipt = receipt;
+    if((activeReceipt.evidence as Row|null)?.researchPolicyVersion!==undefined){
+      const policyContext=await command(identity,'work-context',{jobId:activeReceipt.jobId,executionId:activeReceipt.executionId});
+      if(policyContext.inputHash!==activeReceipt.inputHash || !(policyContext.evidence as Row|null)?.researchPolicyVersion)
+        throw Error('vnext_launch_research_policy_unavailable');
+      const {financialProtocolFromWorkContext,launchFinancialAbsenceAllowed}=await import('./preparation-reconciliation.ts');
+      if(!launchFinancialAbsenceAllowed(policyContext,financialProtocolFromWorkContext(policyContext)))
+        throw Error('vnext_launch_research_policy_unavailable');
+    }
     const context = { symbol: String(receipt.symbol), jobId: String(receipt.jobId), executionId: String(receipt.executionId),
       verify: async () => { await command(identity, 'work-context', { jobId: activeReceipt.jobId, executionId: activeReceipt.executionId }); } };
     const result = await runAdmittedResearch(context, async () => {
@@ -122,14 +145,15 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
       const official = await writer.supabase.rpc('read_financial_facts_for_stocks_as_of', { p_cutoff: frozenAt, p_stock_ids: [stocks.data.id] }).limit(2001);
       const facts=financialRowsAtCutoff(official.data,[String(stocks.data.id)],frozenAt);
       if (official.error || !facts) throw new Error('vnext_preparation_verified_facts_unavailable');
-      const {financialProtocolFromWorkContext,freezeFinancialPreparation,partialMopsSymbolFromWorkContext}=await import('./preparation-reconciliation.ts');
+      const {financialProtocolFromWorkContext,freezeFinancialPreparation,launchFinancialAbsenceAllowed,partialMopsSymbolFromWorkContext}=await import('./preparation-reconciliation.ts');
       const active=await command(identity,'work-context',{jobId:context.jobId,executionId:context.executionId});
       if(active.inputHash!==activeReceipt.inputHash)throw Error('vnext_preparation_context_changed');
       const protocol=financialProtocolFromWorkContext(active);
       const partialMopsSymbol=partialMopsSymbolFromWorkContext(active,context.symbol,protocol);
       const {resolveFinancialEvidenceSources}=await import('./financial-evidence-sources.ts');
       const financialSources=await resolveFinancialEvidenceSources(writer.supabase,facts,frozenAt,protocol,partialMopsSymbol);
-      if(financialSources.evidence.length===0)throw new Error('vnext_validated_financial_data_missing');
+      const financeOptional=launchFinancialAbsenceAllowed(active,protocol);
+      if(financialSources.evidence.length===0&&!financeOptional)throw new Error('vnext_validated_financial_data_missing');
       const original = activeReceipt.evidence as Row;
       const {readCurrentForecasts}=await import('./forecast-current.ts');
       const forecasts=await readCurrentForecasts(writer.supabase,identity,String(context.jobId),String(context.executionId));
@@ -140,7 +164,7 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
       if(protocol){
         const latest=await command(identity,'work-context',{jobId:context.jobId,executionId:context.executionId});
         const latestProtocol=financialProtocolFromWorkContext(latest);
-        if(latest.inputHash!==active.inputHash||latestProtocol!==protocol||partialMopsSymbolFromWorkContext(latest,context.symbol,latestProtocol)!==partialMopsSymbol)throw Error('vnext_preparation_context_changed');
+        if(latest.inputHash!==active.inputHash||latestProtocol!==protocol||launchFinancialAbsenceAllowed(latest,latestProtocol)!==financeOptional||partialMopsSymbolFromWorkContext(latest,context.symbol,latestProtocol)!==partialMopsSymbol)throw Error('vnext_preparation_context_changed');
       }
       const {inputHash:preparedHash,evidence:frozen}=freezeFinancialPreparation(original,historical,financialSources,new Date().toISOString(),forecasts,actionTerms,protocol);
       await command(identity, 'prepare', { jobId: context.jobId, executionId: context.executionId, inputHash: preparedHash, evidence: frozen });
