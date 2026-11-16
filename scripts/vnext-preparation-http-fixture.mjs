@@ -26,7 +26,7 @@ export const preparationColumns={
  candidate_financial_fact_provenance_v4:'provenance_id,fact_id,acquisition_job_id,issuer_document_id,source_url,source_sha256,locator,extracted_at,recorded_at',
  candidate_financial_document_fact_links_v8:'receipt_id,fact_id,fact_recorded_at,evidence_id,created_at',
  candidate_financial_acquisition_jobs_v4:'job_id,stock_id,period_end,status,terminal_reason,response_sha256,source_url,collected_at,created_at,updated_at',
- candidate_financial_document_receipts_v6:'receipt_id,stock_id,issuer_document_id,source_url,period_end,document_sha256,receipt_status,parser_status,published_at,accepted_at,completed_at,parser_evidence_id,financial_validation_status',
+ candidate_financial_document_receipts_v6:'receipt_id,acquisition_job_id,stock_id,issuer_document_id,source_url,period_end,document_sha256,receipt_status,parser_status,published_at,accepted_at,completed_at,parser_evidence_id,financial_validation_status',
  candidate_issuer_ir_document_queue_v4:'document_id,stock_id,document_url,document_sha256,acquisition_status,collected_at,recorded_at',
  candidate_issuer_document_domains_v6:'stock_id,host,approved_at',candidate_financial_parser_evidence_v8:'evidence_id,receipt_id,document_sha256,manifest_sha256,recorded_at',
  tw_trading_sessions_v3:'session_authority_id,session_id,market,open_at,close_at,status,provider,source_timestamp,collected_at,source_ref,recorded_at',

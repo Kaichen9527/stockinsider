@@ -1,0 +1,121 @@
+{
+  "schema": "stockinsider-pr384-native-preparation-http-recovery-v1",
+  "executedDateTaipei": "2026-11-16",
+  "pr": 384,
+  "sourceCommit": "55f29e5a22b0ed1a744c35993f403f35abcf65d4",
+  "sourceTree": "fe00e863db288f4363a59953b9a431384dcbcb23",
+  "environment": {
+    "host": "isolated Contabo staging",
+    "fullWebBuildPassed": true,
+    "nextVersion": "16.3.4",
+    "nodeVersion": "22.14.0",
+    "postgresVersion": "17.11",
+    "requiredServerFilesSha256": "b948aad4be25c0a5add6d812a43f19b86c71105269fc2100b6e3e0202804fb90",
+    "testWorktreesOnMac": false,
+    "productionAccess": false
+  },
+  "priorCatalogTimeout": {
+    "correctedBy": "356ed575282b8075157e24247a9d7d0e90618460",
+    "stoppedInThisPhaseOnCurrent": false,
+    "forecastMigrationsApplied": [
+      "forecast-sources",
+      "forecast-active"
+    ]
+  },
+  "before": {
+    "bridge": "closed staging-only PostgreSQL REST proxy",
+    "missingRequiredProjection": {
+      "table": "candidate_financial_document_receipts_v6",
+      "column": "acquisition_job_id"
+    },
+    "readerRejection": "cached_financial_authority_unresolved",
+    "failedStage": "running_read_reports_real_cached_financial_ready_without_any_write",
+    "tapSha256": "cbd806e2db4422b2f2ad0fd795618c93ff40b419c675c42c657d69d5668f5d5c",
+    "testTotals": {
+      "tests": 4,
+      "pass": 2,
+      "fail": 2,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "change": {
+    "fixture": "scripts/vnext-preparation-http-fixture.mjs",
+    "originalGitBlob": "82c8b19b971b4d43b8890666b2b42569c0e8e551",
+    "fixtureSha256": "66ee484cda28b573d29946d35e6777610dd57421277232b97ff0379010d997ef",
+    "authority": "same fixed source/build and production migrations; applied changed fixture via staging readonly bind",
+    "productSourceChanged": false,
+    "sqlPermissionsChanged": false,
+    "otherProjectionRulesChanged": false,
+    "originalTestsInstalled": true,
+    "nodeSyntaxPassed": true
+  },
+  "after": {
+    "tapSha256": "30202df49aab3d4e1e4027ebab0af86fe2ea20b18127f04aeee75b2d8689b2d6",
+    "testTotals": {
+      "tests": 7,
+      "pass": 5,
+      "fail": 2,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "recovery": {
+      "loss": {
+        "commitReady": "I",
+        "responseBytesSent": 0,
+        "socketClosed": true,
+        "socketDestroyed": true
+      },
+      "httpReceiptSha256": "06dbdc5b604dc1b798f773d2db300217f6a69c6d314443703289f313e9bf82d5",
+      "actualHttp": true,
+      "actualDatabase": true,
+      "syntheticIssuerParserOnly": true,
+      "noSecondClaimPrepareProviderOrLease": true,
+      "providerActualModel": false,
+      "claimEventsInHttpTrace": 0,
+      "totalPrepareAttempts": 1,
+      "totalPrepareCommitted": 1,
+      "remainingPreparationRowsAtRecovery": 1,
+      "providerRowsAtRecovery": 0,
+      "leasesAtRecovery": 0,
+      "cleanup": {
+        "appClosed": true,
+        "containmentUsed": false,
+        "appProcessAbsent": true,
+        "ownedOnly": true
+      },
+      "recovery": [
+        {
+          "action": "preparation-read",
+          "status": "prepared",
+          "reinvoke": false,
+          "automaticResume": false
+        },
+        {
+          "action": "resume-preparation",
+          "status": "prepared",
+          "reinvoke": false,
+          "automaticResume": false
+        }
+      ]
+    },
+    "remainingFailure": {
+      "stage": "frozen_actual_provider_input_and_current_forecast_use_revocation",
+      "code": "P0001",
+      "reason": "vnext_worker_approved_original_sources_required",
+      "failedAt": "scripts/vnext-preparation-http-fixture.mjs:271",
+      "positiveModelInvocation": false
+    },
+    "resources": {
+      "peakSuiteRssBytes": 1149394944,
+      "minScratchFreeBytes": 21297078272,
+      "resourceViolation": null,
+      "samples": 245
+    }
+  },
+  "isolatedDatabaseStopped": true,
+  "formalServiceSignaturesMatched": true,
+  "holdRetained": true
+}
