@@ -1,0 +1,67 @@
+{
+  "schema": "stockinsider-t10-signed-first-party-11549-v1",
+  "recordedAt": "2026-11-16T14:11:17Z",
+  "codeCommit": "11adb2d4056f7f8d3df9bd6258242ce714ae68c0",
+  "runtime": {
+    "venue": "isolated Contabo staging",
+    "postgres": "17.11",
+    "postgrest": "16.3",
+    "separateUnixSockets": true,
+    "productionConfigMounted": false,
+    "stageUnitCollected": true
+  },
+  "auth": {
+    "badSignatureHttp": 401,
+    "ephemeralPostgrestUnixOnly": true,
+    "leaseReleased": true,
+    "writesAfterNegativeRequests": 0,
+    "wrongLeaseHttp": 400,
+    "wrongWriterReleaseHttp": 400
+  },
+  "data": {
+    "artifactReadbackVerified": true,
+    "availableAt": "2026-11-16T14:10:13.054552+00:00",
+    "bytes": 139108,
+    "duplicateReadySameId": true,
+    "facts": 1099,
+    "lookup": {
+      "captures": 1,
+      "facts": 1099,
+      "legacy": 0,
+      "ready": 1,
+      "sourceVisibleNow": true,
+      "symbols": 1099,
+      "visibleAtOriginal2130": false
+    },
+    "observedAt": "2026-11-16T14:10:11.727540+00:00",
+    "originalCutoff": "2026-11-16T21:30:00+08:00",
+    "requestedAt": "2026-11-16T14:10:10.222570+00:00",
+    "rows": 1390,
+    "session": "2026-11-16",
+    "sha256": "568dad96c525b1dae3f72e4fc1f94edc3491c1fee988fc8a97d0fb9e13433000",
+    "source": "https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL?response=open_data"
+  },
+  "formalServiceWrites": false,
+  "resourceStart": {
+    "availableMemoryBytes": 4501921792,
+    "freeDiskBytes": 26153304064
+  },
+  "reviewedGuardsInstalled": true,
+  "scope": "isolated signed writer; real official payload; seeded staging calendar and operator",
+  "scratchRemoved": true,
+  "baseline": {
+    "priorTimedOfficialCaptureAt": "2026-11-16T13:26:04.532532+00:00",
+    "rawShaMatchesPriorSameSession": true,
+    "observationsPreservedAsSeparateEvents": true
+  },
+  "scopeNotes": {
+    "firstPartyHttpFetchedAfterActualQueueClaim": true,
+    "syntheticResearchSeed": true,
+    "seededOfficialDayContext": true,
+    "upstreamCalendarIngestionVerified": false,
+    "productionIdentityUsed": false,
+    "fullRankingSessionVerified": false,
+    "productionSnapshotWritten": false,
+    "twentySessionWindowVerified": false
+  }
+}
