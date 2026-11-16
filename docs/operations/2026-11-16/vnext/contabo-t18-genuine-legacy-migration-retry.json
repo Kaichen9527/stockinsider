@@ -1,0 +1,96 @@
+{
+  "schema": "stockinsider-t18-genuine-backup-migration-retry-v1",
+  "recordedDateTaipei": "2026-11-16",
+  "backupSourceDate": "2026-09-19",
+  "migrationSourceCommit": "bb549e859ba3ae5241eec3a14bdcd84b3ac70d55",
+  "stagingLauncherSourceCommit": "005a94e2bd99ed4d3d8964220ef41efb7575bda6",
+  "temporaryRetryAdapterSha256": "49c38ac4fe716306fa7ddf224ca22156607ff9d4992543d710054ef62be5d02b",
+  "backupAuthenticatedByExistingCustody": true,
+  "postgresqlVersion": "17.11",
+  "realBackupVerified": {
+    "checks": {
+      "foreignKeys": 288,
+      "rlsTables": 193
+    },
+    "databaseBytes": 2258785971,
+    "lineage": null,
+    "schema": "stockinsider-owned-db-restore-v1"
+  },
+  "changedCloneSetting": "max_locks_per_transaction",
+  "control": [
+    {
+      "setting": 64,
+      "result": {
+        "financialCommitted": false,
+        "observed": {},
+        "phase": "financial",
+        "publicationCommitted": false,
+        "reason": "",
+        "sqlstate": "53200",
+        "status": "REJECTED"
+      }
+    },
+    {
+      "setting": 256,
+      "result": {
+        "financialCommitted": false,
+        "observed": {},
+        "phase": "financial",
+        "publicationCommitted": false,
+        "reason": "",
+        "sqlstate": "23514",
+        "status": "REJECTED"
+      }
+    }
+  ],
+  "constraintNameObserved": false,
+  "migrationFileObserved": false,
+  "coreRehearsal": {
+    "core": {
+      "anonDirectRead": false,
+      "jobs": 0,
+      "legacyFenced": false,
+      "modeEnabled": false,
+      "publications": 0,
+      "rlsOwnedTables": 14,
+      "serviceDirectRead": false,
+      "writerFences": 14
+    },
+    "legacyPredecessors": {
+      "public.admit_research_observed_roster_v1(text,text)": "MISSING",
+      "public.assign_research_reviewer_v2(jsonb,uuid,text,text,text,uuid,text)": "MISSING",
+      "public.charge_research_deep_admission_v1()": "MISSING",
+      "public.claim_candidate_deep_outbox_v1(uuid,text,integer,uuid,text,text)": "MISSING",
+      "public.claim_candidate_dossier_outbox_v5(text,integer)": "DEFINITION_OR_AUTHORITY_DIFFERS",
+      "public.claim_research_deep_job_v1(text)": "MISSING",
+      "public.claim_research_observed_job_v2(text,text)": "MISSING",
+      "public.enqueue_research_deep_jobs_v1(uuid)": "MISSING",
+      "public.receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb)": "MISSING",
+      "public.record_budgeted_deep_review_v1(uuid,integer,uuid,jsonb)": "MISSING",
+      "public.record_candidate_deep_submission_v1(uuid,text,integer,uuid,text,uuid,text,uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)": "MISSING",
+      "public.record_candidate_dossier_submission_v4(uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)": "DEFINITION_OR_AUTHORITY_DIFFERS",
+      "public.record_candidate_dossier_submission_v6(uuid,text,uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)": "MISSING",
+      "public.reserve_research_model_v1(text,text,text)": "MISSING",
+      "public.store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)": "MISSING"
+    },
+    "probeRolledBack": true,
+    "status": "CORE_INSTALLED_DISABLED"
+  },
+  "latestLaunchReadpoint": "SCHEMA_MISSING",
+  "latestFixedReleaseRollback": "NOT_RUN",
+  "resourceSamples": {
+    "appMemoryPeakObservedBytes": 18890752,
+    "dbMemoryPeakObservedBytes": 805310464,
+    "minimumHostAvailableMemoryBytes": 4442214400,
+    "minimumHostDiskBytes": 17338896384,
+    "minimumWorkFreeBytes": 5971505152,
+    "restMemoryPeakObservedBytes": 18890752
+  },
+  "officialSignaturesIdentical": true,
+  "hostStagingResourcesCleaned": true,
+  "cleanup": {
+    "temporaryRunnerRemoved": true,
+    "freeBytesAfterCleanup": 26142326784
+  },
+  "releaseHoldRetained": true
+}
