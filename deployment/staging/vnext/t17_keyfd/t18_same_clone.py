@@ -79,6 +79,29 @@ LAUNCH_API='/api/launch-ranking'
 LAUNCH_BINDING_KEYS=frozenset(('rank','symbol','revisionId','scoreRevision','launchQualificationRevision','inputHash'))
 LAUNCH_UUID=re.compile(r'[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}')
 LAUNCH_DIGEST=re.compile(r'[0-9a-f]{64}')
+LAUNCH_MIGRATION_MARKERS=frozenset(('writerFence','opportunityOwner','marketCalendar','priceHistory','corporateActionHistory','vnextCore','vnextWorker','sourceAuthority','businessAuthority','tradingAuthority','actionTermsAuthority','nativeCsvReady','launchRankingRead','launchOutcomeRead'))
+LAUNCH_MIGRATION_PROBE_SQL=br"""
+\set QUIET 1
+BEGIN READ ONLY;
+SET LOCAL search_path=pg_catalog;
+SELECT jsonb_build_object(
+ 'writerFence',(to_regprocedure('public.enforce_production_writer_fence()') IS NOT NULL),
+ 'opportunityOwner',(EXISTS(SELECT FROM pg_roles WHERE rolname='opportunity_v3_rpc_owner' AND NOT (rolcanlogin OR rolsuper OR rolbypassrls OR rolcreaterole OR rolcreatedb OR rolreplication) AND rolconfig IS NULL)),
+ 'marketCalendar',(to_regclass('public.tw_trading_sessions_v3') IS NOT NULL),
+ 'priceHistory',(to_regclass('public.opportunity_price_observations_v3') IS NOT NULL),
+ 'corporateActionHistory',(to_regclass('public.opportunity_corporate_action_snapshots_v3') IS NOT NULL),
+ 'vnextCore',(to_regclass('public.vnext_mode_v1') IS NOT NULL AND to_regclass('public.vnext_publications_v1') IS NOT NULL),
+ 'vnextWorker',(to_regclass('public.vnext_provider_invocations_v1') IS NOT NULL),
+ 'sourceAuthority',(to_regprocedure('public.vnext_input_sources_current_v1(jsonb,text)') IS NOT NULL),
+ 'businessAuthority',(to_regprocedure('public.vnext_business_criteria_current_v1(uuid,text)') IS NOT NULL),
+ 'tradingAuthority',(to_regprocedure('public.vnext_trading_invalid_current_v1(text,text)') IS NOT NULL),
+ 'actionTermsAuthority',(to_regprocedure('public.vnext_action_terms_current_internal_v1(uuid,text,timestamptz)') IS NOT NULL),
+ 'nativeCsvReady',(to_regclass('public.vnext_launch_csv_ready_acks_v1') IS NOT NULL AND to_regprocedure('public.vnext_launch_csv_backend_v1(uuid,text,integer)') IS NOT NULL),
+ 'launchRankingRead',(to_regprocedure('public.vnext_launch_ranking_read_v1(uuid,text)') IS NOT NULL),
+ 'launchOutcomeRead',(to_regprocedure('public.vnext_launch_outcome_public_v1(uuid,text)') IS NOT NULL)
+);
+COMMIT;
+"""
 MAX_HTTP=2*1024**2
 MAX_COUNT=8*1024**3
 FINGERPRINT_SQL=b"""SELECT json_build_object(
@@ -376,6 +399,24 @@ def _execute_fixed_sequence(app,rest,releases,dates,*,launch=False):
             if primary_error is None:raise
 
 
+def project_launch_migration_markers(value):
+    if type(value) is not dict or set(value)!=LAUNCH_MIGRATION_MARKERS:
+        return None
+    if any(type(item) is not bool for item in value.values()):return None
+    return dict(value)
+
+
+def _observe_launch_migration_markers(sql):
+    raw=sql(LAUNCH_MIGRATION_PROBE_SQL)
+    if not isinstance(raw,(str,bytes)) or len(raw)>2048:
+        raise FixedRollbackRejected('launch_clone_migration_markers_rejected')
+    try:decoded=json.loads(raw)
+    except (ValueError,UnicodeError):raise FixedRollbackRejected('launch_clone_migration_markers_rejected') from None
+    value=project_launch_migration_markers(decoded)
+    if value is None:raise FixedRollbackRejected('launch_clone_migration_markers_rejected')
+    return value
+
+
 def _observe_launch_readpoint(sql):
     """Observe only the current cloned ranking head. Do not grant or run the app."""
     schema=sql(LAUNCH_SCHEMA_SQL)
@@ -422,9 +463,13 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     if launch:
         with readpoint_phase('radar_readpoint'):observation=_observe_launch_readpoint(sql)
         if observation['status']!='FROZEN_RANK_ROWS_OBSERVED':
-            return {'status':'LAUNCH_CLONE_READPOINT_ONLY','launchReadpoint':observation,
-                'postgrestAcceptance':'NOT_RUN','nextRollback':'NOT_RUN',
-                'candidateDetailHttp':{'status':'GAP_DETAIL_SCOPE'}}
+            gap={'status':'LAUNCH_CLONE_READPOINT_ONLY','launchReadpoint':observation,
+                 'postgrestAcceptance':'NOT_RUN','nextRollback':'NOT_RUN',
+                 'candidateDetailHttp':{'status':'GAP_DETAIL_SCOPE'}}
+            if observation['status']=='SCHEMA_MISSING':
+                with readpoint_phase('radar_readpoint'):
+                    gap['migrationPrerequisites']=_observe_launch_migration_markers(sql)
+            return gap
         with readpoint_phase('snapshot_dates'):dates=_expected_launch_binding(sql,observation)
     else:
         with readpoint_phase('radar_readpoint'):observation=assess_radar_reader(sql)

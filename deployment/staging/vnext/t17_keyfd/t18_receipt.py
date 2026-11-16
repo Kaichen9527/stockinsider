@@ -5,6 +5,7 @@ from .radar_reader_observation import project_radar_reader_observation
 from .t18_reader_roles import ROLE_COUNTS,LAUNCH_ROLE_COUNTS
 from .fixed_read_proxy import METRICS
 from .t18_release_assets import RELEASE_PINS,LAUNCH_RELEASE_PINS
+from .t18_same_clone import project_launch_migration_markers
 
 MAX_COUNT=8*1024**3
 HEALTH_KEYS=set('sourceCommit buildId nextVersion homeStatus homeBytes homeAcceptance dailyAcceptance staticStatus staticSha256 dailyBytes dailySha256 contentDate snapshotPublishedDate staleReadonly actionsEnabled'.split())
@@ -92,10 +93,13 @@ def project_exercise(value):
     if type(value) is not dict:return None
     if value.get('status')=='FIXED_LAUNCH_RELEASE_ROLLBACK_VERIFIED':return _project_launch_exercise(value)
     if value.get('status')=='LAUNCH_CLONE_READPOINT_ONLY':
-        if (set(value)!={'status','launchReadpoint','postgrestAcceptance','nextRollback'}
-            or value['postgrestAcceptance']!='NOT_RUN' or value['nextRollback']!='NOT_RUN'):return None
-        launch=_project_launch_readpoint(value['launchReadpoint'])
-        return {**value,'launchReadpoint':launch} if launch is not None else None
+        launch=_project_launch_readpoint(value.get('launchReadpoint'))
+        if launch is None or value.get('postgrestAcceptance')!='NOT_RUN' or value.get('nextRollback')!='NOT_RUN':return None
+        expected={'status','launchReadpoint','postgrestAcceptance','nextRollback'}
+        if launch['status']=='SCHEMA_MISSING':
+            expected.add('migrationPrerequisites')
+            if project_launch_migration_markers(value.get('migrationPrerequisites')) is None:return None
+        return {**value,'launchReadpoint':launch} if set(value)==expected else None
     observation=project_radar_reader_observation(value.get('readerObservation'))
     if observation is None:return None
     if value.get('status')=='GAP_GENUINE_SNAPSHOT_OR_SCHEMA':

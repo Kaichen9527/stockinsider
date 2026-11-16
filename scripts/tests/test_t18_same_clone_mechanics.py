@@ -150,13 +150,19 @@ class SameCloneMechanicsOnlyTests(unittest.TestCase):
                 calls.append(statement)
                 if statement==m.LAUNCH_SCHEMA_SQL:return schema
                 if statement==m.LAUNCH_HEAD_SQL and head is not None:return json.dumps(head)
+                if statement==m.LAUNCH_MIGRATION_PROBE_SQL and schema=='false':
+                    return json.dumps({name:False for name in m.LAUNCH_MIGRATION_MARKERS})
                 self.fail('unexpected_sql')
             raw=m.run_fixed_same_clone(query,unexpected,object(),object(),Assets())
             self.assertEqual(raw.pop('candidateDetailHttp'),{'status':'GAP_DETAIL_SCOPE'})
             projected=project_exercise(raw)
             self.assertEqual(projected['launchReadpoint'],wanted)
             self.assertEqual(projected['nextRollback'],'NOT_RUN')
-            self.assertEqual(len(calls),1 if head is None else 2)
+            self.assertEqual(len(calls),2)
+            if schema=='false':
+                self.assertEqual(projected['migrationPrerequisites'],{name:False for name in m.LAUNCH_MIGRATION_MARKERS})
+                stale=projected['migrationPrerequisites'].copy();stale['writerFence']=1
+                self.assertIsNone(project_exercise({**raw,'migrationPrerequisites':stale}))
             raw['launchReadpoint']['unreviewed']='PUBLIC_TEST_REJECTED'
             self.assertIsNone(project_exercise(raw))
 
