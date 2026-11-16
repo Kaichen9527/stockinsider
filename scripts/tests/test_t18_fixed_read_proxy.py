@@ -27,6 +27,15 @@ class FixedReadProxyTests(unittest.TestCase):
                 cls.seen.append((self.command,self.path,self.headers.get('Authorization'),self.headers.get('apikey')))
                 if cls.mode=='redirect':
                     self.send_response(302);self.send_header('Location','http://PUBLIC_FORBIDDEN_TARGET/');self.end_headers();return
+                if cls.mode in ('missing_projection','private_projection_failure'):
+                    self.send_response(404 if cls.mode=='missing_projection' else 403)
+                    payload=json.dumps({'code':'PGRST202' if cls.mode=='missing_projection' else '42501',
+                                        'details':'GENERATED_PRIVATE_MARKER'}).encode()
+                    self.send_header('Content-Type','application/json')
+                    self.send_header('Content-Length',str(len(payload)))
+                    self.end_headers()
+                    self.wfile.write(payload)
+                    return
                 self.send_response(200)
                 self.send_header('Content-Type','application/vnd.pgrst.object+json' if cls.mode=='singular' else 'application/json')
                 self.send_header('Content-Length',str(m.RESPONSE_BYTES_LIMIT+1) if cls.mode=='oversize' else '2')
@@ -43,10 +52,10 @@ class FixedReadProxyTests(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):cls.server.shutdown();cls.server.server_close();cls.thread.join(timeout=2)
     def setUp(self):type(self).mode='normal';type(self).seen.clear()
-    def request(self,method,path,headers=None):
+    def request(self,method,path,headers=None,body=None):
         conn=http.client.HTTPConnection('127.0.0.1',3302,timeout=5)
         try:
-            conn.request(method,path,headers=headers or {})
+            conn.request(method,path,body=body,headers=headers or {})
             response=conn.getresponse();return response.status,response.read(),dict(response.headers)
         finally:conn.close()
     def test_exact_get_head_and_fixed_token_replacement(self):
@@ -131,6 +140,67 @@ class FixedReadProxyTests(unittest.TestCase):
                 started=time.monotonic();status,_,_=self.request('GET',SNAP)
                 self.assertEqual(status,502);self.assertLess(time.monotonic()-started,.35)
                 self.assertEqual(handle.metrics['upstreamFailures'],1)
+
+    def test_launch_projection_rebuilds_readonly_query_and_preserves_legacy_get(self):
+        headers={'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json','apikey':'GENERATED_UNUSED'}
+        run='00000000-0000-4000-8000-000000000018'
+        with m.start_fixed_read_proxy(TOKEN,allow_launch_reads=True) as handle:
+            for route,run_id,symbol in ((m.LAUNCH_RANKING_PATH,None,None),
+                                        (m.LAUNCH_RANKING_PATH,run,None),
+                                        (m.LAUNCH_RANKING_PATH,None,'6488'),
+                                        (m.LAUNCH_OUTCOME_PATH,run,'6488')):
+                body=json.dumps({'p_ranking_run_id':run_id,'p_symbol':symbol})
+                self.assertEqual(self.request('POST',route,headers,body)[0],200)
+            self.assertEqual(self.request('GET',STATE)[0],200)
+            self.assertEqual(handle.metrics['allowedReads'],5)
+        self.assertEqual([row[0] for row in self.seen],['GET']*5)
+        self.assertEqual([row[1] for row in self.seen[:4]],[
+            '/rpc/vnext_launch_ranking_read_v1',
+            '/rpc/vnext_launch_ranking_read_v1?p_ranking_run_id='+run,
+            '/rpc/vnext_launch_ranking_read_v1?p_symbol=6488',
+            '/rpc/vnext_launch_outcome_public_v1?p_ranking_run_id='+run+'&p_symbol=6488',
+        ])
+        self.assertTrue(all(row[2]=='Bearer '+TOKEN and row[3] is None for row in self.seen))
+
+    def test_launch_projection_is_default_off_and_bounded(self):
+        headers={'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'}
+        body='{"p_ranking_run_id":null,"p_symbol":null}'
+        with m.start_fixed_read_proxy(TOKEN):
+            self.assertEqual(self.request('POST',m.LAUNCH_RANKING_PATH,headers,body)[0],405)
+        with m.start_fixed_read_proxy(TOKEN,allow_launch_reads=True) as handle:
+            negative=[
+                (m.LAUNCH_RANKING_PATH,{**headers,'Authorization':'Bearer GENERATED_WRONG'},body),
+                (m.LAUNCH_RANKING_PATH,{**headers,'Content-Profile':'private'},body),
+                (m.LAUNCH_RANKING_PATH,{**headers,'Prefer':'tx=commit'},body),
+                (m.LAUNCH_RANKING_PATH+'?p_symbol=6488',headers,body),
+                (m.LAUNCH_RANKING_PATH,headers,'{"p_ranking_run_id":null,"p_symbol":null,"p_symbol":"6488"}'),
+                (m.LAUNCH_RANKING_PATH,headers,'{"p_ranking_run_id":null,"p_symbol":{"nested":6488}}'),
+                (m.LAUNCH_RANKING_PATH,headers,'{"p_ranking_run_id":null,"p_symbol":"６４８８"}'),
+                (m.LAUNCH_RANKING_PATH,headers,body+' '*128),
+                (m.LAUNCH_OUTCOME_PATH,headers,body),
+                ('/rest/v1/rpc/not_a_launch_projection',headers,body),
+            ]
+            for path,values,data in negative:
+                with self.subTest(path=path):
+                    self.assertEqual(self.request('POST',path,values,data.encode())[0],403)
+            self.assertEqual(self.request('GET',m.LAUNCH_RANKING_PATH,headers)[0],403)
+            self.assertEqual(handle.metrics['allowedReads'],0)
+        self.assertEqual(self.seen,[])
+        with self.assertRaises(m.FixedReadProxyRejected):
+            with m.start_fixed_read_proxy(TOKEN,allow_launch_reads='true'):
+                self.fail('invalid_option_started_proxy')
+
+    def test_launch_projection_exposes_only_known_error_code(self):
+        headers={'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'}
+        body='{"p_ranking_run_id":null,"p_symbol":null}'
+        with m.start_fixed_read_proxy(TOKEN,allow_launch_reads=True):
+            for mode,expected in (
+                ('missing_projection',(404,'PGRST202')),
+                ('private_projection_failure',(403,'fixed_launch_reader_unavailable')),
+            ):
+                type(self).mode=mode
+                status,payload,_=self.request('POST',m.LAUNCH_RANKING_PATH,headers,body)
+                self.assertEqual((status,json.loads(payload)),(expected[0],{'code':expected[1]}))
 
 
 if __name__=='__main__':unittest.main()

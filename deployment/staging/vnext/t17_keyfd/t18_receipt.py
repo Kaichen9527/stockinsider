@@ -2,9 +2,11 @@
 import datetime
 import re
 from .radar_reader_observation import project_radar_reader_observation
-from .t18_reader_roles import ROLE_COUNTS
+from .t18_reader_roles import ROLE_COUNTS,LAUNCH_ROLE_COUNTS
 from .fixed_read_proxy import METRICS
-from .t18_release_assets import RELEASE_PINS
+from .t18_release_assets import RELEASE_PINS,LAUNCH_RELEASE_PINS
+from .t18_same_clone import project_launch_migration_markers
+from .t18_core_migration_rehearsal import project_core_rehearsal
 
 MAX_COUNT=8*1024**3
 HEALTH_KEYS=set('sourceCommit buildId nextVersion homeStatus homeBytes homeAcceptance dailyAcceptance staticStatus staticSha256 dailyBytes dailySha256 contentDate snapshotPublishedDate staleReadonly actionsEnabled'.split())
@@ -30,8 +32,78 @@ def _health(value,commit):
     return {k:value[k] for k in HEALTH_KEYS}
 
 
+def _project_launch_readpoint(value):
+    if type(value) is not dict or set(value)!={'status','session','ranked'}:return None
+    status,date,count=value['status'],value['session'],value['ranked']
+    if status in ('SCHEMA_MISSING','PRODUCER_DISABLED'):
+        return dict(value) if date is None and count is None else None
+    if status=='NOT_PUBLISHED':
+        return dict(value) if date is None and type(count) is int and count==0 else None
+    if status not in ('TOP_ZERO','FROZEN_RANK_ROWS_OBSERVED','RANK_BINDING_INVALID'):
+        return None
+    if type(date) is not str or len(date)!=10:return None
+    try:
+        if datetime.date.fromisoformat(date).isoformat()!=date:return None
+    except ValueError:return None
+    if status=='RANK_BINDING_INVALID':
+        return dict(value) if count is None else None
+    if type(count) is not int or not 0<=count<=10 or (count==0)!=(status=='TOP_ZERO'):return None
+    return dict(value)
+
+
+_LAUNCH_EXERCISE_CONSTANTS={'status':'FIXED_LAUNCH_RELEASE_ROLLBACK_VERIFIED',
+    'snapshotDataAndConstraintBitsUnchanged':True,'postgrestAcceptance':'FIXED_LAUNCH_READER_ONLY',
+    'nextRollback':'FIXED_LAUNCH_PAIR_VERIFIED','namespaceKernelCookiesMatched':True,
+    'threeDistinctOsUidsObserved':True,'ownedListenersClosed':True,'hostUnitCleanup':'HOST_REQUIRED'}
+
+
+def _project_launch_exercise(value):
+    if set(value)!=set(_LAUNCH_EXERCISE_CONSTANTS)|{'launchReadpoint','readerRoleChecks','negativeHttpChecks','proxyMetrics','rollback'}:
+        return None
+    if any(type(value[k]) is not type(v) or value[k]!=v for k,v in _LAUNCH_EXERCISE_CONSTANTS.items()):return None
+    observed=_project_launch_readpoint(value['launchReadpoint'])
+    if observed is None or observed['status']!='FROZEN_RANK_ROWS_OBSERVED':return None
+    roles=value['readerRoleChecks']
+    if (type(roles) is not dict or set(roles)!=set(LAUNCH_ROLE_COUNTS)
+        or any(type(roles[k]) is not int or roles[k]!=v for k,v in LAUNCH_ROLE_COUNTS.items())):return None
+    denied=value['negativeHttpChecks']
+    if type(denied) is not dict or denied!={'proxyDenied':6,'postgrestDenied':2}:return None
+    metrics=value['proxyMetrics']
+    if (type(metrics) is not dict or set(metrics)!=set(METRICS) or any(not _count(v) for v in metrics.values())
+        or metrics['allowedReads']<8 or metrics['blockedRequests']<6):return None
+    result=value['rollback']
+    if (type(result) is not dict or set(result)!={'sequence','steps','faultHealthFailed','automaticRollback','recovered'}
+        or result['sequence']!='A_B_A' or result['faultHealthFailed'] is not True or result['automaticRollback']!='A'
+        or type(result['steps']) is not list or len(result['steps'])!=3):return None
+    fixed={'nextVersion':'16.3.4','homeStatus':200,'detailStatus':200,'staticStatus':200,
+        'session':observed['session'],'ranked':observed['ranked']}
+    steps=[*result['steps'],result['recovered']]
+    for item,index in zip(steps,(0,1,0,0)):
+        if (type(item) is not dict or set(item)!=set(fixed)|{'sourceCommit','buildId','staticSha256','snapshotSha256','detailSha256'}
+            or item['sourceCommit']!=LAUNCH_RELEASE_PINS[index][0]
+            or any(type(item[k]) is not type(v) or item[k]!=v for k,v in fixed.items())
+            or type(item['buildId']) is not str or not re.fullmatch(r'[a-zA-Z0-9_-]{1,256}',item['buildId'])
+            or any(type(item[k]) is not str or not re.fullmatch(r'[a-f0-9]{64}',item[k])
+                for k in ('staticSha256','snapshotSha256','detailSha256'))):return None
+    if (steps[0]!=steps[2] or steps[0]!=steps[3] or steps[0]['buildId']==steps[1]['buildId']
+        or any(steps[0][k]!=steps[1][k] for k in ('snapshotSha256','detailSha256'))):return None
+    return value
+
+
 def project_exercise(value):
     if type(value) is not dict:return None
+    if value.get('status')=='FIXED_LAUNCH_RELEASE_ROLLBACK_VERIFIED':return _project_launch_exercise(value)
+    if value.get('status')=='LAUNCH_CLONE_READPOINT_ONLY':
+        launch=_project_launch_readpoint(value.get('launchReadpoint'))
+        if launch is None or value.get('postgrestAcceptance')!='NOT_RUN' or value.get('nextRollback')!='NOT_RUN':return None
+        expected={'status','launchReadpoint','postgrestAcceptance','nextRollback'}
+        if launch['status']=='SCHEMA_MISSING':
+            expected.add('migrationPrerequisites')
+            if project_launch_migration_markers(value.get('migrationPrerequisites')) is None:return None
+            if 'coreMigrationRehearsal' in value:
+                expected.add('coreMigrationRehearsal')
+                if project_core_rehearsal(value['coreMigrationRehearsal']) is None:return None
+        return {**value,'launchReadpoint':launch} if set(value)==expected else None
     observation=project_radar_reader_observation(value.get('readerObservation'))
     if observation is None:return None
     if value.get('status')=='GAP_GENUINE_SNAPSHOT_OR_SCHEMA':

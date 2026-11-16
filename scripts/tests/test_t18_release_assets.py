@@ -40,6 +40,28 @@ class ReleaseAssetTests(unittest.TestCase):
                 self.assertEqual(evidence['nextVersion'],'16.3.4')
             finally:os.close(fd)
 
+    def test_compiled_profile_requires_one_unmixed_pair(self):
+        original=m.RELEASE_PINS
+        launch=m.LAUNCH_RELEASE_PINS
+        cases=((original,original),(launch,launch),((original[0],launch[0]),None),
+               ((launch[1],),None),(original+launch,None))
+        for planted,expected in cases:
+            with self.subTest(planted=planted), tempfile.TemporaryDirectory() as directory:
+                root=Path(directory)
+                for commit,_ in planted:(root/commit).mkdir()
+                fd=os.open(root,os.O_RDONLY|os.O_DIRECTORY)
+                try:
+                    if expected is None:
+                        with self.assertRaises(m.ReleaseAssetsRejected):m._fixed_release_pins_at_root(fd)
+                    else:
+                        self.assertEqual(m._fixed_release_pins_at_root(fd),expected)
+                finally:os.close(fd)
+        exact=[{'sourceCommit':commit,'manifestSha256':pin} for commit,pin in launch]
+        self.assertTrue(m.is_launch_release_pair(exact))
+        tampered=[{**exact[0],'manifestSha256':'0'*64},exact[1]]
+        self.assertFalse(m.is_launch_release_pair(tampered))
+        self.assertFalse(m.is_launch_release_pair(list(reversed(exact))))
+
     def test_captured_packaging_histograms_only_allow_original_0664_pairs(self):
         # Real onsite histogram, structural policy only; no manifest is forged
         # and no observed-root/runtime lease is issued by these metadata tests.

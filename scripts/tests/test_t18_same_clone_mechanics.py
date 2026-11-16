@@ -22,7 +22,8 @@ import unittest
 
 from deployment.staging.vnext.t17_keyfd import t18_same_clone as m
 from deployment.staging.vnext.t17_keyfd import t18_app_broker as jwt
-from deployment.staging.vnext.t17_keyfd.t18_release_assets import RELEASE_PINS
+from deployment.staging.vnext.t17_keyfd.t18_release_assets import RELEASE_PINS,LAUNCH_RELEASE_PINS
+from deployment.staging.vnext.t17_keyfd.t18_receipt import project_exercise
 
 AS_OF='2026-09-19T04:00:00Z'
 PUBLISHED='2026-09-19T05:00:00Z'
@@ -130,6 +131,95 @@ class SameCloneMechanicsOnlyTests(unittest.TestCase):
     def assert_clean(self,broker):
         self.assertTrue(all(child.poll() is not None for child in broker.children))
         self.assertTrue(m._port_closed(3000))
+    def test_launch_pair_reports_clone_data_without_starting_http_or_granting_reader(self):
+        class Assets:
+            releases=[{'sourceCommit':sha,'manifestSha256':pin} for sha,pin in LAUNCH_RELEASE_PINS]
+        def unexpected(*_):
+            self.fail('launch_readpoint_triggered_runtime')
+        for schema,head,wanted in (
+            ('false',None,{'status':'SCHEMA_MISSING','session':None,'ranked':None}),
+            ('true',{'enabled':True,'session':None,'ranked':0,'valid':True},
+             {'status':'NOT_PUBLISHED','session':None,'ranked':0}),
+            ('true',{'enabled':True,'session':'2026-11-13','ranked':0,'valid':True},
+             {'status':'TOP_ZERO','session':'2026-11-13','ranked':0}),
+            ('true',{'enabled':True,'session':'2026-11-13','ranked':1,'valid':False},
+             {'status':'RANK_BINDING_INVALID','session':'2026-11-13','ranked':None}),
+        ):
+            calls=[]
+            def query(statement):
+                calls.append(statement)
+                if statement==m.LAUNCH_SCHEMA_SQL:return schema
+                if statement==m.LAUNCH_HEAD_SQL and head is not None:return json.dumps(head)
+                if statement==m.LAUNCH_MIGRATION_PROBE_SQL and schema=='false':
+                    return json.dumps({name:False for name in m.LAUNCH_MIGRATION_MARKERS})
+                self.fail('unexpected_sql')
+            raw=m.run_fixed_same_clone(query,unexpected,object(),object(),Assets())
+            self.assertEqual(raw.pop('candidateDetailHttp'),{'status':'GAP_DETAIL_SCOPE'})
+            projected=project_exercise(raw)
+            self.assertEqual(projected['launchReadpoint'],wanted)
+            self.assertEqual(projected['nextRollback'],'NOT_RUN')
+            self.assertEqual(len(calls),2)
+            if schema=='false':
+                self.assertEqual(projected['migrationPrerequisites'],{name:False for name in m.LAUNCH_MIGRATION_MARKERS})
+                stale=projected['migrationPrerequisites'].copy();stale['writerFence']=1
+                self.assertIsNone(project_exercise({**raw,'migrationPrerequisites':stale}))
+            raw['launchReadpoint']['unreviewed']='PUBLIC_TEST_REJECTED'
+            self.assertIsNone(project_exercise(raw))
+
+    def test_core_rehearsal_projects_only_disabled_install_and_exact_predecessors(self):
+        from deployment.staging.vnext.t17_keyfd import t18_core_migration_rehearsal as core
+        root=Path(__file__).resolve().parents[2]
+        migration=(root/'migrations'/core._LEGACY_NAME).read_bytes()
+        self.assertEqual(hashlib.sha256(migration).hexdigest(),core._LEGACY_SHA256)
+        query=core._legacy_probe_sql(migration)
+        self.assertTrue(query.rstrip().endswith(b'ROLLBACK;'))
+        self.assertNotIn(b'EXECUTE replace',query)
+        for target in core._LEGACY_EXPECTED:self.assertIn(target.encode('ascii'),query)
+        result={'status':'CORE_INSTALLED_DISABLED','core':core._CORE_OK,
+                'legacyPredecessors':dict.fromkeys(core._LEGACY_EXPECTED,'MISSING'),'probeRolledBack':True}
+        self.assertEqual(core.project_core_rehearsal(result),result)
+        self.assertIsNone(core.project_core_rehearsal({**result,'probeRolledBack':False}))
+        changed={**core._CORE_OK,'modeEnabled':True}
+        self.assertIsNone(core.project_core_rehearsal({**result,'core':changed}))
+
+    def test_launch_projection_binds_restored_cutoff_and_member_pins(self):
+        expected={'rankingRunId':'00000000-0000-4000-8000-000000000001',
+            'session':'2026-11-13','cutoff':'2026-11-13T13:30:00Z','headSha256':'0'*64,
+            'members':[{'rank':1,'symbol':'1111','revisionId':'00000000-0000-4000-8000-000000000002',
+                        'scoreRevision':'00000000-0000-4000-8000-000000000003',
+                        'launchQualificationRevision':'00000000-0000-4000-8000-000000000004','inputHash':'1'*64}]}
+        observed={'session':expected['session'],'ranked':1}
+        self.assertEqual(m._expected_launch_binding(lambda _:json.dumps(expected),observed),expected)
+        snapshot={key:expected[key] for key in ('rankingRunId','session','cutoff','members')}
+        def request(value):
+            return (200,{'cache-control':'no-store'},
+                    json.dumps({'ok':True,'result':{'availability':'ready','snapshot':value}}).encode())
+        self.assertEqual(m._launch_result(request(snapshot),expected)['snapshot'],snapshot)
+        for changed in ({**snapshot,'session':'2026-11-12'},
+                        {**snapshot,'cutoff':'2026-11-13T13:31:00Z'},
+                        {**snapshot,'members':[{**snapshot['members'][0],'inputHash':'2'*64}]}):
+            with self.assertRaises(m.FixedRollbackRejected):m._launch_result(request(changed),expected)
+
+    def test_launch_success_receipt_rejects_frozen_b_drift_and_legacy_acl(self):
+        from deployment.staging.vnext.t17_keyfd.t18_reader_roles import ROLE_COUNTS,LAUNCH_ROLE_COUNTS
+        step={'sourceCommit':LAUNCH_RELEASE_PINS[0][0],'buildId':'build-a','nextVersion':'16.3.4',
+            'homeStatus':200,'detailStatus':200,'staticStatus':200,'staticSha256':'a'*64,
+            'snapshotSha256':'b'*64,'detailSha256':'c'*64,'session':'2026-11-13','ranked':1}
+        switched={**step,'sourceCommit':LAUNCH_RELEASE_PINS[1][0],'buildId':'build-b','staticSha256':'d'*64}
+        sequence={'sequence':'A_B_A','steps':[step,switched,step],'faultHealthFailed':True,
+                  'automaticRollback':'A','recovered':step}
+        result={'status':'FIXED_LAUNCH_RELEASE_ROLLBACK_VERIFIED','snapshotDataAndConstraintBitsUnchanged':True,
+            'postgrestAcceptance':'FIXED_LAUNCH_READER_ONLY','nextRollback':'FIXED_LAUNCH_PAIR_VERIFIED',
+            'namespaceKernelCookiesMatched':True,'threeDistinctOsUidsObserved':True,'ownedListenersClosed':True,
+            'hostUnitCleanup':'HOST_REQUIRED','launchReadpoint':{'status':'FROZEN_RANK_ROWS_OBSERVED',
+            'session':'2026-11-13','ranked':1},'readerRoleChecks':LAUNCH_ROLE_COUNTS,
+            'negativeHttpChecks':{'proxyDenied':6,'postgrestDenied':2},'proxyMetrics':{'requests':20,
+            'allowedReads':14,'blockedRequests':6,'upstreamFailures':0,'responseBytes':14000},'rollback':sequence}
+        self.assertEqual(project_exercise(result),result)
+        self.assertIsNone(project_exercise({**result,'readerRoleChecks':ROLE_COUNTS}))
+        drift={**switched,'detailSha256':'0'*64}
+        self.assertIsNone(project_exercise({**result,'rollback':{**sequence,'steps':[step,drift,step]}}))
+
     def test_public_python_only_actual_http_A_B_A_and_killed_B_rollback(self):
         broker=self.broker()
         self.assertNotEqual(broker.programs[0].read_bytes(),broker.programs[1].read_bytes())
