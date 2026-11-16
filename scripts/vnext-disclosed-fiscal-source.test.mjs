@@ -27,7 +27,35 @@ test('frozen/current comparisons and original start/deadline fence cannot be omi
  const source=block(sql,'successor3');assert.ok(source.startsWith("SELECT CASE WHEN left(item->>'id',16)='fiscal-forecast:'"));assert.ok(source.includes('vnext_forecast_evidence_current_internal_v1(item,p_symbol)'));
 });
 test('legacy transport validator bytes retained around bounded explicit fiscal pair dispatch; existing caller/provider path is used',()=>{
- let s=read('web/src/lib/vnext/forecast-current.ts');for(const insertion of ["import {validateFiscalForecastPairs} from './disclosed-fiscal-forecast.ts';\n"," validateFiscalForecastPairs(r.evidence,r.receipts,{stockId:r.stockId as string,symbol:r.symbol,asOf:r.asOf});\n","  if(object(value)&&String(value.id).startsWith('fiscal-forecast:'))continue;\n"]){assert.equal(s.split(insertion).length,2);s=s.replace(insertion,'');}assert.equal(sha(s),'9c789343d8dcb6d7ca3799f93c5b731a7660e65e074ba239ec266031a6f630c4');
- const f=read('scripts/vnext-preparation-http-fixture.mjs');for(const v of ['installDisclosedFiscalCandidate(x)','seedDisclosedFiscalFixture(x,query,stockId,runner,kind)','assert.equal(current.evidence.length,6)','assert.equal(legacy.length,2)','frozen.evidence.forecastSourceReceipts,preparation.evidence.forecastSourceReceipts','fiscal-full-originals-revoked'])assert.ok(f.includes(v));
+ let source=read('web/src/lib/vnext/forecast-current.ts');
+ // The weekly audit added this classifier in 5383c4e. It does not change
+ // the forecast transport validator or move authority into the generic cache.
+ const weeklyOwnership="/** These namespaces are owned by the forecast RPC, including its original\n * disclosure companion. The generic source cache cannot refresh either. */\nexport const isForecastEvidence=(e:Evidence)=>e.id.startsWith('forecast:')||e.id.startsWith('fiscal-forecast:');\n";
+ assert.equal(source.split(weeklyOwnership).length,2);
+ source=source.replace(weeklyOwnership,'');
+ assert.equal(sha(source),'0290c8ad8a830fa453c961fe0fe14bda156bbb1dad3b25d8e5057882596e718f');
+ const fiscalDispatch=[
+  "import {validateFiscalForecastPairs} from './disclosed-fiscal-forecast.ts';\n",
+  " validateFiscalForecastPairs(r.evidence,r.receipts,{stockId:r.stockId as string,symbol:r.symbol,asOf:r.asOf});\n",
+  "  if(object(value)&&String(value.id).startsWith('fiscal-forecast:'))continue;\n",
+ ];
+ for(const insertion of fiscalDispatch){
+  assert.equal(source.split(insertion).length,2);
+  source=source.replace(insertion,'');
+ }
+ assert.equal(sha(source),'9c789343d8dcb6d7ca3799f93c5b731a7660e65e074ba239ec266031a6f630c4');
+ const fixture=read('scripts/vnext-preparation-http-fixture.mjs');
+ for(const witness of [
+  'installDisclosedFiscalCandidate(x)',
+  'seedDisclosedFiscalFixture(x,query,stockId,runner,kind)',
+  'assert.equal(current.evidence.length,6)',
+  'assert.equal(legacy.length,2)',
+  "assert.deepEqual(frozen.evidence.evidence.filter(e=>e.id.startsWith('forecast:')||e.id.startsWith('fiscal-forecast:')),allForecasts)",
+  'assert.equal(preparation.evidence.forecastSourceReceipts.length,6)',
+  'assert.equal(frozen.inputHash,preparation.input_hash)',
+  'fiscal-full-originals-revoked',
+ ])assert.ok(fixture.includes(witness),witness);
+ for(const key of ['forecastSourceReceipts','financialSourceReceipts','financialProviderInput'])
+  assert.ok(fixture.includes(`assert.equal(Object.hasOwn(frozen.evidence,'${key}'),false)`),key);
  const worker=read('web/src/lib/vnext/worker-core.ts');assert.ok(worker.includes('record.frozen_request'));assert.ok(!read('web/src/lib/vnext/disclosed-fiscal-forecast.ts').includes('fetch('));
 });

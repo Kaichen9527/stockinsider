@@ -5,6 +5,7 @@ import vm from 'node:vm';
 import {createRequire} from 'node:module';
 import ts from 'typescript';
 import {researchFailureDisposition} from './research-failure.ts';
+import * as preparationReconciliation from './preparation-reconciliation.ts';
 type Row=Record<string,unknown>;
 const requireNative=createRequire(import.meta.url);
 const previousEnabled=process.env.STOCKINSIDER_VNEXT_ENABLED;
@@ -17,6 +18,7 @@ function fixture(mode='empty_financial'){
  const calls:Array<{action:string;body?:Row}>=[];const cache=new Map<string,Record<string,unknown>>();
  const allowed=new Set(['store.ts','policy.ts','research.ts','financial-observation.ts','catalyst-cancellation.ts','business-criteria.ts','semantic-criteria.ts','runtime.ts','factors.ts','audit-quote-clock.ts','../candidate-price-history.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','evidence-clock.ts','worker-output.ts','research-failure.ts']);
  const identity={principal:'synthetic-author',role:'author' as const};
+ const admissionHash='c'.repeat(64);
  const body={jobId:'00000000-0000-4000-8000-000000000001',executionId:'00000000-0000-4000-8000-000000000002'};
  const sourceAt='2026-10-22T06:00:00Z',sourceUrl='https://www.twse.com.tw/synthetic-period.json',sha='b'.repeat(64);
  const old:Row={fact_id:'00000000-0000-4000-8000-000000000003',stock_id:'synthetic-stock',fact_key:'quarterly_basic_eps',period_start:'2026-07-01',period_end:'2026-09-30',duration_kind:'quarterly',value:8.11,unit:'TWD_per_share',provider:'twse',authority_tier:'official_filing',estimate_kind:'reported',estimate_horizon:'reported_period',filing_restatement_id:'SYNTHETIC_OLD',source_ref:'twse-openapi:synthetic-old-eps',source_timestamp:sourceAt,collected_at:sourceAt,recorded_at:sourceAt,validation_status:'validated',schema_valid:true,unit_valid:true,point_in_time_valid:true,consistency_valid:true};
@@ -37,12 +39,13 @@ function fixture(mode='empty_financial'){
  },rpc(name:string,args:Row){
   if(name==='read_financial_facts_for_stocks_as_of'){calls.push({action:'financial-asof'});return {limit:async(count:number)=>{assert.equal(count,2001);return {data:mode==='financial_timeout'?null:facts,error:mode==='financial_timeout'?{message:'transport timed out'}:null};}};}
   assert.equal(name,'vnext_command_v1');const action=String(args.p_command),request=args.p_request as Row;calls.push({action,body:request});
-  if(action==='claim')return {data:{execute:true,...body,symbol:'2330',session:'2026-10-22',evidence:{hash:'synthetic'}},error:null};
+  if(action==='claim')return {data:{execute:true,...body,symbol:'2330',session:'2026-10-22',inputHash:admissionHash,evidence:{hash:admissionHash}},error:null};
   if(action==='fail' && mode==='failure_receipt_lost')throw Error('synthetic mutation response lost');
   if(action==='author-context')return {data:mode==='author_replay'?{committed:true}:{inputHash:'synthetic',evidence:{evidence:[]}},error:null};
   if(action==='review-context')return {data:{inputHash:'synthetic',evidence:{evidence:[]},authorArtifact:null},error:null};
   if(action==='author')return {data:{authored:true,replay:true},error:null};
-  assert.ok(['work-context','fail','review-fail'].includes(action),`unexpected store mutation ${action}`);return {data:{recorded:true},error:null};
+  if(action==='work-context')return {data:{...body,inputHash:admissionHash},error:null};
+  assert.ok(['fail','review-fail'].includes(action),`unexpected store mutation ${action}`);return {data:{recorded:true},error:null};
  }};
  function load(name:string):Record<string,unknown>{
   if(!allowed.has(name))throw Error(`unexpected_failure_source:${name}`);const prior=cache.get(name);if(prior)return prior;
@@ -64,6 +67,7 @@ function fixture(mode='empty_financial'){
    if(dependency==='../candidate-financial-document-worker')return {processCandidateFinancialDocumentReceipts:async()=>({reconciliationErrors:[],results:[]})};
    if(dependency==='../official-financial-validation-worker')return {validatePendingOfficialFinancials:async()=>({status:'success'})};
    if(dependency==='../tw-entry-plan-authority.ts')return {loadTwEntryHistoricalPriceAuthority:async()=>({notEntryAuthority:true,nextSessionAuthority:false,completedSessions:[],bars:[],priceBasis:null,missingData:['synthetic_missing_price_authority']})};
+   if(dependency==='./preparation-reconciliation.ts')return preparationReconciliation;
    if(dependency==='../public-source-url.ts')return requireNative('../public-source-url.ts');
    if(dependency==='../candidate-price-history.ts')return load(dependency);
    if(dependency.startsWith('./'))return load(dependency.slice(2));
@@ -79,7 +83,7 @@ test('only confirmed missing authority, invalid output and definite settled reje
  for(const reason of ['vnext_financial_preparation_incomplete','vnext_preparation_verified_facts_unavailable','vnext_stock_authority_read_uncertain','vnext_trading_authority_read_uncertain','vnext_provider_http_uncertain_500','timeout','fetch failed','provider_http_429:unknown-body','unexpected failure'])assert.equal(researchFailureDisposition(Error(reason)),'uncertain');
  const unknown=Error('provider_http_422');unknown.name='ProviderOutcomeUncertain';assert.equal(researchFailureDisposition(unknown),'uncertain');assert.equal(researchFailureDisposition(null),'uncertain');
 });
-test('actual admitted store rejects zero validated financial data before preparation publication and records one permanent failure',async()=>{
+test('legacy preparation rejects zero validated financial data before preparation publication and records one permanent failure',async()=>{
  const prior=process.env.STOCKINSIDER_VNEXT_ENABLED;process.env.STOCKINSIDER_VNEXT_ENABLED='true';
  try{const {store,identity,body,calls}=fixture();await assert.rejects(()=>store.executeResearch(identity,body),/vnext_validated_financial_data_missing/);const failed=calls.filter(call=>call.action==='fail');assert.equal(failed.length,1);assert.equal(failed[0].body?.permanent,true);assert.equal(failed[0].body?.jobId,body.jobId);assert.ok(calls.some(call=>call.action==='claim'));assert.ok(calls.some(call=>call.action==='work-context'));assert.equal(calls.filter(call=>call.action==='financial-preparation').length,1);assert.equal(calls.some(call=>call.action==='prepare'),false);assert.equal(calls.filter(call=>call.action==='release').length,1);}finally{if(prior===undefined)delete process.env.STOCKINSIDER_VNEXT_ENABLED;else process.env.STOCKINSIDER_VNEXT_ENABLED=prior;}
 });
@@ -96,7 +100,7 @@ test('lost failure-write response stays explicitly uncertain and is never automa
 });
 test('wrong role fails before writer lease or any source authority access',async()=>{const {store,body,calls}=fixture();await assert.rejects(()=>store.executeResearch({principal:'synthetic-operator',role:'operator'},body),/vnext_author_required/);assert.deepEqual(calls,[]);});
 
-test('actual ordinary preparation cannot revive a validated EPS beneath a newer rejected same-grain fact',async()=>{
+test('legacy preparation cannot revive a validated EPS beneath a newer rejected same-grain fact',async()=>{
  const {store,identity,body,calls}=fixture('newer_rejected_financial');
  await assert.rejects(()=>store.executeResearch(identity,body),/vnext_validated_financial_data_missing/);
  const failures=calls.filter(call=>call.action==='fail');assert.equal(failures.length,1);assert.equal(failures[0].body?.permanent,true);

@@ -1,13 +1,14 @@
 /** Execute the actual weekly composition with a closed synthetic transport.
  * No PG/HTTP/model, ACL, lease, real source or semantic acceptance claim. */
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import vm from 'node:vm';import {createRequire} from 'node:module';
+import {isForecastEvidence} from '../web/src/lib/vnext/forecast-current.ts';
 import {readActiveForecasts} from '../web/src/lib/vnext/forecast-active.ts';
 import {auditThesisCycle} from '../web/src/lib/vnext/thesis-cycle.ts';
 import {readCurrentFinancialCache,currentEvidenceRead} from '../web/src/lib/vnext/current-evidence-read.ts';
 import {inputHash} from '../web/src/lib/vnext/policy.ts';
 const ts=createRequire(new URL('../web/package.json',import.meta.url))('typescript');
 const at='2026-10-23T01:00:00.000Z',id=n=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
-function lab({drift=false,sourceError=false,stockDrift=false,financial=false,factsError=false,invalidNewest=false,cachedPrice=false,launchStatus='due',launchEnabled=true,screenSession='2026-10-23'}={}){
+function lab({drift=false,sourceError=false,stockDrift=false,financial=false,factsError=false,invalidNewest=false,cachedPrice=false,cachedForecast=false,launchStatus='due',launchEnabled=true,screenSession='2026-10-23'}={}){
  const evidence={id:`forecast:${id(1)}:${id(2)}`,key:'source_quarterly_diluted_eps_estimate',value:3.2,unit:'TWD_per_share',period:'2027-01-01/2027-03-31',contentHash:'a'.repeat(64),source:'https://issuer.example.com/public-guidance',sourceTier:'public',kind:'assumption',eventAt:'2026-10-22T01:00:00.000Z',availableAt:at};
  const receipt={schemaVersion:'vnext-forecast-source-receipt-v1',stockId:id(3),symbol:'2409',evidenceHash:inputHash(evidence),classification:'source_estimate_not_reported_or_fair_value',verificationId:id(2),revisionId:id(4),sourceHash:'b'.repeat(64),publisherAuthorityId:id(5),sourceAuthorityId:id(6),policyId:id(7),manifestHash:'c'.repeat(64),estimateKind:'analyst_estimate',estimateHorizon:'next_twelve_months',shareBasis:'source_diluted_eps_denominator_not_supplied',denominatorShares:null,annualEps:null,nextFourQuarterEps:null};
  const forecast={schemaVersion:'vnext-current-forecasts-v1',stockId:id(3),symbol:'2409',asOf:at,evidence:[evidence],receipts:[receipt],gaps:['forecast_annual_and_four_quarter_share_authority_missing']};
@@ -21,8 +22,8 @@ function lab({drift=false,sourceError=false,stockDrift=false,financial=false,fac
  const modules={
   './current-evidence-read.ts':{readCurrentFinancialCache,currentEvidenceRead(input){const result=currentEvidenceRead(input),quote=result.formalAudit.quote;Object.defineProperty(result.formalAudit,'quote',{enumerable:true,get(){trace.push({formalQuote:'read'});return quote;}});return result;}},
   './thesis-runtime.ts':{async thesisCommand(identity,action,body){trace.push({action});if(action==='context')return {members:[member]};if(action==='source-current')return {valid:[]};assert.ok(['record','launch-weekly-record'].includes(action));records.push(body);return {reviewed:body.reports.length};}},
-  './forecast-active.ts':{readActiveForecasts},'./thesis-cycle.ts':{auditThesisCycle},
-  './analysis-runtime.ts':{analysisWriter:async work=>{trace.push({writer:'acquired'});return await work();},analysisCommand:async()=>({})},'../supabase-server.ts':{getSupabaseServerClient:()=>client},'./calendar-sync.ts':{synchronizeCachedCalendar:async()=>{trace.push({calendar:'synced'});return {};}},
+  './forecast-active.ts':{readActiveForecasts},'./forecast-current.ts':{isForecastEvidence},'./thesis-cycle.ts':{auditThesisCycle},
+  './analysis-runtime.ts':{analysisWriter:async work=>{trace.push({writer:'acquired'});return await work();},analysisCommand:async(_identity,action)=>action==='source-projection'&&cachedForecast?{'2409':{evidence:[{...evidence,id:'fiscal-forecast:'+id(8),value:9999}]}}:{}},'../supabase-server.ts':{getSupabaseServerClient:()=>client},'./calendar-sync.ts':{synchronizeCachedCalendar:async()=>{trace.push({calendar:'synced'});return {};}},
   './launch-ranking-read.ts':{launchRankingEnabled:()=>launchEnabled},
   './store.ts':{command:async()=>({session:screenSession,priceSessions:cachedPrice?[sessions.at(-1)]:[],market:{risk:'unknown'}})},'../tw-entry-plan-authority.ts':{loadTwEntryHistoricalPriceAuthority(_client,request){assert.equal(request.cutoff,at);assert.equal(request.signalSession,sessions.at(-1));return history;}}
  };
@@ -91,4 +92,13 @@ test('scheduled audit rejects disabled launch mode, wrong role and changed sessi
  await assert.rejects(()=>h.runLaunch({...identity,role:'author'}),/vnext_operator_required/u);
  assert.equal(f.records.length+g.records.length+h.records.length,0);
  assert.equal(f.trace.length+h.trace.length,0);
+});
+
+test('cache forecasts cannot enter the current-authority weekly projection',async()=>{
+ const f=lab({cachedForecast:true});
+ await f.run({role:'operator',principal:'synthetic-configured-operator'});
+ const report=f.records[0].reports[0];
+ assert.equal(report.materialEvidence.forecastCount,1);
+ assert.equal(report.materialEvidence.forecasts[0].value,f.evidence.value);
+ assert.equal(report.deepInputs.valuation.base,null);
 });
