@@ -1,0 +1,1169 @@
+{
+  "recordedAt": "2026-11-16T13:33:26+08:00",
+  "workItem": "T18",
+  "sourceSha": "765832da1b59f572f4eea140b25ab738a087194c",
+  "scope": "Contabo isolated staging, 2026-09-19 authentic encrypted backup, exact reviewed 2026-10-11 schema-only reference",
+  "restore": {
+    "runner": "DB_VERIFIED_T18_GAP",
+    "observedDatabaseBytes": 2258785971,
+    "foreignKeys": 288,
+    "rlsTables": 193,
+    "genuineRuns": 2,
+    "comparablePredecessorDigest": true,
+    "reviewedSqlMigrations": 49,
+    "ownershipPrelude": 1,
+    "financialCommitted": true,
+    "publicationCommitted": false,
+    "evaluationPreservation": {
+      "afterRows": 72,
+      "beforeRows": 72,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    },
+    "diagnosticPreservation": {
+      "afterRows": 52,
+      "beforeRows": 52,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    },
+    "sourceSeed": {
+      "before": {
+        "authorities": 4,
+        "bindings": 1,
+        "executeClosed": true,
+        "functionExact": true,
+        "identities": 4
+      },
+      "checks": 3,
+      "during": {
+        "authorities": 4,
+        "bindings": 1,
+        "executeClosed": true,
+        "functionExact": true,
+        "identities": 4
+      },
+      "installerReportedSatisfied": true,
+      "originalExecuted": false
+    },
+    "nextRollback": "NOT_RUN",
+    "exactGateReason": "publication_tail_predecessor_namespace_mismatch",
+    "publicationBodiesKeptPending": 26,
+    "formalSignaturesUnchangedInBothRuns": true,
+    "stagingCleanupConfirmedInBothRuns": true,
+    "holdRetained": true
+  },
+  "comparison": {
+    "method": "Native PostgreSQL 17 catalog comparison in repeatable-read read-only transactions. Equal schema-only versions returned zero differences. Effective table and any-column permission predicates are counted independently.",
+    "reviewedNamespaceSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+    "restoredNamespaceSha256": "55cbb8bcf6f5d9bad5a4147734c6ced8a0c22661072e21bb32c0ed97a11fcb15",
+    "scoped": {
+      "functions": {
+        "additional": 0,
+        "changed": 139,
+        "countsByChangedField": {
+          "effectiveAcl": 139
+        },
+        "examples": [
+          {
+            "fields": [
+              "effectiveAcl"
+            ],
+            "name": "acquire_legacy_producer_lease_v3_11(text,text,text,bytea,text,uuid,integer)"
+          },
+          {
+            "fields": [
+              "effectiveAcl"
+            ],
+            "name": "append_assistive_artifact_registration_v3(assistive_artifact_registration_input_v3,uuid)"
+          },
+          {
+            "fields": [
+              "effectiveAcl"
+            ],
+            "name": "append_exchange_reported_valuation_transaction_v3_16_9(exchange_reported_valuation_input_v3_13,uuid)"
+          },
+          {
+            "fields": [
+              "effectiveAcl"
+            ],
+            "name": "append_exchange_reported_valuation_v3_13(exchange_reported_valuation_input_v3_13,uuid)"
+          },
+          {
+            "fields": [
+              "effectiveAcl"
+            ],
+            "name": "append_financial_fact_pre_history_v1(financial_fact_input_v3,uuid)"
+          }
+        ],
+        "expected": 242,
+        "missing": 0,
+        "observed": 242,
+        "reachableChangesByRole": {
+          "postgres": {
+            "gained": 0,
+            "lost": 139
+          }
+        },
+        "splitFieldCounts": {}
+      },
+      "roles": {
+        "additional": 0,
+        "changed": 12,
+        "countsByChangedField": {
+          "bypassRls": 1,
+          "createDb": 1,
+          "createRole": 1,
+          "inherit": 1,
+          "login": 1,
+          "membership": 12,
+          "replication": 1,
+          "super": 1
+        },
+        "examples": [
+          {
+            "fields": [
+              "bypassRls",
+              "createDb",
+              "createRole",
+              "inherit",
+              "login",
+              "membership",
+              "replication",
+              "super"
+            ],
+            "name": "postgres"
+          },
+          {
+            "fields": [
+              "membership"
+            ],
+            "name": "anon"
+          },
+          {
+            "fields": [
+              "membership"
+            ],
+            "name": "authenticated"
+          },
+          {
+            "fields": [
+              "membership"
+            ],
+            "name": "authenticator"
+          },
+          {
+            "fields": [
+              "membership"
+            ],
+            "name": "legacy_correctness_rpc_owner"
+          }
+        ],
+        "expected": 30,
+        "missing": 0,
+        "observed": 30,
+        "reachableChangesByRole": {},
+        "splitFieldCounts": {
+          "membershipGrantorOnly": 9
+        }
+      },
+      "schemas": {
+        "additional": 0,
+        "changed": 1,
+        "countsByChangedField": {
+          "acl": 1,
+          "effectiveAcl": 1
+        },
+        "examples": [
+          {
+            "fields": [
+              "acl",
+              "effectiveAcl"
+            ],
+            "name": "public"
+          }
+        ],
+        "expected": 3,
+        "missing": 0,
+        "observed": 3,
+        "reachableChangesByRole": {
+          "authenticator": {
+            "gained": 1,
+            "lost": 0
+          },
+          "dashboard_user": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_checkpoint": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_create_subscription": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_execute_server_program": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_maintain": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_monitor": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_read_all_settings": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_read_all_stats": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_read_server_files": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_signal_backend": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_stat_scan_tables": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_use_reserved_connections": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_write_server_files": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pgbouncer": {
+            "gained": 1,
+            "lost": 0
+          },
+          "postgres": {
+            "gained": 0,
+            "lost": 1
+          },
+          "stockinsider": {
+            "gained": 1,
+            "lost": 0
+          },
+          "supabase_admin": {
+            "gained": 1,
+            "lost": 0
+          },
+          "supabase_auth_admin": {
+            "gained": 1,
+            "lost": 0
+          },
+          "supabase_realtime_admin": {
+            "gained": 1,
+            "lost": 0
+          },
+          "supabase_storage_admin": {
+            "gained": 1,
+            "lost": 0
+          }
+        },
+        "splitFieldCounts": {}
+      },
+      "tables": {
+        "additional": 0,
+        "changed": 92,
+        "countsByChangedField": {
+          "acl": 2,
+          "constraints": 2,
+          "effectiveAcl": 90,
+          "effectiveOtherAcl": 90,
+          "owner": 2
+        },
+        "examples": [
+          {
+            "fields": [
+              "constraints"
+            ],
+            "name": "candidate_research_run_items"
+          },
+          {
+            "fields": [
+              "acl",
+              "effectiveAcl",
+              "effectiveOtherAcl",
+              "owner"
+            ],
+            "name": "entry_plan_authority_jobs_v1"
+          },
+          {
+            "fields": [
+              "acl",
+              "effectiveAcl",
+              "effectiveOtherAcl",
+              "owner"
+            ],
+            "name": "entry_plan_authority_runs_v1"
+          },
+          {
+            "fields": [
+              "constraints"
+            ],
+            "name": "valuation_snapshots"
+          },
+          {
+            "fields": [
+              "effectiveAcl",
+              "effectiveOtherAcl"
+            ],
+            "name": "candidate_financial_document_retry_audit"
+          }
+        ],
+        "expected": 253,
+        "missing": 0,
+        "observed": 253,
+        "reachableChangesByRole": {
+          "postgres": {
+            "gained": 0,
+            "lost": 990
+          },
+          "service_role": {
+            "gained": 0,
+            "lost": 10
+          }
+        },
+        "splitFieldCounts": {
+          "constraintDefinitions": 2
+        }
+      },
+      "types": {
+        "additional": 0,
+        "changed": 0,
+        "countsByChangedField": {},
+        "examples": [],
+        "expected": 120,
+        "missing": 0,
+        "observed": 120,
+        "reachableChangesByRole": {},
+        "splitFieldCounts": {}
+      }
+    },
+    "namespace": {
+      "relations": {
+        "additional": 2,
+        "additionalExamples": [
+          "sha256:aeca4e66fb3e16be12f8b00d7cbea698a406800d7260237b0de93d3507a9aaf6",
+          "sha256:3450893556bf798183da16022cd62cad439df52f8ee0ccb3751170a4aa16ca12"
+        ],
+        "changed": 11,
+        "changedExamples": [
+          {
+            "fields": [
+              "acl",
+              "owner"
+            ],
+            "name": "public/entry_plan_authority_jobs_v1"
+          },
+          {
+            "fields": [
+              "owner"
+            ],
+            "name": "public/entry_plan_authority_jobs_v1_pending"
+          },
+          {
+            "fields": [
+              "owner"
+            ],
+            "name": "public/entry_plan_authority_jobs_v1_pkey"
+          },
+          {
+            "fields": [
+              "owner"
+            ],
+            "name": "public/entry_plan_authority_jobs_v1_single_running"
+          },
+          {
+            "fields": [
+              "acl",
+              "owner"
+            ],
+            "name": "public/entry_plan_authority_runs_v1"
+          }
+        ],
+        "countsByChangedField": {
+          "acl": 6,
+          "owner": 7
+        },
+        "expected": 987,
+        "missing": 0,
+        "missingExamples": [],
+        "observed": 989
+      },
+      "roles": {
+        "additional": 1,
+        "additionalExamples": [
+          "sha256:c3df10d1668dafce817e4dc14ee05a80c25edc86ad5043c7dda6fcc2cacb30f5"
+        ],
+        "changed": 1,
+        "changedExamples": [
+          {
+            "fields": [
+              "bypassRls",
+              "createDb",
+              "createRole",
+              "inherit",
+              "login",
+              "replication",
+              "super"
+            ],
+            "name": "postgres"
+          }
+        ],
+        "countsByChangedField": {
+          "bypassRls": 1,
+          "createDb": 1,
+          "createRole": 1,
+          "inherit": 1,
+          "login": 1,
+          "replication": 1,
+          "super": 1
+        },
+        "expected": 30,
+        "missing": 0,
+        "missingExamples": [],
+        "observed": 31
+      },
+      "routines": {
+        "additional": 13,
+        "additionalExamples": [
+          "sha256:1e07e1a6f7267bf692d108f085a074139be42dbbd9e916f01ae35816b22bccf3",
+          "sha256:8f1dc8e1ebc568794b33d125c3266262cd749a82d8f0bc926a26d9fb3abe897e",
+          "sha256:60beada839fbaea5c9a6b4e6dd688f29aeafc054bd11f8fec1fbd98298cebc94",
+          "sha256:092b6268954c2de6f06b69b08bddd69fe81cb97d873b68c97e5004670090c88e",
+          "sha256:73035b827326e370268ccfd6f223797027bcd9f0414be0aa36ef91fa55816e71",
+          "sha256:2bd64101fa5ba7f238b3f617ba442d765eaf72f6acbea106770d147a93bd3216",
+          "sha256:38581f61712ee7c898072bb0d53870712d90d15a0a5ffab2e044e5cd9349ffa3",
+          "sha256:89a4f5dce468da425c7bb4a2ec389e904015552223a169b875ebeecd0328a80b",
+          "sha256:a8d583cb414c99299e36fc1600f054f8902fb6068fefc50f20c4f27aea4cdc34",
+          "sha256:7169e54af532f24942ac15c3d516ce95eb9709e8f64c4fc3e6ed3b0c8e721b56",
+          "sha256:83939977d9312171746952ed684fdb75dfda743744de40be95dd136e6777bf0a",
+          "sha256:880aaaf51120746deaf7dfd5a3a480dacc4a8cff6e06156a1393d44f0bcd5c11"
+        ],
+        "changed": 36,
+        "changedExamples": [
+          {
+            "fields": [
+              "acl",
+              "owner"
+            ],
+            "name": "extensions/extensions.armor(bytea)"
+          },
+          {
+            "fields": [
+              "acl",
+              "owner"
+            ],
+            "name": "extensions/extensions.armor(bytea,text[],text[])"
+          },
+          {
+            "fields": [
+              "acl",
+              "owner"
+            ],
+            "name": "extensions/extensions.crypt(text,text)"
+          },
+          {
+            "fields": [
+              "acl",
+              "owner"
+            ],
+            "name": "extensions/extensions.dearmor(text)"
+          },
+          {
+            "fields": [
+              "acl",
+              "owner"
+            ],
+            "name": "extensions/extensions.decrypt(bytea,bytea,text)"
+          }
+        ],
+        "countsByChangedField": {
+          "acl": 36,
+          "owner": 36
+        },
+        "expected": 288,
+        "missing": 0,
+        "missingExamples": [],
+        "observed": 301
+      },
+      "types": {
+        "additional": 4,
+        "additionalExamples": [
+          "sha256:20663203d25c8d0fc47a6da2d45dbd24441f6a4394d65d7e22ddfa2edb8d4b3b",
+          "sha256:4aaa06ee75cf855039d75dbae1fc3d853af8323779c2b2170820fb3808eeb930",
+          "sha256:0d256c52191321b5971670c0fd28d5314493f5c8be6e637cafdb872b9301d4e9",
+          "sha256:075fb3288e3f1bb6ed469550d38f3c6ea967103b39c4d5d41674d2dbb86e6035"
+        ],
+        "changed": 4,
+        "changedExamples": [
+          {
+            "fields": [
+              "owner"
+            ],
+            "name": "public/_entry_plan_authority_jobs_v1"
+          },
+          {
+            "fields": [
+              "owner"
+            ],
+            "name": "public/_entry_plan_authority_runs_v1"
+          },
+          {
+            "fields": [
+              "owner"
+            ],
+            "name": "public/entry_plan_authority_jobs_v1"
+          },
+          {
+            "fields": [
+              "owner"
+            ],
+            "name": "public/entry_plan_authority_runs_v1"
+          }
+        ],
+        "countsByChangedField": {
+          "owner": 4
+        },
+        "expected": 820,
+        "missing": 0,
+        "missingExamples": [],
+        "observed": 824
+      }
+    },
+    "exactTargets": {
+      "constraints": [
+        {
+          "added": [],
+          "changed": [
+            {
+              "afterSha256": "93098b41361ccfc8176d28c5d5db8f1f26726ffb40431e5287d8eec57edbd958",
+              "afterValidated": false,
+              "beforeSha256": "3bcdfeaf36cc52292a0ca961b214e4eefcfeba5e98e3f2eb42efa5a9903e8da2",
+              "beforeValidated": false,
+              "fields": [
+                "definition"
+              ],
+              "name": "candidate_research_run_items_valuation_method_check"
+            }
+          ],
+          "removed": [],
+          "table": "candidate_research_run_items"
+        },
+        {
+          "added": [],
+          "changed": [
+            {
+              "afterSha256": "0e9648db4318a07380efd88c87567f828c12c1a04009d8faebc92c2e094584c0",
+              "afterValidated": true,
+              "beforeSha256": "9a691561a07f2713399160e9b707bc0f8fecb264dc6ca341d3b0f0622130bf29",
+              "beforeValidated": true,
+              "fields": [
+                "definition"
+              ],
+              "name": "valuation_snapshots_primary_method_check"
+            },
+            {
+              "afterSha256": "0091d5c7a9b34f12ddd8c0da1f0dbfc97f57b38d8ba4b5d5808b9868104a52ac",
+              "afterValidated": true,
+              "beforeSha256": "545f0909184727d2a89dab1895c44376f60814ceef1c01c9e6ed7d3b2328db1b",
+              "beforeValidated": true,
+              "fields": [
+                "definition"
+              ],
+              "name": "valuation_snapshots_valuation_basis_check"
+            }
+          ],
+          "removed": [],
+          "table": "valuation_snapshots"
+        }
+      ],
+      "membership": [
+        {
+          "added": [
+            {
+              "admin": false,
+              "inherit": true,
+              "member": "si-t18-db",
+              "role": "legacy_correctness_rpc_owner",
+              "set": true
+            }
+          ],
+          "removed": [
+            {
+              "admin": false,
+              "inherit": true,
+              "member": "postgres",
+              "role": "legacy_correctness_rpc_owner",
+              "set": true
+            }
+          ],
+          "role": "legacy_correctness_rpc_owner"
+        },
+        {
+          "added": [
+            {
+              "admin": false,
+              "inherit": true,
+              "member": "si-t18-db",
+              "role": "opportunity_v3_rpc_owner",
+              "set": true
+            }
+          ],
+          "removed": [
+            {
+              "admin": false,
+              "inherit": true,
+              "member": "postgres",
+              "role": "opportunity_v3_rpc_owner",
+              "set": true
+            }
+          ],
+          "role": "opportunity_v3_rpc_owner"
+        },
+        {
+          "added": [],
+          "removed": [
+            {
+              "admin": false,
+              "inherit": true,
+              "member": "postgres",
+              "role": "legacy_correctness_rpc_owner",
+              "set": true
+            },
+            {
+              "admin": false,
+              "inherit": true,
+              "member": "postgres",
+              "role": "opportunity_v3_rpc_owner",
+              "set": true
+            }
+          ],
+          "role": "postgres"
+        }
+      ],
+      "publicSchema": {
+        "expectedPublicGrants": [],
+        "observedPublicGrants": [
+          {
+            "grantable": false,
+            "privilege": "USAGE"
+          }
+        ],
+        "roleChanges": [
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "authenticator"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "dashboard_user"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_checkpoint"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_create_subscription"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_execute_server_program"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_maintain"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_monitor"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_read_all_settings"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_read_all_stats"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_read_server_files"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_signal_backend"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_stat_scan_tables"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_use_reserved_connections"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_write_server_files"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pgbouncer"
+          },
+          {
+            "gained": [],
+            "lost": [
+              "CREATE"
+            ],
+            "role": "postgres"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "stockinsider"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "supabase_admin"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "supabase_auth_admin"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "supabase_realtime_admin"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "supabase_storage_admin"
+          }
+        ]
+      },
+      "serviceRoleChanges": [
+        {
+          "gained": [],
+          "lost": [
+            "REFERENCES:table",
+            "REFERENCES:anyColumn",
+            "DELETE:table",
+            "TRIGGER:table",
+            "TRUNCATE:table"
+          ],
+          "table": "entry_plan_authority_jobs_v1"
+        },
+        {
+          "gained": [],
+          "lost": [
+            "REFERENCES:table",
+            "REFERENCES:anyColumn",
+            "DELETE:table",
+            "TRIGGER:table",
+            "TRUNCATE:table"
+          ],
+          "table": "entry_plan_authority_runs_v1"
+        }
+      ]
+    }
+  },
+  "bootstrapIdentityControl": {
+    "method": "Schema-only native control using a fresh si-t18-db bootstrap actor. The empty fixture was seeded once under its bootstrap administrator while restoring the recorded postgres function owner within the same transaction. The authentic clone retained its verified existing seed without rerunning it.",
+    "findings": {
+      "locale": "C",
+      "stage": "portable_identity_control",
+      "namespaceMatches": false,
+      "fixtureSeedExecution": 1,
+      "targets": {
+        "serviceRoleChanges": [
+          {
+            "table": "entry_plan_authority_jobs_v1",
+            "lost": [
+              "REFERENCES:table",
+              "REFERENCES:anyColumn",
+              "DELETE:table",
+              "TRIGGER:table",
+              "TRUNCATE:table"
+            ],
+            "gained": []
+          },
+          {
+            "table": "entry_plan_authority_runs_v1",
+            "lost": [
+              "REFERENCES:table",
+              "REFERENCES:anyColumn",
+              "DELETE:table",
+              "TRIGGER:table",
+              "TRUNCATE:table"
+            ],
+            "gained": []
+          }
+        ],
+        "publicSchema": {
+          "expectedPublicGrants": [],
+          "observedPublicGrants": [],
+          "roleChanges": [
+            {
+              "role": "postgres",
+              "lost": [
+                "CREATE"
+              ],
+              "gained": []
+            }
+          ]
+        },
+        "constraints": [
+          {
+            "table": "candidate_research_run_items",
+            "removed": [],
+            "added": [],
+            "changed": []
+          },
+          {
+            "table": "valuation_snapshots",
+            "removed": [],
+            "added": [],
+            "changed": []
+          }
+        ],
+        "membership": [
+          {
+            "role": "legacy_correctness_rpc_owner",
+            "removed": [
+              {
+                "role": "legacy_correctness_rpc_owner",
+                "member": "postgres",
+                "admin": false,
+                "inherit": true,
+                "set": true
+              }
+            ],
+            "added": [
+              {
+                "role": "legacy_correctness_rpc_owner",
+                "member": "si-t18-db",
+                "admin": false,
+                "inherit": true,
+                "set": true
+              }
+            ]
+          },
+          {
+            "role": "opportunity_v3_rpc_owner",
+            "removed": [
+              {
+                "role": "opportunity_v3_rpc_owner",
+                "member": "postgres",
+                "admin": false,
+                "inherit": true,
+                "set": true
+              }
+            ],
+            "added": [
+              {
+                "role": "opportunity_v3_rpc_owner",
+                "member": "si-t18-db",
+                "admin": false,
+                "inherit": true,
+                "set": true
+              }
+            ]
+          },
+          {
+            "role": "postgres",
+            "removed": [
+              {
+                "role": "legacy_correctness_rpc_owner",
+                "member": "postgres",
+                "admin": false,
+                "inherit": true,
+                "set": true
+              },
+              {
+                "role": "opportunity_v3_rpc_owner",
+                "member": "postgres",
+                "admin": false,
+                "inherit": true,
+                "set": true
+              }
+            ],
+            "added": []
+          }
+        ]
+      },
+      "namespace": {
+        "relations": {
+          "missing": 0,
+          "additional": 0,
+          "changed": 7,
+          "fields": {
+            "acl": 2,
+            "owner": 7
+          }
+        },
+        "routines": {
+          "missing": 0,
+          "additional": 0,
+          "changed": 36,
+          "fields": {
+            "owner": 36,
+            "acl": 3
+          }
+        },
+        "roles": {
+          "missing": 0,
+          "additional": 1,
+          "changed": 1,
+          "fields": {
+            "bypassRls": 1,
+            "createDb": 1,
+            "createRole": 1,
+            "inherit": 1,
+            "login": 1,
+            "replication": 1,
+            "super": 1
+          }
+        },
+        "types": {
+          "missing": 0,
+          "additional": 0,
+          "changed": 4,
+          "fields": {
+            "owner": 4
+          }
+        }
+      },
+      "scope": {
+        "roles": {
+          "missing": 0,
+          "additional": 0,
+          "changed": 12,
+          "fields": {
+            "membership": 12,
+            "bypassRls": 1,
+            "createDb": 1,
+            "createRole": 1,
+            "inherit": 1,
+            "login": 1,
+            "replication": 1,
+            "super": 1
+          },
+          "splits": {
+            "membershipGrantorOnly": 9
+          },
+          "reachability": {}
+        },
+        "types": {
+          "missing": 0,
+          "additional": 0,
+          "changed": 0,
+          "fields": {},
+          "splits": {},
+          "reachability": {}
+        },
+        "tables": {
+          "missing": 0,
+          "additional": 0,
+          "changed": 90,
+          "fields": {
+            "effectiveAcl": 90,
+            "effectiveOtherAcl": 90,
+            "acl": 2,
+            "owner": 2
+          },
+          "splits": {},
+          "reachability": {
+            "postgres": {
+              "lost": 990,
+              "gained": 0
+            },
+            "service_role": {
+              "lost": 10,
+              "gained": 0
+            }
+          }
+        },
+        "schemas": {
+          "missing": 0,
+          "additional": 0,
+          "changed": 1,
+          "fields": {
+            "effectiveAcl": 1
+          },
+          "splits": {},
+          "reachability": {
+            "postgres": {
+              "lost": 1,
+              "gained": 0
+            }
+          }
+        },
+        "functions": {
+          "missing": 0,
+          "additional": 0,
+          "changed": 139,
+          "fields": {
+            "effectiveAcl": 139
+          },
+          "splits": {},
+          "reachability": {
+            "postgres": {
+              "lost": 139,
+              "gained": 0
+            }
+          }
+        }
+      }
+    },
+    "sameServiceRoleAndMembershipTargets": {
+      "sameServiceRole": true,
+      "sameMembership": true
+    }
+  },
+  "valuationCheckControl": {
+    "method": "Three canonical pg_get_constraintdef values generated in native PostgreSQL from the named 2026-09-07 and 2026-09-20 migrations.",
+    "profiles": [
+      {
+        "migrationDate": "20260907",
+        "constraintProfiles": [
+          {
+            "name": "candidate_research_run_items_valuation_method_check",
+            "validated": false,
+            "definitionSha256": "93098b41361ccfc8176d28c5d5db8f1f26726ffb40431e5287d8eec57edbd958"
+          },
+          {
+            "name": "valuation_snapshots_primary_method_check",
+            "validated": true,
+            "definitionSha256": "0e9648db4318a07380efd88c87567f828c12c1a04009d8faebc92c2e094584c0"
+          },
+          {
+            "name": "valuation_snapshots_valuation_basis_check",
+            "validated": true,
+            "definitionSha256": "0091d5c7a9b34f12ddd8c0da1f0dbfc97f57b38d8ba4b5d5808b9868104a52ac"
+          }
+        ]
+      },
+      {
+        "migrationDate": "20260920",
+        "constraintProfiles": [
+          {
+            "name": "candidate_research_run_items_valuation_method_check",
+            "validated": false,
+            "definitionSha256": "3bcdfeaf36cc52292a0ca961b214e4eefcfeba5e98e3f2eb42efa5a9903e8da2"
+          },
+          {
+            "name": "valuation_snapshots_primary_method_check",
+            "validated": true,
+            "definitionSha256": "9a691561a07f2713399160e9b707bc0f8fecb264dc6ca341d3b0f0622130bf29"
+          },
+          {
+            "name": "valuation_snapshots_valuation_basis_check",
+            "validated": true,
+            "definitionSha256": "545f0909184727d2a89dab1895c44376f60814ceef1c01c9e6ed7d3b2328db1b"
+          }
+        ]
+      }
+    ],
+    "matches": [
+      {
+        "name": "candidate_research_run_items_valuation_method_check",
+        "authenticMatches20260907": true,
+        "reviewedMatches20260920": true
+      },
+      {
+        "name": "valuation_snapshots_primary_method_check",
+        "authenticMatches20260907": true,
+        "reviewedMatches20260920": true
+      },
+      {
+        "name": "valuation_snapshots_valuation_basis_check",
+        "authenticMatches20260907": true,
+        "reviewedMatches20260920": true
+      }
+    ],
+    "diagnosis": "All three authentic definitions match 20260907. All three reviewed definitions match 20260920. Neither the validity flags nor the names changed. The 20260920 contract was absent from the reviewed 49-migration staging sequence."
+  },
+  "remaining": [
+    "Pin and review the missing valuation contract precondition and its placement in the staging upgrade sequence.",
+    "Establish where PUBLIC USAGE and the remaining namespace differences entered the restore. Rehearse changes on the isolated clone and rerun the unchanged exact predecessor guard.",
+    "Run the authentic publication tail and the current candidate's fixed Next.js rollback once the predecessor matches."
+  ],
+  "cleanup": {
+    "stagingUnitsInactive": true,
+    "temporaryDirectoriesAbsent": 4,
+    "diskFreeBeforeBytes": 25910865920,
+    "diskFreeAfterBytes": 26129022976
+  },
+  "fallback": "The previously authorized isolated Contabo staging fallback was used while the managed Codex Cloud staging task was quota-blocked. No build, restore or bulk download used the Mac."
+}
