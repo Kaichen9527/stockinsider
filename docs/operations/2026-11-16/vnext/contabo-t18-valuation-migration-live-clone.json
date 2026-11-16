@@ -1,0 +1,49 @@
+{
+  "recordedAt": "2026-11-16T13:55:16+08:00",
+  "sourceSha": "c7056504b9976c758481e4ef46b071968ef1b390",
+  "stagingHarnessCommit": "005a94e2bd99ed4d3d8964220ef41efb7575bda6",
+  "temporaryStageAdapterSha256": "b9004cac05756dba9f3864699ae0d91e25f34e1f15e76e528fafd8bb30e1c250",
+  "restore": {
+    "backupDate": "2026-09-19",
+    "runner": "DB_VERIFIED_T18_GAP",
+    "foreignKeys": 288,
+    "rlsTables": 193,
+    "financialCommitted": true,
+    "publicationCommitted": false,
+    "formalSignaturesUnchanged": true,
+    "stageCleaned": true,
+    "nextRollback": "NOT_RUN",
+    "holdRetained": true,
+    "minimumHostDiskBytes": 17324707840,
+    "minimumHostAvailableMemoryBytes": 4294848512
+  },
+  "valuationReplay": {
+    "pinnedMigration": "migrations/20260920_auo_forward_bvps_pb_contract_v1.sql",
+    "migrationSha256": "3341e1b34f0c94adad78950ebd7092af6233cdac79abb684ce739d3530314d52",
+    "scope": "Actual authenticated Contabo staging clone after existing reviewed 49-migration financial installation",
+    "statementWrapper": "Separate transaction with explicit rollback",
+    "assertionsBeforeUnchangedFinalGuard": [
+      "authentic 2026-09-07 hashes and validation flags match exactly",
+      "all three reviewed 2026-09-20 constraint hashes and validation flags match after replay",
+      "total rows in both affected tables are unchanged",
+      "direct PUBLIC USAGE is removed in the staging transaction",
+      "after rollback the old constraint profiles and direct grant are restored"
+    ],
+    "assertionBlockReached": true,
+    "evidenceMethod": "The pinned adapter calls the probe before the final, unchanged guard. Expected mismatches from the probe itself are captured, and any failed assertion exits with a different reason. The terminal reason and restored predecessor digest establish that the assertion block finished and the unchanged guard then refused."
+  },
+  "finalGuard": {
+    "reason": "publication_tail_predecessor_namespace_mismatch",
+    "predecessor": {
+      "expectedSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+      "observedSha256": "55cbb8bcf6f5d9bad5a4147734c6ced8a0c22661072e21bb32c0ed97a11fcb15",
+      "relations": 989,
+      "roles": 31,
+      "routines": 301,
+      "types": 824
+    },
+    "migrationsStillPending": 26
+  },
+  "projectionGap": "The local launcher had not yet included the two bounded server receipt fields. Per-phase ACL observations and individual guard outcomes inside the rolled-back probe were not observed in this result. Keep them pending until the corrected launcher captures them.",
+  "next": "Capture the authenticated per-phase ACL and archive TOC counts with the corrected launcher, then resolve and independently review the remaining whole-catalog differences."
+}
