@@ -1,0 +1,57 @@
+{
+  "recordedAt": "2026-11-16T13:58:28+08:00",
+  "pullRequest": 384,
+  "subjectCommit": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "protectedBase": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "historicalJobs": {
+    "architecture": "https://github.com/Kaichen9527/stockinsider/actions/runs/39996616648/job/120561768034",
+    "requirements": "https://github.com/Kaichen9527/stockinsider/actions/runs/39996616648/job/120561768044",
+    "exactReview": "https://github.com/Kaichen9527/stockinsider/actions/runs/39996616648/job/120561768148"
+  },
+  "sharedFailingStep": "protected-external-gate-worker.mjs prepare",
+  "gitDiagnostic": "fatal: couldn't find remote ref refs/heads/evidence/source-led-opportunity-v3-exact-review-cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "selectedRefs": [
+    {
+      "ref": "refs/heads/evidence/source-led-opportunity-v3-architecture-v325-digest",
+      "sha": "2a710eab65e8c60204493ae08848d47fec3faa9c",
+      "notFound": false
+    },
+    {
+      "ref": "refs/heads/evidence/source-led-opportunity-v3-exact-review-cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "sha": null,
+      "notFound": true
+    },
+    {
+      "ref": "refs/heads/evidence/source-led-opportunity-v3-requirements-v325-digest",
+      "sha": "cf942588ffa03c81c4af384bb7cc4442468cf13d",
+      "notFound": false
+    }
+  ],
+  "reviewBlobObservations": [
+    {
+      "kind": "architecture",
+      "commit": "2a710eab65e8c60204493ae08848d47fec3faa9c",
+      "blob": "ce017f8032884a63215c9fe0fa6d8c18bc06cf0b"
+    },
+    {
+      "kind": "architecture",
+      "commit": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "blob": "ce017f8032884a63215c9fe0fa6d8c18bc06cf0b"
+    },
+    {
+      "kind": "requirements",
+      "commit": "cf942588ffa03c81c4af384bb7cc4442468cf13d",
+      "blob": "d514b6acf9f088662180d5219ff1fc14882897f0"
+    },
+    {
+      "kind": "requirements",
+      "commit": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "blob": "d514b6acf9f088662180d5219ff1fc14882897f0"
+    }
+  ],
+  "protectedRequirements": "The protected base requires independent PASS evidence bound to the exact subject commit/tree and reviewed range, its active graph, and a unique direct-child evidence commit with the closed evidence-only diff. All selected refs are fetched together during prepare, before any of these checks run.",
+  "reviewResult": "NOT_RUN",
+  "ciRetryRequested": false,
+  "holdRetained": true,
+  "next": "Resolve product/runtime blockers, bind the final reviewed tree and obtain the qualified independent review artifact for that exact head. Re-run the unchanged check only with the matching evidence."
+}
