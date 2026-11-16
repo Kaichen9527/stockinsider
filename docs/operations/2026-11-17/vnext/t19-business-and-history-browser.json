@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "vnext-business-and-history-browser-witness-v1",
+  "scope": "isolated Contabo, installed Chromium, actual PostgreSQL with synthetic original evidence and test provider",
+  "comparisonRun": 43970489565,
+  "comparisonObservation": "The failed business suite had already rendered the homepage inference and reached the retained article. Its repeated source fixture paragraph appeared in multiple sections.",
+  "build": {
+    "nextVersion": "16.3.4",
+    "prebuiltLabel": "23106ce",
+    "buildIdSha256": "886b180fb160e4dda833bf8dfe36c160e00a9949891968e195835ac9ed64889c",
+    "requiredServerFilesSha256": "b5cc9cb84801f1587224a06af0661e091e2c5cc25009cfe7ae03732aa6b1888f",
+    "exactNewHeadBuildVerified": false
+  },
+  "nativeBusinessTestsPassed": 7,
+  "browser": {
+    "business": {
+      "desktop": "passed",
+      "mobile": "passed"
+    },
+    "current": {
+      "desktop": "passed",
+      "mobile": "passed"
+    }
+  },
+  "assertions": [
+    "source-bound inference while authority is current",
+    "no score or entry approval from inference",
+    "withdrawn inference disappears",
+    "other original counterevidence remains",
+    "exact version and article content retained",
+    "each named section carries exact text even when repeated",
+    "EPS and ratio values preserved",
+    "no horizontal overflow"
+  ],
+  "productionServiceSignaturesAndReleasePointerUnchanged": true
+}
