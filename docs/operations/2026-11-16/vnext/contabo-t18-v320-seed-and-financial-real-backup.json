@@ -1,0 +1,135 @@
+{
+  "schema": "stockinsider-t18-v320-seed-and-financial-real-backup-v1",
+  "testedTaipeiDate": "2026-11-16",
+  "candidateSourceCommit": "cb9e1795af69f6bbc7a577648b0f86c7fe176957",
+  "backupSourceDate": "2026-09-19",
+  "authenticatedClone": true,
+  "stageAdapterSha256": "df3f91e4d06c0cc06d3b279c236e683e62f35d522e9a5de23d5092f7a881f12a",
+  "publishedCandidateSourceComparedByteForByte": [
+    {
+      "path": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+      "exactPublishedBytes": true
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-source-seed-replay.mjs",
+      "exactPublishedBytes": true
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-source-seed-replay.test.mjs",
+      "exactPublishedBytes": true
+    }
+  ],
+  "webChecks": {
+    "baseSource": "ae3be2666e4b78d9b56fce4d12384ceab9e80269",
+    "scope": "isolated_compatibility_candidate_and_existing_web_tree",
+    "syntax": [
+      0,
+      0,
+      0
+    ],
+    "npm": 0,
+    "webBuild": 0,
+    "typecheck": 0,
+    "lint": 0
+  },
+  "webScratchRemoved": true,
+  "firstRestore": {
+    "status": "REJECTED",
+    "reason": "restore_pg_restore_deadline",
+    "scratchCleaned": true,
+    "stagingReplaySeconds": 720,
+    "stagingEngineDeadlineSeconds": 900
+  },
+  "successfulRestoreLimits": {
+    "stagingReplaySeconds": 855,
+    "stagingEngineDeadlineSeconds": 1020
+  },
+  "databaseReceipt": {
+    "checks": {
+      "foreignKeys": 288,
+      "rlsTables": 193
+    },
+    "databaseBytes": 2258785971,
+    "lineage": null,
+    "schema": "stockinsider-owned-db-restore-v1"
+  },
+  "seedEvidence": {
+    "before": {
+      "authorities": 4,
+      "bindings": 1,
+      "executeClosed": true,
+      "functionExact": true,
+      "identities": 4
+    },
+    "checks": 3,
+    "during": {
+      "authorities": 4,
+      "bindings": 1,
+      "executeClosed": true,
+      "functionExact": true,
+      "identities": 4
+    },
+    "installerReportedSatisfied": true,
+    "originalExecuted": false
+  },
+  "financialCommitted": true,
+  "publicationCommitted": false,
+  "publicationGap": {
+    "reason": "publication_tail_predecessor_namespace_mismatch",
+    "authenticBackupPost50": {
+      "expectedSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+      "observedSha256": "55cbb8bcf6f5d9bad5a4147734c6ced8a0c22661072e21bb32c0ed97a11fcb15",
+      "relations": 989,
+      "roles": 31,
+      "routines": 301,
+      "types": 824
+    },
+    "octoberSchemaOnlyExactBaseline": {
+      "locale": "C",
+      "stage": "native_post50_namespace",
+      "namespaceSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+      "roles": 30,
+      "relations": 987,
+      "routines": 288,
+      "types": 820
+    },
+    "netInventoryDifferences": {
+      "relations": 2,
+      "routines": 13,
+      "roles": 1,
+      "types": 4
+    },
+    "nativePublicationExit": 0
+  },
+  "retainedRows": {
+    "evaluation": {
+      "afterRows": 72,
+      "beforeRows": 72,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    },
+    "diagnostic": {
+      "afterRows": 52,
+      "beforeRows": 52,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    }
+  },
+  "latestNextRollback": "NOT_RUN",
+  "officialSignaturesIdentical": true,
+  "nativeHoldRetained": true,
+  "stageResourcesCleaned": true,
+  "cleanup": {
+    "temporaryRunnerRemoved": true,
+    "freeBytesAfterCleanup": 26133274624
+  },
+  "nativeScratchRemoved": true,
+  "resourceSamples": {
+    "appMemoryPeakObservedBytes": 18776064,
+    "dbMemoryPeakObservedBytes": 805310464,
+    "minimumHostAvailableMemoryBytes": 4393803776,
+    "minimumHostDiskBytes": 17331519488,
+    "minimumWorkFreeBytes": 5919150080,
+    "restMemoryPeakObservedBytes": 18763776
+  }
+}
