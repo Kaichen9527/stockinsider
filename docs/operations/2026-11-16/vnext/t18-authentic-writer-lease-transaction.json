@@ -1,0 +1,141 @@
+{
+  "schema": "stockinsider-t18-authentic-writer-lease-transaction-v1",
+  "dayUtc": "2026-11-16",
+  "archiveDate": "2026-09-19",
+  "correctedSource": "437beb7bb4ae07a83d5c3f9f83967966e4dcdcd0",
+  "harnessRevision": "005a94e2bd99ed4d3d8964220ef41efb7575bda6",
+  "verification": {
+    "focusedTests": 30,
+    "productionBuild": {
+      "nextProductionBuildExit": 0,
+      "nextVersion": "16.3.4",
+      "availableDiskBytes": 24495718400,
+      "availableMemoryBytes": 4617449472
+    },
+    "nativeWriterControls": [
+      {
+        "writerFenceNativeControl": true,
+        "nativeSqlstate": "42501",
+        "publicErrorToken": "production_writer_release_rejected",
+        "guardedModeRowUnchanged": true,
+        "activeReleaseFixture": true,
+        "productionBackupOpened": false
+      },
+      {
+        "nativeWriterLeasePipeline": true,
+        "activeReleaseMatched": true,
+        "acquireAndReleaseAsServiceRole": true,
+        "writerFenceAcceptedLeasedWrite": true,
+        "leaseAbsentAndModeDisabled": true,
+        "productionBackupOpened": false
+      },
+      {
+        "scratchCleaned": true
+      }
+    ]
+  },
+  "initialAuthenticatedTrial": {
+    "source": "5e53b9985bf5e83df26d538de94ca9b17fb763d0",
+    "adapterSha256": "f53face9611fe920a96c19188ea37432a7befe9d637b774c9d435d476a439cd5",
+    "stopPhase": "provider",
+    "writer": {
+      "archiveIdentityFenceDisarmed": true,
+      "archivedReleaseRecognized": true,
+      "leaseAcquired": true,
+      "leaseFunctionsMatched": true,
+      "leaseReleased": false,
+      "localReleaseBinding": true,
+      "migrated": [
+        "legacy"
+      ],
+      "negative": {
+        "code": "42501",
+        "fenceContext": true,
+        "legacyModeUpdate": false,
+        "token": "production_writer_release_rejected"
+      },
+      "sameLegacyFailureIsolated": true,
+      "transactionalLegacyCommitted": false,
+      "unchangedModeDisabled": false,
+      "writerFenceStillInstalled": false
+    },
+    "legacyTransactionCommitted": false,
+    "formalSignaturesMatched": true
+  },
+  "correctedAuthenticatedTrial": {
+    "adapterSha256": "600fd9975bee5b706dceac9d3214bfa4d04f1b508227405d65534ae9427effa3",
+    "checks": {
+      "foreignKeys": 288,
+      "rlsTables": 193
+    },
+    "publication": {
+      "installedCatalogSha256": "da8abbcfc5aa4cf1eed9c03c4528a6dbc936d85ec6dba8d81103dd7021f8775a",
+      "namespaceSha256": "4d810effe8ca7fa2a532a3f7ab5f3e286d4f155af659ee4fb232c2eb670e18cb",
+      "productionAuthorized": false,
+      "profile": "contabo-t18-sealed-archive-2026-09-19",
+      "steps": 26
+    },
+    "writer": {
+      "archiveIdentityFenceDisarmed": true,
+      "archivedReleaseRecognized": true,
+      "leaseAbsentAfterCommit": true,
+      "leaseAcquired": true,
+      "leaseFunctionsMatched": true,
+      "leaseReleased": true,
+      "localReleaseBinding": true,
+      "localWriterHeaderCleared": true,
+      "migrated": [
+        "legacy",
+        "provider",
+        "summary"
+      ],
+      "negative": {
+        "code": "42501",
+        "fenceContext": true,
+        "legacyModeUpdate": false,
+        "token": "production_writer_release_rejected"
+      },
+      "sameLegacyFailureIsolated": true,
+      "transactionalLegacyCommitted": true,
+      "unchangedModeDisabled": true,
+      "writerFenceStillInstalled": true
+    },
+    "mode": {
+      "enabled": false,
+      "fenced": true,
+      "jobs": 0,
+      "published": 0,
+      "routines": 15
+    },
+    "evaluationPreservation": {
+      "afterRows": 72,
+      "beforeRows": 72,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    },
+    "diagnosticPreservation": {
+      "afterRows": 52,
+      "beforeRows": 52,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    },
+    "latestLaunchObservation": {
+      "ranked": null,
+      "session": null,
+      "status": "SCHEMA_MISSING"
+    },
+    "nextRollback": "NOT_RUN",
+    "holdRetained": true
+  },
+  "host": {
+    "formalSignaturesMatched": true,
+    "minimumDiskBytes": 17310187520,
+    "minimumAvailableMemoryBytes": 4459098112,
+    "cleanup": {
+      "scratchRootsRemoved": 2,
+      "allStagingUnitsInactive": true,
+      "diskBytes": 26113654784,
+      "memoryAvailableBytes": 4790005760
+    }
+  }
+}
