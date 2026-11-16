@@ -53,9 +53,10 @@ function fixture(options:{enabled?:boolean;operation?:'acquire'|'parse';failure?
  const modules:Record<string,unknown>={
   'node:crypto':nativeRequire('node:crypto'),'next/server':{NextResponse:{json:(body:unknown,init:ResponseInit)=>new Response(JSON.stringify(body),init)}},
   '../internal-auth.ts':null,'./auth.ts':null,'./policy.ts':{vnextEnabled:()=>enabled},
-  '../taiwan-data-runtime.ts':{requireActiveVpsWriter:async()=>({ok:true,releaseId:context.releaseId,supabase:client})},
+  '../taiwan-data-runtime.ts':{requireActiveVpsWriter:async()=>failure==='writer-inactive'
+   ?{ok:false,error:'writer_release_not_active'}:{ok:true,releaseId:context.releaseId,supabase:client}},
   '../production-write-lease.ts':{acquireProductionWriteLease:async()=>{leaseCalls++;trace.push('acquire');if(failure==='busy-claim'&&leaseCalls===1||failure==='busy-final'&&leaseCalls===3)return null;if(failure==='acquire-error')throw Error('synthetic');assert.equal(activeLease,null);activeLease=id(100+leaseCalls);return activeLease;},
-   releaseProductionWriteLease:async(owner:string)=>{trace.push('release');assert.equal(owner,activeLease);activeLease=null;if(failure==='release'&&leaseCalls===1)throw Error('synthetic');}},
+   releaseProductionWriteLease:async(owner:string)=>{trace.push('release');assert.equal(owner,activeLease);activeLease=null;if(failure==='release'&&leaseCalls===1||failure==='release-final'&&leaseCalls===3)throw Error('synthetic');}},
   '../private-artifact-store.ts':{privateArtifactStore:()=>({put:async(_hash:string,b:Buffer)=>{assert.ok(activeLease);assert.equal(createHash('sha256').update(b).digest('hex'),_hash);puts++;trace.push('put');return {created:true};}})},
   '../opportunity-v3/internal.ts':{fixedRunnerPrincipal:()=>id(2)},
   '../candidate-financial-artifact.ts':{readCandidateFinancialArtifact:async()=>{assert.equal(activeLease,null);return Buffer.from(bytes);}},
@@ -63,7 +64,7 @@ function fixture(options:{enabled?:boolean;operation?:'acquire'|'parse';failure?
   '../candidate-official-financials.ts':{candidateFinancialFactInput,candidateParsedExchangeFinancialFact,fetchPreparedCandidateMopsFiling:async(capability:unknown)=>{assert.equal(activeLease,null);await main.verifyFinancialPreparation(capability,{operation:'acquire',symbol:'2330',sourceUrl:attempt.sourceUrl});provider++;trace.push('provider');return {document:{bytes:Buffer.from(bytes),contentType:'application/xhtml+xml',collectedAt:new Date().toISOString(),periodEnd:attempt.periodEnd}};},
    fetchPreparedOfficialFinancialPayload:async(capability:unknown,url:string)=>{assert.equal(activeLease,null);await main.verifyFinancialPreparation(capability,{operation:'acquire',sourceUrl:url});provider++;trace.push('provider');if(failure==='deferred-witness')throw Error('prepared_official_http_server_error');return {body:'[]',rawBytes:Buffer.from('[]'),responseBytes:2};}},
   '../candidate-financial-acquisition.ts':{parseExchangeFinancialEndpoint:()=>({terminalReason:'complete',facts:[{symbol:'2330',factKey:'quarterly_revenue',periodStart:'2026-01-01',periodEnd:failure==='period-missing'?'2026-06-30':'2026-09-30',durationKind:'quarterly',value:1,unit:'TWD_thousand',sourceRef:'twse-openapi:synthetic',sourceTimestamp:'2026-11-01T00:00:00Z',filingRestatementId:'synthetic'}]})},
-  '../candidate-financial-local-parser.ts':{runPreparedFinancialLocalParser:async(capability:unknown,input:Row)=>{assert.equal(activeLease,null);await main.verifyFinancialPreparation(capability,{operation:'parse',artifactHash:input.documentSha256,symbol:'2330',periodEnd:'2026-09-30'});parsers++;trace.push('parser');return {status:options.partial?'partial':'complete',missingRequirements:[],locators:[],validatedFacts:[],parser:'arelle'};}},
+  '../candidate-financial-local-parser.ts':{runPreparedFinancialLocalParser:async(capability:unknown,input:Row)=>{assert.equal(activeLease,null);await main.verifyFinancialPreparation(capability,{operation:'parse',artifactHash:input.documentSha256,symbol:'2330',periodEnd:'2026-09-30'});parsers++;trace.push('parser');if(failure==='parser-throws')throw Error('synthetic_parser_failure');return {status:options.partial?'partial':'complete',missingRequirements:[],locators:[],validatedFacts:[],parser:'arelle'};}},
   '../candidate-financial-document-worker.ts':{candidateFinancialParserEvidence:(_parse:unknown,digest:string)=>({schema:'candidate-financial-parser-evidence-v10',documentSha256:digest}),candidateFinancialDocumentFactInput:candidateFinancialFactInput},
   '../official-financial-validation-worker.ts':{validatePendingOfficialFinancials:async(_stocks:unknown,deps:Row)=>{assert.equal(activeLease,null);assert.deepEqual(clone(deps.subjectIdentities),[identity]);const scoped=deps.client as typeof client;
    await scoped.rpc('record_official_financial_validation',{p_fact_id:id(40),p_recorded_at:identity.recordedAt,p_source_sha256:operation==='parse'?hash:createHash('sha256').update('[]').digest('hex'),p_input_hash:'d'.repeat(64),p_validation:{status:'validated'},p_validator_principal:id(2)});return {status:'success'};}},
@@ -88,15 +89,80 @@ test('ACTUALMOPS acquisition stagesbyteswithoutlease thenregistersreceiptonlyins
 });
 test('ACTUALroutes exactbearer/closedlimit refusebeforeanyDB/lease/provider; wrongmode andmissingbridge blockbeforeIO',async()=>{
  const invalidHeaders:Array<Record<string,string>>=[{},{authorization:'synthetic-internal'},{authorization:'Bearer synthetic-internal','x-internal-key':'synthetic-internal'},{authorization:'Bearer author'}];
- for(const headers of invalidHeaders){const f=fixture(),response=await f.post({limit:1},headers);assert.equal(response.status,401);assert.deepEqual(f.trace,[]);}
- for(const body of [{limit:1,action:'enqueue'},{limit:'1'},{limit:0},{limit:241},{limit:1,url:'https://private.invalid'}]){const f=fixture();assert.equal((await f.post(body)).status,422);assert.deepEqual(f.trace,[]);}
+ for(const enabled of [true,false])for(const operation of ['acquire','parse'] as const){
+  for(const headers of invalidHeaders){
+   const f=fixture({enabled,operation});
+   assert.equal((await f.post({limit:1},headers)).status,401);
+   assert.deepEqual(f.trace,[]);
+  }
+  const upperLimit=operation==='acquire'?240:20;
+  for(const body of [{limit:1,action:'enqueue'},{limit:'1'},{limit:0},{limit:upperLimit+1},{limit:1,url:'https://private.invalid'}]){
+   const f=fixture({enabled,operation});
+   assert.equal((await f.post(body)).status,422);
+   assert.deepEqual(f.trace,[]);
+  }
+ }
  const missing=fixture({operatorMissing:true});assert.equal((await missing.post()).status,403);assert.deepEqual(missing.trace,[]);
- const parser=fixture({operation:'parse'});assert.equal((await parser.post({limit:21})).status,422);assert.deepEqual(parser.trace,[]);
  for(const options of [{failure:'bridge'},{dbMode:'legacy_off' as const}]){const f=fixture(options);assert.equal((await f.post()).status,503);assert.equal(f.counts().provider,0);assert.equal(f.counts().puts,0);}
 });
-test('busy/acquisitionfailure/DBclaim/release errors neverborrowleases orbeginproviderIO',async()=>{
- for(const [failure,status] of [['busy-claim',409],['acquire-error',503],['claim-db',503],['release',503]] as const){const f=fixture({failure});assert.equal((await f.post()).status,status);assert.equal(f.counts().provider,0);assert.equal(f.counts().puts,0);assert.equal(f.counts().activeLease,null);}
- const f=fixture({failure:'busy-final'}),response=await f.post();assert.equal(response.status,202);assert.equal(f.counts().provider,1);assert.equal(f.counts().puts,0);assert.equal(f.counts().commits,0);assert.equal(f.commands.some(c=>c.command==='settle-failure'),false);
+test('acquisition and parser routes block an inactive writer before RPC, lease or I/O',async()=>{
+ for(const enabled of [true,false])for(const operation of ['acquire','parse'] as const){
+  const f=fixture({enabled,operation,failure:'writer-inactive'}),response=await f.post();
+  assert.equal(response.status,409);
+  assert.equal((await response.json()).error,'writer_release_not_active');
+  assert.deepEqual(f.trace,[]);
+ }
+});
+test('busy, failed claim, and failed lease release prevent staging in both operations and modes',async()=>{
+ const failures=[['busy-claim',409],['acquire-error',503],['claim-db',503],['release',503]] as const;
+ for(const enabled of [true,false])for(const operation of ['acquire','parse'] as const){
+  for(const [failure,status] of failures){
+   const f=fixture({enabled,operation,failure});
+   const response=await f.post();
+   assert.equal(response.status,status,`${operation}/${enabled}/${failure}`);
+   const counts=f.counts();
+   assert.deepEqual([counts.provider,counts.parsers,counts.puts,counts.commits,counts.activeLease],[0,0,0,0,null]);
+  }
+ }
+});
+test('contention after staging cannot write an artifact or settle another owner’s work',async()=>{
+ for(const operation of ['acquire','parse'] as const){
+  const f=fixture({operation,failure:'busy-final'}),response=await f.post();
+  assert.equal(response.status,202);
+  const counts=f.counts();
+  assert.equal(counts.provider+counts.parsers,1);
+  assert.deepEqual([counts.puts,counts.commits,counts.activeLease],[0,0,null]);
+  assert.equal(f.commands.some(c=>c.command==='settle-failure'),false);
+ }
+});
+test('FDL-06 a thrown parser failure settles only the owned attempt without publishing or persisting contents',async()=>{
+ for(const enabled of [true,false]){
+  const f=fixture({enabled,operation:'parse',failure:'parser-throws'}),response=await f.post();
+  assert.equal(response.status,500);
+  const body=await response.json();
+  assert.equal(body.results[0].status,'deferred');
+  assert.equal(body.results[0].reason,'parser_unavailable');
+  const settle=f.commands.filter(c=>c.command==='settle-failure');
+  assert.equal(settle.length,1);
+  assert.equal(settle[0].request.attemptId,id(10));
+  const counts=f.counts();
+  assert.deepEqual([counts.parsers,counts.provider,counts.puts,counts.commits,counts.activeLease],[1,0,0,0,null]);
+ }
+});
+test('unconfirmed release after a parser commit returns pending and recovers the same attempt',async()=>{
+ for(const enabled of [true,false]){
+  const f=fixture({enabled,operation:'parse',failure:'release-final'});
+  const response=await f.post();
+  assert.equal(response.status,202);
+  assert.equal((await response.json()).results[0].status,'pending');
+  assert.equal(f.counts().commits,1);
+  assert.equal(f.counts().parsers,1);
+  const recovered=await f.post();
+  assert.equal(recovered.status,200);
+  assert.equal((await recovered.json()).recovered,1);
+  const counts=f.counts();
+  assert.deepEqual([counts.parsers,counts.puts,counts.commits,counts.activeLease],[1,1,1,null]);
+ }
 });
 test('lostcommit/finish/witness responses recoveracrosslimit-only requests WITHOUTrefetch/reparse/recommit ornewworkcharge',async()=>{
  for(const failure of ['lost-commit','lost-finish','lost-witness']){const f=fixture({failure});assert.equal((await f.post()).status,202);const before=f.counts();const response=await f.post();assert.equal(response.status,200);assert.equal(f.counts().provider,before.provider);assert.equal(f.counts().commits,1);assert.equal(f.counts().activeLease,null);const body=await response.json();assert.ok(body.recovered===1||body.known.length===1);assert.equal(f.commands.some(c=>c.command==='settle-failure'),false);}
