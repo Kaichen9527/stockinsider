@@ -4,8 +4,7 @@ import {executeFinancialVpsOperatorPrerequisite} from './financial-vps-operator-
 import {assertOperatorFlags,financialOperatorActionIdentity,assertOperatorPlan,assertOperatorReviewBinding} from './financial-vps-operator-binding.mjs';
 import {OWNERSHIP_PRELUDE,makeFinancialExistingSchemaProfile,assertFinancialExistingSchemaPlan,assertFinancialProfileFlags,assertFinancialProfileReviewBinding} from './financial-existing-schema-profile.mjs';
 import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
-import { SOURCE_SEED_MIGRATION, lockSatisfiedV320SourceSeed, verifySatisfiedV320SourceSeed } from './v320-source-seed-replay.mjs';
-import { v320ConstraintReplays, lockV320Constraint, preserveV320Constraints, verifyV320Constraint } from './legacy-v320-constraint-replay.mjs';
+import { historicalFinancialRestoreReplay } from './historical-financial-restore-replay.mjs';
 import { FINANCIAL_TAIL, selectFinancialHistoryChain, assertFinancialReviewBinding, assertInstalledFinancialHistoryPlan, verifyFinancialHistoryPostconditions } from './financial-history-install-guard.mjs';
 
 import { createHash } from 'node:crypto';
@@ -460,15 +459,28 @@ async function applyReviewedMigrations(options) {
 
 // The CLI enters only after exact-source, attestation and authority validation.
 // Kept separate to exercise transaction/error handling with isolated test clients.
-async function applyReviewedMigrationPlanToClient(client,plan,options,{operatorPrerequisiteExecutor=executeFinancialVpsOperatorPrerequisite}={}) {
+function applyReviewedMigrationPlanToClient(client,plan,options,dependencies) {
+  return applyFinancialMigrationPlanToClient(client,plan,options,dependencies);
+}
+
+// Called by the isolated restored archive runner. The reviewed CLI cannot
+// select this path and its source/attestation envelope is refused here.
+function applyRestoredFinancialPlanToClient(client,plan,options,dependencies) {
+  if(options?.financialExistingSchemaProfile!==true || options?.privateVpsPeerOperator!==true
+    || options?.sourceCommit!==null || options?.attestationCommit!==null || options?.apply===true)
+    throw new Error('historical_financial_restore_only');
+  return applyFinancialMigrationPlanToClient(client,plan,options,dependencies,true);
+}
+
+async function applyFinancialMigrationPlanToClient(client,plan,options,{operatorPrerequisiteExecutor=executeFinancialVpsOperatorPrerequisite}={},restore=false) {
   let locked=false;
   let transactionOpen=false;
   let primaryFailed=false;
   const supersededMigrations=[];
   let operatorAction=null;
-  const retainedChecks=new Map();
-  let retainedSourceSeed=null;
+  const replay=restore?historicalFinancialRestoreReplay(client):null;
   try {
+    if(replay)await replay.assertRestoredBackend();
     const lockResult=await client.query("SELECT pg_try_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0)) AS locked");
     if(lockResult.rows[0]?.locked!==true) throw new Error('migration_install_busy');
     locked=true;
@@ -492,22 +504,10 @@ async function applyReviewedMigrationPlanToClient(client,plan,options,{operatorP
         supersededMigrations.push(migration.relativePath);
         continue;
       }
-      if(options.financialExistingSchemaProfile===true) {
-        for(const profile of v320ConstraintReplays) {
-          if(migration.relativePath!==profile.firstMigration)continue;
-          const oid=await lockV320Constraint(client,profile);
-          if(oid!==null)retainedChecks.set(profile,oid);
-        }
-      }
-      if(options.financialExistingSchemaProfile===true && migration.relativePath===SOURCE_SEED_MIGRATION) {
-        retainedSourceSeed=await lockSatisfiedV320SourceSeed(client,migration);
-        if(retainedSourceSeed)continue;
-      }
-      const sql=preserveV320Constraints(migration,retainedChecks);
-      await client.query(migrationBodyInAtomicTransaction(sql));
+      const sql=replay?await replay.migrationSql(migration):migration.bytes.toString('utf8');
+      if(sql!==null)await client.query(migrationBodyInAtomicTransaction(sql));
     }
-    for(const [profile,oid] of retainedChecks)await verifyV320Constraint(client,profile,oid);
-    if(retainedSourceSeed)await verifySatisfiedV320SourceSeed(client,retainedSourceSeed);
+    const alreadySatisfiedMigrations=replay?await replay.verify():[];
     const verified=await verifyReviewedMigrationPostconditions(client, options);
     await client.query('COMMIT');
     transactionOpen=false;
@@ -515,7 +515,8 @@ async function applyReviewedMigrationPlanToClient(client,plan,options,{operatorP
       sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
       orderedChainSha256:plan.chainSha256,...(operatorAction?{operatorPrerequisite:{...plan.operatorPrerequisite,result:operatorAction}}:{}),...(plan.financialExistingSchemaProfile?{orderedProfileSha256:plan.financialExistingSchemaProfile.orderedProfileSha256,preludes:plan.financialExistingSchemaProfile.preludes.map(({relativePath,sha256})=>[relativePath,sha256])}:{}),migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
       supersededMigrations:Object.freeze(supersededMigrations),
-      ...(retainedSourceSeed?{alreadySatisfiedMigrations:Object.freeze([SOURCE_SEED_MIGRATION])}:{}),verified});
+      ...(alreadySatisfiedMigrations.length?{alreadySatisfiedMigrations}:{}),
+      ...(replay?{historicalRestoreReplay:true,productionAuthorized:false}:{}),verified});
   } catch(error) {
     primaryFailed=true;
     throw error;
@@ -534,4 +535,4 @@ if(import.meta.url===`file://${process.argv[1]}`) {
 }
 
 export { MIGRATIONS, applyReviewedMigrations, parseArguments, reviewedMigrationIsSuperseded,
-  reviewedMigrationPlan, applyReviewedMigrationPlanToClient };
+  reviewedMigrationPlan, applyReviewedMigrationPlanToClient, applyRestoredFinancialPlanToClient };

@@ -48,7 +48,7 @@ jobs:
         run: |
           npm ci --ignore-scripts
           npm --prefix web ci --ignore-scripts
-      - name: Run all six pure financial installer suites
+      - name: Run pure financial installer and historical replay suites
         run: >-
           node --experimental-strip-types --test --test-concurrency=1
           scripts/opportunity-v3/atomic-migration-chain.test.mjs
@@ -57,6 +57,8 @@ jobs:
           scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs
           scripts/opportunity-v3/financial-installer-wrapper-targets.test.mjs
           scripts/opportunity-v3/financial-immutable-finite-acl.test.mjs
+          scripts/opportunity-v3/legacy-v320-constraint-replay.test.mjs
+          scripts/opportunity-v3/v320-source-seed-replay.test.mjs
       - name: Run captured-schema financial transaction acceptance
         shell: bash
         run: |
