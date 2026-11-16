@@ -1,0 +1,699 @@
+{
+  "schema": "stockinsider-t18-authentic-predecessor-acl-v1",
+  "runDateUtc": "2026-11-16",
+  "archiveDate": "2026-09-19",
+  "candidateRevision": "4e3ef7c650ea303e7bc49408c4a142d6e2749f52",
+  "harnessRevision": "005a94e2bd99ed4d3d8964220ef41efb7575bda6",
+  "admission": {
+    "manifestTrusted": true,
+    "verifiedSourceFiles": 55
+  },
+  "nativeReference": {
+    "scope": {
+      "engine": "17.11",
+      "locale": "C",
+      "reviewedRoles": 30,
+      "transactionRollback": true,
+      "productionBackupOpened": false
+    },
+    "reference": {
+      "nativeAclReference": true,
+      "bytes": 82898,
+      "sha256": "a59cd6b79b3194db98f536f5c028240a009192428d5edc5d3e1d3bbbf545d822"
+    },
+    "exactCompatibilityRevoke": {
+      "migration": "migrations/20260911_contabo_data_plane_v1.sql",
+      "compared": 4,
+      "rawChanged": 4,
+      "ownerChanged": 0,
+      "effectiveChanged": 0,
+      "fingerprintPairs": [
+        {
+          "name": "private_artifact_receipts_v1",
+          "ownerEqual": true,
+          "rawChanged": true,
+          "baselineRawNull": true,
+          "observedRawNull": false,
+          "effectiveChanged": false,
+          "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "afterRawSha256": "bccfd5e7f4b59dfa125583240776ddebca3a8761f33dd9c7f4abe446a71ddba9"
+        },
+        {
+          "name": "provider_credentials_encrypted_v1",
+          "ownerEqual": true,
+          "rawChanged": true,
+          "baselineRawNull": true,
+          "observedRawNull": false,
+          "effectiveChanged": false,
+          "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "afterRawSha256": "bccfd5e7f4b59dfa125583240776ddebca3a8761f33dd9c7f4abe446a71ddba9"
+        },
+        {
+          "name": "stockinsider_backend_identities_v1",
+          "ownerEqual": true,
+          "rawChanged": true,
+          "baselineRawNull": true,
+          "observedRawNull": false,
+          "effectiveChanged": false,
+          "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "afterRawSha256": "bccfd5e7f4b59dfa125583240776ddebca3a8761f33dd9c7f4abe446a71ddba9"
+        },
+        {
+          "name": "stockinsider_data_plane_settings_v1",
+          "ownerEqual": true,
+          "rawChanged": true,
+          "baselineRawNull": true,
+          "observedRawNull": false,
+          "effectiveChanged": false,
+          "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "afterRawSha256": "bccfd5e7f4b59dfa125583240776ddebca3a8761f33dd9c7f4abe446a71ddba9"
+        }
+      ],
+      "effectivePermissionCounts": []
+    },
+    "baselinePublicationControl": {
+      "reviewedSteps": 26,
+      "applied": true
+    },
+    "focusedTests": 5
+  },
+  "authenticRestore": {
+    "custodianHandoffReused": true,
+    "checks": {
+      "foreignKeys": 288,
+      "rlsTables": 193
+    },
+    "peerTransport": {
+      "noPassword": true,
+      "noTcp": true,
+      "peerRuleOnly": true,
+      "physicalMapping": true,
+      "roleIdentity": true
+    },
+    "scope": {
+      "routines": {
+        "compared": 36,
+        "effectiveChanged": 0,
+        "effectivePermissionCounts": [],
+        "fingerprintPairs": [
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.armor(bytea)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.armor(bytea,text[],text[])",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.crypt(text,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.dearmor(text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.decrypt(bytea,bytea,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.decrypt_iv(bytea,bytea,bytea,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "0dabf541467e422884753522dcaa7af511288b4f38348e8ad7112853c0465d16",
+            "baselineRawNull": false,
+            "beforeRawSha256": "01953c5b9c7869757fe1f8589ba3bc1a46527a70a75ca0ba1c4446fc19368efe",
+            "effectiveChanged": false,
+            "name": "extensions.digest(bytea,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "0dabf541467e422884753522dcaa7af511288b4f38348e8ad7112853c0465d16",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.digest(text,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.encrypt(bytea,bytea,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.encrypt_iv(bytea,bytea,bytea,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "a9255b5ac5b43d435757d76bf093a7f1c8aac81a094b9a8c2f75c7826f07e008",
+            "baselineRawNull": false,
+            "beforeRawSha256": "647cfe377addb8ecc9b84cf6bd6f4804f10b52be89a23240023c83fe4d22eb1b",
+            "effectiveChanged": false,
+            "name": "extensions.gen_random_bytes(integer)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "0dabf541467e422884753522dcaa7af511288b4f38348e8ad7112853c0465d16",
+            "baselineRawNull": false,
+            "beforeRawSha256": "01953c5b9c7869757fe1f8589ba3bc1a46527a70a75ca0ba1c4446fc19368efe",
+            "effectiveChanged": false,
+            "name": "extensions.gen_random_uuid()",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.gen_salt(text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.gen_salt(text,integer)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.hmac(bytea,bytea,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.hmac(text,text,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_armor_headers(text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_key_id(bytea)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_pub_decrypt(bytea,bytea)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_pub_decrypt(bytea,bytea,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_pub_decrypt(bytea,bytea,text,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_pub_decrypt_bytea(bytea,bytea)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_pub_decrypt_bytea(bytea,bytea,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_pub_decrypt_bytea(bytea,bytea,text,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_pub_encrypt(text,bytea)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_pub_encrypt(text,bytea,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_pub_encrypt_bytea(bytea,bytea)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_pub_encrypt_bytea(bytea,bytea,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_sym_decrypt(bytea,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_sym_decrypt(bytea,text,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_sym_decrypt_bytea(bytea,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_sym_decrypt_bytea(bytea,text,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_sym_encrypt(text,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_sym_encrypt(text,text,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_sym_encrypt_bytea(bytea,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "24e879c66985e0f0b5c1c956cb7f229360bc7faebbc67bce329b4987f88deca0",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "extensions.pgp_sym_encrypt_bytea(bytea,text,text)",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          }
+        ],
+        "ownerChanged": 0,
+        "rawChanged": 36
+      },
+      "schemas": {
+        "compared": 2,
+        "effectiveChanged": 1,
+        "effectivePermissionCounts": [
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "authenticator",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "dashboard_user",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "pg_checkpoint",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "pg_create_subscription",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "pg_execute_server_program",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "pg_maintain",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "pg_monitor",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "pg_read_all_settings",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "pg_read_all_stats",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "pg_read_server_files",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "pg_signal_backend",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "pg_stat_scan_tables",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "pg_use_reserved_connections",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "pg_write_server_files",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "pgbouncer",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "stockinsider",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "supabase_admin",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "supabase_auth_admin",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "supabase_realtime_admin",
+            "scope": "schema"
+          },
+          {
+            "change": "gained",
+            "count": 1,
+            "permission": "USAGE",
+            "role": "supabase_storage_admin",
+            "scope": "schema"
+          }
+        ],
+        "fingerprintPairs": [
+          {
+            "afterRawSha256": "af2decdcc14f9930c418c8a3418a1aa0f2c87e14a456d1de67ac11ee9ebfc3d9",
+            "baselineRawNull": false,
+            "beforeRawSha256": "8b2f05d9479f8cc51607fd6efea1edc4306d3e6f31d7581fd27832fc571a8aae",
+            "effectiveChanged": true,
+            "name": "public",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          }
+        ],
+        "ownerChanged": 0,
+        "rawChanged": 1
+      },
+      "tables": {
+        "compared": 4,
+        "effectiveChanged": 0,
+        "effectivePermissionCounts": [],
+        "fingerprintPairs": [
+          {
+            "afterRawSha256": "bccfd5e7f4b59dfa125583240776ddebca3a8761f33dd9c7f4abe446a71ddba9",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "private_artifact_receipts_v1",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "bccfd5e7f4b59dfa125583240776ddebca3a8761f33dd9c7f4abe446a71ddba9",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "provider_credentials_encrypted_v1",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "bccfd5e7f4b59dfa125583240776ddebca3a8761f33dd9c7f4abe446a71ddba9",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "stockinsider_backend_identities_v1",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          },
+          {
+            "afterRawSha256": "bccfd5e7f4b59dfa125583240776ddebca3a8761f33dd9c7f4abe446a71ddba9",
+            "baselineRawNull": true,
+            "beforeRawSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "effectiveChanged": false,
+            "name": "stockinsider_data_plane_settings_v1",
+            "observedRawNull": false,
+            "ownerEqual": true,
+            "rawChanged": true
+          }
+        ],
+        "ownerChanged": 0,
+        "rawChanged": 4
+      }
+    },
+    "tableAclFingerprintsMatchExactNativeRevoke": true,
+    "publicationPredecessor": {
+      "expectedSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+      "observedSha256": "f659690731faa2867c319824978777312b42314786655d4eb0efd9140e801528",
+      "relations": 989,
+      "roles": 30,
+      "routines": 301,
+      "types": 824
+    },
+    "financialCommitted": true,
+    "publicationCommitted": false,
+    "publicationStop": "publication_tail_predecessor_namespace_mismatch",
+    "nextRollback": "NOT_RUN",
+    "holdRetained": true
+  },
+  "productionUnchanged": true,
+  "hostHeadroom": {
+    "minimumDiskBytes": 17315758080,
+    "minimumAvailableMemoryBytes": 4279361536
+  },
+  "cleanup": {
+    "scratchRootsRemoved": 4,
+    "allStagingUnitsInactive": true,
+    "diskBytes": 26121728000,
+    "memoryAvailableBytes": 4586176512
+  }
+}
