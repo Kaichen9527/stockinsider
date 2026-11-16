@@ -1,0 +1,853 @@
+{
+  "schema": "stockinsider-t18-extension-field-acl-comparison-v1",
+  "dayUtc": "2026-11-16",
+  "archiveDate": "2026-09-19",
+  "candidateRevision": "3339f649d8074760611d6b30cfc581cb9c10ab5b",
+  "harnessRevision": "005a94e2bd99ed4d3d8964220ef41efb7575bda6",
+  "stageAdapterSha256": "836e936b591abe9a6d81ed03ddd07c200d8f4d8bc3161aa8ef7bab1be2957237",
+  "nativeReference": {
+    "nativeExtensionReference": true,
+    "bytes": 162599,
+    "sha256": "3c04f6629bb1994ce39ba68d4dbbbdc9224f1cd1d0f0bb7b2d67bd03c2e4c8f2",
+    "groupCounts": {
+      "relations": 2,
+      "routines": 13,
+      "types": 4
+    },
+    "versions": [
+      [
+        "pg_stat_statements",
+        "1.11"
+      ],
+      [
+        "uuid-ossp",
+        "1.1"
+      ]
+    ]
+  },
+  "nativeDashboardCorrection": {
+    "isolatedNativeDashboardControl": true,
+    "affectedViews": 2,
+    "directRoutineGrantTargets": 13,
+    "resetPermissionRemoved": true,
+    "viewMutationPermissionsRemoved": true,
+    "publicStatisticsReadPreserved": true,
+    "publicUuidExecutePreserved": true,
+    "otherRolesUnchanged": true,
+    "rollbackRestoredFixture": true,
+    "idempotent": true,
+    "resetInvoked": false,
+    "productionBackupOpened": false
+  },
+  "firstAttempt": {
+    "reason": "fixed_db_unit_registration_timeout",
+    "authBackupKeyConsumed": false,
+    "productionSignaturesMatched": true,
+    "stagingCleaned": true
+  },
+  "authenticRestore": {
+    "authenticated": true,
+    "checks": {
+      "foreignKeys": 288,
+      "rlsTables": 193
+    },
+    "publicSchemaCorrection": {
+      "namespaceUnchanged": true,
+      "publicUsageRemoved": true,
+      "recognized": true,
+      "reviewedRolesEquivalent": true,
+      "rollbackRestoredOriginal": true,
+      "scopedAclEqual": true,
+      "tested": true
+    },
+    "historicalComparison": {
+      "actualNamespaceUnchanged": true,
+      "afterValuationMismatch": [],
+      "beforeValuationMismatch": [
+        "tables"
+      ],
+      "historicalValuation": {
+        "rowCountsUnchanged": true,
+        "sourceSha256": "3341e1b34f0c94adad78950ebd7092af6233cdac79abb684ce739d3530314d52",
+        "status": "applied",
+        "verifiedChecks": 3
+      },
+      "namespace": {
+        "byField": {
+          "relations": {
+            "changedFields": {
+              "acl": 2
+            },
+            "directDifferences": [
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "DELETE"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "INSERT"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "MAINTAIN"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "REFERENCES"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "SELECT"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "TRIGGER"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "TRUNCATE"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "UPDATE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "DELETE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "INSERT"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "MAINTAIN"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "REFERENCES"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "SELECT"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "TRIGGER"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "TRUNCATE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "UPDATE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "DELETE"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "INSERT"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "MAINTAIN"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "REFERENCES"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "SELECT"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "TRIGGER"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "TRUNCATE"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "UPDATE"
+                  }
+                ],
+                "member": "extensions/pg_stat_statements"
+              },
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "DELETE"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "INSERT"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "MAINTAIN"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "REFERENCES"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "SELECT"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "TRIGGER"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "TRUNCATE"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "UPDATE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "DELETE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "INSERT"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "MAINTAIN"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "REFERENCES"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "SELECT"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "TRIGGER"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "TRUNCATE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "UPDATE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "DELETE"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "INSERT"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "MAINTAIN"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "REFERENCES"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "SELECT"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "TRIGGER"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "TRUNCATE"
+                  },
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "UPDATE"
+                  }
+                ],
+                "member": "extensions/pg_stat_statements_info"
+              }
+            ],
+            "effectivePermissionCounts": [
+              {
+                "change": "gained",
+                "context": "object",
+                "count": 2,
+                "permission": "INSERT",
+                "role": "dashboard_user"
+              },
+              {
+                "change": "gained",
+                "context": "object",
+                "count": 2,
+                "permission": "UPDATE",
+                "role": "dashboard_user"
+              },
+              {
+                "change": "gained",
+                "context": "object",
+                "count": 2,
+                "permission": "DELETE",
+                "role": "dashboard_user"
+              },
+              {
+                "change": "gained",
+                "context": "object",
+                "count": 2,
+                "permission": "TRUNCATE",
+                "role": "dashboard_user"
+              },
+              {
+                "change": "gained",
+                "context": "object",
+                "count": 2,
+                "permission": "REFERENCES",
+                "role": "dashboard_user"
+              },
+              {
+                "change": "gained",
+                "context": "object",
+                "count": 2,
+                "permission": "TRIGGER",
+                "role": "dashboard_user"
+              },
+              {
+                "change": "gained",
+                "context": "object",
+                "count": 2,
+                "permission": "MAINTAIN",
+                "role": "dashboard_user"
+              },
+              {
+                "change": "gained",
+                "context": "column",
+                "count": 51,
+                "permission": "INSERT",
+                "role": "dashboard_user"
+              },
+              {
+                "change": "gained",
+                "context": "column",
+                "count": 51,
+                "permission": "UPDATE",
+                "role": "dashboard_user"
+              },
+              {
+                "change": "gained",
+                "context": "column",
+                "count": 51,
+                "permission": "REFERENCES",
+                "role": "dashboard_user"
+              }
+            ],
+            "objectsChanged": 2,
+            "objectsEffective": 2
+          },
+          "routines": {
+            "changedFields": {
+              "acl": 13
+            },
+            "directDifferences": [
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "member": "extensions/extensions.pg_stat_statements(boolean)"
+              },
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "member": "extensions/extensions.pg_stat_statements_info()"
+              },
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "member": "extensions/extensions.pg_stat_statements_reset(oid,oid,bigint,boolean)"
+              },
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "member": "extensions/extensions.uuid_generate_v1()"
+              },
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "member": "extensions/extensions.uuid_generate_v1mc()"
+              },
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "member": "extensions/extensions.uuid_generate_v3(uuid,text)"
+              },
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "member": "extensions/extensions.uuid_generate_v4()"
+              },
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "member": "extensions/extensions.uuid_generate_v5(uuid,text)"
+              },
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "member": "extensions/extensions.uuid_nil()"
+              },
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "member": "extensions/extensions.uuid_ns_dns()"
+              },
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "member": "extensions/extensions.uuid_ns_oid()"
+              },
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "member": "extensions/extensions.uuid_ns_url()"
+              },
+              {
+                "gained": [
+                  {
+                    "grantable": false,
+                    "grantee": "dashboard_user",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "grantable": true,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "lost": [
+                  {
+                    "grantable": false,
+                    "grantee": "postgres",
+                    "grantor": "postgres",
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "member": "extensions/extensions.uuid_ns_x500()"
+              }
+            ],
+            "effectivePermissionCounts": [
+              {
+                "change": "gained",
+                "context": "object",
+                "count": 1,
+                "permission": "EXECUTE",
+                "role": "dashboard_user"
+              }
+            ],
+            "objectsChanged": 13,
+            "objectsEffective": 1
+          },
+          "types": {
+            "changedFields": {},
+            "directDifferences": [],
+            "effectivePermissionCounts": [],
+            "objectsChanged": 0,
+            "objectsEffective": 0
+          }
+        },
+        "counts": {
+          "relations": 2,
+          "routines": 13,
+          "types": 4
+        },
+        "nativeExtensionProfileMatch": false,
+        "objectDifferences": {
+          "relations": 2,
+          "routines": 13,
+          "types": 0
+        },
+        "onlyEquivalentAcl": false
+      },
+      "rollbackRestoredCatalog": true,
+      "scopeBeforeRollback": true
+    },
+    "trialPersisted": false,
+    "publicationPredecessor": {
+      "expectedSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+      "observedSha256": "f659690731faa2867c319824978777312b42314786655d4eb0efd9140e801528",
+      "relations": 989,
+      "roles": 30,
+      "routines": 301,
+      "types": 824
+    },
+    "publicationStop": "publication_tail_predecessor_namespace_mismatch",
+    "financialCommitted": true,
+    "publicationCommitted": false,
+    "nextRollback": "NOT_RUN",
+    "holdRetained": true
+  },
+  "host": {
+    "productionSignaturesMatched": true,
+    "minDiskBytes": 17311916032,
+    "minMemoryAvailableBytes": 4231634944,
+    "cleanup": {
+      "scratchRootsRemoved": 5,
+      "allStagingUnitsInactive": true,
+      "diskBytes": 26118713344,
+      "memoryAvailableBytes": 4554600448
+    }
+  }
+}
