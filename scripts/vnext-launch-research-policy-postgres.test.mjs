@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
 import {workerFixture} from './vnext-worker-fixture.mjs';
+import {rosterHeadFixtureSql} from './vnext-launch-roster-head-fixture.mjs';
 import {extractContentBatch} from '../web/src/lib/vnext/permitted-content.ts';
 import {inputHash,taipeiDate} from '../web/src/lib/vnext/policy.ts';
 
@@ -10,6 +11,7 @@ const migration='migrations/20261117_35_vnext_launch_research_policy_v1.sql';
 const dispatchMigration='migrations/20261117_36_vnext_launch_research_dispatch_v1.sql';
 const calendarMigration='migrations/20261117_37_vnext_launch_scheduled_calendar_v1.sql';
 const poolMigration='migrations/20261117_38_vnext_launch_candidate_pool_history_v1.sql';
+const industryMigration='migrations/20261117_39_vnext_launch_candidate_industry_v1.sql';
 const writerRelease='1'.repeat(40);
 const operator='synthetic-launch-operator';
 const author='synthetic-launch-author';
@@ -49,6 +51,10 @@ await test('launch policy is bound to the shared job and its prepared revision i
   await x.writer.query('ALTER TABLE public.vnext_launch_ranking_snapshots_v1 ENABLE ROW LEVEL SECURITY');
   await x.writer.query('REVOKE ALL ON public.vnext_launch_ranking_snapshots_v1 FROM PUBLIC,anon,authenticated,service_role');
   await x.writer.query(fs.readFileSync(poolMigration,'utf8'));
+  const roster=rosterHeadFixtureSql();
+  await x.writer.query(roster.predecessor);
+  await x.writer.query(roster.migration);
+  await x.writer.query(fs.readFileSync(industryMigration,'utf8'));
   await x.writer.query("INSERT INTO public.vnext_principals_v1(principal,role,enabled) VALUES($1,'operator',true),($2,'author',true),($3,'author',true)",[operator,author,distinct]);
   const at=new Date().toISOString(),day=taipeiDate(at);
   await x.writer.query("INSERT INTO public.vnext_sessions_v1(session_date,close_at,completed) VALUES($1,clock_timestamp()-interval '1 hour',true)",[day]);
@@ -101,11 +107,38 @@ await test('launch policy is bound to the shared job and its prepared revision i
   assert.deepEqual(snapshot.previous.rows,[{symbol:'2409',state:'eligible'}]);
   assert.deepEqual((await pool(oldest)).next,{id:recent,cutoff:snapshot.current.cutoff});
   assert.equal(await pool('00000000-0000-4000-8000-000000000199'),null);
+  const poolIndustry=(id=null)=>service('SELECT public.vnext_launch_candidate_pool_history_v2($1) AS result',[id]);
+  const issuer=(async(symbol,venue,cutoff)=>{
+   const stock=(await x.writer.query("INSERT INTO public.stocks(symbol,name,market) VALUES($1,'Synthetic industry issuer','TW') RETURNING id",[symbol])).rows[0].id;
+   await x.writer.query("INSERT INTO public.stock_instruments_v3(stock_id,symbol,exchange,instrument_type,listing_status,official_legal_name,provider,source_timestamp,recorded_at,valid_from,roster_version) VALUES($1,$2,$3,'common_stock','active','Synthetic industry issuer',$4,$5::timestamptz-interval '3 days',$5::timestamptz-interval '2 days',$5::timestamptz-interval '3 days','tw-instrument-roster-v3.0')",[stock,symbol,venue,venue.toLowerCase(),cutoff]);
+   return stock;
+  });
+  const addIndustry=(stock,venue,code,sector,recordedAt,validFrom)=>x.writer.query(
+   "INSERT INTO public.stock_sector_assignments_v3(stock_id,market,official_industry_code,canonical_sector_key,provider,source_timestamp,valid_from,taxonomy_version,status,recorded_at) VALUES($1,$2,$3,$4,$5,$6::timestamptz-interval '1 minute',$7,'tw-sector-taxonomy-v3.0','active',$6) RETURNING assignment_authority_id",
+   [stock,venue,code,sector,venue.toLowerCase(),recordedAt,validFrom]).then(r=>r.rows[0].assignment_authority_id);
+  const offset=(clock,deltaMs)=>new Date(Date.parse(clock)+deltaMs).toISOString();
+  const oldStock=await issuer('2409','TWSE',snapshot.previous.cutoff);
+  const newStock=await issuer('2383','TPEX',snapshot.current.cutoff);
+  const oldClock=offset(snapshot.previous.cutoff,-3600000), newClock=offset(snapshot.current.cutoff,-3600000);
+  const oldIndustry=await addIndustry(oldStock,'TWSE','24','semiconductor',oldClock,oldClock);
+  await addIndustry(oldStock,'TWSE','33','digital_cloud',offset(snapshot.previous.cutoff,1000),oldClock);
+  const currentIndustry=await addIndustry(newStock,'TPEX','28','electronic_components',newClock,newClock);
+  await addIndustry(newStock,'TWSE','21','chemical',newClock,newClock);
+  await addIndustry(newStock,'TPEX','24','semiconductor',offset(snapshot.current.cutoff,-1000),offset(snapshot.current.cutoff,1000));
+  const withIndustry=await poolIndustry();
+  assert.equal(withIndustry.current.rows[0].industrySnapshot.revisionId,currentIndustry);
+  assert.equal(withIndustry.previous.rows[0].industrySnapshot.revisionId,oldIndustry);
+  assert.equal(withIndustry.current.rows[0].industrySnapshot.code,'28');
+  assert.equal(withIndustry.previous.rows[0].industrySnapshot.code,'24');
+  await addIndustry(newStock,'TPEX','23','oil_gas_electricity',newClock,newClock);
+  assert.equal((await poolIndustry()).current.rows[0].industrySnapshot,null);
+  await assert.rejects(()=>service('SELECT public.vnext_launch_candidate_industry_v1($1,$2) AS result',['2383',snapshot.current.cutoff]),{code:'42501'});
   assert.equal(JSON.stringify(snapshot).includes('synthetic_private'),false);
   await assert.rejects(()=>service('SELECT count(*) AS result FROM public.vnext_launch_ranking_snapshots_v1'),{code:'42501'});
   assert.deepEqual((await x.writer.query("SELECT has_function_privilege('anon','public.vnext_launch_candidate_pool_history_v1(uuid)','EXECUTE') anon,has_function_privilege('authenticated','public.vnext_launch_candidate_pool_history_v1(uuid)','EXECUTE') authenticated")).rows[0],{anon:false,authenticated:false});
   await x.writer.query('UPDATE public.vnext_launch_ranking_mode_v1 SET enabled=false');
   assert.equal(await pool(recent),null);
+  assert.equal(await poolIndustry(recent),null);
   await x.writer.query('UPDATE public.vnext_launch_ranking_mode_v1 SET enabled=true');
   const deferral=await context(operator,writerRelease);
   assert.equal(deferral.session,null);

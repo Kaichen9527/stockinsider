@@ -6,7 +6,7 @@ import {createRequire} from 'node:module';
 import React from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
 import ts from 'typescript';
-import {LAUNCH_CANDIDATE_FIXTURE,launchCandidateQuery,launchCandidateFixturePage,launchCandidatePoolPage,readLaunchCandidateCatalog,type LaunchCandidateQuery} from './launch-candidate-catalog.ts';
+import {LAUNCH_CANDIDATE_FIXTURE,launchCandidateQuery,launchCandidateFixturePage,launchCandidatePoolPage,readLaunchCandidateCatalog,launchPoolIndustryLabels,type LaunchCandidateQuery} from './launch-candidate-catalog.ts';
 import {candidateQuery,candidateRankingRunId,candidateHistoryPage,candidateDetailHref} from './candidate-page.ts';
 import {EPOCH_FIXTURE_SCHEMA,type CandidateEpochEvent} from './candidate-epoch-journal.ts';
 import {POLICY} from './policy.ts';
@@ -41,7 +41,7 @@ function actualPage(mode:boolean,reader:(q:LaunchCandidateQuery)=>unknown=readLa
   '@/lib/vnext/ranking-read':{rankingEnabled:()=>oldGate},'@/lib/vnext/launch-ranking-read':{launchRankingEnabled:()=>mode},
   '@/lib/vnext/candidate-page':{candidateQuery,candidateRankingRunId,candidateDetailHref},
   '@/lib/vnext/candidate-history-read':{readCandidateHistory:async(q:ReturnType<typeof candidateQuery>)=>{oldReads++;return candidateHistoryPage(oldPacket,q,now);}},
-  '@/lib/vnext/launch-candidate-catalog':{launchCandidateQuery,readLaunchCandidateCatalog:(q:LaunchCandidateQuery)=>{newReads++;return reader(q);}},
+  '@/lib/vnext/launch-candidate-catalog':{launchCandidateQuery,launchPoolIndustryLabels,readLaunchCandidateCatalog:(q:LaunchCandidateQuery)=>{newReads++;return reader(q);}},
  };
  function load(relative:string){
   const file=new URL(relative,import.meta.url),source=fs.readFileSync(file,'utf8');
@@ -93,9 +93,10 @@ test('ACTUALSSR withdrawalleavespositiononly andstaticfilteroptions; no symbol/s
 });
 
 test('canonical page renders saved pool states and pins the next page',async()=>{
- const p={schemaVersion:'launch-candidate-pool-history-v1',
-  current:{id:id(960),cutoff,rows:[{symbol:'2300',state:'waiting'},{symbol:'2301',state:'eligible'}]},
-  previous:{id:id(959),cutoff:'2026-11-13T13:30:00Z',rows:[{symbol:'2299',state:'eligible'}]},next:null};
+ const p={schemaVersion:'launch-candidate-pool-history-v2',
+  current:{id:id(960),cutoff,rows:[{symbol:'2300',state:'waiting',industrySnapshot:null},
+    {symbol:'2301',state:'eligible',industrySnapshot:{revisionId:id(42),code:'24',knownAt:'2026-11-14T02:00:00Z'}}]},
+  previous:{id:id(959),cutoff:'2026-11-13T13:30:00Z',rows:[{symbol:'2299',state:'eligible',industrySnapshot:null}]},next:null};
  const f=actualPage(true,q=>launchCandidatePoolPage(p,q,now));
  const first=await f.render({limit:'1'});
  for(const label of ['快照日期','本版未出現','確切離池時間與原因未保存','較早版本'])assert.ok(first.includes(label));
@@ -106,4 +107,8 @@ test('canonical page renders saved pool states and pins the next page',async()=>
  const second=await f.render(params);
  assert.match(second,/快照當時等待/u);
  assert.ok(!second.includes('2299'));
+ const filtered=await f.render({catalogId:p.current.id,industry:'24'});
+ assert.match(filtered,/2301/u);
+ assert.match(filtered,/<td>半導體<\/td>/u);
+ assert.ok(!filtered.includes('2300'));
 });

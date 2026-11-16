@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "launch-candidate-industry-witness-v1",
+  "scope": "isolated_contabo",
+  "actualProviderObservation": [
+    {
+      "venue": "TWSE",
+      "datasetId": 18419,
+      "datasetUrl": "https://data.gov.tw/dataset/18419",
+      "artifactUrl": "https://mopsfin.twse.com.tw/opendata/t187ap03_L.csv",
+      "bytes": 675725,
+      "sha256": "22e14a9414f445440e770f8759c70131e0efc0dc20d8066fd40021fb5e20facc",
+      "observedAt": "2026-11-16T21:35:22.420887Z",
+      "publisherReportDate": "2026-11-16",
+      "symbol": "2330",
+      "officialIndustryCode": "24"
+    },
+    {
+      "venue": "TPEX",
+      "datasetId": 25036,
+      "datasetUrl": "https://data.gov.tw/dataset/25036",
+      "artifactUrl": "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv",
+      "bytes": 554352,
+      "sha256": "21db83542776807708d23cf8a4433817eabc2885b6ddaba325a783c13df49254",
+      "observedAt": "2026-11-16T21:35:22.408925Z",
+      "publisherReportDate": "2026-11-16",
+      "symbol": "6488",
+      "officialIndustryCode": "24"
+    }
+  ],
+  "providerRights": "Taiwan Open Government Data License 1.0, as indicated by the two government dataset pages",
+  "publisherDateDoesNotChangeObservationClock": true,
+  "insertedActualProviderRows": false,
+  "productionServicesAndReleasePointerUnchanged": true,
+  "isolatedValidation": {
+    "data": "synthetic PostgreSQL sealed-pool and roster records",
+    "nodeTestsPassed": 33,
+    "postgresRegressionPassed": true,
+    "priorCutoffStillApplied": true,
+    "wrongVenueIgnored": true,
+    "tiedConflictingRevisionUnknown": true,
+    "helperRestrictedToExistingOwner": true,
+    "typescriptPassed": true,
+    "focusedLintPassed": true
+  },
+  "knownGaps": [
+    "official_rows_not_ingested_by_this_replay",
+    "public_source_mentions_not_connected",
+    "production_not_activated"
+  ]
+}

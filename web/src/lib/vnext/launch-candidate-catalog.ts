@@ -126,26 +126,46 @@ function poolProducerUnavailable(activation:'disabled_not_connected'|'snapshot_u
 
 const poolStates = ['snapshot_waiting', 'snapshot_eligible', 'absent_from_successor'] as const;
 type PoolState = typeof poolStates[number];
-type PoolRow = { position: number; symbol: string; state: PoolState; observedAt: string; lastSeenAt: string };
+type PoolRow = { position: number; symbol: string; state: PoolState; observedAt: string; lastSeenAt: string;
+  industrySnapshot: Industry | null };
 type PoolRef = { id: string; cutoff: string };
-type PoolSnapshot = PoolRef & { rows: Array<{ symbol: string; state: 'waiting' | 'eligible' }> };
-const poolGaps = ['public_source_clue_producer_not_connected', 'industry_metadata_not_available',
+type PoolSnapshot = PoolRef & {
+  rows: Array<{ symbol: string; state: 'waiting' | 'eligible'; industrySnapshot: Industry | null }>;
+};
+export const launchPoolIndustryLabels: Readonly<Record<string, string>> = {
+  '01': '水泥', '02': '食品', '03': '塑膠', '04': '紡織纖維', '05': '電機機械', '06': '電器電纜',
+  '08': '玻璃陶瓷', '09': '造紙', '10': '鋼鐵', '11': '橡膠', '12': '汽車', '14': '建材營造',
+  '15': '航運', '16': '觀光餐旅', '17': '金融保險', '18': '貿易百貨', '20': '其他',
+  '21': '化學', '22': '生技醫療', '23': '油電燃氣', '24': '半導體', '25': '電腦及週邊設備',
+  '26': '光電', '27': '通信網路', '28': '電子零組件', '29': '電子通路', '30': '資訊服務',
+  '31': '其他電子', '32': '綠能環保', '33': '數位雲端', '34': '運動休閒', '35': '居家生活',
+};
+const poolGaps = ['public_source_clue_producer_not_connected',
   'full_candidate_history_not_proven', 'between_snapshot_transitions_not_available'];
 
 function poolRef(value: unknown): PoolRef {
   if (!exact(value, 'id cutoff') || !uuid(value.id) || !clock(value.cutoff)) return fail();
   return { id: value.id, cutoff: value.cutoff as string };
 }
-function poolSnapshot(value: unknown): PoolSnapshot {
+function poolIndustry(value: unknown, cutoff: string): Industry | null {
+  if (value === null) return null;
+  if (!exact(value, 'revisionId code knownAt') || !uuid(value.revisionId)
+    || typeof value.code !== 'string' || !Object.hasOwn(launchPoolIndustryLabels, value.code)
+    || !clock(value.knownAt) || evidenceInstant(value.knownAt)! > evidenceInstant(cutoff)!) return fail();
+  return { revisionId: value.revisionId, code: value.code, knownAt: value.knownAt as string,
+    label: launchPoolIndustryLabels[value.code] };
+}
+function poolSnapshot(value: unknown, includesIndustry: boolean): PoolSnapshot {
   if (!exact(value, 'id cutoff rows') || !Array.isArray(value.rows) || value.rows.length > 20) return fail();
   const header = poolRef({ id: value.id, cutoff: value.cutoff });
   const seen = new Set<string>();
   const rows: PoolSnapshot['rows'] = [];
   for (const item of value.rows) {
-    if (!exact(item, 'symbol state') || typeof item.symbol !== 'string' || !/^\d{4}$/u.test(item.symbol)
+    if (!exact(item, includesIndustry ? 'symbol state industrySnapshot' : 'symbol state') || typeof item.symbol !== 'string' || !/^\d{4}$/u.test(item.symbol)
       || (item.state !== 'waiting' && item.state !== 'eligible') || seen.has(item.symbol)) return fail();
     seen.add(item.symbol);
-    rows.push({ symbol: item.symbol, state: item.state });
+    rows.push({ symbol: item.symbol, state: item.state,
+      industrySnapshot: includesIndustry ? poolIndustry(item.industrySnapshot, header.cutoff) : null });
   }
   return { ...header, rows };
 }
@@ -168,9 +188,11 @@ function poolCursor(value: string, catalogId: string, catalogHash: string, filte
 export function launchCandidatePoolPage(value: unknown, query: LaunchCandidateQuery, readAt = new Date().toISOString()) {
   const q = parsedQuery(query);
   data(value);
-  if (!exact(value, 'schemaVersion current previous next') || value.schemaVersion !== 'launch-candidate-pool-history-v1') return fail();
-  const current = poolSnapshot(value.current);
-  const previous = value.previous === null ? null : poolSnapshot(value.previous);
+  if (!exact(value, 'schemaVersion current previous next')
+    || (value.schemaVersion !== 'launch-candidate-pool-history-v1' && value.schemaVersion !== 'launch-candidate-pool-history-v2')) return fail();
+  const includesIndustry = value.schemaVersion === 'launch-candidate-pool-history-v2';
+  const current = poolSnapshot(value.current, includesIndustry);
+  const previous = value.previous === null ? null : poolSnapshot(value.previous, includesIndustry);
   const next = value.next === null ? null : poolRef(value.next);
   if (!clock(readAt) || (q.catalogId !== null && q.catalogId !== current.id)
     || (q.cursor !== null && q.catalogId === null) || evidenceInstant(current.cutoff)! > evidenceInstant(readAt)!
@@ -182,32 +204,41 @@ export function launchCandidatePoolPage(value: unknown, query: LaunchCandidateQu
   const before = previous ? asRef(previous) : null;
   const rows: Omit<PoolRow, 'position'>[] = current.rows.map(row => ({
     symbol: row.symbol, state: row.state === 'waiting' ? 'snapshot_waiting' : 'snapshot_eligible',
-    observedAt: current.cutoff, lastSeenAt: current.cutoff,
+    observedAt: current.cutoff, lastSeenAt: current.cutoff, industrySnapshot: row.industrySnapshot,
   }));
   const inPool = new Set(rows.map(row => row.symbol));
   if (previous) for (const row of previous.rows) {
     if (!inPool.has(row.symbol)) rows.push({
       symbol: row.symbol, state: 'absent_from_successor', observedAt: current.cutoff, lastSeenAt: previous.cutoff,
+      industrySnapshot: row.industrySnapshot,
     });
   }
   rows.sort((a, b) => a.symbol.localeCompare(b.symbol));
   const entries = rows.map((row, index) => ({ ...row, position: index + 1 }));
   const catalogHash = sha256Canonical({ schema: value.schemaVersion, current: asRef(current), previous: before, rows: entries });
+  const classified = entries.filter(row => row.industrySnapshot !== null).length;
+  const industryCode = q.filters.industry
+    ? Object.keys(launchPoolIndustryLabels).find(code => code === q.filters.industry || launchPoolIndustryLabels[code] === q.filters.industry)
+    : null;
+  const gaps = classified === entries.length && includesIndustry ? poolGaps : [...poolGaps, 'industry_metadata_incomplete'];
   const filtersHash = sha256Canonical({ filters: q.filters, limit: q.limit });
   const base = {
     schemaVersion: 'launch-source-candidate-read-v1' as const,
     scope: 'saved_adjacent_launch_pool_snapshots' as const, dateBasis: 'snapshot_observation' as const,
     catalogId: current.id, catalogHash, cutoff: current.cutoff, previousSnapshot: before, nextSnapshot: next,
-    coverage: { sourceComplete: false, membershipComplete: false, sourceFrom: null, membershipFrom: null, preActivationHistory: 'unavailable' },
-    sourceAuthority: false, entryAuthority: false, publicationAuthority: false, gaps: poolGaps,
+    coverage: { sourceComplete: false, membershipComplete: false, sourceFrom: null, membershipFrom: null,
+      preActivationHistory: 'unavailable', industryComplete: includesIndustry && classified === entries.length },
+    sourceAuthority: false, entryAuthority: false, publicationAuthority: false, gaps,
   };
-  if (q.filters.source || q.filters.industry || (q.filters.status && !poolStates.includes(q.filters.status as PoolState))) {
+  if (q.filters.source || (q.filters.industry && (!includesIndustry || !industryCode || (entries.length > 0 && !classified)))
+    || (q.filters.status && !poolStates.includes(q.filters.status as PoolState))) {
     return { ...base, availability: 'filtered_projection_unavailable' as const, rows: [], nextCursor: null };
   }
 
   const after = q.cursor ? poolCursor(q.cursor, current.id, catalogHash, filtersHash, current.cutoff) : null;
   const date = new Date(Date.parse(current.cutoff) + 8 * 3_600_000).toISOString().slice(0, 10);
   const filtered = entries.filter(row => (!q.filters.date || q.filters.date === date)
+    && (!industryCode || row.industrySnapshot?.code === industryCode)
     && (!q.filters.status || q.filters.status === row.state));
   if (after !== null && !filtered.some(row => row.position === after)) return fail();
   const remaining = filtered.filter(row => after === null || row.position > after);
@@ -219,7 +250,7 @@ export function launchCandidatePoolPage(value: unknown, query: LaunchCandidateQu
   return { ...base, availability: 'ready' as const, rows: page, nextCursor };
 }
 
-type PoolReader = { rpc: (name: 'vnext_launch_candidate_pool_history_v1', args: { p_catalog_id: string | null }) =>
+type PoolReader = { rpc: (name: 'vnext_launch_candidate_pool_history_v2', args: { p_catalog_id: string | null }) =>
   PromiseLike<{ data: unknown; error: unknown }> };
 
 /** The service-role adapter reads saved observations. No source acquisitions,
@@ -236,7 +267,7 @@ export async function readLaunchCandidateCatalog(query: LaunchCandidateQuery, cl
   }
   if (q.cursor !== null && q.catalogId === null) return fail();
   let result;
-  try { result = await client.rpc('vnext_launch_candidate_pool_history_v1', { p_catalog_id: q.catalogId }); }
+  try { result = await client.rpc('vnext_launch_candidate_pool_history_v2', { p_catalog_id: q.catalogId }); }
   catch { return poolProducerUnavailable(); }
   if (result.error || result.data === null) return poolProducerUnavailable();
   return launchCandidatePoolPage(result.data, q);

@@ -119,9 +119,28 @@ test('reader uses a single known read RPC and verifies the allowlist without ret
  const client={rpc:async(name:string,args:unknown)=>{calls.push([name,args]);return {data:input,error:null};}};
  const result=await readLaunchCandidateCatalog(query('catalogId='+input.current.id),client);
  assert.equal(result.availability,'ready');
- assert.deepEqual(calls,[['vnext_launch_candidate_pool_history_v1',{p_catalog_id:input.current.id}]]);
+ assert.deepEqual(calls,[['vnext_launch_candidate_pool_history_v2',{p_catalog_id:input.current.id}]]);
  const poisoned={...input,current:{...input.current,rows:[{...input.current.rows[0],note:'private'}]}};
  await assert.rejects(()=>readLaunchCandidateCatalog(query(),{rpc:async()=>({data:poisoned,error:null})}),/projection_invalid/u);
  const unavailable=await readLaunchCandidateCatalog(query(),{rpc:async()=>({data:null,error:null})});
  assert.equal(unavailable.availability,'producer_unavailable');
+});
+
+test('industry filters use the last recorded snapshot classification and report incomplete coverage',()=>{
+ const input=poolPacket();
+ const oldIndustry={revisionId:id(13),code:'24',knownAt:'2026-11-12T12:00:00Z'};
+ const currentIndustry={revisionId:id(14),code:'33',knownAt:'2026-11-16T12:00:00Z'};
+ const v2={...input,schemaVersion:'launch-candidate-pool-history-v2',
+  current:{...input.current,rows:[{...input.current.rows[0],industrySnapshot:null},{...input.current.rows[1],industrySnapshot:currentIndustry}]},
+  previous:{...input.previous,rows:input.previous.rows.map(row=>({...row,industrySnapshot:oldIndustry}))}};
+ const all=launchCandidatePoolPage(v2,query(),poolReadAt);
+ assert.equal(all.coverage.industryComplete,false);
+ assert.equal(all.rows[0].industrySnapshot?.revisionId,oldIndustry.revisionId);
+ assert.equal(all.rows[1].industrySnapshot,null);
+ assert.equal(all.rows[2].industrySnapshot?.label,'數位雲端');
+ assert.deepEqual(launchCandidatePoolPage(v2,query('industry=半導體'),poolReadAt).rows.map(row=>row.symbol),['2300']);
+ assert.deepEqual(launchCandidatePoolPage(v2,query('industry=33'),poolReadAt).rows.map(row=>row.symbol),['2302']);
+ assert.equal(launchCandidatePoolPage(v2,query('industry=99'),poolReadAt).availability,'filtered_projection_unavailable');
+ assert.throws(()=>launchCandidatePoolPage({...v2,previous:{...v2.previous,rows:[{...v2.previous.rows[0], industrySnapshot:currentIndustry}]}},
+   query(),poolReadAt),/projection_invalid/u);
 });
