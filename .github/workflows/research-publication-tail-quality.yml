@@ -27,7 +27,7 @@ jobs:
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '22.14.0'
-      - name: Install PostgreSQL 17 using the existing official signing identity
+      - name: Install PostgreSQL 17.11 using the existing official signing identity
         shell: bash
         run: |
           set -euo pipefail
@@ -37,12 +37,13 @@ jobs:
           test "$fingerprint" = B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
           sudo install -d -m 0755 /usr/share/postgresql-common/pgdg
           sudo install -m 0644 "$key" /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc
-          printf '%s\n' 'Types: deb' 'URIs: https://apt.postgresql.org/pub/repos/apt' 'Suites: noble-pgdg' 'Architectures: amd64' 'Components: main' 'Signed-By: /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc' | sudo tee /etc/apt/sources.list.d/pgdg.sources >/dev/null
+          printf '%s\n' 'Types: deb' 'URIs: https://apt-archive.postgresql.org/pub/repos/apt' 'Suites: noble-pgdg-archive' 'Architectures: amd64' 'Components: main' 'Signed-By: /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc' | sudo tee /etc/apt/sources.list.d/pgdg.sources >/dev/null
           sudo apt-get update
-          sudo apt-get install --yes --no-install-recommends postgresql-17 postgresql-client-17
+          version=17.11-1.pgdg24.04+2
+          sudo apt-get install --yes --no-install-recommends "postgresql-17=$version" "postgresql-client-17=$version"
           bin=/usr/lib/postgresql/17/bin
           for tool in pg_config initdb pg_ctl psql; do test -x "$bin/$tool"; done
-          "$bin/pg_config" --version | grep -E '^PostgreSQL 17\.'
+          "$bin/pg_config" --version | grep -E '^PostgreSQL 17\.11([[:space:]]|$)'
           echo "$bin" >> "$GITHUB_PATH"
           echo "USER=$(id -un)" >> "$GITHUB_ENV"
       - name: Install locked dependencies without lifecycle scripts
