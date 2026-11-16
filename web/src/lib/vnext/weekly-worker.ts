@@ -3,6 +3,7 @@ import type {CatalystReceipt} from './semantic-criteria.ts';
 import {readCurrentFinancialCache,currentEvidenceRead} from './current-evidence-read.ts';
 import {thesisCommand} from './thesis-runtime.ts';
 import {readActiveForecasts} from './forecast-active.ts';
+import {isForecastEvidence} from './forecast-current.ts';
 import {auditThesisCycle} from './thesis-cycle.ts';
 import { analysisCommand,analysisWriter } from './analysis-runtime.ts';
 import type { ThesisAuditInput } from './thesis-audit.ts';
@@ -49,13 +50,13 @@ async function auditActiveTheses(identity:VnextIdentity,options:{screen?:boolean
  const sourceProjection=await analysisCommand(identity,'source-projection',{symbols});
  const inputs:ThesisAuditInput[]=[];const currentEvidenceReads:ReturnType<typeof currentEvidenceRead>[]=[];const {loadTwEntryHistoricalPriceAuthority}=await import('../tw-entry-plan-authority.ts');
  for(const member of members){const publication=member.publication as Row|null;const originalInput=publication?.originalEvidence as Row|undefined;const original=(Array.isArray(originalInput?.evidence)?originalInput!.evidence:[]) as Evidence[];const symbol=String(member.symbol);const stockId=String((stocks.data||[]).find((s)=>s.symbol===symbol)?.id||'');
-  const originalSources=original.filter((e)=>e.sourceTier!=='official');const validity=await thesisCommand(identity,'source-current',{items:originalSources.map((e)=>({symbol,evidence:e}))});
-  const source=sourceProjection[symbol] as Row|undefined;const newContent=(Array.isArray(source?.evidence)?source!.evidence:[]) as Evidence[];
+  const originalSources=original.filter(e=>e.sourceTier!=='official'&&!isForecastEvidence(e));const validity=await thesisCommand(identity,'source-current',{items:originalSources.map((e)=>({symbol,evidence:e}))});
+  const source=sourceProjection[symbol] as Row|undefined;const newContent=((Array.isArray(source?.evidence)?source!.evidence:[]) as Evidence[]).filter(e=>!isForecastEvidence(e));
   const forecasts=activeForecasts.members.find(m=>m.symbol===symbol)!.forecast;if(forecasts.stockId!==stockId)throw Error('vnext_forecast_issuer_binding');
   const instrument=((instruments.data||[]) as Row[]).find((r)=>r.stock_id===stockId);
   const history=instrument && ['TWSE','TPEX'].includes(String(instrument.exchange))?await loadTwEntryHistoricalPriceAuthority(client,{stockId,symbol,exchange:instrument.exchange as 'TWSE'|'TPEX',signalSession:String((screen.priceSessions as string[]|undefined)?.[0]||''),cutoff}):null;
   const currentRead=currentEvidenceRead({symbol,stockId,inputHash:String(member.inputHash),revisionId:publication?String(publication.revision_id):null,publishedInputHash:publication?String(publication.input_hash):null,cutoff,signalSession:String((screen.priceSessions as string[]|undefined)?.[0]||''),financial,history,original});currentEvidenceReads.push(currentRead);
-  const current=[...forecasts.evidence,...currentRead.evidence,...originalSources.filter((e)=>!e.id.startsWith('forecast:') && ((validity.valid||[]) as string[]).includes(e.id)),...newContent.filter((e)=>!originalSources.some((o)=>o.id===e.id))];
+  const current=[...forecasts.evidence,...currentRead.evidence,...originalSources.filter(e=>((validity.valid||[]) as string[]).includes(e.id)),...newContent.filter((e)=>!originalSources.some((o)=>o.id===e.id))];
   // Consume the producer's typed eligibility decision and formal quote; cache
   // availability alone cannot promote its separately labelled comparison.
   const quote=currentRead.formalAudit.quote;

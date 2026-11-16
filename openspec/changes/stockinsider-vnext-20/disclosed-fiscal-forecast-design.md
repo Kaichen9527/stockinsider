@@ -58,3 +58,16 @@ deep attempt. A successful source contract is not native execution. The original
 weekday/time/resource guards stay unchanged, so weekend business admission
 remains a real temporal boundary. Full financial/publication/race/rights and
 actual source/provider/independent semantic acceptance remain open.
+
+## Weekly source revalidation
+
+The weekly thesis worker reads scalar estimates and fiscal disclosures from the
+dedicated active-forecast RPC. Both the fiscal estimate and its original
+disclosure leave the current input when the RPC withdraws the pair. A withdrawn
+input creates an evidence gap in any claim that relied on it. The audit records
+the gap without treating the withdrawal itself as a new forecast.
+
+Material comparison keeps forecast type, period, value, publication time, source
+and a digest of the original fiscal statement. An updated set of share
+assumptions can therefore require review even if the EPS is unchanged. Repeated
+acquisition of the same content preserves the material hash.

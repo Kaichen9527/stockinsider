@@ -8,6 +8,9 @@ import {validateFiscalForecastPairs} from './disclosed-fiscal-forecast.ts';
 type Row=Record<string,unknown>;
 export type CurrentForecasts={schemaVersion:'vnext-current-forecasts-v1';stockId:string;symbol:string;asOf:string;evidence:Evidence[];receipts:Row[];gaps:string[]};
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu;
+/** These namespaces are owned by the forecast RPC, including its original
+ * disclosure companion. The generic source cache cannot refresh either. */
+export const isForecastEvidence=(e:Evidence)=>e.id.startsWith('forecast:')||e.id.startsWith('fiscal-forecast:');
 const object=(v:unknown):v is Row=>Boolean(v)&&typeof v==='object'&&!Array.isArray(v);
 const keys=(v:Row,k:string)=>Object.keys(v).sort().join('|')===k.split(' ').sort().join('|');
 function civil(value:string){const d=new Date(value+'T00:00:00Z');return Number.isFinite(d.getTime())&&d.toISOString().slice(0,10)===value;}
