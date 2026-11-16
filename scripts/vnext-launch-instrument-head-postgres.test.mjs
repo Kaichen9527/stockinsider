@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
+import {rosterHeadFixtureSql} from './vnext-launch-roster-head-fixture.mjs';
 
 const fixture = `
 CREATE ROLE anon;
@@ -29,11 +30,6 @@ INSERT INTO public.stock_instruments_v3(stock_id,symbol,exchange,instrument_type
  FROM generate_series(1000,1219) symbol CROSS JOIN generate_series(1,112) n
  WHERE n<=6 OR symbol=1000;
 `;
-const filename = (name) => new URL('../migrations/'+name,import.meta.url);
-const baseline = fs.readFileSync(filename('20261115_vnext_launch_ranking_v1.sql'),'utf8');
-const first = baseline.indexOf('CREATE FUNCTION public.vnext_launch_instrument_v1(');
-const last = baseline.indexOf('\nCREATE FUNCTION public.vnext_launch_selected_score_v1(',first);
-const migration = fs.readFileSync(filename('20261116_28_vnext_launch_roster_heads_v1.sql'),'utf8');
 
 test('native screening and ranking resolve the same scoped head across appended roster history',()=>{
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'launch-roster-heads-pg-'));
@@ -57,11 +53,8 @@ test('native screening and ranking resolve the same scoped head across appended 
     check(command('initdb',['-D',data,'-U','lab','-A','trust','--no-locale','--encoding=UTF8']));
     check(command('pg_ctl',['-D',data,'-l',path.join(root,'pg.log'),'-w','-o',`-c listen_addresses= -k ${root} -p ${port}`,'start']));
     running=true;
-    assert.ok(first>=0&&last>first);
-    sql(fixture+baseline.slice(first,last)+`
-      ALTER FUNCTION ${ranking} OWNER TO opportunity_v3_rpc_owner;
-      REVOKE ALL ON FUNCTION ${ranking} FROM PUBLIC,anon,authenticated,service_role;
-      GRANT EXECUTE ON FUNCTION ${ranking} TO stockinsider_vnext_owner;`);
+    const {predecessor,migration}=rosterHeadFixtureSql();
+    sql(fixture+predecessor);
     assert.equal(Number(sql('SELECT count(*) FROM public.stock_instruments_v3;')),1426);
     assert.equal(head('1000',before),null,'the previous per-symbol history limit rejected a valid head');
     const metadata=()=>sql(`SELECT to_jsonb(p)-'prosrc' FROM pg_proc p WHERE oid='${ranking}'::regprocedure;`);
