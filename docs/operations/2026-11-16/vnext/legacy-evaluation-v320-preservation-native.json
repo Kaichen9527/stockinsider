@@ -1,0 +1,60 @@
+{
+  "schema": "stockinsider-t18-v320-constraint-preservation-native-v1",
+  "testedTaipeiDate": "2026-11-16",
+  "baseCommit": "141c77fe0ca4d28647525c3ff3a6abac1b3acc29",
+  "unitTests": {
+    "passed": 2,
+    "failed": 0
+  },
+  "nativeLocales": [
+    {
+      "locale": "C.UTF-8",
+      "downgradeRegression": {
+        "locale": "C.UTF-8",
+        "stage": "native_downgrade_regression",
+        "originalSqlstate": "23514",
+        "countPreserved": 3,
+        "existingConstraintOidRetained": true,
+        "unrelatedRevisionCheckInstalled": true,
+        "unknownRejected": true
+      },
+      "capturedSchemaFinal": {
+        "locale": "C.UTF-8",
+        "stage": "installed-state",
+        "enabled": false,
+        "legacyFenced": true,
+        "routines": 15,
+        "jobs": 0,
+        "publications": 0,
+        "rls": 18
+      },
+      "exit": 0
+    },
+    {
+      "locale": "C",
+      "downgradeRegression": {
+        "locale": "C",
+        "stage": "native_downgrade_regression",
+        "originalSqlstate": "23514",
+        "countPreserved": 3,
+        "existingConstraintOidRetained": true,
+        "unrelatedRevisionCheckInstalled": true,
+        "unknownRejected": true
+      },
+      "capturedSchemaFinal": {
+        "locale": "C",
+        "stage": "installed-state",
+        "enabled": false,
+        "legacyFenced": true,
+        "routines": 15,
+        "jobs": 0,
+        "publications": 0,
+        "rls": 18
+      },
+      "exit": 0
+    }
+  ],
+  "temporaryClustersRemoved": true,
+  "appliedToProduction": false,
+  "patchedGenuineBackupRehearsal": "PENDING_AT_COMMIT"
+}

@@ -4,6 +4,7 @@ import {executeFinancialVpsOperatorPrerequisite} from './financial-vps-operator-
 import {assertOperatorFlags,financialOperatorActionIdentity,assertOperatorPlan,assertOperatorReviewBinding} from './financial-vps-operator-binding.mjs';
 import {OWNERSHIP_PRELUDE,makeFinancialExistingSchemaProfile,assertFinancialExistingSchemaPlan,assertFinancialProfileFlags,assertFinancialProfileReviewBinding} from './financial-existing-schema-profile.mjs';
 import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
+import { V314_ACTIONABILITY_MIGRATION, lockInstalledV320EvaluationCheck, preserveV320EvaluationCheck, verifyV320EvaluationCheck } from './legacy-evaluation-constraint-replay.mjs';
 import { FINANCIAL_TAIL, selectFinancialHistoryChain, assertFinancialReviewBinding, assertInstalledFinancialHistoryPlan, verifyFinancialHistoryPostconditions } from './financial-history-install-guard.mjs';
 
 import { createHash } from 'node:crypto';
@@ -464,6 +465,7 @@ async function applyReviewedMigrationPlanToClient(client,plan,options,{operatorP
   let primaryFailed=false;
   const supersededMigrations=[];
   let operatorAction=null;
+  let retainedEvaluationCheck=null;
   try {
     const lockResult=await client.query("SELECT pg_try_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0)) AS locked");
     if(lockResult.rows[0]?.locked!==true) throw new Error('migration_install_busy');
@@ -488,8 +490,15 @@ async function applyReviewedMigrationPlanToClient(client,plan,options,{operatorP
         supersededMigrations.push(migration.relativePath);
         continue;
       }
-      await client.query(migrationBodyInAtomicTransaction(migration.bytes.toString('utf8')));
+      if(options.financialExistingSchemaProfile===true && migration.relativePath===V314_ACTIONABILITY_MIGRATION) {
+        retainedEvaluationCheck=await lockInstalledV320EvaluationCheck(client);
+      }
+      const sql=retainedEvaluationCheck
+        ? preserveV320EvaluationCheck(migration)
+        : migration.bytes.toString('utf8');
+      await client.query(migrationBodyInAtomicTransaction(sql));
     }
+    if(retainedEvaluationCheck)await verifyV320EvaluationCheck(client,retainedEvaluationCheck);
     const verified=await verifyReviewedMigrationPostconditions(client, options);
     await client.query('COMMIT');
     transactionOpen=false;
