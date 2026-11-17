@@ -2,6 +2,7 @@ import { rejectLegacyResearchInVnext } from './vnext/runtime.ts';
 import { randomUUID } from 'crypto';
 import { normalizeRelatedStockSymbols, normalizeSourceDocumentSymbols } from './stock-symbol';
 import { projectPublicPodcastSource, publicPodcastMention } from './podcast-public-evidence';
+import { isBullTalkRankingObservation } from './bulltalk-feed';
 import { calendarStockCandles } from './stock-chart-calendar';
 import { loadActiveCandidateSourceErrors, loadCandidateStageCards, runCandidateResearchCycle } from './candidate-research';
 import { reconcilePublishedCandidateTradePlanCoverage } from './candidate-trade-plan-coverage';
@@ -12556,6 +12557,7 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
 
     // 社群來源
     for (const row of (socialRes.data as Row[]) || []) {
+      if (isBullTalkRankingObservation(row)) continue;
       const doc = projectPublicPodcastSource(row);
       if (!doc) continue;
       const symbols: string[] = normalizeSourceDocumentSymbols(doc.symbols);
@@ -14198,7 +14200,7 @@ export async function getThemeDetail(themeKey: string): Promise<ThemeDetailPaylo
     const stockMap = new Map<string, Row>(((stocksRes.data as Row[]) || []).map((row) => [String(row.id || ''), row]));
     const stockBySymbol = new Map<string, Row>(((stocksRes.data as Row[]) || []).map((row) => [String(row.symbol || ''), row]));
     const sourceDocs = ((sourceDocsRes.data as Row[]) || [])
-      .filter((row) => !isSourceDocNoise(row))
+      .filter((row) => !isBullTalkRankingObservation(row) && !isSourceDocNoise(row))
       .filter((row) => Array.isArray(row.symbols) && (row.symbols as unknown[]).some((symbol) => themeSymbols.has(String(symbol))))
       .slice(0, 24);
     const docSourceCoverage = themeSourceCoverageFromDocuments(sourceDocs, themeSymbols);
@@ -14453,7 +14455,7 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
       );
     }
 
-    const rawSourceDocs = (rawDocsRes.data as Row[]) || [];
+    const rawSourceDocs = ((rawDocsRes.data as Row[]) || []).filter((doc) => !isBullTalkRankingObservation(doc));
     const podcastMentions = rawSourceDocs
       .map(row => publicPodcastMention(row, normalizedSymbol))
       .filter(mention => mention !== null);
@@ -19473,7 +19475,7 @@ export async function runThemeScan(options?: { dryRun?: boolean }): Promise<Agen
     if (signalsRes.error || marketRes.error) {
       throw new Error(signalsRes.error?.message || marketRes.error?.message || 'Failed to load theme scan sources');
     }
-    const allSocialDocs = (socialDocsRes.data as Row[]) || [];
+    const allSocialDocs = ((socialDocsRes.data as Row[]) || []).filter((doc) => !isBullTalkRankingObservation(doc));
 
     const latestPrices = new Map<string, number>();
     for (const row of (signalsRes.data as Row[]) || []) {
@@ -19795,10 +19797,10 @@ export async function runStoryScan(options?: { dryRun?: boolean }): Promise<Agen
           // Fetch recent social docs to boost confidence from real community signals
           const { data: rawSocialDocs } = await supabaseServer
             .from('source_raw_documents')
-            .select('symbols,platform,title,summary,confidence,published_at,collected_at')
+            .select('symbols,platform,title,summary,confidence,published_at,collected_at,metadata')
             .order('collected_at', { ascending: false })
             .limit(500);
-          const allSocialDocs = (rawSocialDocs as Row[]) || [];
+          const allSocialDocs = ((rawSocialDocs as Row[]) || []).filter((doc) => !isBullTalkRankingObservation(doc));
 
           const stockRows = await Promise.all(
             TW_STORY_RESEARCH_SEEDS.map((seed) => ensureStock(seed.symbol, seed.market, seed.name, seed.sector)),

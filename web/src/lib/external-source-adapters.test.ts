@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { parseLicensedBullTalkFeed, bullTalkLicenseReadiness } from './bulltalk-feed.ts';
+import * as bullTalk from './bulltalk-feed.ts';
 import {
   configuredPodcastTranscriptTracks, podcastTranscriptTrackKey, derivePodcastLedgerSemantics, locatePodcastStockMentions, parsePodcastNamespaceFeed, parsePublisherChapters,
   parsePublisherTranscript, selectTimedPublisherTranscript, INVEST_J_THINGS_FEED, INVEST_J_THINGS_PROGRAM, parseInvestJThingsFeed,
@@ -60,6 +61,47 @@ test('BullTalk adapter rejects HTML and parses quoted licensed CSV without scrap
     BULLTALK_LICENSE_SCOPE_REF: 'contract:2026-09',
     BULLTALK_REAL_SAMPLE_SHA256: 'f'.repeat(64),
   }).ready, true);
+});
+
+test('licensed BullTalk metadata keeps counts and original clock precision without manufacturing an article', () => {
+  const input = {
+    title: '2330 目標價上調',
+    url: 'https://licensed.example/rank/2026-11-17',
+    symbols: ['2330'],
+    published_at: '2026-11-17T17:30:50.123456+08:00',
+    mention_count: 18,
+  };
+  const [row] = parseLicensedBullTalkFeed('application/json', JSON.stringify([input]));
+  const document = bullTalk.projectLicensedBullTalkRanking(row);
+  assert.equal(document.title, input.title);
+  assert.equal(document.contentText, '');
+  assert.equal(document.contentSemantics, 'metadata_only');
+  assert.equal(document.publishedAt, input.published_at);
+  assert.equal(document.metadata.candidate_discovery_eligible, false);
+  assert.equal(document.metadata.retention_mode, 'metadata_link_only');
+  assert.equal(document.metadata.mention_count, 18);
+  for (const clock of ['2026-11-17', '2 小時前', '2026-02-30T09:00:00+08:00', null]) {
+    assert.equal(bullTalk.projectLicensedBullTalkRanking({ ...row, publishedAt: clock }).publishedAt, null);
+  }
+});
+
+test('legacy and new BullTalk ranking rows share the same metadata-only boundary', () => {
+  assert.equal(bullTalk.isBullTalkRankingObservation({
+    platform: 'bulltalk', metadata: { connector: 'authorized_feed' },
+  }), true);
+  assert.equal(bullTalk.isBullTalkRankingObservation({
+    platform: 'bulltalk', metadata: bullTalk.projectLicensedBullTalkRanking({
+      title: '熱門榜', sourceUrl: 'https://licensed.example/rank/1', symbols: ['2330'],
+      publishedAt: null, stance: 'neutral', mentionCount: 0, commentCount: 0, engagementCount: 0, rank: 1,
+    }).metadata,
+  }), true);
+  for (const record of [
+    { platform: 'bulltalk', metadata: null },
+    { platform: 'bulltalk', metadata: { connector: 'different_source' } },
+    { platform: 'ptt', metadata: { connector: 'authorized_feed' } },
+  ]) {
+    assert.equal(bullTalk.isBullTalkRankingObservation(record), false);
+  }
 });
 
 test('Podcast namespace adapter recognizes alternate prefixes and preserves transcript and chapter timecodes', () => {

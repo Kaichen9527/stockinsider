@@ -8,7 +8,7 @@ import { getSupabaseServerClient } from './supabase-server';
 import { putSourceAuditArtifact } from './source-audit-artifact';
 import { THREADS_CANONICAL_ORIGIN } from './source-auth';
 import { APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS, UNAVAILABLE_TELEGRAM_PUBLIC_CHANNELS, authorizedPodcastRssAllowlist, podcastContentAnalyzable } from './source-policy';
-import { bullTalkLicenseReadiness, parseLicensedBullTalkFeed } from './bulltalk-feed';
+import { bullTalkLicenseReadiness, isBullTalkRankingObservation, parseLicensedBullTalkFeed, projectLicensedBullTalkRanking } from './bulltalk-feed';
 import { THREADS_KEYWORD_SEARCH_URL, assertThreadsKeywordSearchEndpoint } from './threads-api';
 import {
   derivePodcastLedgerSemantics, locatePodcastStockMentions, parsePodcastNamespaceFeed, podcastStockCodes,
@@ -1311,6 +1311,7 @@ type SourceSyncRunShape = {
   matchedDirectHits?: number;
   matchedIndustryHits?: number;
   candidateDocuments?: number;
+  contentAnalyzable?: boolean;
   searchedKeywords?: string[];
   matchedSymbols?: string[];
   authFailureReason?: string | null;
@@ -2238,7 +2239,8 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
   );
   if (error) throw new Error(error.message);
 
-  const mentionedSymbols = unique(newItems.flatMap((item) => item.symbols || []).filter((symbol) => /^\d{4}$/u.test(symbol)));
+  const mentionItems = newItems.filter((item) => !isBullTalkRankingObservation(item));
+  const mentionedSymbols = unique(mentionItems.flatMap((item) => item.symbols || []).filter((symbol) => /^\d{4}$/u.test(symbol)));
   if (mentionedSymbols.length > 0) {
     const { data: stocks, error: stocksError } = await supabase
       .from('stocks')
@@ -2247,7 +2249,7 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
     if (stocksError) throw new Error(stocksError.message);
     const stockIdBySymbol = new Map(((stocks as Row[]) || []).map((row) => [compactText(row.symbol), compactText(row.id)]));
     const availableAt = nowIso();
-    const mentionRows = newItems
+    const mentionRows = mentionItems
       .filter((item) => (item.contentSemantics || 'editorial_discussion') !== 'bulk_institutional_ranking')
       // A PTT header gap must never acquire a fresh event via availableAt.
       // Metadata/link retention remains available for the legacy caller.
@@ -3039,7 +3041,7 @@ async function scrapeBullTalk(symbolContext?: SymbolScopedStockContext | null) {
   const license = bullTalkLicenseReadiness();
   if (!license.ready || !license.feedUrl) {
     return { connector: 'bulltalk', recordsWritten: 0, fetchedPosts: 0, entityId: null,
-      errorCode: 'license_missing', degradedReason: license.reason || 'bulltalk_authorized_feed_missing', sessionMode: 'not_applicable' as const };
+      errorCode: 'license_missing', contentAnalyzable: false, degradedReason: license.reason || 'bulltalk_authorized_feed_missing', sessionMode: 'not_applicable' as const };
   }
   const feedUrl = license.feedUrl;
   const parsedFeedUrl = new URL(feedUrl);
@@ -3061,16 +3063,12 @@ async function scrapeBullTalk(symbolContext?: SymbolScopedStockContext | null) {
   const rows = parseLicensedBullTalkFeed(contentType, await response.text());
   const docs: SourceRawDocInput[] = rows.slice(0, 500).flatMap((row) => {
     if (symbolContext && !row.symbols.includes(symbolContext.symbol)) return [];
+    const observation = projectLicensedBullTalkRanking(row);
     return [{
-      sourceEntityId: String(entity.id), platform: 'bulltalk', documentUrl: row.sourceUrl, title: row.title,
-      summary: row.title, contentText: row.title, symbols: row.symbols, sentimentLabel: row.stance, confidence: 0.7,
-      publishedAt: safeDateString(row.publishedAt),
+      ...observation,
+      sourceEntityId: String(entity.id),
       metadata: {
-        connector: 'authorized_feed', retention_mode: 'metadata_link_only',
-        mention_count: row.mentionCount,
-        comment_count: row.commentCount,
-        engagement_count: row.engagementCount,
-        rank: row.rank,
+        ...observation.metadata,
         license_basis: 'cmoney_partner_or_api_license',
         license_scope_ref: license.licenseScopeRef,
         real_sample_sha256: license.sampleSha256,
@@ -3080,8 +3078,8 @@ async function scrapeBullTalk(symbolContext?: SymbolScopedStockContext | null) {
   const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(docs, 'bulltalk', symbolContext));
   return { connector: 'bulltalk', recordsWritten: count, fetchedPosts: rows.length,
     duplicatesSkipped: Math.max(0, docs.length - count), matchedDirectHits: new Set(docs.flatMap((doc) => doc.symbols)).size,
-    matchedIndustryHits: 0, entityId: String(entity.id), errorCode: null, sessionMode: 'not_applicable' as const,
-    metadata: { adapter: 'licensed_json_or_csv_v1', license_scope_ref: license.licenseScopeRef, real_sample_sha256: license.sampleSha256 } };
+    matchedIndustryHits: 0, entityId: String(entity.id), errorCode: null, contentAnalyzable: false, sessionMode: 'not_applicable' as const,
+    metadata: { adapter: 'licensed_json_or_csv_v1', content_scope: 'ranking_metadata', valid_matches: 0, license_scope_ref: license.licenseScopeRef, real_sample_sha256: license.sampleSha256 } };
 }
 
 async function scrapeGdeltMetadata(symbolContext?: SymbolScopedStockContext | null): Promise<SourceSyncRunShape> {
@@ -4031,6 +4029,7 @@ export async function runSourceSync(options?: SourceSyncOptions, snapshotSink?: 
       degradedReason: null,
       timedOut: false,
       sessionMode: defaultSessionMode,
+      ...(connector === 'bulltalk' ? { contentAnalyzable: false } : {}),
       metadata: connector === 'threads' ? { provider_canary_ran: false, dry_run_credentials_only: true } : undefined,
     };
   }
@@ -4191,6 +4190,7 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
     throw new Error(docsRes.error?.message || stocksRes.error?.message || 'Failed to load source discovery inputs');
   }
   const documents = ((docsRes.data as Row[]) || []).filter((doc) =>
+    !isBullTalkRankingObservation(doc) &&
     !(RETIRED_SOURCE_CONNECTORS as readonly string[]).includes(compactText(doc.platform).toLowerCase()));
   const stockBySymbol = new Map<string, Row>();
   for (const stock of (stocksRes.data as Row[]) || []) {
@@ -4744,7 +4744,7 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
   const reports = (reportsRes.data as Row[]) || [];
   const recommendations = (recsRes.data as Row[]) || [];
   const evidenceItems = (evidenceRes.data as Row[]) || [];
-  const rawDocs = (rawDocsRes.data as Row[]) || [];
+  const rawDocs = ((rawDocsRes.data as Row[]) || []).filter((doc) => !isBullTalkRankingObservation(doc));
   const valuationCases = (valuationsRes.data as Row[]) || [];
   const themes = (themesRes.data as Row[]) || [];
   const stories = (storiesRes.data as Row[]) || [];
