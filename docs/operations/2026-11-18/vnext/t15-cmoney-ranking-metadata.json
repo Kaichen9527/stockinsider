@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "stockinsider-t15-cmoney-ranking-metadata-v1",
+  "task": 400,
+  "sourceCommit": "0d16af324698204704410726f4008b0cc23aa756",
+  "baseCommit": "177f949772d61db6b8e1d0ea97be4c63a2213043",
+  "runtime": {
+    "environment": "Contabo isolated staging",
+    "node": "22.14.0",
+    "next": "16.3.4",
+    "networkDuringBuild": "private",
+    "productionDatabaseSocketAccessibleDuringBuild": false,
+    "actualCodexCloudModelVerifiedForThisRun": false
+  },
+  "regression": {
+    "scope": "actual connector, persistence and route functions with synthetic provider and database adapters",
+    "original": {
+      "bodyWasTitle": true,
+      "contentSemantics": "editorial_discussion",
+      "candidateDiscoveryEligible": true,
+      "writtenMentionRows": 1,
+      "ledgerContentAnalyzable": true,
+      "ledgerValidMatches": 1
+    },
+    "fixed": {
+      "bodyWasTitle": false,
+      "contentSemantics": "metadata_only",
+      "candidateDiscoveryEligible": false,
+      "writtenMentionRows": 0,
+      "ledgerContentAnalyzable": false,
+      "ledgerValidMatches": 0
+    }
+  },
+  "regressionSha256": "9a73472304eb8055bf3ec40e6d7f680ce9ab32ff3346f843a734389b495fda09",
+  "checks": {
+    "adapterPolicyAndCache": {
+      "counts": {
+        "tests": 35,
+        "pass": 35,
+        "fail": 0,
+        "skipped": 0
+      },
+      "sha256": "c56f5826e186bad953cb81a18ee72e37dcea8e4e19ce6b4c19ce31948fe3fc86"
+    },
+    "historicalTwseSourceClosure": {
+      "counts": {
+        "tests": 11,
+        "pass": 11,
+        "fail": 0,
+        "skipped": 0
+      },
+      "sha256": "4b01776fbd36ce3129f09692a351e58290c3b6311de7e213fe8b31b9153633cd"
+    },
+    "targetedLint": {
+      "passed": true,
+      "warnings": 29,
+      "sha256": "0d3c48ffa0645182e8806759e200060e45a8fa6ea8509c7c00a4ee95f79f2856"
+    },
+    "typecheck": {
+      "passed": true,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    "productionBuild": {
+      "passed": true,
+      "staticPages": 92,
+      "sha256": "3b62ee5a505cb6e45e5c635032add83bfdfc0f06f426ab4d710e6e6f30c72137"
+    }
+  },
+  "hostBounds": {
+    "sampleCount": 143,
+    "samplePeriodSeconds": 2,
+    "minimumDiskBytes": 17152819200,
+    "minimumMemAvailableKiB": 2620600,
+    "publishedBytesContainPrivateRows": false
+  },
+  "productionReadOnlyInventory": {
+    "existingBullTalkRawRows": 1920,
+    "legacyHttpRows": 1920,
+    "titleCopiedAsBody": 1789,
+    "explicitAuthorAndArticleIds": 0,
+    "licensedFeedRows": 0,
+    "legacyCandidateMentionRows": 0,
+    "sourceRowsChanged": 0
+  },
+  "providers": {
+    "realLicensedArticleFeedVerified": false,
+    "productionConnectorEnabledByThisWork": false,
+    "requires": "CMoney license and real article sample with original author/article IDs, original timestamp, authorized text scope and redistribution boundary"
+  },
+  "authority": {
+    "independentReleaseReviewAccepted": false,
+    "nativePermissionGrantExecuted": false,
+    "historicalProfileModified": false,
+    "productionDeploymentPerformed": false
+  }
+}
