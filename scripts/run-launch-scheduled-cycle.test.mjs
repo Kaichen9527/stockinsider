@@ -145,6 +145,35 @@ test('evening drains only the current Taipei date before calling the launch-only
   }]);
 });
 
+test('evening uses the existing private open-day notice scan after publication or retention', () => {
+  const env = { ...active, STOCKINSIDER_VNEXT_INVESTANCHORS_GMAIL_ENABLED: 'true' };
+  const current = { ok: true, policyVersion, result: { scanStatus: 'open_day', checkpointDay: null, articleAuthority: false } };
+  for (const [published, status] of [[true, 'published'], [false, 'retained']]) {
+    const ranking = { ...evening, result: { ...evening.result, ranking: { published } } };
+    const { calls, run } = plan(day + 'T13:30:00Z', [complete, ranking, current], { env });
+    assert.deepEqual(run(), { slot: 'postclose', sessionDate: day, weeklyAudit: 'current', status, currentNoticeScan: 'open_day' });
+    assert.deepEqual(calls.slice(2).map(row => [row.payload, row.timeoutMs]), [
+      [{ action: 'launch-cycle' }, 1_500_000],
+      [{ action: 'investanchors-gmail-notices', scope: 'current' }, 115_000],
+    ]);
+  }
+  for (const response of [null, { ...current, result: { ...current.result, articleAuthority: true } },
+    { ...current, result: { ...current.result, checkpointDay: day } }]) {
+    const { run } = plan(day + 'T13:30:00Z', [complete, evening, response], { env });
+    assert.deepEqual(run(), { slot: 'postclose', sessionDate: day, weeklyAudit: 'current', status: 'published', currentNoticeScan: 'failed' });
+  }
+});
+
+test('evening uses the next morning to recover a notice scan that cannot fit before midnight', () => {
+  const env = { ...active, STOCKINSIDER_VNEXT_INVESTANCHORS_GMAIL_ENABLED: 'true' };
+  for (const finishedAt of [day + 'T15:58:00.001Z', day + 'T16:03:00Z']) {
+    const { calls, run } = plan([day + 'T13:30:00Z', day + 'T13:31:00Z', day + 'T13:32:00Z', finishedAt],
+      [complete, evening], { env });
+    assert.deepEqual(run(), { slot: 'postclose', sessionDate: day, weeklyAudit: 'current', status: 'published', currentNoticeScan: 'deferred' });
+    assert.equal(calls.length, 3);
+  }
+});
+
 test('evening deferral or rank refusal retains the prior publication', () => {
   for (const result of [
     { status: 'deferred', reason: 'calendar_unavailable' },
