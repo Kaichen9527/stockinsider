@@ -183,6 +183,84 @@ async function checkAuthProfileTriggerBoundary(fixture) {
   });
 }
 
+async function checkSourceGuardTriggerBoundary(fixture) {
+  const sourceOwner = 'research_source_fence_owner_v2';
+  const runtimeRoles = ['anon', 'authenticated', 'service_role', sourceOwner];
+  const signatures = [
+    'public.enforce_production_writer_fence()',
+    'public.fence_research_paper_book_append_v1()',
+    'public.fence_research_strategy_record_v1()',
+  ];
+  const inventory = async () => {
+    const { rows } = await fixture.observer.query(`
+      SELECT signatures.name, p.oid::text, pg_get_functiondef(p.oid) AS definition,
+        ARRAY(SELECT name FROM unnest($2::text[]) name WHERE has_function_privilege(name, p.oid, 'EXECUTE')) AS executable,
+        (SELECT jsonb_agg(to_jsonb(t) ORDER BY t.oid) FROM pg_trigger t WHERE t.tgfoid = p.oid) AS bindings
+      FROM unnest($1::text[]) WITH ORDINALITY signatures(name, position)
+      JOIN pg_proc p ON p.oid = to_regprocedure(signatures.name)
+      ORDER BY signatures.position`, [signatures, runtimeRoles]);
+    return rows;
+  };
+  const foreignDefiners = async () => {
+    const { rows } = await fixture.observer.query(`
+      SELECT p.oid::regprocedure::text AS signature FROM pg_proc p
+      WHERE p.pronamespace = 'public'::regnamespace AND p.prosecdef AND p.proowner <> $1::regrole
+        AND has_function_privilege($1, p.oid, 'EXECUTE')
+      ORDER BY 1`, [sourceOwner]);
+    return rows.map(row => row.signature);
+  };
+  const exerciseBusinessGuards = async () => {
+    const writer = fixture.writer;
+    const strategy = 'a'.repeat(64);
+    const paper = 'b'.repeat(64);
+    await writer.query('BEGIN');
+    try {
+      await writer.query('SET LOCAL ROLE service_role');
+      const proposal = hash => writer.query(`
+        INSERT INTO public.research_strategy_records_v1(record_hash, kind, proposal_hash, payload, input_hash, input_payload)
+        VALUES ($1, 'proposal', $1, '{}'::jsonb, $1, '{}'::jsonb)`, [hash]);
+      const paperRevision = (revision, parent) => writer.query(`
+        INSERT INTO public.research_paper_book_revisions_v1(revision_hash, book_id, parent_hash, operation_key, input_hash, state, result)
+        VALUES ($1, 'growth', $2, $1, $1, '{"bookId":"growth"}'::jsonb, '{}'::jsonb)`, [revision, parent]);
+      assert.equal((await proposal(strategy)).rowCount, 1);
+      assert.equal((await paperRevision(paper, null)).rowCount, 1);
+
+      await writer.query('SAVEPOINT before_strategy_denial');
+      await assert.rejects(proposal('c'.repeat(64)), { message: 'research_strategy_weekly_hypothesis_cap' });
+      await writer.query('ROLLBACK TO SAVEPOINT before_strategy_denial');
+      await assert.rejects(paperRevision('d'.repeat(64), null), { message: 'research_paper_book_head_changed' });
+    } finally {
+      await writer.query('ROLLBACK');
+    }
+  };
+
+  const rows = await fixture.snapshot();
+  const before = await inventory();
+  assert.deepEqual(before.map(row => row.name), signatures);
+  for (const row of before) {
+    assert.deepEqual(row.executable, runtimeRoles);
+    assert.ok(row.bindings.length > 0);
+  }
+  assert.deepEqual(await foreignDefiners(), signatures.map(signature => signature.replace(/^public\./u, '')));
+  await exerciseBusinessGuards();
+
+  const migration = readFileSync(new URL('../migrations/20261117_47_vnext_source_guard_trigger_acl_v1.sql', import.meta.url), 'utf8');
+  await fixture.writer.query(migration);
+  assert.deepEqual(await inventory(), before.map(row => ({ ...row, executable: [] })));
+  assert.deepEqual(await foreignDefiners(), []);
+  await exerciseBusinessGuards();
+  assert.deepEqual(await fixture.snapshot(), rows);
+  fixture.save('source-guard-trigger-acl-safe', {
+    existingBindingsByFunction: Object.fromEntries(before.map(row => [row.name, row.bindings.length])),
+    procedureIdentityDefinitionAndBindingsRetained: true,
+    effectiveExecuteDeniedAfter: runtimeRoles,
+    sourceOwnerNonOwnedPublicDefinersAfter: [],
+    strategyWeeklyLimitAndPaperLineageRetained: true,
+    allPublicRowsUnchanged: true,
+    sourceNamespaceGrantApplied: false,
+  });
+}
+
 async function checkSourceOwnerBoundary(fixture) {
   const observer = fixture.observer;
   await observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');
@@ -236,6 +314,60 @@ SELECT jsonb_build_object(
       { name: 'research_source_fence_events_v2_event_id_seq', usage: true, select: true, update: true },
     ]);
     assert.deepEqual(callAdapters, { publicOperators: 0, publicCallableCastFunctions: 0, publicTypesWithNonCatalogInput: 0 });
+    const { rows: receiptRelations } = await observer.query(`
+      SELECT c.relname AS name,
+        ARRAY(SELECT a.attname::text FROM pg_attribute a
+          WHERE a.attrelid = c.oid AND a.attidentity <> '' ORDER BY a.attnum) AS identities,
+        ARRAY(SELECT a.attname || '=' || pg_get_expr(d.adbin, d.adrelid)
+          FROM pg_attrdef d JOIN pg_attribute a ON a.attrelid = d.adrelid AND a.attnum = d.adnum
+          WHERE d.adrelid = c.oid ORDER BY a.attnum) AS defaults,
+        ARRAY(SELECT k.confrelid::regclass::text FROM pg_constraint k
+          WHERE k.conrelid = c.oid AND k.contype = 'f' ORDER BY 1) AS "foreignKeyTargets",
+        (SELECT count(*)::int FROM pg_constraint k WHERE k.conrelid = c.oid AND k.contype = 'f'
+          AND (k.confupdtype <> 'a' OR k.confdeltype <> 'a')) AS "cascadingForeignKeys",
+        coalesce((SELECT jsonb_agg(jsonb_build_object('name', pol.polname, 'command', pol.polcmd,
+          'roles', ARRAY(SELECT CASE WHEN role.oid = 0 THEN 'PUBLIC' ELSE pg_get_userbyid(role.oid)::text END
+            FROM unnest(pol.polroles) role(oid) ORDER BY 1),
+          'using', pg_get_expr(pol.polqual, pol.polrelid), 'check', pg_get_expr(pol.polwithcheck, pol.polrelid)) ORDER BY pol.polname)
+          FROM pg_policy pol WHERE pol.polrelid = c.oid), '[]'::jsonb) AS policies,
+        (SELECT count(*)::int FROM pg_rewrite rule WHERE rule.ev_class = c.oid) AS rules,
+        (SELECT count(*)::int FROM pg_index i WHERE i.indrelid = c.oid
+          AND (i.indexprs IS NOT NULL OR i.indpred IS NOT NULL)) AS "expressionOrPartialIndexes",
+        (SELECT jsonb_agg(jsonb_build_object('function', p.oid::regprocedure::text, 'securityDefiner', p.prosecdef,
+          'definitionSha256', encode(sha256(convert_to(pg_get_functiondef(p.oid), 'UTF8')), 'hex'),
+          'eventMask', t.tgtype::int, 'enabled', t.tgenabled) ORDER BY t.tgname)
+          FROM pg_trigger t JOIN pg_proc p ON p.oid = t.tgfoid
+          WHERE t.tgrelid = c.oid AND NOT t.tgisinternal) AS "userTriggers"
+      FROM pg_class c WHERE c.relnamespace = 'public'::regnamespace AND c.relname = ANY($1::text[])
+      ORDER BY c.relname`, [sourceRelations]);
+    assert.deepEqual(receiptRelations.map(row => row.name), sourceRelations);
+    assert.deepEqual(receiptRelations.map(row => row.identities), [['event_id'], [], []]);
+    assert.deepEqual(receiptRelations.map(row => row.defaults), [
+      ['recorded_at=clock_timestamp()'], [], ['seal_id=gen_random_uuid()', 'received_at=clock_timestamp()'],
+    ]);
+    assert.deepEqual(receiptRelations.map(row => row.foreignKeyTargets), [
+      [], ['research_source_fence_events_v2', 'research_source_seals_v2'], [],
+    ]);
+    assert.deepEqual(receiptRelations.map(row => row.policies), [[], [], [{
+      name: 'input_preparation_seal_read_v2', command: 'r', roles: ['research_input_preparation_owner_v2'],
+      using: 'true', check: null,
+    }]]);
+    for (const row of receiptRelations) {
+      assert.equal(row.cascadingForeignKeys, 0);
+      assert.equal(row.rules, 0);
+      assert.equal(row.expressionOrPartialIndexes, 0);
+      assert.equal(row.userTriggers.length, 1);
+      const [{ definitionSha256, ...trigger }] = row.userTriggers;
+      assert.match(definitionSha256, /^[0-9a-f]{64}$/u);
+      assert.deepEqual(trigger, {
+        function: 'reject_research_source_receipt_mutation_v2()', securityDefiner: false, eventMask: 27, enabled: 'O',
+      });
+    }
+    fixture.save('source-receipt-dependencies-safe', {
+      scope: 'installed catalog, read-only repeatable-read transaction',
+      receiptRelations,
+      nativeSourceGrantExecuted: false,
+    });
     fixture.save('source-owner-boundary-safe', {
       role, relationAccess, sequences, callAdapters,
       transaction: 'repeatable read read only',
@@ -354,6 +486,9 @@ test('planner and legacy report ACLs preserve their existing web and backend cal
     await testSubscriberScope(t, fixture);
     await t.test('auth profile hook remains attached with runtime execution privileges removed', async () => {
       await checkAuthProfileTriggerBoundary(fixture);
+    });
+    await t.test('existing writer and research triggers retain their bindings while restricting execution', async () => {
+      await checkSourceGuardTriggerBoundary(fixture);
     });
     await t.test('source role retains only its known public schema capabilities', async () => {
       await checkSourceOwnerBoundary(fixture);
