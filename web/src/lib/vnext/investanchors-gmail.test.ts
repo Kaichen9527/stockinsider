@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { loadInvestAnchorsNoticeCredentials } from './investanchors-notice-credential.ts';
 import test from 'node:test';
 import { createHash } from 'node:crypto';
 import { openInvestAnchorsGmail } from './investanchors-gmail.ts';
@@ -86,4 +87,75 @@ test('Gmail responses are byte bounded before parsing or retaining any notice', 
   const f = fixture('oversized');
   const mailbox = await openInvestAnchorsGmail(config, day, f.fetcher);
   await assert.rejects(() => mailbox.list({ q, maxResults: 50 }), /response_invalid/u);
+});
+
+
+const systemdDirectory = '/run/credentials/stockinsider-test.service';
+const newEnvelope = {
+  schemaVersion: 'stockinsider-investanchors-gmail-v1',
+  clientId: 'staging-client',
+  clientSecret: 'staging-client-secret',
+  refreshToken: 'staging-refresh-token',
+  mailboxSha256: 'a'.repeat(64),
+  noticeHmacHex: 'b'.repeat(64),
+};
+const legacyEnvironment = {
+  STOCKINSIDER_INVESTANCHORS_GMAIL_CLIENT_ID: 'legacy-client',
+  STOCKINSIDER_INVESTANCHORS_GMAIL_CLIENT_SECRET: 'legacy-secret',
+  STOCKINSIDER_INVESTANCHORS_GMAIL_REFRESH_TOKEN: 'legacy-token',
+  STOCKINSIDER_INVESTANCHORS_GMAIL_MAILBOX_SHA256: 'c'.repeat(64),
+  STOCKINSIDER_INVESTANCHORS_NOTICE_HMAC_HEX: 'd'.repeat(64),
+};
+
+test('the encrypted service credential is authoritative and its staging bytes are cleared', () => {
+  const bytes = Buffer.from(JSON.stringify(newEnvelope));
+  const config = loadInvestAnchorsNoticeCredentials({
+    ...legacyEnvironment, CREDENTIALS_DIRECTORY: systemdDirectory,
+  }, (filename) => {
+    assert.equal(filename, systemdDirectory + '/investanchors-gmail.json');
+    return bytes;
+  });
+  assert.deepEqual(config, {
+    gmail: {
+      clientId: newEnvelope.clientId,
+      clientSecret: newEnvelope.clientSecret,
+      refreshToken: newEnvelope.refreshToken,
+      mailboxSha256: newEnvelope.mailboxSha256,
+    },
+    noticeHmacHex: newEnvelope.noticeHmacHex,
+  });
+  assert.ok(bytes.every(byte => byte === 0));
+});
+
+test('an absent service credential supports existing environments without mixing fields', () => {
+  const missing = () => { throw Object.assign(Error('missing'), { code: 'ENOENT' }); };
+  assert.equal(loadInvestAnchorsNoticeCredentials({ CREDENTIALS_DIRECTORY: systemdDirectory }, missing), null);
+  const config = loadInvestAnchorsNoticeCredentials({
+    ...legacyEnvironment, CREDENTIALS_DIRECTORY: systemdDirectory,
+  }, missing);
+  assert.equal(config?.gmail.refreshToken, 'legacy-token');
+  assert.equal(config?.noticeHmacHex, 'd'.repeat(64));
+  assert.equal(loadInvestAnchorsNoticeCredentials({ ...legacyEnvironment, STOCKINSIDER_INVESTANCHORS_GMAIL_REFRESH_TOKEN: undefined }), null);
+});
+
+test('invalid mounted credentials stop configuration without reviving a legacy grant', () => {
+  for (const bytes of [
+    Buffer.alloc(16_385, 1), Buffer.from([0xff]), Buffer.from('{'),
+    Buffer.from(JSON.stringify({ ...newEnvelope, refreshToken: undefined })),
+    Buffer.from(JSON.stringify({ ...newEnvelope, extra: 'not allowed' })),
+    Buffer.from(JSON.stringify({ ...newEnvelope, noticeHmacHex: 'bad-hmac' })),
+  ]) {
+    assert.throws(() => loadInvestAnchorsNoticeCredentials({
+      ...legacyEnvironment, CREDENTIALS_DIRECTORY: systemdDirectory,
+    }, () => bytes), { message: 'investanchors_credential_invalid' });
+    assert.ok(bytes.every(byte => byte === 0));
+  }
+  for (const CREDENTIALS_DIRECTORY of ['/tmp/credentials', systemdDirectory + '/../other', '']) {
+    assert.throws(() => loadInvestAnchorsNoticeCredentials({
+      ...legacyEnvironment, CREDENTIALS_DIRECTORY,
+    }, () => assert.fail('invalid credential directory must not be read')), { message: 'investanchors_credential_invalid' });
+  }
+  assert.throws(() => loadInvestAnchorsNoticeCredentials({
+    ...legacyEnvironment, CREDENTIALS_DIRECTORY: systemdDirectory,
+  }, () => { throw Object.assign(Error('unreadable'), { code: 'EACCES' }); }), { message: 'investanchors_credential_invalid' });
 });

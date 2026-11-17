@@ -1,5 +1,6 @@
 import type { VnextIdentity } from './auth.ts';
 import { openInvestAnchorsGmail } from './investanchors-gmail.ts';
+import { loadInvestAnchorsNoticeCredentials } from './investanchors-notice-credential.ts';
 import { planInvestAnchorsMailboxDay } from './investanchors-notice-receiver.ts';
 import { runInvestAnchorsNoticeWorker } from './investanchors-notice-progress.ts';
 import { taipeiDate } from './policy.ts';
@@ -31,19 +32,21 @@ export async function runConfiguredInvestAnchorsNotices(identity: VnextIdentity,
   }
 
   const day = resolveInvestAnchorsNoticeDay(new Date(), requestedDay, scope);
-  const clientId = process.env.STOCKINSIDER_INVESTANCHORS_GMAIL_CLIENT_ID;
-  const clientSecret = process.env.STOCKINSIDER_INVESTANCHORS_GMAIL_CLIENT_SECRET;
-  const refreshToken = process.env.STOCKINSIDER_INVESTANCHORS_GMAIL_REFRESH_TOKEN;
-  const mailboxSha256 = process.env.STOCKINSIDER_INVESTANCHORS_GMAIL_MAILBOX_SHA256;
-  const privateKey = process.env.STOCKINSIDER_INVESTANCHORS_NOTICE_HMAC_HEX;
-  if (!clientId || !clientSecret || !refreshToken || !mailboxSha256 || !privateKey || !/^[a-f0-9]{64}$/u.test(privateKey)) {
+  let credentials;
+  try {
+    credentials = loadInvestAnchorsNoticeCredentials();
+  } catch {
+    return { scanStatus: 'blocked' as const, reason: 'background_gmail_credentials_invalid', articleAuthority: false as const };
+  }
+  if (credentials === null) {
     return { scanStatus: 'blocked' as const, reason: 'background_gmail_credentials_missing', articleAuthority: false as const };
   }
 
-  const key = Buffer.from(privateKey, 'hex');
+  const { gmail, noticeHmacHex } = credentials;
+  const key = Buffer.from(noticeHmacHex, 'hex');
   try {
     return await runInvestAnchorsNoticeWorker(identity, day, key,
-      mailboxDay => openInvestAnchorsGmail({ clientId, clientSecret, refreshToken, mailboxSha256 }, mailboxDay));
+      mailboxDay => openInvestAnchorsGmail(gmail, mailboxDay));
   } finally {
     key.fill(0);
   }

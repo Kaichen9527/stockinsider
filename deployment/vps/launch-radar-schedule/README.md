@@ -12,3 +12,13 @@ These three systemd units are held for the reviewed launch release. The legacy i
 - Both candidate services require the vNext and launch rank feature flags. The server independently rejects the launch-only action when the launch policy is disabled. The runner reports only its slot, date and result class.
 
 Before cutover, compare the effective installed units and overrides with the reviewed release. Verify the selected worker understands the launch route, the protected writer credentials are bound, and no older schedule can publish independently. Restore all three prior definitions as part of the release rollback. Verify the weekly audit on the deployed worker and confirm real publication admission as part of the release gates.
+
+### Background Gmail credential
+
+The private worker can load the encrypted `investanchors-gmail.json` systemd credential. Provision it through the approved secret handoff after the Gmail account owner grants the dedicated OAuth client offline access with the exact `gmail.readonly` scope. External OAuth clients left in Google’s Testing status receive a seven-day refresh token for this scope. [Google OAuth token expiration](https://developers.google.com/identity/protocols/oauth2#expiration)
+
+The credential is a JSON object with `schemaVersion` set to `stockinsider-investanchors-gmail-v1`, plus `clientId`, `clientSecret`, `refreshToken`, `mailboxSha256`, and `noticeHmacHex`. Use the SHA-256 of the trimmed, lowercase authorized mailbox address. Keep the notice HMAC key stable across worker restarts and OAuth refresh-token rotation so that existing notice receipts keep their identity. The key is 32 random bytes encoded as 64 lowercase hex digits.
+
+Use the existing Contabo `systemd-creds encrypt` stdin flow and install the encrypted artifact only for the private worker. The worker’s systemd drop-in can bind `LoadCredentialEncrypted=investanchors-gmail.json:/etc/credstore.encrypted/stockinsider-investanchors-gmail`. After staging acceptance, set the nonsecret `STOCKINSIDER_VNEXT_INVESTANCHORS_GMAIL_ENABLED=true` flag on the scheduled service and private worker. A missing credential can use an existing complete environment configuration. A present invalid credential blocks the scan. [systemd encrypted credentials](https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#LoadCredential=)
+
+On staging, verify the exact scope and mailbox pin against Gmail first, then run one notice scan with the scoped operator and writer. The notice receipt is independent of the publisher’s member article authorization.
