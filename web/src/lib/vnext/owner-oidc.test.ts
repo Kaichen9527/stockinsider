@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash, generateKeyPairSync, sign } from 'node:crypto';
 import test, { type TestContext } from 'node:test';
 import { createOwnerOidcRuntime, type OwnerOidcConfig } from './owner-oidc.ts';
+import { createOwnerNotesReader, type OwnerNotesReader } from './owner-research-notes.ts';
 
 // Synthetic in-memory NONPRODUCTION RSA issuer only; no key files or services.
 const key = generateKeyPairSync('rsa', { modulusLength: 2048 });
@@ -27,7 +28,7 @@ function noStore(response: Response) {
   assert.equal(response.headers.get('vary'), 'Authorization, Cookie');
   assert.equal(response.headers.get('referrer-policy'), 'no-referrer');
 }
-function fixture(t: TestContext, options: { ttl?: number; claims?: Record<string, unknown>; alg?: string; wrongKey?: boolean; delay?: Promise<void>; providerStatus?: number; huge?: boolean; redirect?: boolean } = {}) {
+function fixture(t: TestContext, options: { ttl?: number; claims?: Record<string, unknown>; alg?: string; wrongKey?: boolean; delay?: Promise<void>; providerStatus?: number; huge?: boolean; redirect?: boolean; reader?: OwnerNotesReader; ownerSubjects?: readonly string[] } = {}) {
   let current = Math.floor(Date.now() / 1000); let nonce = ''; let challenge = ''; let tokenCalls = 0; let jwksCalls = 0;
   const initial = current;
   const original = globalThis.fetch;
@@ -50,7 +51,11 @@ function fixture(t: TestContext, options: { ttl?: number; claims?: Record<string
     return Response.json({ access_token: 'NONPRODUCTION_ACCESS_SENTINEL', token_type: 'Bearer', expires_in: 3600, id_token: `${inputJwt}.${signature}` });
   }) as typeof fetch;
   t.after(() => { globalThis.fetch = original; });
-  const runtime = createOwnerOidcRuntime(config, { providerOrigin, now: () => current, sessionTtlSeconds: options.ttl });
+  const runtime = createOwnerOidcRuntime(
+    options.ownerSubjects ? { ...config, ownerSubjects: options.ownerSubjects } : config,
+    { providerOrigin, now: () => current, sessionTtlSeconds: options.ttl },
+    options.reader,
+  );
   async function begin() {
     const response = await runtime.login(request('/api/owner/login', 'POST')); assert.equal(response.status, 303); noStore(response);
     const target = new URL(response.headers.get('location')!);
@@ -229,4 +234,81 @@ test('T02 OIDC trust config is snapshotted and test provider cannot select nonlo
   const disabled = createOwnerOidcRuntime(config, { providerOrigin: 'http://untrusted.invalid' });
   assert.equal((await disabled.login(request('/api/owner/login', 'POST'))).status, 503);
   assert.deepEqual(f.calls(), { tokenCalls: 0, jwksCalls: 0 });
+});
+
+test('owner research maps only the verified subject and rejects upstream fields beyond the note projection', async t => {
+  const note = { source: 'investanchors', statement: 'Synthetic private note', publishedAt: '2026-11-17T03:00:00Z' };
+  let result: unknown = [note];
+  const reads: string[] = [];
+  const reader = createOwnerNotesReader(JSON.stringify({ [ownerSubject]: 'fixture-rights' }), async subject => {
+    reads.push(subject); return result;
+  });
+  assert.ok(reader);
+  assert.equal(await reader('other-owner'), null);
+  assert.equal(createOwnerNotesReader('{"one":"same","two":"same"}', async () => []), undefined);
+  const f = fixture(t, { reader });
+  assert.equal((await f.runtime.research(request('/api/owner/research'))).status, 401);
+  const { tx, callbackPath } = await f.begin();
+  const cookie = cookieFrom(await f.runtime.callback(request(callbackPath, 'GET', tx)), SESSION);
+  assert.equal((await f.runtime.research(request('/api/owner/research?rightsSubject=other', 'GET', cookie))).status, 400);
+  assert.deepEqual(reads, []);
+  const response = await f.runtime.research(request('/api/owner/research', 'GET', cookie));
+  noStore(response);
+  assert.deepEqual(await response.json(), { ok: true, research: { status: 'available', rows: [note] } });
+  assert.deepEqual(reads, ['fixture-rights']);
+  result = [{ ...note, body: 'SYNTHETIC_RAW_SENTINEL' }];
+  const refused = await f.runtime.research(request('/api/owner/research', 'GET', cookie));
+  noStore(refused);
+  assert.equal(refused.status, 503);
+  assert.doesNotMatch(await refused.text(), /SYNTHETIC_RAW_SENTINEL/u);
+});
+
+test('owner research withholds notes when logout revokes a session during the read', async t => {
+  let entered!: () => void;
+  let finish!: () => void;
+  const started = new Promise<void>(resolve => { entered = resolve; });
+  const delay = new Promise<void>(resolve => { finish = resolve; });
+  const f = fixture(t, { reader: async () => {
+    entered(); await delay;
+    return [{ source: 'telegram', statement: 'PRIVATE_LOGOUT_SENTINEL', publishedAt: '2026-11-17T03:00:00Z' }];
+  } });
+  const { tx, callbackPath } = await f.begin();
+  const cookie = cookieFrom(await f.runtime.callback(request(callbackPath, 'GET', tx)), SESSION);
+  const pending = f.runtime.research(request('/api/owner/research', 'GET', cookie));
+  await started;
+  const logout = await f.runtime.logout(request('/api/owner/logout', 'POST', cookie));
+  assert.equal(logout.status, 303);
+  finish();
+  const completed = await pending;
+  noStore(completed);
+  assert.equal(completed.status, 401);
+  assert.doesNotMatch(await completed.text(), /PRIVATE_LOGOUT_SENTINEL/u);
+});
+
+test('two independently authenticated owners cannot receive each other’s notes', async t => {
+  const secondOwner = 'NONPRODUCTION_second_owner';
+  const notes = Object.freeze({
+    alpha: { source: 'investanchors', statement: 'Fixture alpha note', publishedAt: '2026-11-17T03:00:00Z' },
+    beta: { source: 'telegram', statement: 'Fixture beta note', publishedAt: '2026-11-16T03:00:00Z' },
+  });
+  const reader = createOwnerNotesReader(JSON.stringify({ [ownerSubject]: 'alpha', [secondOwner]: 'beta' }), async rights => {
+    assert.ok(rights === 'alpha' || rights === 'beta');
+    return [notes[rights]];
+  });
+  assert.ok(reader);
+  const f = fixture(t, { ownerSubjects: [ownerSubject, secondOwner], reader });
+  const cookieBySubject = new Map<string, string>();
+  for (const subject of [ownerSubject, secondOwner]) {
+    f.setClaims({ sub: subject });
+    const { tx, callbackPath } = await f.begin();
+    const completed = await f.runtime.callback(request(callbackPath, 'GET', tx));
+    assert.equal(completed.status, 303);
+    cookieBySubject.set(subject, cookieFrom(completed, SESSION));
+  }
+  for (const [subject, expected] of [[ownerSubject, notes.alpha], [secondOwner, notes.beta]] as const) {
+    const response = await f.runtime.research(request('/api/owner/research', 'GET', cookieBySubject.get(subject)));
+    assert.equal(response.status, 200);
+    noStore(response);
+    assert.deepEqual((await response.json()).research.rows, [expected]);
+  }
 });

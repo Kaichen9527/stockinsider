@@ -23,6 +23,7 @@ on:
       - 'migrations/20261117_40_vnext_launch_industry_capture_v1.sql'
       - 'migrations/20261117_41_vnext_launch_issuer_eps_estimates_v1.sql'
       - 'migrations/20261117_42_vnext_internal_candidate_plan_acl_v1.sql'
+      - 'migrations/20261117_43_vnext_owner_research_notes_v1.sql'
       - 'deployment/vps/launch-radar-schedule/**'
       - 'scripts/run-launch-scheduled-cycle*.mjs'
       - 'openspec/changes/stockinsider-vnext-20/**'
@@ -76,6 +77,7 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/source-backlog.test.ts | tee /tmp/stockinsider-vnext-ci/source-backlog.tap
           node --experimental-strip-types web/src/lib/vnext/investanchors-notice-receiver.test.ts | tee /tmp/stockinsider-vnext-ci/investanchors-notices.tap
           node --experimental-strip-types web/src/lib/vnext/investanchors-gmail.test.ts | tee /tmp/stockinsider-vnext-ci/investanchors-gmail.tap
+          node --experimental-strip-types --test web/src/lib/vnext/owner-oidc.test.ts web/src/lib/vnext/private-owner-read.test.ts | tee /tmp/stockinsider-vnext-ci/owner-read.tap
           node --experimental-strip-types web/src/lib/external-source-adapters.test.ts | tee /tmp/stockinsider-vnext-ci/external-source-adapters.tap
           node scripts/run-launch-scheduled-cycle.test.mjs | tee /tmp/stockinsider-vnext-ci/launch-scheduled-cycle.tap
           node --experimental-strip-types scripts/vnext-source-window-source.test.mjs | tee /tmp/stockinsider-vnext-ci/source-window-source.tap

@@ -1,10 +1,12 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import type { OwnerResearchNote } from '../../lib/vnext/owner-research-notes.ts';
 
 type View = 'loading' | 'unconfigured' | 'signed_out' | 'authenticated' | 'unavailable';
 export default function OwnerResearch() {
   const [view, setView] = useState<View>('loading');
+  const [notes, setNotes] = useState<OwnerResearchNote[] | null>(null);
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
   useEffect(() => {
     const abort = new AbortController(); let timer: ReturnType<typeof setTimeout> | undefined;
@@ -21,10 +23,15 @@ export default function OwnerResearch() {
         if (!research.ok) { setView('unavailable'); return; }
         const result = await research.json();
         if (abort.signal.aborted) return;
-        if (result.research?.status !== 'missing_data') { setView('unavailable'); return; }
+        if (!['missing_data', 'available'].includes(result.research?.status) || !Array.isArray(result.research.rows)) {
+          setView('unavailable'); return;
+        }
+        setNotes(result.research.status === 'available' ? result.research.rows : null);
         setView('authenticated'); setExpiresAt(typeof session.expiresAt === 'string' ? session.expiresAt : null);
         const expiry = Date.parse(session.expiresAt);
-        if (Number.isFinite(expiry)) timer = setTimeout(() => { void load(); }, Math.max(50, expiry - Date.now() + 50));
+        if (Number.isFinite(expiry)) timer = setTimeout(() => {
+          setNotes(null); setExpiresAt(null); setView('signed_out');
+        }, Math.max(0, expiry - Date.now()));
       } catch { if (!abort.signal.aborted) setView('unavailable'); }
     }
     void load();
@@ -34,7 +41,7 @@ export default function OwnerResearch() {
     loading: '正在確認登入狀態…',
     unconfigured: '私人研究登入尚未開放。帳號設定完成後才能登入。',
     signed_out: '請使用獲授權的帳號登入，查看私人研究。',
-    authenticated: '已登入。私人研究資料尚未接通，目前沒有可顯示的研究內容。',
+    authenticated: '已登入。',
     unavailable: '目前無法確認私人研究狀態，請稍後重新整理。',
   };
   return <main data-testid="owner-private-page" className="mx-auto min-h-screen max-w-3xl px-5 py-12 text-slate-900 dark:text-slate-100">
@@ -47,8 +54,19 @@ export default function OwnerResearch() {
         <button data-testid="owner-login-submit" type="submit" className="rounded-lg bg-sky-400 px-5 py-3 font-semibold text-slate-950">使用 Google 登入</button>
       </form>}
       {view === 'authenticated' && <>
-        <h2 className="mt-6 font-semibold">研究資料缺口</h2>
-        <p className="mt-2 text-sm text-slate-300">尚未取得可供此帳號查閱的研究資料與來源授權；不會以示範內容替代。</p>
+        <h2 className="mt-6 font-semibold">{notes === null ? '研究資料缺口' : '研究筆記'}</h2>
+        {notes === null ? <p className="mt-2 text-sm text-slate-300">尚未取得可供此帳號查閱的研究資料與來源授權。</p>
+          : notes.length === 0 ? <p className="mt-2 text-sm text-slate-300">目前沒有授權仍有效的研究筆記。</p>
+            : <ul className="mt-3 divide-y divide-slate-700">
+              {notes.map((note, index) => <li key={index} className="py-3">
+                <p className="text-sm text-slate-300">
+                  {note.source === 'investanchors' ? '定錨' : 'Telegram'} · <time dateTime={note.publishedAt}>
+                    {new Date(note.publishedAt).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' })}
+                  </time>
+                </p>
+                <p className="mt-2 whitespace-pre-wrap break-words">{note.statement}</p>
+              </li>)}
+            </ul>}
         {expiresAt && <p className="mt-4 text-sm text-slate-300">本次登入將在五分鐘內到期。到期後需重新登入。</p>}
         <form method="post" action="/api/owner/logout" className="mt-6">
           <button data-testid="owner-logout-submit" type="submit" className="rounded-lg border border-slate-500 px-5 py-3">登出</button>

@@ -3,6 +3,7 @@
 import { randomBytes } from 'node:crypto';
 import * as oidc from 'openid-client';
 import { ownerPrivateResponse } from './private-owner-read.ts';
+import { createOwnerNotesReader, readOwnerNotesFromDataPlane, type OwnerNotesReader } from './owner-research-notes.ts';
 
 export type OwnerOidcConfig = Readonly<{
   appOrigin: string;
@@ -30,7 +31,7 @@ const GOOGLE = Object.freeze({
   jwks_uri: 'https://www.googleapis.com/oauth2/v3/certs',
 });
 type Transaction = { readonly state: string; readonly nonce: string; readonly verifier: string; readonly created: number; readonly expires: number; used: boolean; cancelled: boolean };
-type Session = Readonly<{ created: number; expires: number }>;
+type Session = Readonly<{ subject: string; created: number; expires: number }>;
 const randomId = () => randomBytes(32).toString('base64url');
 function cookie(name: string, value: string, seconds: number) {
   return `${name}=${value}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${seconds}`;
@@ -76,7 +77,9 @@ function safeConfig(value: OwnerOidcConfig | null) {
   return { appOrigin: snapshot.appOrigin, clientId: snapshot.clientId, clientSecret: snapshot.clientSecret, subjects: new Set(subjects) };
 }
 
-export function createOwnerOidcRuntime(input: OwnerOidcConfig | null = null, test?: OwnerOidcTestDependencies) {
+export function createOwnerOidcRuntime(
+  input: OwnerOidcConfig | null = null, test?: OwnerOidcTestDependencies, readNotes?: OwnerNotesReader,
+) {
   let config: ReturnType<typeof safeConfig> = null;
   let client: oidc.Configuration | null = null;
   let server = GOOGLE as Readonly<{ issuer: string; authorization_endpoint: string; token_endpoint: string; jwks_uri: string }>;
@@ -207,7 +210,7 @@ export function createOwnerOidcRuntime(input: OwnerOidcConfig | null = null, tes
           !Number.isSafeInteger(claims.iat) || claims.iat > after || !Number.isSafeInteger(claims.exp) || claims.exp <= after) return denial();
       prune(after); if (sessions.size >= CAPACITY) return response(503, { ok: false, error: 'owner_login_busy' }, [clearTransaction(), clearSession()]);
       const sessionId = randomId(); const expires = Math.min(after + ttl, claims.exp);
-      const verified = Object.freeze({ created: after, expires }); verifiedSessions.add(verified); sessions.set(sessionId, verified);
+      const verified = Object.freeze({ subject: claims.sub, created: after, expires }); verifiedSessions.add(verified); sessions.set(sessionId, verified);
       return response(303, { ok: true }, [clearTransaction(), cookie(SESSION_COOKIE, sessionId, expires - after)], `${config!.appOrigin}/private-research`);
     } catch { return denial(); }
     finally { if (id) transactions.delete(id); }
@@ -227,12 +230,19 @@ export function createOwnerOidcRuntime(input: OwnerOidcConfig | null = null, tes
   }
   async function research(request: Request) {
     const failed = preflight(request, '/api/owner/research', 'GET'); if (failed) return failed;
-    if (!session(request)) return response(401, { ok: false, error: 'owner_login_required' }, [clearSession()]);
-    // Existing inspected readers require worker/service/public authority, not
-    // owner-content permission. Until a real rights-qualified reader exists,
-    // report the genuine data gap without DB/source/model IO or invented rows.
-    return response(200, { ok: true, research: { status: 'missing_data', rows: [],
-      gaps: ['owner_research_reader_not_connected', 'platform_content_rights_not_verified'] } });
+    const signedIn = session(request);
+    const invalidSession = () => response(401, { ok: false, error: 'owner_login_required' }, [clearSession()]);
+    if (!signedIn) return invalidSession();
+    try {
+      const rows = await readNotes?.(signedIn.subject);
+      if (session(request) !== signedIn) return invalidSession();
+      if (rows) return response(200, { ok: true, research: { status: 'available', rows } });
+      return response(200, { ok: true, research: { status: 'missing_data', rows: [],
+        gaps: ['owner_research_reader_not_connected', 'platform_content_rights_not_verified'] } });
+    } catch {
+      if (session(request) !== signedIn) return invalidSession();
+      return response(503, { ok: false, error: 'owner_research_unavailable' });
+    }
   }
   return Object.freeze({ login, callback, logout, session: sessionStatus, research });
 }
@@ -257,5 +267,8 @@ export function getOwnerOidcRuntime(): OwnerOidcRuntime {
         ownerSubjects: JSON.parse(process.env.STOCKINSIDER_OWNER_OIDC_OWNER_SUBJECTS ?? 'null') };
     } catch { config = null; }
   }
-  const runtime = createOwnerOidcRuntime(config); globalRuntime[RUNTIME] = runtime; return runtime;
+  const reader = config ? createOwnerNotesReader(process.env.STOCKINSIDER_OWNER_RESEARCH_BINDINGS, readOwnerNotesFromDataPlane) : undefined;
+  const runtime = createOwnerOidcRuntime(config, undefined, reader);
+  globalRuntime[RUNTIME] = runtime;
+  return runtime;
 }
