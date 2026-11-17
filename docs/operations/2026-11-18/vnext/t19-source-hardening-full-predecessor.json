@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "stockinsider-t19-source-hardening-full-predecessor-v1",
+  "recordedAt": "2026-11-17T16:49:07Z",
+  "candidateParent": "5da3f351a7ee29f8823874dc80fe39dc8e61f0d7",
+  "scope": "Contabo disposable PostgreSQL 17.11; captured synthetic routine prerequisite with 16 recorded migration inputs plus the roster fixture",
+  "nativeTests": {
+    "tests": 12,
+    "pass": 12,
+    "fail": 0,
+    "skipped": 0
+  },
+  "nativeTapSha256": "746f8dd5c312d9eed93c9f4eaf2aac70e8362930dc606067dafb536166c7eb7a",
+  "originalCatalogWitness": {
+    "runId": "43973887994",
+    "jobId": "133672770144",
+    "allThreeDigestsMatched": true
+  },
+  "fullCatalogDelta": {
+    "before": {
+      "scopeHash": "0fdae5ae5d60769aca8506b4cdddae93df8b93c1827a21f995187de1bf2e4c66",
+      "namespaceHash": "09ef36def6707ad1432e5d78d16fa78acdbf16b9f90b8729a22950ef851680dc",
+      "catalogHash": "f94e1c34489ae90c62ee74aaaba253f7c8fb14c507680ee747cbb05ad0f8e4e2"
+    },
+    "after": {
+      "scopeHash": "0fdae5ae5d60769aca8506b4cdddae93df8b93c1827a21f995187de1bf2e4c66",
+      "namespaceHash": "47ffa7365ca6f06e00e10e357d3119cda0eab4ce5266664c3a78a3e4fb7bab90",
+      "catalogHash": "505dc2e5eee0af4c040c4573b3e342686cbac26d5313356dce1edd94b84327ea"
+    },
+    "changedSignatures": [
+      "enforce_production_writer_fence()",
+      "fence_research_paper_book_append_v1()",
+      "fence_research_strategy_record_v1()",
+      "handle_new_user()",
+      "is_subscriber()",
+      "opportunity_candidate_plan_v3_internal(uuid,text)"
+    ],
+    "rowAndTableAccessMetadataRetained": true,
+    "triggerBindingMetadataRetained": true,
+    "roleAndSchemaAccessRetained": true,
+    "sourceNamespaceGrantApplied": false,
+    "scope": "isolated synthetic full routine predecessor with roster fixtures"
+  },
+  "originalPrefixMigrationSha256": {
+    "20261022_vnext_analysis_sources_v1.sql": "38ebaa113cc2bde07ad3215196bfa898ca0874bd6a1306a142efd740244ffc20",
+    "20261022_vnext_cached_admission_v2.sql": "a2afbf1436444918379edb29787b051da2fc57a51776f473fc8ad620fdf59eec",
+    "20261022_vnext_catalyst_criteria_v1.sql": "35ededaf19661f62337654863cdfe6746dff5956780da9373d55cc19179145d7",
+    "20261022_vnext_dimensionless_arithmetic_v1.sql": "61b838614afe16ca788154828c7f818f8d4be58104402be5db7fbe2231509721",
+    "20261022_vnext_financial_status_text_v1.sql": "b1fc0a4650a0d39f5f8f8e07bdb7e83eeaa3816561bc575a6ff74b8f38f53460",
+    "20261022_vnext_issuer_ir_sources_v1.sql": "da2b2ccfbedccb0b46f12fe1ee55555d8df14195883a9e603791f3640cc49435",
+    "20261022_vnext_preparation_read_v1.sql": "c6c0c63293f8e93e367a36736dde8d5bf896dc7310f16df25776ddca2f77e686",
+    "20261022_vnext_semantic_score_fence_v1.sql": "548c4df2b9003b1d857a004baadc0b08d27d8d3f90d03ae6ef3d2f4a15d7820b",
+    "20261022_vnext_source_withdrawals_v1.sql": "b383be15890450ee301c756045c6bfa8754804959bffc2d71e1f7a1408ee5a48",
+    "20261022_vnext_target_exit_v1.sql": "8a49259e95d6557ac4b7a8a74d90500b0d180735f396fbf1490f337b711bf441",
+    "20261022_vnext_terminal_failure_slots_v1.sql": "20d41e89a29a44515980aa8c51bde2f221cd8a09527a57a188bf4e1ea7162fdb",
+    "20261022_vnext_thesis_audit_v1.sql": "ca57c6da05359e25c1bb238bfc47128ea06a7dedb9e01f9c2668f85e196536a4",
+    "20261023_vnext_forecast_active_v1.sql": "949ded9b3af03e897c599f0d7a1d38ae71c08b0acce524e48d9728e205daf74a",
+    "20261023_vnext_forecast_sources_v1.sql": "45de5d9f23360a244c67c460a3a8de619737facab081af127ec45431ad1a4f90",
+    "20261023_vnext_roster_current_fence_v1.sql": "256960f51e6ec1c43393a243b00e7d385c40a495094b67127c16fd46322a79f2",
+    "20261023_vnext_trading_invalidity_exit_v1.sql": "6c904052b5994dc02fe047dcedf95ae64498df489824d08a7b11b62a1685d59f"
+  },
+  "existingGuardBindings": {
+    "public.enforce_production_writer_fence()": 28,
+    "public.fence_research_paper_book_append_v1()": 1,
+    "public.fence_research_strategy_record_v1()": 1
+  },
+  "sourceOwnerNonOwnedPublicDefinersAfter": [],
+  "sourceRawInsertControl": {
+    "configuredWriterLeaseAcquired": true,
+    "sourceTriggerReached": "research_source_fence_record_v2",
+    "failedSqlstate": "42501",
+    "transactionRolledBack": true,
+    "allPublicTableRowsUnchanged": true
+  },
+  "testedInputs": {
+    "scripts/vnext-internal-candidate-plan-acl-postgres.test.mjs": "df0bbd9c7d718cbd406757ee759194edf3ee12db34c26e62be4c610c50aeb6dc",
+    "scripts/vnext-routine-http.test.mjs": "b1df98ac32024223760e5be5246e7bc685eb63c07bed38b77c0a2d5463d8092f",
+    "scripts/vnext-routine-source-prefix-fixture.mjs": "3f14afe1ae682aa6ade17e1c8c0b77b3b55be151d7303e30e0b03da0c145998a"
+  },
+  "productionServiceReleaseAndTimerSignaturesMatched": true,
+  "ephemeralContainerAndSocketRemoved": true,
+  "productionApplied": false,
+  "independentReviewAccepted": false,
+  "remaining": "Review the exact candidate permission graph and advance the mandatory authorized source write and HTTP acceptance."
+}

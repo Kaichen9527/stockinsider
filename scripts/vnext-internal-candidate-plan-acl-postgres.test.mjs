@@ -2,6 +2,12 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { workerFixture } from './vnext-worker-fixture.mjs';
+import { installRoutineSourcePrefix } from './vnext-routine-source-prefix-fixture.mjs';
+import { rosterHeadFixtureSql } from './vnext-launch-roster-head-fixture.mjs';
+import { readResearchPublicationCatalog } from './opportunity-v3/research-publication-catalog.mjs';
+import { readTailNamespace } from './opportunity-v3/research-publication-tail-entry-namespace.mjs';
+import { tailMetadataSha } from './opportunity-v3/research-publication-tail-entry-guard.mjs';
+import { SOURCE_SCOPE_SQL, sourceNamespaceReachability } from './vnext-source-namespace-candidate.mjs';
 
 const planner = 'public.opportunity_candidate_plan_v3_internal(uuid,text)';
 const historicalFunctionSha256 = 'ad26cb165d6a67bdb2c8e3a38d204c3af3a3be67d180a72c4012faa1b00c32db';
@@ -449,10 +455,81 @@ async function checkRawWriteRequiresNamespace(fixture) {
   });
 }
 
+async function readPredecessorCatalog(observer) {
+  await observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');
+  try {
+    const { rows: [{ scope }] } = await observer.query(SOURCE_SCOPE_SQL);
+    return { scope, namespace: await readTailNamespace(observer), catalog: await readResearchPublicationCatalog(observer, scope) };
+  } finally {
+    await observer.query('ROLLBACK');
+  }
+}
+
+function assertSourceHardeningCatalogDelta(fixture, before, after) {
+  const expectedSignatures = [
+    'enforce_production_writer_fence()',
+    'fence_research_paper_book_append_v1()',
+    'fence_research_strategy_record_v1()',
+    'handle_new_user()',
+    'is_subscriber()',
+    'opportunity_candidate_plan_v3_internal(uuid,text)',
+  ];
+  const allowedFields = (row, namespace) => {
+    const fields = namespace ? ['acl'] : ['acl', 'effectiveAcl'];
+    if (row.signature === 'is_subscriber()') {
+      fields.push('config');
+      if (!namespace) fields.push('definitionSha256');
+    }
+    return fields;
+  };
+
+  const normalize = (previous, current, namespace) => {
+    const changed = [];
+    const restored = current.map((row, index) => {
+      if ((namespace && row.schema !== 'public') || !expectedSignatures.includes(row.signature)) return row;
+      const old = previous[index];
+      assert.equal(row.signature, old.signature);
+      const fields = allowedFields(row, namespace);
+      assert.notDeepEqual(row.acl, old.acl, 'expected the targeted execute ACL to change');
+      changed.push(row.signature);
+      return { ...row, ...Object.fromEntries(fields.map(field => [field, old[field]])) };
+    });
+    assert.deepEqual(changed.sort(), expectedSignatures);
+    return restored;
+  };
+
+  assert.deepEqual(after.scope, before.scope);
+  assert.deepEqual({
+    ...after.namespace, routines: normalize(before.namespace.routines, after.namespace.routines, true),
+  }, before.namespace);
+  assert.deepEqual({
+    ...after.catalog, functions: normalize(before.catalog.functions, after.catalog.functions, false),
+  }, before.catalog);
+  assert.deepEqual(after.catalog.functions.find(row => row.signature === 'is_subscriber()').config,
+    ['search_path=pg_catalog']);
+
+  const digests = snapshot => Object.fromEntries(Object.entries(snapshot).map(([key, value]) => [key + 'Hash', tailMetadataSha(value)]));
+  fixture.save('source-exact-predecessor-acl-delta-safe', {
+    before: digests(before), after: digests(after),
+    changedSignatures: expectedSignatures,
+    rowAndTableAccessMetadataRetained: true,
+    triggerBindingMetadataRetained: true,
+    roleAndSchemaAccessRetained: true,
+    sourceNamespaceGrantApplied: false,
+    scope: 'isolated synthetic full routine predecessor with roster fixtures',
+  });
+}
+
 test('planner and legacy report ACLs preserve their existing web and backend calls', async t => {
   const fixture = await workerFixture();
   try {
     await fixture.install();
+    await installRoutineSourcePrefix(fixture);
+    sourceNamespaceReachability(await readPredecessorCatalog(fixture.observer));
+    const rosterHead = rosterHeadFixtureSql();
+    await fixture.writer.query(rosterHead.predecessor);
+    await fixture.writer.query(rosterHead.migration);
+    const predecessor = await readPredecessorCatalog(fixture.observer);
     const before = await readAcl(fixture.observer);
     assert.equal(before.functionSha256, historicalFunctionSha256);
     assert.ok(before.acl.includes('PUBLIC'));
@@ -492,6 +569,9 @@ test('planner and legacy report ACLs preserve their existing web and backend cal
     });
     await t.test('source role retains only its known public schema capabilities', async () => {
       await checkSourceOwnerBoundary(fixture);
+    });
+    await t.test('the complete predecessor catalog changes only the six targeted routines', async () => {
+      assertSourceHardeningCatalogDelta(fixture, predecessor, await readPredecessorCatalog(fixture.observer));
     });
     await t.test('an authorized source writer rolls back when the source trigger lacks the namespace prerequisite', async () => {
       await checkRawWriteRequiresNamespace(fixture);

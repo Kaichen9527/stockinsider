@@ -11,6 +11,7 @@ import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
 import {workerFixture} from './vnext-worker-fixture.mjs';
+import { installRoutineSourcePrefix } from './vnext-routine-source-prefix-fixture.mjs';
 import {rosterHeadFixtureSql} from './vnext-launch-roster-head-fixture.mjs';
 import {readResearchPublicationCatalog} from './opportunity-v3/research-publication-catalog.mjs';
 import {readTailNamespace} from './opportunity-v3/research-publication-tail-entry-namespace.mjs';
@@ -154,7 +155,7 @@ await test('fresh routine-screen HTTP admits from current original receipts befo
  try{
   await stage('full original candidates commit and legal original content seeds a fresh empty business ledger',async()=>{
    await x.install();
-   for(const candidate of ['migrations/20261022_vnext_analysis_sources_v1.sql','migrations/20261022_vnext_thesis_audit_v1.sql','migrations/20261022_vnext_source_withdrawals_v1.sql','migrations/20261022_vnext_cached_admission_v2.sql','migrations/20261022_vnext_terminal_failure_slots_v1.sql','migrations/20261022_vnext_financial_status_text_v1.sql','migrations/20261022_vnext_issuer_ir_sources_v1.sql','migrations/20261022_vnext_semantic_score_fence_v1.sql','migrations/20261022_vnext_catalyst_criteria_v1.sql','migrations/20261022_vnext_dimensionless_arithmetic_v1.sql','migrations/20261022_vnext_target_exit_v1.sql','migrations/20261022_vnext_preparation_read_v1.sql','migrations/20261023_vnext_trading_invalidity_exit_v1.sql','migrations/20261023_vnext_roster_current_fence_v1.sql','migrations/20261023_vnext_forecast_sources_v1.sql','migrations/20261023_vnext_forecast_active_v1.sql']){const bytes=fs.readFileSync(candidate);await x.writer.query(bytes.toString());x.save('prefix-'+path.basename(candidate),{sha256:sha(bytes),bytes:bytes.length});}
+   await installRoutineSourcePrefix(x);
    await x.observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');
    try {
      predecessorSourceCatalog = await readSourceCatalog(x.observer);
