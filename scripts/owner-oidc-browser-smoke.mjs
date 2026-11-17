@@ -36,6 +36,12 @@ const APP = 'https://127.0.0.1:34441', DISABLED = 'https://127.0.0.1:34444';
 const ISSUER = 'http://127.0.0.1:34443';
 const CLIENT = 'NONPRODUCTION-owner-client', SECRET = 'NONPRODUCTION-owner-secret';
 const OWNER = 'NONPRODUCTION_owner_subject_0001';
+const rights = 'nonproduction-owner-rights';
+const privateNote = {
+  source: 'investanchors',
+  statement: 'Synthetic research note visible only to the signed-in owner.',
+  publishedAt: '2026-11-17T03:00:00Z',
+};
 const sessionName = '__Host-stockinsider-owner-session';
 const transactionName = '__Host-stockinsider-owner-transaction';
 const receipts = [], failures = [], children = [], servers = [];
@@ -151,10 +157,32 @@ try {
   fs.chmodSync(path.join(out, 'fixture-tls.private.key'), 0o600);
   const tls = { key: fs.readFileSync(path.join(out, 'fixture-tls.private.key')), cert: fs.readFileSync(path.join(out, 'fixture-tls.crt')) };
   const bootstrap = path.join(out, 'trusted-bootstrap.mjs');
-  fs.writeFileSync(bootstrap, `import {createOwnerOidcRuntime,installOwnerOidcRuntimeForTests} from ${JSON.stringify(pathToFileURL(path.join(root, 'web/src/lib/vnext/owner-oidc.ts')).href)};\nconst originalFetch=globalThis.fetch;globalThis.fetch=(input,init)=>{const u=new URL(typeof input==='string'?input:input instanceof URL?input.href:input.url);if(u.origin!==${JSON.stringify(ISSUER)})throw Error('nonproduction_outbound_refused');return originalFetch(input,init);};\ninstallOwnerOidcRuntimeForTests(createOwnerOidcRuntime(${JSON.stringify({ appOrigin: APP, clientId: CLIENT, clientSecret: SECRET, ownerSubjects: [OWNER] })},${JSON.stringify({ providerOrigin: ISSUER, sessionTtlSeconds: 5 })}));\n`, { mode: 0o600, flag: 'wx' });
+  const ownerSource = pathToFileURL(path.join(root, 'web/src/lib/vnext/owner-oidc.ts')).href;
+  const notesSource = pathToFileURL(path.join(root, 'web/src/lib/vnext/owner-research-notes.ts')).href;
+  fs.writeFileSync(bootstrap, `
+import { createOwnerOidcRuntime, installOwnerOidcRuntimeForTests } from ${JSON.stringify(ownerSource)};
+import { createOwnerNotesReader } from ${JSON.stringify(notesSource)};
+const originalFetch = globalThis.fetch;
+globalThis.fetch = (input, init) => {
+  const u = new URL(typeof input === 'string' ? input : input instanceof URL ? input.href : input.url);
+  if (u.origin !== ${JSON.stringify(ISSUER)}) throw Error('nonproduction_outbound_refused');
+  return originalFetch(input, init);
+};
+const readNotes = createOwnerNotesReader(${JSON.stringify(JSON.stringify({ [OWNER]: rights }))}, async rightsSubject => {
+  if (rightsSubject !== ${JSON.stringify(rights)}) throw Error('unexpected_synthetic_rights_binding');
+  return ${JSON.stringify([privateNote])};
+});
+installOwnerOidcRuntimeForTests(createOwnerOidcRuntime(
+  ${JSON.stringify({ appOrigin: APP, clientId: CLIENT, clientSecret: SECRET, ownerSubjects: [OWNER] })},
+  ${JSON.stringify({ providerOrigin: ISSUER, sessionTtlSeconds: 12 })},
+  readNotes,
+));
+`, { mode: 0o600, flag: 'wx' });
   await startNext(34442, bootstrap); await startNext(34445);
   await front(34441, 34442, tls); await front(34444, 34445, tls);
-  browser = await chromium.launch({ executablePath: '/usr/bin/chromium', headless: true });
+  const executablePath = ['/usr/bin/chromium', '/usr/bin/google-chrome'].find(path => fs.existsSync(path));
+  assert.ok(executablePath, 'installed Chromium-engine browser required');
+  browser = await chromium.launch({ executablePath, headless: true });
   for (const viewport of [{ name: 'desktop', width: 1440, height: 1000 }, { name: 'mobile', width: 390, height: 844 }]) {
     const context = await browser.newContext({ viewport, ignoreHTTPSErrors: true });
     await context.route('**/*', route => [APP + '/', DISABLED + '/', ISSUER + '/'].some(prefix => route.request().url().startsWith(prefix)) ? route.continue() : route.abort());
@@ -182,22 +210,37 @@ try {
     sensitive.add(savedSession);
     const status = await checkApi(context, APP + '/api/owner/session', 200); assert.equal((await status.json()).authenticated, true);
     const privateResult = await checkApi(context, APP + '/api/owner/research', 200);
-    assert.equal((await privateResult.json()).research.status, 'missing_data');
+    assert.deepEqual((await privateResult.json()).research, { status: 'available', rows: [privateNote] });
+    const visibleNote = page.getByText(privateNote.statement, { exact: true });
+    await visibleNote.waitFor({ state: 'visible' });
+    assert.equal(await page.locator(`time[datetime="${privateNote.publishedAt}"]`).count(), 1);
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);
     const privateHtml = await page.content(); for (const value of sensitive) assert.ok(!privateHtml.includes(value));
-    await page.screenshot({ path: path.join(out, `${viewport.name}-owner.png`), fullPage: true }); record(viewport.name + ':oidc-owner-secure-cookie-private-empty-state');
+    await page.screenshot({ path: path.join(out, `${viewport.name}-owner.png`), fullPage: true });
+    record(viewport.name + ':oidc-owner-secure-cookie-shows-private-note');
+
+    const anonymous = await browser.newContext({ ignoreHTTPSErrors: true });
+    try {
+      const afterOwnerRead = await checkApi(anonymous, APP + '/api/owner/research', 401);
+      assert.ok(!(await afterOwnerRead.text()).includes(privateNote.statement));
+    } finally {
+      await anonymous.close();
+    }
+    record(viewport.name + ':anonymous-after-owner-read-has-no-note');
     const html = await context.request.get(APP + '/'); assert.equal(html.status(), 200);
-    const publicHtml = await html.text(); for (const value of sensitive) assert.ok(!publicHtml.includes(value));
+    const publicHtml = await html.text(); for (const value of [...sensitive, privateNote.statement]) assert.ok(!publicHtml.includes(value));
     assert.ok(publicHtml.includes('/private-research'));
     record(viewport.name + ':public-html-excludes-owner');
     const publicApi = await context.request.get(APP + '/api/radar/daily');
     assert.equal(publicApi.status(), publicBefore.status());
     assert.deepEqual(await publicApi.json(), { error: 'supabase_data_plane_invalid' });
-    const publicPayload = await publicApi.text(); for (const value of sensitive) assert.ok(!publicPayload.includes(value));
+    const publicPayload = await publicApi.text(); for (const value of [...sensitive, privateNote.statement]) assert.ok(!publicPayload.includes(value));
     record(viewport.name + ':public-api-unchanged-missing-backend-500-excludes-owner');
     const logoutCsrf = await context.request.post(APP + '/api/owner/logout', { headers: { Origin: 'https://attacker.invalid' }, maxRedirects: 0 });
     assert.equal(logoutCsrf.status(), 403); noStore(logoutCsrf); record(viewport.name + ':logout-csrf-rejected');
     const loggedOut = page.waitForResponse(response => new URL(response.url()).pathname === '/api/owner/logout' && response.request().method() === 'POST');
     await page.getByTestId('owner-logout-submit').click(); await state(page, 'signed_out');
+    assert.equal(await visibleNote.count(), 0);
     const logoutResponse = await loggedOut; assert.equal(logoutResponse.status(), 303); noStore(logoutResponse);
     const replay = await context.request.get(APP + '/api/owner/session', { headers: { Cookie: `${sessionName}=${savedSession}` } });
     assert.equal(replay.status(), 401); record(viewport.name + ':logout-revokes-server-session');
@@ -212,6 +255,7 @@ try {
     scenario = 'owner'; await page.goto(APP + '/private-research'); await state(page, 'signed_out');
     await page.getByTestId('owner-login-submit').click(); await state(page, 'authenticated');
     await state(page, 'signed_out'); // Real short-lived fixture session expiry, no clock change.
+    assert.equal(await visibleNote.count(), 0);
     await checkApi(context, APP + '/api/owner/research', 401); record(viewport.name + ':session-real-time-expiry');
     const before = { ...counts };
     noStore(await page.goto(DISABLED + '/private-research'), true); await state(page, 'unconfigured');
@@ -250,7 +294,7 @@ try {
   summary = { schema: 'stockinsider-owner-oidc-local-browser-v1', buildSource: built,
     harnessCommit: current, runtimeWebTree: webTree, status: 'PASS', cases: receipts.length, receipts, counts, screenshots,
     identity: 'NONPRODUCTION_LOCAL_CONTROLLED_OIDC_ONLY', secureCookieOnTls: true, productionTlsVerificationDisabled: false,
-    actualGoogleOwnerOrPrivateContent: false, publicApiDataAcceptance: 'NOT_RUN_UNCONFIGURED_BACKEND_EXACT_500_UNCHANGED_BY_LOGIN',
+    actualGoogleOwnerOrPrivateContent: false, syntheticNoteRenderedAfterOidc: true, publicApiDataAcceptance: 'NOT_RUN_UNCONFIGURED_BACKEND_EXACT_500_UNCHANGED_BY_LOGIN',
     databaseOrPaidProviderCalls: 0, productionActions: 0 };
 } catch (error) {
   primaryFailure = error;

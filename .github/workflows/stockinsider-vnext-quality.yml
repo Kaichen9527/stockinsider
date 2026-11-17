@@ -5,6 +5,7 @@ on:
       - '.github/workflows/stockinsider-vnext-quality.yml'
       - 'web/**'
       - 'scripts/vnext-*'
+      - 'scripts/owner-oidc-browser-smoke.mjs'
       - 'scripts/opportunity-v3/**'
       - 'scripts/assert_canonical_vercel_project.mjs'
       - 'deployment/vps/bootstrap-stockinsider-postgres.sql'
@@ -896,6 +897,18 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
+      - name: Same-build desktop and mobile owner notes through controlled OIDC
+        if: ${{ !cancelled() && steps.current_build.outcome == 'success' }}
+        timeout-minutes: 3
+        run: |
+          export OWNER_OIDC_BUILD_SOURCE_SHA="$(git rev-parse HEAD)"
+          export OWNER_OIDC_SMOKE_OUTPUT=/tmp/stockinsider-vnext-ci/browser-owner
+          if node scripts/owner-oidc-browser-smoke.mjs > /tmp/stockinsider-vnext-ci/browser-owner.private.log 2>&1; then
+            echo 'Controlled owner browser checks passed'
+          else
+            echo '::error title=Owner browser acceptance::See the bounded synthetic failure receipt'
+            exit 1
+          fi
       - name: Same-build desktop and mobile browser over current-run PostgreSQL snapshots
         id: current_browser
         if: ${{ !cancelled() && steps.current_build.outcome == 'success' && steps.current_thesis.outcome == 'success' && steps.current_cached.outcome == 'success' && steps.current_business.outcome == 'success' }}
@@ -977,6 +990,8 @@ jobs:
             /tmp/stockinsider-vnext-ci/browser-current/public/images/*.png
             /tmp/stockinsider-vnext-ci/browser-business/public/acceptance.json
             /tmp/stockinsider-vnext-ci/browser-business/public/images/*.png
+            /tmp/stockinsider-vnext-ci/browser-owner/receipt.json
+            /tmp/stockinsider-vnext-ci/browser-owner/failure-receipt.json
           if-no-files-found: warn
           retention-days: 7
       - name: Upload finite synthetic TAP only (no raw rows, env or browser traces)
