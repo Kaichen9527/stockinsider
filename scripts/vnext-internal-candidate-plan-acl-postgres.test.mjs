@@ -455,6 +455,63 @@ async function checkRawWriteRequiresNamespace(fixture) {
   });
 }
 
+async function checkPodcastStorageBoundary(fixture) {
+  const writer = fixture.writer;
+  const episodeId = '00000000-0000-4000-8000-000000000280';
+  const privatePhrase = 'synthetic private transcript';
+  const serviceRoundTrip = async () => {
+    await writer.query('BEGIN');
+    try {
+      await writer.query('SET LOCAL ROLE service_role');
+      await writer.query(`
+        INSERT INTO public.podcast_episodes(id, platform, podcast_name, episode_title, episode_url)
+        VALUES ($1, 'rss', 'Synthetic podcast', 'Synthetic episode', 'https://creator.example/episode/1')`, [episodeId]);
+      await writer.query(`
+        INSERT INTO public.podcast_transcripts(podcast_episode_id, transcript_text, transcript_source)
+        VALUES ($1, $2, 'manual')`, [episodeId, privatePhrase]);
+      const { rows: [row] } = await writer.query(`
+        UPDATE public.podcast_transcripts SET confidence = 0.7
+        WHERE podcast_episode_id = $1 RETURNING transcript_text`, [episodeId]);
+      assert.deepEqual(row, { transcript_text: privatePhrase });
+      const { rows: [episode] } = await writer.query(
+        'SELECT platform FROM public.podcast_episodes WHERE id = $1', [episodeId]);
+      assert.deepEqual(episode, { platform: 'rss' });
+    } finally {
+      await writer.query('ROLLBACK');
+    }
+  };
+
+  const before = await fixture.snapshot();
+  await serviceRoundTrip();
+  const migration = readFileSync(new URL('../migrations/20261117_48_vnext_podcast_private_acl_v1.sql', import.meta.url), 'utf8');
+  await writer.query(migration);
+  const { rows: rls } = await fixture.observer.query(`
+    SELECT relname AS name, relrowsecurity AS enabled FROM pg_class
+    WHERE oid IN ('public.podcast_episodes'::regclass, 'public.podcast_transcripts'::regclass) ORDER BY relname`);
+  assert.deepEqual(rls, [
+    { name: 'podcast_episodes', enabled: true }, { name: 'podcast_transcripts', enabled: true },
+  ]);
+  for (const role of ['anon', 'authenticated']) {
+    const reader = await fixture.connect();
+    try {
+      await reader.query('SET ROLE ' + role);
+      await assert.rejects(reader.query('SELECT metadata FROM public.podcast_episodes LIMIT 1'), { code: '42501' });
+      await assert.rejects(reader.query('SELECT transcript_text FROM public.podcast_transcripts LIMIT 1'), { code: '42501' });
+    } finally {
+      await fixture.close(reader);
+    }
+  }
+  await serviceRoundTrip();
+  assert.deepEqual(await fixture.snapshot(), before);
+  fixture.save('podcast-storage-private-acl-safe', {
+    tablesWithRls: rls.map(table => table.name),
+    deniedTableReads: 4,
+    serviceReadWriteBeforeAndAfter: true,
+    allPublicRowsUnchanged: true,
+    productionApplied: false,
+  });
+}
+
 async function readPredecessorCatalog(observer) {
   await observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');
   try {
@@ -572,6 +629,9 @@ test('planner and legacy report ACLs preserve their existing web and backend cal
     });
     await t.test('the complete predecessor catalog changes only the six targeted routines', async () => {
       assertSourceHardeningCatalogDelta(fixture, predecessor, await readPredecessorCatalog(fixture.observer));
+    });
+    await t.test('podcast creator and member artifacts are private while the worker still writes', async () => {
+      await checkPodcastStorageBoundary(fixture);
     });
     await t.test('an authorized source writer rolls back when the source trigger lacks the namespace prerequisite', async () => {
       await checkRawWriteRequiresNamespace(fixture);

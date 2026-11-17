@@ -29,6 +29,7 @@ on:
       - 'migrations/20261117_45_vnext_launch_issuer_fiscal_forecasts_v1.sql'
       - 'migrations/20261117_46_vnext_auth_profile_trigger_acl_v1.sql'
       - 'migrations/20261117_47_vnext_source_guard_trigger_acl_v1.sql'
+      - 'migrations/20261117_48_vnext_podcast_private_acl_v1.sql'
       - 'deployment/vps/launch-radar-schedule/**'
       - 'scripts/run-launch-scheduled-cycle*.mjs'
       - 'openspec/changes/stockinsider-vnext-20/**'
@@ -515,6 +516,8 @@ jobs:
           out=root/'forecast-current-private-inventory.json';out.write_text(json.dumps(value,indent=2)+'\n')
           print('::notice title=Forecast private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
           PYCODE
+      - name: Public podcast locator privacy contract
+        run: node --experimental-strip-types --test web/src/lib/podcast-public-evidence.test.ts
       - name: Internal planner and legacy report role boundaries (synthetic PostgreSQL)
         env:
           TZ: UTC

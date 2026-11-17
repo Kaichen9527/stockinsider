@@ -1,6 +1,7 @@
 import { rejectLegacyResearchInVnext } from './vnext/runtime.ts';
 import { randomUUID } from 'crypto';
 import { normalizeRelatedStockSymbols, normalizeSourceDocumentSymbols } from './stock-symbol';
+import { projectPublicPodcastSource, publicPodcastMention } from './podcast-public-evidence';
 import { calendarStockCandles } from './stock-chart-calendar';
 import { loadActiveCandidateSourceErrors, loadCandidateStageCards, runCandidateResearchCycle } from './candidate-research';
 import { reconcilePublishedCandidateTradePlanCoverage } from './candidate-trade-plan-coverage';
@@ -12466,10 +12467,10 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
     const topN = Number.isFinite(topNRaw) ? Math.max(10, Math.min(200, Math.floor(topNRaw))) : 50;
     const since = new Date(Date.now() - 14 * 86400000).toISOString();
 
-    const [socialRes, brokerRes, transcriptRes, podcastRes, stocksRes, storyRes, valuationRes, thesisRes, recommendationRes] = await Promise.all([
+    const [socialRes, brokerRes, transcriptRes, stocksRes, storyRes, valuationRes, thesisRes, recommendationRes] = await Promise.all([
       supabase
         .from('source_raw_documents')
-        .select('symbols, platform, title, summary, document_url, published_at, collected_at')
+        .select('symbols, platform, title, summary, document_url, published_at, collected_at, metadata')
         .gte('collected_at', since)
         .limit(500),
       supabase
@@ -12483,11 +12484,6 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
         .select('stock_id, event_name, transcript_excerpt, management_tone, catalyst_mentions, created_at')
         .gte('created_at', since)
         .limit(200),
-      supabase
-        .from('podcast_transcripts')
-        .select('extracted_mentions, extracted_thesis, created_at')
-        .gte('created_at', since)
-        .limit(100),
       supabase.from('stocks').select('id,symbol,name').limit(5000),
       supabase
         .from('story_candidates')
@@ -12559,7 +12555,9 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
     };
 
     // 社群來源
-    for (const doc of (socialRes.data as Row[]) || []) {
+    for (const row of (socialRes.data as Row[]) || []) {
+      const doc = projectPublicPodcastSource(row);
+      if (!doc) continue;
       const symbols: string[] = normalizeSourceDocumentSymbols(doc.symbols);
       if (symbols.length === 0) {
         const extracted = extractSymbolsWithContext(`${String(doc.title || '')} ${String(doc.summary || '')}`);
@@ -12608,21 +12606,6 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
         });
       }
       symbolRegex.lastIndex = 0;
-    }
-
-    // Podcast
-    for (const doc of (podcastRes.data as Row[]) || []) {
-      const symbols: string[] = Array.isArray(doc.extracted_mentions) ? (doc.extracted_mentions as unknown[]).map(String) : [];
-      const theses: string[] = Array.isArray(doc.extracted_thesis) ? (doc.extracted_thesis as Array<{ text?: string }>).map((item) => String(item.text || '')).filter(Boolean) : [];
-      for (const sym of symbols) {
-        addMention(sym, {
-          sourceType: 'podcast',
-          sourceName: 'KOL Podcast',
-          summary: String(theses[0] || '').slice(0, 200),
-          sourceUrl: null,
-          sourceTimestamp: (doc.created_at as string) || null,
-        });
-      }
     }
 
     const latestStoryByStock = new Map<string, Row>();
@@ -14391,7 +14374,7 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
       }, 3500));
 
     const supabaseServer = getSupabaseServerClient();
-    const [storyRes, evidenceRes, valuationRes, eventRes, revenueRes, fundamentalsRes, memoRes, socialRes, thesisRes, brokerRes, reportRes, rawDocsRes, investanchorsRecentRes, marketRes, agentStatus, podcastRes, kolRes, discoveryRes, connectorStatus, revaluationJobRes, brokerSearchRes] = await Promise.all([
+    const [storyRes, evidenceRes, valuationRes, eventRes, revenueRes, fundamentalsRes, memoRes, socialRes, thesisRes, brokerRes, reportRes, rawDocsRes, investanchorsRecentRes, marketRes, agentStatus, kolRes, discoveryRes, connectorStatus, revaluationJobRes, brokerSearchRes] = await Promise.all([
       withQueryTimeout(supabaseServer.from('story_candidates').select('*').eq('stock_id', String(stock.id)).order('as_of_date', { ascending: false }).order('updated_at', { ascending: false }).limit(1), []),
       withQueryTimeout(supabaseServer.from('story_evidence_items').select('*').eq('stock_id', String(stock.id)).order('source_timestamp', { ascending: false }).limit(20), []),
       withQueryTimeout(supabaseServer.from('valuation_cases').select('*').eq('stock_id', String(stock.id)).order('updated_at', { ascending: false }).limit(10), []),
@@ -14425,7 +14408,6 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
       ),
       withQueryTimeout(supabaseServer.from('market_snapshots').select('*').eq('market', 'TW').order('as_of', { ascending: false }).limit(1), []),
       withFallbackTimeout(getAgentStatusSummary(), fallbackAgentStatusSummary(), 3000),
-      withQueryTimeout(supabaseServer.from('podcast_transcripts').select('id,podcast_episode_id,extracted_mentions,extracted_thesis,confidence,created_at,podcast_episodes(platform,title,episode_url,published_at)').order('created_at', { ascending: false }).limit(10), [], 5000),
       withQueryTimeout(supabaseServer.from('kol_profiles').select('*, source_entities(*)').eq('discovery_state', 'approved').order('follower_count', { ascending: false }).limit(20), []),
       withQueryTimeout(supabaseServer.from('source_discovery_queue').select('state').limit(100), []),
       withFallbackTimeout(getConnectorStatusSummary(), [], 3000),
@@ -14471,32 +14453,13 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
       );
     }
 
-    const podcastTranscripts = ((podcastRes.data || []) as Row[]).filter((row) => {
-      const ep = row.podcast_episodes as Row | null;
-      if (!ep) return false;
-      const mentions = Array.isArray(ep.extracted_mentions) ? (ep.extracted_mentions as unknown[]).map(String) : [];
-      // podcast_transcripts has extracted_mentions on the transcript itself
-      const transcriptMentions = Array.isArray(row.extracted_mentions) ? (row.extracted_mentions as unknown[]).map(String) : [];
-      return mentions.includes(normalizedSymbol) || transcriptMentions.includes(normalizedSymbol);
-    });
-    const podcastMentions = podcastTranscripts.map((row) => {
-      const ep = (row.podcast_episodes as Row | null) || {};
-      const thesisList = Array.isArray(row.extracted_thesis) ? (row.extracted_thesis as Array<{ text?: string }>) : [];
-      const riskList = Array.isArray(row.extracted_risks) ? (row.extracted_risks as Array<{ text?: string }>) : [];
-      return {
-        podcastName: String(ep.podcast_name || ''),
-        episodeTitle: String(ep.episode_title || ''),
-        platform: String(ep.platform || 'other') as 'youtube' | 'spotify' | 'apple_podcast' | 'rss' | 'other',
-        episodeUrl: String(ep.episode_url || ''),
-        publishedAt: ep.published_at ? String(ep.published_at) : null,
-        transcriptStatus: String(ep.transcript_status || 'pending') as 'pending' | 'ready' | 'transcript_unavailable' | 'failed',
-        excerpt: String(row.transcript_text || '').slice(0, 300),
-        thesisHighlights: thesisList.slice(0, 3).map((t) => t.text || '').filter(Boolean),
-        riskHighlights: riskList.slice(0, 3).map((t) => t.text || '').filter(Boolean),
-      };
-    });
+    const rawSourceDocs = (rawDocsRes.data as Row[]) || [];
+    const podcastMentions = rawSourceDocs
+      .map(row => publicPodcastMention(row, normalizedSymbol))
+      .filter(mention => mention !== null);
+    const publicRawDocs = rawSourceDocs.map(projectPublicPodcastSource).filter(row => row !== null);
 
-    const kolRawDocs = ((rawDocsRes.data as Row[]) || []).filter((row) => {
+    const kolRawDocs = publicRawDocs.filter((row) => {
       const symbols = Array.isArray(row.symbols) ? (row.symbols as unknown[]).map(String) : [];
       return symbols.includes(normalizedSymbol) && ['kol', 'podcast', 'youtube', 'threads', 'instagram', 'telegram'].includes(String(row.platform || ''));
     });
@@ -14583,7 +14546,7 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
       ),
     );
     const brokerViews = ((brokerRes.data as Row[]) || []).map(mapBrokerView);
-    const directRawDocs = ((rawDocsRes.data as Row[]) || [])
+    const directRawDocs = publicRawDocs
       .filter((row) => !isSourceDocNoise(row))
       .filter((row) => isSymbolScopedDirectDoc(row, normalizedSymbol))
       .sort((a, b) => {
@@ -14591,7 +14554,7 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
         if (priorityDiff !== 0) return priorityDiff;
         return sourceDocTimestamp(b).localeCompare(sourceDocTimestamp(a));
       });
-    const indirectRawDocs = ((rawDocsRes.data as Row[]) || [])
+    const indirectRawDocs = publicRawDocs
       .filter((row) => !isSourceDocNoise(row))
       .filter((row) => {
         const symbols = Array.isArray(row.symbols) ? (row.symbols as unknown[]).map(String) : [];
