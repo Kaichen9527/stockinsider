@@ -227,7 +227,7 @@ await test('launch policy is bound to the shared job and its prepared revision i
       checkedIds.push(id);
       if (id === ids[1] && unavailable) {
         unavailable = false;
-        throw Error('synthetic provider interruption');
+        throw Error('investanchors_gmail_access_rejected');
       }
       const content = Buffer.from('Synthetic notice body with no linked article.');
       return { id, internalDate: String(mailboxWindow.startMs + ids.indexOf(id)),
@@ -245,7 +245,9 @@ await test('launch policy is bound to the shared job and its prepared revision i
   const beforeNotice = await progress();
   assert.equal(beforeNotice.checkpointDay, null);
   const firstNotice = await continueInvestAnchorsNoticeScan(noticeDay, Buffer.alloc(32, 7), mailbox, progress);
-  assert.equal(firstNotice.scanStatus, 'retry_required');
+  assert.equal(firstNotice.scanStatus, 'blocked');
+  assert.equal(firstNotice.reason, 'background_gmail_access_rejected');
+  assert.equal(firstNotice.checkpointDay, null);
   assert.equal(firstNotice.checked, 1);
   assert.equal(firstNotice.deferred, 2);
   const savedPrefix = await progress();
@@ -264,6 +266,7 @@ await test('launch policy is bound to the shared job and its prepared revision i
     databaseLeaseUsed: true, sameDayCheckpointAfterResume: true, completedReadsCharged: 3,
     durablePrefixBeforeRetry: savedPrefix.checkedKeys.length, remainingAfterInterruption: firstNotice.deferred,
     repeatedVerifiedReads: 0, articleAuthority: resumed.articleAuthority, syntheticProvider: true,
+    blockedReason: firstNotice.reason, checkpointDayWhileBlocked: firstNotice.checkpointDay,
   });
   await x.writer.query("DELETE FROM public.production_write_leases WHERE owner_id=$1",[lease]);
   await x.writer.query("DELETE FROM public.production_writer_releases WHERE release_id=$1",[writerRelease]);

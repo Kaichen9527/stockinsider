@@ -11,6 +11,21 @@ const MAX_PAGES = 10;
 const MAX_BODY_BYTES = 128 * 1024;
 const MAX_MIME_PARTS = 16;
 type Row = Record<string, unknown>;
+const gmailBlockReasons = {
+  investanchors_gmail_authorization_required: 'background_gmail_authorization_required',
+  investanchors_gmail_access_rejected: 'background_gmail_access_rejected',
+  investanchors_gmail_client_rejected: 'background_gmail_client_rejected',
+  investanchors_gmail_readonly_grant_required: 'background_gmail_readonly_grant_required',
+  investanchors_gmail_mailbox_mismatch: 'background_gmail_mailbox_mismatch',
+  investanchors_gmail_domain_policy: 'background_gmail_domain_policy',
+} as const;
+type GmailBlockReason = typeof gmailBlockReasons[keyof typeof gmailBlockReasons];
+
+export function investAnchorsGmailBlockReason(error: unknown): GmailBlockReason | null {
+  if (!(error instanceof Error) || !Object.hasOwn(gmailBlockReasons, error.message)) return null;
+  return gmailBlockReasons[error.message as keyof typeof gmailBlockReasons];
+}
+
 type Notice = {
   noticeKey: string;
   receivedAt: string;
@@ -165,7 +180,7 @@ export async function collectInvestAnchorsNotices(
     || !Number.isSafeInteger(limits.readBudget) || limits.readBudget < 0 || limits.readBudget > SOURCE_DAY_LIMIT) {
     throw Error('investanchors_mailbox_input_invalid');
   }
-  const empty = (reason: 'provider_unavailable' | 'invalid_response' | 'page_bound') => ({
+  const empty = (reason: 'provider_unavailable' | 'invalid_response' | 'page_bound' | GmailBlockReason) => ({
     scanStatus: 'retry_required' as const, reason, checkpointDay: null, notices: [] as Notice[],
     checkedKeys: [] as string[], deferred: 0, rejected: 0, articleAuthority: false as const, sourceAuthority: false as const,
   });
@@ -195,16 +210,17 @@ export async function collectInvestAnchorsNotices(
       .filter(item => !limits.checkedKeys.has(item.noticeKey));
     const batch = unread.slice(0, limits.readBudget);
     const notices: Notice[] = [], checkedKeys: string[] = [];
-    let rejected = 0, lastObserved = started, providerInterrupted = false;
+    let rejected = 0, lastObserved = started;
+    let interruption: 'provider_unavailable' | GmailBlockReason | null = null;
     for (const { id, noticeKey } of batch) {
       let message: unknown;
       try {
         message = await deps.get({ id, format: 'full' });
-      } catch {
+      } catch (error) {
         // The inventory is complete. Keep only previously validated messages
         // and leave this message and the remainder pending for the next scan.
-        if (checkedKeys.length === 0) return empty('provider_unavailable');
-        providerInterrupted = true;
+        interruption = investAnchorsGmailBlockReason(error) ?? 'provider_unavailable';
+        if (checkedKeys.length === 0) return empty(interruption);
         break;
       }
       const observedAt = deps.now(), observed = evidenceInstant(observedAt);
@@ -220,10 +236,10 @@ export async function collectInvestAnchorsNotices(
     const deferred = unread.length - checkedKeys.length;
     const scanStatus = deferred > 0 ? 'deferred' as const
       : started >= BigInt(window.endMs) * BigInt(1000) ? 'scanned' as const : 'open_day' as const;
-    return { scanStatus, reason: providerInterrupted ? 'provider_unavailable' as const : null,
+    return { scanStatus, reason: interruption,
       checkpointDay: scanStatus === 'scanned' ? window.day : null,
       notices, checkedKeys, deferred, rejected, articleAuthority: false as const, sourceAuthority: false as const };
-  } catch {
-    return empty('provider_unavailable');
+  } catch (error) {
+    return empty(investAnchorsGmailBlockReason(error) ?? 'provider_unavailable');
   }
 }
