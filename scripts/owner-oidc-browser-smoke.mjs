@@ -53,7 +53,7 @@ const receipts = [], failures = [], children = [], servers = [];
 const navigation = [];
 const sensitive = new Set([SECRET, OWNER, READ_KEY, 'NONPRODUCTION-unused-access']);
 let cleanupVerified = false, summary = null, primaryFailure = null;
-let activePage, failureLocation = null, failureCookiePresence = null;
+let activePage, failureLocation = null, failureCookiePresence = null, activePublicCheck = null;
 const cleanupFailures = [];
 let browser, scenario = 'owner';
 const codes = new Map();
@@ -270,13 +270,21 @@ installOwnerOidcRuntimeForTests(createOwnerOidcRuntime(
       await anonymous.close();
     }
     record(viewport.name + ':anonymous-after-owner-read-has-no-note');
+    activePublicCheck = 'homepage_http_status';
     const html = await context.request.get(APP + '/'); assert.equal(html.status(), 200);
-    const publicHtml = await html.text(); for (const value of [...sensitive, privateNote.statement]) assert.ok(!publicHtml.includes(value));
-    assert.ok(publicHtml.includes('/private-research'));
-    assert.ok(publicHtml.includes('data-testid="vnext-ranked-member"'));
+    activePublicCheck = 'homepage_owner_data_exclusion';
+    const publicHtml = await html.text();
+    for (const value of [...sensitive, privateNote.statement, rights]) assert.ok(!publicHtml.includes(value));
+    activePublicCheck = 'homepage_owner_navigation';
+    assert.ok(publicHtml.includes('href="/private-research"'));
+    activePublicCheck = 'homepage_frozen_launch_member';
+    assert.ok(publicHtml.includes(`data-testid="launch-top10" data-ranking-run-id="${publicBefore.rankingRunId}"`));
+    assert.equal([...publicHtml.matchAll(/data-testid="launch-ranked-member"/gu)].length, publicBefore.members.length);
     record(viewport.name + ':public-html-excludes-owner');
+    activePublicCheck = 'api_frozen_launch_snapshot';
     assert.deepEqual(await checkPublicRanking(context), publicBefore);
     record(viewport.name + ':public-rank-200-snapshot-unchanged-after-owner-login');
+    activePublicCheck = null;
     const logoutCsrf = await context.request.post(APP + '/api/owner/logout', { headers: { Origin: 'https://attacker.invalid' }, maxRedirects: 0 });
     assert.equal(logoutCsrf.status(), 403); noStore(logoutCsrf); record(viewport.name + ':logout-csrf-rejected');
     const loggedOut = page.waitForResponse(response => new URL(response.url()).pathname === '/api/owner/logout' && response.request().method() === 'POST');
@@ -378,7 +386,7 @@ finally {
 if (primaryFailure || !cleanupVerified) {
   fs.writeFileSync(path.join(out, 'failure-receipt.json'), JSON.stringify({ status: 'FAIL', completedCases: receipts,
     ownedProcessesStopped: cleanupVerified, cleanupFailures, primaryFailure: !!primaryFailure, counts, navigation,
-    failureLocation, failureCookiePresence }, null, 2) + '\n', { mode: 0o600 });
+    failureLocation, failureCookiePresence, activePublicCheck }, null, 2) + '\n', { mode: 0o600 });
   throw primaryFailure || Error('owned_fixture_cleanup_failed');
 }
 assert.ok(summary && cleanupVerified);
