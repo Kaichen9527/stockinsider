@@ -132,6 +132,71 @@ async function testSubscriberScope(t, fixture) {
   });
 }
 
+
+async function checkSourceOwnerBoundary(fixture) {
+  const observer = fixture.observer;
+  await observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');
+  try {
+    const queries = `SELECT jsonb_build_object('role',r.rolname,'login',r.rolcanlogin,'superuser',r.rolsuper,
+ 'bypassRls',r.rolbypassrls,
+ 'membershipsOut',(SELECT count(*) FROM pg_auth_members WHERE member=r.oid),
+ 'membershipsIn',(SELECT count(*) FROM pg_auth_members WHERE roleid=r.oid),
+ 'publicUsage', has_schema_privilege(r.oid,'public','USAGE'),
+ 'publicCreate', has_schema_privilege(r.oid,'public','CREATE'),
+ 'publicCallableDefiners',(SELECT jsonb_agg(p.oid::regprocedure::text ORDER BY p.oid::regprocedure::text) FROM pg_proc p
+   WHERE p.pronamespace='public'::regnamespace AND p.prosecdef AND p.prokind='f' AND p.prorettype NOT IN ('pg_catalog.trigger'::regtype,'pg_catalog.event_trigger'::regtype)
+     AND has_function_privilege(r.oid,p.oid,'EXECUTE'))) FROM pg_roles r WHERE r.rolname='research_source_fence_owner_v2';
+WITH rights AS MATERIALIZED (
+ SELECT relname,relrowsecurity AS rls,relforcerowsecurity AS forced,relowner=(SELECT oid FROM pg_roles WHERE rolname='research_source_fence_owner_v2') as owned,
+ ARRAY(SELECT p FROM unnest(ARRAY['SELECT','INSERT','UPDATE','REFERENCES']) p WHERE has_any_column_privilege('research_source_fence_owner_v2',c.oid,p))
+ || ARRAY(SELECT p FROM unnest(ARRAY['DELETE','TRUNCATE','TRIGGER','MAINTAIN']) p WHERE has_table_privilege('research_source_fence_owner_v2',c.oid,p)) AS rights
+ FROM pg_class c WHERE relnamespace='public'::regnamespace AND relkind IN ('r','p','v','m','f')
+)
+SELECT coalesce(jsonb_agg(to_jsonb(v) ORDER BY relname),'[]') FROM rights v WHERE cardinality(rights)>0;
+SELECT coalesce(jsonb_agg(jsonb_build_object('name',relname,'usage',has_sequence_privilege('research_source_fence_owner_v2',c.oid,'USAGE'),
+ 'select',has_sequence_privilege('research_source_fence_owner_v2',c.oid,'SELECT'),'update',has_sequence_privilege('research_source_fence_owner_v2',c.oid,'UPDATE')) ORDER BY relname),'[]')
+ FROM pg_class c WHERE relnamespace='public'::regnamespace AND relkind='S'
+ AND CASE WHEN relkind='S' THEN has_sequence_privilege('research_source_fence_owner_v2',c.oid,'USAGE,SELECT,UPDATE') ELSE false END;
+SELECT jsonb_build_object(
+ 'publicOperators',(SELECT count(*) FROM pg_operator WHERE oprnamespace='public'::regnamespace),
+ 'publicCallableCastFunctions',(SELECT count(*) FROM pg_cast c JOIN pg_proc p ON p.oid=c.castfunc WHERE p.pronamespace='public'::regnamespace),
+ 'publicTypesWithNonCatalogInput',(SELECT count(*) FROM pg_type t JOIN pg_proc p ON p.oid=t.typinput WHERE t.typnamespace='public'::regnamespace AND p.pronamespace<>'pg_catalog'::regnamespace));`;
+    const answers = await observer.query(queries);
+    const [role, relationAccess, sequences, callAdapters] = answers.map(result => Object.values(result.rows[0])[0]);
+    assert.deepEqual(role, {
+      role: 'research_source_fence_owner_v2',
+      login: false, bypassRls: false, superuser: false,
+      publicUsage: false, publicCreate: false, membershipsIn: 0, membershipsOut: 0,
+      publicCallableDefiners: [
+        'assert_research_source_seal_v2(uuid)',
+        'research_publication_source_state_v2(uuid)',
+        'seal_research_sources_v2(jsonb,timestamp with time zone)',
+      ],
+    });
+
+    const ownedRights = ['SELECT', 'INSERT', 'UPDATE', 'REFERENCES', 'DELETE', 'TRUNCATE', 'TRIGGER', 'MAINTAIN'];
+    const sourceRelations = [
+      'research_source_fence_events_v2', 'research_source_seal_invalidations_v2', 'research_source_seals_v2',
+    ];
+    assert.deepEqual(relationAccess, [
+      ...sourceRelations.map(relname => ({ relname, rls: true, owned: true, forced: false, rights: ownedRights })),
+      { relname: 'source_raw_documents', rls: false, owned: false, forced: false, rights: ['SELECT'] },
+    ]);
+    assert.deepEqual(sequences, [
+      { name: 'research_source_fence_events_v2_event_id_seq', usage: true, select: true, update: true },
+    ]);
+    assert.deepEqual(callAdapters, { publicOperators: 0, publicCallableCastFunctions: 0, publicTypesWithNonCatalogInput: 0 });
+    fixture.save('source-owner-boundary-safe', {
+      role, relationAccess, sequences, callAdapters,
+      transaction: 'repeatable read read only',
+      reachesLegacySubscriberOrPlanner: false,
+      namespaceGrantApplied: false,
+    });
+  } finally {
+    await observer.query('ROLLBACK');
+  }
+}
+
 test('planner and legacy report ACLs preserve their existing web and backend calls', async t => {
   const fixture = await workerFixture();
   try {
@@ -167,6 +232,9 @@ test('planner and legacy report ACLs preserve their existing web and backend cal
       await privilegedCaller(fixture, 'opportunity_v3_rpc_owner');
     });
     await testSubscriberScope(t, fixture);
+    await t.test('source role retains only its known public schema capabilities', async () => {
+      await checkSourceOwnerBoundary(fixture);
+    });
   } finally {
     await fixture.finish();
   }
