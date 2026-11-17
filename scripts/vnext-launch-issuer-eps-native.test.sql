@@ -131,3 +131,108 @@ BEGIN
  IF public.vnext_launch_issuer_eps_estimates_v1('00000000-0000-4000-8000-000000000011','2454')->'estimates' IS DISTINCT FROM '[]'::jsonb
  THEN RAISE EXCEPTION 'revoked estimate still exposed';END IF;
 END $test$;
+
+-- Fiscal projections preserve whole issuer-disclosed periods and the original
+-- share denominator. Only the projected authority is synthetic here.
+\ir ../migrations/20261117_45_vnext_launch_issuer_fiscal_forecasts_v1.sql
+CREATE OR REPLACE FUNCTION vnext_forecast_current_internal_v1(uuid,text,timestamptz) RETURNS jsonb LANGUAGE sql STABLE AS
+ $$ SELECT packet FROM fixture_head WHERE $1='00000000-0000-4000-8000-000000000010' AND $2='2454' AND $3='2026-11-10T08:00Z' $$;
+
+INSERT INTO vnext_forecast_rights_v1
+SELECT ('00000000-0000-4000-8000-00000000020'||i)::uuid,
+ '00000000-0000-4000-8000-000000000010',('00000000-0000-4000-8000-00000000021'||i)::uuid,
+ 'allow','public_issuer_guidance','structured_numeric_forecast','2026-11-10T02:00Z','2026-10-01','2090-01-01'
+FROM generate_series(0,1) AS g(i);
+
+WITH types(i, key, amount, start_day, end_day, basis, shares) AS (
+ VALUES (0,'source_annual_forecast_eps',0,'2027-01-01','2027-12-31','diluted','1000'),
+        (1,'source_next_four_fiscal_quarter_eps',-2,'2027-02-01','2028-01-31','basic','2000')
+), pairs AS (
+ SELECT t.*, phase, jsonb_build_object(
+  'id','fiscal-forecast:00000000-0000-4000-8000-00000000020'||i||':00000000-0000-4000-8000-00000000021'||i||':'||phase,
+  'key',CASE phase WHEN 'eps' THEN key ELSE 'fiscal_forecast_original' END,
+  'value',CASE phase WHEN 'eps' THEN to_jsonb(amount) ELSE '{"statement":"DO_NOT_RENDER"}'::jsonb END,
+  'period',start_day||'/'||end_day,
+  'source','https://mops.twse.com.tw/issuer-fiscal-forecast','kind','assumption','sourceTier','public',
+  'eventAt','2026-10-30T09:00:00Z','availableAt','2026-11-10T04:00:00Z')
+  || CASE phase WHEN 'eps' THEN '{"unit":"TWD_per_share"}'::jsonb ELSE '{}'::jsonb END AS item
+ FROM types t CROSS JOIN unnest(ARRAY['eps','original']) AS stages(phase)
+), receipts AS (
+ SELECT i,phase,item,jsonb_build_object(
+  'schemaVersion','vnext-fiscal-forecast-receipt-v1','classification','source_disclosed_forecast_assumption_not_reported',
+  'stockId','00000000-0000-4000-8000-000000000010','symbol','2454',
+  'policyId','00000000-0000-4000-8000-00000000020'||i,
+  'verificationId','00000000-0000-4000-8000-00000000021'||i,'entryRole',phase,
+  'parsed',jsonb_build_object('privateOriginal','DO_NOT_RENDER'),
+  'calculation',jsonb_build_object('key',key,'value',amount,'unit','TWD_per_share','period',start_day||'/'||end_day,
+   'periodStart',start_day,'periodEnd',end_day,'shareBasis',basis,'denominatorShares',shares,'reported',false),
+  'evidenceHash',encode(sha256(convert_to(item::text,'UTF8')),'hex')) AS receipt
+ FROM pairs
+)
+UPDATE fixture_head SET packet=(SELECT jsonb_build_object('evidence',jsonb_agg(item ORDER BY i,phase),
+ 'receipts', jsonb_agg(receipt ORDER BY i,phase)) FROM receipts);
+
+UPDATE vnext_preparations_v1 SET evidence=jsonb_build_object('cutoff','2026-11-10T09:30:00Z',
+ 'forecastSourceAsOf','2026-11-10T08:00:00Z','evidence',packet->'evidence','forecastSourceReceipts',packet->'receipts')
+FROM fixture_head;
+UPDATE vnext_financial_preparation_protocols_v1 b SET
+ frozen_packet=p.evidence, packet_digest=encode(sha256(convert_to(p.evidence::text,'UTF8')),'hex')
+FROM vnext_preparations_v1 p WHERE p.job_id=b.job_id;
+UPDATE vnext_publications_v1 SET content=(SELECT jsonb_build_object('claims',jsonb_agg(jsonb_build_object(
+ 'kind','assumption','numeric',jsonb_build_object('key',e->>'key','value',e->'value','unit',e->>'unit','period',e->>'period'),
+ 'evidenceIds',jsonb_build_array(e->>'id')) ORDER BY e->>'id'))
+ FROM fixture_head CROSS JOIN LATERAL jsonb_array_elements(packet->'evidence') AS entries(e)
+ WHERE (e->>'id') LIKE '%:eps');
+
+SET ROLE service_role;
+BEGIN READ ONLY;
+DO $test$
+DECLARE packet jsonb;
+BEGIN
+ packet:=public.vnext_launch_issuer_fiscal_forecasts_v1('00000000-0000-4000-8000-000000000011','2454');
+ IF packet IS NULL OR jsonb_array_length(packet->'forecasts')<>2
+  OR NOT ((packet->'forecasts'->0) @> '{"horizon":"annual","periodStart":"2027-01-01","periodEnd":"2027-12-31","shareBasis":"diluted","shares":"1000","amount":0}')
+  OR NOT ((packet->'forecasts'->1) @> '{"horizon":"four_quarters","periodStart":"2027-02-01","periodEnd":"2028-01-31","shareBasis":"basic","shares":"2000","amount":-2}')
+  OR packet::text~'DO_NOT_RENDER|privateOriginal|evidenceHash|policyId|verificationId'
+ THEN RAISE EXCEPTION 'unexpected fiscal forecast projection';END IF;
+ IF public.vnext_launch_issuer_fiscal_forecasts_v1('00000000-0000-4000-8000-000000000011','2330') IS NOT NULL
+  OR public.vnext_launch_issuer_fiscal_forecasts_v1('00000000-0000-4000-8000-000000000099','2454') IS NOT NULL
+ THEN RAISE EXCEPTION 'fiscal issuer/run substitution';END IF;
+END $test$;
+COMMIT;
+RESET ROLE;
+
+DO $test$
+BEGIN
+ IF has_function_privilege('anon','public.vnext_launch_issuer_fiscal_forecasts_v1(uuid,text)','EXECUTE')
+  OR has_function_privilege('authenticated','public.vnext_launch_issuer_fiscal_forecasts_v1(uuid,text)','EXECUTE')
+ THEN RAISE EXCEPTION 'unexpected fiscal forecast browser privileges';END IF;
+END $test$;
+
+BEGIN;
+UPDATE fixture_head SET packet=jsonb_set(packet,'{evidence,1,value}','{"statement":"revised"}');
+DO $test$
+BEGIN
+ IF jsonb_array_length(public.vnext_launch_issuer_fiscal_forecasts_v1('00000000-0000-4000-8000-000000000011','2454')->'forecasts')<>1
+  OR public.vnext_launch_issuer_fiscal_forecasts_v1('00000000-0000-4000-8000-000000000011','2454')->'forecasts'->0->>'horizon'<>'four_quarters'
+ THEN RAISE EXCEPTION 'missing original pair did not suppress annual snapshot';END IF;
+END $test$;
+ROLLBACK;
+
+BEGIN;
+UPDATE vnext_publications_v1 SET content=jsonb_set(content,'{claims,0,numeric,value}','99');
+DO $test$
+BEGIN
+ IF jsonb_array_length(public.vnext_launch_issuer_fiscal_forecasts_v1('00000000-0000-4000-8000-000000000011','2454')->'forecasts')<>1
+ THEN RAISE EXCEPTION 'unreviewed fiscal value was projected';END IF;
+END $test$;
+ROLLBACK;
+
+INSERT INTO vnext_forecast_rights_v1 SELECT gen_random_uuid(),stock_id,verification_id,'revoke',license_basis,permitted_use,
+ statement_timestamp(),valid_from,valid_until FROM vnext_forecast_rights_v1
+ WHERE operation='allow' AND verification_id::text LIKE '%0021_';
+DO $test$
+BEGIN
+ IF public.vnext_launch_issuer_fiscal_forecasts_v1('00000000-0000-4000-8000-000000000011','2454')->'forecasts' IS DISTINCT FROM '[]'::jsonb
+ THEN RAISE EXCEPTION 'revoked fiscal estimates leaked';END IF;
+END $test$;

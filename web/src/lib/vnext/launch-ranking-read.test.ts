@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {parseLaunchRankingRead,parseLaunchReportedEps,parseLaunchIssuerEpsEstimates,readLaunchRankingTransport,launchRankingMemberCurrent,launchDetailQuery} from './launch-ranking-read.ts';
+import {parseLaunchRankingRead,parseLaunchReportedEps,parseLaunchIssuerEpsEstimates,parseLaunchIssuerFiscalForecasts,readLaunchRankingTransport,launchRankingMemberCurrent,launchDetailQuery} from './launch-ranking-read.ts';
 import {launchRankingFixture,LAUNCH_TEST_NOW,LAUNCH_TEST_RUN} from './launch-ranking.test-fixture.ts';
 
 test('new launch read acceptsTop0/1/10 and nullablefinancials under its own exact policy, neverlegacy or partial80',()=>{
@@ -185,4 +185,43 @@ test('issuer EPS forecast is pinned to the researched quarter and rejects substi
  ]){
    assert.throws(()=>parseLaunchIssuerEpsEstimates(invalid,binding),/launch_ranking_contract_invalid/);
  }
+});
+
+
+test('fiscal forecasts preserve exact issuer periods and disclosed share assumptions', () => {
+  const binding = {
+    rankingRunId: LAUNCH_TEST_RUN, symbol: '2454', revisionId: '00000000-0000-4000-8000-000000000012',
+    inputHash: 'a'.repeat(64), cutoff: '2026-11-16T13:30:00Z', session: '2026-11-16',
+  };
+  const annual = {
+    horizon: 'annual', periodStart: '2027-01-01', periodEnd: '2027-12-31',
+    shareBasis: 'diluted', shares: '1000', amount: 0, publishedAt: '2026-10-30T09:00:00Z',
+    knownAt: '2026-11-16T09:00:00Z', sourceUrl: 'https://mops.twse.com.tw/issuer-fiscal-forecast',
+  };
+  const four = {
+    ...annual, horizon: 'four_quarters', periodStart: '2027-02-01', periodEnd: '2028-01-31',
+    shareBasis: 'basic', shares: '2000', amount: -2,
+  };
+  const packet = {
+    schemaVersion: 'vnext-launch-issuer-fiscal-forecasts-v1', rankingRunId: binding.rankingRunId,
+    symbol: binding.symbol, revisionId: binding.revisionId, inputHash: binding.inputHash,
+    cutoff: binding.cutoff, forecasts: [annual, four],
+  };
+  assert.deepEqual(parseLaunchIssuerFiscalForecasts(packet, binding), [annual, four]);
+  assert.deepEqual(parseLaunchIssuerFiscalForecasts(null, binding), []);
+  for (const invalid of [
+    { ...packet, symbol: '2330' },
+    { ...packet, rankingRunId: binding.revisionId },
+    { ...packet, revisionId: binding.rankingRunId },
+    { ...packet, cutoff: '2026-11-16T13:31:00Z' },
+    { ...packet, forecasts: [annual, annual] },
+    { ...packet, forecasts: [four, annual] },
+    ...[
+      { shares: '0' }, { shares: 1000 }, { shareBasis: 'unknown' },
+      { periodEnd: '2027-09-30' }, { periodStart: '2027-01-02' },
+      { knownAt: '2026-11-16T13:30:00.000001Z' },
+      { sourceUrl: 'https://mops.twse.com.tw/issuer-forecast?token=private' },
+      { rawOriginal: 'private' }, { priceTarget: 45 },
+    ].map(alteration => ({ ...packet, forecasts: [{ ...annual, ...alteration }] })),
+  ]) assert.throws(() => parseLaunchIssuerFiscalForecasts(invalid, binding), /launch_ranking_contract_invalid/u);
 });

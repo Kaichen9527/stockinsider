@@ -36,8 +36,12 @@ export type LaunchRankingChart = {
 };
 export type LaunchReportedEps = {basis:'basic'|'diluted';periodStart:string;periodEnd:string;amount:number;filedAt:string;knownAt:string;sourceUrl:string};
 export type LaunchIssuerEpsEstimate={periodStart:string;periodEnd:string;amount:number;publishedAt:string;knownAt:string;sourceUrl:string};
+export type LaunchIssuerFiscalForecast = {
+  horizon: 'annual' | 'four_quarters'; periodStart: string; periodEnd: string; shareBasis: 'basic' | 'diluted';
+  shares: string; amount: number; sourceUrl: string; publishedAt: string; knownAt: string;
+};
 export type LaunchRankingDetail = {arithmeticVersion:typeof LAUNCH_RANKING_ARITHMETIC;rankingRunId:string;symbol:string;revisionId:string;scoreRevision:string;launchQualificationRevision:string;inputHash:string;
-  summary:string|null;scoreEvidence:LaunchRankingRule[];citations:LaunchPublicCitation[];chart:LaunchRankingChart|null;reportedEps?:LaunchReportedEps[];issuerEpsEstimates?:LaunchIssuerEpsEstimate[]};
+  summary:string|null;scoreEvidence:LaunchRankingRule[];citations:LaunchPublicCitation[];chart:LaunchRankingChart|null;reportedEps?:LaunchReportedEps[];issuerEpsEstimates?:LaunchIssuerEpsEstimate[];issuerFiscalForecasts?:LaunchIssuerFiscalForecast[]};
 export type LaunchRankingRead = {availability:'ready'|'not_published'|'producer_unavailable'|'not_found'|'schema_unavailable'|'unavailable';reason:string|null;
   readAt:string;snapshot:LaunchRankingSnapshot|null;current:LaunchRankingCurrent[];detail:LaunchRankingDetail|null};
 type Row=Record<string,unknown>;
@@ -307,6 +311,55 @@ async function readIssuerEpsEstimates(
     return result.error ? undefined : parseLaunchIssuerEpsEstimates(result.data,binding);
   } catch { return undefined; }
 }
+
+export function parseLaunchIssuerFiscalForecasts(
+  value: unknown, binding: Parameters<typeof parseLaunchReportedEps>[1],
+): LaunchIssuerFiscalForecast[] {
+  if (value === null) return [];
+  envelope(value);
+  if (!exact(value, 'schemaVersion rankingRunId symbol revisionId inputHash cutoff forecasts')
+    || value.schemaVersion !== 'vnext-launch-issuer-fiscal-forecasts-v1'
+    || value.rankingRunId !== binding.rankingRunId || value.symbol !== binding.symbol
+    || value.revisionId !== binding.revisionId || value.inputHash !== binding.inputHash
+    || !stamp(value.cutoff) || evidenceInstant(value.cutoff) !== evidenceInstant(binding.cutoff)
+    || !Array.isArray(value.forecasts) || value.forecasts.length > 4) invalid();
+  let previous = '';
+  return value.forecasts.map(item => {
+    if (!exact(item, 'horizon periodStart periodEnd shareBasis shares amount sourceUrl publishedAt knownAt')
+      || (item.horizon !== 'annual' && item.horizon !== 'four_quarters')
+      || !date(item.periodStart) || !date(item.periodEnd) || item.periodStart >= item.periodEnd
+      || item.periodEnd <= binding.session
+      || (item.shareBasis !== 'basic' && item.shareBasis !== 'diluted')
+      || typeof item.shares !== 'string' || !/^[1-9][0-9]{0,11}$/u.test(item.shares)
+      || !number(item.amount) || !stamp(item.publishedAt) || !stamp(item.knownAt)
+      || evidenceInstant(item.publishedAt)! > evidenceInstant(item.knownAt)!
+      || evidenceInstant(item.knownAt)! > evidenceInstant(binding.cutoff)!
+      || typeof item.sourceUrl !== 'string'
+      || !/^https:\/\/mops(?:ov)?\.twse\.com\.tw\/[A-Za-z0-9._/-]+$/u.test(item.sourceUrl)
+      || /(?:paid|member|premium|subscription|login|authenticate)/iu.test(item.sourceUrl)) invalid();
+    const anniversary = new Date(item.periodStart + 'T00:00:00Z');
+    anniversary.setUTCFullYear(anniversary.getUTCFullYear() + 1);
+    anniversary.setUTCDate(0);
+    if (!item.periodStart.endsWith('-01') || anniversary.toISOString().slice(0,10) !== item.periodEnd) invalid();
+    const key = [item.horizon, item.periodStart, item.periodEnd].join('/');
+    if (key <= previous) invalid();
+    previous = key;
+    const { horizon, periodStart, periodEnd, shareBasis, shares, amount, sourceUrl, publishedAt, knownAt } = item;
+    return { horizon, periodStart, periodEnd, shareBasis, shares, amount, sourceUrl, publishedAt, knownAt };
+  });
+}
+async function readIssuerFiscalForecasts(
+  client: {rpc:(name:'vnext_launch_issuer_fiscal_forecasts_v1',args:{p_ranking_run_id:string;p_symbol:string})=>PromiseLike<{data:unknown;error:unknown}>},
+  binding: Parameters<typeof parseLaunchIssuerFiscalForecasts>[1],
+) {
+  try {
+    const result = await client.rpc('vnext_launch_issuer_fiscal_forecasts_v1', {
+      p_ranking_run_id: binding.rankingRunId, p_symbol: binding.symbol,
+    });
+    return result.error ? undefined : parseLaunchIssuerFiscalForecasts(result.data, binding);
+  } catch { return undefined; }
+}
+
 export async function readLaunchRankingSnapshot(query:{rankingRunId?:string;symbol?:string}={}):Promise<LaunchRankingRead> {
   if(!launchRankingEnabled())throw Error('launch_ranking_disabled');
   const {getSupabaseServerClient}=await import('../supabase-server.ts');
@@ -314,8 +367,10 @@ export async function readLaunchRankingSnapshot(query:{rankingRunId?:string;symb
   const result=await readLaunchRankingTransport(client,query);
   if(result.availability!=='ready'||!result.detail||!result.snapshot)return result;
   const binding={...result.detail,cutoff:result.snapshot.cutoff,session:result.snapshot.session};
-  const [reportedEps,issuerEpsEstimates]=await Promise.all([readReportedEps(client,binding),readIssuerEpsEstimates(client,binding)]);
-  return {...result,detail:{...result.detail,reportedEps,issuerEpsEstimates}};
+  const [reportedEps, issuerEpsEstimates, issuerFiscalForecasts] = await Promise.all([
+    readReportedEps(client, binding), readIssuerEpsEstimates(client, binding), readIssuerFiscalForecasts(client, binding),
+  ]);
+  return {...result,detail:{...result.detail,reportedEps,issuerEpsEstimates,issuerFiscalForecasts}};
 }
 /** A named launch link never becomes a legacy or latest lookup on failure. */
 export function launchDetailQuery(query:Record<string,string|string[]|undefined>) {

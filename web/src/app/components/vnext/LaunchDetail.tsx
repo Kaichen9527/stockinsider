@@ -49,6 +49,15 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
             </li>)}
           </ul>
         </> : <p className="mt-2">{detail.issuerEpsEstimates ? '此榜單版本無可公開的季度 EPS 預估。' : '季度 EPS 預估目前無法讀取。'}</p>}
+        {detail.issuerFiscalForecasts?.length ? <>
+          <h3 className="mt-4 font-medium">公司來源的年度與四季 EPS 預估</h3>
+          <ul className="mt-2 list-disc space-y-1 pl-5">
+            {detail.issuerFiscalForecasts.map(forecast => <li key={[forecast.horizon, forecast.periodStart, forecast.periodEnd].join('/')}>
+              {forecast.horizon === 'annual' ? '年度' : '四季'} {forecast.periodStart} 至 {forecast.periodEnd}，{forecast.shareBasis === 'basic' ? '基本' : '稀釋'} EPS 預估 {forecast.amount} 元
+              <p>公司揭露股數 {Number(forecast.shares).toLocaleString('zh-TW')} 股。<a href={forecast.sourceUrl} className="underline">公開資訊觀測站來源</a></p>
+            </li>)}
+          </ul>
+        </> : <p className="mt-2">{detail.issuerFiscalForecasts ? '此榜單版本無可公開的年度或四季 EPS 預估。' : '年度與四季 EPS 預估目前無法讀取。'}</p>}
         <p className="mt-2">本益比與目標價情境缺少可公開的估值依據。</p>
       </section>
       <section aria-label="榜單價格圖表" className="min-w-0 rounded-xl border border-slate-300 p-4">

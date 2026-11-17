@@ -26,6 +26,7 @@ on:
       - 'migrations/20261117_42_vnext_internal_candidate_plan_acl_v1.sql'
       - 'migrations/20261117_43_vnext_owner_research_notes_v1.sql'
       - 'migrations/20261117_44_vnext_legacy_subscription_acl_v1.sql'
+      - 'migrations/20261117_45_vnext_launch_issuer_fiscal_forecasts_v1.sql'
       - 'deployment/vps/launch-radar-schedule/**'
       - 'scripts/run-launch-scheduled-cycle*.mjs'
       - 'openspec/changes/stockinsider-vnext-20/**'
@@ -184,11 +185,13 @@ jobs:
           docker exec "$container" createdb -U postgres vnext_issuer_eps
           python3 - <<'PYCODE' | docker exec -i "$container" psql -X -q -v ON_ERROR_STOP=1 -U postgres -d vnext_issuer_eps
           from pathlib import Path
-          migration = Path('migrations/20261117_41_vnext_launch_issuer_eps_estimates_v1.sql')
           fixture = Path('scripts/vnext-launch-issuer-eps-native.test.sql').read_text()
-          marker = '\\ir ../' + migration.as_posix()
-          assert fixture.count(marker) == 1
-          print(fixture.replace(marker, migration.read_text()))
+          for name in ('20261117_41_vnext_launch_issuer_eps_estimates_v1.sql', '20261117_45_vnext_launch_issuer_fiscal_forecasts_v1.sql'):
+              migration = Path('migrations') / name
+              marker = '\\ir ../' + migration.as_posix()
+              assert fixture.count(marker) == 1
+              fixture = fixture.replace(marker, migration.read_text())
+          print(fixture)
           PYCODE
       - name: Genuine captured-prefix legacy coexistence and concurrent mode fence
         env:
