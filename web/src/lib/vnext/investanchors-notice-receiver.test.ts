@@ -349,6 +349,53 @@ test('a partial Gmail fetch keeps verified progress and retries only the unfinis
   assert.equal(checkedKeys.length, 3);
 });
 
+test('Gmail access loss keeps the verified prefix, and recovery reads only the remaining message', async () => {
+  const underlying = provider([mail('verified', window.startMs), mail('pending', window.startMs + 1)]);
+  let denied = true;
+  const readIds: string[] = [];
+  const mailbox = {
+    ...underlying,
+    async get(request: { id: string; format: 'full' }) {
+      readIds.push(request.id);
+      if (request.id === 'pending' && denied) throw Error('investanchors_gmail_access_rejected');
+      return underlying.get(request);
+    },
+  };
+  let checkedKeys: string[] = [];
+  let revision = 0;
+  const rpc = async (payload?: Record<string, unknown>) => {
+    if (!payload) return { articleAuthority: false, checkpointDay: null, checkedKeys,
+      progressId: revision ? String(revision) : null, readBudget: 2 - checkedKeys.length };
+    assert.equal(payload.baseProgressId, revision ? String(revision) : null);
+    assert.equal(payload.scanStatus, denied ? 'deferred' : 'scanned');
+    checkedKeys = [...checkedKeys, ...(payload.checkedKeys as string[])];
+    return { articleAuthority: false, progressId: String(++revision), replay: false };
+  };
+  const first = await continueInvestAnchorsNoticeDays(async () => ({ articleAuthority: false, closedThrough: day, day, kind: 'pending' }),
+    selected => continueInvestAnchorsNoticeScan(selected, key, mailbox, rpc));
+  assert.deepEqual(first, { scanStatus: 'blocked', reason: 'background_gmail_access_rejected', checkpointDay: null,
+    pendingDay: day, checked: 1, awaiting: 1, deferred: 1, rejected: 0, articleAuthority: false });
+  assert.equal(checkedKeys.length, 1);
+  denied = false;
+  assert.equal((await continueInvestAnchorsNoticeScan(day, key, mailbox, rpc)).checkpointDay, day);
+  assert.deepEqual(readIds, ['verified', 'pending', 'pending']);
+  assert.equal(checkedKeys.length, 2);
+});
+
+test('a listing denial never checks any messages or appends progress', async () => {
+  const mailbox = {
+    now: () => clock,
+    list: async () => { throw Error('investanchors_gmail_domain_policy'); },
+    get: async () => { throw Error('unexpected get'); },
+  };
+  const result = await continueInvestAnchorsNoticeScan(day, key, mailbox, async payload => {
+    assert.equal(payload, undefined);
+    return { articleAuthority: false, checkpointDay: null, checkedKeys: [], progressId: null, readBudget: 50 };
+  });
+  assert.deepEqual(result, { scanStatus: 'blocked', reason: 'background_gmail_domain_policy',
+    checkpointDay: null, checked: 0, awaiting: 0, deferred: 0, rejected: 0, articleAuthority: false });
+});
+
 test('invalid response identity does not accept a partial cache prefix', async () => {
   const underlying = provider([mail('first_read', window.startMs), mail('wrong_identity', window.startMs + 1)]);
   const gmail = {

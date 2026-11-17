@@ -30,9 +30,12 @@ function fixture(mode = 'normal') {
     if (url === 'https://oauth2.googleapis.com/token') {
       assert.equal(init.method, 'POST');
       assert.equal(new URLSearchParams(String(init.body)).get('grant_type'), 'refresh_token');
+      if (mode === 'expired_grant') return success({ error: 'invalid_grant', error_description: 'synthetic private description' }, 400);
+      if (mode === 'invalid_client') return success({ error: 'invalid_client' }, 401);
+      if (mode === 'unsupported_oauth_request') return success({ error: 'invalid_request' }, 400);
       return success({ token_type: 'Bearer', access_token: 'fixture-token', expires_in: 3600,
         ...(mode === 'no_scope' ? {} : { scope: mode === 'too_wide' ? scope + ' https://www.googleapis.com/auth/gmail.modify' : scope }) },
-      mode === 'expired_grant' ? 400 : 200, mode === 'redirect' ? 'https://evil.invalid/' : url);
+      200, mode === 'redirect' ? 'https://evil.invalid/' : url);
     }
     assert.equal(init.method, 'GET');
     assert.equal(new Headers(init.headers).get('authorization'), 'Bearer fixture-token');
@@ -41,6 +44,11 @@ function fixture(mode = 'normal') {
     if (url.includes('/profile?')) return success({ emailAddress: mode === 'different_mailbox' ? 'other@example.invalid' : address.toUpperCase() });
     if (url.includes('/messages?')) {
       if (mode === 'oversized') return success({ padding: 'x'.repeat(70_000) });
+      if (mode === 'access_rejected') return success({ error: { errors: [{ reason: 'authError' }] } }, 401);
+      if (mode === 'large_403') return success({ padding: 'x'.repeat(10_000) }, 403);
+      if (['userRateLimitExceeded', 'dailyLimitExceeded', 'domainPolicy', 'insufficientPermissions'].includes(mode)) {
+        return success({ error: { errors: [{ reason: mode, message: 'synthetic private message' }] } }, 403);
+      }
       return success({ messages: [{ id: 'owned_id' }], nextPageToken: 'owned_page' });
     }
     assert.ok(url.endsWith('/messages/owned_id?format=full'));
@@ -72,7 +80,8 @@ test('refresh, mailbox identity, and listed Gmail IDs bind the read-only transpo
 test('credentials, extra scopes, redirects, and the wrong mailbox stop before mail listing', async () => {
   for (const [mode, reason, calls] of [
     ['too_wide', 'readonly_grant_required', 1], ['no_scope', 'readonly_grant_required', 1],
-    ['expired_grant', 'authorization_required', 1], ['redirect', 'unavailable', 1],
+    ['expired_grant', 'authorization_required', 1], ['invalid_client', 'client_rejected', 1],
+    ['unsupported_oauth_request', 'unavailable', 1], ['redirect', 'unavailable', 1],
     ['provider_error', 'unavailable', 1], ['different_mailbox', 'mailbox_mismatch', 2],
   ] as const) {
     const f = fixture(mode);
@@ -83,6 +92,19 @@ test('credentials, extra scopes, redirects, and the wrong mailbox stop before ma
     assert.equal(f.requests.some(request => request.url.includes('/messages')), false);
   }
 });
+test('Gmail denial, policy and quota responses have distinct bounded outcomes', async () => {
+  for (const [mode, expected] of [
+    ['access_rejected', 'access_rejected'], ['userRateLimitExceeded', 'unavailable'],
+    ['dailyLimitExceeded', 'unavailable'], ['domainPolicy', 'domain_policy'],
+    ['insufficientPermissions', 'readonly_grant_required'], ['large_403', 'response_invalid'],
+  ] as const) {
+    const f = fixture(mode);
+    const mailbox = await openInvestAnchorsGmail(config, day, f.fetcher);
+    await assert.rejects(() => mailbox.list({ q, maxResults: 50 }), { message: 'investanchors_gmail_' + expected });
+    assert.equal(f.requests.length, 3);
+  }
+});
+
 test('Gmail responses are byte bounded before parsing or retaining any notice', async () => {
   const f = fixture('oversized');
   const mailbox = await openInvestAnchorsGmail(config, day, f.fetcher);
