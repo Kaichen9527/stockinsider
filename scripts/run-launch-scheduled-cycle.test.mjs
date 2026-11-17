@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { spawn } from 'node:child_process';
+import { once } from 'node:events';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { launchScheduledSlot, runLaunchScheduledCycle } from './run-launch-scheduled-cycle.mjs';
@@ -260,4 +262,84 @@ test('a date rollover during the weekly audit does not start a final drain', () 
   const { calls, run } = plan([day + 'T15:59:00Z', day + 'T16:00:00Z']);
   assert.equal(run().reason, 'launch_schedule_window_changed');
   assert.deepEqual(calls.map(item => item.payload.action), ['launch-weekly-audit']);
+});
+
+
+const incompleteFinal = {
+  ok: false, error: 'taiwan_refresh_scope_incomplete',
+  result: { status: 'incomplete', phase: 'final', sessionDate: day, researchReady: false, scopeComplete: false, errors: [] },
+};
+const gmailEnabled = { ...active, STOCKINSIDER_VNEXT_INVESTANCHORS_GMAIL_ENABLED: 'true' };
+const openDayNotice = { ok: true, policyVersion, result: { scanStatus: 'open_day', checkpointDay: null, articleAuthority: false } };
+
+test('a same-session final data gap retains the prior ranking and still scans current-day notices', () => {
+  const { calls, run } = plan(day + 'T13:30:00Z', [incompleteFinal, openDayNotice], { env: gmailEnabled });
+  assert.deepEqual(run(), {
+    slot: 'postclose', sessionDate: day, status: 'retained', weeklyAudit: 'current',
+    reason: 'launch_final_data_unready', currentNoticeScan: 'open_day',
+  });
+  assert.deepEqual(calls.map(item => item.payload.action ?? item.payload.phase),
+    ['launch-weekly-audit', 'final', 'investanchors-gmail-notices']);
+});
+
+test('evening transport or policy errors remain failures and still run the separate notice scan', () => {
+  for (const [replies, failure] of [
+    [[null, openDayNotice], 'launch_final_drain_failed'],
+    [[{ ...incompleteFinal, result: { ...incompleteFinal.result, sessionDate: '2026-11-13' } }, openDayNotice], 'launch_final_drain_failed'],
+    [[complete, { ...evening, policyVersion: 'unrelated' }, openDayNotice], 'launch_cycle_wrong_policy'],
+  ]) {
+    const { calls, run } = plan(day + 'T13:30:00Z', replies, { env: gmailEnabled });
+    assert.throws(run, { message: failure });
+    assert.deepEqual(calls.at(-1).payload, { action: 'investanchors-gmail-notices', scope: 'current' });
+  }
+  const rollover = plan([day + 'T15:57:00Z', day + 'T15:58:00Z', day + 'T16:02:00Z'],
+    [null], { env: gmailEnabled });
+  assert.throws(rollover.run, { message: 'launch_final_drain_failed' });
+  assert.equal(rollover.calls.length, 2);
+});
+
+test('actual internal-API child keeps a bounded HTTP 503 incomplete-final response', async () => {
+  const server = spawn(process.execPath, ['--input-type=module', '-e', `
+    import { createServer } from 'node:http';
+    const weekly = ${JSON.stringify(currentWeek)};
+    const incomplete = ${JSON.stringify(incompleteFinal)};
+    const current = ${JSON.stringify(openDayNotice)};
+    let stage = 0;
+    const listener = createServer(async (req, res) => {
+      const chunks = [];
+      for await (const chunk of req) chunks.push(chunk);
+      const input = JSON.parse(Buffer.concat(chunks).toString());
+      const valid = req.method === 'POST' && req.headers.authorization === 'Bearer test-operator';
+      let answer = { ok: false, error: 'unexpected_test_request' }, status = 409;
+      if (valid && stage === 0 && req.url === '/api/internal/vnext-research' && input.action === 'launch-weekly-audit') {
+        ++stage; answer = weekly; status = 200;
+      } else if (valid && stage === 1 && req.url === '/api/internal/taiwan-data-queue-drain'
+        && input.phase === 'final' && input.sessionDate === incomplete.result.sessionDate && input.requireComplete === true) {
+        ++stage; answer = incomplete; status = 503;
+      } else if (valid && stage === 2 && req.url === '/api/internal/vnext-research'
+        && input.action === 'investanchors-gmail-notices' && input.scope === 'current') {
+        ++stage; answer = current; status = 200;
+      }
+      res.writeHead(status, { 'content-type':'application/json' });
+      res.end(JSON.stringify(answer));
+    });
+    listener.listen(0, '127.0.0.1', () => console.log(listener.address().port));
+  `], { stdio: ['ignore', 'pipe', 'ignore'] });
+  const exited = once(server, 'exit');
+  try {
+    const [chunk] = await once(server.stdout, 'data', { signal: AbortSignal.timeout(5000) });
+    const port = Number(chunk.toString().trim());
+    assert.ok(Number.isInteger(port) && port > 0);
+    const origin = 'http://127.0.0.1:' + port;
+    const observation = runLaunchScheduledCycle({
+      mode: 'schedule', clock: () => new Date(day + 'T13:30:00Z'),
+      env: { ...process.env, ...gmailEnabled, APP_URL: origin, EXPECTED_APP_URL: origin, INTERNAL_API_KEY: 'test-operator' },
+    });
+    assert.equal(observation.status, 'retained');
+    assert.equal(observation.reason, 'launch_final_data_unready');
+    assert.equal(observation.currentNoticeScan, 'open_day');
+  } finally {
+    server.kill();
+    await exited;
+  }
 });

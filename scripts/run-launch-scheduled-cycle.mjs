@@ -20,6 +20,14 @@ export function launchScheduledSlot(now) {
   return { sessionDate, slot };
 }
 
+function isIncompleteFinalDrain(response, sessionDate) {
+  const { result } = response ?? {};
+  return response?.ok === false && response.error === 'taiwan_refresh_scope_incomplete'
+    && result?.phase === 'final' && result.sessionDate === sessionDate
+    && result.status === 'incomplete' && result.scopeComplete === false && result.researchReady === false
+    && Array.isArray(result.errors) && result.errors.length === 0;
+}
+
 function callInternalApi(endpoint, payload, timeoutMs, env) {
   const result = spawnSync(process.execPath, [
     'scripts/call_internal_api.mjs', endpoint, JSON.stringify(payload),
@@ -30,9 +38,12 @@ function callInternalApi(endpoint, payload, timeoutMs, env) {
     maxBuffer: 2 * 1024 * 1024,
     timeout: timeoutMs + 5_000,
   });
-  if (result.status !== 0) return null;
+  if (result.status !== 0 && (result.status !== 1 || endpoint !== drainEndpoint || payload.phase !== 'final')) return null;
   try {
-    return JSON.parse(result.stdout);
+    // The transport exits nonzero for HTTP 503. Only the typed final-data gap
+    // can survive a failed child process; all other failure payloads stay closed.
+    const response = JSON.parse(result.stdout);
+    return result.status === 0 || isIncompleteFinalDrain(response, payload.sessionDate) ? response : null;
   } catch {
     return null;
   }
@@ -128,41 +139,56 @@ export function runLaunchScheduledCycle({
     return { slot, sessionDate, status: result.status, attempted: result.attempted, published: result.published, stopped: result.stopped };
   }
 
-  const weekly = call(researchEndpoint, { action: 'launch-weekly-audit' }, 120_000, env);
-  const weeklyState = weekly?.result?.status;
-  const weeklyAudit = weekly?.ok === true && weekly.policyVersion === launchPolicy
-    && ['recorded', 'empty', 'current', 'deferred'].includes(weeklyState) ? weeklyState : 'failed';
-  const beforeDrain = launchScheduledSlot(clock());
-  if (beforeDrain.slot !== slot || beforeDrain.sessionDate !== sessionDate) {
-    return { slot, sessionDate, weeklyAudit, status: 'deferred', reason: 'launch_schedule_window_changed' };
+  function runPostclose() {
+    const weekly = call(researchEndpoint, { action: 'launch-weekly-audit' }, 120_000, env);
+    const weeklyState = weekly?.result?.status;
+    const weeklyAudit = weekly?.ok === true && weekly.policyVersion === launchPolicy
+      && ['recorded', 'empty', 'current', 'deferred'].includes(weeklyState) ? weeklyState : 'failed';
+    const base = { slot, sessionDate, weeklyAudit };
+    const beforeDrain = launchScheduledSlot(clock());
+    if (beforeDrain.slot !== slot || beforeDrain.sessionDate !== sessionDate) {
+      return { ...base, status: 'deferred', reason: 'launch_schedule_window_changed' };
+    }
+
+    const response = call(
+      drainEndpoint, { ...drainScope, phase: 'final', sessionDate }, 2_700_000, env,
+    );
+    if (isIncompleteFinalDrain(response, sessionDate)) {
+      return { ...base, status: 'retained', reason: 'launch_final_data_unready' };
+    }
+    if (response?.ok !== true) throw new Error('launch_final_drain_failed');
+    if (response.result?.researchReady !== true || response.result.sessionDate !== sessionDate) {
+      throw new Error('launch_final_drain_wrong_scope');
+    }
+    const current = launchScheduledSlot(clock());
+    if (current.slot !== slot || current.sessionDate !== sessionDate) {
+      return { ...base, status: 'deferred', reason: 'launch_schedule_window_changed' };
+    }
+    const { policyVersion, result } = request(
+      researchEndpoint, { action: 'launch-cycle' }, 1_500_000, 'launch_cycle_failed',
+    );
+    if (policyVersion !== launchPolicy || (result?.status !== 'deferred'
+      && (result?.status !== 'existing_reviewed_cache_only' || typeof result?.ranking?.published !== 'boolean'))) {
+      throw new Error('launch_cycle_wrong_policy');
+    }
+    return { ...base, status: result.ranking?.published === true ? 'published' : 'retained' };
   }
 
-  const { result: drain } = request(
-    drainEndpoint, { ...drainScope, phase: 'final', sessionDate }, 2_700_000, 'launch_final_drain_failed',
-  );
-  if (drain?.researchReady !== true || drain?.sessionDate !== sessionDate) {
-    throw new Error('launch_final_drain_wrong_scope');
+  let outcome, currentNoticeScan;
+  try {
+    outcome = runPostclose();
+  } finally {
+    if (noticeEnabled) {
+      // Notice receipts serve the next cycle even if this publication attempt
+      // fails. Already elapsed Taipei days are left to the morning catch-up.
+      const now = clock();
+      const current = launchScheduledSlot(now);
+      const endsAt = Date.parse(sessionDate + 'T00:00:00+08:00') + 86_400_000;
+      currentNoticeScan = current.slot === slot && current.sessionDate === sessionDate
+        && endsAt - now.getTime() >= noticeTimeoutMs + 5_000 ? readCurrentNotice() : 'deferred';
+    }
   }
-  const current = launchScheduledSlot(clock());
-  if (current.slot !== slot || current.sessionDate !== sessionDate) {
-    return { slot, sessionDate, weeklyAudit, status: 'deferred', reason: 'launch_schedule_window_changed' };
-  }
-  const { policyVersion, result } = request(
-    researchEndpoint, { action: 'launch-cycle' }, 1_500_000, 'launch_cycle_failed',
-  );
-  if (policyVersion !== launchPolicy || (result?.status !== 'deferred'
-    && (result?.status !== 'existing_reviewed_cache_only' || typeof result?.ranking?.published !== 'boolean'))) {
-    throw new Error('launch_cycle_wrong_policy');
-  }
-  const outcome = { slot, sessionDate, weeklyAudit, status: result.ranking?.published === true ? 'published' : 'retained' };
-  if (!noticeEnabled) return outcome;
-
-  // This receipt serves the next research cycle. Keep it outside the frozen
-  // publication attempt and leave time for the bounded current-day request.
-  const endsAt = Date.parse(sessionDate + 'T00:00:00+08:00') + 86_400_000;
-  const available = endsAt - clock().getTime();
-  const currentNoticeScan = available >= noticeTimeoutMs + 5_000 ? readCurrentNotice() : 'deferred';
-  return { ...outcome, currentNoticeScan };
+  return noticeEnabled ? { ...outcome, currentNoticeScan } : outcome;
 }
 
 if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {
