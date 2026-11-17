@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "stockinsider-owner-notes-browser-witness-v1",
+  "originalHarnessHead": "d9c20718f32e5280b33fc9540bf0a2f2b2237f1a",
+  "githubRunId": 44106666695,
+  "githubArtifactId": 14339293266,
+  "actualBuildSource": "97e210453e6f3ec88069292ece09323d4c9d3bad",
+  "sameBuildWebTree": "a469c1d378dad2468940a93608d5fba37c029ff1",
+  "isolatedBrowser": {
+    "casesPassed": 35,
+    "desktopAndMobile": true,
+    "syntheticNoteShownAfterOidc": true,
+    "anonymousContextAfterOwnerReadDenied": true,
+    "publicHtmlNoteAbsent": true,
+    "realTimeExpiry": true,
+    "allOwnedProcessesStopped": true,
+    "publicApiOnlyUnconfiguredResponse": true,
+    "realGoogleIdentityUsed": false,
+    "productionAction": false
+  },
+  "newCoverage": {
+    "scope": "Successful public ranking and authenticated private note in the same app process",
+    "existingOneMemberFixtureParsesUnderActualReadContract": true,
+    "checksExactFrozenRankingBeforeAfterAndFreshAnonymous": true,
+    "exactBuildBrowserExecutionPending": true
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "schema": "stockinsider-launch-weekly-thesis-evidence-v1",
+  "issue": 395,
+  "baseCommit": "8661a8b97a09dc88965b4228a2132c18e3c44182",
+  "environment": {
+    "kind": "contabo_isolated_staging",
+    "node": "22.23.1",
+    "postgres": "17.11",
+    "typescriptTestRuntime": "5.9.3",
+    "availableDiskMiB": 25306,
+    "availableMemoryMiB": 4030
+  },
+  "proof": {
+    "nodeTestsPassed": 23,
+    "typescriptSyntax": "pass",
+    "databasePatch": "pass_synthetic_admission_and_audit_inputs",
+    "baselineStaleEpsAssertionReproduced": true,
+    "epsRetainsCorrectionAndRefusesComparisonWithoutBasis": true,
+    "weeklyCadence": "first_admitted_taipei_session_and_new_input",
+    "sameWeekReplayRejected": true,
+    "incompleteOrStaleBatchAtomic": true,
+    "legacyHomeUnchangedByLaunchRecord": true,
+    "legacyRecordStillRefreshesHome": true
+  },
+  "fullCloudBuild": false,
+  "protectedReview": false,
+  "liveWeeklyFlow": false,
+  "productionMutation": false
+}

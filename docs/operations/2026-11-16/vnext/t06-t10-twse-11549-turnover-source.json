@@ -1,0 +1,83 @@
+{
+  "schema": "stockinsider-twse-11549-turnover-source-v1",
+  "recordedAt": "2026-11-16T12:59:01Z",
+  "baseCommit": "aa07bde41a91501ed4730813e90304dfc6bac41b",
+  "workItems": [
+    391,
+    395
+  ],
+  "scope": "TWSE 11549 same-session raw capture, verified PostgreSQL amount facts and lookup via the existing owned source worker",
+  "authoritativeSourceCatalog": "https://data.gov.tw/dataset/11549",
+  "license": "Taiwan Open Government Data License 1.0",
+  "attribution": "Securities and Futures Bureau, Financial Supervisory Commission / Taiwan Stock Exchange",
+  "realReceipt": {
+    "sourceUrl": "https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL?response=open_data",
+    "datasetId": 11549,
+    "observedAt": "2026-11-16T12:43:02.029326+00:00",
+    "reportedSession": "2026-11-16",
+    "actualTaipeiDate": "2026-11-16",
+    "reportedContentType": "text/csv",
+    "sha256": "568dad96c525b1dae3f72e4fc1f94edc3491c1fee988fc8a97d0fb9e13433000",
+    "bytes": 139108,
+    "records": 1390,
+    "widths": [
+      11
+    ],
+    "header": [
+      "日期",
+      "證券代號",
+      "證券名稱",
+      "成交股數",
+      "成交金額",
+      "開盤價",
+      "最高價",
+      "最低價",
+      "收盤價",
+      "漲跌價差",
+      "成交筆數"
+    ],
+    "fourDigitCodes": 1099,
+    "pointInTimeActual": true,
+    "fourDigitAmountsParsed": 1099,
+    "rawCopyInContaboStaging": true,
+    "rawCopyInGit": false,
+    "rawPrivateContentUsed": false
+  },
+  "nativeCatalog": {
+    "relevantPrecedingMigrations": 40,
+    "allFiveRoutineMetadataIdentical": true,
+    "rolledBack": true,
+    "officialCurrentBytesThroughActualDeriveEntry": true,
+    "oldRequestedDateRejected": true,
+    "unrelatedBroaderChainRejected": true,
+    "broaderChainFailure": {
+      "migration": "20261116_12_vnext_launch_supported_breadth_v1.sql",
+      "reason": "launch_supported_breadth_action_predecessor_changed",
+      "expectedSha256": "c07bcd37733ac56bc19ceae90042e8def5c567324a41f8ae3d2cfab58e76179a",
+      "predecessorSourceBodySha256": "e91a4f123784a6482051d5426a2e5d4784983b5b9b7259bf48b190a61ef04407",
+      "excludedFromTargetedValidation": [
+        "20261116_12",
+        "20261116_13",
+        "20261116_17"
+      ]
+    }
+  },
+  "validation": {
+    "nativeFixturePassed": true,
+    "transportTestsPassed": 17,
+    "lintPassed": true,
+    "typescriptPassed": true,
+    "nextVersion": "16.3.4",
+    "productionBuildPassed": true,
+    "staticPages": 92
+  },
+  "primaryDatabaseWrites": false,
+  "releaseDeployed": false,
+  "additionalSubscriptions": false,
+  "remaining": [
+    "apply through signed isolated writer and ready receipt",
+    "collect or verify twenty equivalent official sessions",
+    "bind TWSE turnover to qualification and frozen evidence",
+    "review broader action/breadth prerequisite before release"
+  ]
+}

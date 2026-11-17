@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "stockinsider-t19-legacy-subscriber-role-witness-v1",
+  "scope": "Contabo isolated staging PostgreSQL 17.11, exact existing disposable schema and synthetic reports/users",
+  "nativeTestsPassed": 7,
+  "nativeTapSha256": "331eadf2fc4e79539cdcccdd474226a554ed436974b14d6a1ccfd596ee795aae",
+  "subscriberLookup": {
+    "functionBodyRetained": true,
+    "independentSearchPath": true,
+    "sourceOwnerCanExecute": false,
+    "sourceSchemaUsage": false,
+    "legacyCallerCases": 4,
+    "accessSurface": "report helpers and row security",
+    "synthetic": true
+  },
+  "rolesRetested": [
+    "anon",
+    "authenticated non-subscriber",
+    "authenticated subscriber",
+    "service_role"
+  ],
+  "plannerBackendBehaviorRetested": true,
+  "existingSourceNamespaceGrantApplied": false,
+  "sourceExtractFullAcceptance": false,
+  "independentProtectedReview": false,
+  "ownedBackendProcessesSettled": true,
+  "ephemeralContainerRemoved": true,
+  "formalServiceSignaturesMatched": true
+}

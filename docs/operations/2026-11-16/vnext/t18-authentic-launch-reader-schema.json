@@ -1,0 +1,329 @@
+{
+  "schema": "stockinsider-t18-authentic-launch-reader-schema-v1",
+  "dayUtc": "2026-11-16",
+  "archiveDate": "2026-09-19",
+  "engineeringCommit": "d2eb70293ef3ec7d75a0138d971e96967ffa3d0d",
+  "harnessRevision": "005a94e2bd99ed4d3d8964220ef41efb7575bda6",
+  "stageAdapterSha256": "ac9acdca312455660f1a44a5532b4e339f66d98944cf2a3ddb9f871e18a8a8ad",
+  "plan": {
+    "prefix": [
+      [
+        "20261022_vnext_analysis_sources_v1.sql",
+        "38ebaa113cc2bde07ad3215196bfa898ca0874bd6a1306a142efd740244ffc20"
+      ],
+      [
+        "20261022_vnext_thesis_audit_v1.sql",
+        "ca57c6da05359e25c1bb238bfc47128ea06a7dedb9e01f9c2668f85e196536a4"
+      ],
+      [
+        "20261022_vnext_source_withdrawals_v1.sql",
+        "b383be15890450ee301c756045c6bfa8754804959bffc2d71e1f7a1408ee5a48"
+      ],
+      [
+        "20261022_vnext_cached_admission_v2.sql",
+        "a2afbf1436444918379edb29787b051da2fc57a51776f473fc8ad620fdf59eec"
+      ],
+      [
+        "20261022_vnext_terminal_failure_slots_v1.sql",
+        "20d41e89a29a44515980aa8c51bde2f221cd8a09527a57a188bf4e1ea7162fdb"
+      ],
+      [
+        "20261022_vnext_financial_status_text_v1.sql",
+        "b1fc0a4650a0d39f5f8f8e07bdb7e83eeaa3816561bc575a6ff74b8f38f53460"
+      ],
+      [
+        "20261022_vnext_issuer_ir_sources_v1.sql",
+        "da2b2ccfbedccb0b46f12fe1ee55555d8df14195883a9e603791f3640cc49435"
+      ],
+      [
+        "20261022_vnext_semantic_score_fence_v1.sql",
+        "548c4df2b9003b1d857a004baadc0b08d27d8d3f90d03ae6ef3d2f4a15d7820b"
+      ],
+      [
+        "20261022_vnext_catalyst_criteria_v1.sql",
+        "35ededaf19661f62337654863cdfe6746dff5956780da9373d55cc19179145d7"
+      ],
+      [
+        "20261022_vnext_dimensionless_arithmetic_v1.sql",
+        "61b838614afe16ca788154828c7f818f8d4be58104402be5db7fbe2231509721"
+      ],
+      [
+        "20261022_vnext_target_exit_v1.sql",
+        "8a49259e95d6557ac4b7a8a74d90500b0d180735f396fbf1490f337b711bf441"
+      ],
+      [
+        "20261022_vnext_preparation_read_v1.sql",
+        "c6c0c63293f8e93e367a36736dde8d5bf896dc7310f16df25776ddca2f77e686"
+      ],
+      [
+        "20261023_vnext_trading_invalidity_exit_v1.sql",
+        "6c904052b5994dc02fe047dcedf95ae64498df489824d08a7b11b62a1685d59f"
+      ],
+      [
+        "20261023_vnext_roster_current_fence_v1.sql",
+        "256960f51e6ec1c43393a243b00e7d385c40a495094b67127c16fd46322a79f2"
+      ],
+      [
+        "20261023_vnext_catalyst_cancellation_v1.sql",
+        "f26d483a8bf4ce0e12dd21c350dde7f51231be327e223e6efa8877dfa834c22d"
+      ],
+      [
+        "20261023_vnext_target_profiles_v1.sql",
+        "d377920d0ef9cab5ac42c40f00127baf75f06167979068d2b02ab8e896112624"
+      ],
+      [
+        "20261023_vnext_business_criteria_v1.sql",
+        "5385809932404223e2c2a7652c4a6e5fb2f3d8b88f68c9db1edb9a2719093c8b"
+      ],
+      [
+        "20261023_vnext_forecast_sources_v1.sql",
+        "45de5d9f23360a244c67c460a3a8de619737facab081af127ec45431ad1a4f90"
+      ],
+      [
+        "20261023_vnext_corporate_action_terms_v1.sql",
+        "e2793bdedb98feb506061d712c4ae611faa07f7026e92adf0060f3e7bc529d63"
+      ]
+    ],
+    "readers": [
+      [
+        "20261115_vnext_launch_source_facts_v1.sql",
+        "dd166f94c1c7e0e1f800b68cec85deafa934d06a7a04b38ef27a05deb5ed548d"
+      ],
+      [
+        "20261115_vnext_launch_ranking_v1.sql",
+        "37e41a95505e762b80b290b7bee4f2e8efd748eee6b2c316355a68dfcd7b1779"
+      ],
+      [
+        "20261115_vnext_launch_index_backfill_v1.sql",
+        "8aca7718c93619cd66c266321d48d915a9ac198e9a2d0cf9f0f0874d04d21c6b"
+      ],
+      [
+        "20261116_01_vnext_launch_outcome_signals_v1.sql",
+        "f992d105153e12f94657325c8632b91e75ede1e02d93fa41aca6e765eea47b4e"
+      ],
+      [
+        "20261116_02_vnext_launch_outcome_versions_v1.sql",
+        "e4ca75f2c263bbf6156e7c88bb889a36a167c99ce40b59731a5324eb1385ee6e"
+      ],
+      [
+        "20261116_03_vnext_launch_outcome_batch_v1.sql",
+        "d37d559d5e91125e1243e732f0254c6ccb6061d7cb34881ed911d9b0be388197"
+      ],
+      [
+        "20261116_04_vnext_launch_outcome_public_v1.sql",
+        "c3bec96e3524a9eab08cc53529440e4f0580cce035d79ba823b5059df620344a"
+      ]
+    ]
+  },
+  "nativeVerification": {
+    "firstRejected": {
+      "launchNativeControl": false,
+      "attempted": 17,
+      "phase": "migrations/20261023_vnext_corporate_action_terms_v1.sql",
+      "code": "P0001",
+      "token": "vnext_action_prerequisites"
+    },
+    "secondRejected": {
+      "launchNativeControl": false,
+      "attempted": 20,
+      "phase": "migrations/20261115_vnext_launch_ranking_v1.sql",
+      "code": "P0001",
+      "token": "launch_existing_private_owner_profile_changed"
+    },
+    "successfulSequence": {
+      "launchNativeControl": true,
+      "attempted": 26,
+      "rolledBack": true,
+      "ranking": true,
+      "outcome": true,
+      "disabled": true
+    },
+    "ownerProfileBeforeAndAfter": {
+      "privateOwnerProfile": {
+        "roles": [
+          {
+            "name": "opportunity_v3_rpc_owner",
+            "canLogin": false,
+            "createDb": false,
+            "bypassRls": false,
+            "superuser": false,
+            "createRole": false,
+            "replication": false,
+            "hasRoleConfig": false
+          },
+          {
+            "name": "stockinsider_vnext_owner",
+            "canLogin": false,
+            "createDb": false,
+            "bypassRls": false,
+            "superuser": false,
+            "createRole": false,
+            "replication": false,
+            "hasRoleConfig": false
+          }
+        ],
+        "memberships": [
+          {
+            "member": "postgres",
+            "setOption": true,
+            "adminOption": false,
+            "grantedRole": "opportunity_v3_rpc_owner",
+            "inheritOption": true
+          }
+        ]
+      },
+      "ownerCorrection": {
+        "performed": true,
+        "rightsPreserved": true,
+        "remainingMemberships": 0
+      }
+    }
+  },
+  "genuine": {
+    "authenticated": true,
+    "integrity": {
+      "foreignKeys": 288,
+      "rlsTables": 193
+    },
+    "preMigrationLaunchReadpoint": {
+      "ranked": null,
+      "session": null,
+      "status": "SCHEMA_MISSING"
+    },
+    "publication": {
+      "installedCatalogSha256": "da8abbcfc5aa4cf1eed9c03c4528a6dbc936d85ec6dba8d81103dd7021f8775a",
+      "namespaceSha256": "4d810effe8ca7fa2a532a3f7ab5f3e286d4f155af659ee4fb232c2eb670e18cb",
+      "productionAuthorized": false,
+      "profile": "contabo-t18-sealed-archive-2026-09-19",
+      "steps": 26
+    },
+    "legacyWriter": {
+      "archiveIdentityFenceDisarmed": true,
+      "archivedReleaseRecognized": true,
+      "leaseAbsentAfterCommit": true,
+      "leaseAcquired": true,
+      "leaseFunctionsMatched": true,
+      "leaseReleased": true,
+      "localReleaseBinding": true,
+      "localWriterHeaderCleared": true,
+      "migrated": [
+        "legacy",
+        "provider",
+        "summary"
+      ],
+      "negative": {
+        "code": "42501",
+        "fenceContext": true,
+        "legacyModeUpdate": false,
+        "token": "production_writer_release_rejected"
+      },
+      "sameLegacyFailureIsolated": true,
+      "transactionalLegacyCommitted": true,
+      "unchangedModeDisabled": true,
+      "writerFenceStillInstalled": true
+    },
+    "legacyMode": {
+      "enabled": false,
+      "fenced": true,
+      "jobs": 0,
+      "published": 0,
+      "routines": 15
+    },
+    "launchSchema": {
+      "authorityAttempted": [
+        "20261022_vnext_analysis_sources_v1.sql",
+        "20261022_vnext_thesis_audit_v1.sql",
+        "20261022_vnext_source_withdrawals_v1.sql",
+        "20261022_vnext_cached_admission_v2.sql",
+        "20261022_vnext_terminal_failure_slots_v1.sql",
+        "20261022_vnext_financial_status_text_v1.sql",
+        "20261022_vnext_issuer_ir_sources_v1.sql",
+        "20261022_vnext_semantic_score_fence_v1.sql",
+        "20261022_vnext_catalyst_criteria_v1.sql",
+        "20261022_vnext_dimensionless_arithmetic_v1.sql",
+        "20261022_vnext_target_exit_v1.sql",
+        "20261022_vnext_preparation_read_v1.sql",
+        "20261023_vnext_trading_invalidity_exit_v1.sql",
+        "20261023_vnext_roster_current_fence_v1.sql",
+        "20261023_vnext_catalyst_cancellation_v1.sql",
+        "20261023_vnext_target_profiles_v1.sql",
+        "20261023_vnext_business_criteria_v1.sql",
+        "20261023_vnext_forecast_sources_v1.sql",
+        "20261023_vnext_corporate_action_terms_v1.sql"
+      ],
+      "authorityCommitted": true,
+      "failure": null,
+      "leasesCleared": true,
+      "privateOwnerCorrection": {
+        "performed": true,
+        "remainingMemberships": 0,
+        "rightsPreserved": true
+      },
+      "privateOwnerProfile": {
+        "memberships": [
+          {
+            "adminOption": false,
+            "grantedRole": "opportunity_v3_rpc_owner",
+            "inheritOption": true,
+            "member": "postgres",
+            "setOption": true
+          }
+        ],
+        "roles": [
+          {
+            "bypassRls": false,
+            "canLogin": false,
+            "createDb": false,
+            "createRole": false,
+            "hasRoleConfig": false,
+            "name": "opportunity_v3_rpc_owner",
+            "replication": false,
+            "superuser": false
+          },
+          {
+            "bypassRls": false,
+            "canLogin": false,
+            "createDb": false,
+            "createRole": false,
+            "hasRoleConfig": false,
+            "name": "stockinsider_vnext_owner",
+            "replication": false,
+            "superuser": false
+          }
+        ]
+      },
+      "readProjection": {
+        "inReadOnlyTransaction": true,
+        "launchDisabled": true,
+        "noMemberRows": true,
+        "noSnapshotRows": true,
+        "outcomeReturnedNull": true,
+        "readerReturnedUnavailable": true,
+        "rolesVerified": true
+      },
+      "readerAttempted": [
+        "20261115_vnext_launch_source_facts_v1.sql",
+        "20261115_vnext_launch_ranking_v1.sql",
+        "20261115_vnext_launch_index_backfill_v1.sql",
+        "20261116_01_vnext_launch_outcome_signals_v1.sql",
+        "20261116_02_vnext_launch_outcome_versions_v1.sql",
+        "20261116_03_vnext_launch_outcome_batch_v1.sql",
+        "20261116_04_vnext_launch_outcome_public_v1.sql"
+      ],
+      "readerCommitted": true
+    },
+    "nextRollback": "NOT_RUN",
+    "holdRetained": true
+  },
+  "host": {
+    "formalSignaturesMatched": true,
+    "minimumDiskBytes": 17189265408,
+    "minimumAvailableMemoryBytes": 3997614080,
+    "cleanup": {
+      "scratchRootsRemoved": 2,
+      "allStagingUnitsInactive": true,
+      "diskBytes": 26111676416,
+      "memoryAvailableBytes": 4568801280
+    }
+  }
+}

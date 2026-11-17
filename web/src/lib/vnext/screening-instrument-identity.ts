@@ -1,6 +1,6 @@
 /** Bounded shared-cache read, not financial or source qualification authority. */
 import type {getSupabaseServerClient} from '../supabase-server';
-import {currentPreparationInstrument,PREPARATION_INSTRUMENT_COLUMNS} from './preparation-trading-identity.ts';
+import {currentPreparationInstrument} from './preparation-trading-identity.ts';
 type Row=Record<string,unknown>;
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/u;
 export async function readCurrentScreeningInstruments(client:ReturnType<typeof getSupabaseServerClient>,symbols:string[],cutoff:string){
@@ -19,27 +19,17 @@ export async function readCurrentScreeningInstruments(client:ReturnType<typeof g
   const prior=ids.get(row.id);if(prior){conflicts.add(prior);conflicts.add(row.symbol);}
   master.set(row.symbol,row);ids.set(row.id,row.symbol);
  }
- const stockIds=[...ids.keys()];
- if(!stockIds.length)return unavailable('official_stock_cache_empty');
- // Preserve the original 2000-row shared bound. Two bounded indexes are needed:
- // symbol corrections and same-stock symbol changes must both be visible.
- // Each has one overflow sentinel; overflow defers, never truncates into health.
- const bySymbol=await client.from('stock_instruments_v3').select(PREPARATION_INSTRUMENT_COLUMNS).in('symbol',symbols).order('recorded_at',{ascending:false}).limit(1001);
- const byStock=await client.from('stock_instruments_v3').select(PREPARATION_INSTRUMENT_COLUMNS).in('stock_id',stockIds).order('recorded_at',{ascending:false}).limit(1001);
- if(bySymbol.error||byStock.error)throw Error('vnext_shared_instrument_cache_unavailable');
- if(!Array.isArray(bySymbol.data)||!Array.isArray(byStock.data)||bySymbol.data.length>1000||byStock.data.length>1000)return unavailable('shared_roster_cache_unbounded');
- const union=new Map<string,Row>();
- const bytes=(row:Row)=>JSON.stringify(Object.fromEntries(Object.keys(row).sort().map(key=>[key,row[key]])));
- for(const row of [...bySymbol.data,...byStock.data] as Row[]){
-  if(!row||typeof row.instrument_authority_id!=='string'||!uuid.test(row.instrument_authority_id)||typeof row.symbol!=='string'||typeof row.stock_id!=='string'||!symbols.includes(row.symbol)&&!stockIds.includes(row.stock_id))return unavailable('shared_roster_identity_unavailable');
-  const existing=union.get(row.instrument_authority_id);
-  if(existing&&bytes(existing)!==bytes(row))return unavailable('shared_roster_observation_changed_during_read');
-  union.set(row.instrument_authority_id,row);
- }
+ if(!ids.size)return unavailable('official_stock_cache_empty');
+ const snapshot=await client.rpc('vnext_screen_roster_heads_v1',{p_symbols:symbols,p_cutoff:cutoff});
+ if(snapshot.error)throw Error('vnext_shared_instrument_cache_unavailable');
+ const heads=snapshot.data as Record<string,unknown>|null;
+ if(!heads||typeof heads!=='object'||Array.isArray(heads)||Object.keys(heads).length!==symbols.length
+   ||symbols.some(symbol=>!Object.hasOwn(heads,symbol)))return unavailable('shared_roster_identity_unavailable');
  for(const symbol of symbols){
   const stock=master.get(symbol);
   if(!stock||conflicts.has(symbol)){gaps.set(symbol,'shared_stock_identity_missing_or_ambiguous');continue;}
-  const selected=currentPreparationInstrument([...union.values()].filter(row=>row.symbol===symbol||row.stock_id===stock.id),{stockId:String(stock.id),symbol,cutoff});
+  const head=heads[symbol];
+  const selected=currentPreparationInstrument(head===null?[]:[head],{stockId:String(stock.id),symbol,cutoff});
   if(selected.status!=='current'){gaps.set(symbol,selected.reason);continue;}
   identities.set(symbol,selected.instrument);
  }

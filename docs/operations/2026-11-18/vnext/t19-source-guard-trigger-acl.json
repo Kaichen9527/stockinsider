@@ -1,0 +1,137 @@
+{
+  "schemaVersion": "stockinsider-t19-source-guard-trigger-acl-v1",
+  "recordedAt": "2026-11-17T16:40:58Z",
+  "candidateParent": "a0afa25b13399f48d56ddd5c5225b9fbf6484b70",
+  "scope": "Disposable Contabo staging PostgreSQL with a captured predecessor schema and synthetic inputs",
+  "postgresVersion": "17.11 (Debian 17.11-1.pgdg12+2)",
+  "fixtureImageDigest": "sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+  "networkMode": "none",
+  "guardTriggerBoundary": {
+    "existingBindingsByFunction": {
+      "public.enforce_production_writer_fence()": 20,
+      "public.fence_research_paper_book_append_v1()": 1,
+      "public.fence_research_strategy_record_v1()": 1
+    },
+    "procedureIdentityDefinitionAndBindingsRetained": true,
+    "effectiveExecuteDeniedAfter": [
+      "anon",
+      "authenticated",
+      "service_role",
+      "research_source_fence_owner_v2"
+    ],
+    "sourceOwnerNonOwnedPublicDefinersAfter": [],
+    "strategyWeeklyLimitAndPaperLineageRetained": true,
+    "allPublicRowsUnchanged": true,
+    "sourceNamespaceGrantApplied": false
+  },
+  "sourceWriterControl": {
+    "writerLeaseAcquired": true,
+    "nextTrigger": "research_source_fence_record_v2",
+    "currentNamespaceFailureSqlstate": "42501",
+    "transactionRolledBack": true,
+    "allPublicTableRowsUnchanged": true
+  },
+  "nativeTapSha256": "4658aadee6dd37271363ebf00cd246234c742df67b9986710147ab7da20fca04",
+  "nativeTests": {
+    "tests": 11,
+    "pass": 11,
+    "fail": 0,
+    "skipped": 0
+  },
+  "sourceSha256": {
+    "migrations/20261117_47_vnext_source_guard_trigger_acl_v1.sql": "2f0f78254df4882b8b8655d2ed372af0accdb4591a32d3a75da7f2ac374e68da",
+    "scripts/vnext-internal-candidate-plan-acl-postgres.test.mjs": "83c46aad7550002d772727d3fd9d1fea129c1e0852355db40082bf89845f0dc4",
+    ".github/workflows/stockinsider-vnext-quality.yml": "efbe3de3249c7c5a770e42baa9104de70b87ed8e3d7d486f6d763d336765746c"
+  },
+  "productionServiceReleaseAndTimerSignaturesMatched": true,
+  "ephemeralContainerAndSocketRemoved": true,
+  "remaining": [
+    "Review the restricted source owner routine bodies and confirm the guarded ACL and receipt dependency graph on the full exact predecessor.",
+    "Obtain eligible independent approval for the exact permission graph and verify the leased raw write and HTTP ingestion with authorized source material."
+  ],
+  "protectedGateApproval": false,
+  "productionApplied": false,
+  "receiptTableDependencies": {
+    "scope": "installed catalog, read-only repeatable-read transaction",
+    "receiptRelations": [
+      {
+        "name": "research_source_fence_events_v2",
+        "identities": [
+          "event_id"
+        ],
+        "defaults": [
+          "recorded_at=clock_timestamp()"
+        ],
+        "foreignKeyTargets": [],
+        "cascadingForeignKeys": 0,
+        "policies": [],
+        "rules": 0,
+        "expressionOrPartialIndexes": 0,
+        "userTriggers": [
+          {
+            "enabled": "O",
+            "function": "reject_research_source_receipt_mutation_v2()",
+            "eventMask": 27,
+            "securityDefiner": false,
+            "definitionSha256": "e8f1b05536066148c6e2c69f460a7ba715e75ed1c8dd3418e4ce2092dd12da92"
+          }
+        ]
+      },
+      {
+        "name": "research_source_seal_invalidations_v2",
+        "identities": [],
+        "defaults": [],
+        "foreignKeyTargets": [
+          "research_source_fence_events_v2",
+          "research_source_seals_v2"
+        ],
+        "cascadingForeignKeys": 0,
+        "policies": [],
+        "rules": 0,
+        "expressionOrPartialIndexes": 0,
+        "userTriggers": [
+          {
+            "enabled": "O",
+            "function": "reject_research_source_receipt_mutation_v2()",
+            "eventMask": 27,
+            "securityDefiner": false,
+            "definitionSha256": "e8f1b05536066148c6e2c69f460a7ba715e75ed1c8dd3418e4ce2092dd12da92"
+          }
+        ]
+      },
+      {
+        "name": "research_source_seals_v2",
+        "identities": [],
+        "defaults": [
+          "seal_id=gen_random_uuid()",
+          "received_at=clock_timestamp()"
+        ],
+        "foreignKeyTargets": [],
+        "cascadingForeignKeys": 0,
+        "policies": [
+          {
+            "name": "input_preparation_seal_read_v2",
+            "check": null,
+            "roles": [
+              "research_input_preparation_owner_v2"
+            ],
+            "using": "true",
+            "command": "r"
+          }
+        ],
+        "rules": 0,
+        "expressionOrPartialIndexes": 0,
+        "userTriggers": [
+          {
+            "enabled": "O",
+            "function": "reject_research_source_receipt_mutation_v2()",
+            "eventMask": 27,
+            "securityDefiner": false,
+            "definitionSha256": "e8f1b05536066148c6e2c69f460a7ba715e75ed1c8dd3418e4ce2092dd12da92"
+          }
+        ]
+      }
+    ],
+    "nativeSourceGrantExecuted": false
+  }
+}

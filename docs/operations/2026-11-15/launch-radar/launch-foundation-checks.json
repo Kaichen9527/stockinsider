@@ -1,0 +1,875 @@
+{
+  "schema": "stockinsider-launch-source-foundation-checkpoint-v1",
+  "observedAt": "2026-11-14T22:49:29.817980+00:00",
+  "localValidationCommit": "bd6bf3e56c4b7161ba7d76a4a65bc28289857f6c",
+  "publicSourceCommit": "d68f5a33b8345e66fe324749101bd1f92abfdcc0",
+  "sourceTree": "c0c297ff80d6debc2b015077695f8c111969bafb",
+  "webTree": "7be3cb1feb32488993b5e95e69489f7e2a897073",
+  "publication": {
+    "schema": "stockinsider-tested-tree-api-publication-v1",
+    "observedAt": "2026-11-14T22:29:35.099398+00:00",
+    "localValidationCommit": "bd6bf3e56c4b7161ba7d76a4a65bc28289857f6c",
+    "publicSourceCommit": "d68f5a33b8345e66fe324749101bd1f92abfdcc0",
+    "baseCommit": "20de30e52792e002fb8b56725c005c3ab0f3017d",
+    "wholeTree": "c0c297ff80d6debc2b015077695f8c111969bafb",
+    "webTree": "7be3cb1feb32488993b5e95e69489f7e2a897073",
+    "treeEqualityVerifiedBeforePublication": true,
+    "soleParentVerifiedBeforePublication": true,
+    "branch": "codex/stockinsider-v2-cloud-nov07",
+    "force": false,
+    "transport": "configured GitHub connector",
+    "normalGitPush": "UNAVAILABLE_NO_HTTPS_IDENTITY_PREVIOUSLY_CONFIRMED_NOT_RETRIED",
+    "secretValuesRead": false,
+    "testsRanPublicCommit": false,
+    "testsRanLocalIdenticalTree": true,
+    "formalA1": "NOT_GRANTED",
+    "nativeHold": "PRESERVED",
+    "originalPrHead": "UNCHANGED"
+  },
+  "sourceInventory": [
+    {
+      "path": "migrations/20261115_vnext_launch_source_facts_v1.sql",
+      "sha256": "de64932744b0e81105953bb49d1461e272e1e9c978f17b0f1ebb3ffda905bb37"
+    },
+    {
+      "path": "scripts/vnext-launch-source-facts-source.test.mjs",
+      "sha256": "4a756c4b0967b5009d0d6bf4bae917612ee76dd8965f049022e3cf390c1143bd"
+    },
+    {
+      "path": "web/e2e/launch-citation.spec.ts",
+      "sha256": "680bdd3eac178fca60e8098b74a8956b3644f2c3533658f57eb3119228f85024"
+    },
+    {
+      "path": "web/e2e/launch-ranking.spec.ts",
+      "sha256": "0896ffc33c095156286e0496c45c87612a7662555c3d030873c3107ada9de1e6"
+    },
+    {
+      "path": "web/playwright.launch-citation.config.ts",
+      "sha256": "ebae6443667466ecbaaa8a556024f0d160cadab0c2aa3f348d18f0c4dba4ab23"
+    },
+    {
+      "path": "web/scripts/launch-ranking-binary64-vectors.sql",
+      "sha256": "94f4f3217fadfc3e5087aae800f0bb7bc5cab2f55c29354551d796f3019e77cb"
+    },
+    {
+      "path": "web/scripts/launch-ranking-browser-bridge.mjs",
+      "sha256": "efc4007836c85680e1c4134d9a0bbb780d68a81c06a2c628516a248d7c38e725"
+    },
+    {
+      "path": "web/scripts/launch-ranking-wire-replay.md",
+      "sha256": "3275dcd0173b574532f50def7091cae4ff683d8ac325c0b00a1e834aafbdebfb"
+    },
+    {
+      "path": "web/scripts/launch-ranking-wire-replay.mjs",
+      "sha256": "adc24570ccdc1fedadc4731df43fdd66a97372ecac5803e9b45702d7f520abc1"
+    },
+    {
+      "path": "web/scripts/launch-ranking-wire-replay.test.mjs",
+      "sha256": "858c556c4605c5f2cbf1726c822f694e3748c8066d29dd911590fe18eec620c1"
+    },
+    {
+      "path": "web/src/app/api/internal/radar-preliminary-publish/route.ts",
+      "sha256": "150da7ea1b167912e0b607ab0e1b2d50aad44ecae0e76f3cdf79c4cbc31848a2"
+    },
+    {
+      "path": "web/src/app/api/internal/taiwan-data-queue-drain/route.ts",
+      "sha256": "4f8e37c42425d1185a6c1305a46b2d43c939bde2536b8763611361638ab8bce4"
+    },
+    {
+      "path": "web/src/app/api/launch-ranking/route.ts",
+      "sha256": "c678c7f5e2f45886b64c5f8831d7d87ff8326ad683c91d5746b77934bc257381"
+    },
+    {
+      "path": "web/src/app/components/vnext/LaunchDetail.tsx",
+      "sha256": "3fb3aeea4fbf03594363fd207f6e32210f82668ad8b7602ee66c5da0b3fe2f59"
+    },
+    {
+      "path": "web/src/lib/public-source-url.ts",
+      "sha256": "4800b3434f1de7b26dfe4bcd08ad03ddf572ebec02754add69aa545f3e4e5fe9"
+    },
+    {
+      "path": "web/src/lib/radar-public-snapshot.ts",
+      "sha256": "5f8bd0d9a14e1963734456f7917fae74b80ce8470c546b2e69be43cb47ec8ae5"
+    },
+    {
+      "path": "web/src/lib/vnext/citations.test.ts",
+      "sha256": "b6375fd9160a70e5f8158027595ebeea2a59aa8ddb9d595d7f88d870db24487e"
+    },
+    {
+      "path": "web/src/lib/vnext/citations.ts",
+      "sha256": "fc1e8b57b6d34778bba10a7dbe5fc83b12b95509d2b955ecc643275cd837e7ed"
+    },
+    {
+      "path": "web/src/lib/vnext/discovery-test-loader.mjs",
+      "sha256": "9941f5a5604ee042f5f1fc8d1214341eda421d5d819a6757cad9abd9a485a970"
+    },
+    {
+      "path": "web/src/lib/vnext/http.ts",
+      "sha256": "e21e026b65ee7194c74aa8c52ef07653c5e76b33e8d55a4a79b789ed88e3078f"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-citation.test-fixture.ts",
+      "sha256": "c026cc8712cc1f3e7fef352e39def67caff96eb586f597e54ca2258cdb98bb2f"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-cutover.test.ts",
+      "sha256": "2d301af3750c3be93ccf32a15fa9abf9bc490cc74894107335d860ac0e5ab50a"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-cutover.ts",
+      "sha256": "cee557629d6a64a6cb4f45a32534da62f6c6f65ae97040bd82eed25078cc6c18"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-public-api.test.ts",
+      "sha256": "787577425d4a3a43cf41a190e2fe10b85d331ed3f7407739c49c46b829c3a7b6"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-public-citation.test.ts",
+      "sha256": "53d790a9bb520cf154047d5180de62d2888f6b7a77aae9c75055e0dfb8748a43"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-public-citation.ts",
+      "sha256": "7158d9571855a8085fcb7b9170e4c5452def1cecca5bcd20143ed0c4b588ec6a"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-ranking-command.test.ts",
+      "sha256": "68095361de359d1bd2e4eb2379b725cf5de9eca66a5411524ac9ac9108099a0a"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-ranking-command.ts",
+      "sha256": "31a53e7dbcb885bcec76c92b218f49d0fcb7c15b3cb854c7ccf14c6882f072c3"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-ranking-read.test.ts",
+      "sha256": "a02503ab8b68a20e44cf38010b127fa3b80ce04b12a1663bbee0a15a2ab83d7e"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-ranking-read.ts",
+      "sha256": "0830c34dac80ba1ff96eac2d4dac703035228b4977705eb092deab8e470cb9ec"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-ranking-wire.test.ts",
+      "sha256": "5774cf2ca928338a9b7f99803988840bc3d41ab8362383001be9ec6508daa0a5"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-ranking.test-fixture.ts",
+      "sha256": "8a4af169d84244362248934d81f5cd7e071e3cfe74e06362421ab9fe532a7f6c"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-source-store.test.ts",
+      "sha256": "d40b60e460ef6917b4a74df2c81d70fbc62e25d6991dd2a78a2ac76c69b41ccf"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-source-store.ts",
+      "sha256": "140bd6775a8068b3e70dab946f88ba12e74610ecc4604142ad7698446afa06b1"
+    },
+    {
+      "path": "web/src/lib/vnext/preparation-reconciliation.test.ts",
+      "sha256": "63561f86ca6bb76a5646da8f9c4fe7b5697d020451e3233919186081da5efba1"
+    },
+    {
+      "path": "web/src/lib/vnext/ranking-command.ts",
+      "sha256": "f0dfb2ede623fdf24a0f4d3b086f9fe1c0a41f52363a83b8ed044614ee36f12c"
+    },
+    {
+      "path": "web/src/lib/vnext/research-cycle.ts",
+      "sha256": "27a99b73c877c8972ffe553fd02a5cb4c46e323a629d06354aae6abe9e8aa65f"
+    },
+    {
+      "path": "web/src/lib/vnext/research-failure.test.ts",
+      "sha256": "7d67c212a646b605c9028470f48d85957aeb077c6aefe23b7b61fb3a66729020"
+    }
+  ],
+  "verification": {
+    "totalUnitCases": 649,
+    "core": 625,
+    "binary64Wire": 16,
+    "publicCitation": 8,
+    "skipped": 0,
+    "checks": [
+      {
+        "name": "core",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/vnext/top10-projection.test.ts",
+          "web/src/lib/vnext/published-target-read.test.ts",
+          "web/src/lib/vnext/ranking-read.test.ts",
+          "web/src/lib/vnext/launch-page-dispatch.test.ts",
+          "web/src/lib/vnext/launch-source-store.test.ts",
+          "web/src/lib/vnext/launch-ranking-command.test.ts",
+          "web/src/lib/vnext/launch-cutover.test.ts",
+          "scripts/vnext-launch-source-facts-source.test.mjs",
+          "web/src/lib/vnext/candidate-page.test.ts",
+          "web/src/lib/stock-chart-calendar.test.ts",
+          "web/src/app/components/vnext/detail-source.test.mjs",
+          "scripts/vnext-ranking-snapshot-source.test.mjs",
+          "web/src/lib/ptt-article-parser.test.ts",
+          "web/src/lib/vnext/launch-official-replay.test.ts",
+          "web/src/lib/vnext/launch-licensed-csv.test.ts",
+          "web/src/lib/vnext/launch-native-volume.test.ts",
+          "web/src/lib/vnext/launch-institutional-volume.test.ts",
+          "web/src/lib/vnext/launch-institutional-selection.test.ts",
+          "web/src/lib/vnext/launch-licensed-5274.test.ts",
+          "web/scripts/launch-official-replay.test.mjs",
+          "web/src/lib/ptt-mention-provenance.test.ts",
+          "web/src/lib/ptt-policy.test.ts",
+          "scripts/ptt-mention-provenance-boundary.test.mjs",
+          "web/src/lib/vnext/launch-score.test.ts",
+          "web/src/lib/vnext/launch-score-rules.test.ts",
+          "web/src/lib/vnext/owner-oidc.test.ts",
+          "web/src/lib/vnext/launch-pattern-read.test.ts",
+          "web/src/lib/vnext/private-owner-read.test.ts",
+          "web/src/lib/vnext/launch-patterns.test.ts",
+          "web/src/lib/technical-indicator-adapter.test.ts",
+          "web/src/lib/technical-features-v2.test.ts",
+          "scripts/vnext-linux-restore-candidate.test.mjs",
+          "scripts/local-backup-envelope.test.mjs",
+          "scripts/local-backup-artifact.test.mjs",
+          "scripts/local-backup-lifecycle.test.mjs",
+          "scripts/build-contabo-restore-list.test.mjs",
+          "scripts/export-contabo-database-backup.test.mjs",
+          "scripts/contabo-production-restore-contract.test.mjs",
+          "scripts/contabo-local-backup-cutover.test.mjs",
+          "scripts/rehearse-contabo-database-restore.test.mjs",
+          "scripts/verify-standalone-release.test.mjs",
+          "scripts/package-standalone-release.test.mjs",
+          "web/src/lib/stock-chart-supply.test.ts",
+          "web/src/lib/vnext/business-public.test.ts",
+          "web/src/lib/vnext/vnext.test.ts",
+          "scripts/vnext-staging-preflight.test.mjs",
+          "web/src/lib/vnext/candidate-history-read.test.ts",
+          "scripts/vnext-candidate-history-source.test.mjs",
+          "web/src/lib/candidate-price-history.test.ts",
+          "scripts/vnext-source-window-source.test.mjs",
+          "web/src/lib/vnext/source-volume-boundary.test.ts",
+          "web/src/lib/vnext/analysis-sources.test.ts",
+          "web/src/lib/vnext/source-backlog.test.ts",
+          "web/src/lib/vnext/cached-source-admission.test.ts",
+          "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+          "web/src/lib/vnext/schedule-admission.test.ts",
+          "web/src/lib/vnext/schedule-replay-binding.test.ts",
+          "scripts/vnext-staging-schedule-candidate.test.mjs",
+          "scripts/vnext-candidate-epoch-source.test.mjs",
+          "web/src/lib/source-content-semantics.test.ts",
+          "web/src/lib/vnext/cached-admission.test.ts",
+          "web/src/lib/vnext/current-evidence-read.test.ts",
+          "web/src/lib/vnext/preparation-authority.test.ts",
+          "scripts/vnext-weekly-forecast-source.test.mjs",
+          "web/src/lib/vnext/forecast-active.test.ts",
+          "web/src/lib/vnext/forecast-current.test.ts",
+          "web/src/lib/vnext/thesis.test.ts",
+          "scripts/vnext-staging-execution-boundary.test.mjs",
+          "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+          "web/src/lib/tw-entry-plan-authority.test.ts",
+          "web/src/lib/vnext/preparation-reconciliation.test.ts",
+          "web/src/lib/vnext/research-failure.test.ts"
+        ],
+        "start": "2026-11-14T22:24:52.704247+00:00",
+        "end": "2026-11-14T22:25:06.027127+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 48836608,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29561970688,
+          "/tmp": 9403076608
+        },
+        "resourceViolation": null,
+        "logSha256": "6790b1523ebbc96c12e6c082dc6c5c63c66cdc2f79f210d7b3ebd2e915ddaf3e"
+      },
+      {
+        "name": "wire_unit",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/vnext/launch-ranking-read.test.ts",
+          "web/src/lib/vnext/launch-ranking-wire.test.ts",
+          "web/scripts/launch-ranking-wire-replay.test.mjs"
+        ],
+        "start": "2026-11-14T22:25:06.027913+00:00",
+        "end": "2026-11-14T22:25:07.032531+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 28794880,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29561933824,
+          "/tmp": 9403543552
+        },
+        "resourceViolation": null,
+        "logSha256": "0e821c3516730318e482d5d25c744f3cd4d40a794b749e5c65c6a5b2b9d3155e"
+      },
+      {
+        "name": "citation_unit",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/vnext/citations.test.ts",
+          "web/src/lib/vnext/launch-public-citation.test.ts",
+          "web/src/lib/vnext/launch-public-api.test.ts"
+        ],
+        "start": "2026-11-14T22:25:07.033144+00:00",
+        "end": "2026-11-14T22:25:07.534518+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 31670272,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29561925632,
+          "/tmp": 9403543552
+        },
+        "resourceViolation": null,
+        "logSha256": "1b99c2f5da851f303eb02714a8441a0393211ec27f8d8b7b052b9d4f5066f377"
+      },
+      {
+        "name": "types",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "typecheck"
+        ],
+        "start": "2026-11-14T22:25:07.534892+00:00",
+        "end": "2026-11-14T22:25:21.068211+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 80994304,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29561921536,
+          "/tmp": 9403543552
+        },
+        "resourceViolation": null,
+        "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+      },
+      {
+        "name": "lint",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "lint"
+        ],
+        "start": "2026-11-14T22:25:21.068695+00:00",
+        "end": "2026-11-14T22:25:41.374297+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 81289216,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29561905152,
+          "/tmp": 9403543552
+        },
+        "resourceViolation": null,
+        "logSha256": "438e5d44daf5f0098dce8b2a6dacc1637258fd1f8673d46276a52ba5617d3459"
+      },
+      {
+        "name": "build",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "build"
+        ],
+        "start": "2026-11-14T22:25:41.375117+00:00",
+        "end": "2026-11-14T22:25:46.651617+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 82513920,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29548728320,
+          "/tmp": 9403543552
+        },
+        "resourceViolation": null,
+        "logSha256": "d4055bd1b505948d96fc75cf4fc4dca97b5ca9dcb2a84c0052d0db85067bd16c"
+      },
+      {
+        "name": "owner_browser",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "scripts/owner-oidc-browser-smoke.mjs"
+        ],
+        "start": "2026-11-14T22:25:46.652046+00:00",
+        "end": "2026-11-14T22:26:02.460296+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 127823872,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29470330880,
+          "/tmp": 9280454656
+        },
+        "resourceViolation": null,
+        "logSha256": "c61c6f57fcab640f4473275e89510705acc2a52e2219220c4f38018bc9cdf043"
+      },
+      {
+        "name": "launch_browser",
+        "command": [
+          "python3",
+          "/workspace/stockinsider/work/ptt-official-nov15/launch-foundation-validation-retry1/browser.py"
+        ],
+        "start": "2026-11-14T22:26:02.460766+00:00",
+        "end": "2026-11-14T22:26:22.773302+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 16777216,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29466079232,
+          "/tmp": 9282232320
+        },
+        "resourceViolation": null,
+        "logSha256": "820864c382e6365db15ad7a00b38445a91dea89fb3bcd5d474a3e4e941a88735"
+      },
+      {
+        "name": "citation_browser",
+        "command": [
+          "python3",
+          "/workspace/stockinsider/work/ptt-official-nov15/launch-foundation-validation-retry1/citation-browser.py"
+        ],
+        "start": "2026-11-14T22:26:22.774459+00:00",
+        "end": "2026-11-14T22:26:38.109257+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 16908288,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29461958656,
+          "/tmp": 9272143872
+        },
+        "resourceViolation": null,
+        "logSha256": "24ac05895351e0b0da8db2522ad2df9377a41b659d26e3104b567203c88ee94a"
+      }
+    ],
+    "controlledOwnerBrowser": {
+      "schema": "stockinsider-owner-oidc-local-browser-v1",
+      "buildSource": "bd6bf3e56c4b7161ba7d76a4a65bc28289857f6c",
+      "harnessCommit": "bd6bf3e56c4b7161ba7d76a4a65bc28289857f6c",
+      "runtimeWebTree": "7be3cb1feb32488993b5e95e69489f7e2a897073",
+      "status": "PASS",
+      "cases": 33,
+      "receipts": [
+        "desktop:unauthenticated-http",
+        "desktop:csrf-rejected",
+        "desktop:oidc-owner-secure-cookie-private-empty-state",
+        "desktop:public-html-excludes-owner",
+        "desktop:public-api-unchanged-missing-backend-500-excludes-owner",
+        "desktop:logout-csrf-rejected",
+        "desktop:logout-revokes-server-session",
+        "desktop:nonowner-rejected",
+        "desktop:expired-rejected",
+        "desktop:nonce-rejected",
+        "desktop:issuer-rejected",
+        "desktop:audience-rejected",
+        "desktop:signature-rejected",
+        "desktop:session-real-time-expiry",
+        "desktop:disabled-zero-provider-io",
+        "mobile:unauthenticated-http",
+        "mobile:csrf-rejected",
+        "mobile:oidc-owner-secure-cookie-private-empty-state",
+        "mobile:public-html-excludes-owner",
+        "mobile:public-api-unchanged-missing-backend-500-excludes-owner",
+        "mobile:logout-csrf-rejected",
+        "mobile:logout-revokes-server-session",
+        "mobile:nonowner-rejected",
+        "mobile:expired-rejected",
+        "mobile:nonce-rejected",
+        "mobile:issuer-rejected",
+        "mobile:audience-rejected",
+        "mobile:signature-rejected",
+        "mobile:session-real-time-expiry",
+        "mobile:disabled-zero-provider-io",
+        "http:state-mismatch-zero-token-exchange",
+        "http:consumed-transaction-no-replay",
+        "http:successful-callback-cannot-redeem-twice"
+      ],
+      "counts": {
+        "authorize": 18,
+        "token": 17,
+        "jwks": 1,
+        "pkce": 17
+      },
+      "screenshots": [
+        {
+          "name": "desktop-disabled.png",
+          "sha256": "9b2690951d051dd484d00ee29fd8127c7d645d47f0b86fb1a3410c87dc1de62d"
+        },
+        {
+          "name": "desktop-owner.png",
+          "sha256": "f1213f73ca2b11e97f9de451edbc7027d3bb685780c6030531ab15cf5d9263dc"
+        },
+        {
+          "name": "mobile-disabled.png",
+          "sha256": "a8cdbb00b0f00098411980074fbe393b824c59746d10697c1c8e32f5b9843ee4"
+        },
+        {
+          "name": "mobile-owner.png",
+          "sha256": "0fe71c42418814e45a7c82a611f2d0296c455b44bcef24645c22e915b24d5a2d"
+        }
+      ],
+      "identity": "NONPRODUCTION_LOCAL_CONTROLLED_OIDC_ONLY",
+      "secureCookieOnTls": true,
+      "productionTlsVerificationDisabled": false,
+      "actualGoogleOwnerOrPrivateContent": false,
+      "publicApiDataAcceptance": "NOT_RUN_UNCONFIGURED_BACKEND_EXACT_500_UNCHANGED_BY_LOGIN",
+      "databaseOrPaidProviderCalls": 0,
+      "productionActions": 0,
+      "ownedProcessesStopped": true
+    },
+    "controlledLaunchBrowser": {
+      "schema": "stockinsider-controlled-launch-browser-v1",
+      "sourceCommit": "bd6bf3e56c4b7161ba7d76a4a65bc28289857f6c",
+      "scope": "synthetic_loopback_RPC_REAL_NEXT_HTTP_SSR_DESKTOP_MOBILE_NOT_ACTUAL_DB_OR_PUBLICATION",
+      "startedAt": "2026-11-14T22:26:02.489563+00:00",
+      "productionActions": 0,
+      "actualSourceAcquisition": false,
+      "fixtureCredentialOnly": true,
+      "bridgeStats": {
+        "synthetic": true,
+        "reads": 31,
+        "unsupported": 0,
+        "controls": 28,
+        "mode": "short_expiry"
+      },
+      "exit": 0,
+      "status": "PASS",
+      "casesPlanned": 10,
+      "sourceTree": "c0c297ff80d6debc2b015077695f8c111969bafb",
+      "webTree": "7be3cb1feb32488993b5e95e69489f7e2a897073",
+      "ownedProcessesStopped": true,
+      "endedAt": "2026-11-14T22:26:22.531100+00:00"
+    },
+    "controlledCitationBrowser": {
+      "schema": "stockinsider-controlled-launch-citation-browser-v1",
+      "sourceCommit": "bd6bf3e56c4b7161ba7d76a4a65bc28289857f6c",
+      "scope": "synthetic_loopback_RPC_REAL_NEXT_HTTP_SSR_DESKTOP_MOBILE_NOT_ACTUAL_DB_OR_PUBLICATION",
+      "startedAt": "2026-11-14T22:26:22.804091+00:00",
+      "productionActions": 0,
+      "actualSourceAcquisition": false,
+      "fixtureCredentialOnly": true,
+      "bridgeStats": {
+        "synthetic": true,
+        "reads": 173,
+        "unsupported": 0,
+        "controls": 90,
+        "mode": "ready"
+      },
+      "exit": 0,
+      "status": "PASS",
+      "casesPlanned": 6,
+      "sourceTree": "c0c297ff80d6debc2b015077695f8c111969bafb",
+      "webTree": "7be3cb1feb32488993b5e95e69489f7e2a897073",
+      "ownedProcessesStopped": true,
+      "endedAt": "2026-11-14T22:26:37.929857+00:00"
+    }
+  },
+  "retainedFirstIteration": {
+    "source": "92edfda41768cdc5b1cbca17c37bbad7ec2d157b",
+    "checks": [
+      {
+        "name": "core",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/vnext/top10-projection.test.ts",
+          "web/src/lib/vnext/published-target-read.test.ts",
+          "web/src/lib/vnext/ranking-read.test.ts",
+          "web/src/lib/vnext/launch-page-dispatch.test.ts",
+          "web/src/lib/vnext/launch-source-store.test.ts",
+          "web/src/lib/vnext/launch-ranking-command.test.ts",
+          "web/src/lib/vnext/launch-cutover.test.ts",
+          "scripts/vnext-launch-source-facts-source.test.mjs",
+          "web/src/lib/vnext/candidate-page.test.ts",
+          "web/src/lib/stock-chart-calendar.test.ts",
+          "web/src/app/components/vnext/detail-source.test.mjs",
+          "scripts/vnext-ranking-snapshot-source.test.mjs",
+          "web/src/lib/ptt-article-parser.test.ts",
+          "web/src/lib/vnext/launch-official-replay.test.ts",
+          "web/src/lib/vnext/launch-licensed-csv.test.ts",
+          "web/src/lib/vnext/launch-native-volume.test.ts",
+          "web/src/lib/vnext/launch-institutional-volume.test.ts",
+          "web/src/lib/vnext/launch-institutional-selection.test.ts",
+          "web/src/lib/vnext/launch-licensed-5274.test.ts",
+          "web/scripts/launch-official-replay.test.mjs",
+          "web/src/lib/ptt-mention-provenance.test.ts",
+          "web/src/lib/ptt-policy.test.ts",
+          "scripts/ptt-mention-provenance-boundary.test.mjs",
+          "web/src/lib/vnext/launch-score.test.ts",
+          "web/src/lib/vnext/launch-score-rules.test.ts",
+          "web/src/lib/vnext/owner-oidc.test.ts",
+          "web/src/lib/vnext/launch-pattern-read.test.ts",
+          "web/src/lib/vnext/private-owner-read.test.ts",
+          "web/src/lib/vnext/launch-patterns.test.ts",
+          "web/src/lib/technical-indicator-adapter.test.ts",
+          "web/src/lib/technical-features-v2.test.ts",
+          "scripts/vnext-linux-restore-candidate.test.mjs",
+          "scripts/local-backup-envelope.test.mjs",
+          "scripts/local-backup-artifact.test.mjs",
+          "scripts/local-backup-lifecycle.test.mjs",
+          "scripts/build-contabo-restore-list.test.mjs",
+          "scripts/export-contabo-database-backup.test.mjs",
+          "scripts/contabo-production-restore-contract.test.mjs",
+          "scripts/contabo-local-backup-cutover.test.mjs",
+          "scripts/rehearse-contabo-database-restore.test.mjs",
+          "scripts/verify-standalone-release.test.mjs",
+          "scripts/package-standalone-release.test.mjs",
+          "web/src/lib/stock-chart-supply.test.ts",
+          "web/src/lib/vnext/business-public.test.ts",
+          "web/src/lib/vnext/vnext.test.ts",
+          "scripts/vnext-staging-preflight.test.mjs",
+          "web/src/lib/vnext/candidate-history-read.test.ts",
+          "scripts/vnext-candidate-history-source.test.mjs",
+          "web/src/lib/candidate-price-history.test.ts",
+          "scripts/vnext-source-window-source.test.mjs",
+          "web/src/lib/vnext/source-volume-boundary.test.ts",
+          "web/src/lib/vnext/analysis-sources.test.ts",
+          "web/src/lib/vnext/source-backlog.test.ts",
+          "web/src/lib/vnext/cached-source-admission.test.ts",
+          "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+          "web/src/lib/vnext/schedule-admission.test.ts",
+          "web/src/lib/vnext/schedule-replay-binding.test.ts",
+          "scripts/vnext-staging-schedule-candidate.test.mjs",
+          "scripts/vnext-candidate-epoch-source.test.mjs",
+          "web/src/lib/source-content-semantics.test.ts",
+          "web/src/lib/vnext/cached-admission.test.ts",
+          "web/src/lib/vnext/current-evidence-read.test.ts",
+          "web/src/lib/vnext/preparation-authority.test.ts",
+          "scripts/vnext-weekly-forecast-source.test.mjs",
+          "web/src/lib/vnext/forecast-active.test.ts",
+          "web/src/lib/vnext/forecast-current.test.ts",
+          "web/src/lib/vnext/thesis.test.ts",
+          "scripts/vnext-staging-execution-boundary.test.mjs",
+          "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+          "web/src/lib/tw-entry-plan-authority.test.ts",
+          "web/src/lib/vnext/preparation-reconciliation.test.ts",
+          "web/src/lib/vnext/research-failure.test.ts"
+        ],
+        "start": "2026-11-14T22:18:58.779106+00:00",
+        "end": "2026-11-14T22:19:11.351507+00:00",
+        "exit": 1,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 48267264,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29540839424,
+          "/tmp": 9403023360
+        },
+        "resourceViolation": null,
+        "logSha256": "cdf773446b0dddf7ff5c25ded8d19a5aba921e35109a7c8786f537164fe7cfd9"
+      },
+      {
+        "name": "wire_unit",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/vnext/launch-ranking-read.test.ts",
+          "web/src/lib/vnext/launch-ranking-wire.test.ts",
+          "web/scripts/launch-ranking-wire-replay.test.mjs"
+        ],
+        "start": "2026-11-14T22:19:11.352384+00:00",
+        "end": "2026-11-14T22:19:12.354571+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 28917760,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29540798464,
+          "/tmp": 9403543552
+        },
+        "resourceViolation": null,
+        "logSha256": "6658fb5cfbf63be1b07489e7de25c26f7216840dc7cc29e4a73eeabd28385b23"
+      },
+      {
+        "name": "citation_unit",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/vnext/citations.test.ts",
+          "web/src/lib/vnext/launch-public-citation.test.ts",
+          "web/src/lib/vnext/launch-public-api.test.ts"
+        ],
+        "start": "2026-11-14T22:19:12.354995+00:00",
+        "end": "2026-11-14T22:19:12.856292+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 31674368,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29540790272,
+          "/tmp": 9403543552
+        },
+        "resourceViolation": null,
+        "logSha256": "55f5aebb795e40bce056a756a42ba9bcd48ee73f97befae7199b48adbabcb900"
+      },
+      {
+        "name": "types",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "typecheck"
+        ],
+        "start": "2026-11-14T22:19:12.856674+00:00",
+        "end": "2026-11-14T22:19:20.629686+00:00",
+        "exit": 2,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 81674240,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29540786176,
+          "/tmp": 9403543552
+        },
+        "resourceViolation": null,
+        "logSha256": "5e218b683bf93d840b9fe82c1dc75806f35642d82db222a222990e75ed74a989"
+      },
+      {
+        "name": "lint",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "lint"
+        ],
+        "start": "2026-11-14T22:19:20.630195+00:00",
+        "end": "2026-11-14T22:19:40.187573+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 81833984,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29540769792,
+          "/tmp": 9403543552
+        },
+        "resourceViolation": null,
+        "logSha256": "438e5d44daf5f0098dce8b2a6dacc1637258fd1f8673d46276a52ba5617d3459"
+      },
+      {
+        "name": "build",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "build"
+        ],
+        "start": "2026-11-14T22:19:40.188179+00:00",
+        "end": "2026-11-14T22:20:02.525568+00:00",
+        "exit": 1,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 82620416,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29392240640,
+          "/tmp": 9403510784
+        },
+        "resourceViolation": null,
+        "logSha256": "a5d405f87fa515d896c1787fbf56229d937abd6a36e19752213d253838938252"
+      },
+      {
+        "name": "owner_browser",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "scripts/owner-oidc-browser-smoke.mjs"
+        ],
+        "status": "NOT_RUN",
+        "reason": "successful_current_build_required"
+      },
+      {
+        "name": "launch_browser",
+        "command": [
+          "python3",
+          "/workspace/stockinsider/work/ptt-official-nov15/launch-foundation-validation/browser.py"
+        ],
+        "status": "NOT_RUN",
+        "reason": "successful_current_build_required"
+      },
+      {
+        "name": "citation_browser",
+        "command": [
+          "python3",
+          "/workspace/stockinsider/work/ptt-official-nov15/launch-foundation-validation/citation-browser.py"
+        ],
+        "status": "NOT_RUN",
+        "reason": "successful_current_build_required"
+      }
+    ],
+    "coreTests": 625,
+    "corePass": 621,
+    "coreFail": 4,
+    "wirePass": 16,
+    "citationPass": 8,
+    "lint": "PASS",
+    "types": "FAIL_TS2339_TEST_UNION_PROPERTY",
+    "build": "FAIL_SAME_TYPE_ERROR",
+    "browsers": "NOT_RUN_CURRENT_BUILD_REQUIRED",
+    "repair": {
+      "source": "bd6bf3e56c4b7161ba7d76a4a65bc28289857f6c",
+      "changedPaths": [
+        "web/src/lib/vnext/discovery-test-loader.mjs",
+        "web/src/lib/vnext/launch-ranking-wire.test.ts",
+        "web/src/lib/vnext/preparation-reconciliation.test.ts",
+        "web/src/lib/vnext/research-failure.test.ts"
+      ],
+      "productGateOrArithmeticChange": false,
+      "description": "Closed VM loaders gained actual pure URL helper/evidence-clock dependencies; fixture union assignment narrowed with unchanged assertions. HTTP200 expectation retained with failure diagnostics."
+    }
+  },
+  "engineeringReview": {
+    "openP0": 0,
+    "openP1": 0,
+    "formalA1": false
+  },
+  "preservation": {
+    "observedAt": "2026-11-14T22:31:58.263704+00:00",
+    "originalFiles": 283,
+    "missing": 0,
+    "changed": 0,
+    "archiveOrRecoveryVerified": false
+  },
+  "limits": {
+    "actualSqlApply": "NOT_RUN_NATIVE_HOLD",
+    "sqlGrammarAclRlsCommitConcurrencyPerformance": "NOT_RUN",
+    "fullLaunchSqlScoreQualificationCas": "SEPARATE_UNFROZEN_WIP_NOT_IN_SOURCE",
+    "realSourceCaptureInCloud": false,
+    "actualSelectedDatabaseScore": "NOT_RUN",
+    "actualAdjacentCloseRankings": "NOT_RUN",
+    "formalOwner": "UNCONFIGURED",
+    "formalA1": "BLOCKED_UNCHANGED",
+    "ci": "FORMAL_GATE_NOT_RUN",
+    "originalPrHead": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+    "originalPrHeadChanged": false,
+    "productionActions": 0,
+    "productionTimersChanged": false,
+    "paidCalls": 0,
+    "archiveOrRecoveryVerified": false,
+    "reclaimedBytes": 0
+  },
+  "externalSyntheticArithmeticWireOnly": {
+    "commit": "61f25d67ee09be9dff754b66d00c2fac4a70d298",
+    "gitBlob": "2892ce9af6b237c94b5ae8d861451138d1fab9dd",
+    "path": "launch-wire-external-pg.json",
+    "sha256": "ba722c74b8b3d98e0c560c706b56dd14845e6201ae063780d8a07df04e105c39",
+    "scope": "EXTERNAL_ISOLATED_EMPTY_PG17_SYNTHETIC_SELECT_WIRE_ONLY",
+    "sourceCommit": "d68f5a33b8345e66fe324749101bd1f92abfdcc0",
+    "cloudReceivedOriginalPgBodies": false,
+    "reportedResults": 17,
+    "reportedPass": 17,
+    "receiptReportedRawBodyAndConsumerDigestsMatch": true,
+    "all8SourceFileGitAndSha256DigestsMatch": true
+  }
+}

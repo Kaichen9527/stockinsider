@@ -1,0 +1,132 @@
+{
+  "schema": "stockinsider-t18-native-legacy-bridge-rehearsal-v1",
+  "sourceCommit": "bb549e859ba3ae5241eec3a14bdcd84b3ac70d55",
+  "testDateTaipei": "2026-11-16",
+  "databaseInput": "2026-10-11 captured schema only",
+  "testInstances": [
+    {
+      "locale": "C.UTF-8",
+      "result": 0,
+      "observations": [
+        {
+          "stage": "identity",
+          "datcollate": "C.UTF-8",
+          "datctype": "C.UTF-8",
+          "addr": null,
+          "version": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)"
+        },
+        {
+          "stage": "capture_restore",
+          "capturedSchemaSha256": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731"
+        },
+        {
+          "stage": "financial-prefix",
+          "selected": 49,
+          "ownershipPrelude": true,
+          "result": "committed"
+        },
+        {
+          "stage": "publication-prefix",
+          "steps": 26,
+          "status": "committed",
+          "tailOrderedSha256": "edc46d48235d1542426c2ba729e24265d1722d757070a8ed5f97061ec843798e",
+          "predecessorSha256": "63677c0b92f9778f316dd5e7f68a8dd93f9d78fe2c013d7272417c1806ee33e4"
+        },
+        {
+          "stage": "20261022_stockinsider_vnext_20_v1.sql",
+          "sha256": "84418af40194689ff6b85a11394bbcd04c28ce8041281bc897149a44e86c90de",
+          "bytes": 53059
+        },
+        {
+          "stage": "20261022_vnext_legacy_mode_fence_v1.sql",
+          "sha256": "272130d1747d3faa1f6d65554c8af8ffbc3d7ab1ad7b1045d4f9b331293c6685",
+          "bytes": 11290
+        },
+        {
+          "stage": "20261022_vnext_provider_worker_v1.sql",
+          "sha256": "637e494cb5ccb32ab11d847fb69586cbbf0aec717c1c0991a250195a917826ba",
+          "bytes": 20783
+        },
+        {
+          "stage": "20261022_vnext_financial_summary_v1.sql",
+          "sha256": "f35641c802b39fcd07fadf6f62e4101080f917e26401941df1fb562ddeb44b66",
+          "bytes": 10096
+        },
+        {
+          "stage": "installed-state",
+          "enabled": false,
+          "legacyFenced": true,
+          "routines": 15,
+          "jobs": 0,
+          "publications": 0,
+          "rls": 18
+        }
+      ]
+    },
+    {
+      "locale": "C",
+      "result": 0,
+      "observations": [
+        {
+          "stage": "identity",
+          "datcollate": "C",
+          "datctype": "C",
+          "addr": null,
+          "version": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)"
+        },
+        {
+          "stage": "capture_restore",
+          "capturedSchemaSha256": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731"
+        },
+        {
+          "stage": "financial-prefix",
+          "selected": 49,
+          "ownershipPrelude": true,
+          "result": "committed"
+        },
+        {
+          "stage": "publication-prefix",
+          "steps": 26,
+          "status": "committed",
+          "tailOrderedSha256": "edc46d48235d1542426c2ba729e24265d1722d757070a8ed5f97061ec843798e",
+          "predecessorSha256": "63677c0b92f9778f316dd5e7f68a8dd93f9d78fe2c013d7272417c1806ee33e4"
+        },
+        {
+          "stage": "20261022_stockinsider_vnext_20_v1.sql",
+          "sha256": "84418af40194689ff6b85a11394bbcd04c28ce8041281bc897149a44e86c90de",
+          "bytes": 53059
+        },
+        {
+          "stage": "20261022_vnext_legacy_mode_fence_v1.sql",
+          "sha256": "272130d1747d3faa1f6d65554c8af8ffbc3d7ab1ad7b1045d4f9b331293c6685",
+          "bytes": 11290
+        },
+        {
+          "stage": "20261022_vnext_provider_worker_v1.sql",
+          "sha256": "637e494cb5ccb32ab11d847fb69586cbbf0aec717c1c0991a250195a917826ba",
+          "bytes": 20783
+        },
+        {
+          "stage": "20261022_vnext_financial_summary_v1.sql",
+          "sha256": "f35641c802b39fcd07fadf6f62e4101080f917e26401941df1fb562ddeb44b66",
+          "bytes": 10096
+        },
+        {
+          "stage": "installed-state",
+          "enabled": false,
+          "legacyFenced": true,
+          "routines": 15,
+          "jobs": 0,
+          "publications": 0,
+          "rls": 18
+        }
+      ]
+    }
+  ],
+  "minimumSampledFreeDiskBytes": 25980784640,
+  "minimumSampledAvailableMemoryBytes": 4266360832,
+  "scratchRemoved": true,
+  "productionBackupOpened": false,
+  "productionAuthorized": false,
+  "scope": "two ephemeral PostgreSQL 17.11 clusters with loopback-only network namespace, Unix socket and peer authentication"
+}

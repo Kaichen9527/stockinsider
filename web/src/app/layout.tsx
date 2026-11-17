@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import './globals.css';
 
 const CANONICAL_APP_URL = 'http://5.104.83.211';
@@ -17,7 +18,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-Hant" suppressHydrationWarning>
-      <body className="antialiased" suppressHydrationWarning>{children}</body>
+      <body className="antialiased" suppressHydrationWarning>
+        <nav aria-label="帳號入口" className="mx-auto flex max-w-7xl justify-end px-5 pt-4 text-sm">
+          <Link href="/private-research" prefetch={false} className="inline-flex min-h-11 items-center text-sky-700 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700 dark:text-sky-300 dark:focus-visible:outline-sky-300">私人研究</Link>
+        </nav>
+        {children}
+      </body>
     </html>
   );
 }

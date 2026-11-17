@@ -4,7 +4,8 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {validateClaim,type Evidence,type Claim} from './research.ts';
 const period='2026-06-30';
-const evidence=(units:string[],values:number[]=units.map((_,i)=>i===0?10:20)):Evidence[]=>units.map((unit,index)=>({id:`synthetic-${index}`,key:index===0?'quarterly_diluted_eps':'pe_multiple',value:values[index],unit,period,kind:'fact',sourceTier:'official',source:'https://www.twse.com.tw/synthetic-unit-vector',contentHash:String(index+1).repeat(64),eventAt:'2026-10-21T05:00:00.000Z',availableAt:'2026-10-21T06:00:00.000Z'}));
+// Pure dimensional arithmetic assumptions, separate from reported-financial provenance.
+const evidence=(units:string[],values:number[]=units.map((_,i)=>i===0?10:20)):Evidence[]=>units.map((unit,index)=>({id:`synthetic-${index}`,key:`synthetic_unit_operand_${index}`,value:values[index],unit,period,kind:'assumption',sourceTier:'public',source:'https://example.org/synthetic-unit-vector',contentHash:String(index+1).repeat(64),eventAt:'2026-10-21T05:00:00.000Z',availableAt:'2026-10-21T06:00:00.000Z'}));
 function check(operation:'multiply'|'divide'|'add'|'subtract',rows:Evidence[],unit:string,value:number){
  const claim:Claim={id:'synthetic-result',kind:'derived',text:'Synthetic numerical unit test, not validated acquisition or semantic research.',evidenceIds:rows.map(e=>e.id),numeric:{key:'valuation_base',value,unit,period,formula:{operation,evidenceIds:rows.map(e=>e.id)}}};
  return validateClaim(claim,rows);

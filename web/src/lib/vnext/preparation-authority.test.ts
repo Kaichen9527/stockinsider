@@ -25,6 +25,16 @@ test('document citation joins exact fact version, issuer, immutable document has
  const mutations:Array<(copy:typeof rows)=>void>=[r=>r.links[0].fact_recorded_at='2026-10-21T05:59:59Z',r=>r.links[0].evidence_id='different-parser',r=>r.receipts[0].stock_id='other',r=>r.receipts[0].period_end='2026-03-31',r=>r.receipts[0].document_sha256='f'.repeat(64),r=>r.receipts[0].completed_at='2027-01-01',r=>r.receipts[0].receipt_status='rejected',r=>r.documents[0].document_url='https://mops.twse.com.tw/different',r=>r.documents[0].acquisition_status='queued',r=>(r.provenance[0].locator as Row).manifest_sha256='unproven'];
  for(const mutate of mutations){const copy=structuredClone(rows);mutate(copy);assert.equal(projectFinancialEvidenceSources([fact],copy,cutoff).evidence.length,0);}
 });
+test('financial original publication/source clocks and exact fact revision retain PostgreSQL microseconds',()=>{
+ const boundary='2026-10-21T10:00:00.000001Z',future='2026-10-21T10:00:00.000002Z';
+ for(const make of [()=>sourceFixture(true),issuerFixture]){
+  const f=make();f.rows.receipts[0].published_at=future;assert.equal(projectFinancialEvidenceSources([f.fact],f.rows,boundary).evidence.length,0);
+  f.rows.receipts[0].published_at=boundary;const valid=projectFinancialEvidenceSources([f.fact],f.rows,boundary);assert.equal(valid.evidence.length,1);assert.equal(valid.receipts[0].knownAt,boundary);assert.equal(valid.evidence[0].availableAt,boundary);
+  f.rows.links[0].fact_recorded_at='2026-10-21T06:00:00.000001Z';assert.equal(projectFinancialEvidenceSources([f.fact],f.rows,boundary).evidence.length,0);
+ }
+ const f=sourceFixture();f.rows.provenance[0].extracted_at=boundary;assert.equal(projectFinancialEvidenceSources([f.fact],f.rows,boundary).evidence[0].availableAt,boundary);
+ f.rows.provenance[0].extracted_at=future;assert.equal(projectFinancialEvidenceSources([f.fact],f.rows,boundary).evidence.length,0);
+});
 test('unsupported issuer IR, private/credential URLs and absent provenance remain explicit gaps with zero fetch',async()=>{
  let calls=0;const prior=globalThis.fetch;globalThis.fetch=async()=>{calls++;throw Error('no external fetch permitted');};
  try{for(const url of ['https://www.nanya.com/reviewed-original.pdf','https://user:pass@mops.twse.com.tw/a','https://mops.twse.com.tw:444/a','http://mops.twse.com.tw/a','https://127.0.0.1/a'])assert.equal(financialProviderSourceUrl(url),null);
@@ -94,7 +104,7 @@ function valuationFixture(){
  const claims:Artifact['claims']=[...[80,140,180].map((value,index)=>({id:index===1?'valuation:forward_pb':`scenario-${index}`,text:'Synthetic explicitly supplied original numeric PB assumption; no real company or production receipt is asserted.',kind:'derived' as const,evidenceIds:['book',`assumption-${index}`],numeric:{value,unit:'TWD_per_share',period:'2026-06-30',key:['valuation_bear','valuation_base','valuation_bull'][index],formula:{operation:'multiply' as const,evidenceIds:['book',`assumption-${index}`]}}})),{id:'price',text:'Synthetic original price100 TWD.',kind:'fact',evidenceIds:['quote'],numeric:{value:100,unit:'TWD',period:'2026-10-21',key:'current_price'}}];
  const artifact:Artifact={schemaVersion:'stockinsider-vnext-research-v1',model:'synthetic',modelVersion:'synthetic',inputHash:inputHash('synthetic-preparation'),outputHash:'',sections:Object.fromEntries(REQUIRED_SECTIONS.map(key=>[key,{text:'Synthetic structural valuation fixture only.',evidenceIds:['book','assumption-1'],claimIds:['valuation:forward_pb']}])),claims,quoteDate:'2026-10-21',valuationDate:'2026-10-21',annualEps:null,nextFourQuarterEps:null,gaps:['annual_eps_missing','next_four_quarter_eps_missing']};
  const review:Review={approved:true,authorOutputHash:'',modelVersion:'synthetic-independent-review',findings:[],factsChecked:true,valuationChecked:true,claimsChecked:true,claimChecks:claims.map(claim=>({claimId:claim.id,verdict:'supported',reason:'Synthetic source-bound arithmetic comparison, not formal semantic approval.',sources:claim.evidenceIds.map(id=>({id,contentHash:evidence.find(e=>e.id===id)!.contentHash}))}))};
- const quote:AuditQuote={close:100,session:'2026-10-21',source:'https://www.twse.com.tw/synthetic',adjusted:true,volume:1000,ma20:90,ma60:80,volumeRatio:1,institutionalFlow:null};
+ const quote:AuditQuote={observedAt:clock,availableAt:clock,close:100,session:'2026-10-21',source:'https://www.twse.com.tw/synthetic',adjusted:true,volume:1000,ma20:90,ma60:80,volumeRatio:1,institutionalFlow:null};
  return {artifact,review,original:evidence,quote,cutoff};
 }
 function bind(fixture:ReturnType<typeof valuationFixture>){fixture.artifact.outputHash=inputHash({...fixture.artifact,outputHash:undefined});fixture.review.authorOutputHash=fixture.artifact.outputHash;return fixture;}

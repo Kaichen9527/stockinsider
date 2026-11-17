@@ -1,0 +1,809 @@
+{
+  "schema": "stockinsider-launch-ranking-ui-source-checkpoint-v1",
+  "observedAt": "2026-11-14T21:16:57.668917+00:00",
+  "localValidationCommit": "f79cfb4647ed3df60c379f0df24ccda9edf15db0",
+  "publicSourceCommit": "96f4650bc4385301741db589344e0c91093eacb7",
+  "sourceTree": "bb6a058ff464524972b358fad5a22cf71eb771c5",
+  "webTree": "385fccbe073f3be64f2fd5179704f0e4f7efce1d",
+  "publication": {
+    "transport": "configured GitHub connector",
+    "baseCommit": "6ebe54b89343258a69ebbdd039fa7632cab8a719",
+    "branch": "codex/stockinsider-v2-cloud-nov07",
+    "force": false,
+    "treeEqualityVerified": true,
+    "soleParentVerified": true,
+    "testsRanLocalIdenticalTree": true,
+    "testsRanPublicCommit": false,
+    "commitMetadataDiffers": true
+  },
+  "sourceInventory": [
+    {
+      "path": "web/e2e/launch-ranking.spec.ts",
+      "sha256": "fd253102ddbd73e413e49c28dc6204fd864431ef0537fdbcf85eb3665c42f249"
+    },
+    {
+      "path": "web/playwright.launch-ranking.config.ts",
+      "sha256": "0ee7e6505a4033c1a90b4424337bb7427eebbf49f21dd3c7aa5fd0cd0feda2f4"
+    },
+    {
+      "path": "web/scripts/launch-ranking-browser-bridge.mjs",
+      "sha256": "8d169226e93fbe630febb02077e7eb0dcd48fac14d7a0bad89a247bea245981d"
+    },
+    {
+      "path": "web/src/app/components/vnext/Home.tsx",
+      "sha256": "38c72350eaf61a916d629ea03d6244492b4c5db65a2a321ae12500fbcd492c9f"
+    },
+    {
+      "path": "web/src/app/components/vnext/LaunchCurrentStatus.tsx",
+      "sha256": "d2db41e16ca46f2e5c25699c315e43bb8f74058631d529137d604ceb0e2709d1"
+    },
+    {
+      "path": "web/src/app/components/vnext/LaunchDetail.tsx",
+      "sha256": "01a14fb2db0596dc0ed2abc739f456320b7ecb94e112ecf62d156679bc429bb5"
+    },
+    {
+      "path": "web/src/app/components/vnext/LaunchHome.tsx",
+      "sha256": "a82fcc3464fd6608384af05540c23f380da633c1f3496395f23e3b931fb22825"
+    },
+    {
+      "path": "web/src/app/components/vnext/LaunchTop10.tsx",
+      "sha256": "789e1047f4d6d6995f375f7c444eb381008f44d1cca69414603c9a9008cded16"
+    },
+    {
+      "path": "web/src/app/stock/[symbol]/page.tsx",
+      "sha256": "3c83ed13faa9a81d5d415f4bcbd1bea0a0d99184284a203a9ff3972a77d741be"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-page-dispatch.test.ts",
+      "sha256": "0624c3dc063903d9c521ff6c2a9e1036d27b347e15da7a917af2a688d601c7ed"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-ranking-read.test.ts",
+      "sha256": "7397719f5051e4e25caab1f4f6a1bcdf3dec9c9ab94610ef0bbd75da522a96ef"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-ranking-read.ts",
+      "sha256": "ab24225af8b1d36096740bb99c875ebb9d749b4745e7f21037ee34fa19df5bd5"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-ranking.test-fixture.ts",
+      "sha256": "b9d7c8c094a04216fee3274d38c482865bdddbc852d82cb2f21eebb78ec6bc66"
+    }
+  ],
+  "verification": {
+    "unitCases": 593,
+    "unitPass": 593,
+    "skipped": 0,
+    "checks": [
+      {
+        "name": "focused",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/vnext/top10-projection.test.ts",
+          "web/src/lib/vnext/published-target-read.test.ts",
+          "web/src/lib/vnext/ranking-read.test.ts",
+          "web/src/lib/vnext/launch-ranking-read.test.ts",
+          "web/src/lib/vnext/launch-page-dispatch.test.ts",
+          "web/src/lib/vnext/candidate-page.test.ts",
+          "web/src/lib/stock-chart-calendar.test.ts",
+          "web/src/app/components/vnext/detail-source.test.mjs",
+          "scripts/vnext-ranking-snapshot-source.test.mjs",
+          "web/src/lib/ptt-article-parser.test.ts",
+          "web/src/lib/vnext/launch-official-replay.test.ts",
+          "web/src/lib/vnext/launch-licensed-csv.test.ts",
+          "web/src/lib/vnext/launch-native-volume.test.ts",
+          "web/src/lib/vnext/launch-institutional-volume.test.ts",
+          "web/src/lib/vnext/launch-institutional-selection.test.ts",
+          "web/src/lib/vnext/launch-licensed-5274.test.ts",
+          "web/scripts/launch-official-replay.test.mjs",
+          "web/src/lib/ptt-mention-provenance.test.ts",
+          "web/src/lib/ptt-policy.test.ts",
+          "scripts/ptt-mention-provenance-boundary.test.mjs",
+          "web/src/lib/vnext/launch-score.test.ts",
+          "web/src/lib/vnext/launch-score-rules.test.ts",
+          "web/src/lib/vnext/owner-oidc.test.ts",
+          "web/src/lib/vnext/launch-pattern-read.test.ts",
+          "web/src/lib/vnext/private-owner-read.test.ts",
+          "web/src/lib/vnext/launch-patterns.test.ts",
+          "web/src/lib/technical-indicator-adapter.test.ts",
+          "web/src/lib/technical-features-v2.test.ts",
+          "scripts/vnext-linux-restore-candidate.test.mjs",
+          "scripts/local-backup-envelope.test.mjs",
+          "scripts/local-backup-artifact.test.mjs",
+          "scripts/local-backup-lifecycle.test.mjs",
+          "scripts/build-contabo-restore-list.test.mjs",
+          "scripts/export-contabo-database-backup.test.mjs",
+          "scripts/contabo-production-restore-contract.test.mjs",
+          "scripts/contabo-local-backup-cutover.test.mjs",
+          "scripts/rehearse-contabo-database-restore.test.mjs",
+          "scripts/verify-standalone-release.test.mjs",
+          "scripts/package-standalone-release.test.mjs",
+          "web/src/lib/stock-chart-supply.test.ts",
+          "web/src/lib/vnext/business-public.test.ts",
+          "web/src/lib/vnext/vnext.test.ts",
+          "scripts/vnext-staging-preflight.test.mjs",
+          "web/src/lib/vnext/candidate-history-read.test.ts",
+          "scripts/vnext-candidate-history-source.test.mjs",
+          "web/src/lib/candidate-price-history.test.ts",
+          "scripts/vnext-source-window-source.test.mjs",
+          "web/src/lib/vnext/source-volume-boundary.test.ts",
+          "web/src/lib/vnext/analysis-sources.test.ts",
+          "web/src/lib/vnext/source-backlog.test.ts",
+          "web/src/lib/vnext/cached-source-admission.test.ts",
+          "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+          "web/src/lib/vnext/schedule-admission.test.ts",
+          "web/src/lib/vnext/schedule-replay-binding.test.ts",
+          "scripts/vnext-staging-schedule-candidate.test.mjs",
+          "scripts/vnext-candidate-epoch-source.test.mjs",
+          "web/src/lib/source-content-semantics.test.ts",
+          "web/src/lib/vnext/cached-admission.test.ts",
+          "web/src/lib/vnext/current-evidence-read.test.ts",
+          "web/src/lib/vnext/preparation-authority.test.ts",
+          "scripts/vnext-weekly-forecast-source.test.mjs",
+          "web/src/lib/vnext/forecast-active.test.ts",
+          "web/src/lib/vnext/forecast-current.test.ts",
+          "web/src/lib/vnext/thesis.test.ts",
+          "scripts/vnext-staging-execution-boundary.test.mjs",
+          "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+          "web/src/lib/tw-entry-plan-authority.test.ts"
+        ],
+        "start": "2026-11-14T21:11:51.606894+00:00",
+        "end": "2026-11-14T21:12:02.897713+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 47718400,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29548957696,
+          "/tmp": 9402650624
+        },
+        "resourceViolation": null,
+        "logSha256": "7f6923ec1746a46248687532558cd009a86a8099d244c34bc39a9a6161722091"
+      },
+      {
+        "name": "types",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "typecheck"
+        ],
+        "start": "2026-11-14T21:12:02.898385+00:00",
+        "end": "2026-11-14T21:12:05.654517+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 81928192,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29548933120,
+          "/tmp": 9403543552
+        },
+        "resourceViolation": null,
+        "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+      },
+      {
+        "name": "lint",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "lint"
+        ],
+        "start": "2026-11-14T21:12:05.655108+00:00",
+        "end": "2026-11-14T21:12:25.716278+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 82440192,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29548929024,
+          "/tmp": 9403543552
+        },
+        "resourceViolation": null,
+        "logSha256": "438e5d44daf5f0098dce8b2a6dacc1637258fd1f8673d46276a52ba5617d3459"
+      },
+      {
+        "name": "build",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "build"
+        ],
+        "start": "2026-11-14T21:12:25.716668+00:00",
+        "end": "2026-11-14T21:12:32.753988+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 81289216,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29547302912,
+          "/tmp": 9403543552
+        },
+        "resourceViolation": null,
+        "logSha256": "5d835d3c2394c00f199ecd3abc2875d08ddccb0d7203724affda30527f90acaf"
+      },
+      {
+        "name": "owner_browser",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "scripts/owner-oidc-browser-smoke.mjs"
+        ],
+        "start": "2026-11-14T21:12:32.754477+00:00",
+        "end": "2026-11-14T21:12:48.545726+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 119873536,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29546729472,
+          "/tmp": 9275752448
+        },
+        "resourceViolation": null,
+        "logSha256": "c61c6f57fcab640f4473275e89510705acc2a52e2219220c4f38018bc9cdf043"
+      },
+      {
+        "name": "launch_browser",
+        "command": [
+          "python3",
+          "/workspace/stockinsider/work/ptt-official-nov15/launch-ui-validation-retry2/browser.py"
+        ],
+        "start": "2026-11-14T21:12:48.546193+00:00",
+        "end": "2026-11-14T21:13:07.847872+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 16777216,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29542649856,
+          "/tmp": 9283395584
+        },
+        "resourceViolation": null,
+        "logSha256": "e8475fc0a39a79bd3a42885fcc08cb4d0b983115f8a846365f1a7732b62be2a2"
+      }
+    ],
+    "controlledOwnerBrowser": {
+      "schema": "stockinsider-owner-oidc-local-browser-v1",
+      "buildSource": "f79cfb4647ed3df60c379f0df24ccda9edf15db0",
+      "harnessCommit": "f79cfb4647ed3df60c379f0df24ccda9edf15db0",
+      "runtimeWebTree": "385fccbe073f3be64f2fd5179704f0e4f7efce1d",
+      "status": "PASS",
+      "cases": 33,
+      "receipts": [
+        "desktop:unauthenticated-http",
+        "desktop:csrf-rejected",
+        "desktop:oidc-owner-secure-cookie-private-empty-state",
+        "desktop:public-html-excludes-owner",
+        "desktop:public-api-unchanged-missing-backend-500-excludes-owner",
+        "desktop:logout-csrf-rejected",
+        "desktop:logout-revokes-server-session",
+        "desktop:nonowner-rejected",
+        "desktop:expired-rejected",
+        "desktop:nonce-rejected",
+        "desktop:issuer-rejected",
+        "desktop:audience-rejected",
+        "desktop:signature-rejected",
+        "desktop:session-real-time-expiry",
+        "desktop:disabled-zero-provider-io",
+        "mobile:unauthenticated-http",
+        "mobile:csrf-rejected",
+        "mobile:oidc-owner-secure-cookie-private-empty-state",
+        "mobile:public-html-excludes-owner",
+        "mobile:public-api-unchanged-missing-backend-500-excludes-owner",
+        "mobile:logout-csrf-rejected",
+        "mobile:logout-revokes-server-session",
+        "mobile:nonowner-rejected",
+        "mobile:expired-rejected",
+        "mobile:nonce-rejected",
+        "mobile:issuer-rejected",
+        "mobile:audience-rejected",
+        "mobile:signature-rejected",
+        "mobile:session-real-time-expiry",
+        "mobile:disabled-zero-provider-io",
+        "http:state-mismatch-zero-token-exchange",
+        "http:consumed-transaction-no-replay",
+        "http:successful-callback-cannot-redeem-twice"
+      ],
+      "counts": {
+        "authorize": 18,
+        "token": 17,
+        "jwks": 1,
+        "pkce": 17
+      },
+      "screenshots": [
+        {
+          "name": "desktop-disabled.png",
+          "sha256": "9b2690951d051dd484d00ee29fd8127c7d645d47f0b86fb1a3410c87dc1de62d"
+        },
+        {
+          "name": "desktop-owner.png",
+          "sha256": "f1213f73ca2b11e97f9de451edbc7027d3bb685780c6030531ab15cf5d9263dc"
+        },
+        {
+          "name": "mobile-disabled.png",
+          "sha256": "a8cdbb00b0f00098411980074fbe393b824c59746d10697c1c8e32f5b9843ee4"
+        },
+        {
+          "name": "mobile-owner.png",
+          "sha256": "0fe71c42418814e45a7c82a611f2d0296c455b44bcef24645c22e915b24d5a2d"
+        }
+      ],
+      "identity": "NONPRODUCTION_LOCAL_CONTROLLED_OIDC_ONLY",
+      "secureCookieOnTls": true,
+      "productionTlsVerificationDisabled": false,
+      "actualGoogleOwnerOrPrivateContent": false,
+      "publicApiDataAcceptance": "NOT_RUN_UNCONFIGURED_BACKEND_EXACT_500_UNCHANGED_BY_LOGIN",
+      "databaseOrPaidProviderCalls": 0,
+      "productionActions": 0,
+      "ownedProcessesStopped": true
+    },
+    "controlledLaunchBrowser": {
+      "schema": "stockinsider-controlled-launch-browser-v1",
+      "sourceCommit": "f79cfb4647ed3df60c379f0df24ccda9edf15db0",
+      "scope": "synthetic_loopback_RPC_REAL_NEXT_HTTP_SSR_DESKTOP_MOBILE_NOT_ACTUAL_DB_OR_PUBLICATION",
+      "startedAt": "2026-11-14T21:12:48.577626+00:00",
+      "productionActions": 0,
+      "actualSourceAcquisition": false,
+      "fixtureCredentialOnly": true,
+      "bridgeStats": {
+        "synthetic": true,
+        "reads": 31,
+        "unsupported": 0,
+        "controls": 28,
+        "mode": "short_expiry"
+      },
+      "exit": 0,
+      "status": "PASS",
+      "casesPlanned": 10,
+      "sourceTree": "bb6a058ff464524972b358fad5a22cf71eb771c5",
+      "webTree": "385fccbe073f3be64f2fd5179704f0e4f7efce1d",
+      "ownedProcessesStopped": true,
+      "endedAt": "2026-11-14T21:13:07.647585+00:00"
+    }
+  },
+  "retainedEarlierIterations": [
+    {
+      "source": "4002a7209c9a2204011845efb6c21db4890037f7",
+      "note": "First isolated setup failed: 24 unit failures from absent generated authority/work directory and executable-mode restoration expectations; lint rejected synchronous effect setState; launch browser lacked managed browser cache. Types/build and33 OIDC cases passed. No native retry.",
+      "checks": [
+        {
+          "name": "focused",
+          "command": [
+            "/workspace/.tools/node22/node_modules/node/bin/node",
+            "--experimental-strip-types",
+            "--test",
+            "web/src/lib/vnext/top10-projection.test.ts",
+            "web/src/lib/vnext/published-target-read.test.ts",
+            "web/src/lib/vnext/ranking-read.test.ts",
+            "web/src/lib/vnext/launch-ranking-read.test.ts",
+            "web/src/lib/vnext/candidate-page.test.ts",
+            "web/src/lib/stock-chart-calendar.test.ts",
+            "web/src/app/components/vnext/detail-source.test.mjs",
+            "scripts/vnext-ranking-snapshot-source.test.mjs",
+            "web/src/lib/ptt-article-parser.test.ts",
+            "web/src/lib/vnext/launch-official-replay.test.ts",
+            "web/src/lib/vnext/launch-licensed-csv.test.ts",
+            "web/src/lib/vnext/launch-native-volume.test.ts",
+            "web/src/lib/vnext/launch-institutional-volume.test.ts",
+            "web/src/lib/vnext/launch-institutional-selection.test.ts",
+            "web/src/lib/vnext/launch-licensed-5274.test.ts",
+            "web/scripts/launch-official-replay.test.mjs",
+            "web/src/lib/ptt-mention-provenance.test.ts",
+            "web/src/lib/ptt-policy.test.ts",
+            "scripts/ptt-mention-provenance-boundary.test.mjs",
+            "web/src/lib/vnext/launch-score.test.ts",
+            "web/src/lib/vnext/launch-score-rules.test.ts",
+            "web/src/lib/vnext/owner-oidc.test.ts",
+            "web/src/lib/vnext/launch-pattern-read.test.ts",
+            "web/src/lib/vnext/private-owner-read.test.ts",
+            "web/src/lib/vnext/launch-patterns.test.ts",
+            "web/src/lib/technical-indicator-adapter.test.ts",
+            "web/src/lib/technical-features-v2.test.ts",
+            "scripts/vnext-linux-restore-candidate.test.mjs",
+            "scripts/local-backup-envelope.test.mjs",
+            "scripts/local-backup-artifact.test.mjs",
+            "scripts/local-backup-lifecycle.test.mjs",
+            "scripts/build-contabo-restore-list.test.mjs",
+            "scripts/export-contabo-database-backup.test.mjs",
+            "scripts/contabo-production-restore-contract.test.mjs",
+            "scripts/contabo-local-backup-cutover.test.mjs",
+            "scripts/rehearse-contabo-database-restore.test.mjs",
+            "scripts/verify-standalone-release.test.mjs",
+            "scripts/package-standalone-release.test.mjs",
+            "web/src/lib/stock-chart-supply.test.ts",
+            "web/src/lib/vnext/business-public.test.ts",
+            "web/src/lib/vnext/vnext.test.ts",
+            "scripts/vnext-staging-preflight.test.mjs",
+            "web/src/lib/vnext/candidate-history-read.test.ts",
+            "scripts/vnext-candidate-history-source.test.mjs",
+            "web/src/lib/candidate-price-history.test.ts",
+            "scripts/vnext-source-window-source.test.mjs",
+            "web/src/lib/vnext/source-volume-boundary.test.ts",
+            "web/src/lib/vnext/analysis-sources.test.ts",
+            "web/src/lib/vnext/source-backlog.test.ts",
+            "web/src/lib/vnext/cached-source-admission.test.ts",
+            "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+            "web/src/lib/vnext/schedule-admission.test.ts",
+            "web/src/lib/vnext/schedule-replay-binding.test.ts",
+            "scripts/vnext-staging-schedule-candidate.test.mjs",
+            "scripts/vnext-candidate-epoch-source.test.mjs",
+            "web/src/lib/source-content-semantics.test.ts",
+            "web/src/lib/vnext/cached-admission.test.ts",
+            "web/src/lib/vnext/current-evidence-read.test.ts",
+            "web/src/lib/vnext/preparation-authority.test.ts",
+            "scripts/vnext-weekly-forecast-source.test.mjs",
+            "web/src/lib/vnext/forecast-active.test.ts",
+            "web/src/lib/vnext/forecast-current.test.ts",
+            "web/src/lib/vnext/thesis.test.ts",
+            "scripts/vnext-staging-execution-boundary.test.mjs",
+            "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+            "web/src/lib/tw-entry-plan-authority.test.ts"
+          ],
+          "start": "2026-11-14T20:48:49.280477+00:00",
+          "end": "2026-11-14T20:48:54.327065+00:00",
+          "exit": 1,
+          "status": "FAIL",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 47546368,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29913280512,
+            "/tmp": 9420517376
+          },
+          "resourceViolation": null,
+          "logSha256": "738dd3c2a948e8e137f1ce288605229939f99a40cb9a87400f25363c671295ff"
+        },
+        {
+          "name": "types",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "typecheck"
+          ],
+          "start": "2026-11-14T20:48:54.328009+00:00",
+          "end": "2026-11-14T20:49:04.865649+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 82026496,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29913141248,
+            "/tmp": 9421017088
+          },
+          "resourceViolation": null,
+          "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+        },
+        {
+          "name": "lint",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "lint"
+          ],
+          "start": "2026-11-14T20:49:04.866024+00:00",
+          "end": "2026-11-14T20:49:23.927545+00:00",
+          "exit": 1,
+          "status": "FAIL",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 82112512,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29912821760,
+            "/tmp": 9419694080
+          },
+          "resourceViolation": null,
+          "logSha256": "201e0d8145f11e1438ab047abc9ef47b581d857245a3256a86a7b379c02e70d1"
+        },
+        {
+          "name": "build",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "build"
+          ],
+          "start": "2026-11-14T20:49:23.928050+00:00",
+          "end": "2026-11-14T20:49:49.068505+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 81285120,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29566201856,
+            "/tmp": 9403600896
+          },
+          "resourceViolation": null,
+          "logSha256": "391fbd013bf4a1b8c5c62b624af0293d4670f99ac22cfed15297d3d485072af3"
+        },
+        {
+          "name": "owner_browser",
+          "command": [
+            "/workspace/.tools/node22/node_modules/node/bin/node",
+            "--experimental-strip-types",
+            "scripts/owner-oidc-browser-smoke.mjs"
+          ],
+          "start": "2026-11-14T20:49:49.069214+00:00",
+          "end": "2026-11-14T20:50:05.630557+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 127074304,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29560102912,
+            "/tmp": 9287868416
+          },
+          "resourceViolation": null,
+          "logSha256": "c61c6f57fcab640f4473275e89510705acc2a52e2219220c4f38018bc9cdf043"
+        },
+        {
+          "name": "launch_browser",
+          "command": [
+            "python3",
+            "/workspace/stockinsider/work/ptt-official-nov15/launch-ui-validation/browser.py"
+          ],
+          "start": "2026-11-14T20:50:05.631103+00:00",
+          "end": "2026-11-14T20:50:13.946453+00:00",
+          "exit": 1,
+          "status": "FAIL",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 16777216,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29559943168,
+            "/tmp": 9403543552
+          },
+          "resourceViolation": null,
+          "logSha256": "f615713a0434decb5d05eb1ea851fdc2032d9c9f0909e916631619712bb2baa5"
+        }
+      ]
+    },
+    {
+      "source": "bc7aaf6d07b6002cf2e5ab4ebbbcd99127c8c34c",
+      "note": "589 units/types/lint/build/33OIDC/10launch passed after setup, asynchronous demotion and existing trusted Chromium pin. Independent source review then found a legacy historical URL dispatch regression; held publication and fixed before current validation.",
+      "checks": [
+        {
+          "name": "focused",
+          "command": [
+            "/workspace/.tools/node22/node_modules/node/bin/node",
+            "--experimental-strip-types",
+            "--test",
+            "web/src/lib/vnext/top10-projection.test.ts",
+            "web/src/lib/vnext/published-target-read.test.ts",
+            "web/src/lib/vnext/ranking-read.test.ts",
+            "web/src/lib/vnext/launch-ranking-read.test.ts",
+            "web/src/lib/vnext/candidate-page.test.ts",
+            "web/src/lib/stock-chart-calendar.test.ts",
+            "web/src/app/components/vnext/detail-source.test.mjs",
+            "scripts/vnext-ranking-snapshot-source.test.mjs",
+            "web/src/lib/ptt-article-parser.test.ts",
+            "web/src/lib/vnext/launch-official-replay.test.ts",
+            "web/src/lib/vnext/launch-licensed-csv.test.ts",
+            "web/src/lib/vnext/launch-native-volume.test.ts",
+            "web/src/lib/vnext/launch-institutional-volume.test.ts",
+            "web/src/lib/vnext/launch-institutional-selection.test.ts",
+            "web/src/lib/vnext/launch-licensed-5274.test.ts",
+            "web/scripts/launch-official-replay.test.mjs",
+            "web/src/lib/ptt-mention-provenance.test.ts",
+            "web/src/lib/ptt-policy.test.ts",
+            "scripts/ptt-mention-provenance-boundary.test.mjs",
+            "web/src/lib/vnext/launch-score.test.ts",
+            "web/src/lib/vnext/launch-score-rules.test.ts",
+            "web/src/lib/vnext/owner-oidc.test.ts",
+            "web/src/lib/vnext/launch-pattern-read.test.ts",
+            "web/src/lib/vnext/private-owner-read.test.ts",
+            "web/src/lib/vnext/launch-patterns.test.ts",
+            "web/src/lib/technical-indicator-adapter.test.ts",
+            "web/src/lib/technical-features-v2.test.ts",
+            "scripts/vnext-linux-restore-candidate.test.mjs",
+            "scripts/local-backup-envelope.test.mjs",
+            "scripts/local-backup-artifact.test.mjs",
+            "scripts/local-backup-lifecycle.test.mjs",
+            "scripts/build-contabo-restore-list.test.mjs",
+            "scripts/export-contabo-database-backup.test.mjs",
+            "scripts/contabo-production-restore-contract.test.mjs",
+            "scripts/contabo-local-backup-cutover.test.mjs",
+            "scripts/rehearse-contabo-database-restore.test.mjs",
+            "scripts/verify-standalone-release.test.mjs",
+            "scripts/package-standalone-release.test.mjs",
+            "web/src/lib/stock-chart-supply.test.ts",
+            "web/src/lib/vnext/business-public.test.ts",
+            "web/src/lib/vnext/vnext.test.ts",
+            "scripts/vnext-staging-preflight.test.mjs",
+            "web/src/lib/vnext/candidate-history-read.test.ts",
+            "scripts/vnext-candidate-history-source.test.mjs",
+            "web/src/lib/candidate-price-history.test.ts",
+            "scripts/vnext-source-window-source.test.mjs",
+            "web/src/lib/vnext/source-volume-boundary.test.ts",
+            "web/src/lib/vnext/analysis-sources.test.ts",
+            "web/src/lib/vnext/source-backlog.test.ts",
+            "web/src/lib/vnext/cached-source-admission.test.ts",
+            "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+            "web/src/lib/vnext/schedule-admission.test.ts",
+            "web/src/lib/vnext/schedule-replay-binding.test.ts",
+            "scripts/vnext-staging-schedule-candidate.test.mjs",
+            "scripts/vnext-candidate-epoch-source.test.mjs",
+            "web/src/lib/source-content-semantics.test.ts",
+            "web/src/lib/vnext/cached-admission.test.ts",
+            "web/src/lib/vnext/current-evidence-read.test.ts",
+            "web/src/lib/vnext/preparation-authority.test.ts",
+            "scripts/vnext-weekly-forecast-source.test.mjs",
+            "web/src/lib/vnext/forecast-active.test.ts",
+            "web/src/lib/vnext/forecast-current.test.ts",
+            "web/src/lib/vnext/thesis.test.ts",
+            "scripts/vnext-staging-execution-boundary.test.mjs",
+            "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+            "web/src/lib/tw-entry-plan-authority.test.ts"
+          ],
+          "start": "2026-11-14T20:59:00.841409+00:00",
+          "end": "2026-11-14T20:59:12.175815+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 48599040,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29557014528,
+            "/tmp": 9403121664
+          },
+          "resourceViolation": null,
+          "logSha256": "21afd08be7a1c5986aaa456d715681dff43099a61c064375824bc2eb5ee5b87e"
+        },
+        {
+          "name": "types",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "typecheck"
+          ],
+          "start": "2026-11-14T20:59:12.177132+00:00",
+          "end": "2026-11-14T20:59:25.468266+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 81645568,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29556989952,
+            "/tmp": 9403543552
+          },
+          "resourceViolation": null,
+          "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+        },
+        {
+          "name": "lint",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "lint"
+          ],
+          "start": "2026-11-14T20:59:25.468652+00:00",
+          "end": "2026-11-14T20:59:44.280291+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 82685952,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29556928512,
+            "/tmp": 9403543552
+          },
+          "resourceViolation": null,
+          "logSha256": "438e5d44daf5f0098dce8b2a6dacc1637258fd1f8673d46276a52ba5617d3459"
+        },
+        {
+          "name": "build",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "build"
+          ],
+          "start": "2026-11-14T20:59:44.281330+00:00",
+          "end": "2026-11-14T20:59:50.810276+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 81461248,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29556920320,
+            "/tmp": 9403543552
+          },
+          "resourceViolation": null,
+          "logSha256": "2ce823643c89121f11cc3532f3532e25ea1cd7a67b26d30b80d8a5080bac7a3f"
+        },
+        {
+          "name": "owner_browser",
+          "command": [
+            "/workspace/.tools/node22/node_modules/node/bin/node",
+            "--experimental-strip-types",
+            "scripts/owner-oidc-browser-smoke.mjs"
+          ],
+          "start": "2026-11-14T20:59:50.810791+00:00",
+          "end": "2026-11-14T21:00:06.380575+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 120254464,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29553885184,
+            "/tmp": 9288335360
+          },
+          "resourceViolation": null,
+          "logSha256": "c61c6f57fcab640f4473275e89510705acc2a52e2219220c4f38018bc9cdf043"
+        },
+        {
+          "name": "launch_browser",
+          "command": [
+            "python3",
+            "/workspace/stockinsider/work/ptt-official-nov15/launch-ui-validation-retry1/browser.py"
+          ],
+          "start": "2026-11-14T21:00:06.381075+00:00",
+          "end": "2026-11-14T21:00:25.940858+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 16777216,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29549875200,
+            "/tmp": 9280790528
+          },
+          "resourceViolation": null,
+          "logSha256": "c2a9581199b28a3fcb99ca3cda81629debdea11cb31c24c025ec694c96be8cab"
+        }
+      ]
+    }
+  ],
+  "engineeringReview": {
+    "openP0": 0,
+    "openP1": 0,
+    "formalA1": false,
+    "scope": "source and controlled local HTTP/browser only"
+  },
+  "preservation": {
+    "observedAt": "2026-11-14T21:15:57.704112+00:00",
+    "originalFiles": 283,
+    "missing": 0,
+    "changed": 0,
+    "archiveOrRecoveryVerified": false
+  },
+  "runtime": {
+    "networkMode": "restricted",
+    "networkState": "enforced",
+    "networkPresets": [
+      "package_managers"
+    ],
+    "customAllowedHosts": [],
+    "secretBindingNames": [],
+    "outboundIdentityNames": [],
+    "modelAttestation": "NOT_OBSERVED_NOT_SELF_ATTESTED",
+    "node": "22.14.0",
+    "browser": "/usr/bin/chromium",
+    "noBrowserDownload": true
+  },
+  "limits": {
+    "actualDatabaseQualification": "NOT_RUN",
+    "actualLaunchWriter": "IN_PROGRESS_NOT_ACCEPTED",
+    "actualOfficialSourceHere": false,
+    "actualAdjacentCloseSessions": "NOT_RUN",
+    "historicalOnlinePublication": "NOT_PROVEN",
+    "formalOwner": "UNCONFIGURED",
+    "native": "HOLD_NOT_RUN",
+    "formalA1": "BLOCKED_UNCHANGED",
+    "productionActions": 0,
+    "productionTimersChanged": false,
+    "originalPrHead": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+    "originalPrHeadChanged": false,
+    "archiveOrRecoveryVerified": false,
+    "reclaimedBytes": 0
+  }
+}

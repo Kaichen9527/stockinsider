@@ -1,0 +1,96 @@
+{
+  "recordedAt": "2026-11-15T13:52:53.991941Z",
+  "tasks": [
+    "T06",
+    "T10"
+  ],
+  "baseCommit": "1e81ad145f6c60c9cb97a4af9507ecee0cc4979a",
+  "environment": {
+    "execution": "Contabo staging",
+    "runtime": "Node v22.14.0",
+    "replay": "network-isolated, unprivileged",
+    "temporarySourceFiles": "removed after replay",
+    "productionMutation": false
+  },
+  "tests": {
+    "newCases": 4,
+    "existingReplayCliCases": 15,
+    "passed": 19,
+    "failed": 0
+  },
+  "replay": {
+    "schema": "launch-listed-roster-source-replay-v1",
+    "targetSession": "2026-11-13",
+    "cutoff": "2026-11-13T21:30:00+08:00",
+    "scope": "company_and_custody_reconciliation",
+    "comparableSourceDates": true,
+    "sameSessionByCutoff": false,
+    "qualified": false,
+    "custodianRows": 145052,
+    "custodianOtherFourDigitRows": 15,
+    "receipts": [
+      {
+        "datasetId": 18419,
+        "datasetUrl": "https://data.gov.tw/dataset/18419",
+        "url": "https://mopsfin.twse.com.tw/opendata/t187ap03_L.csv",
+        "name": "上市公司基本資料",
+        "owner": "金融監督管理委員會證券期貨局／臺灣證券交易所",
+        "license": "Taiwan Open Government Data License 1.0",
+        "licenseUrl": "https://data.gov.tw/license",
+        "sourceDate": "2026-11-15",
+        "receivedAt": "2026-11-15T13:52:49.341162Z",
+        "bytes": 675707,
+        "sha256": "279d795dd283f35d8f8ed5d3c72c4a826fb2ae0a734d84938b6b1597cc795a86"
+      },
+      {
+        "datasetId": 25036,
+        "datasetUrl": "https://data.gov.tw/dataset/25036",
+        "url": "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv",
+        "name": "上櫃公司基本資料",
+        "owner": "金融監督管理委員會證券期貨局／證券櫃檯買賣中心",
+        "license": "Taiwan Open Government Data License 1.0",
+        "licenseUrl": "https://data.gov.tw/license",
+        "sourceDate": "2026-11-15",
+        "receivedAt": "2026-11-15T13:52:50.567811Z",
+        "bytes": 553728,
+        "sha256": "c36bc7507c172f749d46765675a2a973013e0d65ee64c1e2f7f41f1f0032ee15"
+      },
+      {
+        "datasetId": 11425,
+        "datasetUrl": "https://data.gov.tw/dataset/11425",
+        "url": "https://opendata.tdcc.com.tw/getOD.ashx?id=1-1",
+        "name": "證券基本資料",
+        "owner": "金融監督管理委員會證券期貨局／臺灣集中保管結算所",
+        "license": "Taiwan Open Government Data License 1.0",
+        "licenseUrl": "https://data.gov.tw/license",
+        "sourceDate": "2026-11-15",
+        "receivedAt": "2026-11-15T13:52:53.991941Z",
+        "bytes": 14235611,
+        "sha256": "5d7c8f26ab48425f63f3d4f9377424535e779abc725a6706796b060ba0f70263"
+      }
+    ],
+    "venues": {
+      "TWSE": {
+        "companyRows": 1099,
+        "companyCodes": 1093,
+        "excludedOtherCodes": 6,
+        "corroboratedCodes": 1091,
+        "corroboratedSetHash": "ac05c34c4b8937fcfc63d6e4bb2d7196dcf658f8f3bfb2a173fdb4fe92838bfc",
+        "custodyMarketMismatch": 2
+      },
+      "TPEX": {
+        "companyRows": 897,
+        "companyCodes": 897,
+        "excludedOtherCodes": 0,
+        "corroboratedCodes": 896,
+        "corroboratedSetHash": "193e77e5feb4ab4fb92d32094ff835e7eeb39bb6110d441c3a678d121eb5eb46",
+        "custodyMarketMismatch": 1
+      }
+    }
+  },
+  "remaining": [
+    "Find official time-bounded exchange proof for listing, suspension, resumption and delisting disputes",
+    "Collect evidence on actual sessions by cutoff and bind coverage to current roster authority manifest",
+    "Keep licensed price, company-action and full-market qualification gates"
+  ]
+}

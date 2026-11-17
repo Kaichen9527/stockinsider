@@ -1,7 +1,7 @@
 {
   "schemaVersion": "vnext-published-target-read-source-v1",
   "migration": "migrations/20261024_vnext_published_target_read_v1.sql",
-  "migrationSha256": "b7c0c8992c0dbd45fedaf8ddbe2a9d235b15f06a2365e819e4f51f45aad07260",
+  "migrationSha256": "213823d9c1a90aee259b90974329431369eb07634901caddb560d1d0853e7025",
   "nativeVerified": false,
   "nativeOids": null,
   "modifiedRoutines": [
@@ -52,6 +52,7 @@
       ],
       "predecessorProconfig": [
         "search_path=pg_catalog, public",
+        "TimeZone=UTC",
         "statement_timeout=30s",
         "lock_timeout=2s"
       ]
@@ -67,5 +68,14 @@
     "code": "P0001",
     "message": "vnext_target_read_predecessor_changed",
     "finding": "new precondition incorrectly assumed target current had only search_path; exact original constructor also has statement_timeout30s/lock_timeout2s; source-derived correction only, no ACL/body hash or old profile change"
+  },
+  "secondConstructorFinding": {
+    "subject": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+    "run": 39996620417,
+    "job": 120561693293,
+    "actualMessageHash": "52c7cc08ab309eda6015c8991ffeedae7a5318ef3d8a3179bb2f016dea56d8aa",
+    "exactSourceDerivedErrorMessageMatches": true,
+    "scope": "quote constructor TimeZone=UTC precedes30s/2s; guard rejects before apply; no new installer COMMIT/fiscal/withdrawal positive on this subject",
+    "nativeRetry": "HOLD_SAME_FAILURE_LIMIT_2; exact source review required; no lowering or unknown setting allowed"
   }
 }

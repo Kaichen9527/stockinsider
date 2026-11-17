@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "stockinsider-t14-invest-j-things-publisher-atom-v1",
+  "recordedAt": "2026-11-17T19:20:54.539145+00:00",
+  "parent": "eef137d88a7eb3ffe398ec1336e1b78b8039801d",
+  "scope": "Contabo isolated staging; fixed GitHub parent with six code and test paths changed; no formal runtime credentials",
+  "publisher": {
+    "profile": "https://da-hwa-international.com.tw/teacher_john.html",
+    "channel": "https://www.youtube.com/channel/UCXB8cCqwOHP3BmyhYLAUs0g",
+    "feed": "https://www.youtube.com/feeds/videos.xml?channel_id=UCXB8cCqwOHP3BmyhYLAUs0g",
+    "program": "投資 J 件事"
+  },
+  "officialIndexProbe": {
+    "httpStatus": 200,
+    "contentType": "text/xml; charset=UTF-8",
+    "bytes": 25784,
+    "sha256": "3b567381ce269b8f4a5f88df279c37c79ea241562f7588fa0fdc095daf62ea65",
+    "entries": 15,
+    "titlesIdentifyingProgram": 0,
+    "authorizedTracks": 0,
+    "admittedEpisodes": 0,
+    "transcriptDownloads": 0,
+    "node": "22.14.0",
+    "priorTransportFailure": "ERR_INVALID_IP_ADDRESS",
+    "fixedTransportPinnedValidatedAddressFamily": true
+  },
+  "admission": {
+    "autoEnabled": false,
+    "originAndAnalysisPermissionRequired": true,
+    "exactCreatorProgramAndCanonicalEpisodeRegistrationRequired": true,
+    "usesAtomPublishedTime": true,
+    "shortsAndWatchShareOneCanonicalEpisodeUrl": true,
+    "feedsFromOtherChannelsOrUnregisteredProgramsAreExcluded": true,
+    "publicLocatorRequiresCurrentlyRegisteredMatchingTranscriptSha256": true,
+    "privateArtifactUrlTranscriptAndTranscriptDigestAreOmittedFromPublicProjection": true,
+    "existingProfileIdPreserved": true
+  },
+  "operatorInputs": {
+    "feedEnv": "PODCAST_RSS_ALLOWLIST",
+    "analysisEnv": "PODCAST_CONTENT_ANALYSIS_ALLOWLIST",
+    "publisherArtifactOriginEnv": "PODCAST_ARTIFACT_ORIGIN_ALLOWLIST",
+    "trackRegistryEnv": "PODCAST_AUTHORIZED_TRANSCRIPT_TRACKS",
+    "trackFields": [
+      "episodeUrl",
+      "feedUrl",
+      "language",
+      "program",
+      "type",
+      "url",
+      "utf8Sha256"
+    ]
+  },
+  "sourceTests": {
+    "pass": 20,
+    "fail": 0,
+    "tapSha256": "42c4c466598a7691c8b485c57995940715fec4258108c144d56489099ab8b4fc"
+  },
+  "build": {
+    "next": "16.3.4",
+    "typecheckPassed": true,
+    "lintPassed": true,
+    "lintWarnings": 37,
+    "productionBuildPassed": true,
+    "requiredServerFilesSha256": "606c0683cdc51a48298558396ee10de88471098cb5ee452bc90175595b584c48"
+  },
+  "codeSha256": {
+    "web/src/lib/research-v2.ts": "b219e326d630e02531cf4638bd04c36068652c4dc28309f58247a36b49440039",
+    "web/src/lib/podcast-rss.ts": "523f67ab17237ca8074e2ba83c8fc7e875560c5cc4ba2e000dbc472f206d3488",
+    "web/src/lib/pinned-https-fetch.ts": "d63c6c03dbf4e7e2a22115c9c238156ddb76ba587599a53cee43432da00d5478",
+    "web/src/lib/external-source-adapters.test.ts": "3b547e02552a07c57b14355f4dcc95cdcf1ea856a101142bd80828adc22d88d9",
+    "web/src/lib/podcast-public-evidence.ts": "effd53e3991c1287cf84539efd80ac9ecdfce91acbf0f6346f2ccd9d08fb44fd",
+    "web/src/lib/podcast-public-evidence.test.ts": "01368f1decb9bab1dba787c439d24f5d1ef91a2d4186b1713492c8a5e227e939"
+  },
+  "productionDeployed": false,
+  "realSourceContentAccepted": false,
+  "remaining": "Creator or rights holder must provide program, original episode identifier and rights-cleared VTT/SRT before a genuine content-to-candidate run."
+}

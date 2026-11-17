@@ -1,0 +1,76 @@
+{
+  "recordedAt": "2026-11-15T14:50:34.620279Z",
+  "baseCommit": "c37772d7f3c4106a6336defedcd6cb9ccfe8bb65",
+  "tasks": [
+    "T06",
+    "T10"
+  ],
+  "migration": "migrations/20261116_16_vnext_launch_twse_close_plan_v1.sql",
+  "source": {
+    "datasetId": 11764,
+    "reportDay": "2026-11-13",
+    "bytes": 79265,
+    "sourceRows": 1086,
+    "sha256": "6b03cce558971759c4edc94c0ee39b434d5dd841002ec227140c490a94e8133c",
+    "actualObservedAt": "2026-11-15T14:50:34.620279Z",
+    "knownByOriginalCutoff": false,
+    "originalBytesRetained": false
+  },
+  "nativePostgreSQL": {
+    "version": "17.11",
+    "environment": "Contabo staging, disposable network-isolated PostgreSQL cluster",
+    "fixtureDependencies": [
+      "calendar",
+      "roster",
+      "source policy",
+      "writer and lease adapter",
+      "artifact receipt adapter"
+    ],
+    "fixtureSignalDay": "2026-11-15",
+    "fixtureSignalDayIsRealTradingSession": false,
+    "v3Plan": {
+      "jobs": 107,
+      "additionalCloseJobs": 29,
+      "closeJobsOnReplay": 0,
+      "indexResources": 72
+    },
+    "lastSlot": {
+      "before": 199,
+      "after": 200,
+      "added": 1,
+      "replayAdded": 0,
+      "newestMissingFirst": true
+    },
+    "assertions": [
+      "source request window and common roster",
+      "ready receipt retains append/ready clocks and exact provenance",
+      "prior cutoff and new unacknowledged resource head cannot see an older ready capture",
+      "current close is claimed ahead of older jobs",
+      "previous generation receives zero attempts in either queue path",
+      "unbound ordinary queue and other licensed data remain available",
+      "private helper inaccessible to service role",
+      "fixture source rights changes are denied"
+    ],
+    "passed": true
+  },
+  "node": {
+    "version": "22.14.0",
+    "environment": "Contabo staging, network-isolated Node test subprocess",
+    "passed": 22,
+    "failed": 0,
+    "suites": [
+      "launch-source-store.test.ts",
+      "launch-index-backfill.test.ts"
+    ]
+  },
+  "productionMutation": false,
+  "stagingServiceMutation": false,
+  "launchMarketBreadthConsumesReceipts": false,
+  "fullCodexVmChecks": false,
+  "fullRealSessionAcceptance": false,
+  "pending": [
+    "Use committed close receipts with official report identity and exact company-action handling in market breadth",
+    "Verify daily scheduling and actual acquisition coverage across two genuine adjacent sessions",
+    "Verify native migration chain and full application and deploy gates in Codex VM and isolated staging"
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "vnext-ranking-snapshot-source-v1",
+  "migration": "migrations/20261107_vnext_ranking_snapshot_v1.sql",
+  "migrationSha256": "ed1fdb3c6ff1a0323fc8b9386b0afb27cb08804092ea3715696b4264c02507fb",
+  "nativeVerified": false,
+  "nativeHOLD": true,
+  "sourceVersion": "vnext-ranking-snapshot-source-v1",
+  "newRoutines": [
+    "public.vnext_ranking_immutable_v1()",
+    "public.vnext_ranking_command_v1(text,jsonb)",
+    "public.vnext_ranking_read_v1(uuid,text)"
+  ],
+  "modifiedExistingRoutines": [],
+  "newRoles": [],
+  "directTableGrants": [],
+  "executeGrantees": [
+    "service_role"
+  ],
+  "lockOrder": [
+    "610091002",
+    "2409,6002",
+    "64221022"
+  ],
+  "authority": "existing_operator_writer_publication_provider_rights_qualification_current_score",
+  "qualificationTtlSeconds": 120,
+  "postCloseTaipei": "20:30",
+  "limits": {
+    "activePool": 20,
+    "ranking": 10
+  },
+  "unverified": [
+    "native SQL grammar/catalog/RLS/fence",
+    "concurrent CAS/idempotency/atomic rollback",
+    "actual authorized source/provider/reviewer",
+    "protected exact review"
+  ],
+  "dependencies": [
+    {
+      "signature": "public.vnext_target_current_v1(text,uuid,text)",
+      "bodySha256": "802d70c4a65be2e32b03206471c054479539e694ef4c761efebf451501edf365",
+      "securityDefiner": true,
+      "proconfig": [
+        "search_path=pg_catalog, public",
+        "statement_timeout=30s",
+        "lock_timeout=2s"
+      ],
+      "sourceProfile": "vnext-published-target-read-profile-v1.json"
+    },
+    {
+      "signature": "public.vnext_read_v1(text)",
+      "bodySha256": "20259a7fb00e81257ca6a18faafb3131383f60876272885c09b8fc6566a7d85b",
+      "securityDefiner": true,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "sourceProfile": "vnext-published-target-read-profile-v1.json"
+    },
+    {
+      "signature": "public.vnext_current_deep_score_v1(jsonb,uuid,text)",
+      "bodySha256": "46f6d848805cc89dc35fd85d9f5d817d934112169f0f1a0cc01c37054adf2e33",
+      "securityDefiner": true,
+      "proconfig": [
+        "search_path=pg_catalog, public",
+        "statement_timeout=30s",
+        "lock_timeout=2s"
+      ],
+      "sourceProfile": "vnext-business-criteria-profile-v1.json"
+    },
+    {
+      "signature": "public.vnext_input_sources_current_v1(jsonb,text)",
+      "bodySha256": "912b039211f3624f82fa1940740b9cb47a8f0ed46817e108504b29d5a528b8e4",
+      "securityDefiner": true,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "sourceProfile": "vnext-action-terms-profile-v1.json"
+    },
+    {
+      "signature": "public.vnext_catalog_canonical_v1(jsonb)",
+      "bodySha256": "597081dda160ac0e369b5f5306bee102caac5b78b19cd82583e0e9408cc4f464",
+      "securityDefiner": false,
+      "proconfig": [
+        "search_path=pg_catalog"
+      ],
+      "sourceProfile": "migrations/20261022_vnext_legacy_mode_fence_v1.sql"
+    },
+    {
+      "signature": "public.vnext_provider_envelope_v1(jsonb,integer)",
+      "bodySha256": "f30e724618b242f2e40ee3f64ced5f131baf5505ac51827238bb6992f9c27264",
+      "securityDefiner": false,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "sourceProfile": "migrations/20261022_vnext_provider_worker_v1.sql"
+    }
+  ],
+  "newTables": [
+    "public.vnext_ranking_snapshots_v1",
+    "public.vnext_ranking_members_v1"
+  ],
+  "operatingLimitation": "existing published qualification expires in120seconds and cannot be renewed here; fresh daily20:30 snapshot may remain blocked; no native positive proven",
+  "retentionPins": "all frozen active candidate publication pointers, not only Top10"
+}

@@ -62,11 +62,12 @@ export async function fetchPinnedHttpsText(input: {
 }) {
   if (input.url.protocol !== 'https:' || input.url.username || input.url.password
     || !input.allowedOrigins.has(input.url.origin) || input.maxBytes < 1) throw new Error('pinned_https_url_rejected');
-  const addresses = await publicAddresses(input.url.hostname, input.lookup || dns.lookup);
+  const [address] = await publicAddresses(input.url.hostname, input.lookup || dns.lookup);
+  const family = net.isIP(address) as 4 | 6;
   return await new Promise<{ status: number; body: string; contentType: string }>((resolve, reject) => {
     const request = https.request(input.url, {
-      method: 'GET', headers: input.headers, servername: unbracket(input.url.hostname),
-      lookup: (_hostname, _options, callback) => callback(null, addresses[0], net.isIP(addresses[0]) as 4 | 6),
+      method: 'GET', headers: input.headers, servername: unbracket(input.url.hostname), family,
+      lookup: (_hostname, _options, callback) => callback(null, address, family),
     }, (response) => {
       const status = response.statusCode || 0;
       if (status >= 300 && status < 400) { response.resume(); reject(new Error('pinned_https_redirect_rejected')); return; }

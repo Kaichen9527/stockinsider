@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "stockinsider-t07-issuer-fiscal-forecast-projection-v1",
+  "scope": "Contabo isolated worker and HTTP smoke using synthetic ranking/review/authority rows",
+  "nodeTestCountPassed": 25,
+  "postgresNativeFixture": "17.11 passed annual, four quarters, preserved legacy quarterly, changed original, withdrawn rights and cross-issuer/run controls",
+  "typescript": "pass",
+  "targetedLint": "pass",
+  "nextProductionBuild": "16.3.4 pass",
+  "standaloneHttp": {
+    "rankingRead200": true,
+    "detailApiAndHtml200": true,
+    "fiscalReads": 3,
+    "immutableBinding": true,
+    "sourceWithdrawnEmpty": true,
+    "homeSelectOnly": true,
+    "synthetic": true
+  },
+  "sourceFileHashes": {
+    "web/src/lib/vnext/launch-ranking-read.ts": "d15c31ac184713ec937e1999b2ba8e229513e323c160d5f041561b437d7fc487",
+    "web/src/app/components/vnext/LaunchDetail.tsx": "e7b9b5f2501f373c024b28db5e8d63892d5a325fc75ec086f3407f9f999086bf",
+    "web/src/lib/vnext/launch-ranking-read.test.ts": "04ee181b8f5e86f9742c10d821bc94fac923098c533557163f98a83abb1febc5",
+    "scripts/vnext-launch-issuer-eps-native.test.sql": "f54199e72dd8520926770d6844e7c1e6e17035064f89280079a4d0e0fd48834d",
+    ".github/workflows/stockinsider-vnext-quality.yml": "cabee7a118b782229f3f759ecb7ef1f3fdabe7d28220834c65e860e6e7e7d021",
+    "openspec/changes/stockinsider-vnext-20/launch-radar-amendment.md": "699fcf895198ae7822a4b4c1a6b485e3dd9a678fb5c265b566369bee54681685",
+    "migrations/20261117_45_vnext_launch_issuer_fiscal_forecasts_v1.sql": "2de0f0740e96d50c0a9e0e73ba2686f0907207d7ac2634c8b0bf26d9fae70b2a"
+  },
+  "disposableBuildOutput": {
+    "workspacePath": "web/.next",
+    "buildIdSha256": "71aa11756023919915185cdef4afb8369c6aba8bc340ee9926164f01c95fc64b",
+    "purpose": "disposable fiscal projection build and standalone smoke",
+    "runtimeOrReleasePointerUsesIt": false,
+    "rebuildCommand": "npm run build"
+  },
+  "realIssuerEndToEndVerified": false,
+  "reviewedPeOrTargetScenarioProjected": false,
+  "productionMigrationsApplied": false
+}

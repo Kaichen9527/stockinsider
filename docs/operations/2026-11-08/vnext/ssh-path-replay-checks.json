@@ -1,0 +1,386 @@
+{
+  "scope": "source/anonymous NONKEY filesystem behavior in same-VM isolated managed container plus pure replay fixtures and existing synthetic public HTTP/browser regressions; no live SSH/host/authentication or whole-entry scheduler authority",
+  "sourceCommit": "b3a3486c923d48a185d76b87cd0d28e682da8234",
+  "sourceTree": "f619de00ff40dfb4dd7e5a63174c9ecc4309fee9",
+  "runtimeWebTree": "6481851a5c279ead1590053282f778596e39ffd5",
+  "baseProtectionCommit": "6428918f540d5d088814be324ab8578c0cb41e4e",
+  "originalPrHeadRequired": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "userTimezone": "Asia/Taipei",
+  "completedAtLocal": "2026-11-08T10:54:16.834619+08:00",
+  "machineTimes": "UTC ISO8601",
+  "model": {
+    "implementationAndIndependentSourceReview": "GPT-6.1 Sol High explicitly selected",
+    "coordinator": "integration only; no self model-switch claim"
+  },
+  "privacy": {
+    "behaviorOnlyPublicEvidence": true,
+    "stagingAddressIncluded": false,
+    "keyOrFingerprintIncluded": false,
+    "authenticationIdentityIncluded": false,
+    "privateLogIncluded": false,
+    "actualCredentialProcessed": false
+  },
+  "filesystemFixture": {
+    "status": "PASS_BEHAVIOR_CASES",
+    "caseCount": 16,
+    "report": {
+      "aclObservations": {
+        "kernelAccessAclRejectionVerified": false,
+        "kernelDefaultAclRejectionVerified": false,
+        "unavailableAclInspectionExplicitlyBlocked": true
+      },
+      "allCasesPassed": true,
+      "behaviors": {
+        "test_bootstrap_early_apply_barrier_precedes_all_host_observation": true,
+        "test_changed_ancestor_mode_after_open_refuses_publication_without_repair": true,
+        "test_exact_idempotence_is_not_expiry_renewal_or_unsafe_path_repair": true,
+        "test_existing_directory_and_file_metadata_mismatch_is_not_healed": true,
+        "test_fifo_rejected_without_waiting_for_a_writer": true,
+        "test_fixed_restrictions_and_bounded_canonical_expiry": true,
+        "test_hardlinked_or_oversized_existing_file_rejects_before_read": true,
+        "test_host_facade_cannot_be_enabled_or_touch_paths": true,
+        "test_isolated_cli_help_and_early_apply_refusal_without_public_file": true,
+        "test_kernel_posix_acl_rejected_or_inspection_explicitly_blocked": true,
+        "test_missing_acl_observation_and_reported_access_or_default_acl_block": true,
+        "test_named_directory_replacement_does_not_follow_production_fixture": true,
+        "test_new_path_under_child_umask_permits_read_but_no_write_or_other_group": true,
+        "test_nonzero_group_and_nonkey_payload_cannot_be_replaced_by_caller_options": true,
+        "test_original_umask_failure_denies_nonroot_despite_file_mode": true,
+        "test_symlink_ancestor_directory_and_file_do_not_follow_or_touch_target": true
+      },
+      "fixtureOnly": true,
+      "rootFixturePrerequisiteMet": true
+    },
+    "sourceFilesSha256": {
+      "deployment/staging/vnext/authorized_key_path.py": "82f90a7166d5769023d3263dee0141ef99657e842a3b961f211d2f6ed149f97d",
+      "deployment/staging/vnext/bootstrap.py": "ec52074eeafd09881cd05d827a3bff49a44353916201594d43a559109e2c9201",
+      "scripts/vnext-staging-keypath.test.py": "ce1cba8af7c4d58b937aac0cfc2e2f997f6557db1f34b0f500b238a144499ca6"
+    },
+    "exit": 0,
+    "stderrEmpty": true,
+    "durationSeconds": 1.482,
+    "imageArtifactDigest": "python@sha256:4840d514c583a4d3d8cad3940e68dee6f0f6f3635c12fcd0a3d74c21a5b93a54",
+    "scope": "official software image digest, not an authentication identity",
+    "networkNone": true,
+    "rootFilesystemReadOnly": true,
+    "sourceMountsReadOnly": true,
+    "onlyExplicitThreeSourceFilesMounted": true,
+    "hostRuntimeOrCredentialMount": false,
+    "privileged": false,
+    "memoryLimitBytes": 134217728,
+    "tmpfsLimitBytes": 67108864,
+    "pidsLimit": 32,
+    "capabilities": "file ownership and child credential drop only; no SYS_ADMIN or networking",
+    "autoRemoveRequested": true,
+    "cleanupBehavior": {
+      "querySucceeded": true,
+      "fixtureImageContainersRemaining": 0
+    }
+  },
+  "kernelAclAcceptance": {
+    "status": "BLOCKED_KERNEL_INJECTION_UNAVAILABLE",
+    "accessAclInjectionVerified": false,
+    "defaultAclInjectionVerified": false,
+    "unavailableInspectionDenialVerified": true,
+    "reportedAclDenialBranchTested": true,
+    "mockBranchIsNotKernelAclAcceptance": true
+  },
+  "checks": [
+    {
+      "name": "focused",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/top10-projection.test.ts",
+        "web/src/lib/vnext/published-target-read.test.ts",
+        "web/src/lib/vnext/ranking-read.test.ts",
+        "web/src/lib/vnext/candidate-page.test.ts",
+        "web/src/lib/stock-chart-calendar.test.ts",
+        "web/src/app/components/vnext/detail-source.test.mjs",
+        "scripts/vnext-ranking-snapshot-source.test.mjs",
+        "web/src/lib/stock-chart-supply.test.ts",
+        "web/src/lib/vnext/business-public.test.ts",
+        "web/src/lib/vnext/vnext.test.ts",
+        "scripts/vnext-staging-preflight.test.mjs",
+        "web/src/lib/vnext/candidate-history-read.test.ts",
+        "scripts/vnext-candidate-history-source.test.mjs",
+        "web/src/lib/candidate-price-history.test.ts",
+        "scripts/vnext-source-window-source.test.mjs",
+        "web/src/lib/vnext/source-volume-boundary.test.ts",
+        "web/src/lib/vnext/analysis-sources.test.ts",
+        "web/src/lib/vnext/source-backlog.test.ts",
+        "web/src/lib/vnext/cached-source-admission.test.ts",
+        "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+        "web/src/lib/vnext/schedule-admission.test.ts",
+        "web/src/lib/vnext/schedule-replay-binding.test.ts",
+        "scripts/vnext-staging-schedule-candidate.test.mjs",
+        "scripts/vnext-candidate-epoch-source.test.mjs",
+        "web/src/lib/source-content-semantics.test.ts",
+        "web/src/lib/vnext/cached-admission.test.ts",
+        "web/src/lib/vnext/current-evidence-read.test.ts",
+        "web/src/lib/vnext/preparation-authority.test.ts",
+        "scripts/vnext-weekly-forecast-source.test.mjs",
+        "web/src/lib/vnext/forecast-active.test.ts",
+        "web/src/lib/vnext/forecast-current.test.ts",
+        "web/src/lib/vnext/thesis.test.ts",
+        "scripts/vnext-staging-execution-boundary.test.mjs",
+        "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+        "web/src/lib/tw-entry-plan-authority.test.ts"
+      ],
+      "start": "2026-11-08T02:53:42.434351+00:00",
+      "end": "2026-11-08T02:53:46.212148+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 42954752,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31017865216,
+        "/tmp": 9423351808
+      },
+      "resourceViolation": null,
+      "logSha256": "fb242b4ccdfea756c07aa4494903c69db8448b10dea395b102eae7ba1205d14c"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-08T02:53:46.212788+00:00",
+      "end": "2026-11-08T02:53:48.470786+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40177664,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31017844736,
+        "/tmp": 9423351808
+      },
+      "resourceViolation": null,
+      "logSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-08T02:53:48.471330+00:00",
+      "end": "2026-11-08T02:54:05.550079+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40910848,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31017836544,
+        "/tmp": 9423351808
+      },
+      "resourceViolation": null,
+      "logSha256": "84df8aab33a2588ebae98ea51a5abfccb758ea53330f1013e6b9766025759b29"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-08T02:54:05.550757+00:00",
+      "end": "2026-11-08T02:54:10.567857+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40923136,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31016067072,
+        "/tmp": 9423351808
+      },
+      "resourceViolation": null,
+      "logSha256": "8ba570d6def26d923021c7e65fe68b8a798b0160d5d8be493d70bdcfb5236247"
+    },
+    {
+      "name": "browser",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/vnext-ranking-browser-smoke.mjs"
+      ],
+      "start": "2026-11-08T02:54:10.568272+00:00",
+      "end": "2026-11-08T02:54:16.834619+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 156311552,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31014035456,
+        "/tmp": 9300238336
+      },
+      "resourceViolation": null,
+      "logSha256": "050f1cac5800d9be6573aa556a2987d0eeea748d548ddab9e7efc1da6dc2a5ab"
+    }
+  ],
+  "nodeFocusedTotals": {
+    "pass": 330,
+    "fail": 0,
+    "skip": 0
+  },
+  "newReplayCases": {
+    "pass": 11,
+    "fail": 0,
+    "overlap330": true
+  },
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 34
+  },
+  "browser": {
+    "scope": "actual isolated HTTP/SSR/Chromium desktop/mobile; synthetic RPC transport only, no native PG/review authority",
+    "status": "PASS",
+    "source": "b3a3486c923d48a185d76b87cd0d28e682da8234",
+    "harnessCommit": "b3a3486c923d48a185d76b87cd0d28e682da8234",
+    "runtimeWebTree": "6481851a5c279ead1590053282f778596e39ffd5",
+    "browserVersion": "151.0.7922.173",
+    "checks": [
+      "desktop:top0",
+      "desktop:top1",
+      "desktop:top10",
+      "desktop:bound-detail-invalidity",
+      "desktop:wrong-revision-closed",
+      "desktop:stable-page-private-allowlist",
+      "desktop:saved-history-version-and-observed-exit",
+      "mobile:top0",
+      "mobile:top1",
+      "mobile:top10",
+      "mobile:bound-detail-invalidity",
+      "mobile:wrong-revision-closed",
+      "mobile:stable-page-private-allowlist",
+      "mobile:saved-history-version-and-observed-exit"
+    ],
+    "readRpcCalls": 23,
+    "writeRpcCalls": 0,
+    "providerCalls": 0
+  },
+  "browserCleanup": {
+    "appPid": 5336,
+    "appExit": 143,
+    "appSignal": null,
+    "bridgeClosed": true
+  },
+  "browserLimit": "14 existing synthetic readonly public regressions; no SSH or scheduler runtime case",
+  "draftReplayChecks": {
+    "initialPass": 10,
+    "finalPass": 11,
+    "note": "known-original retry lineage refinement added; prepared hash independent; initial result not formal acceptance"
+  },
+  "review": {
+    "scope": "readonly source/test/docs in host-harddisabled/fixture-only scope; not formal A1",
+    "blocker": 0,
+    "high": 0,
+    "openFindings": 0,
+    "reviewerExecutedTestsOrSystemActions": false,
+    "fixedFindings": [
+      "revalidate ancestor owner/group/mode and ACL after descriptor binding",
+      "preserve isolated Python -I CLI compatibility without module-search relaxation",
+      "exact file size before reading, with trailing-byte negative",
+      "retain canonical UTC Z option assertion",
+      "known retry references do not conflate admission and prepared input"
+    ]
+  },
+  "bootstrapBehavior": {
+    "apply": "UNCONDITIONAL_REFUSAL_BEFORE_HOST_OBSERVATION",
+    "legacyAccountPasswordAndPrivateTreeKeyMutationsRemoved": true,
+    "capacityDryRunArithmeticPreserved": true,
+    "capacityObservedForTargetHost": false,
+    "gatewaySourceBytesUnchanged": true,
+    "isolatedPythonHelpAndApplyBarrierTested": true,
+    "actualHostPathOrDaemonBinding": "NOT_OBSERVED",
+    "actualDedicatedGroupMembership": "NOT_OBSERVED",
+    "serverEnforcedExpiryRevocationSessionClosure": "NOT_RUN",
+    "hostInstaller": "Disabled",
+    "fixtureSentinelCannotAuthenticate": true,
+    "existingMismatchNeverRepairedOrRenewed": true
+  },
+  "replayIdentity": {
+    "stableSlotSeparatedFromMaterial": true,
+    "calendarVersionBoundAsFixtureIntent": true,
+    "originalStageRequestRefsOpaqueNotVerified": true,
+    "acquisitionOnlyClockCannotCreateMaterialAttempt": true,
+    "changedMaterialAtSameSlot": "fixture_identity_conflict",
+    "completedResultCutoffAndExpiryRetained": true,
+    "pendingUncertainFailedAutomaticPost": false,
+    "wholeEntryAuthorityBound": false,
+    "productionExecution": false,
+    "chargeAuthorized": false,
+    "providerPostAllowed": false,
+    "newDbLedgerOrAdapter": false
+  },
+  "productionSourceUnchanged": {
+    "protectedDiffExit": 0,
+    "productionSshdTouched": false,
+    "productionUnitsInstallersSqlAndWorkflowUnchanged": true
+  },
+  "sourceFilesSha256": {
+    "deployment/staging/vnext/bootstrap.py": "ec52074eeafd09881cd05d827a3bff49a44353916201594d43a559109e2c9201",
+    "deployment/staging/vnext/authorized_key_path.py": "82f90a7166d5769023d3263dee0141ef99657e842a3b961f211d2f6ed149f97d",
+    "deployment/staging/vnext/AUTHORIZED-KEY-PATH.md": "a6314b2abc436dc0b0267bfac199e0897d2fc6c572f5825a0106d5bad7b6ccd2",
+    "scripts/vnext-staging-keypath.test.py": "ce1cba8af7c4d58b937aac0cfc2e2f997f6557db1f34b0f500b238a144499ca6",
+    "web/src/lib/vnext/schedule-replay-binding.ts": "59b697eda9e4f888a66099b3b0c7f8b19c6a51822bd850058f3a5440a3cccfc0",
+    "web/src/lib/vnext/schedule-replay-binding.test.ts": "ba1f91b7b1744ed595435f03114ae3713b1c79b3a382b8018e34d2d85eb2dded"
+  },
+  "resources": {
+    "serialHeavyWork": true,
+    "minimumFilesystemFreeBytes": 8589934592,
+    "admissionReferenceBytes": 536870912,
+    "sampledTreeRssCeilingBytes": 8589934592,
+    "sampledNotInstantaneousOrCgroupPeak": true,
+    "containerDependencyDownload": "official image through existing managed policy; no daemon/network configuration change",
+    "historicalPruneOrDelete": false
+  },
+  "readinessBehaviorOnly": {
+    "selectedExecutorObservedCurrent": true,
+    "executorRunning": true,
+    "configuredRevisionMatchesObserved": true,
+    "networkPolicyEnforced": true,
+    "secretBindingsPresent": false,
+    "outboundIdentitiesPresent": false,
+    "ordinaryRootFixturePrivilege": false,
+    "supportedIsolatedRootFixture": true,
+    "hostSshIdentityVerified": false
+  },
+  "gates": {
+    "liveSshOrHostPermission": "NOT_RUN_BY_THIS_EXECUTOR",
+    "kernelAclInjection": "BLOCKED",
+    "actualDaemonGroupPolicyAndExpiry": "NOT_VERIFIED",
+    "wholeEntryDurableReplay": "NOT_CONNECTED",
+    "nativePostgres": "HOLD_NOT_RETRIED",
+    "formalA1ProtectedReview": "BLOCKED",
+    "realSourceCurrentQualificationAdjacentSessions": "NOT_RUN",
+    "CI": "REQUIRED_NOT_TRIGGERED",
+    "stagingRestoreRelease": "BLOCKED"
+  },
+  "actions": {
+    "remoteStagingConnection": 0,
+    "vpnOrNetworkPolicyChange": 0,
+    "keyAgentEnvReadOrMutation": 0,
+    "hostAuthorizationOrAccountMutation": 0,
+    "hostSshdChange": 0,
+    "timerOrProductionService": 0,
+    "sqlPgNativeRetry": 0,
+    "newVmOrRebuild": 0,
+    "originalPrHeadUpdate": 0,
+    "mergeOrDeploy": 0,
+    "oldVmOrIcloud": 0,
+    "officialFixtureImageDownload": 1
+  },
+  "bytesReclaimedFromHistoricalData": 0,
+  "verifiedArchiveLocation": null
+}

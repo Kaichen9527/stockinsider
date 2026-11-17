@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "stockinsider-t06-disposition-range-title-v1",
+  "engineeringParent": "03daec4d14699140f4dbe22093f77e71513a0b62",
+  "control": {
+    "originalParserRejectedTWSETitle": true,
+    "change": "Accept the exact legacy range title or the exact same-day official update line. Reject different dates and additional lines.",
+    "individualCaptureReceiptsBeforeParsing": true,
+    "individualMarketsSettleBeforeExit": true,
+    "focusedTestsPassed": 6
+  },
+  "archivedReplay": {
+    "session": "2026-11-17",
+    "cutoff": "2026-11-17T21:30:00+08:00",
+    "replayedAt": "2026-11-17T14:01:15.341Z",
+    "archivedBeforeCutoffByFileMetadataOnly": true,
+    "originalPerResponseObservationReceiptPresent": false,
+    "testedInPrivateNetwork": true,
+    "rankingAuthority": false,
+    "sources": [
+      {
+        "market": "TWSE",
+        "originalRangeSha256": "d8e93af7fcb7e5366b13d18fe182b5e9f04d820957ab21d20625bb31cf5f4d30",
+        "originalNoticeSha256": "de12c39139ac87a04a9be0b3903ad9e01d3034c9fad7e7dddafe44b54684c9de",
+        "rangeFileMtimeUtc": "2026-11-17T13:24:32.184Z",
+        "noticeFileMtimeUtc": "2026-11-17T13:24:32.246Z",
+        "officialNotices": 3,
+        "csvNoticesInEffect": 3,
+        "fourDigitSetsAgree": true,
+        "admittedAtCutoff": false
+      },
+      {
+        "market": "TPEX",
+        "originalRangeSha256": "7e533ba6ee0cb01d7b7ebf3c9751fc110d488bed3f7d00fbab6be1f78cf58ef6",
+        "originalNoticeSha256": "3faa9bb078aa6ab6c63ca26b7efb5f10bb6e84955edd277081917f943916426e",
+        "rangeFileMtimeUtc": "2026-11-17T13:24:31.856Z",
+        "noticeFileMtimeUtc": "2026-11-17T13:24:31.766Z",
+        "officialNotices": 6,
+        "csvNoticesInEffect": 6,
+        "fourDigitSetsAgree": true,
+        "admittedAtCutoff": false
+      }
+    ]
+  },
+  "sourceAcquisition": {
+    "listedRosterBeforeCutoff": true,
+    "priceLimitObserverWroteReceipt": true,
+    "signedTurnoverAndDispositionStoppedAtCapacityCheck": true,
+    "rankingOrProductionTouched": false
+  },
+  "host": {
+    "observedAvailableBytes": 16489865216,
+    "stagingRollbackWorkspaceNotAllocated": true
+  },
+  "tomorrow": {
+    "scheduledByExistingStageTimer": true,
+    "replacementActivationVerified": false
+  }
+}

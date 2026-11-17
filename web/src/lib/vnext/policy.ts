@@ -71,4 +71,4 @@ export function latestCompletedSession(sessions: Session[], now: string): string
 export function taipeiDate(now: string) {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(now));
 }
-export const STAGING_SCHEDULE = Object.freeze({ enabled: false, timeZone: 'Asia/Taipei', postClose: '18:30', premarket: '08:15' });
+export const STAGING_SCHEDULE = Object.freeze({ enabled: false, timeZone: 'Asia/Taipei', postClose: '20:30', premarket: '08:15' });

@@ -1,0 +1,10 @@
+[Unit]
+Description=INERT source candidate for isolated vNext 20:30 ranking intent
+ConditionPathExists=!/
+
+[Timer]
+OnCalendar=*-*-* 20:30:00 Asia/Taipei
+Persistent=false
+RandomizedDelaySec=0
+AccuracySec=1s
+Unit=stockinsider-vnext-oct22-staging-rank-publish.service

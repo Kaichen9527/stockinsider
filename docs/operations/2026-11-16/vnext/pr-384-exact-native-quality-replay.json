@@ -1,0 +1,101 @@
+{
+  "schema": "stockinsider-pr384-native-quality-comparison-v1",
+  "dateTaipei": "2026-11-16",
+  "pr": 384,
+  "integrationHeadAtReplay": "55f29e5a22b0ed1a744c35993f403f35abcf65d4",
+  "suiteSource": {
+    "commit": "a8fbdfdbf55d77d2928a9134a396091001994769",
+    "tree": "6b83fe004f9f62b1bccb52617b4ac4387562c2ea",
+    "ciRun": 39996620417,
+    "ciJob": 120561693293
+  },
+  "environment": {
+    "host": "authorized isolated Contabo staging",
+    "nodeVersion": "22.14.0",
+    "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "postgresVersion": "17.11",
+    "postgresSha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed",
+    "postgresImage": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+    "imageNetwork": "none",
+    "nextVersion": "16.3.4",
+    "buildPassed": true,
+    "buildIdFileSha256": "1a4b25bcfa5ca4ca990952016e9ed43932af529bee7bd37839f97535d1a79232",
+    "requiredServerFilesSha256": "937e0d1f3bb02f4517d2137132732925061291e9e7ce45c995f26b788d181a8f",
+    "buildCgroupMemoryMaxBytes": 2147483648,
+    "postgresCgroupMemoryMaxBytes": 1073741824,
+    "syntheticApplicationInputs": true
+  },
+  "nativeThesis": {
+    "tapSha256": "cd1d591a889c4e8876d0f5bc8e5a84401a4bebf69f39847502eac431066adf91",
+    "rawTapCounts": {
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "subtests": [
+      "actual thesis audit, current-source closure and durable retry budget",
+      "original prefixes plus two additive candidates commit and real screen-context ambiguity is closed",
+      "2409 actual configured worker consumes current extraction and retains an unqualified revision",
+      "2383 actual configured worker consumes current extraction and retains an unqualified revision",
+      "actual all-active audit persists separate deep evidence; corrected new fact IDs cause substantive drift",
+      "read-rights withdrawal blocks current replay and worker dispatch while immutable history remains exact",
+      "only a known settled429 exposes one charged retry; total started attempts remains4"
+    ],
+    "checkpoints": [
+      "cleanup.json",
+      "final-state.json",
+      "semantic-current-public-recalculation.json",
+      "thesis-audit.json"
+    ]
+  },
+  "nativePreparation": {
+    "tapSha256": "616098426f96c38e27275b5605adb87a2675aa90c1bb95e51f85093c64b65795",
+    "tests": 1,
+    "passed": 0,
+    "failed": 1,
+    "stoppedDuring": "preflight",
+    "errorCode": "57014",
+    "postgresError": "canceling statement due to statement timeout",
+    "migration": "20261023_vnext_forecast_sources_v1.sql",
+    "databaseContext": "post-install catalog comparison FOR over SELECT rows",
+    "sourceFrame": "/scripts/vnext-preparation-http-fixture.mjs:176:3",
+    "sameErrorAsHistoricalCI": false,
+    "historicCiErrorCode": "ERR_ASSERTION",
+    "statementTimeoutSeconds": 30,
+    "httpReached": false,
+    "commitResponseLossWitness": false,
+    "explicitReadRecoveryWitness": false,
+    "readMigration": {
+      "preparationReadSqlApplied": true,
+      "originalOidPreserved": true,
+      "predecessorSha256": "b99885487f46bc01bd9375fb285620058eddda1aa23eb3c3043ce89ec6ca2a17",
+      "successorSha256": "63f40aa176395df6a06dc7a50875e251f90714545fd20670b2e34eb39438f016",
+      "distinctObserver": true,
+      "wholeRowsUnchanged": true,
+      "catalogUnchanged": true
+    },
+    "resources": {
+      "nodeSha": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+      "pgSha": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed",
+      "minScratchFreeBytes": 23738298368,
+      "peakSuiteRssBytes": 781201408,
+      "resourceViolation": null,
+      "samples": 143
+    }
+  },
+  "relatedIntegrationChange": {
+    "commit": "356ed575282b8075157e24247a9d7d0e90618460",
+    "comparison": "two-way EXCEPT ALL over full normalized JSONB rows under retained bounds and allowed delta checks",
+    "freshExactIntegrationTestCompleted": false
+  },
+  "verifiedCleanup": {
+    "ownedClustersStopped": true,
+    "initialAndFinalFormalSignaturesEqual": true,
+    "stageFixtureEvidenceRetained": true,
+    "formalServicesChanged": false
+  },
+  "releaseHoldRetained": true
+}

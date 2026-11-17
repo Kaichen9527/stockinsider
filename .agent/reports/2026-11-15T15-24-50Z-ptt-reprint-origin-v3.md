@@ -1,0 +1,3 @@
+# PTT Stock repost classification
+
+Contabo isolated staging replayed six real PTT pages with the actual collector and parser on Node 22.14.0. Both news reposts were recognized without reusing their forum timestamps as original dates. The ordinary financial article still matched, the old article stayed outside the 30-day window, the ETF template was excluded and explicit replies stayed blocked. All 19 Node checks passed. No article bodies, author identifiers, source policy changes or database writes were retained. [OpenSpec evidence](../../openspec/changes/stockinsider-vnext-20/evidence/2026-11-15-t04-ptt-reprint-origin-v3.json)

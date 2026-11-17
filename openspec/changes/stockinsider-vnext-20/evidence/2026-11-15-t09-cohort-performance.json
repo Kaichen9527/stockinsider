@@ -1,0 +1,48 @@
+{
+  "ticket": 394,
+  "base": "b97b660f7f995be1ba5ce7d58d947b59997a99a2",
+  "candidateOnly": true,
+  "productionModified": false,
+  "environment": "isolated Contabo staging; PostgreSQL Unix socket and Node offline",
+  "scope": {
+    "calendarDays": 365,
+    "reviewedStudyHorizons": [
+      20,
+      60,
+      120
+    ],
+    "firstSeparateFromRepeat": true,
+    "realizedSimulationUsesModeledFillsOnly": true
+  },
+  "postgres": {
+    "postgres": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "frozenSignalGroups": {
+      "first": 1,
+      "repeat": 2
+    },
+    "latestVersionPerSignal": true,
+    "distinctMaturityAndFillDenominators": true,
+    "sameMarketCohortMeanChecked": true,
+    "oneVersionMissingMaintained": true,
+    "readonlyAndRawInputsExcluded": true,
+    "webParserAcceptedDatabaseWire": true,
+    "sqlSha256": "a3e8e58999d4f080e06121bff38873d8a0e10f1b98b02628a7d034c40d243c58"
+  },
+  "node": {
+    "version": "22.23.1",
+    "passes": 47,
+    "includingNew": 5,
+    "failures": 0,
+    "scopedStrictTypescript": "5.9.3",
+    "react": "19.2.3",
+    "browserVerified": false
+  },
+  "hashes": {
+    "web/src/lib/vnext/launch-outcome-cohorts.ts": "7cdad6443e3fcd44eccc7e909f2f4a88dcf10a6aafb4da5da66f64b7cd1142cc",
+    "web/src/lib/vnext/launch-outcome-cohorts.test.ts": "69772817324d3f1d144669226c211aba533c72da5459ffc355b29d9ca921370e",
+    "web/src/app/components/vnext/LaunchPerformance.tsx": "e73ddb561056a8c6b27f642404fd0d2493c3239b3e2a9205080564dba6e9a7a0",
+    "web/src/app/launch/performance/page.tsx": "bc542113481c66dc6e330261d6351a543d129c7b21570c70437d3388295223bd",
+    "web/src/app/components/vnext/LaunchTop10.tsx": "059fd2c70f3d4355223da0ce13567fdf09829ebcd0c7649ef7860f0db8164700",
+    "migrations/20261116_06_vnext_launch_outcome_cohorts_v1.sql": "a3e8e58999d4f080e06121bff38873d8a0e10f1b98b02628a7d034c40d243c58"
+  }
+}

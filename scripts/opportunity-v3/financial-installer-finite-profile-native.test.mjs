@@ -8,7 +8,7 @@ import path from 'node:path';
 import {gunzipSync} from 'node:zlib';
 import test from 'node:test';
 import {fileURLToPath} from 'node:url';
-import {MIGRATIONS,applyReviewedMigrationPlanToClient} from './apply-reviewed-migrations.mjs';
+import {MIGRATIONS,applyRestoredFinancialPlanToClient,applyReviewedMigrationPlanToClient} from './apply-reviewed-migrations.mjs';
 import {migrationBodyInAtomicTransaction} from './atomic-migration-chain.mjs';
 import {FINANCIAL_TAIL,selectFinancialHistoryChain,orderedHash,verifyFinancialHistoryPostconditions,assertFinancialHistoryCatalog} from './financial-history-install-guard.mjs';
 import {OWNERSHIP_PRELUDE,makeFinancialExistingSchemaProfile} from './financial-existing-schema-profile.mjs';
@@ -60,12 +60,42 @@ test('financial installer approved finite immutable ACL and complete captured-sc
  const bin=execFileSync('pg_config',['--bindir'],{encoding:'utf8'}).trim();
  const directory=fs.mkdtempSync(path.join(os.tmpdir(),'si-fin49-')),data=path.join(directory,'pg'),port=56000+process.pid%1000;
  let running=false;const clients=new Set();const trace=[];const pending=['successful first profile50 commit','apply twice','nonempty seed and full catalog/data','forced failure after genuine predecessor replacement','partial residue/changed config','disconnect','competing install lock'];
- const connect=async()=>{const c=new Client({host:directory,port,user:'postgres',database:'postgres',statement_timeout:30000,query_timeout:35000});clients.add(c);await c.connect();return c;};
+ const connect=async(database='postgres')=>{const c=new Client({host:directory,port,user:'postgres',database,statement_timeout:30000,query_timeout:35000});clients.add(c);await c.connect();return c;};
  const traced=client=>{const query=client.query.bind(client);client.query=async(...args)=>{const text=typeof args[0]==='string'?args[0]:args[0]?.text;const row={at:new Date().toISOString(),sha256:sha(text??''),migration:bodyPaths.get(sha(text??''))??null,kind:(text??'').slice(0,60)};trace.push(row);try{const result=await query(...args);if(text?.includes("'v314Diagnostics'")){save('full-postcondition-predicate-values.json',result.rows?.[0]?.result??null);save('financial-catalog-before-original-postcondition-rejection.json',await readFinancialHistoryCatalog({query}));save('role-before-original-postcondition-rejection.json',await snapshotVpsRuntimeRole({query}));}return result;}catch(e){row.error=errorValue(e);save('query-trace.json',trace);throw e;}};return client;};
  let stage='initdb';
  try {
   execFileSync(path.join(bin,'initdb'),['-D',data,'-U','postgres','-A','trust','--no-instructions'],{stdio:'pipe'});
   execFileSync(path.join(bin,'pg_ctl'),['-D',data,'-l',path.join(directory,'pg.log'),'-o',`-h '' -k ${directory} -p ${port}`,'-w','start'],{stdio:'pipe'});running=true;
+  stage='historical restore backend scope';
+  await t.test('real PostgreSQL refuses the reviewed database before acquiring the migration lock',async()=>{
+   const writer=await connect();
+   try {
+    const calls=[];
+    const query=writer.query.bind(writer);
+    writer.query=(sql,...args)=>{calls.push(sql);return query(sql,...args);};
+    await assert.rejects(applyRestoredFinancialPlanToClient(writer,plan,options),/historical_financial_restore_backend_required/u);
+    assert.equal(calls.length,1);
+    assert.match(calls[0],/current_database\(\)='t17_restored'/u);
+   } finally {clients.delete(writer);}
+  });
+  await t.test('real dedicated socket-only restore database still honors the migration lock',async()=>{
+   const admin=await connect();
+   try {await admin.query('CREATE DATABASE t17_restored');} finally {await admin.end();clients.delete(admin);}
+   const holder=await connect('t17_restored');
+   try {
+    await holder.query("SELECT pg_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");
+    const writer=await connect('t17_restored');
+    try {
+     const calls=[];
+     const query=writer.query.bind(writer);
+     writer.query=(sql,...args)=>{calls.push(sql);return query(sql,...args);};
+     await assert.rejects(applyRestoredFinancialPlanToClient(writer,plan,options),/migration_install_busy/u);
+     assert.equal(calls.length,2);
+     assert.match(calls[0],/current_database\(\)='t17_restored'/u);
+     assert.match(calls[1],/pg_try_advisory_lock/u);
+    } finally {clients.delete(writer);}
+   } finally {await holder.end();clients.delete(holder);}
+  });
   let a=await connect();stage='unchanged bootstrap/schema restore';
   const bootstrapBytes=fs.readFileSync(path.join(root,'deployment/vps/bootstrap-stockinsider-postgres.sql'));
   const bootstrap=bootstrapBytes.toString('utf8').replaceAll(/^\\set.*$/gm,'');

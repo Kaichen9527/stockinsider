@@ -13,7 +13,7 @@ export function reviewedTargetBaseline(input:BaselineInput){
  const price=matching.length===1?matching[0].numeric:null;
  const source=matching.length===1?original.find(e=>matching[0].evidenceIds.includes(e.id) && e.key==='current_price' && e.value===price?.value && e.unit===price?.unit && e.period===price?.period):null;
  if(!price || !source || source.kind!=='fact' || source.sourceTier!=='official' || !Number.isFinite(Date.parse(publishedAt)))return {baseline:null,gaps:['target_original_reviewed_quote_missing']};
- const valuation=reviewedValuation({artifact,review,original,cutoff:publishedAt,quote:{close:price.value,session:price.period,source:source.source,adjusted:true,volume:null,ma20:null,ma60:null,volumeRatio:null,institutionalFlow:null}});
+ const valuation=reviewedValuation({artifact,review,original,cutoff:publishedAt,quote:{observedAt:source.eventAt,availableAt:source.availableAt,close:price.value,session:price.period,source:source.source,adjusted:true,volume:null,ma20:null,ma60:null,volumeRatio:null,institutionalFlow:null}});
  const scenarioClaims=artifact!.claims.filter(c=>['valuation_bear','valuation_base','valuation_bull'].includes(c.numeric?.key||''));
  // current_price is an actual per-share quote even when its original cache
  // contract uses TWD. These finite price aliases never admit cash-flow units.

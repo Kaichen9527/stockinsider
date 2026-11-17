@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "stockinsider-t05-podcast-code-context-and-frozen-read-v1",
+  "recordedAt": "2026-11-17T17:05:33Z",
+  "candidateParent": "0eb7092aaeefb20dee210b33527c8c62f109b03d",
+  "protectedReleaseAuthorized": false,
+  "fullOrdinaryBuildAtParent": {
+    "runId": "44131831685",
+    "typesAndLintPassed": true,
+    "buildPassed": true,
+    "publicProjectionContractPassed": true
+  },
+  "currentFormalSnapshotRead": {
+    "queryMode": "repeatable read, read only, statement timeout 3s",
+    "latest": {
+      "latestValidLegacyWindows": 2,
+      "windowsWithStoredPodcastDiscovery": 0,
+      "windowsWithPodcastSummaryMirroredIntoCard": 0
+    },
+    "historicBound": {
+      "discoverySourcesSampled": 0,
+      "historicalPodcastThemeSources": 0,
+      "historicalPodcastSummaryMirrors": 0,
+      "historicalLegacySnapshotsSampled": 128,
+      "historicalPodcastDiscoverySources": 0
+    },
+    "storedValuesOrRowsPublished": false,
+    "sourceScope": "legacy Radar home/daily discovery and theme projections",
+    "cacheRowsChanged": false
+  },
+  "spokenLocatorRegression": {
+    "fixture": "synthetic timed publisher cues",
+    "baselineFalsePositiveClasses": [
+      "year",
+      "index points",
+      "decimal",
+      "embedded English marker",
+      "derivative label"
+    ],
+    "fullWidthExplicitCodePreviouslyMissed": true,
+    "uncertainCodesRejected": true,
+    "validFirstSpokenTimesRetained": true,
+    "realSourceAcceptance": false,
+    "tests": {
+      "tests": 16,
+      "pass": 16,
+      "fail": 0,
+      "skipped": 0
+    },
+    "tapSha256": "aa6f7604f8c8d2235abf11fba8fb060e10076d47d3efacd071238100d39d71e3"
+  },
+  "sourceSha256": {
+    "web/src/lib/podcast-rss.ts": "6cb577c512edc7984c3f32ab17271e8101069bccd270a587a83602fde4856328",
+    "web/src/lib/external-source-adapters.test.ts": "03953fd392be9bacbabebb180d16c038de23426cc21211ffa3576853cc8e66d8"
+  }
+}

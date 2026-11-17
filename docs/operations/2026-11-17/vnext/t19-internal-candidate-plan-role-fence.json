@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "stockinsider-internal-candidate-plan-role-fence-witness-v1",
+  "parent": "9e59a805687a963e925ad491db51e4920e5fe304",
+  "scope": "Contabo isolated PostgreSQL synthetic fixture, engineering migration only",
+  "postgres": "17.11",
+  "node": "22.14.0",
+  "networkMode": "none",
+  "assertions": {
+    "tapTestsPassed": 4,
+    "oidAndRoutineDefinitionUnchanged": true,
+    "allFixtureTableRowsUnchanged": true,
+    "anonymousAndBrowserUserExecuteDeniedAfter": true,
+    "publicExecuteAbsentAfter": true,
+    "existingRpcOwnerAndServiceRoleReachedSameSyntheticEmptyRunBeforeAfter": true
+  },
+  "sourceIngestionSchemaPrivilegeChanged": false,
+  "formalServiceSignaturesMatched": true,
+  "stageDatabaseContainerRemoved": true,
+  "independentApproval": "REQUIRED",
+  "productionMigrationExecuted": false,
+  "continuousTest": {
+    "workflow": ".github/workflows/stockinsider-vnext-quality.yml",
+    "syntaxCheckedInStaging": true,
+    "exactHeadWorkflow": "AWAITING_GITHUB_RUN"
+  }
+}

@@ -6,6 +6,8 @@ import {readCurrentForecasts,validateCurrentForecasts} from './forecast-current.
 import {freezeFinancialPreparation} from './preparation-reconciliation.ts';
 import {normalizeWorkerAuthor,normalizeWorkerReview} from './worker-output.ts';
 import {inputHash} from './policy.ts';import {REQUIRED_SECTIONS} from './research.ts';
+import {auditPublishedThesis,type ThesisAuditInput} from './thesis-audit.ts';
+import {readActiveForecasts} from './forecast-active.ts';
 const at='2026-10-23T01:00:00.000Z',id=(n:number)=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
 const header='Synthetic engineering original, not actual MOPS guidance.\n😀 complete original context\n數值預測口徑: 財年固定股數v1\n股票代號: 2409\n會計年度起始月: 1\n財年標示: 起始年\n預測期間類型: 未來四季\n預測股數基礎: 稀釋\n預測固定股數: 1000\n股數假設開始日期: 2027-01-01\n股數假設結束日期: 2027-12-31\n期間股數假設: 明示預測期間固定股數\n預估淨利單位: TWD\n預估淨利歸屬: 普通股股東';
 const rows=['2027|1|2027-01-01|2027-03-31|1000','2027|2|2027-04-01|2027-06-30|2000','2027|3|2027-07-01|2027-09-30|-1000','2027|4|2027-10-01|2027-12-31|3000'];
@@ -46,7 +48,16 @@ test('actual preparation and author/distinct-review contract consume full origin
  const frozen=freezeFinancialPreparation(original,history,financial,at,f);assert.deepEqual(frozen.evidence.forecastSourceReceipts,f.receipts);assert.equal(frozen.inputHash,inputHash(frozen.evidence));
  const ids=f.evidence.map(e=>e.id),claim={id:'forward-four',kind:'assumption' as const,text:'Synthetic source explicitly assumes1000 forecast shares and projects common-income5000 for four exact future calendar quarters; not reported earnings.',evidenceIds:ids,numeric:{key:'next_four_quarter_eps',value:5,unit:'TWD_per_share',period:'2027-Q1/2027-Q4'}};
  const raw={sections:Object.fromEntries(REQUIRED_SECTIONS.map(k=>[k,{text:'Synthetic engineering forecast; complete original, exact periods and explicitly disclosed denominator retained. No actual provider or formal semantic approval.',claimIds:[claim.id],evidenceIds:ids}])),claims:[claim],quoteDate:'2026-10-22',valuationDate:'2026-10-22',annualEps:null,nextFourQuarterEps:5,gaps:['annual_eps_missing','quote_authority_missing']};
- const a=normalizeWorkerAuthor(raw,{model:'synthetic-author',modelVersion:'contract'},frozen.inputHash,f.evidence),review={approved:true,findings:[],factsChecked:true,valuationChecked:true,claimsChecked:true,claimChecks:[{claimId:claim.id,verdict:'supported',reason:'Synthetic distinct-review contract reads complete original; not actual independent semantic approval.',sources:f.evidence.map(e=>({id:e.id,contentHash:e.contentHash}))}]};assert.equal(normalizeWorkerReview(review,'synthetic-distinct-reviewer',a,f.evidence).approved,true);assert.throws(()=>normalizeWorkerAuthor({...raw,annualEps:5},{model:'synthetic',modelVersion:'contract'},frozen.inputHash,f.evidence),/annual_eps_summary_unbound/);
+ const a=normalizeWorkerAuthor(raw,{model:'synthetic-author',modelVersion:'contract'},frozen.inputHash,f.evidence),review={approved:true,findings:[],factsChecked:true,valuationChecked:true,claimsChecked:true,claimChecks:[{claimId:claim.id,verdict:'supported',reason:'Synthetic distinct-review contract reads complete original; not actual independent semantic approval.',sources:f.evidence.map(e=>({id:e.id,contentHash:e.contentHash}))}]};
+ const acceptedReview=normalizeWorkerReview(review,'synthetic-distinct-reviewer',a,f.evidence);
+ assert.equal(acceptedReview.approved,true);
+ assert.throws(()=>normalizeWorkerAuthor({...raw,annualEps:5},{model:'synthetic',modelVersion:'contract'},frozen.inputHash,f.evidence),/annual_eps_summary_unbound/);
+ const audit={...auditInput(f.evidence),inputHash:frozen.inputHash,artifact:a,review:acceptedReview};
+ assert.equal(auditPublishedThesis(audit).claimChecks[0].status,'supported_original');
+ const withdrawn=auditPublishedThesis({...audit,current:[f.evidence[0]]});
+ assert.equal(withdrawn.claimChecks[0].status,'gap');
+ assert.ok(withdrawn.gaps.includes('original_forecast_current_authority_unavailable'));
+ assert.equal(withdrawn.materialChanged,false);
 });
 test('the same receive byte/depth caps and current public-source restriction are retained',()=>{
  const huge=current();(huge.evidence[1].value as {statement:string}).statement='x'.repeat(1048577);assert.throws(()=>validateCurrentForecasts(huge),/wire_bound/);
@@ -56,5 +67,43 @@ test('the same receive byte/depth caps and current public-source restriction are
 test('unknown metadata is refused even when the material hash intentionally ignores its key',()=>{
  for(const key of ['fetchedAt','collectedAt','retrievedAt','evaluatedAt'])for(const target of ['evidence','parsed','calculation']){
   const f=current(),value=target==='evidence'?f.evidence[0]:target==='parsed'?f.receipts[0].parsed:f.receipts[0].calculation,before=inputHash(value);Object.assign(value,{[key]:'UNKNOWN_UNTRUSTED_METADATA'});assert.equal(inputHash(value),before);assert.throws(()=>validateCurrentForecasts(f),/current_pair_or_calculation_drift/);
+ }
+});
+
+function auditInput(evidence:ThesisAuditInput['original']):ThesisAuditInput{
+ return {symbol:source.symbol,inputHash:inputHash('synthetic-weekly-audit'),revisionId:null,publishedInputHash:null,artifact:null,review:null,
+  original:evidence,current:evidence,newContent:[],quote:{close:null,session:'2026-10-23',source:'',adjusted:false,volume:null,ma20:null,ma60:null,volumeRatio:null,institutionalFlow:null},
+  cutoff:at,market:{risk:'unknown',snapshotHash:null},previousMarketHash:null,tradingValid:null};
+}
+test('weekly audit uses the actual active forecast transport and notices revised share assumptions with unchanged EPS',async()=>{
+ const first=validateCurrentForecasts(current());
+ const nextBody=body.replace('股數: 1000','股數: 2000').replace(/(\|)(-?\d+)(?=\n|$)/gu,(_match,pipe,number)=>pipe+String(Number(number)*2));
+ const next=current(nextBody);
+ const input=auditInput(first.evidence);
+ const batch={schemaVersion:'vnext-active-forecasts-v1',asOf:at,members:[{symbol:source.symbol,inputHash:input.inputHash,forecast:next}]};
+ const result=await readActiveForecasts({rpc:async()=>({data:batch,error:null})} as unknown as Parameters<typeof readActiveForecasts>[0],{role:'operator',principal:'synthetic-operator'});
+ const currentEvidence=result.members[0].forecast.evidence;
+ assert.equal(currentEvidence[0].value,first.evidence[0].value);
+ const audit=auditPublishedThesis({...input,current:currentEvidence});
+ assert.ok(audit.materialReasons.includes('current_source_forecast_changed'));
+ assert.equal(audit.materialEvidence.forecastCount,1);
+ assert.notEqual(audit.materialHash,auditPublishedThesis(input).materialHash);
+ assert.equal(audit.materialEvidence.factCount,0);
+ assert.doesNotMatch(JSON.stringify(audit.materialEvidence),/complete original context|預測固定股數/);
+});
+test('a source clock refresh is not material while missing/orphan/future fiscal evidence stays unknown',()=>{
+ const first=validateCurrentForecasts(current()),input=auditInput(first.evidence);
+ const initial=auditPublishedThesis(input);
+ assert.equal(initial.materialEvidence.forecastCount,1);
+ const updated=first.evidence.map(e=>({...e,availableAt:'2026-10-23T01:00:01.000Z'}));
+ const redelivery=auditPublishedThesis({...input,current:updated,cutoff:'2026-10-23T01:00:02.000Z'});
+ assert.equal(redelivery.materialHash,initial.materialHash);
+ assert.equal(redelivery.materialChanged,false);
+ assert.ok(!redelivery.gaps.includes('original_forecast_current_authority_unavailable'));
+ for(const currentEvidence of [[],first.evidence.slice(0,1),updated]){
+  const audit=auditPublishedThesis({...input,current:currentEvidence});
+  assert.equal(audit.materialEvidence.forecastCount,0);
+  assert.equal(audit.materialChanged,false);
+  assert.ok(audit.gaps.includes('original_forecast_current_authority_unavailable'));
  }
 });

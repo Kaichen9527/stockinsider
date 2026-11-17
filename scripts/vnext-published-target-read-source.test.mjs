@@ -15,7 +15,11 @@ test('cash/rights remain rejected and exit recomputes whole proof under original
 test('predecessor SET configuration is derived per exact original constructor, not a shared assumed profile',()=>{
  const original=read('migrations/20261022_vnext_target_exit_v1.sql');assert.ok(original.includes("LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public SET statement_timeout='30s' SET lock_timeout='2s' AS $current$"));
  const base=read('migrations/20261022_stockinsider_vnext_20_v1.sql');assert.ok(base.includes("RETURNS jsonb LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,public AS $$"));
- const configs=[['search_path=pg_catalog, public','statement_timeout=30s','lock_timeout=2s'],['search_path=pg_catalog, public'],['search_path=pg_catalog, public','statement_timeout=30s','lock_timeout=2s']];
+ // Derive the COMPLETE SET list from each pinned original constructor.
+ // No shared guessed subset, unknown SET, expanded schema or config OR.
+ const declaration=(text,name,tag)=>{const start=text.indexOf('CREATE FUNCTION public.'+name+'(');assert.ok(start>=0);const end=text.indexOf(' AS '+tag,start);assert.ok(end>start);return text.slice(start,end);};
+ const clauses=[declaration(original,'vnext_target_current_v1','$current$'),declaration(base,'vnext_read_v1','$$'),declaration(original,'vnext_target_quote_v1','$quote$')];
+ const configs=clauses.map(text=>{const found=[...text.matchAll(/\bSET (search_path|timezone|statement_timeout|lock_timeout)=(pg_catalog,public|'[^']+')/gu)];assert.equal(found.length,(text.match(/\bSET /gu)||[]).length,'unknown constructor setting rejected');return found.map(([,key,value])=>key==='search_path'?'search_path=pg_catalog, public':(key==='timezone'?'TimeZone':key)+'='+value.slice(1,-1));});
  p.modifiedRoutines.forEach((r,i)=>{assert.deepEqual(r.predecessorProconfig,configs[i]);const predicate="oid='"+r.signature+"'::regprocedure AND pg_get_userbyid(proowner)='stockinsider_vnext_owner' AND prosecdef AND proconfig=ARRAY["+configs[i].map(v=>"'"+v+"'").join(',')+"]";assert.ok(sql.includes(predicate));});
 });
 

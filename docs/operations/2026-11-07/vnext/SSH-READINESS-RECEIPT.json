@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "vnext-staging-access-readiness-v1",
+  "recordedAt": "2026-11-07T09:10:55.684362+00:00",
+  "environmentId": "ccarenv_b64_Y2NhcmVudl82ODU0YWE3YmQ3MjA4MTkxYjJiNTQxYTc1M2NkOTM3Zg",
+  "observationsCurrent": true,
+  "observedRevision": "1",
+  "phase": "running",
+  "networkPolicyState": "enforced",
+  "startupTcpScope": {
+    "domains": [],
+    "ip_ranges": []
+  },
+  "sshAgent": {
+    "variablePresent": false,
+    "socketPresent": false
+  },
+  "secretBindings": [],
+  "outboundIdentities": [],
+  "exactTcp22GrantObserved": false,
+  "supportedScopeMutationToolAvailable": false,
+  "clientSshAttempt": "NOT_RUN_NO_PRECISE_GRANT",
+  "clientPrivateKeyGeneration": "NOT_PERFORMED",
+  "networkChange": "NOT_PERFORMED",
+  "operatorAttested": {
+    "host": "vmi3152467",
+    "address": "5.104.83.211",
+    "publicHostKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICb2EOs2bC/szIaSZyXr/slT5iLFqXLFS1VLWepWMj4X root@vmi3152467",
+    "publicHostFingerprint": "SHA256:yQ4VCXl76rLr6Zep0ybQcHZeK4CfuFmMiZcWJrp2DYg",
+    "fingerprintSource": "operator read public host key through existing strict pinned login; matched operator trust record",
+    "localPublicKeyFingerprintRecomputed": true,
+    "bootstrapSource": "47a9bdab997c2fe3b3baf23e9f22068d4d24893b",
+    "capacityReady": true,
+    "projectedDiskBytes": 25371435008,
+    "projectedMemoryBytes": 2914750464,
+    "productionActions": 0,
+    "hostObservedAt": "not supplied; freshness not inferred",
+    "stagingAccountCreated": false,
+    "stagingClientKeyInstalled": false,
+    "services": "operator reports root gateway and StockInsider web/worker/PostgREST/PG/nginx active; only failing ubuntu OpenClaw gateway paused"
+  },
+  "scopeLimit": "operator host observations are not this VM transport/restore/isolation acceptance; dryrun fixed allowances do not admit unmeasured download/restore peaks",
+  "remaining": [
+    "supported task-scoped TCP22 route with expiry/revocation",
+    "secure short-lived isolated agent identity custody",
+    "reviewed public client config and exact identity selection",
+    "approved expiry and revocation/session procedure",
+    "fresh host capacity and exact application restore/deploy peak budget",
+    "isolated writer/runtime validation"
+  ],
+  "endOfBatchRecheck": {
+    "recordedAt": "2026-11-07T09:18:17.267370+00:00",
+    "observationsCurrent": true,
+    "revision": "1",
+    "networkState": "enforced",
+    "startupTcpDomains": [],
+    "startupTcpIpRanges": [],
+    "agentVariablePresent": false,
+    "agentSocketPresent": false,
+    "secrets": [],
+    "outboundIdentities": [],
+    "connectionAttempted": false,
+    "keyGenerated": false
+  }
+}

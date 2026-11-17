@@ -52,9 +52,32 @@ await test('fresh confirmed roster invalidity fences current work, claim and pro
  const currentInput=async symbol=>(await query('SELECT evidence,input_hash FROM public.vnext_members_v1 WHERE symbol=$1',[symbol],{role:'stockinsider_vnext_owner',readonly:true})).rows[0];
  async function unchanged(work){const before=await snapshot();await work();assert.deepEqual(await snapshot(),before);}
  const publicRead=async()=>(await query('SELECT public.vnext_read_v1(NULL) AS result',[],{role:'service_role',readonly:true})).rows[0].result;
- const screeningCache={from(table){assert.ok(['stocks','stock_instruments_v3'].includes(table));let selected,limit;const filters=[],orders=[];const allowed=table==='stocks'?['id','symbol','market']:columns;
-  const q={select(value){selected=value;assert.ok(value.split(',').every(k=>allowed.includes(k)));return q;},in(key,value){assert.ok(['symbol','stock_id'].includes(key)&&Array.isArray(value)&&value.length<=2);assert.ok(value.every(v=>key==='symbol'?symbols.includes(v):[...ids.values()].includes(v)));filters.push({key,value,in:true});return q;},eq(key,value){assert.equal(table,'stocks');assert.equal(key,'market');assert.equal(value,'TW');filters.push({key,value,in:false});return q;},order(key,opt){assert.equal(key,'recorded_at');assert.equal(opt.ascending,false);orders.push('recorded_at DESC');return q;},limit(value){assert.ok([221,1001].includes(value));limit=value;return q;},then(resolve,reject){const values=filters.map(f=>f.value),where=filters.map((f,i)=>f.key+(f.in?'=ANY($'+(i+1)+'::'+(f.key==='stock_id'?'uuid':'text')+'[])':'=$'+(i+1))).join(' AND ');assert.ok(where&&selected&&limit);return query(`SELECT coalesce(jsonb_agg(to_jsonb(qrow)),'[]'::jsonb) AS data FROM(SELECT ${selected} FROM public.${table} WHERE ${where}${orders.length?' ORDER BY '+orders.join(','):''} LIMIT ${limit}) qrow`,values,{role:'service_role',readonly:true}).then(result=>({data:result.rows[0].data,error:null})).then(resolve,reject);}};return q;
- }};
+ const screeningCache={
+  from(table){
+   assert.equal(table,'stocks');
+   let selected=false, symbolsBound=false, marketBound=false;
+   const stockQuery={
+    select(value){assert.equal(value,'id,symbol,market');selected=true;return stockQuery;},
+    in(key,value){assert.equal(key,'symbol');assert.deepEqual(value,symbols);symbolsBound=true;return stockQuery;},
+    eq(key,value){assert.equal(key,'market');assert.equal(value,'TW');marketBound=true;return stockQuery;},
+    async limit(value){
+     assert.equal(value,221);assert.ok(selected&&symbolsBound&&marketBound);
+     const result=await query("SELECT id,symbol,market FROM public.stocks WHERE symbol=ANY($1::text[]) AND market='TW' LIMIT 221",[symbols],{role:'service_role',readonly:true});
+     return {data:result.rows,error:null};
+    },
+   };
+   return stockQuery;
+  },
+  async rpc(name,args){
+   assert.equal(name,'vnext_screen_roster_heads_v1');
+   assert.deepEqual(Object.keys(args).sort(),['p_cutoff','p_symbols']);
+   assert.deepEqual(args.p_symbols,symbols);
+   assert.ok(Number.isFinite(Date.parse(args.p_cutoff)));
+   const result=await query('SELECT public.vnext_screen_roster_heads_v1($1::text[],$2::timestamptz) AS data',
+    [args.p_symbols,args.p_cutoff],{role:'service_role',readonly:true});
+   return {data:result.rows[0].data,error:null};
+  },
+ };
  const actualScreening=async()=>{const cutoff=(await query('SELECT to_jsonb(clock_timestamp()) AS value',[],{readonly:true})).rows[0].value;return readCurrentScreeningInstruments(screeningCache,symbols,cutoff);};
 
  try{
@@ -81,6 +104,19 @@ await test('fresh confirmed roster invalidity fences current work, claim and pro
    const before=await snapshot();for(const symbol of symbols){const input=await currentInput(symbol);assert.equal(await sourceCurrent(symbol,input.evidence),true);}assert.deepEqual(await snapshot(),before);assert.equal(before.vnext_jobs_v1.rows.filter(r=>r.started_at!==null).length,0);x.save('missing-roster-original-semantics',{wholeRows:before,sourceCurrent:true,syntheticOfficialShape:true,actualFinancialValidation:false});
   });
   await step('current active roster succeeds; ambiguous append remains a deferral and does not suppress original source predicate',async()=>{
+   const {rosterHeadFixtureSql,rosterHeadBaselinePath,rosterHeadMigrationPath}=await import('./vnext-launch-roster-head-fixture.mjs');
+   const {predecessor,migration:rosterHeadMigration}=rosterHeadFixtureSql();
+   const beforeInstall=await snapshot();
+   await statement(x.writer,predecessor);
+   await statement(x.writer,rosterHeadMigration);
+   assert.deepEqual(await snapshot(),beforeInstall);
+   const rights=(await query(`SELECT
+    has_function_privilege('service_role','public.vnext_screen_roster_heads_v1(text[],timestamptz)','EXECUTE') AS screening,
+    has_function_privilege('service_role','public.vnext_launch_instrument_v1(text,timestamptz)','EXECUTE') AS internal,
+    has_function_privilege('anon','public.vnext_screen_roster_heads_v1(text[],timestamptz)','EXECUTE') AS anonymous`,[],{readonly:true})).rows[0];
+   assert.deepEqual(rights,{screening:true,internal:false,anonymous:false});
+   x.save('native-roster-heads',{baselinePath:rosterHeadBaselinePath,baselineSha256:hash(fs.readFileSync(rosterHeadBaselinePath)),
+    migrationPath:rosterHeadMigrationPath,migrationSha256:hash(rosterHeadMigration),rights,wholeRowsUnchanged:true});
    await withLease(()=>connection(async(c,status)=>{for(const symbol of symbols)await appendRoster(c,status,symbol);},{role:'postgres'}));
    const baseline=await snapshot();for(const symbol of symbols)assert.equal(await sourceCurrent(symbol,(await currentInput(symbol)).evidence),true);assert.deepEqual(await snapshot(),baseline);
    await withLease(()=>connection(async(c,status)=>{const clock=(await statement(c,"SELECT to_jsonb(clock_timestamp()) AS value",[],status)).rows[0].value;await appendRoster(c,status,'2408',{listing_status:'active',recorded_at:clock});await appendRoster(c,status,'2408',{listing_status:'suspended',recorded_at:clock});await statement(c,'SET LOCAL ROLE stockinsider_vnext_owner',[],status);const result=(await statement(c,'SELECT public.vnext_input_sources_current_v1($1::jsonb,$2) AS current,public.vnext_trading_invalid_current_v1($2,$3) AS proof',[JSON.stringify(inputs.get('2408')),'2408',inputs.get('2408').hash],status)).rows[0];assert.equal(result.current,true);assert.equal(result.proof.deferred,'trading_invalid_latest_roster_conflict');assert.equal('proofHash'in result.proof,false);x.save('ambiguous-original-semantics',{result,committed:false,originalStateRetained:true});},{transaction:true}));assert.deepEqual(await snapshot(),baseline);const selected=await actualScreening();assert.deepEqual([...selected.identities.keys()].sort(),[...symbols].sort());assert.equal(selected.gaps.size,0);assert.deepEqual(await snapshot(),baseline);x.save('actual-shared-cache-current',{symbols:[...selected.identities.keys()],serviceRoleReadOnly:true,wholeRowsUnchanged:true});

@@ -1,0 +1,1099 @@
+{
+  "schemaVersion": "stockinsider-t19-source-namespace-entrypoints-review-v1",
+  "headBeforeChange": "f8208af629f556441894c7b83d82d7d4e2a5d951",
+  "hostedControl": {
+    "runId": 43973887994,
+    "jobId": 133672770144,
+    "runtimeCommit": "eceac610376b3708b04b897853a848210e9729ab",
+    "parts": 2,
+    "canonicalSha256": "444bab7259aca463dc82906f4853bd23bd4d580aabf14ff91446539ecc9f4f32",
+    "compressedSha256": "89d702319b9862867d4a4519355521c4d61d91a46481218741de401ef8f4a481",
+    "matchedNativeCatalogAfterRoster": {
+      "scopeHash": "0fdae5ae5d60769aca8506b4cdddae93df8b93c1827a21f995187de1bf2e4c66",
+      "namespaceHash": "09ef36def6707ad1432e5d78d16fa78acdbf16b9f90b8729a22950ef851680dc",
+      "catalogHash": "f94e1c34489ae90c62ee74aaaba253f7c8fb14c507680ee747cbb05ad0f8e4e2",
+      "existingReadCodecs": true
+    },
+    "directProjectionIdentical": true,
+    "ordinaryTestCounts": {
+      "tests": 8,
+      "pass": 6,
+      "fail": 2,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "rawSourcePositiveBlockedBy": "vnext_test_source_namespace_not_ready",
+    "inputOwnerUsage": false,
+    "sourceOwnerUsage": false
+  },
+  "stage": {
+    "postgres": "17.11",
+    "syntheticFixture": true,
+    "readOnlyRepeatableReadSeparateObserver": true,
+    "publicRuntimeNamespaceNone": true,
+    "runtimeContainerRemoved": true,
+    "catalogMetadataBeforeAfterEqual": true,
+    "productionContinuitySignaturesMatched": true,
+    "appBuildExercised": false,
+    "fixtureSourceGrantApplied": false,
+    "sourceContentInvoked": false,
+    "ordinaryTriggerFunctions": 10,
+    "triggerBindings": 61,
+    "hasDirectTriggerAttachmentOrDmlOnBindings": false,
+    "sqlCallableFunctions": 8,
+    "callableSecurityDefinerCount": 5,
+    "callablePostgresDefinerWithPublicExecuteCount": 2,
+    "nextReview": [
+      "Compare caller-controlled arguments and fixed body call graph for the five callable SECURITY DEFINER routines.",
+      "Inspect implicit type/cast/operator paths, trigger chains, and caller access using the pinned definitions before any permission change."
+    ],
+    "independentReview": "REQUIRED_NOT_APPROVED"
+  },
+  "entrypoints": {
+    "schema": "vnext-source-owner-entrypoints-v1",
+    "target": "research_source_fence_owner_v2",
+    "observedPublicUsage": false,
+    "routines": [
+      {
+        "signature": "assert_research_source_seal_v2(uuid)",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "definitionSha256": "06aed61305eb8754a80733518a815953c9b79160bb20b7572fb399e561498199",
+        "language": "plpgsql",
+        "entryKind": "sql_callable",
+        "executeGrantees": [
+          "research_input_preparation_owner_v2",
+          "research_observed_rpc_owner",
+          "research_source_fence_owner_v2"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": []
+      },
+      {
+        "signature": "can_read_report(uuid)",
+        "owner": "postgres",
+        "securityDefiner": false,
+        "definitionSha256": "411d046a533b19f73d69812772889f9cfb4762bab7a164aa663ba030aca65008",
+        "language": "sql",
+        "entryKind": "sql_callable",
+        "executeGrantees": [
+          "PUBLIC",
+          "anon",
+          "authenticated",
+          "postgres",
+          "service_role"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": []
+      },
+      {
+        "signature": "can_read_subscriber_report(uuid)",
+        "owner": "postgres",
+        "securityDefiner": false,
+        "definitionSha256": "28fbf715d4e6a43835d43fe50ed0d5a0b41dba470f7d3d8975650b2718f0d99d",
+        "language": "sql",
+        "entryKind": "sql_callable",
+        "executeGrantees": [
+          "PUBLIC",
+          "anon",
+          "authenticated",
+          "postgres",
+          "service_role"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": []
+      },
+      {
+        "signature": "enforce_production_writer_fence()",
+        "owner": "postgres",
+        "securityDefiner": true,
+        "definitionSha256": "c3cc691d21eabd9431524b25ef53e4513100d6fe56031ebe2371ce01957417d9",
+        "language": "plpgsql",
+        "entryKind": "trigger",
+        "executeGrantees": [
+          "PUBLIC",
+          "anon",
+          "authenticated",
+          "postgres",
+          "service_role"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": [
+          {
+            "schema": "public",
+            "trigger": "trg_candidate_source_mentions_writer_fence",
+            "relation": "candidate_source_mentions",
+            "eventMask": 23,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "trg_source_raw_documents_writer_fence",
+            "relation": "source_raw_documents",
+            "eventMask": 23,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_analysis_bindings_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_audit_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_calendar_receipts_v2",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_confirmations_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_content_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_extractions_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_forecast_rights_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_home_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_jobs_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_legacy_routines_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_market_interpretations_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_members_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_mode_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_preparations_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_principals_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_provider_bindings_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_provider_events_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_provider_invocations_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_publications_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_qualifications_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_screening_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_sessions_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_source_policies_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_source_withdrawals_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_thesis_audits_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "vnext_writer_fence",
+            "relation": "vnext_weekly_audits_v1",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          }
+        ]
+      },
+      {
+        "signature": "fence_observed_model_completion_v2()",
+        "owner": "postgres",
+        "securityDefiner": false,
+        "definitionSha256": "180a51d9b41251d1af39e67e877d3135febcdc22e7c5425af93c813de6e004b3",
+        "language": "plpgsql",
+        "entryKind": "trigger",
+        "executeGrantees": [
+          "PUBLIC",
+          "anon",
+          "authenticated",
+          "postgres",
+          "service_role"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": [
+          {
+            "schema": "public",
+            "trigger": "observed_model_completion_scope_v2",
+            "relation": "research_model_completions_v1",
+            "eventMask": 7,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          }
+        ]
+      },
+      {
+        "signature": "fence_research_paper_book_append_v1()",
+        "owner": "postgres",
+        "securityDefiner": true,
+        "definitionSha256": "db1f6885e858bc0c20c1657864d1da68394286f2c5656b4a332f5f5a21d6f825",
+        "language": "plpgsql",
+        "entryKind": "trigger",
+        "executeGrantees": [
+          "PUBLIC",
+          "anon",
+          "authenticated",
+          "postgres",
+          "service_role"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": [
+          {
+            "schema": "public",
+            "trigger": "trg_research_paper_book_append_v1",
+            "relation": "research_paper_book_revisions_v1",
+            "eventMask": 7,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          }
+        ]
+      },
+      {
+        "signature": "fence_research_strategy_record_v1()",
+        "owner": "postgres",
+        "securityDefiner": true,
+        "definitionSha256": "11eafc6d0e201e23452d6dec2d6f64bddecddd9fa7ee8b9c6ff4f66f6e627bff",
+        "language": "plpgsql",
+        "entryKind": "trigger",
+        "executeGrantees": [
+          "PUBLIC",
+          "anon",
+          "authenticated",
+          "postgres",
+          "service_role"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": [
+          {
+            "schema": "public",
+            "trigger": "trg_research_strategy_record_fence_v1",
+            "relation": "research_strategy_records_v1",
+            "eventMask": 7,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          }
+        ]
+      },
+      {
+        "signature": "handle_new_user()",
+        "owner": "postgres",
+        "securityDefiner": true,
+        "definitionSha256": "8de1a903bd2b604409bedd79a68d2a22f8d9350eaa73570910a464f8c4981453",
+        "language": "plpgsql",
+        "entryKind": "trigger",
+        "executeGrantees": [
+          "PUBLIC",
+          "anon",
+          "authenticated",
+          "postgres",
+          "service_role"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": [
+          {
+            "schema": "auth",
+            "trigger": "on_auth_user_created",
+            "relation": "users",
+            "eventMask": 5,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          }
+        ]
+      },
+      {
+        "signature": "is_subscriber()",
+        "owner": "postgres",
+        "securityDefiner": true,
+        "definitionSha256": "93a64cc85054b92368a56892d916f868f7474689753d3bee2318ab493ed5f4fe",
+        "language": "sql",
+        "entryKind": "sql_callable",
+        "executeGrantees": [
+          "PUBLIC",
+          "anon",
+          "authenticated",
+          "postgres",
+          "service_role"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": []
+      },
+      {
+        "signature": "legacy_correctness_immutable_v3_11()",
+        "owner": "legacy_correctness_rpc_owner",
+        "securityDefiner": false,
+        "definitionSha256": "e31247edf623dcd50e046b3702c6b3721d7a910af56f84e5a2dc7e3acf05ec10",
+        "language": "plpgsql",
+        "entryKind": "trigger",
+        "executeGrantees": [
+          "PUBLIC",
+          "anon",
+          "authenticated",
+          "legacy_correctness_rpc_owner",
+          "service_role"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": [
+          {
+            "schema": "public",
+            "trigger": "legacy_analysis_evaluations_v3_11_immutable",
+            "relation": "legacy_analysis_evaluations_v3_11",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_analysis_revision_payloads_v3_13_immutable",
+            "relation": "legacy_analysis_revision_payloads_v3_13",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_analysis_revisions_v3_11_immutable",
+            "relation": "legacy_analysis_revisions_v3_11",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_candidate_discovery_ledger_v3_11_immutable",
+            "relation": "legacy_candidate_discovery_ledger_v3_11",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_decision_revision_evaluations_v3_13_immutable",
+            "relation": "legacy_decision_revision_evaluations_v3_13",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_decision_revisions_v3_13_immutable",
+            "relation": "legacy_decision_revisions_v3_13",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_frozen_source_authorities_v3_13_immutable",
+            "relation": "legacy_frozen_source_authorities_v3_13",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_frozen_source_revisions_v3_11_immutable",
+            "relation": "legacy_frozen_source_revisions_v3_11",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_producer_authority_pages_v3_11_immutable",
+            "relation": "legacy_producer_authority_pages_v3_11",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_producer_job_payloads_v3_11_immutable",
+            "relation": "legacy_producer_job_payloads_v3_11",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_producer_job_results_v3_11_immutable",
+            "relation": "legacy_producer_job_results_v3_11",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_provider_acquisition_conflicts_v3_16_21_immutable",
+            "relation": "legacy_provider_acquisition_conflicts_v3_16_21",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_provider_acquisition_revisions_v3_16_21_immutable",
+            "relation": "legacy_provider_acquisition_revisions_v3_16_21",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_radar_projections_v3_11_immutable",
+            "relation": "legacy_radar_projections_v3_11",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_release_checkpoints_v3_19_immutable",
+            "relation": "legacy_release_checkpoints_v3_19",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_runtime_health_observations_v3_11_immutable",
+            "relation": "legacy_runtime_health_observations_v3_11",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_source_acquisition_outcomes_v3_13_immutable",
+            "relation": "legacy_source_acquisition_outcomes_v3_13",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_source_append_context_v3_13_immutable",
+            "relation": "legacy_source_append_context_v3_13",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_source_connector_attempts_v3_13_immutable",
+            "relation": "legacy_source_connector_attempts_v3_13",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_source_document_persistence_v3_13_immutable",
+            "relation": "legacy_source_document_persistence_v3_13",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_source_item_outcomes_v3_13_immutable",
+            "relation": "legacy_source_item_outcomes_v3_13",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "legacy_source_processing_outcomes_v3_13_immutable",
+            "relation": "legacy_source_processing_outcomes_v3_13",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "opportunity_financial_fact_series_registry_v3_immutable",
+            "relation": "opportunity_financial_fact_series_registry_v3",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "opportunity_financial_observations_v1_immutable",
+            "relation": "opportunity_financial_observations_v1",
+            "eventMask": 27,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          }
+        ]
+      },
+      {
+        "signature": "opportunity_candidate_plan_v3_internal(uuid,text)",
+        "owner": "postgres",
+        "securityDefiner": true,
+        "definitionSha256": "ad26cb165d6a67bdb2c8e3a38d204c3af3a3be67d180a72c4012faa1b00c32db",
+        "language": "plpgsql",
+        "entryKind": "sql_callable",
+        "executeGrantees": [
+          "PUBLIC",
+          "anon",
+          "authenticated",
+          "service_role"
+        ],
+        "recordedObjectDependencies": [
+          "type canonical_sector_key_v3",
+          "type source_key_v3"
+        ],
+        "triggerBindings": []
+      },
+      {
+        "signature": "preserve_first_recommended_at()",
+        "owner": "postgres",
+        "securityDefiner": false,
+        "definitionSha256": "153e289cf5fd922037017b85613799f50554a782eacf287424e5bb6e49fd82e7",
+        "language": "plpgsql",
+        "entryKind": "trigger",
+        "executeGrantees": [
+          "PUBLIC",
+          "anon",
+          "authenticated",
+          "postgres",
+          "service_role"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": [
+          {
+            "schema": "public",
+            "trigger": "trg_preserve_first_recommended_at",
+            "relation": "recommendations",
+            "eventMask": 19,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          }
+        ]
+      },
+      {
+        "signature": "research_publication_source_state_v2(uuid)",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "definitionSha256": "0ad5b0a448cf657c188b7a099149c70b4bc0532c6a822bd8738a5a61ffe3a3c0",
+        "language": "sql",
+        "entryKind": "sql_callable",
+        "executeGrantees": [
+          "research_observed_rpc_owner",
+          "research_source_fence_owner_v2"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": []
+      },
+      {
+        "signature": "research_source_fence_record_v2()",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "definitionSha256": "52d26abb8b812beec884a8267d40a3ef547ae6e3a3a4df528c6a6d8bfe70e7f1",
+        "language": "plpgsql",
+        "entryKind": "trigger",
+        "executeGrantees": [
+          "research_source_fence_owner_v2"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": [
+          {
+            "schema": "public",
+            "trigger": "research_source_fence_record_v2",
+            "relation": "source_raw_documents",
+            "eventMask": 29,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          }
+        ]
+      },
+      {
+        "signature": "research_source_fence_write_v2()",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "definitionSha256": "fe8339c551f7c809da1f67fb438787bb296133fead41f4f07b3284196aa81522",
+        "language": "plpgsql",
+        "entryKind": "trigger",
+        "executeGrantees": [
+          "research_source_fence_owner_v2"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": [
+          {
+            "schema": "public",
+            "trigger": "research_source_fence_truncate_v2",
+            "relation": "source_raw_documents",
+            "eventMask": 34,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          },
+          {
+            "schema": "public",
+            "trigger": "research_source_fence_write_v2",
+            "relation": "source_raw_documents",
+            "eventMask": 31,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          }
+        ]
+      },
+      {
+        "signature": "research_source_root_v2(jsonb)",
+        "owner": "postgres",
+        "securityDefiner": false,
+        "definitionSha256": "ada9281b7cd0673b2d4adb9e2c7be673f3959bbff3733117e50d362a569159bc",
+        "language": "sql",
+        "entryKind": "sql_callable",
+        "executeGrantees": [
+          "anon",
+          "authenticated",
+          "postgres",
+          "research_input_preparation_owner_v2",
+          "research_source_fence_owner_v2",
+          "service_role"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": []
+      },
+      {
+        "signature": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "definitionSha256": "ff4eb006af3bde82a86a640ac8126083d78684ea6bc2947100d0f8a2ed618479",
+        "language": "plpgsql",
+        "entryKind": "sql_callable",
+        "executeGrantees": [
+          "research_input_preparation_owner_v2",
+          "research_source_fence_owner_v2",
+          "service_role"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": []
+      },
+      {
+        "signature": "validate_research_deep_scope_v1()",
+        "owner": "postgres",
+        "securityDefiner": false,
+        "definitionSha256": "12330c7e878b4ac9d54bd7b84627d77b319ed35fc335ca3ce5a8d30c504ce394",
+        "language": "plpgsql",
+        "entryKind": "trigger",
+        "executeGrantees": [
+          "PUBLIC",
+          "anon",
+          "authenticated",
+          "postgres",
+          "service_role"
+        ],
+        "recordedObjectDependencies": [],
+        "triggerBindings": [
+          {
+            "schema": "public",
+            "trigger": "research_deep_scope_binding_v1",
+            "relation": "research_deep_jobs_v1",
+            "eventMask": 23,
+            "activationMode": "O",
+            "sourceRoleCanDelete": false,
+            "sourceRoleCanInsert": false,
+            "sourceRoleCanUpdate": false,
+            "sourceRoleCanTruncate": false,
+            "sourceRoleCanDefineTrigger": false
+          }
+        ]
+      }
+    ],
+    "catalogDependenciesArePartial": true,
+    "routineBodiesPublished": false,
+    "grantExecuted": false
+  }
+}

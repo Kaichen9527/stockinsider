@@ -1,0 +1,74 @@
+{
+  "recordedAt": "2026-11-15T15:09:21.827890Z",
+  "baseCommit": "1851fcdc83caf64a12b5898b5c3ea52fa37d259e",
+  "tasks": [
+    "T06",
+    "T10"
+  ],
+  "migration": "migrations/20261116_17_vnext_launch_twse_close_breadth_v1.sql",
+  "vectors": "web/scripts/launch-twse-close-breadth-vectors.sql",
+  "source": {
+    "datasetId": 11764,
+    "reportDay": "2026-11-13",
+    "bytes": 79265,
+    "reportedRows": 1086,
+    "observedAt": "2026-11-15T15:09:21.827890Z",
+    "knownAtOriginalCutoff": false,
+    "sha256": "6b03cce558971759c4edc94c0ee39b434d5dd841002ec227140c490a94e8133c",
+    "originalBytesRetained": false
+  },
+  "nativeCheck": {
+    "runtime": "Contabo staging, PostgreSQL 17.11 in a disposable network-isolated cluster",
+    "result": "pass",
+    "fixtureInputs": [
+      "calendar",
+      "roster and synthetic manifest renewal",
+      "18 historic price comparisons and synthetic signal price",
+      "corporate-action coverage and terms",
+      "policy, writer and lease"
+    ],
+    "fixtureSignalDay": "2026-11-15",
+    "fixtureSignalDayIsRealTradingSession": false,
+    "beforeReady": {
+      "eligible": 1,
+      "observed": 0,
+      "priceGaps": 1
+    },
+    "afterReady": {
+      "eligible": 1,
+      "observed": 1,
+      "aboveMa20": 1,
+      "priceGaps": 0,
+      "actionGaps": 0,
+      "qualified": false
+    },
+    "mismatchedOfficialClose": {
+      "observed": 0,
+      "priceGaps": 1
+    },
+    "incorrectDividendTerms": {
+      "observed": 0,
+      "actionGaps": 1
+    },
+    "changedRights": {
+      "observed": 0,
+      "priceGaps": 1
+    },
+    "sameMemberRenewedRoster": {
+      "observed": 1,
+      "retainsOriginalReceipt": true,
+      "coveredPreviously": true
+    },
+    "newMemberCoveredByPreviousRoster": false,
+    "unalteredTpexBreadthPacket": true,
+    "privateRoutineAccessChecks": "pass"
+  },
+  "pending": [
+    "Full recognized capital-event taxonomy and registered market breadth coverage",
+    "Both markets' verified cash flow and index requirements",
+    "Two genuine adjacent sessions and full Codex VM/deployment acceptance"
+  ],
+  "productionMutation": false,
+  "marketGateOpened": false,
+  "releaseValid": false
+}

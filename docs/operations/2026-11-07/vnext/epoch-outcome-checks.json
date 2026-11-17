@@ -1,0 +1,366 @@
+{
+  "scope": "disabled source-SQL candidate, pure fixture intent projection and source/profile/anchor negatives; existing public HTTP/SSR/Chromium regressions use synthetic RPC. No native/real journal/SQL/rights/publication acceptance.",
+  "sourceCommit": "170e5a93265d1a7d61dfc26e1ba25ecd463f82ae",
+  "sourceTree": "2486fccfe2bac3e8fcd098bf0a528cc4257333ac",
+  "runtimeWebTree": "81f907ddff58ace41693d416d6992edf21f8ba56",
+  "baseProtectionCommit": "3b39764636d43c0e4d02267b643c19781ddd6718",
+  "branch": "codex/stockinsider-v2-cloud-nov07",
+  "originalPrHeadRequired": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "userTimezone": "Asia/Taipei",
+  "validationCompletedAtLocal": "2026-11-08T00:08:29.995206+08:00",
+  "machineTimestampBasis": "UTC ISO8601; preserved in check receipts",
+  "implementationModels": {
+    "model": "GPT-6.1 Sol",
+    "reasoningEffort": "high",
+    "sqlDesignAuthor": "candidate_history_sol",
+    "pureAuthor": "source_qualification_gap_sol",
+    "independentEngineeringReviewer": "boundary_review_sol",
+    "coordinator": "root integration/receipts; no self model-switch claim"
+  },
+  "checks": [
+    {
+      "name": "focused",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/top10-projection.test.ts",
+        "web/src/lib/vnext/published-target-read.test.ts",
+        "web/src/lib/vnext/ranking-read.test.ts",
+        "web/src/lib/vnext/candidate-page.test.ts",
+        "web/src/lib/stock-chart-calendar.test.ts",
+        "web/src/app/components/vnext/detail-source.test.mjs",
+        "scripts/vnext-ranking-snapshot-source.test.mjs",
+        "web/src/lib/stock-chart-supply.test.ts",
+        "web/src/lib/vnext/business-public.test.ts",
+        "web/src/lib/vnext/vnext.test.ts",
+        "scripts/vnext-staging-preflight.test.mjs",
+        "web/src/lib/vnext/candidate-history-read.test.ts",
+        "scripts/vnext-candidate-history-source.test.mjs",
+        "web/src/lib/candidate-price-history.test.ts",
+        "scripts/vnext-source-window-source.test.mjs",
+        "web/src/lib/vnext/source-volume-boundary.test.ts",
+        "web/src/lib/vnext/analysis-sources.test.ts",
+        "web/src/lib/vnext/source-backlog.test.ts",
+        "web/src/lib/vnext/cached-source-admission.test.ts",
+        "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+        "scripts/vnext-candidate-epoch-source.test.mjs",
+        "web/src/lib/source-content-semantics.test.ts",
+        "web/src/lib/vnext/cached-admission.test.ts",
+        "web/src/lib/vnext/current-evidence-read.test.ts",
+        "web/src/lib/vnext/preparation-authority.test.ts",
+        "scripts/vnext-weekly-forecast-source.test.mjs",
+        "web/src/lib/vnext/forecast-active.test.ts",
+        "web/src/lib/vnext/forecast-current.test.ts",
+        "web/src/lib/vnext/thesis.test.ts",
+        "scripts/vnext-staging-execution-boundary.test.mjs",
+        "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+        "web/src/lib/tw-entry-plan-authority.test.ts"
+      ],
+      "start": "2026-11-07T16:07:55.124926+00:00",
+      "end": "2026-11-07T16:07:58.648514+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 41492480,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31467638784,
+        "/tmp": 9422872576
+      },
+      "resourceViolation": null,
+      "logSha256": "7b31626c7ee589f49e90cde2bd4b81b96ba6fa8a174033ded3d4b55c0ab0afa2"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-07T16:07:58.649037+00:00",
+      "end": "2026-11-07T16:08:00.908499+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40919040,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31467618304,
+        "/tmp": 9422872576
+      },
+      "resourceViolation": null,
+      "logSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-07T16:08:00.908885+00:00",
+      "end": "2026-11-07T16:08:18.711321+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40415232,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31467614208,
+        "/tmp": 9422872576
+      },
+      "resourceViolation": null,
+      "logSha256": "84df8aab33a2588ebae98ea51a5abfccb758ea53330f1013e6b9766025759b29"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-07T16:08:18.711697+00:00",
+      "end": "2026-11-07T16:08:22.979422+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 41046016,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31467606016,
+        "/tmp": 9422872576
+      },
+      "resourceViolation": null,
+      "logSha256": "6636b0b863924e88f1ad9be667ba67d4a92df800d544a9a7b8eace3d9cfc981d"
+    },
+    {
+      "name": "browser",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/vnext-ranking-browser-smoke.mjs"
+      ],
+      "start": "2026-11-07T16:08:22.979779+00:00",
+      "end": "2026-11-07T16:08:29.995206+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 157290496,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31464005632,
+        "/tmp": 9305587712
+      },
+      "resourceViolation": null,
+      "logSha256": "06fbb755eed8f0cde1bbce2f32f8b39cbfe0cb5c0544036f1e653792e0b1b801"
+    }
+  ],
+  "focusedTotals": {
+    "pass": 296,
+    "fail": 0,
+    "skip": 0
+  },
+  "newCases": {
+    "pureFixtureIntent": 10,
+    "sqlSourceContract": 7,
+    "overlapFocusedTotal": true
+  },
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 34
+  },
+  "browser": {
+    "scope": "actual isolated HTTP/SSR/Chromium desktop/mobile; synthetic RPC transport only, no native PG/review authority",
+    "status": "PASS",
+    "source": "170e5a93265d1a7d61dfc26e1ba25ecd463f82ae",
+    "harnessCommit": "170e5a93265d1a7d61dfc26e1ba25ecd463f82ae",
+    "runtimeWebTree": "81f907ddff58ace41693d416d6992edf21f8ba56",
+    "browserVersion": "151.0.7922.173",
+    "checks": [
+      "desktop:top0",
+      "desktop:top1",
+      "desktop:top10",
+      "desktop:bound-detail-invalidity",
+      "desktop:wrong-revision-closed",
+      "desktop:stable-page-private-allowlist",
+      "desktop:saved-history-version-and-observed-exit",
+      "mobile:top0",
+      "mobile:top1",
+      "mobile:top10",
+      "mobile:bound-detail-invalidity",
+      "mobile:wrong-revision-closed",
+      "mobile:stable-page-private-allowlist",
+      "mobile:saved-history-version-and-observed-exit"
+    ],
+    "readRpcCalls": 23,
+    "writeRpcCalls": 0,
+    "providerCalls": 0
+  },
+  "browserCleanup": {
+    "appPid": 27776,
+    "appExit": 143,
+    "appSignal": null,
+    "bridgeClosed": true
+  },
+  "journalBrowserCases": {
+    "status": "NOT_RUN",
+    "reason": "no journal route/reader installed or connected;14 existing public-read regressions only"
+  },
+  "authorChecks": [
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/vnext/candidate-epoch-journal.test.ts"
+      ],
+      "pass": 10,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--test",
+        "scripts/vnext-candidate-epoch-source.test.mjs"
+      ],
+      "pass": 7,
+      "fail": 0,
+      "skip": 0
+    }
+  ],
+  "review": {
+    "scope": "readonly design/source/final docs; not formal A1/legal approval",
+    "blocker": 0,
+    "high": 0,
+    "openFindings": 0,
+    "reviewerExecutedFinalTests": false,
+    "finalDocsReviewedNoMaterialCorrection": true,
+    "fixedFindings": [
+      "SQL CHECK UNKNOWN/NULL escape",
+      "pure target exit requires publication revision",
+      "epoch summaries restricted to visible page epoch ids",
+      "fixed schema/policy replay domain"
+    ],
+    "additionalDesignCorrection": "admission FK lineage uses stable job.admission_hash rather than prepared mutable job.input_hash"
+  },
+  "draftChecks": {
+    "initialPurePass": 10,
+    "note": "draft10 passed before target-publication/summary/policy repairs; superseded by final fixed source, not formal acceptance"
+  },
+  "journal": {
+    "schema": "vnext-candidate-epoch-event-v1",
+    "policy": "stockinsider-vnext-20-v1",
+    "sqlApplied": false,
+    "installerRegistered": false,
+    "actualMutationHooks": 0,
+    "productionRead": "Disabled",
+    "appendFirstStatement": "RAISE EXCEPTION vnext_candidate_epoch_hooks_not_connected",
+    "appendAlgorithm": "UNREACHABLE_SOURCE_DESIGN",
+    "activationViaCallerMetadataFlagOrGuc": false,
+    "fixtureSourceCauseVerified": false,
+    "fixtureEntryAuthority": false,
+    "coverageComplete": false,
+    "preActivationHistory": "unavailable",
+    "epochBootstrapFromMutableMembersOrSnapshots": false,
+    "legacyEpoch": null,
+    "prospectiveCausePaths": [
+      "core.enqueue.admitted",
+      "core.enqueue.deferred",
+      "core.exit.target_hit"
+    ],
+    "allProspectiveHooks": "NOT_CONNECTED",
+    "unsupportedPaths": [
+      "active member upsert/update",
+      "claim",
+      "prepare/input changes",
+      "publish",
+      "review rejection/failure",
+      "fail/expire",
+      "provider settlement delegation",
+      "swap atomic pair",
+      "other explicit exits",
+      "cancellation",
+      "future paths"
+    ],
+    "referencePins": "proposed FK pins only: same-symbol predecessor/epoch/previousepoch,principal,session,job,publication; not installed",
+    "causeIdAndProofHash": "opaque bounded values, not immutable cause/proof FK or causal/rights authority",
+    "replayCasRetentionSqlRuntime": "NOT_RUN"
+  },
+  "resources": {
+    "serialHeavyChecks": true,
+    "minimumFilesystemFreeBytes": 8589934592,
+    "admissionReferenceBytes": 536870912,
+    "sampledTreeRssCeilingBytes": 8589934592,
+    "samplingSeconds": 0.25,
+    "sampledNotInstantaneousOrCgroupPeak": true,
+    "cachedBuildAvailable": true,
+    "pruneOrDelete": false
+  },
+  "readinessNamesOnly": {
+    "environmentId": "ccarenv_b64_Y2NhcmVudl82ODU0YWE3YmQ3MjA4MTkxYjJiNTQxYTc1M2NkOTM3Zg",
+    "specRevision": "1",
+    "observedSpecRevision": "1",
+    "observationsCurrent": true,
+    "phase": "running",
+    "network": {
+      "mode": "restricted",
+      "state": "enforced",
+      "customAllowedHosts": [],
+      "presets": [
+        "package_managers"
+      ]
+    },
+    "secretBindingNames": [],
+    "outboundIdentityAliases": [],
+    "stagingExecutorProvenance": "NOT_OBSERVED"
+  },
+  "sourceFilesSha256": {
+    "migrations/20261107_vnext_candidate_epoch_journal_v1.sql": "ad15c6197168dab7192ed6d1bb783106b63f59207fb4224174610b49f7a88cbd",
+    "scripts/vnext-candidate-epoch-source.test.mjs": "b0dbac89908b249fde41ec3e1b8a53221a411a1244d239c1391ff3cd358c12f6",
+    "web/src/lib/vnext/candidate-epoch-journal.ts": "be13c4deb7eeed995adbeca1192b5fe9a5a9ad4bad3fb16c6e55017c14f833ab",
+    "web/src/lib/vnext/candidate-epoch-journal.test.ts": "237ab080734e5c5f7138d6429c589aebe164f78103f5d0368de4ad9031935158",
+    "openspec/changes/stockinsider-vnext-20/candidate-epoch-journal-design.md": "f3cfcd98af5e27a36196fc736affd3bea00a1fe21679b327d2b2dca7ad862b53",
+    "openspec/changes/stockinsider-vnext-20/candidate-epoch-outcome-amendment.md": "346f08a803490109e3ea1631c8d6ef79954405b3683bfe52ae1a925ddbf0fbb0"
+  },
+  "protectedAuthority": {
+    "activeGraphSha256": "c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a",
+    "acceptanceVersion": "1.46.0",
+    "scriptValueRowsSha256": "77ffc8879d7cd473b2c822e1a03d310782e34e9967644a93cd5aad6fd42e5d69",
+    "sameGraphDoesNotApproveNewProduct": true,
+    "attestationOrReviewRefIssued": false
+  },
+  "gates": {
+    "native": "HOLD_NOT_RETRIED",
+    "sqlGrammarCatalogInstallAclRlsWriter": "NOT_RUN",
+    "causalRightsBinding": "NOT_IMPLEMENTED_NOT_VERIFIED",
+    "actualReplayCasConcurrencyRollback": "NOT_RUN",
+    "liveReadonlyJournal": "NOT_CONNECTED",
+    "formalA1": "BLOCKED",
+    "protectedExactReview": "BLOCKED",
+    "realSourceDistinctAuthorReviewWebsitePositive": "NOT_RUN",
+    "twoActualAdjacentPostCloseSessions": "NOT_RUN",
+    "CI": "REQUIRED_NOT_TRIGGERED",
+    "stagingRestoreRollback": "NOT_RUN",
+    "release": "BLOCKED"
+  },
+  "operatorReport": "Cloud Key not set; no Tailscale devices; Contabo NeedsLogin. Not independently connected/verified by this task.",
+  "actions": {
+    "sqlOrPg": 0,
+    "nativeRetry": 0,
+    "existingWriterHookChange": 0,
+    "keyReadChangeOrGeneration": 0,
+    "sshOrContabo": 0,
+    "networkConfigChange": 0,
+    "newTaskExecutorRebuild": 0,
+    "productionWriterOrSchedule": 0,
+    "originalPrHeadUpdate": 0,
+    "mergeOrDeploy": 0,
+    "oldVmOrIcloud": 0
+  },
+  "bytesReclaimed": 0,
+  "verifiedArchiveLocation": null
+}

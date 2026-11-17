@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "t06-tpex-stopped-trading-queue-v1",
+  "baseCommit": "f6cb416788363c45fcbedbf47f3655e72ab0ca4f",
+  "environment": "isolated Contabo staging",
+  "dataset": {
+    "id": 11736,
+    "catalog": "https://data.gov.tw/dataset/11736",
+    "scope": "positive explicit stopped-trading flag in a same-day report; no unrestricted-venue conclusion"
+  },
+  "migrationSha256": "dbd0826d2e44297b5ed16bf2bf2106b4607a0d015b65b19daa2d16b2f707b0d7",
+  "sourceConsumerSha256": "119aef7adc556208393c5bd79ec5c640619d10015dad80a647d3082a1d67380f",
+  "sourceConsumerTestSha256": "694ee9af8107dabc85a5fa8a46d57b7aa4089eaf0ef56bdc2e54fdd56bbd786b",
+  "nativeFixture": [
+    "separate requirement for actual stop flag",
+    "old report, duplicate symbol and blank header scope refused",
+    "late acknowledgement and wrong listing market remain unknown",
+    "same-date ready locks the observed suspension and calendar",
+    "revoked rights returns unknown"
+  ],
+  "actualCorpus": {
+    "session": "2026-11-16",
+    "sha256": "8efd9fc4d18b8b6df6018280ce9b42671c98c793541d0fc5f0379d1915af06ae",
+    "observedAt": "2026-11-16T16:29:27.705850+00:00",
+    "bytes": 1237,
+    "rows": 20,
+    "stopped": 1,
+    "acceptedAtOriginalCutoff": false,
+    "completeAbsenceProved": false
+  },
+  "signedFixture": {
+    "ranAt": "2026-11-16T16:30:15.248436+00:00",
+    "reportRows": 2,
+    "stoppedFacts": 1,
+    "artifactReadback": true,
+    "readyReplay": true,
+    "auth": {
+      "badSignatureHttp": 401,
+      "ephemeralPostgrestUnixOnly": true,
+      "leaseReleased": true,
+      "writesAfterNegativeRequests": 0,
+      "wrongLeaseHttp": 400,
+      "wrongWriterReleaseHttp": 400
+    },
+    "scratchRemoved": true
+  },
+  "verifiedProviderAlternatives": [
+    {
+      "document": "https://www.twse.com.tw/docs1/data01/market/public_html/1030620-1030601626-2.pdf",
+      "scope": "TWSE security-status f1 distinguishes disposition, stopped trading, halt and resume. Documentation review only."
+    },
+    {
+      "document": "https://eshop.twse.com.tw/zh/product/detail/cfec9a1470e448ec91bfde006db361e8",
+      "scope": "A05 has a suspension annotation and a 17:30 batch. Paid product documentation reviewed; scope and entitlement require validation."
+    },
+    {
+      "document": "https://eshop.twse.com.tw/zh/product/detail/000000006f6a5e34017033452c8d0070",
+      "scope": "BFI85U is produced 22:00 for the next day."
+    },
+    {
+      "document": "https://eshop.twse.com.tw/zh/product/detail/75ce5fd1ad574df49ad9ff82209ca837",
+      "scope": "T97 is produced 23:30."
+    }
+  ],
+  "liveRankAccepted": false,
+  "formalProductionChanged": false,
+  "preservedDispositionRegression": "native-pass",
+  "web": {
+    "node": "22.14.0",
+    "next": "16.3.4",
+    "testsPassed": 28,
+    "testsFailed": 0,
+    "focusedLint": "pass",
+    "typescript": "pass",
+    "productionBuild": "pass",
+    "logSha256": {
+      "nodeTest": "559318316136e91243b5a722c550810bad928bc607e8294154c2ab3b06068b2e",
+      "build": "b5e684ec13ccdfb98e75c63e97c719ac7acd39af71262fd76e1b740a9c1b917c"
+    }
+  }
+}

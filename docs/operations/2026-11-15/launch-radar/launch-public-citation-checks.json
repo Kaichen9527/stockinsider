@@ -1,0 +1,111 @@
+{
+  "schema": "stockinsider-launch-public-citation-checkpoint-v1",
+  "publicSourceCommit": "d68f5a33b8345e66fe324749101bd1f92abfdcc0",
+  "localValidationCommit": "bd6bf3e56c4b7161ba7d76a4a65bc28289857f6c",
+  "sourceTree": "c0c297ff80d6debc2b015077695f8c111969bafb",
+  "sharedReceipt": {
+    "path": "launch-foundation-checks.json",
+    "sha256": "29ede9945eec6f9a3c3d60a354088301df1024675f90d854a2cf381e302353e8"
+  },
+  "unit": {
+    "cases": 8,
+    "status": "PASS",
+    "check": {
+      "name": "citation_unit",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/citations.test.ts",
+        "web/src/lib/vnext/launch-public-citation.test.ts",
+        "web/src/lib/vnext/launch-public-api.test.ts"
+      ],
+      "start": "2026-11-14T22:25:07.033144+00:00",
+      "end": "2026-11-14T22:25:07.534518+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 31670272,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29561925632,
+        "/tmp": 9403543552
+      },
+      "resourceViolation": null,
+      "logSha256": "1b99c2f5da851f303eb02714a8441a0393211ec27f8d8b7b052b9d4f5066f377"
+    }
+  },
+  "browser": {
+    "schema": "stockinsider-controlled-launch-citation-browser-v1",
+    "sourceCommit": "bd6bf3e56c4b7161ba7d76a4a65bc28289857f6c",
+    "scope": "synthetic_loopback_RPC_REAL_NEXT_HTTP_SSR_DESKTOP_MOBILE_NOT_ACTUAL_DB_OR_PUBLICATION",
+    "startedAt": "2026-11-14T22:26:22.804091+00:00",
+    "productionActions": 0,
+    "actualSourceAcquisition": false,
+    "fixtureCredentialOnly": true,
+    "bridgeStats": {
+      "synthetic": true,
+      "reads": 173,
+      "unsupported": 0,
+      "controls": 90,
+      "mode": "ready"
+    },
+    "exit": 0,
+    "status": "PASS",
+    "casesPlanned": 6,
+    "sourceTree": "c0c297ff80d6debc2b015077695f8c111969bafb",
+    "webTree": "7be3cb1feb32488993b5e95e69489f7e2a897073",
+    "ownedProcessesStopped": true,
+    "endedAt": "2026-11-14T22:26:37.929857+00:00"
+  },
+  "browserCases": 6,
+  "projects": [
+    "desktop",
+    "mobile"
+  ],
+  "malformedModesPerProject": 42,
+  "urlCases": {
+    "unsafe": 31,
+    "unknownRights": 5,
+    "malformedBindings": 6
+  },
+  "scope": "SYNTHETIC_INERT_URLS_REAL_NEXT_SSR_AND_HTTP_GET_NOT_REAL_SOURCE_RIGHTS",
+  "transport": {
+    "numericLoopbackPortGuard": true,
+    "apiMaxRedirects": 0,
+    "browserNonLoopbackAttemptsAsserted": 0,
+    "readinessRedirectsForbidden": true
+  },
+  "permission": {
+    "urlSafetyNotRights": true,
+    "noSilentStripOrRewrite": true,
+    "privateClaimAuthorityUnexpanded": true,
+    "registeredDatasetIds": [
+      11370,
+      11371,
+      11856,
+      11391,
+      11755
+    ],
+    "publicLandingOnly": true,
+    "license": "Taiwan Open Government Data License 1.0",
+    "attribution": "Securities and Futures Bureau, Financial Supervisory Commission",
+    "sourceCaptureAndCurrentRightsMustBeSqlDerived": true,
+    "callerHashNotAuthority": true,
+    "actualSqlPublicRightsDerivation": "NOT_RUN_PENDING_FULL_WRITER"
+  },
+  "publicGet": {
+    "path": "/api/launch-ranking",
+    "defaultDisabled": true,
+    "queryFields": [
+      "rankingRunId",
+      "symbol"
+    ],
+    "unknownDuplicateOrInvalid": "400_ZERO_RPC",
+    "allResponsesCacheControl": "no-store",
+    "sourceQueueModelOrWriterWork": 0
+  },
+  "memberArticleAccess": 0,
+  "privateOriginalsReceived": 0,
+  "actualSourceRightsAcceptance": false,
+  "nativeHold": "PRESERVED"
+}

@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "t06-licensed-disposition-queue-and-rank-preflight-v1",
+  "baseCommit": "ed34a5885d5410ae45a75a7bf8919b44ea09dd89",
+  "environment": "isolated Contabo fallback after Codex Cloud quota limit",
+  "deployedToProduction": false,
+  "independentReviewCompleted": false,
+  "realRankingSessionsAccepted": 0,
+  "migrationSha256": "91dfe4cfdaa85242b136af91b7b8d36fa45a6708120a6214347f2b6e00c37806",
+  "sourceStoreSha256": "a658db318f2c3c8151bcbcb68194ff3fd019706ae08fa9726ffcc216e24360b4",
+  "sourceStoreTestSha256": "1df719164989225d445773b89a512c7268a5dc522705868fdb27ae26779ee220",
+  "fixtures": [
+    "exact predecessor hashes preserved",
+    "positive report initially verified for both venues",
+    "active interval and deduplicated symbol",
+    "header-only report and missing symbol keep unknown",
+    "late or unacknowledged report keeps unknown",
+    "newer ready head supersedes stale positive",
+    "withdrawn rights removes eligibility evidence",
+    "official calendar and exact market pin",
+    "service-role direct private parser denied"
+  ],
+  "independentSqlCorpus": [
+    {
+      "dataset": 29082,
+      "bytes": 2575,
+      "sha256": "3e18e3b0f0d1de5c15fca10c7c534fb11afada88179e464c42cf2ae8017a2c84",
+      "reportedRows": 2,
+      "fourDigitNoticesInEffect": 2,
+      "session": "2026-11-16",
+      "matchesOriginalCutoffHash": true,
+      "replayedAt": "2026-11-16T16:08:56.638239+00:00"
+    },
+    {
+      "dataset": 11396,
+      "bytes": 5991,
+      "sha256": "c2d9052ac0bda64410b9104e56af20b43c0e065390ca53ca42f43daa3a8231e5",
+      "reportedRows": 6,
+      "fourDigitNoticesInEffect": 2,
+      "session": "2026-11-17",
+      "matchesOriginalCutoffHash": false,
+      "replayedAt": "2026-11-16T16:08:56.303937+00:00"
+    }
+  ],
+  "signedHttpFixture": {
+    "auth": {
+      "badSignatureHttp": 401,
+      "ephemeralPostgrestUnixOnly": true,
+      "leaseReleased": true,
+      "writesAfterNegativeRequests": 0,
+      "wrongLeaseHttp": 400,
+      "wrongWriterReleaseHttp": 400
+    },
+    "bundleSha256": "7dd1a8941749cfc2cba29f4791c481e1d1d6a5fdc6e508b4d4904381ac087caf",
+    "data": {
+      "artifactReadbackVerified": true,
+      "datasetId": 29082,
+      "duplicateReadySameId": true,
+      "fixture": true,
+      "lookup": {
+        "absentUnknown": true,
+        "facts": 1,
+        "legacy": 0,
+        "ready": 1,
+        "sourceVisibleNow": true
+      }
+    },
+    "formalServiceWrites": false,
+    "resourceStart": {
+      "availableMemoryBytes": 4127780864,
+      "freeDiskBytes": 19931189248
+    },
+    "reviewedGuardsInstalled": true,
+    "scope": "isolated signed writer for synthetic disposition input and fixture calendar",
+    "scopeLimitations": {
+      "fullRankingSessionVerified": false,
+      "productionFlagsChanged": false,
+      "upstreamCalendarIngestionVerified": false
+    },
+    "scratchRemoved": true,
+    "serviceStartedAt": "2026-11-16T16:11:05.432098+00:00",
+    "verifiedAt": "2026-11-16T16:11:10.866136+00:00"
+  },
+  "web": {
+    "node": "22.14.0",
+    "next": "16.3.4",
+    "relatedTestsPassed": 24,
+    "relatedTestsFailed": 0,
+    "typescript": "pass",
+    "focusedLint": "pass",
+    "productionBuild": "pass",
+    "staticOutputs": 92,
+    "logsSha256": {
+      "nodeTest": "c49f0001cccdc5bacaf1016f4dcde52209233da84678ce15c96b28e691f21ba1",
+      "build": "91a8879c39735bb11093e8da978420aff4e17078474129084100b934eee19d49"
+    }
+  },
+  "retainedRedSummary": [
+    "The initial TypeScript test caught a provider URL property-name mismatch. The fixed source-store adapter uses sourceUrl/maxBytes explicitly.",
+    "Early SQL fixture attempts corrected local stub parameter names and installed the existing pool helper. The migration bytes were unchanged.",
+    "The overnight TPEx feed no longer matched the original cutoff bytes. The new body is tested only as a fresh parser corpus.",
+    "The signed fixture explicitly enabled type stripping for pinned Node 22.14.0."
+  ],
+  "nextActualCapturePending": true,
+  "remainingGaps": [
+    "full disposition and suspension coverage",
+    "real signed 29082 and 11396 capture/ready at cutoff",
+    "source-led and review gates",
+    "full ranked publication and Contabo rollout"
+  ]
+}

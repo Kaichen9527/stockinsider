@@ -276,3 +276,6 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5, scope
   }
   return { claimed: claimed.length, reconciliationErrors, results };
 }
+
+// Existing pure mapping only; does not grant a worker/admission capability.
+export {factInput as candidateFinancialDocumentFactInput};

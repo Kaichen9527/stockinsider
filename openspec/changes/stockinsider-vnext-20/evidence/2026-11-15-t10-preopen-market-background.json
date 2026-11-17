@@ -1,0 +1,38 @@
+{
+  "ticket": 395,
+  "base": "fa3476552227306fcf91f194f553283e47a53416",
+  "candidateOnly": true,
+  "productionModified": false,
+  "postgres": {
+    "postgres": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "fixed0815CalendarCutoff": true,
+    "completedFridayToMonday": true,
+    "lateIndexDoesNotEnterMorning": true,
+    "preSlotAndAfterOpenDenied": true,
+    "missingVenueRetainsPrevious": true,
+    "twoVenuePlannedHolidayRejected": true,
+    "readOnlyPublicWireParsed": true,
+    "liveMorningWriteVerified": false,
+    "onlyUnixSocket": true,
+    "sqlSha256": "50eb7ed6a36cb9bcc06e8b12d93ca5abba3a0a6b000d06cd542a43b1626f833c"
+  },
+  "node": {
+    "version": "22.23.1",
+    "passed": 56,
+    "failed": 0,
+    "scopedStrictTypescript": "5.9.3",
+    "actualBrowser": false
+  },
+  "limits": [
+    "local-market index background only",
+    "no temporary or production timer installed",
+    "overnight producer and 21:30 breadth/foreign flow still pending"
+  ],
+  "fileDigests": {
+    "migrations/20261116_08_vnext_launch_morning_background_v1.sql": "50eb7ed6a36cb9bcc06e8b12d93ca5abba3a0a6b000d06cd542a43b1626f833c",
+    "web/src/lib/vnext/launch-morning-background.ts": "f6d567f47f98cde484323c7beead00366db0f94fd59df16abda870b922002399",
+    "web/src/lib/vnext/launch-morning-background.test.ts": "ce3181ab21b0145b2fbbcb4e42bc3d150ca62502bade73bb26f88f7c559b0e7a",
+    "web/src/lib/vnext/http.ts": "04e8075b5410d1af492670fbe3b2ebc859314ce0cdd785ca8ce96058d5aae9e3",
+    "web/src/app/components/vnext/LaunchHome.tsx": "97fc9fcd99d4497447c3f14358b366596f856354ceab99f23a62f96b07a9d85f"
+  }
+}

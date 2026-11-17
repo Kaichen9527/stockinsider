@@ -1,0 +1,341 @@
+{
+  "schema": "stockinsider-launch-selected-read-owner-checks-v1",
+  "recordedAt": "2026-11-14T14:56:41.889939+00:00",
+  "userTimezone": "Asia/Taipei",
+  "source": {
+    "commit": "3250ad88cfb49d807df88b82a69f3c281c8968f8",
+    "tree": "e1b7fbf9c65050263b3478e4a3fe455cdafc017e",
+    "runtimeWebTree": "392deb45938e024c258c264322c02b3adb17f766",
+    "baseProtection": "addcaecd6ad6ad8f6c181bad7601c3e57effbb9c",
+    "originalPrHead": "cbb581662e72942610ff85b0bf5e7e47ddddfa46"
+  },
+  "scope": "selected_read_protocol_integration_and_unconfigured_independent_owner_metadata_boundary",
+  "legacyAuthority": {
+    "path": "web/src/lib/tw-entry-plan-authority.ts",
+    "exactBaselinePrefixUnchanged": true,
+    "baselinePrefixBytes": 32482,
+    "baselinePrefixSha256": "8a2f9622e3f5a55a31541e7fdd951f53ab9344cc386bcc5a8f208189c6299928",
+    "addedExportOnly": true,
+    "historyFloorSessions": 240,
+    "originalRawVolumeGuardSessions": 21,
+    "newVolumeEvidenceSessions": 51,
+    "priceAdjustmentTransitions": 239,
+    "anyCandidateEventInside51BlocksRawShareComparability": true
+  },
+  "focused": {
+    "status": "PASS",
+    "tests": 437,
+    "pass": 437,
+    "fail": 0,
+    "skipped": 0,
+    "retainedCases": 406,
+    "newSelectedReadCases": 13,
+    "newOwnerBoundaryCases": 18
+  },
+  "checks": [
+    {
+      "name": "focused",
+      "start": "2026-11-14T14:54:39.282825+00:00",
+      "end": "2026-11-14T14:54:44.574098+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 43180032,
+      "resourceViolation": null,
+      "logSha256": "1442db2dc63182eb263501fbe5646a3af94ce3aa547af631326d5e2cdb3f5305",
+      "command": [
+        "node22.14.0",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/top10-projection.test.ts",
+        "web/src/lib/vnext/published-target-read.test.ts",
+        "web/src/lib/vnext/ranking-read.test.ts",
+        "web/src/lib/vnext/candidate-page.test.ts",
+        "web/src/lib/stock-chart-calendar.test.ts",
+        "web/src/app/components/vnext/detail-source.test.mjs",
+        "scripts/vnext-ranking-snapshot-source.test.mjs",
+        "web/src/lib/vnext/launch-pattern-read.test.ts",
+        "web/src/lib/vnext/private-owner-read.test.ts",
+        "web/src/lib/vnext/launch-patterns.test.ts",
+        "web/src/lib/technical-indicator-adapter.test.ts",
+        "web/src/lib/technical-features-v2.test.ts",
+        "scripts/vnext-linux-restore-candidate.test.mjs",
+        "scripts/local-backup-envelope.test.mjs",
+        "scripts/local-backup-artifact.test.mjs",
+        "scripts/local-backup-lifecycle.test.mjs",
+        "scripts/build-contabo-restore-list.test.mjs",
+        "scripts/export-contabo-database-backup.test.mjs",
+        "scripts/contabo-production-restore-contract.test.mjs",
+        "scripts/contabo-local-backup-cutover.test.mjs",
+        "scripts/rehearse-contabo-database-restore.test.mjs",
+        "scripts/verify-standalone-release.test.mjs",
+        "scripts/package-standalone-release.test.mjs",
+        "web/src/lib/stock-chart-supply.test.ts",
+        "web/src/lib/vnext/business-public.test.ts",
+        "web/src/lib/vnext/vnext.test.ts",
+        "scripts/vnext-staging-preflight.test.mjs",
+        "web/src/lib/vnext/candidate-history-read.test.ts",
+        "scripts/vnext-candidate-history-source.test.mjs",
+        "web/src/lib/candidate-price-history.test.ts",
+        "scripts/vnext-source-window-source.test.mjs",
+        "web/src/lib/vnext/source-volume-boundary.test.ts",
+        "web/src/lib/vnext/analysis-sources.test.ts",
+        "web/src/lib/vnext/source-backlog.test.ts",
+        "web/src/lib/vnext/cached-source-admission.test.ts",
+        "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+        "web/src/lib/vnext/schedule-admission.test.ts",
+        "web/src/lib/vnext/schedule-replay-binding.test.ts",
+        "scripts/vnext-staging-schedule-candidate.test.mjs",
+        "scripts/vnext-candidate-epoch-source.test.mjs",
+        "web/src/lib/source-content-semantics.test.ts",
+        "web/src/lib/vnext/cached-admission.test.ts",
+        "web/src/lib/vnext/current-evidence-read.test.ts",
+        "web/src/lib/vnext/preparation-authority.test.ts",
+        "scripts/vnext-weekly-forecast-source.test.mjs",
+        "web/src/lib/vnext/forecast-active.test.ts",
+        "web/src/lib/vnext/forecast-current.test.ts",
+        "web/src/lib/vnext/thesis.test.ts",
+        "scripts/vnext-staging-execution-boundary.test.mjs",
+        "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+        "web/src/lib/tw-entry-plan-authority.test.ts"
+      ],
+      "minimumFreeBytes": {
+        "workspace": 31003410432,
+        "tmp": 9420808192
+      }
+    },
+    {
+      "name": "types",
+      "start": "2026-11-14T14:54:44.575525+00:00",
+      "end": "2026-11-14T14:54:51.845068+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81469440,
+      "resourceViolation": null,
+      "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "minimumFreeBytes": {
+        "workspace": 31003357184,
+        "tmp": 9421664256
+      }
+    },
+    {
+      "name": "lint",
+      "start": "2026-11-14T14:54:51.845448+00:00",
+      "end": "2026-11-14T14:55:08.889584+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81448960,
+      "resourceViolation": null,
+      "logSha256": "19413ba2546bc395d24513acf4de8e2749f93bfe60ad7087f5bbb4e7fcb5db30",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "minimumFreeBytes": {
+        "workspace": 31003353088,
+        "tmp": 9421664256
+      }
+    },
+    {
+      "name": "build",
+      "start": "2026-11-14T14:55:08.889963+00:00",
+      "end": "2026-11-14T14:55:20.177196+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 82055168,
+      "resourceViolation": null,
+      "logSha256": "ad077dc745432b748410fc4e692f18605226bfd68f4f0e2719f02619ebb3cb1e",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "minimumFreeBytes": {
+        "workspace": 31003340800,
+        "tmp": 9421631488
+      }
+    }
+  ],
+  "lint": {
+    "status": "PASS",
+    "errors": 0,
+    "warnings": 34
+  },
+  "resourcePolicy": {
+    "serialHeavyWorkloads": true,
+    "filesystemFloorBytes": 8589934592,
+    "admissionMarginBytes": 536870912,
+    "processTreeRssCeilingBytes": 8589934592,
+    "samplingIntervalMs": 250,
+    "sampledNotExactTaskPeaks": true
+  },
+  "cgroupObservation": {
+    "scope": "lifetime_peak_not_source_specific",
+    "memory.max": "17179869184",
+    "memory.current": "586567680",
+    "memory.peak": "2049744896",
+    "cpu.max": "400000 100000"
+  },
+  "publicOfficialCanary": {
+    "status": "BLOCKED",
+    "scope": "one_public_official_get_no_credentials",
+    "url": "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date=20260101",
+    "startedAt": "2026-11-14T14:45:42.737464+00:00",
+    "completedAt": "2026-11-14T14:45:42.749122+00:00",
+    "curlExit": 56,
+    "httpStatus": "000",
+    "responseBytes": 0,
+    "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "boundedMaximumBytes": 65536,
+    "timeoutSeconds": 15,
+    "redirectsFollowed": false,
+    "tlsVerificationDisabled": false,
+    "credentialReadOrSentByClient": false,
+    "configuredOutboundIdentityCount": 0,
+    "failureClass": "PROXY_CONNECT_REJECTED_403",
+    "actualCalendarAuthority": false,
+    "retryOrAlternateHostAttempted": false,
+    "rawBodyOrHeadersPublished": false,
+    "proxyResponseStatuses": [
+      403
+    ],
+    "actualOriginResponseObserved": false
+  },
+  "externalCoordinatorEvidence": {
+    "status": "PROVIDED_NOT_OBSERVED_IN_THIS_RUNTIME",
+    "scope": "external_coordinator_report_not_this_runtime_acquisition",
+    "url": "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date=20260101",
+    "reportedStat": "ok",
+    "reportedHolidayRows": 27,
+    "reportedResponseSha256": "7fefe785ea7155a5004a2eb74486ad865ea5c4b5f02ee0cffbbdacb1ca2ea390",
+    "reportReceivedAt": "2026-11-14T14:54:25.738669+00:00",
+    "rawArtifactReceived": false,
+    "runtimeHashVerified": false,
+    "runtimeProducer": false,
+    "annualCompletenessVerified": false,
+    "adjacentSessionAcceptance": false,
+    "networkPolicyBypassedOrChanged": false,
+    "collectorUrlAvailability": "REPORTED_EXTERNALLY"
+  },
+  "ownerBoundary": {
+    "actualTrustedIssuerConfiguration": "NOT_CONFIGURED",
+    "actualOwnerSession": "NOT_CONNECTED",
+    "route": "NOT_INSTALLED",
+    "contentSourcePermission": "NOT_GRANTED_BY_THIS_MODULE",
+    "default": "DISABLED",
+    "runtimeReadsEnvironment": false,
+    "runtimeAcceptsPrivateKey": false,
+    "runtimeSignsOrIssuesCredential": false,
+    "syntheticIssuerKeys": "IN_MEMORY_NONPRODUCTION_TEST_ONLY",
+    "maximumTokenBytes": 2048,
+    "maximumCapabilityLifetimeSeconds": 300,
+    "workerCredentialsReused": false,
+    "responseCache": "private_no_store_including_errors",
+    "publicSourceOrHtmlIntegrated": false,
+    "revocationLogoutSessionAdapter": "NOT_IMPLEMENTED"
+  },
+  "selectedReadBoundary": {
+    "injectedExistingReadonlyClient": true,
+    "actualDatabaseObserved": false,
+    "appProducerOrRouteCaller": "NOT_CONNECTED",
+    "acquisitionSourceRankingPublicationEntryAuthority": false,
+    "fullAnnualProofRequired": true,
+    "rawVolumeFromPriceFactorInferred": false,
+    "originalBreakoutBenchmarkAndDailyLimitGuessed": false
+  },
+  "engineeringReview": {
+    "selectedAuthorAndReviewerModel": "gpt-6.1-sol",
+    "selectedReasoningEffort": "high",
+    "formalA1OrProtectedApproval": false,
+    "reviewerTestsExecuted": false,
+    "openNewP0": 0,
+    "openNewP1": 0,
+    "preTestFindingsResolved": [
+      "aggregate_dependency_availability_maximum",
+      "query_and_result_accessor_snapshot_bypass",
+      "expiry_after_query_and_result_extraction",
+      "trusted_config_array_and_key_snapshot"
+    ]
+  },
+  "notRun": [
+    {
+      "check": "real_official_runtime_producer_and_adjacent_sessions",
+      "status": "BLOCKED",
+      "reason": "local_proxy_CONNECT403_no_origin_response_external_report_not_runtime_acquisition"
+    },
+    {
+      "check": "actual_owner_login_private_content_and_public_browser_cache_flow",
+      "status": "NOT_RUN",
+      "reason": "issuer_session_route_source_unconfigured"
+    },
+    {
+      "check": "native_pg_sql",
+      "status": "NOT_RUN",
+      "reason": "existing_native_HOLD"
+    },
+    {
+      "check": "desktop_mobile_new_flow",
+      "status": "NOT_RUN",
+      "reason": "no_new_app_UI_route_connected_prior_evidence_retains_subject"
+    },
+    {
+      "check": "formal_A1_protected_CI_release",
+      "status": "BLOCKED",
+      "reason": "existing_formal_binding_and_release_prerequisites_unresolved"
+    },
+    {
+      "check": "Contabo_private_backup_iCloud_deploy",
+      "status": "NOT_RUN",
+      "reason": "outside_authorized_current_slice"
+    }
+  ],
+  "unchangedProtectedScope": [
+    ".github",
+    "scripts",
+    "migrations",
+    "deployment",
+    "web/package.json",
+    "web/package-lock.json",
+    "web/vercel.json",
+    "web/src/lib/vnext/auth.ts",
+    "web/src/lib/vnext/policy.ts",
+    "web/src/lib/vnext/qualification.ts",
+    "web/src/lib/vnext/ranking-read.ts",
+    "web/src/lib/vnext/launch-patterns.ts"
+  ],
+  "actions": {
+    "publicOfficialGetAttempts": 1,
+    "canaryRetriesOrAlternativeHosts": 0,
+    "researchProviderJobsStarted": 0,
+    "paidCalls": 0,
+    "privateOriginalOrProductionCredentialReceived": false,
+    "networkPolicyChangedOrBypassed": false,
+    "secretsOrEnvironmentFilesReadWritten": false,
+    "sqlOrPostgresql": false,
+    "sshVpnOrContabo": false,
+    "productionMetricsTimerServiceOrPrHeadChanged": false,
+    "oldVmOrICloudTouched": false,
+    "cleanupOrArchive": false,
+    "bytesReclaimed": 0,
+    "mergeOrDeploy": false,
+    "nativeHoldRetained": true
+  },
+  "testIterations": 1,
+  "sameFailureLimit": 2,
+  "maxTaskIterations": 5
+}

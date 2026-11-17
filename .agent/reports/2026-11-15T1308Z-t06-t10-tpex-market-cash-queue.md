@@ -1,0 +1,11 @@
+# TPEx market cash source in the guarded queue
+
+Dataset 11743 uses the same licensed-source prepass and writer lease as other exchange data. After an official TPEx close, the planner schedules the five dates from the existing official-calendar proof. An independently confirmed current close can start a single daily capture while the full history is incomplete. The same dated resource is enqueued at most once per Taipei capture generation.
+
+The storage path derives the market amount from the exact CSV bytes in PostgreSQL and checks date, ownership, cutoffs, report identity and eight category totals. Market cash stays in its own immutable source fact table. It does not enter the per-stock share facts. The selector requires a committed readiness acknowledgement, current source rights and all five official dates. A new cancellation invalidates the window. The existing market result stays incomplete pending TWSE cash and company-action-comparable breadth.
+
+The initial isolated PostgreSQL build reproduced a syntax error in the inherited integer predicate. The amended branch adds parentheses to that CASE and the corresponding inherited date predicate. The numeric boundaries and expected date rules remain the same. Profile, derive, command and market context changes preserve each selected function's catalog metadata and pin its before and after bodies.
+
+PostgreSQL 17.11 ran through the source queue and acknowledged five real official reports from November 9–13 in a disposable schema. Writer/backend, lease and calendar fixtures isolated the test from production. The PostgreSQL results matched an independent CSV sum. The actual raw report hashes match the earlier replay, but their November 15 retrieval clocks remain separate. An unacknowledged receipt, earlier decision cutoff, missing close, revoked scope, wrong lease and late cancellation all fail closed. A separate native fixture confirmed single-day planning, the five-date plan and same-generation idempotency. Node.js 22.23.1 passed 19 application transport, parser and route tests.
+
+The migration, source flag and candidate timers have not been applied in production. Cloud full CI, real adjacent close verification, protected review, daily TWSE coverage and permitted use, and confirmed breadth remain pending.

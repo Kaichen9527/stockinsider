@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "stockinsider-t05-podcast-public-private-boundary-v1",
+  "recordedAt": "2026-11-17T16:58:07Z",
+  "candidateParent": "4b52552b8d67f4e2ba3bbeb27d72b009109e2d1e",
+  "scope": "Public compatibility paths plus isolated capture-derived PostgreSQL 17.11 with synthetic episode and transcript",
+  "projection": {
+    "directTranscriptTableReadsRemovedFrom": [
+      "getDiscoveredStocks",
+      "getStockDeepDive"
+    ],
+    "discoveryAndDetailEvidence": [
+      "episode link",
+      "publisher date",
+      "recognized stock symbol",
+      "recorded spoken interval"
+    ],
+    "legacyTranscriptTextAndExtractedThesisExcluded": true,
+    "unitTests": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "skipped": 0
+    },
+    "unitTapSha256": "5f629e2c092646d8da24c421e69f1d50e2099e6c7110a0bbfa861ccdb13ab87a",
+    "cryptographicSourceSignatureVerified": false,
+    "missingCreatorProvenanceOrInvalidLocatorExcluded": true
+  },
+  "database": {
+    "observed": {
+      "tablesWithRls": [
+        "podcast_episodes",
+        "podcast_transcripts"
+      ],
+      "deniedTableReads": 4,
+      "serviceReadWriteBeforeAndAfter": true,
+      "allPublicRowsUnchanged": true,
+      "productionApplied": false
+    },
+    "nativeTests": {
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "skipped": 0
+    },
+    "nativeTapSha256": "b9bbef35353c395cf0c0c18cb4ed78b01ac4ec9b1567d49c43ac3559bf40a25a"
+  },
+  "testedSourcesSha256": {
+    "web/src/lib/podcast-public-evidence.ts": "db3873823175aabc2be5eb82f57cdbae19a6503dd1351314416a9a7dd9d37a29",
+    "web/src/lib/podcast-public-evidence.test.ts": "1f295bbe1bec5c521f2ad8ba1820f92b437cb366c8cfff6e9a21c2b04c45ad41",
+    "web/src/lib/domain.ts": "76703fbab11ab47d97de73d68bd428accbdd95715c005bba738a3137a28018bc",
+    "migrations/20261117_48_vnext_podcast_private_acl_v1.sql": "9ed390532f252d54ed7a3b4e1c265470971e2af8d3f271c1a42c6f503e6b2dd7",
+    "scripts/vnext-internal-candidate-plan-acl-postgres.test.mjs": "1e1b94fbc4cd418de9c41592ffa8df49e801fe8b58a471ff023e9b6df411c142",
+    ".github/workflows/stockinsider-vnext-quality.yml": "073c6823ccfd8bfd3173718d7e4b44d91d816ab2b9d57efa905edc3e37525153"
+  },
+  "formalServiceReleaseAndTimersUnchanged": true,
+  "stagingDatabaseContainerAndSocketRemoved": true,
+  "productionApplied": false,
+  "realCreatorContentAccepted": false,
+  "renderedBrowserAcceptanceCompleted": false
+}

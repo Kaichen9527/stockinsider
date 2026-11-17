@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "stockinsider-t19-source-owner-role-boundary-v1",
+  "scope": "isolated Contabo PostgreSQL 17.11 worker fixture after the planner and subscriber ACL candidates",
+  "nativeTestsPassed": 8,
+  "nativeTapSha256": "98561d8f124a09d792a3a764e866ffb85ac7e64412406530a024fbdf1b6902d2",
+  "sourceOwner": {
+    "role": {
+      "role": "research_source_fence_owner_v2",
+      "login": false,
+      "bypassRls": false,
+      "superuser": false,
+      "publicUsage": false,
+      "publicCreate": false,
+      "membershipsIn": 0,
+      "membershipsOut": 0,
+      "publicCallableDefiners": [
+        "assert_research_source_seal_v2(uuid)",
+        "research_publication_source_state_v2(uuid)",
+        "seal_research_sources_v2(jsonb,timestamp with time zone)"
+      ]
+    },
+    "relationAccess": [
+      {
+        "rls": true,
+        "owned": true,
+        "forced": false,
+        "rights": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "REFERENCES",
+          "DELETE",
+          "TRUNCATE",
+          "TRIGGER",
+          "MAINTAIN"
+        ],
+        "relname": "research_source_fence_events_v2"
+      },
+      {
+        "rls": true,
+        "owned": true,
+        "forced": false,
+        "rights": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "REFERENCES",
+          "DELETE",
+          "TRUNCATE",
+          "TRIGGER",
+          "MAINTAIN"
+        ],
+        "relname": "research_source_seal_invalidations_v2"
+      },
+      {
+        "rls": true,
+        "owned": true,
+        "forced": false,
+        "rights": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "REFERENCES",
+          "DELETE",
+          "TRUNCATE",
+          "TRIGGER",
+          "MAINTAIN"
+        ],
+        "relname": "research_source_seals_v2"
+      },
+      {
+        "rls": false,
+        "owned": false,
+        "forced": false,
+        "rights": [
+          "SELECT"
+        ],
+        "relname": "source_raw_documents"
+      }
+    ],
+    "sequences": [
+      {
+        "name": "research_source_fence_events_v2_event_id_seq",
+        "usage": true,
+        "select": true,
+        "update": true
+      }
+    ],
+    "callAdapters": {
+      "publicOperators": 0,
+      "publicCallableCastFunctions": 0,
+      "publicTypesWithNonCatalogInput": 0
+    },
+    "transaction": "repeatable read read only",
+    "reachesLegacySubscriberOrPlanner": false,
+    "namespaceGrantApplied": false
+  },
+  "applicationAuthorizationOrTransitiveProof": false,
+  "independentReviewStillRequired": true,
+  "sourceExtractionCompleted": false,
+  "ephemeralContainerRemoved": true,
+  "formalContinuityMatched": true
+}

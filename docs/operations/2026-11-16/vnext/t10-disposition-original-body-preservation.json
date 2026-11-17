@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "t10-disposition-original-body-preservation-v1",
+  "stage": "Contabo isolated staging",
+  "observationAt": "2026-11-16T23:50:37+08:00",
+  "scheduledFor": "2026-11-17T21:28:00+08:00",
+  "targetCutoff": "2026-11-17T21:30:00+08:00",
+  "timerState": "waiting",
+  "lastTrigger": null,
+  "actualSessionReceiptAvailable": false,
+  "existingStageUnitDefinitionSha256": "753c6aa4af27ef3f17ad8d130d0ccae862873a32b3bcc72f411302cadd2876b8",
+  "oldRunnerSha256": "114db9b87b117156a0230d1407f233072a4a97ff6d345ca00cba9d1c2fa9c559",
+  "runnerSha256": "4244855f876c1050a3027b43862bda1eff2c2f9308520e913f8e06f2b8cc4062",
+  "testsSha256": "3781a349178068adc4d16311e8e492e8d8c81f9544553e77dc26ba5f62cb81a9",
+  "pythonTestsPassed": 5,
+  "datasetScope": "Licensed exact TWSE 29082 session query and TPEx 11396 source. Only successful parsed same-window responses retain bytes.",
+  "captureClockBoundary": "Source receipt stores observedAt from successful HTTP read and recordedAt after durable file rename. A cutoff-period fetch recorded late remains unavailable for cutoff replay.",
+  "lateReadRehearsal": [
+    {
+      "datasetId": 29082,
+      "observedAt": "2026-11-16T15:52:16.557356+00:00",
+      "sha256": "3e18e3b0f0d1de5c15fca10c7c534fb11afada88179e464c42cf2ae8017a2c84",
+      "bytes": 2575,
+      "sessionIdentity": "DATED_QUERY_WITH_OVERLAPS",
+      "usableRecords": 2,
+      "beforeCutoff": false,
+      "completeAbsenceProved": false
+    },
+    {
+      "datasetId": 11396,
+      "observedAt": "2026-11-16T15:52:16.064558+00:00",
+      "sha256": "c75339a624da52950c5d82d9c76e0992cdbaaa5e44050ef187aff83685032081",
+      "bytes": 6932,
+      "sessionIdentity": "CURRENT_FEED_ANNOUNCED_OVERLAPS",
+      "usableRecords": 5,
+      "beforeCutoff": false,
+      "completeAbsenceProved": false
+    }
+  ],
+  "receiptHasRankAuthority": false,
+  "publishedOriginalBodies": false,
+  "actualRankedSessionAccepted": false,
+  "writerInvoked": false,
+  "productionChanged": false,
+  "webBuild": {
+    "command": "npm run build -- --webpack",
+    "result": "pass",
+    "nextVersion": "16.3.4",
+    "staticOutputs": 92,
+    "logSha256": "24fdc6930a332d26a71fa442d1f5287ebd2d568352069a488e0240b6c26e086c"
+  }
+}

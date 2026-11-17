@@ -1,0 +1,40 @@
+{
+  "kind": "staging_schedule_readback_v1",
+  "observedAt": "2026-11-16T23:29:34+08:00",
+  "targetTradingDate": "2026-11-17",
+  "timezone": "Asia/Taipei",
+  "actualCaptureStatus": "pending_at_observation",
+  "actualRankingSessionAccepted": false,
+  "prodChanges": false,
+  "schedules": [
+    {
+      "observer": "signed_twse_turnover",
+      "scheduledAt": "2026-11-17T21:20:00+08:00",
+      "state": "waiting",
+      "lastTrigger": null
+    },
+    {
+      "observer": "dated_twse_price_limits",
+      "scheduledAt": "2026-11-17T21:23:00+08:00",
+      "state": "waiting",
+      "lastTrigger": null,
+      "receiptExists": false,
+      "runnerSha256": "f05ccfaf0ededfc7c8561cb5b64160918678f255fa4ee316e81b240d747a2d9f",
+      "parserSha256": "efb1caa6591ae8862ce42beea501b322de1787275b78494b9c2120c9552ff7da",
+      "parserCommit": "4911969e4c8b2fd52dceee140dfbbb9a7db44330",
+      "plannedChecks": [
+        "requested_and_declared_trade_date",
+        "current_day_bounds_csv_json_agree",
+        "licensed_quote_matches_price_limit_for_control",
+        "receive_and_record_before_cutoff"
+      ],
+      "targetCutoff": "2026-11-17T21:30:00+08:00",
+      "verifiedUnitProperties": {
+        "dynamicUser": true,
+        "privateTmp": true,
+        "protectSystem": "strict",
+        "maxRuntimeSeconds": 40
+      }
+    }
+  ]
+}

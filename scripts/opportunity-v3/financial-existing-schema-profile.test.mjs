@@ -3,7 +3,7 @@ import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import fs from 'node:fs';
 import test from 'node:test';
-import {MIGRATIONS,parseArguments,applyReviewedMigrationPlanToClient} from './apply-reviewed-migrations.mjs';
+import {MIGRATIONS,parseArguments,applyReviewedMigrationPlanToClient,applyRestoredFinancialPlanToClient} from './apply-reviewed-migrations.mjs';
 import {FINANCIAL_TAIL,selectFinancialHistoryChain,orderedHash} from './financial-history-install-guard.mjs';
 import {OWNERSHIP_PRELUDE,OWNERSHIP_PRELUDE_SHA256,FINANCIAL_EXISTING_PROFILE_SHA256,makeFinancialExistingSchemaProfile,assertFinancialExistingSchemaPlan,assertFinancialProfileReviewBinding} from './financial-existing-schema-profile.mjs';
 const load=relativePath=>{const bytes=fs.readFileSync(relativePath);return {relativePath,bytes,sha256:createHash('sha256').update(bytes).digest('hex')};};
@@ -26,6 +26,7 @@ test('missing/wrong prelude bytes/hash/order/chain and profile omission reject',
 test('profile flag conflict/duplicates and absent/duplicate/wrong literal fail closed',()=>{
  const base=['--apply','--source-commit','1'.repeat(40),'--attestation-commit','2'.repeat(40)];
  assert.equal(parseArguments([...base,'--financial-existing-schema-profile']).financialExistingSchemaProfile,true);
+ assert.throws(()=>parseArguments([...base,'--financial-existing-schema-profile','--historical-financial-restore']),/invalid_arguments/u);
  for(const flags of [['--financial-history-extension','--financial-existing-schema-profile'],['--financial-existing-schema-profile','--financial-existing-schema-profile']])assert.throws(()=>parseArguments([...base,...flags]),/conflict|invalid_arguments/u);
  const literal=`Financial existing-schema ordered profile SHA256: ${FINANCIAL_EXISTING_PROFILE_SHA256}`;assertFinancialProfileReviewBinding(literal,FINANCIAL_EXISTING_PROFILE_SHA256);
  for(const review of ['',literal+'\n'+literal,literal+'\n'+literal.replace(FINANCIAL_EXISTING_PROFILE_SHA256,'0'.repeat(64)),literal+'\n  '+literal,literal.replace(FINANCIAL_EXISTING_PROFILE_SHA256,'0'.repeat(64))])assert.throws(()=>assertFinancialProfileReviewBinding(review,FINANCIAL_EXISTING_PROFILE_SHA256),/binding_missing/u);
@@ -33,4 +34,16 @@ test('profile flag conflict/duplicates and absent/duplicate/wrong literal fail c
 test('actual installer checks successor and profile under lock/BEGIN before any prelude query',async()=>{
  const calls=[];const client={query:async sql=>{calls.push(sql);if(sql.includes('pg_try_advisory_lock'))return {rows:[{locked:true}]};if(sql.includes(' AS observations'))return {rows:[{observations:false,wrapper:false,reader:false,residue:false,unknown_successor:true}]};return {rows:[]};},end:async()=>{}};
  await assert.rejects(applyReviewedMigrationPlanToClient(client,plan,{financialExistingSchemaProfile:true}),/unknown_research/u);assert.ok(calls.includes('ROLLBACK'));assert.ok(!calls.some(x=>x.includes('DO $ownership_bridge$')));
+});
+test('isolated archive replay refuses reviewed envelopes and a mismatched backend before the lock',async()=>{
+ const calls=[];const client={query:async sql=>{calls.push(sql);return {rows:[{isolated:false}]};},end:async()=>{calls.push('closed');}};
+ const options={financialExistingSchemaProfile:true,privateVpsPeerOperator:true,sourceCommit:null,attestationCommit:null};
+ for(const override of [{apply:true},{sourceCommit:'1'.repeat(40)},{attestationCommit:'2'.repeat(40)},{financialExistingSchemaProfile:false},{privateVpsPeerOperator:false}]){
+  assert.throws(()=>applyRestoredFinancialPlanToClient(client,plan,{...options,...override}),/historical_financial_restore_only/u);
+ }
+ assert.deepEqual(calls,[]);
+ await assert.rejects(applyRestoredFinancialPlanToClient(client,plan,options),/historical_financial_restore_backend_required/u);
+ assert.equal(calls.length,2);
+ assert.match(calls[0],/current_database\(\)='t17_restored'/u);
+ assert.equal(calls[1],'closed');
 });

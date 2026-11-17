@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "launch-issuer-eps-projection-witness-v1",
+  "scope": "isolated Contabo; actual PostgreSQL 17.11 and synthetic authority/projected original",
+  "buildScope": "typescript and targeted lint; exact production build awaits branch CI",
+  "nodeTestsPassed": 18,
+  "typescriptPassed": true,
+  "focusedLintPassed": true,
+  "native": {
+    "rankedPublicationAndImmutablePreparationBound": true,
+    "exactNumericClaimAndOriginalSourceBound": true,
+    "currentEvidenceAndReceiptPairRequired": true,
+    "zeroEstimatePreserved": true,
+    "crossSymbolAndCrossRankingRejected": true,
+    "changedSourceNotSubstituted": true,
+    "amountWithoutExactClaimOmitted": true,
+    "privateLicensedEstimateOmitted": true,
+    "revokedEstimateOmitted": true,
+    "noServiceRoleRightsTableReads": true
+  },
+  "realIssuerEndToEndAccepted": false,
+  "productionServiceSignaturesAndReleasePointerUnchanged": true
+}

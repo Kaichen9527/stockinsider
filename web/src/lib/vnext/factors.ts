@@ -1,3 +1,5 @@
+import {AUDIT_QUOTE_CLOCK_VERSION,quoteClock,civilDateKnownAt} from './audit-quote-clock.ts';
+import {evidenceInstant} from './evidence-clock.ts';
 import { DEEP_WEIGHTS, INITIAL_WEIGHTS, INITIAL_SCORE_VERSION, scoreFactors, type Factor, type Factors } from './policy.ts';
 import { eligibleClue, independentClues, volumeComparison, type Clue } from './screening.ts';
 type Observation = { value: number | null; source: string; observedAt: string };
@@ -47,8 +49,8 @@ export function initialFactors(input: ScreeningInputs) {
   };
   return {...scoreFactors(factors, INITIAL_WEIGHTS),derivationVersion:INITIAL_SCORE_VERSION};
 }
-type Checklist = { checks: Array<{ key: string; met: boolean | null; provenance: string[]; observedAt: string }> };
-export type DeepInputs = { cutoff: string; valuation: { current: number | null; bear: number | null; base: number | null; bull: number | null; method: string; quoteAt: string; valuationAt: string; provenance: string[] };
+type Checklist = { checks: Array<{ key: string; met: boolean | null; provenance: string[]; observedAt: string; raw?:unknown }> };
+export type DeepInputs = { cutoff: string; clockVersion?:typeof AUDIT_QUOTE_CLOCK_VERSION; valuation: { current: number | null; bear: number | null; base: number | null; bull: number | null; method: string; quoteAt: string; valuationAt: string; quoteClockVersion?:typeof AUDIT_QUOTE_CLOCK_VERSION; quoteObservedAt?:string; quoteKnownAt?:string; provenance: string[] };
   profitabilityChecklist: Checklist; technicalChipsChecklist: Checklist; catalystChecklist: Checklist; marketLiquidityChecklist: Checklist };
 const CHECKLISTS = {
   profitability: ['margin_stable', 'cashflow_conversion', 'competitive_advantage', 'concentration_disclosed'],
@@ -60,7 +62,7 @@ function checklist(input: Checklist, keys: string[], cutoff: string) {
   const checks = Array.isArray(input?.checks) ? input.checks : [];
   const selected = keys.map((key) => checks.filter((c) => c.key === key));
   const valid = selected.every((list) => list.length === 1 && typeof list[0].met === 'boolean' && list[0].provenance.length > 0
-    && Number.isFinite(Date.parse(list[0].observedAt)) && Date.parse(list[0].observedAt) <= Date.parse(cutoff));
+    && evidenceInstant(list[0].observedAt)!==null && evidenceInstant(cutoff)!==null && evidenceInstant(list[0].observedAt)! <= evidenceInstant(cutoff)!);
   return factor({ requiredKeys: keys, checks }, valid ? selected.filter((list) => list[0].met === true).length / keys.length : null,
     valid ? [...new Set(selected.flatMap((list) => list[0].provenance))] : [], valid ? 'fixed_evidence_checklist_fraction' : 'fixed_checklist_evidence_missing');
 }
@@ -70,7 +72,9 @@ export function deepFactors(input: DeepInputs) {
   const valid = v && [v.current, v.bear, v.base, v.bull].every((x) => typeof x === 'number' && Number.isFinite(x) && x > 0)
     && v.bear! <= v.base! && v.base! <= v.bull! && v.bear! < v.current! && v.provenance?.length > 0
     && ['forward_pe', 'forward_pb', 'normalized_pe', 'ev_ebitda', 'dcf'].includes(v.method)
-    && [v.quoteAt, v.valuationAt].every((date) => Number.isFinite(Date.parse(date)) && Date.parse(date) <= Date.parse(input.cutoff));
+    && v.quoteClockVersion===AUDIT_QUOTE_CLOCK_VERSION
+    && quoteClock({observedAt:v.quoteObservedAt,availableAt:v.quoteKnownAt},input.cutoff)!==null
+    && civilDateKnownAt(v.quoteAt,input.cutoff) && civilDateKnownAt(v.valuationAt,input.cutoff) && v.valuationAt>=v.quoteAt;
   const upside = valid ? v.base! / v.current! - 1 : null; const downside = valid ? 1 - v.bear! / v.current! : null;
   const rewardRisk = upside !== null && downside !== null && downside > 0 ? upside / downside : null;
   const factors: Factors = {

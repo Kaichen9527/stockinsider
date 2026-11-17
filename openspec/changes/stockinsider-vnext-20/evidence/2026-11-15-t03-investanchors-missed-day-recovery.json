@@ -1,0 +1,46 @@
+{
+  "task": "T03",
+  "base": "157f7c2f787b8d93285666e0f1ae3dc812762066",
+  "observedAt": "2026-11-15T16:03:44Z",
+  "environment": "Disposable Contabo staging harness, processes run as unprivileged user in a private network namespace",
+  "cloudExecutor": "Last observed Cloud turn terminal due to usage limit. No local build or test.",
+  "postgres": {
+    "major": 17,
+    "result": "passed",
+    "fixtures": "Synthetic audit, principals, source counters and writer. Real migration 20261116_18 followed by real migration 20261116_19.",
+    "checks": [
+      "service role execute and denied anon/authenticated",
+      "exact enabled operator and owned writer",
+      "read committed",
+      "concurrent single start marker",
+      "oldest gap with more recent completed day",
+      "re-open deferred progress",
+      "40-day anchored catch-up and denial for another principal",
+      "existing source/day quota and compare-and-swap",
+      "existing private receipt shape"
+    ]
+  },
+  "node": {
+    "version": "22.14.0",
+    "passed": 34,
+    "failed": 0,
+    "strictTypeScriptScope": "Gmail transport and its unit tests",
+    "including": [
+      "bounded two-day catch-up",
+      "failure and budget stop at oldest day",
+      "normal recheck once",
+      "invalid or nonadvancing plans and mismatched checkpoint date",
+      "rollover to a new Taipei day",
+      "single timer and notice timeout"
+    ]
+  },
+  "productionServicesChanged": false,
+  "realGmailBackgroundGrantValidated": false,
+  "memberContentAcquired": false,
+  "deploymentApprovedByThisEvidence": false,
+  "outstanding": [
+    "Exact-base full CI and independent review",
+    "Approved background Gmail grant and full member-article path",
+    "T03 live end-to-end acceptance"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "status": "FAIL",
+  "scope": "observed first redacted internal fatal, not inferred sole cause for every run",
+  "run": 39996616648,
+  "job": 120561768044,
+  "check": "requirements",
+  "step": "Retrieve bootstrap and prepare detached subject",
+  "timestamp": "2026-10-23T17:38:02.7119243Z",
+  "retrieval": "supported GitHub connector job log reader, no rejected signed URL renewal",
+  "firstRedactedFatal": "fatal: couldn't find remote ref refs/heads/evidence/source-led-opportunity-v3-exact-review-cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "fatalLineSha256": "6ad01264c8c45e81b53d0c786c1a4a37bd1c3fb8bffb14a12e5f4e6e75d46383",
+  "remoteRefProbe": "git ls-remote origin exact ref returned exit0 with no matching ref on2026-11-07",
+  "interpretation": "prepare fetch requires exact-subject independent review ref; observed ref missing. No pin/guard/ref modification, self approval or workflow rerun.",
+  "protectedGate": "BLOCKED",
+  "nativeRetry": "HOLD_SAME_FAILURE_LIMIT_2"
+}

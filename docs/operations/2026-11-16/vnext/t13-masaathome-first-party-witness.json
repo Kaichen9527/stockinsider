@@ -1,0 +1,62 @@
+{
+  "task": "T13",
+  "observedDate": "2026-11-16",
+  "method": "Read three actual posts and their attached chart in the existing Threads browser session. Rechecked timestamps against the post time elements.",
+  "author": {
+    "handle": "@masaathome",
+    "verifiedBadgeObserved": true,
+    "profile": "https://www.threads.com/@masaathome",
+    "officialLanding": "https://portaly.cc/masaathome",
+    "partnerProfile": "https://www.cmoney.tw/app/expert/masa?ca=1",
+    "partnerNotes": "https://www.cmoney.tw/notes/?aid=3571"
+  },
+  "observations": [
+    {
+      "ref": "https://www.threads.com/@masaathome/post/DfyrGsxk6wN",
+      "postedAt": "2026-11-16T06:06:36Z",
+      "case": "latest independent post",
+      "instrument": "Nasdaq-100 futures",
+      "qualifiedTaiwanIssuers": 0
+    },
+    {
+      "ref": "https://www.threads.com/@masaathome/post/Dfr8pfDk9lR",
+      "postedAt": "2026-11-13T15:25:12Z",
+      "case": "independent original after the November 13 Taiwan publication cutoff",
+      "instrument": "Nasdaq-100 futures",
+      "qualifiedTaiwanIssuers": 0
+    },
+    {
+      "ref": "https://www.threads.com/@masaathome/post/DfsjU7Ek8An",
+      "postedAt": "2026-11-13T21:03:11Z",
+      "case": "author caption with direct quote of previous post",
+      "quotedRoot": "Dfr8pfDk9lR",
+      "instrument": "Nasdaq-100 futures",
+      "qualifiedTaiwanIssuers": 0
+    }
+  ],
+  "sample": {
+    "postsRead": 3,
+    "independentRoots": 2,
+    "qualifiedTaiwanIssuers": 0,
+    "chartNumericLabel": "2612",
+    "chartLabelDisposition": "part of the NQmain futures chart caption, ineligible as standalone TWSE stock-code evidence"
+  },
+  "cmoneyNotes": [
+    {
+      "ref": "https://www.cmoney.tw/notes/note-detail.aspx?nid=967671",
+      "originalLocalDate": "2025-07-18",
+      "contentAccess": "excerpt and member gate"
+    },
+    {
+      "ref": "https://www.cmoney.tw/notes/note-detail.aspx?nid=1019558",
+      "originalLocalDate": "2025-10-18",
+      "contentAccess": "excerpt and member gate"
+    }
+  ],
+  "limits": [
+    "Sample only; no 30-day coverage claim",
+    "Automated collection and member/App contents unverified",
+    "No source body, screenshots, or private content in this report"
+  ],
+  "taskComplete": false
+}

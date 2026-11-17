@@ -1,0 +1,371 @@
+{
+  "schema": "stockinsider-launch-radar-t01-t06-source-checks-v1",
+  "recordedAt": "2026-11-14T14:33:26.688736+00:00",
+  "userTimezone": "Asia/Taipei",
+  "source": {
+    "commit": "e9ec4d588d9607d5c713a704c500ae03e4815f00",
+    "tree": "04bb4d963a24d3a5f760317bed195aed3d205ef3",
+    "runtimeWebTree": "72f0ae5a73ccdb7a37929d1bf8ea7eeaff7eb6d5",
+    "baseProtectionCommit": "9bca1e30b3f6d481c722fcc33f12f93cc286749e",
+    "originalPrHead": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+    "originalMain": "93e44475cbb0c27beb26e4dcb68e382096a4e212"
+  },
+  "approvedGoal": {
+    "parent": 385,
+    "tickets": [
+      386,
+      405
+    ],
+    "status": "ACTIVE_IMPLEMENTATION_SOURCE_ONLY",
+    "parentBodySha256": "aacd043d02434e5f6dc1a4ef749339cefc77cf62b8e98f556a52e6dbf4daacf9",
+    "ticketsCreatedModifiedOrClosed": false,
+    "formalRequirementDesignA1Approval": false
+  },
+  "readiness": {
+    "observedAt": "2026-11-14T14:29:10.398099+00:00",
+    "hostTimezone": "UTC",
+    "userTimezone": "Asia/Taipei",
+    "filesystem": {
+      "/workspace": {
+        "freeBytes": 31009824768,
+        "totalBytes": 33770192896
+      },
+      "/tmp": {
+        "freeBytes": 9441292288,
+        "totalBytes": 9441329152
+      }
+    },
+    "memory.max": "17179869184",
+    "memory.current": "104845312",
+    "cpu.max": "400000 100000",
+    "hostMemoryBytes": {
+      "MemTotal": 18882662400,
+      "MemAvailable": 18208141312
+    },
+    "model": {
+      "requestedAuthor": "gpt-6.1-sol",
+      "requestedReasoningEffort": "high",
+      "explicitAuthorAndReviewerSelection": "ACCEPTED_BY_SPAWN_TOOL",
+      "hostRuntimeModelMetadata": "NOT_EXPOSED",
+      "selfSwitchClaimed": false
+    },
+    "configuredSecretBindingNames": [],
+    "configuredOutboundIdentityAliases": [],
+    "runtimePhase": "running_current",
+    "networkScope": "enforced_restricted_package_manager_preset_no_custom_hosts",
+    "contaboAdmission": false
+  },
+  "postValidationCgroup": {
+    "scope": "cgroup_current_and_lifetime_peak_not_per_workload_measurement",
+    "memory.max": "17179869184",
+    "memory.current": "577855488",
+    "memory.peak": "1743917056",
+    "cpu.max": "400000 100000"
+  },
+  "preservation": {
+    "base": "9bca1e30b3f6d481c722fcc33f12f93cc286749e",
+    "localPreservationRef": "refs/heads/codex/launch-radar-preserve-9bca1e3",
+    "trackedWipAtStart": 0,
+    "existingWorkRegularFilesHashed": 283,
+    "existingWorkBytesHashed": 22510297,
+    "excludedCustodyFiles": 0,
+    "nonregularNotFollowed": 0,
+    "privateManifestSha256": "e99ad07dfaad43c44d5a32af3300097f57824e631c51cca60d99b66ee73025cc",
+    "contentDeletedOrOverwritten": false,
+    "archiveOrRecoveryVerified": false,
+    "oldCheckoutAvailable": false,
+    "oldCheckoutTouched": false
+  },
+  "preservationRecheck": {
+    "manifestSha256": "e99ad07dfaad43c44d5a32af3300097f57824e631c51cca60d99b66ee73025cc",
+    "verifiedExistingFiles": 283,
+    "changedOrMissing": 0,
+    "restoreVerified": false,
+    "originalBytesPreserved": true
+  },
+  "oldCustody": {
+    "oldCheckoutAvailable": false,
+    "localObjectObservation": [
+      {
+        "commit": "1b2fbc49e4a14227ddf812d586ddca229c22f33b",
+        "localCommitObjectAvailable": false,
+        "remoteRecoveryAttempted": false
+      },
+      {
+        "commit": "9b579e90732d6505b63d0bf0e239fee90de0ebe7",
+        "localCommitObjectAvailable": false,
+        "remoteRecoveryAttempted": false
+      }
+    ],
+    "oldTrackedWipAndPgdata": "NOT_ACCESSIBLE_NOT_RECOVERED_NOT_TOUCHED",
+    "originalReceiptHash": "555641f51ab03b8c955e0f0e8e51456cc38627b786e520dedc578067ada1518b",
+    "originalReceiptRecovered": false
+  },
+  "skills": {
+    "repository": "mattpocock/skills",
+    "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa",
+    "fileCount": 4,
+    "exactBlobAndSha256Verified": true,
+    "licenseBlob": "f1dd2c09108dde1a5f56097cee8461b3ea834499",
+    "licenseSha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+    "fetchedVia": "connected_GitHub_file_provider_exact_commit_ref",
+    "localUpstreamCommitTreeAttestation": false,
+    "existingSameNameSkillsOverwritten": false,
+    "remoteCodeExecuted": false,
+    "newInterviewOrTicketPublication": false
+  },
+  "focused": {
+    "status": "PASS",
+    "tests": 406,
+    "pass": 406,
+    "fail": 0,
+    "skipped": 0,
+    "retainedRegressionCases": 382,
+    "existingTechnicalAdapterCases": 6,
+    "newT06FixtureCases": 18
+  },
+  "checks": [
+    {
+      "name": "focused",
+      "start": "2026-11-14T14:29:40.121212+00:00",
+      "end": "2026-11-14T14:29:45.410980+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 45924352,
+      "resourceViolation": null,
+      "logSha256": "34fa9e3d9cb4fb0e4d4f397dde247e681ce50ee39edf6231f9184165a09f2495",
+      "command": [
+        "node22.14.0",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/top10-projection.test.ts",
+        "web/src/lib/vnext/published-target-read.test.ts",
+        "web/src/lib/vnext/ranking-read.test.ts",
+        "web/src/lib/vnext/candidate-page.test.ts",
+        "web/src/lib/stock-chart-calendar.test.ts",
+        "web/src/app/components/vnext/detail-source.test.mjs",
+        "scripts/vnext-ranking-snapshot-source.test.mjs",
+        "web/src/lib/vnext/launch-patterns.test.ts",
+        "web/src/lib/technical-indicator-adapter.test.ts",
+        "web/src/lib/technical-features-v2.test.ts",
+        "scripts/vnext-linux-restore-candidate.test.mjs",
+        "scripts/local-backup-envelope.test.mjs",
+        "scripts/local-backup-artifact.test.mjs",
+        "scripts/local-backup-lifecycle.test.mjs",
+        "scripts/build-contabo-restore-list.test.mjs",
+        "scripts/export-contabo-database-backup.test.mjs",
+        "scripts/contabo-production-restore-contract.test.mjs",
+        "scripts/contabo-local-backup-cutover.test.mjs",
+        "scripts/rehearse-contabo-database-restore.test.mjs",
+        "scripts/verify-standalone-release.test.mjs",
+        "scripts/package-standalone-release.test.mjs",
+        "web/src/lib/stock-chart-supply.test.ts",
+        "web/src/lib/vnext/business-public.test.ts",
+        "web/src/lib/vnext/vnext.test.ts",
+        "scripts/vnext-staging-preflight.test.mjs",
+        "web/src/lib/vnext/candidate-history-read.test.ts",
+        "scripts/vnext-candidate-history-source.test.mjs",
+        "web/src/lib/candidate-price-history.test.ts",
+        "scripts/vnext-source-window-source.test.mjs",
+        "web/src/lib/vnext/source-volume-boundary.test.ts",
+        "web/src/lib/vnext/analysis-sources.test.ts",
+        "web/src/lib/vnext/source-backlog.test.ts",
+        "web/src/lib/vnext/cached-source-admission.test.ts",
+        "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+        "web/src/lib/vnext/schedule-admission.test.ts",
+        "web/src/lib/vnext/schedule-replay-binding.test.ts",
+        "scripts/vnext-staging-schedule-candidate.test.mjs",
+        "scripts/vnext-candidate-epoch-source.test.mjs",
+        "web/src/lib/source-content-semantics.test.ts",
+        "web/src/lib/vnext/cached-admission.test.ts",
+        "web/src/lib/vnext/current-evidence-read.test.ts",
+        "web/src/lib/vnext/preparation-authority.test.ts",
+        "scripts/vnext-weekly-forecast-source.test.mjs",
+        "web/src/lib/vnext/forecast-active.test.ts",
+        "web/src/lib/vnext/forecast-current.test.ts",
+        "web/src/lib/vnext/thesis.test.ts",
+        "scripts/vnext-staging-execution-boundary.test.mjs",
+        "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+        "web/src/lib/tw-entry-plan-authority.test.ts"
+      ],
+      "minimumFreeBytes": {
+        "workspace": 31009513472,
+        "tmp": 9441099776
+      }
+    },
+    {
+      "name": "types",
+      "start": "2026-11-14T14:29:45.411713+00:00",
+      "end": "2026-11-14T14:29:48.678184+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81035264,
+      "resourceViolation": null,
+      "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "minimumFreeBytes": {
+        "workspace": 31009497088,
+        "tmp": 9441292288
+      }
+    },
+    {
+      "name": "lint",
+      "start": "2026-11-14T14:29:48.678566+00:00",
+      "end": "2026-11-14T14:30:05.734241+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 82378752,
+      "resourceViolation": null,
+      "logSha256": "19413ba2546bc395d24513acf4de8e2749f93bfe60ad7087f5bbb4e7fcb5db30",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "minimumFreeBytes": {
+        "workspace": 31009492992,
+        "tmp": 9437749248
+      }
+    },
+    {
+      "name": "build",
+      "start": "2026-11-14T14:30:05.734611+00:00",
+      "end": "2026-11-14T14:30:18.523994+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 82661376,
+      "resourceViolation": null,
+      "logSha256": "4adc34effaeee6f82ac825ebcfb947e15483be0681e10008dab49b55b48f1932",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "minimumFreeBytes": {
+        "workspace": 31005523968,
+        "tmp": 9421664256
+      }
+    }
+  ],
+  "lint": {
+    "status": "PASS",
+    "errors": 0,
+    "warnings": 34
+  },
+  "resourcePolicy": {
+    "minimumWorkspaceAndTmpBytes": 8589934592,
+    "admissionMarginBytes": 536870912,
+    "maximumProcessTreeRssBytes": 8589934592,
+    "samplingIntervalMs": 250,
+    "processRssIsSampledNotExactPeak": true,
+    "serialHeavyWorkloads": true,
+    "contaboOrRestoreAdmission": false
+  },
+  "engineeringReview": {
+    "requestedModel": "gpt-6.1-sol",
+    "requestedReasoningEffort": "high",
+    "newBoundedSourceDocP0": 0,
+    "newBoundedSourceDocP1": 0,
+    "reviewerExecutedTests": false,
+    "formalA1OrProtectedApproval": false
+  },
+  "limitations": {
+    "T01ActualHostModelAndEffortAttestation": "NOT_EXPOSED",
+    "T01OldCheckoutObjectsAndRecovery": "NOT_RECOVERED",
+    "T02VerifiedOwnerSessionPrivateRead": "NOT_IMPLEMENTED",
+    "T06RealOfficialProviderChipActionCalendar": "NOT_CONNECTED",
+    "T06NewUI": "NOT_CONNECTED",
+    "T06FinalHoldRelativeStrengthAndSlopePolicy": "NULL_WITH_GAPS",
+    "T08LaunchScoreQualificationAndSnapshotAdapter": "NOT_CONNECTED",
+    "T10Target2130Scheduler": "NOT_CONNECTED_PRIOR_POLICY_UNCHANGED"
+  },
+  "notRun": [
+    {
+      "check": "desktop_mobile_browser_new_launch_flow",
+      "status": "NOT_RUN",
+      "reason": "no_launch_UI_or_route_connected_prior_browser_evidence_remains_original_scope"
+    },
+    {
+      "check": "native_pg_sql",
+      "status": "NOT_RUN",
+      "reason": "native_HOLD_retained"
+    },
+    {
+      "check": "real_source_full_body_private_login_and_two_close_sessions",
+      "status": "NOT_RUN",
+      "reason": "provider_permissions_identity_and_real_acceptance_not_available_in_this_slice"
+    },
+    {
+      "check": "formal_A1_protected_CI_release",
+      "status": "BLOCKED",
+      "reason": "existing_binding_and_release_prerequisites_not_satisfied_or_retried"
+    },
+    {
+      "check": "Contabo_backup_restore_Next_rollback_iCloud",
+      "status": "NOT_RUN",
+      "reason": "explicit_current_turn_boundary"
+    }
+  ],
+  "unchangedProtectedScope": [
+    ".github",
+    "scripts/opportunity-v3",
+    "scripts/runtime/reviewed-runtime-release.js",
+    "migrations",
+    "deployment",
+    "web/package.json",
+    "web/package-lock.json",
+    "web/vercel.json",
+    "web/src/lib/vnext/policy.ts",
+    "web/src/lib/vnext/qualification.ts",
+    "web/src/lib/vnext/ranking-read.ts",
+    "web/src/lib/vnext/auth.ts"
+  ],
+  "actions": {
+    "paidCalls": 0,
+    "privateOriginalsOrSecretsReceived": false,
+    "environmentSecretsReadOrWritten": false,
+    "sshOrVpn": false,
+    "sqlOrPostgresql": false,
+    "productionMetricTimerServiceOrPrHeadChanged": false,
+    "oldVmOrICloudTouched": false,
+    "archiveOrDeletionPerformed": false,
+    "bytesReclaimed": 0,
+    "mergeOrDeploy": false,
+    "nativeHoldRetained": true,
+    "researchProviderCalls": 0
+  },
+  "localPreparationCorrections": [
+    {
+      "phase": "skill_installer_blob_preflight",
+      "result": "FIRST_LOCAL_ASSERTION_FAILED_BEFORE_FILE_WRITES",
+      "cause": "local_script_encoded_Git_blob_header_NUL_incorrectly",
+      "fix": "explicit_single_zero_byte_then_exact_upstream_blob_verification",
+      "pinsChanged": false,
+      "secondPreflight": "PASS"
+    },
+    {
+      "phase": "multifile_document_patch",
+      "result": "EXPECTED_HEADER_NOT_FOUND_NO_EDITS",
+      "fix": "read_actual_header_and_apply_exact_patch"
+    }
+  ],
+  "taskIterations": {
+    "testIterations": 1,
+    "sameFailureLimit": 2,
+    "maxTaskIterations": 5
+  }
+}

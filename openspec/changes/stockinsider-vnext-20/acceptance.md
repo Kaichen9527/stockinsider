@@ -2,6 +2,10 @@
 
 Each ID maps to an executable case and evidence before Release Gate PASS; pending means not passed. Existing financial/source/auth/publication safety expectations remain authoritative. User-approved changed behavior is versioned and does not rewrite historical RED/PASS.
 
+## Launch Goal acceptance overlay — #385, 2026-11-14
+
+[Approved launch amendment](launch-radar-amendment.md) versions the new technical70/chips20/market10 policy with nullable separate fundamentals, changed ties/source scope/21:30 target and performance. VN01–VN20 IDs and their old results remain intact; legacy fundamental70/financial-completeness tests are not launch-policy positives. Before launch release, new executable cases must cover the complete changed policy and public/private boundaries in addition to retained budget/writer/review/source protections. T01 model-attestation/WIP recovery gaps, source-only T06 fixture results or an engineering review cannot be promoted to real source/session/CI/staging acceptance.
+
 | ID | Executable outcome required |
 |---|---|
 | VN01 | Empty explicit scope and unadmitted symbols cause zero coverage/download/parser/quote/model calls |
@@ -35,3 +39,7 @@ Each ID maps to an executable case and evidence before Release Gate PASS; pendin
 ## Current evidence and unaccepted scope
 
 See [current VN01–VN20 execution matrix](../../../docs/operations/2026-10-22/vnext/CURRENT.json) and [single current status and delivery index](../../../docs/operations/2026-10-22/vnext/STATUS.md). Historical evidence/summary.json remains the6410 checkpoint. The matrix distinguishes real VM database/HTTP/browser tests from synthetic content, pure contracts, missing implementations and external prerequisites. No requirement is waived by a PASS in a narrower test. Release Gate remains pending.
+
+## Current V2 VN20 authority amendment — 2026-11-07
+
+Historical VN20 NOT_AUTHORIZED and its receipts above remain historical. For this user-approved V2 checkpoint, merge/formal deployment is authorized only AFTER the amendment's independent/protected review, complete VN01–VN20, CI, real-source/two-session, isolated staging, restore/rollback and resource gates. autoMerge/autoDeploy remain false; no gate is waived and this checkpoint is not release-ready. See [V2 amendment](v2-top10-cloud-amendment.md).

@@ -1,0 +1,426 @@
+{
+  "schema": "stockinsider-linux-restore-release-source-checks-v1",
+  "recordedAt": "2026-11-08T03:58:22.932490+00:00",
+  "scope": "same_development_vm_source_and_nonproduction_fixtures_only",
+  "source": {
+    "commit": "0c6eaddf63f579ffe4f619c8d4f6788db0759f5d",
+    "tree": "ed27d7d9fc914d633e55e69a441c8acb4fe05b11",
+    "runtimeWebTree": "6481851a5c279ead1590053282f778596e39ffd5",
+    "baseProtectionCommit": "e8f99139f8ba98175adf7718f089ad3362b96dd5",
+    "implementationCommit": "a13656b26327137b213c2ec029c422ce0c7fa924",
+    "fixtureModeFixCommit": "0c6eaddf63f579ffe4f619c8d4f6788db0759f5d"
+  },
+  "readiness": {
+    "schema": "stockinsider-development-readiness-behavior-v1",
+    "observationsCurrent": true,
+    "phase": "running",
+    "policy": {
+      "mode": "restricted",
+      "state": "enforced",
+      "customHostCount": 0,
+      "packageManagerPreset": true
+    },
+    "runtimeVariableNames": [],
+    "secretBindingNames": [],
+    "outboundIdentityAliases": [],
+    "remoteAdmission": "NOT_REQUESTED_NOT_OBSERVED",
+    "productionArtifactsReceived": false
+  },
+  "focused": {
+    "status": "PASS",
+    "tests": 382,
+    "pass": 382,
+    "fail": 0,
+    "skipped": 0,
+    "retainedVnextCases": 330,
+    "additionalExistingBackupReleaseCases": 31,
+    "newLinuxCandidateCases": 12,
+    "newStandaloneStructuralCases": 9
+  },
+  "attempts": [
+    {
+      "source": "a13656b26327137b213c2ec029c422ce0c7fa924",
+      "focused": {
+        "status": "FAIL",
+        "tests": 382,
+        "pass": 379,
+        "fail": 3
+      },
+      "failureClasses": [
+        "two_new_fixture_declared_0644_but_umask_0077_created_0600",
+        "one_existing_public_shell_checkout_0700_expected_0755"
+      ],
+      "checks": [
+        {
+          "name": "focused",
+          "start": "2026-11-08T03:54:36.713859+00:00",
+          "end": "2026-11-08T03:54:40.980597+00:00",
+          "exit": 1,
+          "status": "FAIL",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 44163072,
+          "resourceViolation": null,
+          "logSha256": "5e1d8aa7e45cbd5baf125b213daf5c6948138f4a291fa23bd64ad4ac17bfea51",
+          "command": [
+            "node22.14.0",
+            "--experimental-strip-types",
+            "--test",
+            "web/src/lib/vnext/top10-projection.test.ts",
+            "web/src/lib/vnext/published-target-read.test.ts",
+            "web/src/lib/vnext/ranking-read.test.ts",
+            "web/src/lib/vnext/candidate-page.test.ts",
+            "web/src/lib/stock-chart-calendar.test.ts",
+            "web/src/app/components/vnext/detail-source.test.mjs",
+            "scripts/vnext-ranking-snapshot-source.test.mjs",
+            "scripts/vnext-linux-restore-candidate.test.mjs",
+            "scripts/local-backup-envelope.test.mjs",
+            "scripts/local-backup-artifact.test.mjs",
+            "scripts/local-backup-lifecycle.test.mjs",
+            "scripts/build-contabo-restore-list.test.mjs",
+            "scripts/export-contabo-database-backup.test.mjs",
+            "scripts/contabo-production-restore-contract.test.mjs",
+            "scripts/contabo-local-backup-cutover.test.mjs",
+            "scripts/rehearse-contabo-database-restore.test.mjs",
+            "scripts/verify-standalone-release.test.mjs",
+            "scripts/package-standalone-release.test.mjs",
+            "web/src/lib/stock-chart-supply.test.ts",
+            "web/src/lib/vnext/business-public.test.ts",
+            "web/src/lib/vnext/vnext.test.ts",
+            "scripts/vnext-staging-preflight.test.mjs",
+            "web/src/lib/vnext/candidate-history-read.test.ts",
+            "scripts/vnext-candidate-history-source.test.mjs",
+            "web/src/lib/candidate-price-history.test.ts",
+            "scripts/vnext-source-window-source.test.mjs",
+            "web/src/lib/vnext/source-volume-boundary.test.ts",
+            "web/src/lib/vnext/analysis-sources.test.ts",
+            "web/src/lib/vnext/source-backlog.test.ts",
+            "web/src/lib/vnext/cached-source-admission.test.ts",
+            "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+            "web/src/lib/vnext/schedule-admission.test.ts",
+            "web/src/lib/vnext/schedule-replay-binding.test.ts",
+            "scripts/vnext-staging-schedule-candidate.test.mjs",
+            "scripts/vnext-candidate-epoch-source.test.mjs",
+            "web/src/lib/source-content-semantics.test.ts",
+            "web/src/lib/vnext/cached-admission.test.ts",
+            "web/src/lib/vnext/current-evidence-read.test.ts",
+            "web/src/lib/vnext/preparation-authority.test.ts",
+            "scripts/vnext-weekly-forecast-source.test.mjs",
+            "web/src/lib/vnext/forecast-active.test.ts",
+            "web/src/lib/vnext/forecast-current.test.ts",
+            "web/src/lib/vnext/thesis.test.ts",
+            "scripts/vnext-staging-execution-boundary.test.mjs",
+            "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+            "web/src/lib/tw-entry-plan-authority.test.ts"
+          ],
+          "minimumFreeBytes": {
+            "workspace": 31013498880,
+            "tmp": 9422155776
+          }
+        },
+        {
+          "name": "types",
+          "start": "2026-11-08T03:54:40.981292+00:00",
+          "end": "2026-11-08T03:54:42.987262+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 40247296,
+          "resourceViolation": null,
+          "logSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "typecheck"
+          ],
+          "minimumFreeBytes": {
+            "workspace": 31013482496,
+            "tmp": 9423351808
+          }
+        },
+        {
+          "name": "lint",
+          "start": "2026-11-08T03:54:42.987750+00:00",
+          "end": "2026-11-08T03:55:00.025575+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 40800256,
+          "resourceViolation": null,
+          "logSha256": "84df8aab33a2588ebae98ea51a5abfccb758ea53330f1013e6b9766025759b29",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "lint"
+          ],
+          "minimumFreeBytes": {
+            "workspace": 31013478400,
+            "tmp": 9423351808
+          }
+        },
+        {
+          "name": "build",
+          "start": "2026-11-08T03:55:00.025985+00:00",
+          "end": "2026-11-08T03:55:04.039222+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 40382464,
+          "resourceViolation": null,
+          "logSha256": "7e9385ff0d938db0922cff77e9cd5f1a9d9842e493663fbbd454e5af310d026a",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "build"
+          ],
+          "minimumFreeBytes": {
+            "workspace": 31013466112,
+            "tmp": 9423351808
+          }
+        }
+      ]
+    },
+    {
+      "source": "0c6eaddf63f579ffe4f619c8d4f6788db0759f5d",
+      "focused": {
+        "status": "PASS",
+        "tests": 382,
+        "pass": 382,
+        "fail": 0
+      },
+      "checks": [
+        {
+          "name": "focused",
+          "start": "2026-11-08T03:56:51.798259+00:00",
+          "end": "2026-11-08T03:56:55.822316+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 43941888,
+          "resourceViolation": null,
+          "logSha256": "763b2c86e43c64475cc79cb9bfce0e00b026b1956f95d53d1cdbc65864ef70b4",
+          "command": [
+            "node22.14.0",
+            "--experimental-strip-types",
+            "--test",
+            "web/src/lib/vnext/top10-projection.test.ts",
+            "web/src/lib/vnext/published-target-read.test.ts",
+            "web/src/lib/vnext/ranking-read.test.ts",
+            "web/src/lib/vnext/candidate-page.test.ts",
+            "web/src/lib/stock-chart-calendar.test.ts",
+            "web/src/app/components/vnext/detail-source.test.mjs",
+            "scripts/vnext-ranking-snapshot-source.test.mjs",
+            "scripts/vnext-linux-restore-candidate.test.mjs",
+            "scripts/local-backup-envelope.test.mjs",
+            "scripts/local-backup-artifact.test.mjs",
+            "scripts/local-backup-lifecycle.test.mjs",
+            "scripts/build-contabo-restore-list.test.mjs",
+            "scripts/export-contabo-database-backup.test.mjs",
+            "scripts/contabo-production-restore-contract.test.mjs",
+            "scripts/contabo-local-backup-cutover.test.mjs",
+            "scripts/rehearse-contabo-database-restore.test.mjs",
+            "scripts/verify-standalone-release.test.mjs",
+            "scripts/package-standalone-release.test.mjs",
+            "web/src/lib/stock-chart-supply.test.ts",
+            "web/src/lib/vnext/business-public.test.ts",
+            "web/src/lib/vnext/vnext.test.ts",
+            "scripts/vnext-staging-preflight.test.mjs",
+            "web/src/lib/vnext/candidate-history-read.test.ts",
+            "scripts/vnext-candidate-history-source.test.mjs",
+            "web/src/lib/candidate-price-history.test.ts",
+            "scripts/vnext-source-window-source.test.mjs",
+            "web/src/lib/vnext/source-volume-boundary.test.ts",
+            "web/src/lib/vnext/analysis-sources.test.ts",
+            "web/src/lib/vnext/source-backlog.test.ts",
+            "web/src/lib/vnext/cached-source-admission.test.ts",
+            "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+            "web/src/lib/vnext/schedule-admission.test.ts",
+            "web/src/lib/vnext/schedule-replay-binding.test.ts",
+            "scripts/vnext-staging-schedule-candidate.test.mjs",
+            "scripts/vnext-candidate-epoch-source.test.mjs",
+            "web/src/lib/source-content-semantics.test.ts",
+            "web/src/lib/vnext/cached-admission.test.ts",
+            "web/src/lib/vnext/current-evidence-read.test.ts",
+            "web/src/lib/vnext/preparation-authority.test.ts",
+            "scripts/vnext-weekly-forecast-source.test.mjs",
+            "web/src/lib/vnext/forecast-active.test.ts",
+            "web/src/lib/vnext/forecast-current.test.ts",
+            "web/src/lib/vnext/thesis.test.ts",
+            "scripts/vnext-staging-execution-boundary.test.mjs",
+            "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+            "web/src/lib/tw-entry-plan-authority.test.ts"
+          ],
+          "minimumFreeBytes": {
+            "workspace": 31011827712,
+            "tmp": 9422876672
+          }
+        },
+        {
+          "name": "types",
+          "start": "2026-11-08T03:56:55.822841+00:00",
+          "end": "2026-11-08T03:56:57.826924+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 41054208,
+          "resourceViolation": null,
+          "logSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "typecheck"
+          ],
+          "minimumFreeBytes": {
+            "workspace": 31011807232,
+            "tmp": 9423351808
+          }
+        },
+        {
+          "name": "lint",
+          "start": "2026-11-08T03:56:57.827343+00:00",
+          "end": "2026-11-08T03:57:14.874132+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 40128512,
+          "resourceViolation": null,
+          "logSha256": "84df8aab33a2588ebae98ea51a5abfccb758ea53330f1013e6b9766025759b29",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "lint"
+          ],
+          "minimumFreeBytes": {
+            "workspace": 31011803136,
+            "tmp": 9423351808
+          }
+        },
+        {
+          "name": "build",
+          "start": "2026-11-08T03:57:14.874504+00:00",
+          "end": "2026-11-08T03:57:18.637442+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 41189376,
+          "resourceViolation": null,
+          "logSha256": "715b1f3bd25ba31e1e80699cd3130613e9e86eb8f61b4780311b3f39f280476a",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "build"
+          ],
+          "minimumFreeBytes": {
+            "workspace": 31011790848,
+            "tmp": 9423351808
+          }
+        }
+      ]
+    }
+  ],
+  "materialCorrection": {
+    "fixture": "explicit_chmod_0644_after_creation",
+    "verifierAndAssertionsUnchanged": true,
+    "localPublicSourceMode": {
+      "scope": "one_public_repository_source_file_only",
+      "source": "deployment/vps/restore-contabo-database.sh",
+      "beforeMode": "0o700",
+      "afterMode": "0o755",
+      "bytesUnchanged": true,
+      "sha256": "e3493f967da0f1977ef0a9e8ef684a6cbcbc979f458808031a5b386d9c935bfa",
+      "executed": false,
+      "productionAction": false,
+      "reason": "align_local_checkout_mode_with_existing_0755_contract_after_umask_0077"
+    },
+    "independentlyReviewedBeforeOneRetry": true,
+    "sameFailureLimit": 2,
+    "maxTaskIterations": 5,
+    "boundedIterationsUsed": 2
+  },
+  "resourceScope": {
+    "floorWorkspaceAndTmpBytes": 8589934592,
+    "admissionMarginBytes": 536870912,
+    "processTreeRssCeilingBytes": 8589934592,
+    "samplingIntervalMs": 250,
+    "sampledNotInstantaneousOrCgroupPeak": true,
+    "serialWorkloads": true,
+    "contaboCapacityAuthority": false
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 34,
+    "status": "PASS"
+  },
+  "engineeringReview": {
+    "scope": "new_disabled_candidate_verifier_fixtures_and_documents",
+    "openP0": 0,
+    "openP1": 0,
+    "reviewerTestExecution": false,
+    "formalA1OrProtectedApproval": false,
+    "retainedLegacyArchiveReopenExecutionBlocker": true
+  },
+  "notRun": [
+    {
+      "check": "synthetic_http_browser",
+      "status": "NOT_RUN",
+      "reason": "not_repeated_as_requested_prior_14_evidence_retained_separately"
+    },
+    {
+      "check": "native_pg_sql_restore",
+      "status": "NOT_RUN",
+      "reason": "native_HOLD_and_Cloud_source_only_boundary"
+    },
+    {
+      "check": "actual_backup_key_manifest_escrow_and_restore",
+      "status": "NOT_RUN",
+      "reason": "no_production_artifacts_received_separate_coordinator"
+    },
+    {
+      "check": "actual_next_http_version_failure_rollback",
+      "status": "NOT_RUN",
+      "reason": "actual_bundles_not_received_separate_coordinator"
+    },
+    {
+      "check": "protected_A1_CI_release",
+      "status": "BLOCKED",
+      "reason": "existing_formal_binding_and_release_prerequisites_not_satisfied_or_retried"
+    }
+  ],
+  "executionBoundary": {
+    "linuxLiveFacade": "Disabled",
+    "unimplementedRuntimeRequirements": 9,
+    "syntheticPlaintextLimitBytes": 65536,
+    "productionBackupOrKeyReceived": false,
+    "sshOrVpn": false,
+    "postgresqlOrSql": false,
+    "serviceOrTimerOperation": false,
+    "productionAction": false,
+    "icloudOrOldVmAction": false,
+    "bytesReclaimed": 0,
+    "originalPrHead": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+    "originalPrHeadChanged": false,
+    "nativeHoldRetained": true,
+    "deploymentPerformed": false
+  },
+  "unchangedProtectedScope": [
+    ".github",
+    "scripts/opportunity-v3/protected-external-gate-worker.mjs",
+    "scripts/runtime/reviewed-runtime-release.js",
+    "web/package-lock.json",
+    "web/package.json",
+    "deployment/vps",
+    "web/vercel.json"
+  ],
+  "rawPrivateLogsPublished": false
+}

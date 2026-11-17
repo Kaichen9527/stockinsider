@@ -58,3 +58,68 @@ deep attempt. A successful source contract is not native execution. The original
 weekday/time/resource guards stay unchanged, so weekend business admission
 remains a real temporal boundary. Full financial/publication/race/rights and
 actual source/provider/independent semantic acceptance remain open.
+
+## Weekly source revalidation
+
+The weekly thesis worker reads scalar estimates and fiscal disclosures from the
+dedicated active-forecast RPC. Both the fiscal estimate and its original
+disclosure leave the current input when the RPC withdraws the pair. A withdrawn
+input creates an evidence gap in any claim that relied on it. The audit records
+the gap without treating the withdrawal itself as a new forecast.
+
+Material comparison keeps forecast type, period, value, publication time, source
+and a digest of the original fiscal statement. An updated set of share
+assumptions can therefore require review even if the EPS is unchanged. Repeated
+acquisition of the same content preserves the material hash.
+
+## MOPS simple-format original forecast source
+
+The MOPS archive adapter fetches the official list and the identified original
+detail by the fixed filing query. It binds the issuer code, ROC report year,
+season mask, sequence, and declared publication date across the two responses.
+Each capture preserves receipt time, byte count and both original response
+digests. The original content can be supplied privately to later source
+validation. The diagnostic command writes the structured capture receipt.
+
+The supported form is an original consolidated full-year or individual-quarter
+filing. Scope is keyed by issuer, report year and the declared four-position
+season mask before considering revision sequence. Other quarters are separate
+filings. Multiple rows for the requested mask require revision reconciliation.
+When no exact scope exists, the reader returns an unavailable result.
+
+Each EPS cell keeps its point value or both original bounds. The earlier periods
+shown in an individual-quarter filing are comparative values of unverified
+accounting status. A displayed total in that filing is cumulative through the
+selected quarter. Full-year EPS comes from the full-year disclosure. Share
+basis and forecast denominator stay unknown when absent.
+
+The archive reader provides historical source evidence. Freshness, current
+rights, latest revision and immutable preparation admission still belong to the
+existing data authorities. The capture clock of any new retrieval must be
+retained for point-in-time evaluation. Promoting a range into reviewed forward
+valuation requires further source and scenario validation.
+
+## Issuer earnings-call operating guidance
+
+The fixed issuer transcript profile binds the company, forecast quarter,
+original document SHA-256 and the page carrying consolidated operating
+guidance. The capture carries the actual retrieval timestamp, the event date
+and the code-point interval on the versioned normalized page. The structured
+receipt keeps the company-disclosed revenue, gross margin and operating
+expense ranges together.
+
+The calculated operating scenarios use integer TWD and basis points. Base
+uses the component midpoints. Bear and bull evaluate independent endpoints,
+including the effect of revenue on a negative operating margin. Each scenario
+records its operands and derived operating margin and income. Exactness and
+input intervals are validated before calculation. The scenario endpoints
+express sensitivities to the stated inputs and carry their own calculation
+classification.
+
+EPS requires net nonoperating income, tax basis, common shareholder
+attribution and forecast weighted shares on a compatible basis. Forward P/E
+requires a verified price and positive EPS at the valuation horizon. Price
+scenarios require supported multiple assumptions. These outputs stay unknown
+until their inputs are available. The transcript
+receipt and scenario output will need native research-input admission and
+independent review before publication.

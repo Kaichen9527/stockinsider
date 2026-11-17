@@ -5,6 +5,7 @@ on:
       - '.github/workflows/stockinsider-vnext-quality.yml'
       - 'web/**'
       - 'scripts/vnext-*'
+      - 'scripts/owner-oidc-browser-smoke.mjs'
       - 'scripts/opportunity-v3/**'
       - 'scripts/assert_canonical_vercel_project.mjs'
       - 'deployment/vps/bootstrap-stockinsider-postgres.sql'
@@ -13,6 +14,26 @@ on:
       - 'migrations/20261022_*'
       - 'migrations/20261023_*'
       - 'migrations/20261024_*'
+      - 'migrations/20261115_vnext_launch_ranking_v1.sql'
+      - 'migrations/20261116_28_vnext_launch_roster_heads_v1.sql'
+      - 'migrations/20261117_35_vnext_launch_research_policy_v1.sql'
+      - 'migrations/20261117_36_vnext_launch_research_dispatch_v1.sql'
+      - 'migrations/20261117_37_vnext_launch_scheduled_calendar_v1.sql'
+      - 'migrations/20261117_38_vnext_launch_candidate_pool_history_v1.sql'
+      - 'migrations/20261117_39_vnext_launch_candidate_industry_v1.sql'
+      - 'migrations/20261117_40_vnext_launch_industry_capture_v1.sql'
+      - 'migrations/20261117_41_vnext_launch_issuer_eps_estimates_v1.sql'
+      - 'migrations/20261117_42_vnext_internal_candidate_plan_acl_v1.sql'
+      - 'migrations/20261117_43_vnext_owner_research_notes_v1.sql'
+      - 'migrations/20261117_44_vnext_legacy_subscription_acl_v1.sql'
+      - 'migrations/20261117_45_vnext_launch_issuer_fiscal_forecasts_v1.sql'
+      - 'migrations/20261117_46_vnext_auth_profile_trigger_acl_v1.sql'
+      - 'migrations/20261117_47_vnext_source_guard_trigger_acl_v1.sql'
+      - 'migrations/20261117_48_vnext_podcast_private_acl_v1.sql'
+      - 'migrations/20261117_49_vnext_launch_candidate_clue_journal_v1.sql'
+      - 'migrations/20261117_50_vnext_launch_candidate_clue_history_v1.sql'
+      - 'deployment/vps/launch-radar-schedule/**'
+      - 'scripts/run-launch-scheduled-cycle*.mjs'
       - 'openspec/changes/stockinsider-vnext-20/**'
       - 'specs/research-admission/**'
       - 'package.json'
@@ -51,6 +72,11 @@ jobs:
       - name: Actual source contracts, types and lint
         run: |
           mkdir -m 700 /tmp/stockinsider-vnext-ci
+          mkdir -m 700 /tmp/stockinsider-vnext-oct22-private
+          node --experimental-strip-types web/src/lib/vnext/launch-research-dispatch.test.ts | tee /tmp/stockinsider-vnext-ci/launch-research-dispatch.tap
+          node --experimental-strip-types web/src/lib/vnext/launch-cutover.test.ts | tee /tmp/stockinsider-vnext-ci/launch-cutover.tap
+          node --experimental-strip-types --test web/src/lib/vnext/launch-candidate-catalog.test.ts web/src/lib/vnext/launch-candidate-catalog-page.test.ts | tee /tmp/stockinsider-vnext-ci/launch-candidate-catalog.tap
+          node --experimental-strip-types --test web/src/lib/vnext/launch-disposition-range.test.ts web/src/lib/vnext/launch-disposition-status.test.ts | tee /tmp/stockinsider-vnext-ci/launch-disposition-range.tap
           node --experimental-strip-types web/src/lib/vnext/vnext.test.ts | tee /tmp/stockinsider-vnext-ci/pure.tap
           node --experimental-strip-types web/src/lib/vnext/discovery.test.ts | tee /tmp/stockinsider-vnext-ci/discovery.tap
           node --experimental-strip-types web/src/lib/vnext/screening-instrument-identity.test.ts | tee /tmp/stockinsider-vnext-ci/screening-instrument-source.tap
@@ -58,6 +84,11 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/worker.test.ts | tee /tmp/stockinsider-vnext-ci/worker-source.tap
           node --experimental-strip-types web/src/lib/vnext/analysis-sources.test.ts | tee /tmp/stockinsider-vnext-ci/analysis-source.tap
           node --experimental-strip-types web/src/lib/vnext/source-backlog.test.ts | tee /tmp/stockinsider-vnext-ci/source-backlog.tap
+          node --experimental-strip-types web/src/lib/vnext/investanchors-notice-receiver.test.ts | tee /tmp/stockinsider-vnext-ci/investanchors-notices.tap
+          node --experimental-strip-types web/src/lib/vnext/investanchors-gmail.test.ts | tee /tmp/stockinsider-vnext-ci/investanchors-gmail.tap
+          node --experimental-strip-types --test web/src/lib/vnext/owner-oidc.test.ts web/src/lib/vnext/private-owner-read.test.ts | tee /tmp/stockinsider-vnext-ci/owner-read.tap
+          node --experimental-strip-types web/src/lib/external-source-adapters.test.ts | tee /tmp/stockinsider-vnext-ci/external-source-adapters.tap
+          node scripts/run-launch-scheduled-cycle.test.mjs | tee /tmp/stockinsider-vnext-ci/launch-scheduled-cycle.tap
           node --experimental-strip-types scripts/vnext-source-window-source.test.mjs | tee /tmp/stockinsider-vnext-ci/source-window-source.tap
           node scripts/vnext-source-namespace-source.test.mjs | tee /tmp/stockinsider-vnext-ci/source-namespace-source.tap
           python3 -B scripts/vnext-reachability-annotation-source.test.py
@@ -125,13 +156,55 @@ jobs:
           if VNEXT_BUSINESS_DATABASE=vnext_business_01 VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-ci/business node --experimental-strip-types scripts/vnext-business-postgres.test.mjs > /tmp/stockinsider-vnext-ci/business.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
           python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/business.tap.private.log /tmp/stockinsider-vnext-ci/business.tap
           test "$test_status" = 0
+      - name: Launch research policy shares the queue and binds prepared input
+        if: ${{ !cancelled() && steps.current_build.outcome == 'success' }}
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-35
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-35
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/launch-research-policy
+        run: |
+          set -euo pipefail
+          container=
+          cleanup() {
+            if [[ -n "$container" ]]; then
+              docker stop "$container" >/dev/null
+            fi
+            rmdir "$VNEXT_WORKER_SOCKET_PARENT/socket" "$VNEXT_WORKER_SOCKET_PARENT"
+          }
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          trap cleanup EXIT
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          container=$(docker run --rm -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 \
+            -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' \
+            --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" \
+            postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27)
+          ready=0
+          for attempt in $(seq 1 30); do
+            if docker exec "$container" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker >/dev/null; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          status=0
+          node --experimental-strip-types scripts/vnext-launch-research-policy-postgres.test.mjs > /tmp/stockinsider-vnext-ci/launch-research-policy.private.log 2>&1 || status=$?
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/launch-research-policy.private.log /tmp/stockinsider-vnext-ci/launch-research-policy.tap
+          test "$status" = 0
+          docker exec "$container" createdb -U postgres vnext_issuer_eps
+          python3 - <<'PYCODE' | docker exec -i "$container" psql -X -q -v ON_ERROR_STOP=1 -U postgres -d vnext_issuer_eps
+          from pathlib import Path
+          fixture = Path('scripts/vnext-launch-issuer-eps-native.test.sql').read_text()
+          for name in ('20261117_41_vnext_launch_issuer_eps_estimates_v1.sql', '20261117_45_vnext_launch_issuer_fiscal_forecasts_v1.sql'):
+              migration = Path('migrations') / name
+              marker = '\\ir ../' + migration.as_posix()
+              assert fixture.count(marker) == 1
+              fixture = fixture.replace(marker, migration.read_text())
+          print(fixture)
+          PYCODE
       - name: Genuine captured-prefix legacy coexistence and concurrent mode fence
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-legacy-full-04
           VNEXT_LEGACY_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/legacy-full-pg-socket-04
           VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/legacy
         run: |
-          mkdir -m 700 /tmp/stockinsider-vnext-oct22-private
           mkdir -m 700 "$VNEXT_LEGACY_SOCKET_PARENT"
           mkdir -m 700 "$VNEXT_LEGACY_SOCKET_PARENT/socket"
           docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_legacy -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_LEGACY_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
@@ -392,7 +465,7 @@ jobs:
                       value=json.loads(line[len(prefix):])
                       if set(value)!=keys or any(type(v) not in [bool,int] for v in value.values()): raise SystemExit('closed forecast safe witness required')
                       notices.append({'kind':prefix.strip(),'value':value})
-          paths=['migrations/20261024_vnext_published_target_read_v1.sql','scripts/opportunity-v3/vnext-published-target-read-profile-v1.json','scripts/vnext-published-target-read-native-fixture.mjs','web/src/lib/vnext/published-target-read.ts','migrations/20261023_vnext_disclosed_fiscal_forecast_v1.sql','scripts/opportunity-v3/vnext-disclosed-fiscal-profile-v1.json','scripts/vnext-disclosed-fiscal-native-fixture.mjs','web/src/lib/vnext/disclosed-fiscal-forecast.ts','migrations/20261023_vnext_corporate_action_terms_v1.sql','scripts/opportunity-v3/vnext-action-terms-profile-v1.json','scripts/vnext-action-terms-native-fixture.mjs','web/src/lib/vnext/corporate-action-terms.ts','migrations/20261023_vnext_forecast_active_v1.sql','scripts/opportunity-v3/vnext-forecast-active-profile-v1.json','web/src/lib/vnext/forecast-active.ts','web/src/lib/vnext/weekly-worker.ts','web/src/lib/vnext/thesis-audit.ts','migrations/20261023_vnext_forecast_sources_v1.sql','scripts/opportunity-v3/vnext-forecast-sources-profile-v1.json','scripts/vnext-forecast-native-fixture.mjs','scripts/vnext-preparation-http-fixture.mjs','scripts/vnext-preparation-http.test.mjs','web/src/lib/vnext/forecast-current.ts','web/src/lib/vnext/preparation-reconciliation.ts','web/src/lib/vnext/store.ts']
+          paths=['migrations/20261024_vnext_published_target_read_v1.sql','scripts/opportunity-v3/vnext-published-target-read-profile-v1.json','scripts/vnext-published-target-read-native-fixture.mjs','web/src/lib/vnext/published-target-read.ts','migrations/20261023_vnext_disclosed_fiscal_forecast_v1.sql','scripts/opportunity-v3/vnext-disclosed-fiscal-profile-v1.json','scripts/vnext-disclosed-fiscal-native-fixture.mjs','web/src/lib/vnext/disclosed-fiscal-forecast.ts','migrations/20261023_vnext_corporate_action_terms_v1.sql','scripts/opportunity-v3/vnext-action-terms-profile-v1.json','scripts/vnext-action-terms-native-fixture.mjs','web/src/lib/vnext/corporate-action-terms.ts','migrations/20261023_vnext_forecast_active_v1.sql','scripts/opportunity-v3/vnext-forecast-active-profile-v1.json','web/src/lib/vnext/forecast-active.ts','web/src/lib/vnext/weekly-worker.ts','web/src/lib/vnext/thesis-audit.ts','migrations/20261023_vnext_forecast_sources_v1.sql','scripts/opportunity-v3/vnext-forecast-sources-profile-v1.json','scripts/vnext-forecast-native-fixture.mjs','scripts/vnext-preparation-http-fixture.mjs','scripts/vnext-preparation-http.test.mjs','web/src/lib/vnext/evidence-clock.ts','web/src/lib/vnext/forecast-current.ts','web/src/lib/vnext/preparation-reconciliation.ts','web/src/lib/vnext/store.ts']
           inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
           value={'sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'observedWitnesses':notices,'actualTapCounts':{m[1].decode():int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',(root/'preparation-http.tap').read_bytes(),re.M)},'tapSha256':hashlib.sha256((root/'preparation-http.tap').read_bytes()).hexdigest(),'scope':'hosted genuine PostgreSQL/HTTP assertions if reached; synthetic source metadata and original append APIs, actual journal reservation only, zero external provider calls; absent witness means NOT_REACHED'}
           (root/'forecast-current-summary.json').write_text(json.dumps(value,indent=2)+'\n')
@@ -446,6 +519,62 @@ jobs:
           out=root/'forecast-current-private-inventory.json';out.write_text(json.dumps(value,indent=2)+'\n')
           print('::notice title=Forecast private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
           PYCODE
+      - name: Public podcast locator privacy contract
+        run: node --experimental-strip-types --test web/src/lib/podcast-public-evidence.test.ts
+      - name: Internal planner and legacy report role boundaries (synthetic PostgreSQL)
+        env:
+          TZ: UTC
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-36
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-36
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/internal-candidate-plan-acl
+        run: |
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --rm --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 \
+            --network none --memory=1g --memory-swap=1g --cpus=1 \
+            --tmpfs /var/lib/postgresql/data:rw,size=384m,nosuid,nodev \
+            -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker \
+            -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' \
+            --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" \
+            postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          raw=/tmp/stockinsider-vnext-ci/internal-candidate-plan-acl.tap.private.log
+          if node --experimental-strip-types --test scripts/vnext-internal-candidate-plan-acl-postgres.test.mjs > "$raw" 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py "$raw" /tmp/stockinsider-vnext-ci/internal-candidate-plan-acl.tap
+          test "$test_status" = 0
+      - name: Candidate clue clearance and saved catalog through the existing source writer
+        env:
+          TZ: UTC
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-44
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-44
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/candidate-clue-journal
+        run: |
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT" "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --rm --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 \
+            --network none --memory=1g --memory-swap=1g --cpus=1 \
+            --tmpfs /var/lib/postgresql/data:rw,size=384m,nosuid,nodev \
+            -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker \
+            -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' \
+            --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" \
+            postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for attempt in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          raw=/tmp/stockinsider-vnext-ci/candidate-clue-journal.tap.private.log
+          test_status=0
+          node --experimental-strip-types --test scripts/vnext-launch-candidate-clue-postgres.test.mjs > "$raw" 2>&1 || test_status=$?
+          python3 scripts/vnext-safe-tap.py "$raw" /tmp/stockinsider-vnext-ci/candidate-clue-journal.tap
+          test "$test_status" = 0
       - name: Fresh routine-screen actual HTTP admission and withdrawal (synthetic originals)
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-12
@@ -722,7 +851,7 @@ jobs:
                   value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
                   print('::error title=Business criteria finite diagnostic::'+value)
           tap=(root/'business-criteria.tap').read_bytes()
-          paths=['scripts/vnext-business-criteria-postgres.test.mjs', 'scripts/vnext-business-criteria-resource-run.py', 'scripts/vnext-worker-fixture.mjs', 'web/src/lib/vnext/business-criteria.ts', 'web/src/lib/vnext/worker-core.ts', 'web/src/lib/vnext/worker-prompts.ts', 'web/src/lib/vnext/research.ts', 'web/src/lib/vnext/worker-output.ts', 'web/src/lib/vnext/thesis-audit.ts', 'web/src/lib/vnext/public-contract.ts', 'web/src/app/components/vnext/Home.tsx', 'migrations/20261023_vnext_business_criteria_v1.sql', 'scripts/opportunity-v3/vnext-business-criteria-profile-v1.json', 'migrations/20261023_vnext_catalyst_cancellation_v1.sql', 'migrations/20261023_vnext_target_profiles_v1.sql', 'scripts/opportunity-v3/vnext-target-profiles-source-v1.json', 'scripts/vnext-target-profiles.test.mjs']
+          paths=['scripts/vnext-business-criteria-postgres.test.mjs', 'scripts/vnext-native-scalar-research-fixture.mjs', 'scripts/vnext-synthetic-research-vectors.mjs', 'scripts/vnext-business-criteria-resource-run.py', 'scripts/vnext-worker-fixture.mjs', 'web/src/lib/vnext/business-criteria.ts', 'web/src/lib/vnext/worker-core.ts', 'web/src/lib/vnext/worker-prompts.ts', 'web/src/lib/vnext/research.ts', 'web/src/lib/vnext/worker-output.ts', 'web/src/lib/vnext/thesis-audit.ts', 'web/src/lib/vnext/public-contract.ts', 'web/src/app/components/vnext/Home.tsx', 'migrations/20261023_vnext_business_criteria_v1.sql', 'scripts/opportunity-v3/vnext-business-criteria-profile-v1.json', 'migrations/20261023_vnext_catalyst_cancellation_v1.sql', 'migrations/20261023_vnext_target_profiles_v1.sql', 'scripts/opportunity-v3/vnext-target-profiles-source-v1.json', 'scripts/vnext-target-profiles.test.mjs']
           inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
           summary={'scope':'actual original-bound business inference/current context/audit/public projection/withdrawal; synthetic facts/provider only; no group points, bounded-risk or semantic approval','sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'tapSha256':hashlib.sha256(tap).hexdigest(),'actualTapCounts':{m[1]:int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',tap,re.M)},'resourceObserved':False}
           # Decode finite count keys only; no private rows/principals are emitted.
@@ -807,6 +936,18 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
+      - name: Same-build desktop and mobile owner notes through controlled OIDC
+        if: ${{ !cancelled() && steps.current_build.outcome == 'success' }}
+        timeout-minutes: 3
+        run: |
+          export OWNER_OIDC_BUILD_SOURCE_SHA="$(git rev-parse HEAD)"
+          export OWNER_OIDC_SMOKE_OUTPUT=/tmp/stockinsider-vnext-ci/browser-owner
+          if node --disable-warning=ExperimentalWarning --experimental-strip-types scripts/owner-oidc-browser-smoke.mjs > /tmp/stockinsider-vnext-ci/browser-owner.private.log 2>&1; then
+            echo 'Controlled owner browser checks passed'
+          else
+            echo '::error title=Owner browser acceptance::See the bounded synthetic failure receipt'
+            exit 1
+          fi
       - name: Same-build desktop and mobile browser over current-run PostgreSQL snapshots
         id: current_browser
         if: ${{ !cancelled() && steps.current_build.outcome == 'success' && steps.current_thesis.outcome == 'success' && steps.current_cached.outcome == 'success' && steps.current_business.outcome == 'success' }}
@@ -888,6 +1029,8 @@ jobs:
             /tmp/stockinsider-vnext-ci/browser-current/public/images/*.png
             /tmp/stockinsider-vnext-ci/browser-business/public/acceptance.json
             /tmp/stockinsider-vnext-ci/browser-business/public/images/*.png
+            /tmp/stockinsider-vnext-ci/browser-owner/receipt.json
+            /tmp/stockinsider-vnext-ci/browser-owner/failure-receipt.json
           if-no-files-found: warn
           retention-days: 7
       - name: Upload finite synthetic TAP only (no raw rows, env or browser traces)
@@ -1169,7 +1312,7 @@ jobs:
                   value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
                   print('::error title=Roster-current finite diagnostic::'+value)
           tap=(root/'roster-current.tap').read_bytes()
-          paths=['scripts/vnext-roster-current-postgres.test.mjs','scripts/vnext-roster-current-resource-run.py','scripts/vnext-worker-fixture.mjs','web/src/lib/vnext/screening-instrument-identity.ts','web/src/lib/vnext/preparation-trading-identity.ts','migrations/20261023_vnext_roster_current_fence_v1.sql','scripts/opportunity-v3/vnext-roster-current-profile-v1.json','migrations/20261023_vnext_trading_invalidity_exit_v1.sql','scripts/opportunity-v3/vnext-trading-invalidity-profile-v1.json']
+          paths=['scripts/vnext-roster-current-postgres.test.mjs','scripts/vnext-launch-roster-head-fixture.mjs','migrations/20261115_vnext_launch_ranking_v1.sql','migrations/20261116_28_vnext_launch_roster_heads_v1.sql','scripts/vnext-roster-current-resource-run.py','scripts/vnext-worker-fixture.mjs','web/src/lib/vnext/screening-instrument-identity.ts','web/src/lib/vnext/preparation-trading-identity.ts','migrations/20261023_vnext_roster_current_fence_v1.sql','scripts/opportunity-v3/vnext-roster-current-profile-v1.json','migrations/20261023_vnext_trading_invalidity_exit_v1.sql','scripts/opportunity-v3/vnext-trading-invalidity-profile-v1.json']
           inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
           summary={'scope':'actual held-work/claim/provider-reserve SQL fences; synthetic facts/eligibility/roster/calendar, no model invocation or financial approval','sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'tapSha256':hashlib.sha256(tap).hexdigest(),'actualTapCounts':{m[1]:int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',tap,re.M)},'resourceObserved':False}
           # Decode finite count keys only; no private rows/principals are emitted.

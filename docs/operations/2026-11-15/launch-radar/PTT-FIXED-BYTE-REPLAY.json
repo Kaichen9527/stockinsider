@@ -1,0 +1,64 @@
+{
+  "schema": "stockinsider-ptt-fixed-byte-replay-request-v1",
+  "sourceCommit": "4a77e32537b00c62b31c72516d28fb0c474fefb3",
+  "runtime": "Node22.14.0",
+  "parserVersion": "ptt-own-body-v2",
+  "inputs": "SAME_FOUR_RETAINED_PRIVATE_BYTES_NO_REFETCH",
+  "expected": [
+    "4763_body_symbol_4763",
+    "old2330_age_rejected",
+    "00981A_no_template2330",
+    "Re3443_original_unresolved"
+  ],
+  "rightsAndQueueAuthority": false,
+  "sourceFiles": [
+    {
+      "path": "scripts/ptt-body-replay.mjs",
+      "blob": "2292006c7d6c0cca747ea3fa32c8af13a303b3f9",
+      "sha256": "e22e4db56d2bf7cc0fb13be53159a9fd636524c4e623ec8105e940871455b9c8"
+    },
+    {
+      "path": "web/src/lib/ptt-collector-test-loader.mjs",
+      "blob": "6dbe323382d563cb9ca673ab4086bc651c84829a",
+      "sha256": "81704c175b67ad5e2cf1b3c22ef8fef405fef56e87f51ec10cb159f97937a90f"
+    },
+    {
+      "path": "web/src/lib/research-v2.ts",
+      "blob": "14d1d0e2ede542659c00bc0af3d84601911cbddf",
+      "sha256": "b3999363da58e733847ad5514656b19bf9553cf60ae9332af95a78666e358df6"
+    },
+    {
+      "path": "web/src/lib/ptt-article-parser.ts",
+      "blob": "040b0b24595d37ec2b1abfcc3b70d846dd7f059b",
+      "sha256": "d1876ecb489420992a0053c0c4f5337d2f405bc8b288958a10b1ecfc1aeb2f0e"
+    },
+    {
+      "path": "web/src/lib/ptt-mention-provenance.ts",
+      "blob": "388fb4bfe1fd0d0fe8945ce1ce76cf2846586883",
+      "sha256": "720696966455e70679261c6083dcdf586c67613dc54ce38e87adc136f44f6ce0"
+    },
+    {
+      "path": "web/src/lib/vnext/evidence-clock.ts",
+      "blob": "fa27138f5dd8f6ce823a91e2fd4be84cfe76fac9",
+      "sha256": "bf587d9f77289610aa3a4c45285af5337f501aa8dd90b55ab37ac45cdc91ea2e"
+    }
+  ],
+  "dependencies": [
+    {
+      "lockPath": "node_modules/parse5",
+      "version": "7.3.0",
+      "integrity": "sha512-IInvU7fabl34qmi9gY8XOVxhYyMyuH2xUNpb2q8/Y+7552KlejkRvqvD19nMoUW/uQGGbqNpA6Tufu5FL5BZgw=="
+    },
+    {
+      "lockPath": "node_modules/parse5/node_modules/entities",
+      "version": "6.0.1",
+      "integrity": "sha512-aN97NXWF6AWBTahfVOIrB/NShkzi5H7F9r1s9mD3cDj4Ko5f2qhhVoYMibXF7GlLveb/D2ioWay8lxI97Ven3g=="
+    },
+    {
+      "lockPath": "node_modules/typescript",
+      "version": "5.9.3",
+      "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="
+    }
+  ],
+  "actualNewSourceReplay": "PENDING_EXTERNAL_COORDINATOR"
+}

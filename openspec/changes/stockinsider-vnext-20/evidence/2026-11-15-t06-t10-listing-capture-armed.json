@@ -1,0 +1,73 @@
+{
+  "recordedAt": "2026-11-15T14:04:00Z",
+  "tasks": [
+    "T06",
+    "T10"
+  ],
+  "scope": "isolated Contabo staging cutoff observation",
+  "sourceCommit": "2596970c6054ec3111caa7a8b5aea5d4f7b72c1d",
+  "sourceHashes": {
+    "web/src/lib/vnext/launch-listed-roster-replay.ts": "1f02f6015d8a444ddabd97da22ae0b0ffef98440f27d77145235527426b4e62c",
+    "web/scripts/capture-listed-roster-source.mjs": "95d42b6317f4ba3cc01858623a226141ba8c2fb0ac141c6777c0f55c7afe9a4f",
+    "web/src/lib/vnext/licensed-csv-decoder.ts": "23185f71bcb9f002cf3be7a0c644ef154c44c51d07d30bef26af135a3a49782d",
+    "web/src/lib/vnext/evidence-clock.ts": "bf587d9f77289610aa3a4c45285af5337f501aa8dd90b55ab37ac45cdc91ea2e"
+  },
+  "runtime": {
+    "node": "v22.14.0",
+    "nodeArchiveSha256": "69b09dba5c8dcb05c4e4273a4340db1005abeafe3927efda2bc5b249e80437ec",
+    "nodeBinarySha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "memoryMaxBytes": 335544320,
+    "cpuPercent": 60,
+    "tasksMax": 20,
+    "runtimeMaxSeconds": 65,
+    "accuracySeconds": 1,
+    "dynamicUnprivilegedUser": true,
+    "protectSystem": "strict",
+    "privateDirectoryMode": "0700",
+    "privateFileMode": "0600",
+    "persistentCatchup": false
+  },
+  "capture": [
+    {
+      "session": "2026-11-16",
+      "scheduledAt": "2026-11-16T21:24:00+08:00",
+      "cutoff": "2026-11-16T21:30:00+08:00",
+      "timerActive": true,
+      "serviceInactiveBeforeFire": true,
+      "actualApplicationSession": false
+    },
+    {
+      "session": "2026-11-17",
+      "scheduledAt": "2026-11-17T21:24:00+08:00",
+      "cutoff": "2026-11-17T21:30:00+08:00",
+      "timerActive": true,
+      "serviceInactiveBeforeFire": true,
+      "actualApplicationSession": false
+    }
+  ],
+  "checks": {
+    "testsPassed": 20,
+    "liveEarlyRefusedBeforeSideEffects": true,
+    "rehearsalFilesRetrieved": 3,
+    "rehearsalTarget": "2026-11-13",
+    "rehearsalSourceDate": "2026-11-15",
+    "rehearsalFinishedAt": "2026-11-15T14:01:53.060Z",
+    "rehearsalProcessPeakRssKiB": 202392,
+    "rehearsalSourceDateRejectedForTarget": true,
+    "rehearsalRetainedRawFiles": 0,
+    "rehearsalRetainedProjection": false,
+    "oldTimersUnchanged": true,
+    "oldStageTimersStillActive": 6,
+    "oldTimersSha256": "6c6c45bf426be013322979f9a88bc0c7197039cf9b39a79e9d6d9bf7fd8ac68d",
+    "diskFreeBeforeBytes": 26501636096,
+    "availableMemBeforeKiB": 4032812
+  },
+  "sources": [
+    "https://data.gov.tw/dataset/18419",
+    "https://data.gov.tw/dataset/25036",
+    "https://data.gov.tw/dataset/11425"
+  ],
+  "productionMutation": false,
+  "registryMutation": false,
+  "rankingAuthority": false
+}

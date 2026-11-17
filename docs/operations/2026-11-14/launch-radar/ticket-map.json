@@ -1,0 +1,129 @@
+{
+  "schema": "stockinsider-launch-radar-ticket-map-v1",
+  "parent": 385,
+  "parentBodySha256": "aacd043d02434e5f6dc1a4ef749339cefc77cf62b8e98f556a52e6dbf4daacf9",
+  "tickets": [
+    {
+      "number": 386,
+      "title": "強勢發動雷達 T01：保全、環境與規格",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/386",
+      "body": "## Parent\n#385\n\n## What to build\n保存可取用 WIP、備份與 SHA／雜湊，核對 PR #384 與保護分支；不可讀舊 VM 原樣保留並列缺口。核對 Cloud 作者模型／推理強度、固定技能版、OpenSpec 變更與既有 HOLD。\n\n## Acceptance criteria\n- [ ] 保存可取用 Git/WIP，記錄雜湊及不可恢復範圍。\n- [ ] 實際確認 Cloud 模型與環境、固定技能版本；遵守容量與保護分支。\n- [ ] 依父規格修訂 OpenSpec，不解除既有發布門檻。\n\n## Blocked by\n無。\n\n<!-- stockinsider-launch-radar-t01 -->"
+    },
+    {
+      "number": 387,
+      "title": "強勢發動雷達 T02：私人研究登入",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/387",
+      "body": "## Parent\n#385\n\n## What to build\n私人研究登入。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 限定帳號登入，提供獨立 no-store 私人接口。測未授權、非擁有人及公開 HTML/API/快取無私人資料。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #386\n\n<!-- stockinsider-launch-radar-t02 -->"
+    },
+    {
+      "number": 388,
+      "title": "強勢發動雷達 T03：定錨完整流程",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/388",
+      "body": "## Parent\n#385\n\n## What to build\n定錨完整流程。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 唯讀每日郵件到獲准的會員文章內容，再產生候選、論點及原文定位。測過期登入、通知無正文、重跑與去重。不把標題當完成。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #387\n\n<!-- stockinsider-launch-radar-t03 -->"
+    },
+    {
+      "number": 389,
+      "title": "強勢發動雷達 T04：PTT 完整流程",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/389",
+      "body": "## Parent\n#385\n\n## What to build\nPTT 完整流程。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 以可使用的 Stock 文章正文確認標的、原事件時間、轉載去重及來源覆蓋缺口，產生候選卡。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #386\n\n<!-- stockinsider-launch-radar-t04 -->"
+    },
+    {
+      "number": 390,
+      "title": "強勢發動雷達 T05：股癌完整流程",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/390",
+      "body": "## Parent\n#385\n\n## What to build\n股癌完整流程。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 獲准分析實際節目內容並定位口述時間、標的及證據。RSS 索引保留未完成狀態。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #387\n\n<!-- stockinsider-launch-radar-t05 -->"
+    },
+    {
+      "number": 391,
+      "title": "強勢發動雷達 T06：行情、籌碼與型態",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/391",
+      "body": "## Parent\n#385\n\n## What to build\n行情、籌碼與型態。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 接官方行情、法人、公司行動和日曆，顯示題定型態、等待條件與日／週／月圖；含歷史不足、漲停、假突破及跨月週線測試。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #386\n\n<!-- stockinsider-launch-radar-t06 -->"
+    },
+    {
+      "number": 392,
+      "title": "強勢發動雷達 T07：基本面與估值",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/392",
+      "body": "## Parent\n#385\n\n## What to build\n基本面與估值。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 從財報與法說產生可溯源 EPS、P/E、價格情境及反證，區分事實／估計／假設，驗證非正 EPS 與資料缺口。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #387\n- #391\n\n<!-- stockinsider-launch-radar-t07 -->"
+    },
+    {
+      "number": 393,
+      "title": "強勢發動雷達 T08：評分與榜單",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/393",
+      "body": "## Parent\n#385\n\n## What to build\n評分與榜單。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 發動 70／20／10，純動能也可進榜，具獨立審查及凍結版本；實作首頁、詳情、候選篩選／分頁和進退理由，測 0／1／10／>10、同分、null 及隔離。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #389\n- #391\n\n<!-- stockinsider-launch-radar-t08 -->"
+    },
+    {
+      "number": 394,
+      "title": "強勢發動雷達 T09：成效追蹤",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/394",
+      "body": "## Parent\n#385\n\n## What to build\n成效追蹤。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 實作 20／60／120 交易日及 +20%／−15% 先後，分開研究價與次日可成交模擬，處理成本、未到期、無法成交與順序不明。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #393\n\n<!-- stockinsider-launch-radar-t09 -->"
+    },
+    {
+      "number": 395,
+      "title": "強勢發動雷達 T10：每日運作",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/395",
+      "body": "## Parent\n#385\n\n## What to build\n每日運作。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 同一 queue／writer／ledger：21:30 發布、08:15 市場、週檢查；上限 20 active、四次開始深研及 200／50 來源，測併發、冪等與缺料沿用原日期。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #391\n- #392\n- #393\n- #394\n\n<!-- stockinsider-launch-radar-t10 -->"
+    },
+    {
+      "number": 396,
+      "title": "強勢發動雷達 T11：投資癮來源",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/396",
+      "body": "## Parent\n#385\n\n## What to build\n投資癮來源。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 用可使用的節目／文章正文產生候選與證據；App 來源分別驗證並揭露權限差異。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #387\n\n<!-- stockinsider-launch-radar-t11 -->"
+    },
+    {
+      "number": 397,
+      "title": "強勢發動雷達 T12：財報狗來源",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/397",
+      "body": "## Parent\n#385\n\n## What to build\n財報狗來源。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 用獲准的實際節目或研究內容產生候選，保留發布日期與內容定位。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #387\n\n<!-- stockinsider-launch-radar-t12 -->"
+    },
+    {
+      "number": 398,
+      "title": "強勢發動雷達 T13：麻紗來源",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/398",
+      "body": "## Parent\n#385\n\n## What to build\n麻紗來源。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 確認麻紗宅在家，取得可使用的實際內容，展示候選與原文；會員與公開分別驗收。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #387\n\n<!-- stockinsider-launch-radar-t13 -->"
+    },
+    {
+      "number": 399,
+      "title": "強勢發動雷達 T14：John 來源",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/399",
+      "body": "## Parent\n#385\n\n## What to build\nJohn 來源。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 確認林睿閎／投資 J 件事，接通可使用的實際內容，避免同名或不適用的採集。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #387\n\n<!-- stockinsider-launch-radar-t14 -->"
+    },
+    {
+      "number": 400,
+      "title": "強勢發動雷達 T15：同學會來源",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/400",
+      "body": "## Parent\n#385\n\n## What to build\n同學會來源。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 以獲准 CMoney 供應取得標的、文章內容、原始時間；驗收重複作者、轉載、辨識。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #387\n\n<!-- stockinsider-launch-radar-t15 -->"
+    },
+    {
+      "number": 401,
+      "title": "強勢發動雷達 T16：封存與清理",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/401",
+      "body": "## Parent\n#385\n\n## What to build\n封存與清理。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 盤點依賴與容量；iCloud 小檔重下載、雜湊解密後，驗證大量加密封存可還原，只清 manifest 中沒有依賴的副本。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #386\n\n<!-- stockinsider-launch-radar-t16 -->"
+    },
+    {
+      "number": 402,
+      "title": "強勢發動雷達 T17：正式備份還原",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/402",
+      "body": "## Parent\n#385\n\n## What to build\n正式備份還原。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] Contabo 隔離 staging 真正正式備份還原，驗證資料關聯與容量，留存正式服務持續性的去敏證據。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #386\n\n<!-- stockinsider-launch-radar-t17 -->"
+    },
+    {
+      "number": 403,
+      "title": "強勢發動雷達 T18：Next.js 回滾",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/403",
+      "body": "## Parent\n#385\n\n## What to build\nNext.js 回滾。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 用實際固定 Next.js 版本測切換、故障回滾、頁面與靜態資源，驗證正式指標未變。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #393\n- #402\n\n<!-- stockinsider-launch-radar-t18 -->"
+    },
+    {
+      "number": 404,
+      "title": "強勢發動雷達 T19：首版發布",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/404",
+      "body": "## Parent\n#385\n\n## What to build\n首版發布。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 定錨暨另外兩個真實內容來源，兩個相鄰真實收盤及 VN01–VN20、獨立審查、CI、容量及既有 HOLD 解除後，經 PR 部署 Contabo 並驗證。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #388\n- #391\n- #392\n- #393\n- #394\n- #395\n- #402\n- #403\n- 條件依賴：除定錨外，另外任兩個指定來源完成實際內容驗收；優先 PTT、股癌。\n\n<!-- stockinsider-launch-radar-t19 -->"
+    },
+    {
+      "number": 405,
+      "title": "強勢發動雷達 T20：全部完成與交付",
+      "url": "https://github.com/Kaichen9527/stockinsider/issues/405",
+      "body": "## Parent\n#385\n\n## What to build\n全部完成與交付。依父規格及 [PR #384](https://github.com/Kaichen9527/stockinsider/pull/384) 的既有契約實作。\n\n## Acceptance criteria\n- [ ] 補齊八來源及後續部署；交付 commit、正式版本／網址、覆蓋、封存、節省容量與追蹤狀態。未獲授權不算完成。\n- [ ] 以 commit、測試及去敏證據驗收；有缺口即標明未完成。\n\n## Blocked by\n- #389\n- #390\n- #396\n- #397\n- #398\n- #399\n- #400\n- #401\n- #404\n\n<!-- stockinsider-launch-radar-t20 -->"
+    }
+  ],
+  "ticketStateObserved": "open_ready_for_agent",
+  "ticketsRecreatedOrClosed": false
+}

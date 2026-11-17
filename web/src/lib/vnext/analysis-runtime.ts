@@ -6,8 +6,8 @@ export async function analysisCommand(identity:VnextIdentity,action:string,body:
  const {getSupabaseServerClient}=await import('../supabase-server.ts');const result=await getSupabaseServerClient().rpc('vnext_analysis_command_v1',{p_principal:identity.principal,p_command:action,p_request:body});
  if(result.error)throw new Error(`vnext_analysis_authority_rejected:${result.error.message}`);return result.data as WorkerRow;
 }
-export async function analysisWriter<T>(work:()=>Promise<T>){
+export async function analysisWriter<T>(work:(leaseOwner:string)=>Promise<T>){
  const {requireActiveVpsWriter}=await import('../taiwan-data-runtime.ts');const writer=await requireActiveVpsWriter();if(!writer.ok)throw new Error(writer.error);
  const {acquireProductionWriteLease,releaseProductionWriteLease}=await import('../production-write-lease.ts');const lease=await acquireProductionWriteLease(300);if(!lease)throw new Error('production_write_cycle_already_running');
- try{return await work();}finally{await releaseProductionWriteLease(lease);}
+ try{return await work(lease);}finally{await releaseProductionWriteLease(lease);}
 }

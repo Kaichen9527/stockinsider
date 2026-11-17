@@ -1,0 +1,43 @@
+{
+  "schema": "stockinsider-t09-outcome-trading-session-rotation-v1",
+  "recordedAt": "2026-11-16T12:19:39Z",
+  "base": "df3b81b40036d3ead85ff6df97621dff6e7fc7fb",
+  "workItem": 394,
+  "environment": "Contabo isolated validation",
+  "scope": "Native batch RPC exercised with synthetic scheduler and security boundary fixtures",
+  "migration": "migrations/20261116_27_vnext_launch_outcome_session_rotation_v1.sql",
+  "nativeRegression": "scripts/vnext-launch-outcome-batch-postgres.test.mjs",
+  "reviewedPredecessorDefinitionSha256": "2baa580e8d97ef8af185d7ece4f53e01a2eb3df85363f63a1702959ecf889656",
+  "stableScenario": {
+    "frozenRankingSnapshots": 14,
+    "signalsPerSnapshot": 8,
+    "signals": 112,
+    "batchCapacity": 16,
+    "originalUniqueWithinTwoFixtureWeeks": 80,
+    "revisedUniqueWithinSevenCompletedSessions": 112,
+    "excludedUncompletedWeekday": true,
+    "excludedCalendarEntryWithCloseAfterCutoff": true
+  },
+  "preservation": {
+    "oidOwnerAclAndRoutineSettingsUnchanged": true,
+    "publicExecutionDenied": true,
+    "unchangedSameCutoffRetryEquivalent": true,
+    "excludedAlreadyEvaluatedAtCutoff": true,
+    "excludedTerminalSignals": true,
+    "emptyBatchVerified": true,
+    "predecessorGuardVerified": true
+  },
+  "build": {
+    "version": "Next.js 16.3.4",
+    "typescriptPassed": true,
+    "staticPages": 92,
+    "passed": true
+  },
+  "scratchRemoved": true,
+  "productionModified": false,
+  "releaseHoldRetained": true,
+  "remaining": [
+    "real ranked outcome and adjacent official sessions",
+    "independent review and deployment"
+  ]
+}

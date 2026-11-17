@@ -1,0 +1,41 @@
+{
+  "schema": "stockinsider-vnext-preparation-source-preflight-check-v1",
+  "recordedDateTaipei": "2026-11-16",
+  "historicalCiRun": 39996620417,
+  "historicalCiFailureStage": "preflight",
+  "historicalCiWitnesses": 0,
+  "exactHistoricalGitTree": "a8fbdfdbf55d77d2928a9134a396091001994769",
+  "sourceOnly": {
+    "verifySource": "passed",
+    "binding": {
+      "predecessor": "b99885487f46bc01bd9375fb285620058eddda1aa23eb3c3043ce89ec6ca2a17",
+      "successor": "63f40aa176395df6a06dc7a50875e251f90714545fd20670b2e34eb39438f016",
+      "scope": "source inverse/guard order only, not SQL/native result"
+    }
+  },
+  "lineageOnly": [
+    {
+      "name": "original_file",
+      "pass": true,
+      "actual": "1a61d92a43fcda82ad6fd9b6da00525c5861558701b644720e993709076db545",
+      "expected": "1a61d92a43fcda82ad6fd9b6da00525c5861558701b644720e993709076db545",
+      "sameOldError": false
+    },
+    {
+      "name": "fragment_1",
+      "pass": true,
+      "actual": "28b8f89c5ba24b112ddaed0c583e7b02d0a22263cfb845f809aaabbc66b8e6ee",
+      "expected": "28b8f89c5ba24b112ddaed0c583e7b02d0a22263cfb845f809aaabbc66b8e6ee",
+      "sameOldError": false
+    },
+    {
+      "name": "fragment_2",
+      "pass": true,
+      "actual": "34546104f9f8012fbc67720e735147c884aabe05cac1204582cae4a1727dc17f",
+      "expected": "34546104f9f8012fbc67720e735147c884aabe05cac1204582cae4a1727dc17f",
+      "sameOldError": false
+    }
+  ],
+  "nextHttpExercised": false,
+  "nativeCommitOrResponseLossObserved": false
+}

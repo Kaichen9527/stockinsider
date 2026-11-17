@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "stockinsider-t10-same-session-final-data-gap-v1",
+  "recordedAt": "2026-11-17T18:27:43+00:00",
+  "parent": "7f1153d87ee79167b85c15ad5524c03054c7620a",
+  "scope": "Contabo isolated tests using a loopback HTTP server and the production scheduler transport",
+  "expectedFinalGap": {
+    "status": "retained",
+    "reason": "launch_final_data_unready",
+    "publicationCallMade": false,
+    "currentNoticeScanStillAttempted": true
+  },
+  "unexpectedFailureRemainsFailure": true,
+  "noticeCutoffAndDateRolloverRetained": true,
+  "baselineReproducedNewFailures": 3,
+  "focused": {
+    "pass": 23,
+    "fail": 0
+  },
+  "related": {
+    "pass": 50,
+    "fail": 0,
+    "skipped": 0
+  },
+  "tapSha256": {
+    "baseline": "880157c929b91965ade8ce3f444619a6da7b5bf75c14320fcfa015144eaca6eb",
+    "focused": "f742708ca8803a773b830e802b229b4f9756596095955277764b542cbe9edb07",
+    "related": "5bb85c13932742900ead6b854a3baa24e2e564dde879283eccdfeb38667ea66f"
+  },
+  "sourceSha256": {
+    "scripts/run-launch-scheduled-cycle.mjs": "41f44ca1a1f7b0c2407c80756756c328a33edc5b264f51039b4068a678ab36cf",
+    "scripts/run-launch-scheduled-cycle.test.mjs": "805374da96d4a97873a58fb85c0dd38fa3396b3c7878eec5ee9f2ed18b4a710d",
+    "deployment/vps/launch-radar-schedule/README.md": "72d1d4e33499f9d220d6ff98c65603fe09150fcabc5fafabbed050ba11b80ff0"
+  },
+  "build": {
+    "nextVersion": "16.3.4",
+    "passed": true,
+    "requiredServerFilesSha256": "dc020b6c68e19b322250b37eeada422125a08e2a1dca59afeb1115ea163ed9da"
+  },
+  "formalScheduleChanged": false,
+  "realClosingSessionAcceptance": false
+}

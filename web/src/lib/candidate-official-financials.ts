@@ -333,6 +333,21 @@ export function candidateFinancialPeriodPredatesListing(
 
 export async function fetchCandidateMopsFiling(candidate: CandidateOfficialFinancial, year: number, quarter: number) {
   await verifyAdmittedResearch(candidate.symbol);
+  return fetchCandidateMopsFilingCore(candidate,year,quarter);
+}
+/** Separate private-data-preparation authority; never fabricates research work. */
+export async function fetchPreparedCandidateMopsFiling(capability:unknown,candidate:CandidateOfficialFinancial,year:number,quarter:number){
+  const {verifyFinancialPreparation}=await import('./vnext/financial-preparation.ts');
+  const sourceUrl = candidateMopsDownloadUrl(candidate.symbol, year, quarter);
+  const preflight = async () => {
+    await verifyFinancialPreparation(capability, {
+      operation: 'acquire', symbol: candidate.symbol, sourceUrl, minimumRemainingMs: 15_000,
+    });
+  };
+  await preflight();
+  return fetchCandidateMopsFilingCore(candidate, year, quarter, preflight);
+}
+async function fetchCandidateMopsFilingCore(candidate:CandidateOfficialFinancial,year:number,quarter:number,preflight?:()=>Promise<void>){
   const sourceUrl = candidateMopsDownloadUrl(candidate.symbol,year,quarter);
   const periodEnd = `${year}-${['03-31', '06-30', '09-30', '12-31'][quarter - 1]}`;
   let lastError: unknown = null;
@@ -342,6 +357,7 @@ export async function fetchCandidateMopsFiling(candidate: CandidateOfficialFinan
       // policy blocks a VPS address. Manual redirect handling keeps that body
       // inspectable instead of reducing it to Node's opaque `fetch failed`.
       // Use the form's official document download, not the Big5 preview page.
+      if(preflight)await preflight();
       const response = await fetch(MOPS_DOWNLOAD_URL, { method:'POST',body:new URL(sourceUrl).searchParams,
         headers: { Accept: 'application/xhtml+xml,text/html', 'user-agent': 'StockInsider/5.0' }, redirect: 'manual', signal: AbortSignal.timeout(12_000) });
       if (!response.body) throw new Error('mops_empty_response');
@@ -374,7 +390,7 @@ export async function fetchCandidateMopsFiling(candidate: CandidateOfficialFinan
     } catch (error) {
       lastError = error;
       if (/security_blocked/iu.test(finMindFinancialErrorDetail(error))) break;
-      if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 300 * (attempt + 1)));
+      if (attempt < 2) {if(preflight)await preflight();await new Promise((resolve) => setTimeout(resolve, 300 * (attempt + 1)));}
     }
   }
   throw new Error(lastError ? finMindFinancialErrorDetail(lastError) : 'mops_unavailable');
@@ -1010,3 +1026,28 @@ export async function refreshCandidateOfficialFinancials(
     failures,
   };
 }
+
+/** Prepared profile deliberately accepts only a bounded full official response.
+ * It never invokes Range/curl, FinMind, alternate hosts or issuer IR fallback. */
+export async function fetchPreparedOfficialFinancialPayload(capability:unknown,sourceUrl:string){
+  const {verifyFinancialPreparation}=await import('./vnext/financial-preparation.ts');
+  let last:unknown;
+  for(let attempt=0;attempt<3;attempt++){
+    await verifyFinancialPreparation(capability,{operation:'acquire',sourceUrl,minimumRemainingMs:15000});
+    try{
+      const response=await fetch(sourceUrl,{headers:{Accept:'application/json','user-agent':'StockInsider/financial-preparation-v1'},redirect:'error',signal:AbortSignal.timeout(12000)});
+      const complete=await readBoundedTpexBody(response,12000000);
+      const body=new TextDecoder('utf-8',{fatal:true}).decode(complete.bytes);
+      const rejected=classifyFinancialResponse(response.status,response.headers.get('content-type'),body);
+      if(rejected)throw Error(`prepared_official_${rejected}`);
+      return {response,body,rawBytes:complete.bytes,responseBytes:complete.responseBytes};
+    }catch(error){
+      last=error;
+      if(error instanceof Error&&/prepared_official_(?:security_blocked|http_not_found|http_rate_limited|html_rejected)/u.test(error.message))throw error;
+      if(attempt<2){await verifyFinancialPreparation(capability,{operation:'acquire',sourceUrl,minimumRemainingMs:15000});await new Promise(resolve=>setTimeout(resolve,300*(attempt+1)));}
+    }
+  }
+  throw Error(last instanceof Error&&last.message.startsWith('prepared_official_')?last.message:'prepared_official_transport_failed');
+}
+// Pure existing normalization aliases; no IO or admission/publication authority.
+export {toParsedTpexFact as candidateParsedExchangeFinancialFact,financialFactInput as candidateFinancialFactInput};

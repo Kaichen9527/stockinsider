@@ -1,0 +1,239 @@
+{
+  "schema": "stockinsider-t18-authentic-disabled-readpoint-rehearsal-v1",
+  "candidateSourceCommit": "367ae04a35790d3ca79abd5162177a3828b41a4b",
+  "harnessBaseCommit": "005a94e2bd99ed4d3d8964220ef41efb7575bda6",
+  "scope": "isolated staging engineering, producer disabled",
+  "backupDate": "2026-09-19",
+  "nativePostgres": {
+    "version": "17.11",
+    "launchMigrationsApplied": 30,
+    "rolledBack": true,
+    "rankingReaderSha256": "6acbe1a334f15419d3293c8d5384ff61b732112ec40f0ace0db4088eb96ab189",
+    "outcomeReaderSha256": "79690d17c3ba526eef7a5804636667422e33c526777f83b530625d3f7bf3e51a",
+    "chartMigrations": [
+      {
+        "filename": "20261116_20_vnext_launch_chart_basis_v1.sql",
+        "sha256": "b1dee453a5c7e0894ae6e9567c7de4d136ad39c4ffa65fb2e62eaba49abc65d5"
+      },
+      {
+        "filename": "20261116_21_vnext_launch_chart_adjustment_v1.sql",
+        "sha256": "3b5cb71aa03d2fb3324fa0771937e77234db0840e14a8da7a88d5a6991908cd9"
+      },
+      {
+        "filename": "20261116_22_vnext_launch_chart_volume_v1.sql",
+        "sha256": "21bc1b10882d0fd3a458f108ef5ce46f75c65e6bc5d321cd2cb8c604a8d89314"
+      },
+      {
+        "filename": "20261116_23_vnext_launch_chart_freeze_v1.sql",
+        "sha256": "c2b2e8ffa1fd88e79ee3a148f1cbe3f7490839f8f9f4e13f2bc5e5dbee53f546"
+      }
+    ],
+    "scratchRemoved": true
+  },
+  "focusedTests": {
+    "nativeRepositoryTests": 5,
+    "harnessRegressionTests": 35,
+    "disabledScopeTests": 4
+  },
+  "firstAttempt": {
+    "keyConsumed": true,
+    "status": "REJECTED",
+    "failure": "t18_fixed_http_exercise_failed",
+    "diagnostics": {
+      "phase": "fixed_http_exercise"
+    },
+    "formalSignaturesUnchanged": true,
+    "cleanupVerified": true,
+    "holdRetained": true,
+    "resources": {
+      "appMemoryPeakObservedBytes": 20189184,
+      "dbMemoryPeakObservedBytes": 805310464,
+      "minimumHostAvailableMemoryBytes": 3918041088,
+      "minimumHostDiskBytes": 17303015424,
+      "minimumWorkFreeBytes": 5866614784,
+      "restMemoryPeakObservedBytes": 31121408
+    }
+  },
+  "positiveRankedNextAcceptance": "NOT_RUN",
+  "productionAuthorized": false,
+  "recordedAt": "2026-11-16T12:00:55Z",
+  "transportFix": {
+    "commit": "f519b65b689a67f14bada9ecb429783de173c2f4",
+    "pullRequest": 406,
+    "baselineReproducedOnBothLaunchPins": true,
+    "existingReleasePinsStillAccepted": true,
+    "unpinnedCommitRejected": true,
+    "focusedTestsPassed": 13,
+    "productionBuild": "Next.js 16.3.4, 92/92",
+    "testVenue": "isolated Contabo",
+    "formalReviewEvidence": "missing evidence branch for the fixed commit"
+  },
+  "diagnosticsRun": {
+    "keyConsumed": true,
+    "status": "REJECTED",
+    "phase": {
+      "errorClass": "rejected",
+      "httpSubphase": "aba_first_a_start",
+      "phase": "fixed_http_exercise"
+    },
+    "completed": [
+      "appTransportClosed",
+      "proxyDenialsPassed",
+      "proxyStarted",
+      "proxyStopped",
+      "restDenialsPassed",
+      "restShutdownAcknowledged",
+      "restTargetResponded"
+    ],
+    "cleanupVerified": true,
+    "formalSignaturesUnchanged": true
+  },
+  "fixedRun": {
+    "keyConsumed": true,
+    "runnerStatus": "DB_VERIFIED_T18_GAP",
+    "engineeringStatus": "PASSED",
+    "durationSeconds": 868.291,
+    "database": {
+      "checks": {
+        "foreignKeys": 288,
+        "rlsTables": 193
+      },
+      "databaseBytes": 2258466483,
+      "lineage": null,
+      "schema": "stockinsider-owned-db-restore-v1"
+    },
+    "manifestBindings": [
+      {
+        "manifestSha256": "a980d41f1f76c6e96a9dcb7349df129606ec37c234850933297dca7b9bac266a",
+        "sourceCommit": "f67548d87f2563608aa1469c14e6976d52a866cc"
+      },
+      {
+        "manifestSha256": "7baa6bab4e6140c41b1fa7cb9ac96cac23e1746f2e017ef3be3291d42115b1be",
+        "sourceCommit": "948bb9e448eda468bb618f78ec6b0ca1d691d0d5"
+      }
+    ],
+    "readpoint": {
+      "ranked": null,
+      "session": null,
+      "status": "PRODUCER_DISABLED"
+    },
+    "engineering": {
+      "hostUnitCleanup": "HOST_REQUIRED",
+      "namespaceKernelCookiesMatched": true,
+      "negativeHttpChecks": {
+        "postgrestDenied": 2,
+        "proxyDenied": 6
+      },
+      "ownedListenersClosed": true,
+      "proxyMetrics": {
+        "allowedReads": 15,
+        "blockedRequests": 11,
+        "requests": 26,
+        "responseBytes": 4695,
+        "upstreamFailures": 0
+      },
+      "readerRoleChecks": {
+        "allowedSelectColumns": 11,
+        "authConnectPrivileges": 1,
+        "createdRoles": 2,
+        "databaseCreatePrivileges": 0,
+        "elevatedRoles": 0,
+        "launchProjectionDefinitionsPinned": 2,
+        "membershipEdges": 1,
+        "nonPublicSchemaUsagePrivileges": 0,
+        "publicRoutineExecutions": 2,
+        "readOnlyRoleSettings": 2,
+        "readerConnectPrivileges": 0,
+        "readerPolicies": 4,
+        "rlsTables": 2,
+        "schemaCreatePrivileges": 0,
+        "sequenceWritePrivileges": 0,
+        "temporaryDatabasePrivileges": 0,
+        "unexpectedMemberships": 0,
+        "unexpectedSelectColumns": 0,
+        "writePrivileges": 0
+      },
+      "rollback": {
+        "automaticRollback": "A",
+        "faultHealthFailed": true,
+        "recovered": {
+          "buildId": "ax-PpYISKH9qBzNpA8JK8",
+          "homeStatus": 200,
+          "nextVersion": "16.3.4",
+          "projectionSha256": "fd78d560c1c7acb1cf4a9ccd5219d8f4ef43057650eba548f74b643db7a8c29f",
+          "rankingStatus": 503,
+          "sourceCommit": "f67548d87f2563608aa1469c14e6976d52a866cc",
+          "staticSha256": "9476e0afd3f9da68a64e6ec58631191fd3eaca62c9f5a377e7517fe9a89e59ea",
+          "staticStatus": 200
+        },
+        "sequence": "A_B_A",
+        "steps": [
+          {
+            "buildId": "ax-PpYISKH9qBzNpA8JK8",
+            "homeStatus": 200,
+            "nextVersion": "16.3.4",
+            "projectionSha256": "fd78d560c1c7acb1cf4a9ccd5219d8f4ef43057650eba548f74b643db7a8c29f",
+            "rankingStatus": 503,
+            "sourceCommit": "f67548d87f2563608aa1469c14e6976d52a866cc",
+            "staticSha256": "9476e0afd3f9da68a64e6ec58631191fd3eaca62c9f5a377e7517fe9a89e59ea",
+            "staticStatus": 200
+          },
+          {
+            "buildId": "G2grVK9zibGvacOqWUL65",
+            "homeStatus": 200,
+            "nextVersion": "16.3.4",
+            "projectionSha256": "fd78d560c1c7acb1cf4a9ccd5219d8f4ef43057650eba548f74b643db7a8c29f",
+            "rankingStatus": 503,
+            "sourceCommit": "948bb9e448eda468bb618f78ec6b0ca1d691d0d5",
+            "staticSha256": "9476e0afd3f9da68a64e6ec58631191fd3eaca62c9f5a377e7517fe9a89e59ea",
+            "staticStatus": 200
+          },
+          {
+            "buildId": "ax-PpYISKH9qBzNpA8JK8",
+            "homeStatus": 200,
+            "nextVersion": "16.3.4",
+            "projectionSha256": "fd78d560c1c7acb1cf4a9ccd5219d8f4ef43057650eba548f74b643db7a8c29f",
+            "rankingStatus": 503,
+            "sourceCommit": "f67548d87f2563608aa1469c14e6976d52a866cc",
+            "staticSha256": "9476e0afd3f9da68a64e6ec58631191fd3eaca62c9f5a377e7517fe9a89e59ea",
+            "staticStatus": 200
+          }
+        ]
+      },
+      "scope": "PRODUCER_DISABLED_ARCHIVE",
+      "snapshotDataAndConstraintBitsUnchanged": true,
+      "threeDistinctOsUidsObserved": true
+    },
+    "migrated": {
+      "sealedPublication": 26,
+      "legacy": [
+        "legacy",
+        "provider",
+        "summary"
+      ],
+      "launchAuthorities": 19,
+      "launchReaders": 11,
+      "modesDisabled": true,
+      "writerLeaseCleared": true
+    },
+    "capacity": {
+      "appMemoryPeakObservedBytes": 96464896,
+      "dbMemoryPeakObservedBytes": 805310464,
+      "minimumHostAvailableMemoryBytes": 4066410496,
+      "minimumHostDiskBytes": 17299640320,
+      "minimumWorkFreeBytes": 5866455040,
+      "restMemoryPeakObservedBytes": 35827712
+    },
+    "formalSignaturesUnchanged": true,
+    "hostCleanupVerified": true,
+    "scratchRootsRemoved": 2,
+    "stageUnitsInactive": true,
+    "freeDiskAfterCleanupBytes": 26104504320,
+    "memoryAvailableAfterCleanupBytes": 4632932352,
+    "archivePreserved": true
+  },
+  "remainingGates": [
+    "genuine nonempty frozen ranking and ranked stock detail from the same clone",
+    "eligible independent review and required CI for deployment"
+  ]
+}

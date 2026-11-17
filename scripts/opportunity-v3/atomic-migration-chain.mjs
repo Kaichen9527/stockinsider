@@ -1,6 +1,6 @@
 /** Preserve SQL bytes except standalone transaction wrappers. Dollar-quoted
  * function bodies and comments are lexical islands, not transaction commands. */
-export function migrationBodyInAtomicTransaction(sql) {
+export function migrationBodyInAtomicTransaction(sql, {allowReadCommittedWrapper = false} = {}) {
   if (typeof sql !== 'string' || !sql.trim()) throw new Error('migration_sql_empty');
   const statements = [];
   let start = 0, i = 0, visible = '';
@@ -51,7 +51,11 @@ export function migrationBodyInAtomicTransaction(sql) {
   }
   finish(sql.length);
   const control = /^(?:BEGIN\b|START\s+TRANSACTION\b|COMMIT\b|END\b|ROLLBACK\b|ABORT\b|SAVEPOINT\b|RELEASE\s+SAVEPOINT\b|PREPARE\s+TRANSACTION\b|SET\s+(?:LOCAL\s+)?TRANSACTION\b)/iu;
-  const wrapped = statements.length >= 2 && /^BEGIN\s*;$/iu.test(statements[0].visible)
+  // A caller that opened READ COMMITTED may preserve an explicit wrapper with the same isolation.
+  const wrapper = allowReadCommittedWrapper === true
+    ? /^BEGIN(?:\s+ISOLATION\s+LEVEL\s+READ\s+COMMITTED)?\s*;$/iu
+    : /^BEGIN\s*;$/iu;
+  const wrapped = statements.length >= 2 && wrapper.test(statements[0].visible)
     && /^COMMIT\s*;$/iu.test(statements.at(-1).visible);
   const body = wrapped ? statements.slice(1, -1) : statements;
   for (const statement of body) {

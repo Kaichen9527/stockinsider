@@ -1,0 +1,54 @@
+{
+  "task": "T07/T08",
+  "base": "fc65a939f430cb02687f867919967104ba8f71a5",
+  "scope": "Published launch detail, reported public MOPS EPS bound to the exact research input",
+  "environment": {
+    "kind": "Contabo isolated staging",
+    "network": "private namespace with local fixture services",
+    "node": "22.14.0",
+    "postgres": "17",
+    "next": "16.3.4"
+  },
+  "check": {
+    "nativeReadOnlyFixture": "passed",
+    "nativeRejects": [
+      "wrong symbol",
+      "unknown run",
+      "unranked candidate",
+      "late publication",
+      "digest mismatch",
+      "disabled mode",
+      "private or differently bound source",
+      "post-cutoff fact",
+      "unauthorized RPC and raw table access"
+    ],
+    "typescript": "passed",
+    "eslintChangedAppFiles": "passed",
+    "nextProductionBuild": "passed",
+    "nodeRankingReadAndWire": {
+      "passed": 16,
+      "failed": 0
+    },
+    "browser": {
+      "desktop": 2,
+      "mobile": 2,
+      "transport": "controlled fixture through real built Next application"
+    }
+  },
+  "logSha256": {
+    "node": "f5630284d7cc7d416b242a76ca2c6c57c9d3f4d40551e8330fb4c1bbd2d238a6",
+    "build": "08ea90db239f3e19d5e9efb60c722dde6784a319a8732a66547a7f41144d0a22",
+    "browser": "7738f6460f0b27860bf2a3822e284e56921fd24130086d491966b49b54b200ef"
+  },
+  "authorization": {
+    "productionDatabaseChanged": false,
+    "productionServiceChanged": false,
+    "modeActivatedInProduction": false,
+    "hold": "retained"
+  },
+  "open": [
+    "apply and verify the new reader against a genuine ranked study in isolated staging",
+    "complete independently reviewed forward EPS, P/E, price scenarios and counterevidence",
+    "complete full protected review and release acceptance for PR #384"
+  ]
+}

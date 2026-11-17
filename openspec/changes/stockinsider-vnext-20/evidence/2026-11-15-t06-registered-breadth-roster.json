@@ -1,0 +1,65 @@
+{
+  "schema": "stockinsider-t06-registered-breadth-roster-candidate-v1",
+  "base": "60e626958474405e2bf793047f57f000c8be19fb",
+  "issues": [
+    391,
+    395
+  ],
+  "nativeVerification": {
+    "database": "PostgreSQL 17.11",
+    "isolation": "temporary_contabo_postgresql",
+    "actualRegistryValidator": true,
+    "syntheticManifestAndCalendar": true,
+    "activeCommonAndExclusionsPassed": true,
+    "cutoffAndLaterRevocationPassed": true,
+    "headAndManifestConflictsRefused": true,
+    "privateAclPassed": true,
+    "marketGateHeld": true,
+    "indexedSyntheticSample": {
+      "registered": 2200,
+      "eligible": 2000,
+      "observedQueryMilliseconds": 218,
+      "runs": 1
+    },
+    "availableDiskMiB": 25289,
+    "availableMemoryMiB": 3786
+  },
+  "currentCompanyCsvObservations": [
+    {
+      "venue": "TWSE",
+      "datasetId": 18419,
+      "http": "200",
+      "curlExit": 0,
+      "bytes": 675707,
+      "media": "text/csv",
+      "capturedAt": "2026-11-15T13:18:45.076961+00:00",
+      "reportDates": [
+        "1151115"
+      ],
+      "rows": 1099,
+      "uniqueFourDigitSymbols": 1093,
+      "rawSha256": "279d795dd283f35d8f8ed5d3c72c4a826fb2ae0a734d84938b6b1597cc795a86"
+    },
+    {
+      "venue": "TPEX",
+      "datasetId": 25036,
+      "http": "200",
+      "curlExit": 0,
+      "bytes": 553728,
+      "media": "text/csv",
+      "capturedAt": "2026-11-15T13:18:47.199247+00:00",
+      "reportDates": [
+        "1151115"
+      ],
+      "rows": 897,
+      "uniqueFourDigitSymbols": 897,
+      "rawSha256": "c36bc7507c172f749d46765675a2a973013e0d65ee64c1e2f7f41f1f0032ee15"
+    }
+  ],
+  "exchangeWideUniverseCertified": false,
+  "corporateActionComparableBreadth": false,
+  "productionMutation": false,
+  "rawSourceCommitted": false,
+  "fullCloudCi": false,
+  "holdCleared": false
+}

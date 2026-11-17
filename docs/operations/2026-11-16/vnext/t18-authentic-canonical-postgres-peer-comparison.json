@@ -1,0 +1,619 @@
+{
+  "recordedAt": "2026-11-16T15:31:12+08:00",
+  "workItem": "T18",
+  "engineeringSource": "a5afad91732b6273653c6dc3be8d41ff75a4aeb0",
+  "harnessCommit": "005a94e2bd99ed4d3d8964220ef41efb7575bda6",
+  "temporaryStageAdapterSha256": "9a2a9dcf73de458e4f282f8873892e431b4cc42d937757360c57b9893515d1a0",
+  "scope": "Independent comparison on the authentic September 19 backup. The original portable-role restore and formal admission contract stand on their own. This comparison used the same nonroot OS UID, controlled root custody, network isolation and database evidence, with peer restricted to the exact logical postgres role. No late REST or Next transport from this variant.",
+  "transport": {
+    "noPassword": true,
+    "noTcp": true,
+    "peerRuleOnly": true,
+    "physicalMapping": true,
+    "roleIdentity": true,
+    "onlyOtherRoleProbeRefused": true
+  },
+  "authenticBackup": {
+    "date": "2026-09-19",
+    "reviewedFinancialSteps": 49,
+    "ownershipPrelude": 1,
+    "databaseBytes": 2258466483,
+    "foreignKeys": 288,
+    "evaluationPreservation": {
+      "afterRows": 72,
+      "beforeRows": 72,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    },
+    "diagnosticPreservation": {
+      "afterRows": 52,
+      "beforeRows": 52,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    },
+    "financialCommitted": true,
+    "publicationCommitted": false,
+    "originalPublicationRejection": "publication_tail_predecessor_namespace_mismatch",
+    "publicationPredecessor": {
+      "expectedSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+      "observedSha256": "f659690731faa2867c319824978777312b42314786655d4eb0efd9140e801528",
+      "relations": 989,
+      "roles": 30,
+      "routines": 301,
+      "types": 824
+    },
+    "nextRollback": "NOT_RUN",
+    "formalSignaturesUnchanged": true,
+    "holdRetained": true
+  },
+  "scopedDeltas": {
+    "functions": {
+      "compared": 242,
+      "oldBootstrapChanges": 139,
+      "canonicalPeerChanges": 0,
+      "remainingFieldCounts": {}
+    },
+    "roles": {
+      "compared": 30,
+      "oldBootstrapChanges": 12,
+      "canonicalPeerChanges": 0,
+      "remainingFieldCounts": {}
+    },
+    "schemas": {
+      "compared": 3,
+      "oldBootstrapChanges": 1,
+      "canonicalPeerChanges": 1,
+      "remainingFieldCounts": {
+        "acl": 1,
+        "effectiveAcl": 1
+      }
+    },
+    "tables": {
+      "compared": 253,
+      "oldBootstrapChanges": 92,
+      "canonicalPeerChanges": 2,
+      "remainingFieldCounts": {
+        "constraints": 2
+      }
+    },
+    "types": {
+      "compared": 120,
+      "oldBootstrapChanges": 0,
+      "canonicalPeerChanges": 0,
+      "remainingFieldCounts": {}
+    }
+  },
+  "comparison": {
+    "baseline": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+    "namespace": {
+      "relations": {
+        "additional": 2,
+        "additionalExamples": [
+          "sha256:aeca4e66fb3e16be12f8b00d7cbea698a406800d7260237b0de93d3507a9aaf6",
+          "sha256:3450893556bf798183da16022cd62cad439df52f8ee0ccb3751170a4aa16ca12"
+        ],
+        "changed": 4,
+        "changedExamples": [
+          {
+            "fields": [
+              "acl"
+            ],
+            "name": "public/private_artifact_receipts_v1"
+          },
+          {
+            "fields": [
+              "acl"
+            ],
+            "name": "public/provider_credentials_encrypted_v1"
+          },
+          {
+            "fields": [
+              "acl"
+            ],
+            "name": "public/stockinsider_backend_identities_v1"
+          },
+          {
+            "fields": [
+              "acl"
+            ],
+            "name": "public/stockinsider_data_plane_settings_v1"
+          }
+        ],
+        "countsByChangedField": {
+          "acl": 4
+        },
+        "expected": 987,
+        "missing": 0,
+        "missingExamples": [],
+        "observed": 989
+      },
+      "roles": {
+        "additional": 0,
+        "additionalExamples": [],
+        "changed": 0,
+        "changedExamples": [],
+        "countsByChangedField": {},
+        "expected": 30,
+        "missing": 0,
+        "missingExamples": [],
+        "observed": 30
+      },
+      "routines": {
+        "additional": 13,
+        "additionalExamples": [
+          "sha256:1e07e1a6f7267bf692d108f085a074139be42dbbd9e916f01ae35816b22bccf3",
+          "sha256:8f1dc8e1ebc568794b33d125c3266262cd749a82d8f0bc926a26d9fb3abe897e",
+          "sha256:60beada839fbaea5c9a6b4e6dd688f29aeafc054bd11f8fec1fbd98298cebc94",
+          "sha256:092b6268954c2de6f06b69b08bddd69fe81cb97d873b68c97e5004670090c88e",
+          "sha256:73035b827326e370268ccfd6f223797027bcd9f0414be0aa36ef91fa55816e71",
+          "sha256:2bd64101fa5ba7f238b3f617ba442d765eaf72f6acbea106770d147a93bd3216",
+          "sha256:38581f61712ee7c898072bb0d53870712d90d15a0a5ffab2e044e5cd9349ffa3",
+          "sha256:89a4f5dce468da425c7bb4a2ec389e904015552223a169b875ebeecd0328a80b",
+          "sha256:a8d583cb414c99299e36fc1600f054f8902fb6068fefc50f20c4f27aea4cdc34",
+          "sha256:7169e54af532f24942ac15c3d516ce95eb9709e8f64c4fc3e6ed3b0c8e721b56",
+          "sha256:83939977d9312171746952ed684fdb75dfda743744de40be95dd136e6777bf0a",
+          "sha256:880aaaf51120746deaf7dfd5a3a480dacc4a8cff6e06156a1393d44f0bcd5c11"
+        ],
+        "changed": 36,
+        "changedExamples": [
+          {
+            "fields": [
+              "acl"
+            ],
+            "name": "extensions/extensions.armor(bytea)"
+          },
+          {
+            "fields": [
+              "acl"
+            ],
+            "name": "extensions/extensions.armor(bytea,text[],text[])"
+          },
+          {
+            "fields": [
+              "acl"
+            ],
+            "name": "extensions/extensions.crypt(text,text)"
+          },
+          {
+            "fields": [
+              "acl"
+            ],
+            "name": "extensions/extensions.dearmor(text)"
+          },
+          {
+            "fields": [
+              "acl"
+            ],
+            "name": "extensions/extensions.decrypt(bytea,bytea,text)"
+          }
+        ],
+        "countsByChangedField": {
+          "acl": 36
+        },
+        "expected": 288,
+        "missing": 0,
+        "missingExamples": [],
+        "observed": 301
+      },
+      "types": {
+        "additional": 4,
+        "additionalExamples": [
+          "sha256:20663203d25c8d0fc47a6da2d45dbd24441f6a4394d65d7e22ddfa2edb8d4b3b",
+          "sha256:4aaa06ee75cf855039d75dbae1fc3d853af8323779c2b2170820fb3808eeb930",
+          "sha256:0d256c52191321b5971670c0fd28d5314493f5c8be6e637cafdb872b9301d4e9",
+          "sha256:075fb3288e3f1bb6ed469550d38f3c6ea967103b39c4d5d41674d2dbb86e6035"
+        ],
+        "changed": 0,
+        "changedExamples": [],
+        "countsByChangedField": {},
+        "expected": 820,
+        "missing": 0,
+        "missingExamples": [],
+        "observed": 824
+      }
+    },
+    "observed": "f659690731faa2867c319824978777312b42314786655d4eb0efd9140e801528",
+    "schema": "post50-namespace-difference-v1",
+    "scopedCatalog": {
+      "functions": {
+        "additional": 0,
+        "changed": 0,
+        "countsByChangedField": {},
+        "examples": [],
+        "expected": 242,
+        "missing": 0,
+        "observed": 242,
+        "reachableChangesByRole": {},
+        "splitFieldCounts": {}
+      },
+      "roles": {
+        "additional": 0,
+        "changed": 0,
+        "countsByChangedField": {},
+        "examples": [],
+        "expected": 30,
+        "missing": 0,
+        "observed": 30,
+        "reachableChangesByRole": {},
+        "splitFieldCounts": {}
+      },
+      "schemas": {
+        "additional": 0,
+        "changed": 1,
+        "countsByChangedField": {
+          "acl": 1,
+          "effectiveAcl": 1
+        },
+        "examples": [
+          {
+            "fields": [
+              "acl",
+              "effectiveAcl"
+            ],
+            "name": "public"
+          }
+        ],
+        "expected": 3,
+        "missing": 0,
+        "observed": 3,
+        "reachableChangesByRole": {
+          "authenticator": {
+            "gained": 1,
+            "lost": 0
+          },
+          "dashboard_user": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_checkpoint": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_create_subscription": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_execute_server_program": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_maintain": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_monitor": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_read_all_settings": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_read_all_stats": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_read_server_files": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_signal_backend": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_stat_scan_tables": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_use_reserved_connections": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pg_write_server_files": {
+            "gained": 1,
+            "lost": 0
+          },
+          "pgbouncer": {
+            "gained": 1,
+            "lost": 0
+          },
+          "stockinsider": {
+            "gained": 1,
+            "lost": 0
+          },
+          "supabase_admin": {
+            "gained": 1,
+            "lost": 0
+          },
+          "supabase_auth_admin": {
+            "gained": 1,
+            "lost": 0
+          },
+          "supabase_realtime_admin": {
+            "gained": 1,
+            "lost": 0
+          },
+          "supabase_storage_admin": {
+            "gained": 1,
+            "lost": 0
+          }
+        },
+        "splitFieldCounts": {}
+      },
+      "tables": {
+        "additional": 0,
+        "changed": 2,
+        "countsByChangedField": {
+          "constraints": 2
+        },
+        "examples": [
+          {
+            "fields": [
+              "constraints"
+            ],
+            "name": "candidate_research_run_items"
+          },
+          {
+            "fields": [
+              "constraints"
+            ],
+            "name": "valuation_snapshots"
+          }
+        ],
+        "expected": 253,
+        "missing": 0,
+        "observed": 253,
+        "reachableChangesByRole": {},
+        "splitFieldCounts": {
+          "constraintDefinitions": 2
+        }
+      },
+      "types": {
+        "additional": 0,
+        "changed": 0,
+        "countsByChangedField": {},
+        "examples": [],
+        "expected": 120,
+        "missing": 0,
+        "observed": 120,
+        "reachableChangesByRole": {},
+        "splitFieldCounts": {}
+      }
+    },
+    "targets": {
+      "constraints": [
+        {
+          "added": [],
+          "changed": [
+            {
+              "afterSha256": "93098b41361ccfc8176d28c5d5db8f1f26726ffb40431e5287d8eec57edbd958",
+              "afterValidated": false,
+              "beforeSha256": "3bcdfeaf36cc52292a0ca961b214e4eefcfeba5e98e3f2eb42efa5a9903e8da2",
+              "beforeValidated": false,
+              "fields": [
+                "definition"
+              ],
+              "name": "candidate_research_run_items_valuation_method_check"
+            }
+          ],
+          "removed": [],
+          "table": "candidate_research_run_items"
+        },
+        {
+          "added": [],
+          "changed": [
+            {
+              "afterSha256": "0e9648db4318a07380efd88c87567f828c12c1a04009d8faebc92c2e094584c0",
+              "afterValidated": true,
+              "beforeSha256": "9a691561a07f2713399160e9b707bc0f8fecb264dc6ca341d3b0f0622130bf29",
+              "beforeValidated": true,
+              "fields": [
+                "definition"
+              ],
+              "name": "valuation_snapshots_primary_method_check"
+            },
+            {
+              "afterSha256": "0091d5c7a9b34f12ddd8c0da1f0dbfc97f57b38d8ba4b5d5808b9868104a52ac",
+              "afterValidated": true,
+              "beforeSha256": "545f0909184727d2a89dab1895c44376f60814ceef1c01c9e6ed7d3b2328db1b",
+              "beforeValidated": true,
+              "fields": [
+                "definition"
+              ],
+              "name": "valuation_snapshots_valuation_basis_check"
+            }
+          ],
+          "removed": [],
+          "table": "valuation_snapshots"
+        }
+      ],
+      "membership": [],
+      "publicSchema": {
+        "expectedPublicGrants": [],
+        "observedPublicGrants": [
+          {
+            "grantable": false,
+            "privilege": "USAGE"
+          }
+        ],
+        "roleChanges": [
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "authenticator"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "dashboard_user"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_checkpoint"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_create_subscription"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_execute_server_program"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_maintain"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_monitor"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_read_all_settings"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_read_all_stats"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_read_server_files"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_signal_backend"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_stat_scan_tables"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_use_reserved_connections"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pg_write_server_files"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "pgbouncer"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "stockinsider"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "supabase_admin"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "supabase_auth_admin"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "supabase_realtime_admin"
+          },
+          {
+            "gained": [
+              "USAGE"
+            ],
+            "lost": [],
+            "role": "supabase_storage_admin"
+          }
+        ]
+      },
+      "serviceRoleChanges": []
+    }
+  },
+  "explanations": {
+    "roleBinding": "The authentic logical postgres peer variant matched all 30 scoped roles and 242 scoped functions. The verified prior authentic run used the staging identity as the logical bootstrap role.",
+    "exactFourExpectedAclNull": {
+      "private_artifact_receipts_v1": true,
+      "provider_credentials_encrypted_v1": true,
+      "stockinsider_backend_identities_v1": true,
+      "stockinsider_data_plane_settings_v1": true
+    },
+    "declaredCompatibilitySql": "20260911_contabo_data_plane_v1.sql revokes permissions for PUBLIC, anon, authenticated and service_role on these four tables.",
+    "nativeRevokeControl": {
+      "tableRawAclInitiallyNull": true,
+      "tableRawAclAfterNonNull": true,
+      "effectiveTablePrivilegesSame": true,
+      "functionRawAclInitiallyNull": true,
+      "functionRawAclAfterNonNull": true,
+      "anonFunctionExecuteChanged": true
+    },
+    "limitation": "The native control demonstrates that a table raw ACL can change without effective permission changes, and a function raw ACL can accompany an effective execute change. It does not stand in for an object-by-object effective comparison of the four relations and 36 routines on the authentic clone."
+  },
+  "cleanup": {
+    "directoriesAbsent": 3,
+    "diskBeforeBytes": 25907683328,
+    "diskAfterBytes": 26122620928,
+    "stageUnitsInactive": true
+  },
+  "resources": {
+    "appMemoryPeakObservedBytes": 18923520,
+    "dbMemoryPeakObservedBytes": 805310464,
+    "minimumHostAvailableMemoryBytes": 3044704256,
+    "minimumHostDiskBytes": 16972759040,
+    "minimumWorkFreeBytes": 5936422912,
+    "restMemoryPeakObservedBytes": 18878464
+  },
+  "next": "Verify direct and effective ACL deltas on the remaining 4 relations, 36 extension routines and public schema, and review a finite staging compatibility profile with the genuine installed extensions retained. Follow the unchanged original gate and frozen-rank readout before running the launch rollback."
+}

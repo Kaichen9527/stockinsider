@@ -1,0 +1,164 @@
+{
+  "schemaVersion": "stockinsider-t19-hardened-source-namespace-review-v1",
+  "recordedAt": "2026-11-17T17:27:32Z",
+  "candidateParent": "9fe1fdff438266b9560dc4a414e2fe5c8d8a042d",
+  "scope": "Contabo isolated PostgreSQL 17.11, exact routine predecessor with the four source-related ACL revisions; read-only repeatable-read observer",
+  "projectedGrant": {
+    "schema": "vnext-hardened-source-namespace-review-v1",
+    "predecessor": {
+      "scopeHash": "0fdae5ae5d60769aca8506b4cdddae93df8b93c1827a21f995187de1bf2e4c66",
+      "namespaceHash": "47ffa7365ca6f06e00e10e357d3119cda0eab4ce5266664c3a78a3e4fb7bab90",
+      "catalogHash": "505dc2e5eee0af4c040c4573b3e342686cbac26d5313356dce1edd94b84327ea"
+    },
+    "forecast": {
+      "scopeHash": "0fdae5ae5d60769aca8506b4cdddae93df8b93c1827a21f995187de1bf2e4c66",
+      "namespaceHash": "47ffa7365ca6f06e00e10e357d3119cda0eab4ce5266664c3a78a3e4fb7bab90",
+      "catalogHash": "02814858a7a8c691d47052612fd3342f37e8a7941debd26064a560176c6fd8cf"
+    },
+    "reviewedTarget": "research_source_fence_owner_v2",
+    "proposedPermission": [
+      "public",
+      "USAGE"
+    ],
+    "grantOption": false,
+    "namespaceAndObjectAclUnchangedInProjection": true,
+    "reachableRoutines": [
+      {
+        "signature": "assert_research_source_seal_v2(uuid)",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "definitionSha256": "06aed61305eb8754a80733518a815953c9b79160bb20b7572fb399e561498199"
+      },
+      {
+        "signature": "can_read_report(uuid)",
+        "owner": "postgres",
+        "securityDefiner": false,
+        "definitionSha256": "411d046a533b19f73d69812772889f9cfb4762bab7a164aa663ba030aca65008"
+      },
+      {
+        "signature": "can_read_subscriber_report(uuid)",
+        "owner": "postgres",
+        "securityDefiner": false,
+        "definitionSha256": "28fbf715d4e6a43835d43fe50ed0d5a0b41dba470f7d3d8975650b2718f0d99d"
+      },
+      {
+        "signature": "fence_observed_model_completion_v2()",
+        "owner": "postgres",
+        "securityDefiner": false,
+        "definitionSha256": "180a51d9b41251d1af39e67e877d3135febcdc22e7c5425af93c813de6e004b3"
+      },
+      {
+        "signature": "legacy_correctness_immutable_v3_11()",
+        "owner": "legacy_correctness_rpc_owner",
+        "securityDefiner": false,
+        "definitionSha256": "e31247edf623dcd50e046b3702c6b3721d7a910af56f84e5a2dc7e3acf05ec10"
+      },
+      {
+        "signature": "preserve_first_recommended_at()",
+        "owner": "postgres",
+        "securityDefiner": false,
+        "definitionSha256": "153e289cf5fd922037017b85613799f50554a782eacf287424e5bb6e49fd82e7"
+      },
+      {
+        "signature": "research_publication_source_state_v2(uuid)",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "definitionSha256": "0ad5b0a448cf657c188b7a099149c70b4bc0532c6a822bd8738a5a61ffe3a3c0"
+      },
+      {
+        "signature": "research_source_fence_record_v2()",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "definitionSha256": "52d26abb8b812beec884a8267d40a3ef547ae6e3a3a4df528c6a6d8bfe70e7f1"
+      },
+      {
+        "signature": "research_source_fence_write_v2()",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "definitionSha256": "fe8339c551f7c809da1f67fb438787bb296133fead41f4f07b3284196aa81522"
+      },
+      {
+        "signature": "research_source_root_v2(jsonb)",
+        "owner": "postgres",
+        "securityDefiner": false,
+        "definitionSha256": "ada9281b7cd0673b2d4adb9e2c7be673f3959bbff3733117e50d362a569159bc"
+      },
+      {
+        "signature": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "definitionSha256": "ff4eb006af3bde82a86a640ac8126083d78684ea6bc2947100d0f8a2ed618479"
+      },
+      {
+        "signature": "validate_research_deep_scope_v1()",
+        "owner": "postgres",
+        "securityDefiner": false,
+        "definitionSha256": "12330c7e878b4ac9d54bd7b84627d77b319ed35fc335ca3ce5a8d30c504ce394"
+      }
+    ],
+    "reachableRelations": [
+      {
+        "name": "research_source_fence_events_v2",
+        "kind": "r",
+        "owner": "research_source_fence_owner_v2",
+        "rls": true,
+        "forceRls": false
+      },
+      {
+        "name": "research_source_fence_events_v2_event_id_seq",
+        "kind": "S",
+        "owner": "research_source_fence_owner_v2",
+        "rls": false,
+        "forceRls": false
+      },
+      {
+        "name": "research_source_seal_invalidations_v2",
+        "kind": "r",
+        "owner": "research_source_fence_owner_v2",
+        "rls": true,
+        "forceRls": false
+      },
+      {
+        "name": "research_source_seals_v2",
+        "kind": "r",
+        "owner": "research_source_fence_owner_v2",
+        "rls": true,
+        "forceRls": false
+      },
+      {
+        "name": "source_raw_documents",
+        "kind": "r",
+        "owner": "postgres",
+        "rls": false,
+        "forceRls": false
+      }
+    ],
+    "transactionMetadataUnchanged": true,
+    "grantExecuted": false,
+    "independentReviewAccepted": false,
+    "productionAuthorized": false
+  },
+  "nativeTests": {
+    "tests": 14,
+    "pass": 14,
+    "fail": 0,
+    "skipped": 0
+  },
+  "nativeTapSha256": "f41fea94eb8bab47870171dc023db2b884050ef4a91f153f8e0294559b609b74",
+  "implicitReceiptDependenciesRef": "5da3f351a7ee29f8823874dc80fe39dc8e61f0d7",
+  "sourceWriteControl": {
+    "leaseAcquired": true,
+    "rejectedSqlstate": "42501",
+    "transactionRolledBack": true,
+    "allPublicRowsUnchanged": true
+  },
+  "protectedApplyEntryChanged": false,
+  "eligibleIndependentApprovalVerified": false,
+  "productionServiceReleaseAndTimerSignaturesMatched": true,
+  "ephemeralContainerAndSocketRemoved": true,
+  "testedSourcesSha256": {
+    "scripts/vnext-source-namespace-candidate.mjs": "03ae2fdd715df263240326dcc08636cfda0391f1e7ea4f6ae46978820305acf3",
+    "scripts/vnext-internal-candidate-plan-acl-postgres.test.mjs": "1b326331cf29faba7a5878d48cf0f6212d4239f6225ebe566db0a604df3ed837"
+  },
+  "remaining": "Eligible reviewer verifies transitive function behavior and exact role graph. Approved staging native authorization and real source HTTP write remain pending."
+}

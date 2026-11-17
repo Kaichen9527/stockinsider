@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "stockinsider-investanchors-late-day-notice-v1",
+  "sourceParent": "19f4eef8465976000b6d1e0086f3dadc9fca3a64",
+  "session": "2026-11-17",
+  "liveManualCheck": {
+    "transport": "existing authorized readonly Gmail connector and publisher member browser",
+    "taipeiDayCompleteThroughObservation": true,
+    "matchingMailboxNotices": 1,
+    "paginationExhausted": true,
+    "receivedTaipei": "2026-11-17T19:59:45+08:00",
+    "exactPublisherListTitleMatches": 1,
+    "verifiedPublisherDkim": true,
+    "multipartNotice": true,
+    "readOriginalText": true,
+    "originalPublisherDisplayDate": "2026-11-17",
+    "originalPublisherDisplayTime": "15:32",
+    "visibleLongArticleParagraphs": 17,
+    "matchedNamesInBoundedTaiwanWatchlist": 1,
+    "originalSymbolsExplicitlyConfirmed": 0,
+    "matchedIssuerMentionContext": "industry comparison",
+    "candidateWritten": false
+  },
+  "scheduling": {
+    "newTimer": false,
+    "additionalVisitAfterSuccessfulOrRetainedPublicationDecision": true,
+    "currentDayDoesNotCheckpoint": true,
+    "followupOnNextMorningAfterRollover": true,
+    "existingLedgerAndBudgetUnchanged": true,
+    "timeoutMs": 115000,
+    "actor": "existing internal operator-only POST"
+  },
+  "engineering": {
+    "stagingNodeTestsPassed": 39,
+    "reusedExactWebLockForParser": true,
+    "liveOAuthWorkerStarted": false,
+    "providerModelCalled": false,
+    "privateDataStoredOrPublished": false,
+    "productionScheduleChanged": false,
+    "fullPublisherAutomationApproved": false
+  }
+}

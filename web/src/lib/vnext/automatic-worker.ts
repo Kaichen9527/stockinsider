@@ -1,8 +1,8 @@
 import { createHash } from 'node:crypto';
 import { vnextEnabled } from './policy.ts';
 import { openAiResponsesProvider, providerCredentialIdentity } from './provider.ts';
-import { AUTHOR_INSTRUCTIONS, REVIEWER_INSTRUCTIONS,serverWorkerPromptProfile } from './worker-prompts.ts';
-import { runResearchWorker, type WorkerDependencies, type WorkerBinding, type WorkerRow } from './worker-core.ts';
+import { AUTHOR_INSTRUCTIONS, REVIEWER_INSTRUCTIONS,BUSINESS_WORKER_PROFILE,serverWorkerPromptProfile } from './worker-prompts.ts';
+import { runResearchWorker, verifyWorkerBindings, type WorkerDependencies, type WorkerBinding, type WorkerRow } from './worker-core.ts';
 function serverBindings() {
  const profile=serverWorkerPromptProfile();
  const key=process.env.OPENAI_API_KEY;
@@ -15,19 +15,26 @@ function serverBindings() {
  };
  return {key,author:configured('author',profile.author),reviewer:configured('reviewer',profile.reviewer)};
 }
+async function journal(identity:WorkerBinding['identity'],action:string,body:WorkerRow):Promise<WorkerRow> {
+  const { getSupabaseServerClient }=await import('../supabase-server.ts');
+  const result=await getSupabaseServerClient().rpc('vnext_provider_command_v1',{p_principal:identity.principal,p_command:action,p_request:body});
+  if(result.error) throw new Error(`vnext_provider_authority_rejected:${result.error.message}`);
+  if(!result.data || typeof result.data!=='object') throw new Error('vnext_provider_receipt_missing');
+  return result.data as WorkerRow;
+}
+export async function requireScheduledLaunchWorker() {
+ const {author,reviewer}=serverBindings();
+ if(author.promptVersion!==BUSINESS_WORKER_PROFILE.version||reviewer.promptVersion!==BUSINESS_WORKER_PROFILE.version) {
+  throw Error('launch_research_worker_profile_unavailable');
+ }
+ await verifyWorkerBindings({author,reviewer,journal});
+}
 /** Only jobId and an explicit recovery operation cross the HTTP seam. Provider,
  * model, instructions and principals are server config + enabled DB bindings. */
 async function run(jobId:string,recovery:boolean) {
  if(!vnextEnabled()) throw new Error('vnext_worker_disabled');
  const config=serverBindings();
- const { getSupabaseServerClient }=await import('../supabase-server.ts');
  const store=await import('./store.ts');
- const journal:WorkerDependencies['journal']=async(identity,action,body) => {
-  const result=await getSupabaseServerClient().rpc('vnext_provider_command_v1',{p_principal:identity.principal,p_command:action,p_request:body});
-  if(result.error) throw new Error(`vnext_provider_authority_rejected:${result.error.message}`);
-  if(!result.data || typeof result.data!=='object') throw new Error('vnext_provider_receipt_missing');
-  return result.data as WorkerRow;
- };
  const withWriterLease:WorkerDependencies['withWriterLease']=async(work) => {
   const { requireActiveVpsWriter }=await import('../taiwan-data-runtime.ts');
   const { acquireProductionWriteLease,releaseProductionWriteLease }=await import('../production-write-lease.ts');

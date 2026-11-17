@@ -1,0 +1,86 @@
+{
+  "recordedAt": "2026-11-16T14:43:50+08:00",
+  "workItem": "T09",
+  "sourceParent": "80b6faeb2a2b9ef6381ff95aa4207b2126955894",
+  "fileSha256": {
+    "web/src/lib/vnext/launch-opening-tpex-tape.ts": "931b006d1c09a21a1839be3d76ad78ff325554248bb4916cdab358943a02153d",
+    "web/src/lib/vnext/launch-opening-tpex-tape.test.ts": "566aaa3ddc7aa0561c33b3f10bb4a51d73af53f0ce2675b8177778f28d25d6cf",
+    "web/scripts/replay-tpex-opening-outcome.mjs": "2c491a457d64dc9c13d83a2650d833c43d4ce65ca6345910fec64c1fdf00f432"
+  },
+  "environment": {
+    "host": "Contabo isolated staging fallback",
+    "localMacCodeOrArchive": false,
+    "serviceWritesOrProductionDeployment": false,
+    "node": "22.23.1",
+    "next": "16.3.4",
+    "npmInstallExit": 0
+  },
+  "checks": {
+    "nodeTests": {
+      "tests": 22,
+      "pass": 22,
+      "fail": 0,
+      "skipped": 0
+    },
+    "fullWebTypes": 0,
+    "touchedFileLint": 0,
+    "webProductionBuild": 0
+  },
+  "actualHistoricalReplay": {
+    "stage": "real-trade-proof",
+    "sampleScope": "historical_price_replay",
+    "asOf": "2026-11-16T06:38:16.619021Z",
+    "receipts": {
+      "tape": {
+        "observedAt": "2026-11-16T06:38:13.290326Z",
+        "recordedAt": "2026-11-16T06:38:13.292872Z",
+        "sha256": "2f3fbe0b93ba71b624c24e9bae273af804092ea49fd8c6e0509d455b7762470e"
+      },
+      "prior": {
+        "observedAt": "2026-11-16T06:38:14.659895Z",
+        "recordedAt": "2026-11-16T06:38:14.666285Z",
+        "sha256": "741589fddf408015e3ac4e50e076eb07b97b58f39f2665af4517a4b5549a72f4",
+        "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2023%2F09%2F14&response=json"
+      },
+      "day": {
+        "observedAt": "2026-11-16T06:38:16.613465Z",
+        "recordedAt": "2026-11-16T06:38:16.618970Z",
+        "sha256": "782b85c6f3603a04a329b5069553cbe390729d25e35234c9ddb5baf8f3418761",
+        "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2023%2F09%2F15&response=json"
+      }
+    },
+    "data": {
+      "policy": "tpex-mth-paired-opening-v1",
+      "scope": "historical_price_replay",
+      "symbol": "3105",
+      "session": "2023-09-15",
+      "knownAt": "2026-11-16T06:38:16.618970Z",
+      "revision": "47c6d73d057fb45f6da54199a25210d81a612ab6ea47fe8f55de722421d3538b",
+      "firstMatchingAt": "2023-09-15T09:00:14.019624+08:00",
+      "firstMatchingShares": 51000,
+      "firstMatchingTrades": 44,
+      "rawOpen": "142.00",
+      "officialUpperLimit": "156.50",
+      "dayMatches": 4582,
+      "dayShares": 6313078
+    },
+    "executionStatus": "modeled_fill",
+    "researchThresholdState": "pending",
+    "publishedRank": false
+  },
+  "negativeActualTape": "tpex_opening_archive_daily_totals",
+  "boundaryRegression": {
+    "delayedOpening": "opening_evidence_gap",
+    "intradayReopening": "opening_evidence_gap",
+    "smallFirstMatch": "opening_evidence_gap",
+    "upperLimitMatch": "opening_evidence_gap",
+    "wrongDayOrOpen": "reject",
+    "tamperedCaptureOrFutureAvailability": "reject",
+    "publishedRankInput": "reject"
+  },
+  "shape": "Validated the 67-byte-before-CRLF TPEx file profile only. Reconciled both sides to exact official all-session quantity and match count, then bound the first in-session regular print below the venue upper limit to the existing raw-price revision.",
+  "scope": "Offline retrospective replay of actual official tape and daily data with a historical control input. Current trading-signal intake and actual adjacent workflow sessions are outside this receipt.",
+  "scratchRemoved": true,
+  "freeDiskAfterBytes": 26124988416,
+  "paidServicesUsed": false
+}

@@ -1,0 +1,13 @@
+[Unit]
+Description=INERT source candidate for isolated vNext shared market; no worker integration
+ConditionPathExists=!/
+
+[Service]
+Type=oneshot
+User=sivnext-schedule
+ExecStart=/usr/bin/false
+NoNewPrivileges=true
+PrivateNetwork=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true

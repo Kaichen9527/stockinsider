@@ -1,0 +1,109 @@
+{
+  "schema": "stockinsider-t18-v320-diagnostic-real-backup-v1",
+  "testedTaipeiDate": "2026-11-16",
+  "candidateSourceCommit": "14d568eab9a65d17667eb6050f025f1c964ccb1c",
+  "backupSourceDate": "2026-09-19",
+  "authenticatedClone": true,
+  "stageAdapterSha256": "06f5e2174e7905849f1c83f283d987a29a2b752920c0cb1b17649913c8c62984",
+  "publishedCandidateSourceComparedByteForByte": [
+    {
+      "path": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+      "exactPublishedBytes": true
+    },
+    {
+      "path": "scripts/opportunity-v3/legacy-v320-constraint-replay.mjs",
+      "exactPublishedBytes": true
+    },
+    {
+      "path": "scripts/opportunity-v3/legacy-v320-constraint-replay.test.mjs",
+      "exactPublishedBytes": true
+    }
+  ],
+  "webChecks": {
+    "summary": {
+      "baseSource": "b7b3cb3260589a34c94b79b4aa9946be5cc66617",
+      "scope": "isolated_compatibility_candidate_and_existing_web_tree",
+      "syntax": [
+        0,
+        0,
+        0
+      ],
+      "npm": 0,
+      "webBuild": 0,
+      "typecheck": 0,
+      "lint": 0
+    },
+    "workspaceRemoved": true
+  },
+  "genuineBackupCheck": {
+    "checks": {
+      "foreignKeys": 288,
+      "rlsTables": 193
+    },
+    "databaseBytes": 2258785971,
+    "lineage": null,
+    "schema": "stockinsider-owned-db-restore-v1"
+  },
+  "obtainedMigrationResult": {
+    "diagnosticAudit": {
+      "checkedRows": 52,
+      "exactValidatedV320": true,
+      "leaseExpired": 12,
+      "readOnly": true,
+      "rejectedByV3191": 12,
+      "rejectedByV320": 0
+    },
+    "diagnosticPreservation": {
+      "afterRows": 52,
+      "beforeRows": 52,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    },
+    "evaluationPreservation": {
+      "afterRows": 72,
+      "beforeRows": 72,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    },
+    "financialCommitted": false,
+    "observed": {},
+    "phase": "financial",
+    "publicationCommitted": false,
+    "reason": "",
+    "sqlstate": "42501",
+    "status": "REJECTED",
+    "trace": {
+      "constraint": null,
+      "constraintReported": false,
+      "errorLine": null,
+      "migration": "migrations/20260829_v320_kol_source_authority_seed.sql",
+      "migrationSha256": "e386cb8239115083be8c4c282b7bae43a2f2caa13e7e9e8bb2e6bf8d81164207",
+      "publicErrorToken": null,
+      "targetTable": null
+    }
+  },
+  "controlledSecurityDefinerHypothesis": {
+    "scope": "native control only; no actual backup or role ACL observed",
+    "sqlstate": "42501",
+    "insertedRows": 0,
+    "ownerRetained": true,
+    "underlyingInsert": false
+  },
+  "isolatedControlRemoved": true,
+  "latestNextRollback": "NOT_RUN",
+  "officialSignaturesIdentical": true,
+  "nativeHoldRetained": true,
+  "stageResourcesCleaned": true,
+  "clear": {
+    "temporaryRunnerRemoved": true,
+    "freeBytesAfterCleanup": 26137071616
+  },
+  "resourceSamples": {
+    "appMemoryPeakObservedBytes": 18894848,
+    "dbMemoryPeakObservedBytes": 805310464,
+    "minimumHostAvailableMemoryBytes": 4373327872,
+    "minimumHostDiskBytes": 17331023872,
+    "minimumWorkFreeBytes": 5967507456,
+    "restMemoryPeakObservedBytes": 18903040
+  }
+}

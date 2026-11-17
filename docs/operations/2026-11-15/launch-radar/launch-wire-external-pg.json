@@ -1,0 +1,440 @@
+{
+  "actualWriterOrPostgrestInvoked": false,
+  "applicationMigrationApplied": false,
+  "durationSeconds": 10.32,
+  "initialDatabaseEmptyNoProductTables": true,
+  "nativeHoldRetained": true,
+  "negativeControls": {
+    "tamperedEqualRs63SymbolOrderExit": 1
+  },
+  "networkNamespaceIsolated": true,
+  "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+  "nodeVersion": "v22.14.0",
+  "observedAtUtc": "2026-11-14T22:35:04.645247+00:00",
+  "pgVersion": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+  "results": [
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 13637,
+        "inputSha256": "7d2e5f9c55f115eadb861ed538fa3b727e21d2b0c55df6f7e9110b47e2b24500",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 13637,
+      "rawPgSha256": "7d2e5f9c55f115eadb861ed538fa3b727e21d2b0c55df6f7e9110b47e2b24500",
+      "vector": "negative_excess"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 13635,
+        "inputSha256": "fe4d453b1a2d2209893f309455aa9b3f6eb58ab1d9ed32f85318a0feb8cbf00a",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 13635,
+      "rawPgSha256": "fe4d453b1a2d2209893f309455aa9b3f6eb58ab1d9ed32f85318a0feb8cbf00a",
+      "vector": "positive_excess"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 14498,
+        "inputSha256": "6c07c2ecd7f6ac628aa77baef2a812af2800b122c5b6df2f68fb7116ee7d67e9",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 14498,
+      "rawPgSha256": "6c07c2ecd7f6ac628aa77baef2a812af2800b122c5b6df2f68fb7116ee7d67e9",
+      "vector": "positive_tiny"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 14501,
+        "inputSha256": "ed872293022ac0d8e53c585e7ceb25bb5b942c2d3207fcd718509023afdabe2c",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 14501,
+      "rawPgSha256": "ed872293022ac0d8e53c585e7ceb25bb5b942c2d3207fcd718509023afdabe2c",
+      "vector": "negative_tiny"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 13594,
+        "inputSha256": "22f5ae9501fe3c643f1de94946a85f37e59ae75832438203060633c614f68288",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 13594,
+      "rawPgSha256": "22f5ae9501fe3c643f1de94946a85f37e59ae75832438203060633c614f68288",
+      "vector": "known_zero"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 13651,
+        "inputSha256": "6f523a02c517f3905ea92909008ceda3d3349d815aa66a7da6ef9622550b0079",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 13651,
+      "rawPgSha256": "6f523a02c517f3905ea92909008ceda3d3349d815aa66a7da6ef9622550b0079",
+      "vector": "depth_below"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 13636,
+        "inputSha256": "5b4e48dae1c0a08ae308c5914632ab978d03c5138660d3cb894e390e29744d92",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 13636,
+      "rawPgSha256": "5b4e48dae1c0a08ae308c5914632ab978d03c5138660d3cb894e390e29744d92",
+      "vector": "depth_exact"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 13650,
+        "inputSha256": "e0c20faad7a7faad890e3245d4f18cf20333a0b5e23be0e8a67e536fb9120db4",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 13650,
+      "rawPgSha256": "e0c20faad7a7faad890e3245d4f18cf20333a0b5e23be0e8a67e536fb9120db4",
+      "vector": "depth_above"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 13635,
+        "inputSha256": "cf82a3b0f6857183f134162c55c2751c59835201f720634a616b4c97b9dc6b85",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 13635,
+      "rawPgSha256": "cf82a3b0f6857183f134162c55c2751c59835201f720634a616b4c97b9dc6b85",
+      "vector": "distance_exact"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 13650,
+        "inputSha256": "4f831ecfe0afae8fdfedede1333700b61cf6c96ca6034ee807ad700597adda4e",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 13650,
+      "rawPgSha256": "4f831ecfe0afae8fdfedede1333700b61cf6c96ca6034ee807ad700597adda4e",
+      "vector": "distance_above"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 13635,
+        "inputSha256": "ce4b27f71c1912931bfdff26977f497311b3041a38f1b1a0f97085848585c4cc",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 13635,
+      "rawPgSha256": "ce4b27f71c1912931bfdff26977f497311b3041a38f1b1a0f97085848585c4cc",
+      "vector": "ratio_exact"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 13666,
+        "inputSha256": "fb488c1bd66a89f250d93e885faf8c01b82d49284055d962967c411c0fe24a8a",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 13666,
+      "rawPgSha256": "fb488c1bd66a89f250d93e885faf8c01b82d49284055d962967c411c0fe24a8a",
+      "vector": "ratio_above"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 13637,
+        "inputSha256": "185fc2801f7d2d425b431e3b79ce2544899a5c105d6479fdc14ca08291689e67",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 13637,
+      "rawPgSha256": "185fc2801f7d2d425b431e3b79ce2544899a5c105d6479fdc14ca08291689e67",
+      "vector": "signed_ratio"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 13649,
+        "inputSha256": "f80e0b8b6e5b3ebdff2b2f0f0f5e5e66d3aeedfd8f6e6aba8e38378e20de4d4e",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 13649,
+      "rawPgSha256": "f80e0b8b6e5b3ebdff2b2f0f0f5e5e66d3aeedfd8f6e6aba8e38378e20de4d4e",
+      "vector": "positive_third"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 13651,
+        "inputSha256": "dbb0199144a5bbbb8eec3bf7e745037c73869bcb1163a692d2fd6ceee560490f",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 13651,
+      "rawPgSha256": "dbb0199144a5bbbb8eec3bf7e745037c73869bcb1163a692d2fd6ceee560490f",
+      "vector": "signed_third"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 13635,
+        "inputSha256": "362875f1fd689dfdbc97f6b87ff4477364bd72b31cf237374296124fdf328971",
+        "members": 1,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 13635,
+      "rawPgSha256": "362875f1fd689dfdbc97f6b87ff4477364bd72b31cf237374296124fdf328971",
+      "vector": "integer_cancellation"
+    },
+    {
+      "consumerExit": 0,
+      "consumerReceipt": {
+        "arithmeticVersion": "binary64-v1",
+        "bytes": 14769,
+        "inputSha256": "a27e5e88793ce9638afb3c1087c2af74f6c65d3f539301ac68dd47a0b7ad2382",
+        "members": 2,
+        "origin": "unverified_stdin",
+        "publicationAuthority": false,
+        "rankingAuthority": false,
+        "rankingRunId": "00000000-0000-4000-8000-000000000001",
+        "realPgExecution": "NOT_VERIFIED",
+        "rules": 16,
+        "schema": "launch-wire-replay-receipt-v1",
+        "scope": "parser_wire_validation_only",
+        "sourceAuthority": false,
+        "wireSchema": "vnext-launch-ranking-snapshot-v2"
+      },
+      "rawPgBytes": 14769,
+      "rawPgSha256": "a27e5e88793ce9638afb3c1087c2af74f6c65d3f539301ac68dd47a0b7ad2382",
+      "vector": "equal_rs63_tie"
+    }
+  ],
+  "schema": "stockinsider-launch-ranking-postgresql-wire-boundary-v1",
+  "sourceCommit": "d68f5a33b8345e66fe324749101bd1f92abfdcc0",
+  "sourceFiles": {
+    "web/scripts/launch-ranking-binary64-vectors.sql": {
+      "gitBlob": "25058b384c84723590347f464309cd003c8bad3d",
+      "sha256": "94f4f3217fadfc3e5087aae800f0bb7bc5cab2f55c29354551d796f3019e77cb"
+    },
+    "web/scripts/launch-ranking-wire-replay.mjs": {
+      "gitBlob": "c8e9f051e872c32effe0432cf64756eb073c5246",
+      "sha256": "adc24570ccdc1fedadc4731df43fdd66a97372ecac5803e9b45702d7f520abc1"
+    },
+    "web/src/lib/public-source-url.ts": {
+      "gitBlob": "c4f7ea17bc1415638b4ef782d147d580d2a190fa",
+      "sha256": "4800b3434f1de7b26dfe4bcd08ad03ddf572ebec02754add69aa545f3e4e5fe9"
+    },
+    "web/src/lib/vnext/citations.ts": {
+      "gitBlob": "2fb776e380e525bbdff780b2fd15ba14a49d9774",
+      "sha256": "fc1e8b57b6d34778bba10a7dbe5fc83b12b95509d2b955ecc643275cd837e7ed"
+    },
+    "web/src/lib/vnext/evidence-clock.ts": {
+      "gitBlob": "fa27138f5dd8f6ce823a91e2fd4be84cfe76fac9",
+      "sha256": "bf587d9f77289610aa3a4c45285af5337f501aa8dd90b55ab37ac45cdc91ea2e"
+    },
+    "web/src/lib/vnext/launch-public-citation.ts": {
+      "gitBlob": "7898ed998e2486a71cfc2bc8393265104ff1685b",
+      "sha256": "7158d9571855a8085fcb7b9170e4c5452def1cecca5bcd20143ed0c4b588ec6a"
+    },
+    "web/src/lib/vnext/launch-ranking-read.ts": {
+      "gitBlob": "19405ea2c3232c5bda3ec1f1cd53957e4546199b",
+      "sha256": "0830c34dac80ba1ff96eac2d4dac703035228b4977705eb092deab8e470cb9ec"
+    },
+    "web/src/lib/vnext/policy.ts": {
+      "gitBlob": "a8441d87c99c1edf6ebfed991b58b346f917b32b",
+      "sha256": "06b10f467752ad38cc8d80f5b93163aa446284f5cca5be6bb37fd186926ddab7"
+    }
+  },
+  "temporaryClusterCleaned": true,
+  "firstObservation": {
+    "nodeVersion": "v22.23.1",
+    "pinnedConsumerRequires": "v22.14.0",
+    "positivePacketsAccepted": 0,
+    "totalPackets": 17,
+    "outcome": "runtime_mismatch_first_attempt",
+    "temporaryClusterCleaned": true,
+    "applicationMigrationApplied": false
+  },
+  "postgrest": "NOT_RUN",
+  "protectedReviewOrProductionAuthority": false,
+  "context": "An isolated, initially empty PG cluster on Contabo generated synthetic SELECT-only packets. Eight exact Git blobs were streamed. Input SHA and byte counts match each actual fixed Node consumer receipt. No production credentials, product tables, migration, release, or protected retry."
+}

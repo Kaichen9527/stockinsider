@@ -1,0 +1,267 @@
+{
+  "schema": "stockinsider-twse-11764-private-close-source-v1",
+  "observedAt": "2026-11-15T02:53:29.606742+00:00",
+  "publicSourceCommit": "bad5c986174ed6bd00bf4e6f2fee1abffccecb86",
+  "localValidationCommit": "d1ffd7bb048cfc8aef418eb4fa73752ee84e1207",
+  "wholeTree": "261e2a92d49c421da1c6d55aa393d486a10e4189",
+  "webTree": "021d0f1e6d25b668ebd0e6b63cdb9f7bb1dc0737",
+  "publication": {
+    "transport": "configured GitHub connector",
+    "expectedParent": "27f5630f0e0e58f87705e9c0f250e3aed6346396",
+    "force": false,
+    "wholeTreeEqualityVerified": true,
+    "testsRanPublicCommit": false
+  },
+  "sourceInventory": [
+    {
+      "path": "web/src/lib/vnext/launch-breadth-replay.ts",
+      "bytes": 20709,
+      "sha256": "4eafd39c1b20b15ddcfff4db35be37b9e85bffaf18f3576288c932174f795e20"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-twse-close-replay.test.ts",
+      "bytes": 9576,
+      "sha256": "233276480ca979889ffed897f24241e991ae5779928a9902abb4257d22089c6f"
+    },
+    {
+      "path": "web/scripts/launch-official-replay.mjs",
+      "bytes": 5000,
+      "sha256": "ca8d0acbac7c7de3e74da1f428349d4412a33282d317bd63e68d41a33ee8bf61"
+    },
+    {
+      "path": "web/scripts/launch-official-replay.test.mjs",
+      "bytes": 26753,
+      "sha256": "e57a3abfcf3d841bebd1665b9172b2a8557a9075559a04bcd5da85de7f5777c5"
+    }
+  ],
+  "checks": [
+    {
+      "name": "related_unit",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/launch-twse-close-replay.test.ts",
+        "web/src/lib/market-breadth.test.ts",
+        "web/src/lib/market-evidence.test.ts",
+        "web/src/lib/market-evidence-format.test.ts",
+        "web/src/lib/vnext/launch-breadth-replay.test.ts",
+        "web/src/lib/vnext/launch-native-volume.test.ts",
+        "web/src/lib/vnext/launch-licensed-csv.test.ts"
+      ],
+      "start": "2026-11-15T02:49:19.876797+00:00",
+      "end": "2026-11-15T02:49:23.891507+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 34553856,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29350330368,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "b884388b114ae7103a33bc5826b0882494971785c321d44a80caaacf3a301bf9"
+    },
+    {
+      "name": "actual_cli",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/scripts/launch-official-replay.test.mjs"
+      ],
+      "start": "2026-11-15T02:49:23.891864+00:00",
+      "end": "2026-11-15T02:49:30.167904+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 27340800,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29343809536,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "a690bb9a627fb904c12c99e2d0b62514aefedd10fd2660a63b03c3c9621aa455"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-15T02:49:30.168578+00:00",
+      "end": "2026-11-15T02:49:32.927113+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81817600,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29343801344,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-15T02:49:32.927480+00:00",
+      "end": "2026-11-15T02:49:53.237664+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 82608128,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29343797248,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "19c877eafdc15415f5ad90d09b41a580c102658a544d359e3d8d1998689103b4"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-15T02:49:53.238038+00:00",
+      "end": "2026-11-15T02:49:59.271660+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 82444288,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29342404608,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "6ee1317b47747eb3c601adeba24420046d4e306cd6a963704d640c6f9ad2b324"
+    }
+  ],
+  "counts": {
+    "relatedUnit": 50,
+    "actualPrivateCli": 15,
+    "fail": 0,
+    "skip": 0
+  },
+  "engineeringReview": {
+    "openP0": 0,
+    "openP1": 0,
+    "formalA1": false
+  },
+  "oldTpexParser": {
+    "preservedPrefixBytes": 11336,
+    "sha256": "7e9a650a8efd21f99b7a29b3930f07535332f6d075901c022df1aab1f04f34be",
+    "publishedReference": "b6d148adfffe75333a806aa318feeb01a3f31878",
+    "oldApiSchemaRevisionAndDefaultsUnchanged": true
+  },
+  "newContract": {
+    "schema": "launch-twse-11764-close-observations-v1",
+    "parserVersion": "twse-11764-reported-close-observer-v1",
+    "datasetId": 11764,
+    "fixedUrl": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=YYYYMMDD",
+    "csvHeader": [
+      "\u65e5\u671f",
+      "\u8b49\u5238\u4ee3\u865f",
+      "\u8b49\u5238\u540d\u7a31",
+      "\u6536\u76e4\u50f9",
+      "\u6b96\u5229\u7387(%)",
+      "\u80a1\u5229\u5e74\u5ea6",
+      "\u672c\u76ca\u6bd4",
+      "\u80a1\u50f9\u6de8\u503c\u6bd4",
+      "\u8ca1\u5831\u5e74/\u5b63"
+    ],
+    "columnsUsed": {
+      "payloadDate": 0,
+      "issuerCode": 1,
+      "rawClose": 3
+    },
+    "payloadDateFormat": "YYYYMMDD exactly matches request on every nonempty row",
+    "blankRows": "skip wholly empty records, preserve decoded-row hash; require nonempty data",
+    "maximumResponses": 30,
+    "maximumPageBytes": 500000,
+    "maximumDecodedBytes": 15000000,
+    "maximumRoster": 5000,
+    "sourcePublisherAt": null,
+    "priceBasis": "raw_unadjusted",
+    "owner": null,
+    "license": null,
+    "licenseVersion": null,
+    "rightsRevision": null,
+    "rightsGap": "twse_11764_resource_license_owner_snapshot_unverified",
+    "sourceAuthority": false,
+    "rightsAuthority": false,
+    "publicationAuthority": false,
+    "marketAuthority": false,
+    "rosterAuthority": false,
+    "calendarAuthority": false,
+    "caComparableCoverage": null,
+    "qualifiedBreadth": null,
+    "aggregateMarketGate": null
+  },
+  "externalControls": [
+    {
+      "commit": "84a975ebb20ef4aef1b6d21f5c28258ad569732d",
+      "metadataGitBlob": "68ba7a1fc9f220a449d1f8c753ab75822469bfa0",
+      "collectorTextGitBlob": "36128927bf883a66e13c05dcc149c6fede1624a1",
+      "checkerTextGitBlob": "08a055df1e93beb89dbe7e2cd15f478d9aad3526",
+      "scope": "sanitized31actualresponses/2456852bytes/1085positivecloseparity metadata; collector/checker read as TEXT ONLY, never executedCloud; observedNov15 notNov13 knowledge"
+    },
+    {
+      "commit": "59e151e50cc3f07023b2a9290bf00c32a37cdf57",
+      "metadataGitBlob": "0f78105147f90d49c8ef4d490695c763cc745444",
+      "scope": "FinMind marketcurrency sample parity only; absent venue/version/currentrights/cutoff=>disabled"
+    },
+    {
+      "commit": "324dab2ac451c74e304880acfd6c16c539c2c479",
+      "metadataGitBlob": "702f489d03eb0c8faf303fc5409500b8d446944f",
+      "scope": "separate official theoreticalreference/tradingbase/limit and observedclock controls, no new actionterms/outcome"
+    },
+    {
+      "commit": "dfe1337f7365245fbeea1a57e3719e9fac73ce47",
+      "metadataGitBlob": "3f176d6c1773db7174341f148e3fac67825e3285",
+      "scope": "TWSE3004/4771 independent11549daily versus full20cash controls; futurewriter only, monthlyrightsunknown"
+    }
+  ],
+  "limits": {
+    "rawOfficialBytesParsedOrRehashedCloud": false,
+    "synthetic1937Of1979MeansTrueBreadth": false,
+    "OHLCVolumeTurnoverCashFlowPEBasisDerived": false,
+    "DbRightsProfileOrCitationAllowlistChanged": false,
+    "fullRosterCOrNewAcquisitionImplemented": false,
+    "sqlApplyOrNative": "NOT_RUN_HOLD",
+    "actualMarketRankingOrT06T10Acceptance": false,
+    "actualSourceCalls": 0,
+    "productionActions": 0,
+    "paidCalls": 0,
+    "timersChanged": false,
+    "originalPrHead": "UNCHANGED",
+    "formalA1": "BLOCKED_UNCHANGED"
+  },
+  "remaining": [
+    "exact current11764owner/license/version/use-purpose rights snapshot through existing rights table",
+    "immutable raw full-roster purpose facts/head-first ordinary identities/captureACK/ownedlease/postcommitwitness/recovery bridge",
+    "<=200unique staged planning, pending notready, no duplicatecapture or researchcharge",
+    "real calendar/cancel/CAcomparability and fixedtwo-market authorized1/5session currencyflow",
+    "actual source-bound selectedcache/score/writer/native/two-session/CI/release gates"
+  ],
+  "preservation": {
+    "originalFiles": 283,
+    "changed": 0,
+    "missing": 0,
+    "archiveOrRecoveryVerified": false,
+    "reclaimedBytes": 0
+  }
+}

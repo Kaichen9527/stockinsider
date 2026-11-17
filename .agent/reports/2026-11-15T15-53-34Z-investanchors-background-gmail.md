@@ -1,0 +1,3 @@
+# InvestAnchors background Gmail transport verification
+
+Twenty-nine isolated tests and the strict scoped transport type check passed on Contabo staging. The exact OAuth scope, profile identity, read-only URLs and existing morning slot were exercised with synthetic transport. The named Contabo environment file has zero of the five required fields and the optional action is off. No provider token was requested or printed, no production setting changed, and member article authority remains false. [OpenSpec evidence](../../openspec/changes/stockinsider-vnext-20/evidence/2026-11-15-t03-investanchors-background-gmail.json)

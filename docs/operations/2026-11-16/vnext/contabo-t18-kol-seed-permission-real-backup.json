@@ -1,0 +1,118 @@
+{
+  "schema": "stockinsider-t18-kol-seed-permission-real-backup-v1",
+  "testedTaipeiDate": "2026-11-16",
+  "backupSourceDate": "2026-09-19",
+  "candidateSourceCommit": "14d568eab9a65d17667eb6050f025f1c964ccb1c",
+  "stageAdapterSha256": "30022eb28d1ae0274e973632081ad29aa4efa1504da114dd69573f4225070b0d",
+  "authenticatedClone": true,
+  "diagnosticControl": {
+    "scope": "synthetic smoke of exact telemetry code only",
+    "catalogAccessProjected": true,
+    "sqlstate42501Classified": true,
+    "errorObject": "source_entities",
+    "rawErrorExported": false
+  },
+  "databaseReceipt": {
+    "checks": {
+      "foreignKeys": 288,
+      "rlsTables": 193
+    },
+    "databaseBytes": 2258785971,
+    "lineage": null,
+    "schema": "stockinsider-owned-db-restore-v1"
+  },
+  "authorityDiagnostic": {
+    "sourceLocation": {
+      "constraint": null,
+      "constraintReported": false,
+      "errorLine": null,
+      "migration": "migrations/20260829_v320_kol_source_authority_seed.sql",
+      "migrationSha256": "e386cb8239115083be8c4c282b7bae43a2f2caa13e7e9e8bb2e6bf8d81164207",
+      "publicErrorToken": null,
+      "targetTable": null
+    },
+    "sqlstate": "42501",
+    "denial": {
+      "kind": "acl_table",
+      "object": "internal_principal_role_bindings_v3",
+      "postgresRoutine": "aclcheck_error",
+      "sites": [
+        {
+          "function": "seed_v320_kol_source_authorities",
+          "line": 29
+        }
+      ]
+    },
+    "privileges": {
+      "appendDefiner": true,
+      "appendExists": true,
+      "callerRole": "si-t18-db",
+      "effectiveBypassRls": false,
+      "effectiveRole": "postgres",
+      "effectiveSuperuser": false,
+      "execAppend": false,
+      "originalDefiner": true,
+      "relations": {
+        "internal_principal_role_bindings_v3": {
+          "forceRls": false,
+          "insert": false,
+          "ownedByEffectiveRole": true,
+          "owner": "postgres",
+          "rls": true,
+          "select": false
+        },
+        "source_entities": {
+          "forceRls": false,
+          "insert": true,
+          "ownedByEffectiveRole": true,
+          "owner": "postgres",
+          "rls": false,
+          "select": true
+        },
+        "source_identity_authorities_v3": {
+          "forceRls": false,
+          "insert": false,
+          "ownedByEffectiveRole": false,
+          "owner": "opportunity_v3_rpc_owner",
+          "rls": true,
+          "select": false
+        }
+      },
+      "schemaUsage": true,
+      "seedExists": true
+    },
+    "permissionChangesApplied": false
+  },
+  "priorChecks": {
+    "evaluation": {
+      "afterRows": 72,
+      "beforeRows": 72,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    },
+    "diagnostic": {
+      "afterRows": 52,
+      "beforeRows": 52,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    }
+  },
+  "financialCommitted": false,
+  "publicationCommitted": false,
+  "latestNextRollback": "NOT_RUN",
+  "productionSignaturesIdentical": true,
+  "resources": {
+    "appMemoryPeakObservedBytes": 18874368,
+    "dbMemoryPeakObservedBytes": 805310464,
+    "minimumHostAvailableMemoryBytes": 4357120000,
+    "minimumHostDiskBytes": 17332977664,
+    "minimumWorkFreeBytes": 5966020608,
+    "restMemoryPeakObservedBytes": 18935808
+  },
+  "stageResourcesCleaned": true,
+  "cleanup": {
+    "temporaryRunnerRemoved": true,
+    "freeBytesAfterCleanup": 26136449024
+  },
+  "releaseHoldRetained": true
+}

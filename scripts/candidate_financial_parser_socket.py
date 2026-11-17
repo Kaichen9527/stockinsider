@@ -8,19 +8,32 @@ import socket
 import subprocess
 import sys
 import tempfile
+import time
 
 MAX_HEADER = 1024
 MAX_BYTES = 50 * 1024 * 1024
 MAX_OUTPUT = 2 * 1024 * 1024
+REQUEST_TIMEOUT_SECONDS = 5
+PARSER_TIMEOUT_SECONDS = 25
+EXTENDED_OFFICIAL_TIMEOUT_SECONDS = 142
 EXPECTED_ARELLE_VERSION = "2.44.7"
 EXPECTED_TAXONOMY_SHA256 = "4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869"
 OFFICIAL_TAXONOMY_PATH = "/opt/stockinsider/runtime/candidate-financial-parser/taxonomy/current"
 
 
 def receive_request(connection):
+    deadline = time.monotonic() + REQUEST_TIMEOUT_SECONDS
+
+    def read(count):
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError("parser_socket_request_timeout")
+        connection.settimeout(remaining)
+        return connection.recv(count)
+
     header = bytearray()
     while b"\n" not in header:
-        chunk = connection.recv(min(256, MAX_HEADER + 1 - len(header)))
+        chunk = read(min(256, MAX_HEADER + 1 - len(header)))
         if not chunk or len(header) + len(chunk) > MAX_HEADER:
             raise ValueError("parser_socket_header_invalid")
         header.extend(chunk)
@@ -40,14 +53,18 @@ def receive_request(connection):
                 or not 4 <= len(entity) <= 6 or not isinstance(period_end, str)
                 or datetime.date.fromisoformat(period_end).isoformat() != period_end):
             raise ValueError("parser_socket_context_invalid")
+    profile = request.get("profile")
+    if "profile" in request and (profile != "extended-official" or format_name == "pdf" or entity is None):
+        raise ValueError("parser_socket_profile_invalid")
     payload = bytearray(remainder)
     while len(payload) < size:
-        chunk = connection.recv(min(64 * 1024, size - len(payload)))
+        chunk = read(min(64 * 1024, size - len(payload)))
         if not chunk:
             raise ValueError("parser_socket_payload_truncated")
         payload.extend(chunk)
     if len(payload) != size:
         raise ValueError("parser_socket_payload_invalid")
+    connection.settimeout(REQUEST_TIMEOUT_SECONDS)
     return request, bytes(payload)
 
 
@@ -71,9 +88,13 @@ def serve(connection):
             if taxonomy_sha256 != EXPECTED_TAXONOMY_SHA256:
                 raise ValueError("official_taxonomy_identity_mismatch")
             command.extend(["--taxonomy-path", taxonomy_path, "--taxonomy-sha256", taxonomy_sha256])
+        extended = request.get("profile") == "extended-official"
+        if extended:
+            command.append("--extended-official-validation")
         completed = subprocess.run(
             command,
-            input=payload, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=25, check=False,
+            input=payload, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            timeout=EXTENDED_OFFICIAL_TIMEOUT_SECONDS if extended else PARSER_TIMEOUT_SECONDS, check=False,
             env={"LANG": "C.UTF-8", "LC_ALL": "C.UTF-8", "PYTHONNOUSERSITE": "1", "PYTHONHASHSEED": "0",
                  "XDG_CONFIG_HOME": config_home, "TMPDIR": config_home,
                  "NO_PROXY": "*", "no_proxy": "*", "HF_HUB_OFFLINE": "1", "TRANSFORMERS_OFFLINE": "1"},
@@ -96,9 +117,15 @@ def main():
         with connection:
             try:
                 serve(connection)
+            except (ConnectionError, TimeoutError):
+                # A timed-out or disconnected caller cannot take down the listener.
+                continue
             except Exception as error:
                 response = json.dumps({"error": str(error)[:160]}, separators=(",", ":")).encode("utf-8")
-                connection.sendall(response + b"\n")
+                try:
+                    connection.sendall(response + b"\n")
+                except (ConnectionError, TimeoutError):
+                    continue
 
 
 if __name__ == "__main__":

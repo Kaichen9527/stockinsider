@@ -1,0 +1,631 @@
+{
+  "schema": "stockinsider-weekly-quote-clock-source-v1",
+  "observedAt": "2026-11-15T01:23:17.124924+00:00",
+  "localValidationCommit": "7390267cef3f743117cef46f0e579de1a852bcc8",
+  "publicSourceCommit": "2928fe9e0a47a039df23d18e2c8ca6a15509e935",
+  "wholeTree": "323cf6b7e9d95bcc5bf83dcf83df9ff3d0fe2983",
+  "webTree": "548f7613e4df1c0d63b4bf10701c82c4c44bab44",
+  "publication": {
+    "transport": "configured GitHub connector",
+    "expectedParent": "eb46a730177f7fa08d9252622d3d49c2211636d3",
+    "force": false,
+    "treeEqualityVerified": true,
+    "testsRanLocalIdenticalTree": true,
+    "testsRanPublicCommit": false
+  },
+  "sourceInventory": [
+    {
+      "path": "migrations/20261115_vnext_weekly_quote_clock_v1.sql",
+      "sha256": "295ae9283e9e0e0cfbb9bf2bfbfae91b843b16189d73c1c8faecb22a7d20314e"
+    },
+    {
+      "path": "scripts/vnext-thesis-postgres.test.mjs",
+      "sha256": "3a6bd20e35979446f88b8e0a54f8f7e4ed4f2c1c386e1c55d10203b3ba812359"
+    },
+    {
+      "path": "scripts/vnext-weekly-quote-clock-source.test.mjs",
+      "sha256": "cb9172156622aeb58b6e9564e0b2cf91fe4909995543dad2ec786c24f39f5fd3"
+    },
+    {
+      "path": "web/src/lib/vnext/audit-quote-clock.test.ts",
+      "sha256": "6aba86afbe6b7a865058babfb132ba520f87ecf95f9c9b41991a1b6592f0467d"
+    },
+    {
+      "path": "web/src/lib/vnext/audit-quote-clock.ts",
+      "sha256": "01e3796de196cd561a4ab29c0f00aa846019881a56043684ac94db5e54b18652"
+    },
+    {
+      "path": "web/src/lib/vnext/cached-price-factors.ts",
+      "sha256": "6b11eed47efa64a33c702754312f42540a617abb6a4d869940473e4c8eb205f9"
+    },
+    {
+      "path": "web/src/lib/vnext/current-evidence-read.test.ts",
+      "sha256": "ab633cd064966ca46ee44db029ec3b87758f939896aa00fe36bdecaeaeec24ec"
+    },
+    {
+      "path": "web/src/lib/vnext/current-evidence-read.ts",
+      "sha256": "615b7cb737457571c529db823be02057951f5b94721d927f8303ab86b90dfff3"
+    },
+    {
+      "path": "web/src/lib/vnext/discovery-test-loader.mjs",
+      "sha256": "b2fce5e0891754d04964cc8f84569647cf0fa77552bdfda3c01269f541efffbf"
+    },
+    {
+      "path": "web/src/lib/vnext/factors.ts",
+      "sha256": "7165c921189f5884a2fce407477c3b1cc05318adcdf5ef626fdafe5761cb0c15"
+    },
+    {
+      "path": "web/src/lib/vnext/preparation-authority.test.ts",
+      "sha256": "694aea4fbddadf430ad2234729cdf30ce9b0893b56bd0cce66e3e2aad2922f6e"
+    },
+    {
+      "path": "web/src/lib/vnext/preparation-reconciliation.test.ts",
+      "sha256": "1ad2a01d8ee97f47544bfcf2e06bb231e14531f2f4011869bc3b7328214621eb"
+    },
+    {
+      "path": "web/src/lib/vnext/research-failure.test.ts",
+      "sha256": "8cd99589a93a99a22d066d76624457ef37cc993d2191664e903c21b70da89218"
+    },
+    {
+      "path": "web/src/lib/vnext/reviewed-target.test.ts",
+      "sha256": "71959a6f3a76f1a0df6c919c947b03e9c7ff75647c25ca0dd86f82feb2de7d41"
+    },
+    {
+      "path": "web/src/lib/vnext/reviewed-target.ts",
+      "sha256": "0bf6e9574dd2b25a73b6ce2ba20c70445bd99301e32360e7c516b3e0ff7da129"
+    },
+    {
+      "path": "web/src/lib/vnext/reviewed-valuation.ts",
+      "sha256": "f6facac58e352c119b0202946dcacd4665db1c568b2cba21175d3cb226f810a7"
+    },
+    {
+      "path": "web/src/lib/vnext/thesis-audit.ts",
+      "sha256": "a21f45cfbd3cdb9101eb71630c2afe8579ecedcae487a652c14ea5b5d29ac660"
+    },
+    {
+      "path": "web/src/lib/vnext/thesis.test.ts",
+      "sha256": "29b74f53e52ddac6cd6d2a10a83d19b67ddac0c9162a5a4e02bce203af3d50be"
+    }
+  ],
+  "checks": [
+    {
+      "name": "source_static",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--test",
+        "scripts/vnext-weekly-quote-clock-source.test.mjs"
+      ],
+      "start": "2026-11-15T01:13:14.304842+00:00",
+      "end": "2026-11-15T01:13:14.555452+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 0,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29400682496,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "8cabc70e029da329cdab923c9099c14c2993e8205d3c06a01f6dc11d0d71ae75"
+    },
+    {
+      "name": "clock_utc",
+      "command": [
+        "env",
+        "TZ=UTC",
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/audit-quote-clock.test.ts"
+      ],
+      "start": "2026-11-15T01:13:14.555822+00:00",
+      "end": "2026-11-15T01:13:15.057053+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 27996160,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29400670208,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "0b438b2f3c681eefd50a0e1d5856f391772872f4acc3a924a70644fb02006c0d"
+    },
+    {
+      "name": "clock_taipei",
+      "command": [
+        "env",
+        "TZ=Asia/Taipei",
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/audit-quote-clock.test.ts"
+      ],
+      "start": "2026-11-15T01:13:15.057440+00:00",
+      "end": "2026-11-15T01:13:15.308223+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 0,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29400670208,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "9256bc8819f1cf036b4a316ac86522904582ae4b4faba4ce68dcb4017e9a4d7c"
+    },
+    {
+      "name": "clock_new_york",
+      "command": [
+        "env",
+        "TZ=America/New_York",
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/audit-quote-clock.test.ts"
+      ],
+      "start": "2026-11-15T01:13:15.308591+00:00",
+      "end": "2026-11-15T01:13:15.559431+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 0,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29400666112,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "22c03f1bfee98a28dd36699bbd9429dd0dd4ffc36c4dd4ec61dd04d609450206"
+    },
+    {
+      "name": "related_unit",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/forecast-active.test.ts",
+        "web/src/lib/vnext/preparation-authority.test.ts",
+        "web/src/lib/vnext/thesis-semantic-authority.test.ts",
+        "web/src/lib/vnext/catalyst-criteria.test.ts",
+        "web/src/lib/vnext/research-failure.test.ts",
+        "web/src/lib/vnext/business-criteria.test.ts",
+        "web/src/lib/vnext/source-volume-boundary.test.ts",
+        "web/src/lib/vnext/current-evidence-read.test.ts",
+        "web/src/lib/vnext/vnext.test.ts",
+        "web/src/lib/vnext/reviewed-target.test.ts",
+        "web/src/lib/vnext/cached-admission.test.ts",
+        "web/src/lib/vnext/preparation-reconciliation.test.ts",
+        "web/src/lib/vnext/thesis.test.ts",
+        "web/src/lib/vnext/ranking-read.test.ts",
+        "web/src/lib/vnext/published-target-read.test.ts"
+      ],
+      "start": "2026-11-15T01:13:15.559931+00:00",
+      "end": "2026-11-15T01:13:18.571516+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 38092800,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29400633344,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "7a0cf0e7dc1350de3e1166130a20e834dfe55cea03cd6ecbba2169fba1445cc0"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-15T01:13:18.571965+00:00",
+      "end": "2026-11-15T01:13:21.594285+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81272832,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29400608768,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-15T01:13:21.594987+00:00",
+      "end": "2026-11-15T01:13:41.902268+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81657856,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29400600576,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "19c877eafdc15415f5ad90d09b41a580c102658a544d359e3d8d1998689103b4"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-15T01:13:41.902900+00:00",
+      "end": "2026-11-15T01:13:47.676997+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 82141184,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29400596480,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "67bdb42cbcd2a6266722e2ede60d8952aaf582f77097b9bce7047813b9280622"
+    }
+  ],
+  "verificationCounts": {
+    "staticSourceCases": 2,
+    "temporalCases": 5,
+    "nodeTimezoneConfigurations": [
+      "UTC",
+      "Asia/Taipei",
+      "America/New_York"
+    ],
+    "temporalExecutions": 15,
+    "relatedCases": 138,
+    "skipped": 0,
+    "actualSqlCases": 0
+  },
+  "firstCheck": {
+    "schema": "stockinsider-weekly-clock-first-check-v1",
+    "observedAt": "2026-11-15T01:12:12.011239+00:00",
+    "localCommit": "6969e94087119a23c8681aa5829385c7762ed704",
+    "wholeTree": "b547bc342e592dc1332ffee1d69cc4f26edde152",
+    "webTree": "dcc92f2bf87a4d26e48e92f3b1701a8e0273e44b",
+    "checks": [
+      {
+        "name": "clock_utc",
+        "command": [
+          "env",
+          "TZ=UTC",
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/vnext/audit-quote-clock.test.ts"
+        ],
+        "start": "2026-11-15T01:04:33.307477+00:00",
+        "end": "2026-11-15T01:04:33.808471+00:00",
+        "exit": 1,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 28520448,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29349298176,
+          "/tmp": 9403478016
+        },
+        "resourceViolation": null,
+        "logSha256": "4afd2b4c87bb1b56562aa73b0ccb5674378eb4721f02bcf853105ca906740a21"
+      },
+      {
+        "name": "clock_taipei",
+        "command": [
+          "env",
+          "TZ=Asia/Taipei",
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/vnext/audit-quote-clock.test.ts"
+        ],
+        "start": "2026-11-15T01:04:33.808919+00:00",
+        "end": "2026-11-15T01:04:34.059700+00:00",
+        "exit": 1,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 0,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29349294080,
+          "/tmp": 9403478016
+        },
+        "resourceViolation": null,
+        "logSha256": "71d174ad429c1440660121327c5a3c6c10cba999472f806f9447affb74d0ad59"
+      },
+      {
+        "name": "clock_new_york",
+        "command": [
+          "env",
+          "TZ=America/New_York",
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/vnext/audit-quote-clock.test.ts"
+        ],
+        "start": "2026-11-15T01:04:34.060072+00:00",
+        "end": "2026-11-15T01:04:34.312391+00:00",
+        "exit": 1,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 0,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29349289984,
+          "/tmp": 9403478016
+        },
+        "resourceViolation": null,
+        "logSha256": "72c758eb91d7d2b35f14465a77c29347f2ba511537324a39b5fb8f6b5ddbfb10"
+      },
+      {
+        "name": "related_unit",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/vnext/forecast-active.test.ts",
+          "web/src/lib/vnext/preparation-authority.test.ts",
+          "web/src/lib/vnext/thesis-semantic-authority.test.ts",
+          "web/src/lib/vnext/catalyst-criteria.test.ts",
+          "web/src/lib/vnext/research-failure.test.ts",
+          "web/src/lib/vnext/business-criteria.test.ts",
+          "web/src/lib/vnext/source-volume-boundary.test.ts",
+          "web/src/lib/vnext/current-evidence-read.test.ts",
+          "web/src/lib/vnext/vnext.test.ts",
+          "web/src/lib/vnext/reviewed-target.test.ts",
+          "web/src/lib/vnext/cached-admission.test.ts",
+          "web/src/lib/vnext/preparation-reconciliation.test.ts",
+          "web/src/lib/vnext/thesis.test.ts",
+          "web/src/lib/vnext/ranking-read.test.ts",
+          "web/src/lib/vnext/published-target-read.test.ts"
+        ],
+        "start": "2026-11-15T01:04:34.317408+00:00",
+        "end": "2026-11-15T01:04:37.109038+00:00",
+        "exit": 1,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 38453248,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29349236736,
+          "/tmp": 9403478016
+        },
+        "resourceViolation": null,
+        "logSha256": "2279e15b7df109aed7f5575b24a02f3be0bd1fb426154a9f21d2ce7b64159fc8"
+      },
+      {
+        "name": "types",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "typecheck"
+        ],
+        "start": "2026-11-15T01:04:37.109626+00:00",
+        "end": "2026-11-15T01:04:42.123636+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 81477632,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29349224448,
+          "/tmp": 9403478016
+        },
+        "resourceViolation": null,
+        "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+      },
+      {
+        "name": "lint",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "lint"
+        ],
+        "start": "2026-11-15T01:04:42.124075+00:00",
+        "end": "2026-11-15T01:05:01.687591+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 81264640,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29349224448,
+          "/tmp": 9403478016
+        },
+        "resourceViolation": null,
+        "logSha256": "19c877eafdc15415f5ad90d09b41a580c102658a544d359e3d8d1998689103b4"
+      },
+      {
+        "name": "build",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "build"
+        ],
+        "start": "2026-11-15T01:05:01.688364+00:00",
+        "end": "2026-11-15T01:05:13.986050+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 82612224,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29128818688,
+          "/tmp": 9403478016
+        },
+        "resourceViolation": null,
+        "logSha256": "882f0d30da513b454048870fa350ebd29046ef50b1cfb15ba006d5e366e7dd8a"
+      }
+    ],
+    "temporalResults": {
+      "configurations": 3,
+      "perConfiguration": {
+        "pass": 5,
+        "staticFail": 1
+      },
+      "sharedStaticRepeated": true,
+      "rootDriverDesignError": "shared SQL static case placed inside each TZ process, repeated the same failure before inspection"
+    },
+    "relatedResults": {
+      "total": 138,
+      "pass": 129,
+      "fail": 9,
+      "failCategories": {
+        "missingActualClockHelperClosedLoader": 8,
+        "missingActualEvidenceInstantAstBinding": 1
+      }
+    },
+    "quality": {
+      "types": "PASS",
+      "lint": "PASS",
+      "build": "PASS"
+    },
+    "correctedCausalDiagnosis": "Actual SQL fragments each once, literal successor4496/fa2 matches; JS replace replacement-template dollar-apostrophe duplicated suffix and corrupted the test reconstruction. No demonstrated SQL migration defect.",
+    "initialIncorrectCausalAssessment": "Root initially inferred six SQL occurrences from already-corrupted JS intermediate; explicitly corrected before edits or native execution",
+    "sourceInventory": [
+      {
+        "path": "migrations/20261115_vnext_weekly_quote_clock_v1.sql",
+        "sha256": "295ae9283e9e0e0cfbb9bf2bfbfae91b843b16189d73c1c8faecb22a7d20314e"
+      },
+      {
+        "path": "scripts/vnext-thesis-postgres.test.mjs",
+        "sha256": "3a6bd20e35979446f88b8e0a54f8f7e4ed4f2c1c386e1c55d10203b3ba812359"
+      },
+      {
+        "path": "web/src/lib/vnext/audit-quote-clock.test.ts",
+        "sha256": "797e98d1ba9483a85d02a1349f3a8fce6a697a2b11c7cf70de4f4060eddf3706"
+      },
+      {
+        "path": "web/src/lib/vnext/audit-quote-clock.ts",
+        "sha256": "01e3796de196cd561a4ab29c0f00aa846019881a56043684ac94db5e54b18652"
+      },
+      {
+        "path": "web/src/lib/vnext/cached-price-factors.ts",
+        "sha256": "6b11eed47efa64a33c702754312f42540a617abb6a4d869940473e4c8eb205f9"
+      },
+      {
+        "path": "web/src/lib/vnext/current-evidence-read.test.ts",
+        "sha256": "ab633cd064966ca46ee44db029ec3b87758f939896aa00fe36bdecaeaeec24ec"
+      },
+      {
+        "path": "web/src/lib/vnext/current-evidence-read.ts",
+        "sha256": "615b7cb737457571c529db823be02057951f5b94721d927f8303ab86b90dfff3"
+      },
+      {
+        "path": "web/src/lib/vnext/factors.ts",
+        "sha256": "7165c921189f5884a2fce407477c3b1cc05318adcdf5ef626fdafe5761cb0c15"
+      },
+      {
+        "path": "web/src/lib/vnext/preparation-authority.test.ts",
+        "sha256": "694aea4fbddadf430ad2234729cdf30ce9b0893b56bd0cce66e3e2aad2922f6e"
+      },
+      {
+        "path": "web/src/lib/vnext/reviewed-target.test.ts",
+        "sha256": "e49d3a6a080c85100b3a1534d2145b130804404d020e93e96d820a03fb3c03e5"
+      },
+      {
+        "path": "web/src/lib/vnext/reviewed-target.ts",
+        "sha256": "0bf6e9574dd2b25a73b6ce2ba20c70445bd99301e32360e7c516b3e0ff7da129"
+      },
+      {
+        "path": "web/src/lib/vnext/reviewed-valuation.ts",
+        "sha256": "f6facac58e352c119b0202946dcacd4665db1c568b2cba21175d3cb226f810a7"
+      },
+      {
+        "path": "web/src/lib/vnext/thesis-audit.ts",
+        "sha256": "a21f45cfbd3cdb9101eb71630c2afe8579ecedcae487a652c14ea5b5d29ac660"
+      },
+      {
+        "path": "web/src/lib/vnext/thesis.test.ts",
+        "sha256": "29b74f53e52ddac6cd6d2a10a83d19b67ddac0c9162a5a4e02bce203af3d50be"
+      }
+    ],
+    "status": "LOCAL_HOLD_UNTIL_MATERIAL_TEST_AND_DRIVER_FIX_INDEPENDENT_REVIEW",
+    "nativeHold": "UNCHANGED_NOT_RUN",
+    "actualSql": "NOT_RUN",
+    "originalNativeTapCause": "UNPROVEN_NO_ASSERTION_LINE",
+    "published": false
+  },
+  "repair": {
+    "productionAndNativeSourceChangedAfterFirstCheck": false,
+    "sqlSha256Unchanged": "295ae9283e9e0e0cfbb9bf2bfbfae91b843b16189d73c1c8faecb22a7d20314e",
+    "staticLiteralReplacement": "callback replacement preserves dollar-apostrophe literally; exact once-only fragments and successor hash",
+    "closedVmLoaders": "actual pure clock/date helper dependencies, no broad import or fabricated clock",
+    "astBinding": "actual evidenceInstant supplied, original vectors unchanged",
+    "driverSha256": "40a5a13ce21a4c85e477ff07a9d0b910f95ae5f8ccaee35a1013e24aaaa04eab",
+    "driver": "reviewed frozen command list, STATIC once first, any failure records later NOT_RUN and breaks",
+    "driverHasSeparateRuntimeCommandWhitelistAssertion": false,
+    "localHoldResumedOnlyAfterMaterialRepairAndIndependentReview": true
+  },
+  "clockContract": {
+    "sessionQuoteAtValuationAt": "civil dates, existing public identity and frozen history unchanged",
+    "observedKnown": "explicit zone-bearing instants observed<=known<=cutoff, exact microseconds",
+    "missingBareFuture": "fail closed, no midnight or cutoff fallback",
+    "financialSemanticMarket": "own independent evidence clocks only",
+    "formalQuoteAuthority": "STILL_NULL_COMPARISON_CLOCKS_NOT_AUTHORITY"
+  },
+  "sqlCandidate": {
+    "sourceOnly": true,
+    "predecessorBytes": 3296,
+    "predecessorHash": "12b3cf00b3558c1e80008c7ba905e6482e7c9ef4fc7f5f50df71fd644a27044c",
+    "successorBytes": 4496,
+    "successorHash": "fa2aea3377a3cc60d7e69ecd567d4ca10d596789e89e097d936798d01695044e",
+    "fragmentOccurrenceCounts": [
+      1,
+      1,
+      1
+    ],
+    "actualSyntaxTimezoneAclRlsAcceptance": "NOT_RUN_HOLD",
+    "oldMigrationsAndAclSourceUnchanged": true
+  },
+  "nativeFixture": {
+    "path": "scripts/vnext-thesis-postgres.test.mjs",
+    "change": "two explicit synthetic observedAt/availableAt quote properties only",
+    "assertionsPinsGuardsUnchanged": true,
+    "execution": "NOT_RUN_HOLD"
+  },
+  "externalTrace": {
+    "commit": "1b2e45dd897157a7438db34f19b961d07c5ba077",
+    "gitBlob": "b15413cb0a94ed4f3581467b6a197f733a055874",
+    "cloudObservation": "SANITIZED_METADATA_ONLY",
+    "originalTaipei0141DateClockOffset": "approximately6h19future from civil ISO date parsedUTC midnight",
+    "originalNativeTapFirstCause": "UNPROVEN_NO_ASSERTION_LINE",
+    "cachedPreparation": "reported static hash and IR lineage match; concrete preflight assertion unresolved"
+  },
+  "engineeringReview": {
+    "openP0": 0,
+    "openP1": 0,
+    "formalA1": false
+  },
+  "limits": {
+    "nativeHold": "PRESERVED",
+    "actualSqlApply": "NOT_RUN",
+    "postgresTimezoneParity": "NOT_RUN",
+    "realQuoteRightsActionsAuthority": "NOT_CONFIGURED_UNCHANGED",
+    "actualWeeklyResearchAcceptance": false,
+    "originalPrHead": "UNCHANGED",
+    "productionActions": 0,
+    "timersChanged": false,
+    "paidCalls": 0
+  },
+  "preservation": {
+    "originalFiles": 283,
+    "changed": 0,
+    "missing": 0,
+    "archiveOrRecoveryVerified": false,
+    "reclaimedBytes": 0
+  }
+}

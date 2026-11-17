@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "stockinsider-t09-public-outcome-clock-v1",
+  "recordedAt": "2026-11-17T19:57:29.433171+00:00",
+  "parent": "1430624a810bfb76e56ed2822b1f62e6eedf2ea4",
+  "scope": "Contabo isolated staging; real API and detail route code driven by synthetic outcome receipts",
+  "tiesOutcomeObservationToFrozenRankingCutoff": true,
+  "rejectsSettledSessionBeyondTaipeiObservationDate": true,
+  "rejectsExecutionBeforeModeledEntry": true,
+  "preservesScheduledPendingDates": true,
+  "addsNoPublicOutcomeFields": true,
+  "tests": {
+    "passed": 31,
+    "failed": 0,
+    "tapSha256": "1f8e3bc5fdeda35431143895ac8155a0fea6181fc46a575b88ed77e112cc4e35",
+    "parentExpectedFailure": true,
+    "parentTapSha256": "6e5a2b4d845d1d5192c2766506407a93af036080f9acd36b26e90142cb17e14d"
+  },
+  "build": {
+    "node": "22.14.0",
+    "next": "16.3.4",
+    "typesPassed": true,
+    "lintPassed": true,
+    "lintWarnings": 37,
+    "productionBuildPassed": true,
+    "requiredServerFilesSha256": "606c0683cdc51a48298558396ee10de88471098cb5ee452bc90175595b584c48"
+  },
+  "sourceSha256": {
+    "web/src/lib/vnext/launch-outcome-public.ts": "e21ac5e91c4b24e8424de73d10d69a3bbaa894c133dd9a359f1a0e8277224e5a",
+    "web/src/lib/vnext/launch-outcome-public.test.ts": "133528b3bbd1a88f7536d14375cee9b971350645946a3e169cf3f8732c8ac06d",
+    "web/src/lib/vnext/launch-outcome.test-fixture.ts": "50814d1d757ea331ca49cd39c38768d3dc41652c29e4e0b368ac91614cee2bc5",
+    "web/src/app/api/launch-ranking/route.ts": "47572380dd64504c0efb1b9de6210cdc8adc9f7778b84edb2e3ece1e5767c402",
+    "web/src/app/components/vnext/LaunchDetail.tsx": "803337df4eb09e34bb18376aa748e9c3f6e44fe7bcf476a14b597d189e9a16b8",
+    "web/src/lib/vnext/launch-public-api.test.ts": "1d2498a15cab11f042056567a797879580309cd9e50e7e297845fde38a785b8f",
+    "web/src/lib/vnext/launch-page-dispatch.test.ts": "8d518d8f8627970ec49213d94f4b1a2c14f2097b0ac1543437ccbaaab8433d54"
+  },
+  "realPublishedSignalPerformanceVerified": false,
+  "productionDeploymentPerformed": false
+}

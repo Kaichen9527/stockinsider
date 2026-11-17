@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "t06-signed-disposition-live-observation-schedule-v1",
+  "environment": "Contabo isolated staging",
+  "sourceCommit": "c1b218568a079b23dc1af1d63d9d07cb464aba77",
+  "installedRunnerSha256": "ed32aeb7523163451ddc6d921d74be849711cef0ebc3bc3195690cb2cc3e4baf",
+  "migrationSha256": "91dfe4cfdaa85242b136af91b7b8d36fa45a6708120a6214347f2b6e00c37806",
+  "isolatedSupportSha256": "6a26f0c331d08f9589ff1fc6b05e5899f3373640813b4bcae9c387eaceb65d08",
+  "bootstrapBundleSha256": "7dd1a8941749cfc2cba29f4791c481e1d1d6a5fdc6e508b4d4904381ac087caf",
+  "captureDatasets": [
+    29082,
+    11396
+  ],
+  "verifiedReadinessAt": "2026-11-17T00:17:30+08:00",
+  "startAt": "2026-11-17T21:25:00+08:00",
+  "latestPermittedStartExclusive": "2026-11-17T21:27:00+08:00",
+  "cutoff": "2026-11-17T21:30:00+08:00",
+  "timer": {
+    "state": "waiting",
+    "persistent": false,
+    "lastTrigger": null,
+    "liveReceiptPresent": false
+  },
+  "limits": {
+    "diskAdmissionGiB": 17,
+    "availableMemoryAdmissionGiB": 2.75,
+    "serviceMemoryLimitMiB": 512,
+    "serviceCpuPercent": 100,
+    "runtimeLimitSeconds": 360
+  },
+  "fixture": {
+    "runCompletedAt": "2026-11-16T16:16:50.484227+00:00",
+    "facts": [
+      {
+        "datasetId": 29082,
+        "fourDigitFacts": 1,
+        "artifactReadbackVerified": true,
+        "duplicateReadySameId": true,
+        "fixtureReadbackPassed": true
+      },
+      {
+        "datasetId": 11396,
+        "fourDigitFacts": 1,
+        "artifactReadbackVerified": true,
+        "duplicateReadySameId": true,
+        "fixtureReadbackPassed": true
+      }
+    ],
+    "auth": {
+      "badSignatureHttp": 401,
+      "ephemeralPostgrestUnixOnly": true,
+      "leaseReleased": true,
+      "writesAfterNegativeRequests": 0,
+      "wrongLeaseHttp": 400,
+      "wrongWriterReleaseHttp": 400
+    },
+    "scratchRemoved": true
+  },
+  "receiptScope": "Publisher CSVs and genuine signed queue path in a disposable database, with staging identities and fixture exchange calendars. Neither upstream calendar production nor full ranking acceptance is claimed.",
+  "formalChanges": false,
+  "liveRankAccepted": false,
+  "productionBuild": {
+    "next": "16.3.4",
+    "result": "pass",
+    "staticOutputs": 92,
+    "sha256": "af3082afb8f02110af944b7e965c2854e6f3ad2b62a8a6334f1e2751511a262f"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "stockinsider-t10-launch-schedule-candidate-v1",
+  "issue": 395,
+  "baseCommit": "eb27ae1c89bcfae4452321e8a54158e184631dd5",
+  "mode": "isolated_staging_tests",
+  "node": "22.23.1",
+  "systemd": "255",
+  "environment": {
+    "freeDiskMiB": 25307,
+    "availableMemoryMiB": 4010
+  },
+  "checks": {
+    "schedule": {
+      "passed": 12,
+      "failed": 0
+    },
+    "package": {
+      "passed": 7,
+      "failed": 0
+    },
+    "typescriptRouteSyntax": "pass",
+    "unitFileVerification": "pass",
+    "parsedTaipeiSlots": "winter_and_summer_pass"
+  },
+  "publicationOwner": "stockinsider-research-cycle.service",
+  "timeZone": "Asia/Taipei",
+  "calendar": [
+    "08:15:00",
+    "21:30:00"
+  ],
+  "candidateInstalled": false,
+  "productionMutation": false,
+  "realWritesVerified": false,
+  "weeklyAuditScheduled": false,
+  "modelVerifiedForThisRun": false,
+  "closeObservationDates": [
+    "2026-11-16",
+    "2026-11-17"
+  ],
+  "closeObservationState": "timers_waiting",
+  "pendings": [
+    "approved_market_breadth_and_flow",
+    "weekly_active_audit",
+    "protected_release_review",
+    "required_cloud_app_ci",
+    "actual_release_cutover"
+  ]
+}

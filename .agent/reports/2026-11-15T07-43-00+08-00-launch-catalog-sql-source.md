@@ -1,0 +1,7 @@
+# Candidate catalog and SQL source checkpoint — engineering only
+
+Source32bd9df/localb806546 identical tree:38 related tests/types/lint/build and2 actual unavailable Next.js browser profiles PASS. The two failed browser attempts, emitted-code TDZ observation and material fixed-import repair are retained; independent source/emitted-artifact review preceded local retry. Actual metadata/mutation producer remains missing and hard-disabled; no complete real history or never-admitted proof.
+
+Source763a0c6/local342c65d identical whole tree:12 STATIC source checks/build PASS, unchanged validated web tree. New16-rule SQL score/qualification/immutable CAS/read source is unexecuted. No grammar/ACL/RLS/codec/commit/concurrency/PostgREST/retention or real ranking claim. Next classification separates known authoritative per-member exclusions from required unknown/prior-date retention; no source_ok bypass. Source/use-purpose/venue/action/market producer gaps and charts/support/counter/finance/valuation/TWSE flow links remain.
+
+Receipts: docs/operations/2026-11-15/launch-radar/launch-candidate-catalog-checks.json and launch-sql-source-checks.json. Original283 work files unchanged/missing0, no recovery archive/reclamation. Root actual runtime model remains NOT_OBSERVED; source author/reviewer selected Sol High is not a model attestation. Formal A1/native HOLD/original PR head/production services, flags and timers untouched. No Contabo/SQL/keys/private source IO.

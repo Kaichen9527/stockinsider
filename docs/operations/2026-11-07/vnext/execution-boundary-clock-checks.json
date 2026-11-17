@@ -1,0 +1,497 @@
+{
+  "scope": "source/unit/synthetic cached transport/mock execution boundary and actual local HTTP/SSR/Chromium with synthetic RPC; no live staging/native/real-source acceptance",
+  "sourceCommit": "209b29076637f39bb84b81e7ed567e7c8c50d897",
+  "implementationCommit": "9af61c01e1cb5af82e136107b2fad0d8b22ccdfa",
+  "baseCommit": "b621ba1eeb2c1390584df0a488bc1c075ae4aa2a",
+  "sourceTree": "6b6ed87594c57b38d44026a59c4da00d55fc36e0",
+  "runtimeWebTree": "f1b12580892c1e185cfa0e46b9743e3efc6ba86c",
+  "branch": "codex/stockinsider-v2-cloud-nov07",
+  "originalPrHeadRequired": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "authorsAndReviewer": {
+    "model": "GPT-6.1 Sol",
+    "reasoningEffort": "high",
+    "authorAgents": [
+      "execution_boundary_sol",
+      "source_qualification_gap_sol"
+    ],
+    "independentEngineeringReviewer": "boundary_review_sol",
+    "formalReviewBinding": "BLOCKED_NOT_REPLACED"
+  },
+  "finalChecks": [
+    {
+      "name": "focused",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/top10-projection.test.ts",
+        "web/src/lib/vnext/published-target-read.test.ts",
+        "web/src/lib/vnext/ranking-read.test.ts",
+        "web/src/lib/vnext/candidate-page.test.ts",
+        "web/src/lib/stock-chart-calendar.test.ts",
+        "web/src/app/components/vnext/detail-source.test.mjs",
+        "scripts/vnext-ranking-snapshot-source.test.mjs",
+        "web/src/lib/stock-chart-supply.test.ts",
+        "web/src/lib/vnext/business-public.test.ts",
+        "web/src/lib/vnext/vnext.test.ts",
+        "scripts/vnext-staging-preflight.test.mjs",
+        "web/src/lib/vnext/candidate-history-read.test.ts",
+        "scripts/vnext-candidate-history-source.test.mjs",
+        "web/src/lib/candidate-price-history.test.ts",
+        "scripts/vnext-source-window-source.test.mjs",
+        "web/src/lib/vnext/source-volume-boundary.test.ts",
+        "web/src/lib/vnext/analysis-sources.test.ts",
+        "web/src/lib/vnext/source-backlog.test.ts",
+        "web/src/lib/vnext/cached-admission.test.ts",
+        "web/src/lib/vnext/current-evidence-read.test.ts",
+        "web/src/lib/vnext/preparation-authority.test.ts",
+        "scripts/vnext-weekly-forecast-source.test.mjs",
+        "web/src/lib/vnext/forecast-active.test.ts",
+        "web/src/lib/vnext/forecast-current.test.ts",
+        "web/src/lib/vnext/thesis.test.ts",
+        "scripts/vnext-staging-execution-boundary.test.mjs",
+        "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+        "web/src/lib/tw-entry-plan-authority.test.ts"
+      ],
+      "start": "2026-11-07T14:52:08.871897+00:00",
+      "end": "2026-11-07T14:52:12.137651+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40873984,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31577001984,
+        "/tmp": 9422872576
+      },
+      "resourceViolation": null,
+      "logSha256": "b5903b418d92e1fd64e07c72fb492c1dc22ad8ece3b694f7c852a2e12c118cd4"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-07T14:52:12.138192+00:00",
+      "end": "2026-11-07T14:52:14.395102+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40218624,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31576993792,
+        "/tmp": 9422872576
+      },
+      "resourceViolation": null,
+      "logSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-07T14:52:14.395447+00:00",
+      "end": "2026-11-07T14:52:32.195186+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 41054208,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31576993792,
+        "/tmp": 9422872576
+      },
+      "resourceViolation": null,
+      "logSha256": "84df8aab33a2588ebae98ea51a5abfccb758ea53330f1013e6b9766025759b29"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-07T14:52:32.195557+00:00",
+      "end": "2026-11-07T14:52:36.712406+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40144896,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31489454080,
+        "/tmp": 9422872576
+      },
+      "resourceViolation": null,
+      "logSha256": "fdafe82de595ac9c9c2cdfd45ce0b7b74d6d69354985ab51d1df8da02b9793a5"
+    },
+    {
+      "name": "browser",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/vnext-ranking-browser-smoke.mjs"
+      ],
+      "start": "2026-11-07T14:52:36.712810+00:00",
+      "end": "2026-11-07T14:52:42.730064+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 154533888,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31486636032,
+        "/tmp": 9301569536
+      },
+      "resourceViolation": null,
+      "logSha256": "0d58dfa1487a6634be4f05dcc08790a22514a581de65b0ed28653bb03f4e7f28"
+    }
+  ],
+  "focusedTotals": {
+    "pass": 256,
+    "fail": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 34
+  },
+  "browser": {
+    "scope": "actual isolated HTTP/SSR/Chromium desktop/mobile; synthetic RPC transport only, no native PG/review authority",
+    "status": "PASS",
+    "source": "209b29076637f39bb84b81e7ed567e7c8c50d897",
+    "harnessCommit": "209b29076637f39bb84b81e7ed567e7c8c50d897",
+    "runtimeWebTree": "f1b12580892c1e185cfa0e46b9743e3efc6ba86c",
+    "browserVersion": "151.0.7922.173",
+    "checks": [
+      "desktop:top0",
+      "desktop:top1",
+      "desktop:top10",
+      "desktop:bound-detail-invalidity",
+      "desktop:wrong-revision-closed",
+      "desktop:stable-page-private-allowlist",
+      "desktop:saved-history-version-and-observed-exit",
+      "mobile:top0",
+      "mobile:top1",
+      "mobile:top10",
+      "mobile:bound-detail-invalidity",
+      "mobile:wrong-revision-closed",
+      "mobile:stable-page-private-allowlist",
+      "mobile:saved-history-version-and-observed-exit"
+    ],
+    "readRpcCalls": 23,
+    "writeRpcCalls": 0,
+    "providerCalls": 0
+  },
+  "browserCleanup": {
+    "appPid": 21271,
+    "appExit": 143,
+    "appSignal": null,
+    "bridgeClosed": true
+  },
+  "initialAttempt": {
+    "sourceCommit": "9af61c01e1cb5af82e136107b2fad0d8b22ccdfa",
+    "checks": [
+      {
+        "name": "focused",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/vnext/top10-projection.test.ts",
+          "web/src/lib/vnext/published-target-read.test.ts",
+          "web/src/lib/vnext/ranking-read.test.ts",
+          "web/src/lib/vnext/candidate-page.test.ts",
+          "web/src/lib/stock-chart-calendar.test.ts",
+          "web/src/app/components/vnext/detail-source.test.mjs",
+          "scripts/vnext-ranking-snapshot-source.test.mjs",
+          "web/src/lib/stock-chart-supply.test.ts",
+          "web/src/lib/vnext/business-public.test.ts",
+          "web/src/lib/vnext/vnext.test.ts",
+          "scripts/vnext-staging-preflight.test.mjs",
+          "web/src/lib/vnext/candidate-history-read.test.ts",
+          "scripts/vnext-candidate-history-source.test.mjs",
+          "web/src/lib/candidate-price-history.test.ts",
+          "scripts/vnext-source-window-source.test.mjs",
+          "web/src/lib/vnext/source-volume-boundary.test.ts",
+          "web/src/lib/vnext/analysis-sources.test.ts",
+          "web/src/lib/vnext/source-backlog.test.ts",
+          "web/src/lib/vnext/cached-admission.test.ts",
+          "web/src/lib/vnext/current-evidence-read.test.ts",
+          "web/src/lib/vnext/preparation-authority.test.ts",
+          "scripts/vnext-weekly-forecast-source.test.mjs",
+          "web/src/lib/vnext/forecast-active.test.ts",
+          "web/src/lib/vnext/forecast-current.test.ts",
+          "web/src/lib/vnext/thesis.test.ts",
+          "scripts/vnext-staging-execution-boundary.test.mjs",
+          "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+          "web/src/lib/tw-entry-plan-authority.test.ts"
+        ],
+        "start": "2026-11-07T14:49:12.938235+00:00",
+        "end": "2026-11-07T14:49:16.454870+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 40972288,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider": 31458410496,
+          "/tmp": 9422872576
+        },
+        "resourceViolation": null,
+        "logSha256": "b1afe5d2b345174f95652e6bd9d6a093d0f2c01f2dbb89ae90c3bd1fb17a14e0"
+      },
+      {
+        "name": "types",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "typecheck"
+        ],
+        "start": "2026-11-07T14:49:16.455356+00:00",
+        "end": "2026-11-07T14:49:18.711999+00:00",
+        "exit": 2,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 41078784,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider": 31458394112,
+          "/tmp": 9422872576
+        },
+        "resourceViolation": null,
+        "logSha256": "6a7adb0411f3793794b3d940f9afc8a07e4c29552fec95f8b0c0358fd4406546"
+      },
+      {
+        "name": "lint",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "lint"
+        ],
+        "start": "2026-11-07T14:49:18.712556+00:00",
+        "end": "2026-11-07T14:49:36.012516+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 40931328,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider": 31458390016,
+          "/tmp": 9422872576
+        },
+        "resourceViolation": null,
+        "logSha256": "84df8aab33a2588ebae98ea51a5abfccb758ea53330f1013e6b9766025759b29"
+      },
+      {
+        "name": "build",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "build"
+        ],
+        "start": "2026-11-07T14:49:36.012890+00:00",
+        "end": "2026-11-07T14:49:40.529318+00:00",
+        "exit": 1,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 41054208,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider": 31357194240,
+          "/tmp": 9422872576
+        },
+        "resourceViolation": null,
+        "logSha256": "a55479a1865d90639b7bff68edb73369ce9c9b4c97ff0866cd13100760ea27df"
+      },
+      {
+        "name": "browser",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "scripts/vnext-ranking-browser-smoke.mjs"
+        ],
+        "start": "2026-11-07T14:49:40.529736+00:00",
+        "end": "2026-11-07T14:49:41.030801+00:00",
+        "exit": 1,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 126898176,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider": 31577067520,
+          "/tmp": 9422872576
+        },
+        "resourceViolation": null,
+        "logSha256": "d32b5d7f5a9f61cd46b12f4025c15c6a8c894fc7cad1bb77ef9fe0e83a5b5c49"
+      }
+    ],
+    "cause": "four TS7006 implicit-any errors in new test fixture; types/build failed",
+    "browserFailure": {
+      "status": "FAIL",
+      "error": "app_exited",
+      "checks": [],
+      "readRpcCalls": 0
+    },
+    "browserCleanup": {
+      "appPid": 20542,
+      "appExit": 1,
+      "appSignal": null,
+      "bridgeClosed": true
+    },
+    "browserAcceptance": "NOT_REACHED; supervisor erroneously attempted after failed build",
+    "fixCommit": "209b29076637f39bb84b81e7ed567e7c8c50d897",
+    "fix": "type-only Row annotations; reviewer verified equivalent transpiled runtime AST and unchanged assertions; one rerun approved; supervisor now requires successful build before browser",
+    "diagnostics": [
+      "tw-entry-plan-authority-clock.test.ts(31,99): TS7006 row implicit any",
+      "tw-entry-plan-authority-clock.test.ts(35,72): TS7006 row implicit any",
+      "tw-entry-plan-authority-clock.test.ts(35,116): TS7006 row implicit any",
+      "tw-entry-plan-authority-clock.test.ts(39,13): TS7006 row implicit any"
+    ]
+  },
+  "independentReview": {
+    "sourceCasesPassed": 36,
+    "stagingCasesPassed": 31,
+    "blocker": 0,
+    "high": 0,
+    "limits": "source/mock engineering review only; not formal A1 or live resource/provenance assurance",
+    "commands": [
+      {
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+          "web/src/lib/tw-entry-plan-authority.test.ts",
+          "web/src/lib/vnext/cached-admission.test.ts",
+          "web/src/lib/vnext/current-evidence-read.test.ts"
+        ],
+        "pass": 36,
+        "fail": 0,
+        "skip": 0
+      },
+      {
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--test",
+          "scripts/vnext-staging-execution-boundary.test.mjs",
+          "scripts/vnext-staging-preflight.test.mjs"
+        ],
+        "pass": 31,
+        "fail": 0,
+        "skip": 0
+      },
+      {
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--test",
+          "scripts/vnext-staging-execution-boundary.test.mjs"
+        ],
+        "pass": 16,
+        "fail": 0,
+        "skip": 0,
+        "scope": "subset rerun after standard JSON whitespace correction; not additional unique cases"
+      }
+    ],
+    "receiptReviewedNoOverclaim": true
+  },
+  "resourcePolicy": {
+    "serialHeavyChecks": true,
+    "minimumFilesystemFreeBytes": 8589934592,
+    "admissionReferenceBytes": 536870912,
+    "sampledTreeRssCeilingBytes": 8589934592,
+    "samplingSeconds": 0.25,
+    "sampledNotInstantaneousOrCgroupMax": true,
+    "cachedBuildAvailable": true
+  },
+  "readinessNamesOnly": {
+    "environmentId": "ccarenv_b64_Y2NhcmVudl82ODU0YWE3YmQ3MjA4MTkxYjJiNTQxYTc1M2NkOTM3Zg",
+    "sourceConfigVersionId": "311bc521-54bb-49bc-9475-35870c957a4d~cecfgver_6ac23d874ba881a3bc669bc61427c657",
+    "specRevision": "1",
+    "observedSpecRevision": "1",
+    "observationsCurrent": true,
+    "observedPhase": "running",
+    "network": {
+      "mode": "restricted",
+      "state": "enforced",
+      "customAllowedHosts": [],
+      "presets": [
+        "package_managers"
+      ]
+    },
+    "secretBindingNames": [],
+    "runtimeVariableNames": [],
+    "outboundIdentityAliases": [],
+    "platformStagingExecutor": "NOT_OBSERVED",
+    "vpnEnrollment": "NOT_OBSERVED",
+    "exactDestinationApproval": "NOT_OBSERVED",
+    "ephemeralSshAgentProvenance": "NOT_OBSERVED",
+    "liveConnector": "NOT_IMPLEMENTED_NOT_ADMITTED"
+  },
+  "sourceFilesSha256": {
+    "deployment/staging/vnext/execution-boundary.mjs": "b838b30a5be247669967b9f4d70ca53923cc377ff60279996581b4215f53585c",
+    "deployment/staging/vnext/verify.mjs": "47282d2e10f9b282f4d7226f5e931011b176603ac2781f6346b84bd95e8c5276",
+    "scripts/vnext-staging-execution-boundary.test.mjs": "c45eb04408a55fc7d5a5a27c162b4b098ae8e3ff80326d8f9b220d46714069e7",
+    "web/src/lib/tw-entry-plan-authority.ts": "8a2f9622e3f5a55a31541e7fdd951f53ab9344cc386bcc5a8f208189c6299928",
+    "web/src/lib/tw-entry-plan-authority-clock.test.ts": "a50f5355988920949930be24674afa23a588d4bc6e852fe862cc923a460120fd"
+  },
+  "retainedFailureLogSha256": {
+    "types-initial.log": "6a7adb0411f3793794b3d940f9afc8a07e4c29552fec95f8b0c0358fd4406546",
+    "build-initial.log": "a55479a1865d90639b7bff68edb73369ce9c9b4c97ff0866cd13100760ea27df",
+    "browser/next.log": "9bee286da10a84cd05217ac16cc2c401b48eb818a083b33a0e5860a1ec9cdf87"
+  },
+  "execution": {
+    "productionState": "Disabled",
+    "executable": false,
+    "liveAdapter": "NOT_IMPLEMENTED_NOT_ADMITTED",
+    "fixtureSuccessState": "FixtureOnly",
+    "stagingAcceptance": "NOT_RUN",
+    "capacityProvesIsolation": false,
+    "realResourceCustody": "NOT_OBSERVED"
+  },
+  "preservedGates": {
+    "native": "HOLD_NOT_RETRIED",
+    "formalIndependentReview": "BLOCKED",
+    "protectedReviewBinding": "BLOCKED",
+    "liveStaging": "NOT_RUN",
+    "realLegalSourceDistinctAuthorReviewWebsitePositive": "NOT_RUN",
+    "twoActualAdjacentPostCloseSessions": "NOT_RUN",
+    "CI": "REQUIRED_NOT_TRIGGERED",
+    "release": "BLOCKED"
+  },
+  "remainingFormalAuthorityGaps": [
+    "hidden_newer_financial_correction_completeness",
+    "current_financial_rights",
+    "published_action_target",
+    "price_dataset_binding",
+    "weekly_shared_cutoff",
+    "published_requalification_protocol"
+  ],
+  "formalBodyPin": "unchanged; internal source-versus-close millisecond guard remains pinned/unresolved; no full formal precision closure",
+  "operatorReport": "staging Tailscale auth key filled in secure draft; actual publication confirmation and Contabo one-time registration pending; not read or verified here",
+  "prohibitedActionsExecuted": {
+    "newTaskOrExecutor": 0,
+    "keyGenerationOrHandling": 0,
+    "networkConfigChange": 0,
+    "sshOrContabo": 0,
+    "sqlOrPg": 0,
+    "writerOrSchedules": 0,
+    "oldVmOrIcloud": 0,
+    "mergeOrDeploy": 0
+  },
+  "bytesReclaimed": 0,
+  "verifiedArchiveLocation": null,
+  "formalBodySha256": "2658fdf4e16a5f080882b0d020021dbf59766253079167269bbabf4db7605e17",
+  "remoteBeforePush": {
+    "protectionBranch": "b621ba1eeb2c1390584df0a488bc1c075ae4aa2a",
+    "originalPrHead": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+    "prDraft": true
+  }
+}

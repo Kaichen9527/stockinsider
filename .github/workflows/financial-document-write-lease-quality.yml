@@ -5,6 +5,10 @@ on:
     paths:
       - '.github/workflows/financial-document-write-lease-quality.yml'
       - 'scripts/candidate-financial-document-write-lease-route.test.mjs'
+      - 'scripts/vnext-financial-preparation-source.test.mjs'
+      - 'web/src/app/api/internal/candidate-financial-queue-drain/route.ts'
+      - 'web/src/lib/vnext/financial-preparation*.ts'
+      - 'migrations/*_vnext_financial_preparation*.sql'
       - 'web/src/app/api/internal/candidate-financial-documents/**'
       - 'web/src/lib/production-write-lease.ts'
       - 'web/src/lib/candidate-financial-artifact.ts'
@@ -38,7 +42,11 @@ jobs:
           node-version: '22.14.0'
       - name: Install exact locked test dependencies without lifecycle scripts
         run: npm --prefix web ci --ignore-scripts
-      - name: Execute actual upload and worker routes with synthetic boundaries
+      - name: Generate official authority module from repository inputs
+        run: node web/scripts/sync-official-authority.mjs
+      - name: Execute actual upload, acquisition and parser routes with synthetic boundaries
         run: >-
-          node --test --test-concurrency=1
+          node --experimental-strip-types --test --test-concurrency=1
           scripts/candidate-financial-document-write-lease-route.test.mjs
+          scripts/vnext-financial-preparation-source.test.mjs
+          web/src/lib/vnext/financial-preparation.test.ts

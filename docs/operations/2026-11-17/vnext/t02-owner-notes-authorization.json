@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "stockinsider-owner-notes-authorization-v1",
+  "parent": "0f460f611522ce44a65f187eceed105163f3f29d",
+  "scope": "Existing operator-authored InvestAnchors and Telegram summaries with active source rights, never publisher originals",
+  "activation": {
+    "settings": "STOCKINSIDER_OWNER_OIDC_ENABLED and protected STOCKINSIDER_OWNER_RESEARCH_BINDINGS",
+    "bindings": "One-to-one, server-only JSON object from verified identity-provider subject to existing approved source-rights subject",
+    "configurationInstalled": false,
+    "productionMigrationApplied": false
+  },
+  "staging": {
+    "postgresVersion": "17.11",
+    "nodeVersion": "22.14.0",
+    "realNativeDatabaseSyntheticData": true,
+    "nativeTestsPassed": 3,
+    "ownerAuthenticationTestsPassed": 47,
+    "typescriptTranspileChecksPassed": true,
+    "bothIdentitiesIsolated": true,
+    "unmappedSubjectNoRead": true,
+    "rawProducerFieldsRefused": true,
+    "expiredSourcePolicyAndWithdrawalDoNotReturnNotes": true,
+    "historicalRowsPreserved": true,
+    "logoutWhileReadingReturnsNoNotes": true,
+    "existingPrivateNoStoreContractRetained": true,
+    "formalServiceSignaturesMatched": true
+  },
+  "remaining": {
+    "realGoogleHttpsOwnerCallback": true,
+    "bindAuthorizedOwnerRights": true,
+    "exactBuildBrowserAndPublicPayloadValidation": true
+  }
+}

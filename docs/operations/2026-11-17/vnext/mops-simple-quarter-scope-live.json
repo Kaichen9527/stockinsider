@@ -1,0 +1,255 @@
+{
+  "task": "T07 scope-preserving MOPS archive reading",
+  "base": "8e4373eed4831a99986b856ea557ea5aa4b80bd3",
+  "environment": {
+    "kind": "Contabo isolated staging",
+    "node": "22.14.0",
+    "next": "16.3.4"
+  },
+  "observations": [
+    {
+      "status": "archive_observed",
+      "schemaVersion": "vnext-mops-simple-forecast-capture-v2",
+      "symbol": "2454",
+      "market": "TWSE",
+      "coveredQuarters": [
+        3
+      ],
+      "publishedDate": "2026-07-31",
+      "knownAt": "2026-11-16T17:23:06.775Z",
+      "sourcePage": "https://mopsov.twse.com.tw/mops/web/t163sb10",
+      "listingReceipt": {
+        "sha256": "5bc6e8cdc0f12c5ca5560a383b2ee602732c71fce39540fa2b1e4bbf1ce6833e",
+        "bytes": 5107,
+        "acquiredAt": "2026-11-16T17:23:06.421Z"
+      },
+      "detailReceipt": {
+        "sha256": "7e887bccc8b11c609402225be3831c6ad0f1f28b0bc201f6de097327d9f0c6c5",
+        "bytes": 13327,
+        "acquiredAt": "2026-11-16T17:23:06.775Z"
+      },
+      "observation": {
+        "issuerName": "聯發科技股份有限公司",
+        "year": 2026,
+        "unit": "TWD_per_share",
+        "classification": "issuer_disclosed_forecast",
+        "shareBasis": null,
+        "denominatorShares": null,
+        "quarters": [
+          {
+            "quarter": 3,
+            "eps": {
+              "kind": "range",
+              "low": 12.88,
+              "high": 15.74
+            }
+          }
+        ],
+        "comparativeQuarters": [
+          {
+            "quarter": 1,
+            "eps": {
+              "kind": "point",
+              "value": 15.17
+            }
+          },
+          {
+            "quarter": 2,
+            "eps": {
+              "kind": "point",
+              "value": 15.28
+            }
+          }
+        ],
+        "annual": null,
+        "displayedCumulative": {
+          "throughQuarter": 3,
+          "eps": {
+            "kind": "range",
+            "low": 43.33,
+            "high": 46.19
+          }
+        }
+      }
+    },
+    {
+      "status": "archive_observed",
+      "schemaVersion": "vnext-mops-simple-forecast-capture-v2",
+      "symbol": "2454",
+      "market": "TWSE",
+      "coveredQuarters": [
+        2
+      ],
+      "publishedDate": "2026-04-30",
+      "knownAt": "2026-11-16T17:23:08.222Z",
+      "sourcePage": "https://mopsov.twse.com.tw/mops/web/t163sb10",
+      "listingReceipt": {
+        "sha256": "5bc6e8cdc0f12c5ca5560a383b2ee602732c71fce39540fa2b1e4bbf1ce6833e",
+        "bytes": 5107,
+        "acquiredAt": "2026-11-16T17:23:07.807Z"
+      },
+      "detailReceipt": {
+        "sha256": "d80712c2d6711d20f042216311fbdaba0e3e836058a74fdac0c79492987110f2",
+        "bytes": 12501,
+        "acquiredAt": "2026-11-16T17:23:08.222Z"
+      },
+      "observation": {
+        "issuerName": "聯發科技股份有限公司",
+        "year": 2026,
+        "unit": "TWD_per_share",
+        "classification": "issuer_disclosed_forecast",
+        "shareBasis": null,
+        "denominatorShares": null,
+        "quarters": [
+          {
+            "quarter": 2,
+            "eps": {
+              "kind": "range",
+              "low": 12.28,
+              "high": 15.01
+            }
+          }
+        ],
+        "comparativeQuarters": [
+          {
+            "quarter": 1,
+            "eps": {
+              "kind": "point",
+              "value": 15.17
+            }
+          }
+        ],
+        "annual": null,
+        "displayedCumulative": {
+          "throughQuarter": 2,
+          "eps": {
+            "kind": "range",
+            "low": 27.45,
+            "high": 30.18
+          }
+        }
+      }
+    },
+    {
+      "status": "archive_observed",
+      "schemaVersion": "vnext-mops-simple-forecast-capture-v2",
+      "symbol": "2412",
+      "market": "TWSE",
+      "coveredQuarters": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "publishedDate": "2026-01-23",
+      "knownAt": "2026-11-16T17:23:11.484Z",
+      "sourcePage": "https://mopsov.twse.com.tw/mops/web/t163sb10",
+      "listingReceipt": {
+        "sha256": "f0302e074bae52729f7a28aa187e1ce7f4b675f54107486c35b380ef8c1a5771",
+        "bytes": 4268,
+        "acquiredAt": "2026-11-16T17:23:10.992Z"
+      },
+      "detailReceipt": {
+        "sha256": "91a112da1ac56737cfcfa77b23560c7f2be57aa00302e060bf16aa895190325d",
+        "bytes": 18580,
+        "acquiredAt": "2026-11-16T17:23:11.484Z"
+      },
+      "observation": {
+        "issuerName": "中華電信股份有限公司",
+        "year": 2026,
+        "unit": "TWD_per_share",
+        "classification": "issuer_disclosed_forecast",
+        "shareBasis": null,
+        "denominatorShares": null,
+        "quarters": [
+          {
+            "quarter": 1,
+            "eps": {
+              "kind": "point",
+              "value": 1.16
+            }
+          },
+          {
+            "quarter": 2,
+            "eps": {
+              "kind": "point",
+              "value": 1.19
+            }
+          },
+          {
+            "quarter": 3,
+            "eps": {
+              "kind": "range",
+              "low": 1.22,
+              "high": 1.32
+            }
+          },
+          {
+            "quarter": 4,
+            "eps": {
+              "kind": "range",
+              "low": 1.25,
+              "high": 1.35
+            }
+          }
+        ],
+        "comparativeQuarters": [],
+        "annual": {
+          "kind": "range",
+          "low": 4.82,
+          "high": 5.02
+        },
+        "displayedCumulative": null
+      }
+    }
+  ],
+  "unavailable": [
+    {
+      "symbol": "2454",
+      "year": 2026,
+      "scope": "annual",
+      "reason": "no_exact_scope_in_archive_listing"
+    },
+    {
+      "symbol": "2454",
+      "year": 2026,
+      "scope": "Q4",
+      "reason": "no_exact_scope_in_archive_listing"
+    }
+  ],
+  "additionalIssuerSource": {
+    "symbol": "2454",
+    "publishedDate": "2026-10-30",
+    "scope": "company conference Q4 outlook",
+    "url": "https://www.mediatek.com/hubfs/MediaTek-Assets/Pdfs/Quarterly%20Earnings%20Release/2026/Quarterly%20Earnings%20Release-2026Q3/Transcript.pdf",
+    "bytes": 316576,
+    "sha256": "991c4a867a06803b8c02db4c89e058b937902a47634cc89e2869310782342a9c",
+    "observation": "The forward guidance section discloses revenue and margin and operating expense assumptions.",
+    "pending": "Extract as its own source with separate issuer authority."
+  },
+  "tests": {
+    "node": {
+      "passed": 26,
+      "failed": 0,
+      "logSha256": "72418869d7aec5a6e276a2be291d6380a29d28079aabb82e8c7283110f3e2285"
+    },
+    "typescript": "passed",
+    "eslintChangedFiles": "passed",
+    "productionBuild": {
+      "status": "passed",
+      "logSha256": "bd53b845d6519075e4907a6d1856700cbc8dd24e3cf5c8e7e2b3bf6de87404c0"
+    }
+  },
+  "authority": {
+    "productionChanged": false,
+    "providerRequests": 0,
+    "rawBodiesInGit": false,
+    "currentResearchAdmission": false,
+    "existingHold": "retained"
+  },
+  "pending": [
+    "Reconcile revisions of the same filing scope",
+    "Bind current time and issuer authorization and genuine independent review",
+    "Validate EPS/P-E and price scenarios subject to required inputs"
+  ]
+}

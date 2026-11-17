@@ -1,0 +1,128 @@
+{
+  "schema": "stockinsider-pr384-native-preparation-and-provider-typed-replay-v1",
+  "dateTaipei": "2026-11-16",
+  "pr": 384,
+  "sourceCommit": "b602d25ae276a84b0abb4e3d4e29e784cc12bc19",
+  "sourceTree": "901caaf8e7fad52f86b9692a45fd48f26ff3893f",
+  "testedVenue": "authorized isolated Contabo staging",
+  "compiledWeb": {
+    "result": "passed",
+    "buildIdFileSha256": "69f597ba869185f43a72b374af0fda93c9fbb11dcfa01b3b463107dcc89e22cd",
+    "requiredServerFilesSha256": "b948aad4be25c0a5add6d812a43f19b86c71105269fc2100b6e3e0202804fb90",
+    "nodeVersion": "22.14.0",
+    "nextVersion": "16.3.4",
+    "postgresVersion": "17.11"
+  },
+  "legacyFailure": {
+    "sqlState": "P0001",
+    "message": "vnext_worker_approved_original_sources_required",
+    "nativeReadOnlyRecheck": {
+      "issuerOriginalReceiptCurrent": true,
+      "issuerMatchesLegacyExactKeySet": false,
+      "financialIntervalMetadataPresent": true,
+      "forecastItemSourcePredicatesPassed": 6,
+      "frozenSourcesCurrent": true,
+      "providerBodySha256": "14ffe7baa787f6808f2cb1e3250344766a51698ef722268361ef5512621cbcba",
+      "databasePreparationCount": 1,
+      "providerReservationCount": 0
+    }
+  },
+  "intermediateTypedRun": {
+    "tests": {
+      "tests": 8,
+      "pass": 6,
+      "fail": 2,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "renamedEarlierRuntimeStateRetained": true,
+    "affectedProviderSubtestPassed": true,
+    "nextFixtureFailure": {
+      "sqlState": "428C9",
+      "field": "daily_adjustment_factor",
+      "cause": "the fixture explicitly provided a generated column"
+    }
+  },
+  "finalNativeRun": {
+    "tests": {
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "passedTitles": [
+      "auth_first_and_closed_author_selectors",
+      "current_original_numeric_forecasts_use_real_author_reader_and_private_acl",
+      "running_read_reports_real_cached_financial_ready_without_any_write",
+      "real_prepare_commit_then_bridge_socket_loss_yields_uncertain_without_resend",
+      "explicit_http_read_and_prepared_resume_observe_same_frozen_state_without_reprepare",
+      "frozen_actual_provider_input_and_current_forecast_use_revocation",
+      "current_original_action_share_cash_terms_and_permanent_use_withdrawal",
+      "running cached preparation HTTP read, actual committed response loss and explicit immutable read recovery"
+    ],
+    "tapSha256": "02a34557c3ccc499a0135b379edd9c4b304558ebcae55495c10db18a6cdcf983",
+    "resource": {
+      "peakSuiteRssBytes": 1116971008,
+      "minScratchFreeBytes": 20569403392,
+      "resourceViolation": null,
+      "samples": 264
+    },
+    "formalSignaturesMatched": true,
+    "ownedClusterStopped": true
+  },
+  "actualTypedProviderResult": {
+    "dispatchJournalReserved": true,
+    "providerPosts": 0,
+    "providerRows": 1,
+    "closedProviderEvidenceFields": [
+      "cutoff",
+      "evidence"
+    ],
+    "externalRequestContainsSourceReceipts": false,
+    "forecastItems": 6,
+    "internalFrozenForecastReceipts": 6,
+    "typedIssuerFactBindings": 1,
+    "revokedForecastItemsRemaining": 0,
+    "additionalFiscalPolicyRevocations": 2,
+    "rawReceiptSha256": "6ff488948b5b170306da49c9ce88c9ee8d2d591b3517678f2199d91655d32225",
+    "installedMigration": {
+      "sha256": "14fe34293ff99756e7630e704e57d83a4897edae66f65fbe7f8db60c0d418e68",
+      "bytes": 46192
+    }
+  },
+  "actionSourceFormatTests": {
+    "tests": 2,
+    "passed": 2,
+    "tapSha256": "4cfda3655d3023dc28c202963b46c28096eee533dfe49c114c18454fa6cb3192"
+  },
+  "code": [
+    {
+      "path": "scripts/vnext-preparation-http-fixture.mjs",
+      "sha256": "071c5b3f3e225a643e0d0eaaf3ac1c31d66b0341fdd540ee602b6654cd401798"
+    },
+    {
+      "path": "scripts/vnext-preparation-http.test.mjs",
+      "sha256": "35c787f5b6a62f61943ef663128d26005ba345cc09b71389c3503dd2f6caa840"
+    },
+    {
+      "path": "scripts/vnext-action-terms-native-fixture.mjs",
+      "sha256": "74d9851cb05eb5dae6898fc6978d9f3ed7577d1733a5734ad04157c2901391d6"
+    },
+    {
+      "path": "scripts/vnext-action-row-reference.test.mjs",
+      "sha256": "163db80524d27db7623d30eb77359efd09cfea99e10e4538725e50a1d8224d3b"
+    }
+  ],
+  "scope": {
+    "testOnlyChanges": true,
+    "webAndMigrationsUnchanged": true,
+    "typedMigrationAlreadyInRepository": true,
+    "recordedActualHttpAndPostgres": true,
+    "externalModelCalled": false,
+    "syntheticIssuerOrigins": true,
+    "releaseHoldRetained": true
+  }
+}

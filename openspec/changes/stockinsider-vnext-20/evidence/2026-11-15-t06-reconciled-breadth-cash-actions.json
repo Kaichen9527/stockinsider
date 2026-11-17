@@ -1,0 +1,44 @@
+{
+  "recordedAt": "2026-11-15T13:40:57Z",
+  "tasks": [
+    "T06",
+    "T10"
+  ],
+  "baseCommit": "0c36d0951e7dd5429cf53e0c63e2d027b901d260",
+  "migration": "migrations/20261116_13_vnext_launch_breadth_cash_action_v1.sql",
+  "vectors": "web/scripts/launch-breadth-cash-action-vectors.sql",
+  "officialFormulaReferences": [
+    "https://www.twse.com.tw/zh/announcement/ex-right/twt49u.html",
+    "https://www.twse.com.tw/zh/announcement/reduction/twtauu.html"
+  ],
+  "environment": {
+    "hostScope": "Contabo staging",
+    "engine": "PostgreSQL 17",
+    "cluster": "disposable network-isolated cluster",
+    "fixtureIssuerTerms": true,
+    "productionMutation": false
+  },
+  "checks": {
+    "persistentRegressionVectors": 15,
+    "integratedPositivePaths": 2,
+    "integratedVariations": 14,
+    "registeredRosterRegressions": "pass",
+    "supportedBreadthRegressions": "pass",
+    "privateAcl": "pass",
+    "catalogPreservation": "pass",
+    "marketRankingGate": "held"
+  },
+  "qualification": {
+    "scope": "supported_feeds_only",
+    "completeCapitalCoverage": false,
+    "qualified": false,
+    "fullMarketComplete": false,
+    "fullMarketRisk": "unknown",
+    "actualIssuerEventAcceptance": false
+  },
+  "next": [
+    "Bind an authoritative exchange-wide roster to cutoff and admitted source rows",
+    "Verify broader action coverage and licensed whole-market cash input",
+    "Run real-session and source acceptance and Cloud release gates"
+  ]
+}

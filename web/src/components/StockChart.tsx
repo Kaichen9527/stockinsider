@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { createChart, ColorType, CandlestickData, CandlestickSeries, LineSeries } from 'lightweight-charts';
+import { createChart, ColorType, CandlestickData, CandlestickSeries, HistogramSeries, LineSeries } from 'lightweight-charts';
+import { calendarStockCandles, selectStockChartSeries } from '../lib/stock-chart-calendar';
 
 interface ChartProps {
-  data: CandlestickData[];
+  data: Array<CandlestickData & { volume?: number | null }>;
   timeframeCharts?: {
     daily: CandlestickData[];
     weekly: CandlestickData[];
@@ -14,6 +15,7 @@ interface ChartProps {
     yearly: CandlestickData[];
   };
   missingReason?: string | null;
+  rankingWindow?: { cutoff: string; displayFrom: string };
   height?: number;
 }
 
@@ -27,25 +29,6 @@ const timeframeLabel: Record<TimeframeKey, string> = {
   halfYear: '半年線',
   yearly: '年線',
 };
-
-function aggregateCandles(data: CandlestickData[], chunkSize: number) {
-  if (chunkSize <= 1) return data;
-  const output: CandlestickData[] = [];
-  for (let index = 0; index < data.length; index += chunkSize) {
-    const chunk = data.slice(index, index + chunkSize);
-    if (chunk.length === 0) continue;
-    const first = chunk[0];
-    const last = chunk[chunk.length - 1];
-    output.push({
-      time: last.time,
-      open: Number(first.open),
-      high: Math.max(...chunk.map((item) => Number(item.high))),
-      low: Math.min(...chunk.map((item) => Number(item.low))),
-      close: Number(last.close),
-    });
-  }
-  return output;
-}
 
 function buildMaSeries(candles: CandlestickData[], period: number) {
   const output: Array<{ time: CandlestickData['time']; value: number }> = [];
@@ -61,36 +44,49 @@ function buildMaSeries(candles: CandlestickData[], period: number) {
   return output;
 }
 
-export default function StockChart({ data, timeframeCharts, missingReason, height = 390 }: ChartProps) {
+export default function StockChart({ data, timeframeCharts, missingReason, rankingWindow, height = 390 }: ChartProps) {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const [timeframe, setTimeframe] = useState<TimeframeKey>('daily');
+  const [calendarCutoff, setCalendarCutoff] = useState<string>();
+  const effectiveCutoff = rankingWindow?.cutoff ?? calendarCutoff;
+  const displayFrom = rankingWindow?.displayFrom;
 
   const normalizedDaily = useMemo(() => {
     return [...data]
       .sort((a, b) => String(a.time).localeCompare(String(b.time)))
-      .reduce<Map<string, CandlestickData>>((acc, candle) => {
+      .reduce<Map<string, ChartProps['data'][number]>>((acc, candle) => {
         acc.set(String(candle.time), candle);
         return acc;
-      }, new Map<string, CandlestickData>());
+      }, new Map<string, ChartProps['data'][number]>());
   }, [data]);
 
   const dataset = useMemo(() => {
-    const fallbackCharts = {
-      daily: Array.from(normalizedDaily.values()),
-      weekly: aggregateCandles(Array.from(normalizedDaily.values()), 5),
-      monthly: aggregateCandles(Array.from(normalizedDaily.values()), 21),
-      quarterly: aggregateCandles(Array.from(normalizedDaily.values()), 63),
-      halfYear: aggregateCandles(Array.from(normalizedDaily.values()), 126),
-      yearly: aggregateCandles(Array.from(normalizedDaily.values()), 252),
-    };
-    return timeframeCharts || fallbackCharts;
-  }, [normalizedDaily, timeframeCharts]);
+    if (timeframeCharts) return { charts: timeframeCharts, calendar: null, calendarError: false };
+    try {
+      const calendar = {
+        weekly: calendarStockCandles(data, 'weekly', effectiveCutoff),
+        monthly: calendarStockCandles(data, 'monthly', effectiveCutoff),
+        quarterly: calendarStockCandles(data, 'quarterly', effectiveCutoff),
+        halfYear: calendarStockCandles(data, 'halfYear', effectiveCutoff),
+        yearly: calendarStockCandles(data, 'yearly', effectiveCutoff),
+      };
+      return { charts: { daily: Array.from(normalizedDaily.values()), weekly: calendar.weekly.candles,
+        monthly: calendar.monthly.candles, quarterly: calendar.quarterly.candles,
+        halfYear: calendar.halfYear.candles, yearly: calendar.yearly.candles }, calendar, calendarError: false };
+    } catch {
+      return { charts: { daily: Array.from(normalizedDaily.values()), weekly: [], monthly: [], quarterly: [], halfYear: [], yearly: [] }, calendar: null, calendarError: true };
+    }
+  }, [data, normalizedDaily, timeframeCharts, effectiveCutoff]);
 
-  const selectedData = useMemo(() => {
-    const rows = dataset[timeframe];
-    if (rows && rows.length > 0) return rows;
-    return Array.from(normalizedDaily.values());
-  }, [dataset, timeframe, normalizedDaily]);
+  const selectedData = useMemo(() => selectStockChartSeries(dataset.charts, timeframe, Array.from(normalizedDaily.values())), [dataset, timeframe, normalizedDaily]);
+
+  const visibleData = useMemo(() => displayFrom ? selectedData.filter(row => String(row.time) >= displayFrom) : selectedData, [selectedData, displayFrom]);
+
+  const volume = useMemo(() => {
+    if (!rankingWindow) return [];
+    if (timeframe === 'daily') return Array.from(normalizedDaily.values(), row => row.volume ?? null);
+    return dataset.calendar?.[timeframe].periods.map(period => period.volume) ?? [];
+  }, [rankingWindow, timeframe, normalizedDaily, dataset.calendar]);
 
   useEffect(() => {
     if (!chartContainerRef.current) return;
@@ -126,7 +122,20 @@ export default function StockChart({ data, timeframeCharts, missingReason, heigh
       wickDownColor: '#F87171',
     });
 
-    series.setData(selectedData);
+    series.setData(visibleData);
+    const volumeData = selectedData.flatMap((candle, index) => {
+      const value = volume[index];
+      if (value == null || (displayFrom && String(candle.time) < displayFrom)) return [];
+      return [{ time: candle.time, value, color: candle.close >= candle.open ? '#059669' : '#dc2626' }];
+    });
+    if (volumeData.length) {
+      const histogram = chart.addSeries(HistogramSeries, {
+        priceFormat: { type: 'volume' }, priceScaleId: '', priceLineVisible: false, lastValueVisible: false,
+      });
+      histogram.priceScale().applyOptions({ scaleMargins: { top: 0.82, bottom: 0 } });
+      series.priceScale().applyOptions({ scaleMargins: { top: 0.08, bottom: 0.25 } });
+      histogram.setData(volumeData);
+    }
     const maConfig: Array<{ period: number; color: string }> = [
       { period: 5, color: '#22D3EE' },
       { period: 10, color: '#6366F1' },
@@ -142,7 +151,8 @@ export default function StockChart({ data, timeframeCharts, missingReason, heigh
         priceLineVisible: false,
         lastValueVisible: false,
       });
-      maSeries.setData(buildMaSeries(selectedData, item.period));
+      const movingAverage = buildMaSeries(selectedData, item.period);
+      maSeries.setData(displayFrom ? movingAverage.filter(row => String(row.time) >= displayFrom) : movingAverage);
     }
     chart.timeScale().fitContent();
     window.addEventListener('resize', handleResize);
@@ -151,16 +161,18 @@ export default function StockChart({ data, timeframeCharts, missingReason, heigh
       window.removeEventListener('resize', handleResize);
       chart.remove();
     };
-  }, [height, selectedData]);
+  }, [height, selectedData, visibleData, displayFrom, volume]);
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
-        {(Object.keys(timeframeLabel) as TimeframeKey[]).map((key) => (
+        {(Object.keys(timeframeLabel) as TimeframeKey[])
+          .filter(key => !rankingWindow || key === 'daily' || key === 'weekly' || key === 'monthly').map((key) => (
           <button
             key={key}
             type="button"
-            onClick={() => setTimeframe(key)}
+            aria-pressed={timeframe === key}
+            onClick={() => { if (!rankingWindow) setCalendarCutoff(new Date().toISOString()); setTimeframe(key); }}
             className={`rounded-full border px-3 py-1 text-xs transition ${
               timeframe === key
                 ? 'border-accent bg-accent-soft text-accent'
@@ -172,16 +184,28 @@ export default function StockChart({ data, timeframeCharts, missingReason, heigh
         ))}
       </div>
 
-      {selectedData.length > 0 ? (
-        <div ref={chartContainerRef} className="w-full overflow-hidden rounded-lg border border-gray-800" style={{ height }} />
+      {timeframeCharts && (timeframe === 'weekly' || timeframe === 'monthly') && <p className="text-xs text-slate-500" role="status">本期完成狀態與交易日覆蓋尚未提供，請以來源資料為準。</p>}
+      {!timeframeCharts && (timeframe === 'weekly' || timeframe === 'monthly') && <p className="text-xs text-slate-500" role="status">
+        {dataset.calendarError ? '期別資料有衝突或格式不完整，暫不繪製。' : <>
+          依台灣曆{timeframe === 'weekly' ? '週' : '月'}聚合。{rankingWindow ? ' 最後一期只計入截至榜單日的交易日。' : ' 只含已提供交易日，歷史期別不代表資料完整。'}
+          {dataset.calendar?.[timeframe].periods.some(period => period.provisional === true) ? '本期尚未完成（暫定）。'
+            : effectiveCutoff === undefined ? '本期完成狀態待確認。' : ''}
+        </>}
+      </p>}
+      {visibleData.length > 0 ? (
+        <div data-testid={rankingWindow ? 'launch-price-chart' : undefined} ref={chartContainerRef} className="w-full overflow-hidden rounded-lg border border-gray-800" style={{ height }} />
       ) : (
         <div
           className="flex w-full items-center justify-center rounded-lg border border-dashed border-gray-700 bg-black/5 px-6 text-center text-sm leading-7 text-slate-600 dark:text-emerald-100/60"
           style={{ height }}
         >
-          {missingReason || '目前還沒有足夠的日線資料可繪製 K 線圖。'}
+          {missingReason || `目前還沒有足夠的${timeframeLabel[timeframe]}資料可繪製 K 線圖。`}
         </div>
       )}
+      {rankingWindow && visibleData.length > 0 && <p className="text-xs text-slate-500">
+        成交量以股計。缺少成交量的期別留白。{' '}
+        圖表由 <a className="underline" href="https://www.tradingview.com/lightweight-charts/" target="_blank" rel="noreferrer">TradingView Lightweight Charts™</a> 繪製。
+      </p>}
     </div>
   );
 }

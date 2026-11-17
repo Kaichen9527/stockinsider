@@ -1,0 +1,449 @@
+{
+  "scope": "Disabled schedule/admission fixture logic, inert staging-only source units, offline systemd verification/calendar parsing, existing actual local HTTP/SSR/Chromium regressions with synthetic readonly RPC. Not active scheduler/ledger/source/real-session acceptance.",
+  "sourceCommit": "2f1050a6ba5deafe8ae55c2d778766f140f062e7",
+  "sourceTree": "3a580414ea082a7ccb97862f9379e1fa8207c07f",
+  "runtimeWebTree": "d4d9bdb7fbe65c934a20390eaa056c0d86c40332",
+  "baseProtectionCommit": "272f1ee975218c21ba358e9d4d50dc1e7b5ec86b",
+  "branch": "codex/stockinsider-v2-cloud-nov07",
+  "originalPrHeadRequired": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "userTimezone": "Asia/Taipei",
+  "completedAtLocal": "2026-11-08T10:27:50.607183+08:00",
+  "machineTimestampBasis": "UTC ISO8601",
+  "implementationModels": {
+    "model": "GPT-6.1 Sol",
+    "reasoningEffort": "high",
+    "plannerAuthor": "candidate_history_sol",
+    "stagingConfigAuthor": "execution_boundary_sol",
+    "independentEngineeringReviewer": "boundary_review_sol",
+    "coordinator": "root integration/receipts; no self model-switch claim"
+  },
+  "checks": [
+    {
+      "name": "focused",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/top10-projection.test.ts",
+        "web/src/lib/vnext/published-target-read.test.ts",
+        "web/src/lib/vnext/ranking-read.test.ts",
+        "web/src/lib/vnext/candidate-page.test.ts",
+        "web/src/lib/stock-chart-calendar.test.ts",
+        "web/src/app/components/vnext/detail-source.test.mjs",
+        "scripts/vnext-ranking-snapshot-source.test.mjs",
+        "web/src/lib/stock-chart-supply.test.ts",
+        "web/src/lib/vnext/business-public.test.ts",
+        "web/src/lib/vnext/vnext.test.ts",
+        "scripts/vnext-staging-preflight.test.mjs",
+        "web/src/lib/vnext/candidate-history-read.test.ts",
+        "scripts/vnext-candidate-history-source.test.mjs",
+        "web/src/lib/candidate-price-history.test.ts",
+        "scripts/vnext-source-window-source.test.mjs",
+        "web/src/lib/vnext/source-volume-boundary.test.ts",
+        "web/src/lib/vnext/analysis-sources.test.ts",
+        "web/src/lib/vnext/source-backlog.test.ts",
+        "web/src/lib/vnext/cached-source-admission.test.ts",
+        "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+        "web/src/lib/vnext/schedule-admission.test.ts",
+        "scripts/vnext-staging-schedule-candidate.test.mjs",
+        "scripts/vnext-candidate-epoch-source.test.mjs",
+        "web/src/lib/source-content-semantics.test.ts",
+        "web/src/lib/vnext/cached-admission.test.ts",
+        "web/src/lib/vnext/current-evidence-read.test.ts",
+        "web/src/lib/vnext/preparation-authority.test.ts",
+        "scripts/vnext-weekly-forecast-source.test.mjs",
+        "web/src/lib/vnext/forecast-active.test.ts",
+        "web/src/lib/vnext/forecast-current.test.ts",
+        "web/src/lib/vnext/thesis.test.ts",
+        "scripts/vnext-staging-execution-boundary.test.mjs",
+        "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+        "web/src/lib/tw-entry-plan-authority.test.ts"
+      ],
+      "start": "2026-11-08T02:27:04.442561+00:00",
+      "end": "2026-11-08T02:27:07.962845+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 42803200,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31463256064,
+        "/tmp": 9441292288
+      },
+      "resourceViolation": null,
+      "logSha256": "32bcdba4fa69867d77719c8140f97e0828743a81348083667c3e899011ae6da8"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-08T02:27:07.963400+00:00",
+      "end": "2026-11-08T02:27:15.501477+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40415232,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31463235584,
+        "/tmp": 9441292288
+      },
+      "resourceViolation": null,
+      "logSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-08T02:27:15.501853+00:00",
+      "end": "2026-11-08T02:27:31.046645+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40341504,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31463239680,
+        "/tmp": 9439436800
+      },
+      "resourceViolation": null,
+      "logSha256": "84df8aab33a2588ebae98ea51a5abfccb758ea53330f1013e6b9766025759b29"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-08T02:27:31.047095+00:00",
+      "end": "2026-11-08T02:27:43.082208+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40431616,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31462486016,
+        "/tmp": 9423351808
+      },
+      "resourceViolation": null,
+      "logSha256": "55e9bd566bbfd44577d4bc16ed4b9dd1b763c5f9782d27b48772e9892d9194ed"
+    },
+    {
+      "name": "browser",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/vnext-ranking-browser-smoke.mjs"
+      ],
+      "start": "2026-11-08T02:27:43.082577+00:00",
+      "end": "2026-11-08T02:27:50.607183+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 146591744,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31458119680,
+        "/tmp": 9304162304
+      },
+      "resourceViolation": null,
+      "logSha256": "8ca9a4099095ade7d54f707e8eb9371e1aadfdaf96805324500c4e5219fbd7df"
+    }
+  ],
+  "focusedTotals": {
+    "pass": 319,
+    "fail": 0,
+    "skip": 0
+  },
+  "newCases": {
+    "purePlanner": 14,
+    "stagingSource": 9,
+    "countsOverlap319": true
+  },
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 34
+  },
+  "browser": {
+    "scope": "actual isolated HTTP/SSR/Chromium desktop/mobile; synthetic RPC transport only, no native PG/review authority",
+    "status": "PASS",
+    "source": "2f1050a6ba5deafe8ae55c2d778766f140f062e7",
+    "harnessCommit": "2f1050a6ba5deafe8ae55c2d778766f140f062e7",
+    "runtimeWebTree": "d4d9bdb7fbe65c934a20390eaa056c0d86c40332",
+    "browserVersion": "151.0.7922.173",
+    "checks": [
+      "desktop:top0",
+      "desktop:top1",
+      "desktop:top10",
+      "desktop:bound-detail-invalidity",
+      "desktop:wrong-revision-closed",
+      "desktop:stable-page-private-allowlist",
+      "desktop:saved-history-version-and-observed-exit",
+      "mobile:top0",
+      "mobile:top1",
+      "mobile:top10",
+      "mobile:bound-detail-invalidity",
+      "mobile:wrong-revision-closed",
+      "mobile:stable-page-private-allowlist",
+      "mobile:saved-history-version-and-observed-exit"
+    ],
+    "readRpcCalls": 23,
+    "writeRpcCalls": 0,
+    "providerCalls": 0
+  },
+  "browserCleanup": {
+    "appPid": 2282,
+    "appExit": 143,
+    "appSignal": null,
+    "bridgeClosed": true
+  },
+  "scheduledWorkerBrowserAcceptance": "NOT_RUN;14 existing public regressions only",
+  "authorChecks": [
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/schedule-admission.test.ts"
+      ],
+      "pass": 14,
+      "fail": 0
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--test",
+        "scripts/vnext-staging-schedule-candidate.test.mjs"
+      ],
+      "pass": 9,
+      "fail": 0,
+      "logSha256": "ed695a0b287966f48820451cba516aebde396b6fa9bb6e535bfe8ddd6ad04085"
+    }
+  ],
+  "draftChecks": {
+    "initialStagingPass": 9,
+    "initialLogSha256": "f627015ec674c28e1a0367e908d7b5affb0350fdc65289dfd4e050f869240155",
+    "note": "initial9PASS preceded narrow ranking-publication purpose/reference correction; updated9passed once after source assertion; units unchanged, no repeat unit verification"
+  },
+  "offlineSystemd": {
+    "command": [
+      "/usr/bin/systemd-analyze",
+      "verify",
+      "--man=no",
+      "deployment/staging/vnext/stockinsider-vnext-oct22-staging-rank-publish.service",
+      "deployment/staging/vnext/stockinsider-vnext-oct22-staging-rank-publish.timer",
+      "deployment/staging/vnext/stockinsider-vnext-oct22-staging-shared-market.service",
+      "deployment/staging/vnext/stockinsider-vnext-oct22-staging-shared-market.timer"
+    ],
+    "exit": 0,
+    "warnings": 0,
+    "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "unitFilesSha256": {
+      "deployment/staging/vnext/stockinsider-vnext-oct22-staging-rank-publish.service": "0498d0c172da48ac0dd0a604eaa544defa9d6d2c65150e7e36742c5bd97ac8d6",
+      "deployment/staging/vnext/stockinsider-vnext-oct22-staging-rank-publish.timer": "12716c4fffee9300ecc96d4faeacd75ebca929b3ae929198c0ab662ce5d6fe6e",
+      "deployment/staging/vnext/stockinsider-vnext-oct22-staging-shared-market.service": "f4e29fceee12e1aa0f795b545793bd2003e5e17166b30f313e7c56745a1db735",
+      "deployment/staging/vnext/stockinsider-vnext-oct22-staging-shared-market.timer": "b7e8a0f575173911a255df282db1701f30cfb39983a38cb28986e081a54f4ac1"
+    },
+    "installed": false,
+    "managerAction": false
+  },
+  "calendarParser": [
+    {
+      "command": [
+        "/usr/bin/systemd-analyze",
+        "calendar",
+        "--iterations=2",
+        "--base-time=2026-11-08 00:00:00 UTC",
+        "*-*-* 20:30:00 Asia/Taipei"
+      ],
+      "chunk_id": "b93375",
+      "wall_time_seconds": 3.007e-05,
+      "exit_code": 0,
+      "original_token_count": 48,
+      "output": "Normalized form: *-*-* 20:30:00 Asia/Taipei\n    Next elapse: Sun 2026-11-08 12:30:00 UTC\n       From now: 10h left\n   Iteration #2: Mon 2026-11-09 12:30:00 UTC\n       From now: 1 day 10h left\n",
+      "scope": "offline explicit base-time parser only; no clock change or actual session acceptance"
+    },
+    {
+      "command": [
+        "/usr/bin/systemd-analyze",
+        "calendar",
+        "--iterations=2",
+        "--base-time=2026-11-08 00:00:00 UTC",
+        "*-*-* 08:15:00 Asia/Taipei"
+      ],
+      "chunk_id": "9d99f4",
+      "wall_time_seconds": 3.2672e-05,
+      "exit_code": 0,
+      "original_token_count": 48,
+      "output": "Normalized form: *-*-* 08:15:00 Asia/Taipei\n    Next elapse: Sun 2026-11-08 00:15:00 UTC\n       From now: 2h 10min ago\n   Iteration #2: Mon 2026-11-09 00:15:00 UTC\n       From now: 21h left\n",
+      "scope": "offline explicit base-time parser only; no clock change or actual session acceptance"
+    }
+  ],
+  "calendarParserLimits": {
+    "changesClock": false,
+    "liveTimerAcceptance": false,
+    "twoActualAdjacentSessions": false,
+    "mapping": "20:30 Asia/Taipei ->12:30UTC;08:15 Asia/Taipei ->00:15UTC; daily wake expression is not official trading-day authority"
+  },
+  "review": {
+    "scope": "readonly design/source/docs; not formal A1",
+    "blocker": 0,
+    "high": 0,
+    "openFindings": 0,
+    "reviewerExecutedTestsOrSystemd": false,
+    "finalDocsReviewed": true,
+    "fixedFindings": [
+      "known newer partial close must not fall back to older completed pair",
+      "duplicate active schedules in either job conflict",
+      "equivalent latest-head tie deterministic under reorder",
+      "only latest head conflicts block; later correction clears old conflict",
+      "new rank intent120smaxage versus completed fixture replay; original actual proof expiry/rights remains unbound",
+      "rank purpose/reference narrowed to publication only"
+    ],
+    "docPrecisionCorrection": "ranking SQL uses clock_timestamp database clock, not statement_timestamp"
+  },
+  "schedulePolicy": {
+    "version": "taipei-fixed-cutoff-five-minute-v1",
+    "timezone": "Asia/Taipei",
+    "rank": "20:30",
+    "sharedMarket": "08:15",
+    "fixedCutoff": true,
+    "planningWindowSeconds": 300,
+    "window": "half_open",
+    "catchup": false,
+    "weekdayInference": false,
+    "plannedConstantEnabled": false,
+    "runtimeExecutionAllowed": false,
+    "runtimeChargeAuthorized": false,
+    "wholeEntryDurableReplay": "NOT_PROVEN",
+    "actualProofExpiryAndRights": "NOT_BOUND",
+    "latestCalendarUnrepresentedDates": "NOT_PROVEN",
+    "retention": "previous snapshot originalsession/cutoff/sourceAt cloned unchanged; nullprior staysnull"
+  },
+  "stagingConfig": {
+    "state": "Disabled",
+    "unitsInstalled": false,
+    "allUnitCondition": "ConditionPathExists=!/",
+    "serviceExecStart": "/usr/bin/false",
+    "installSection": false,
+    "persistent": false,
+    "actualLockImplementation": "NOT_IMPLEMENTED",
+    "processLockReplacesDbLease": false,
+    "singleProductionTimerInventory": "NOT_OBSERVED",
+    "workerIntegration": "NOT_CONNECTED",
+    "actualProductionTimersChanged": false,
+    "readOnlyPreflightGrantAllowsWorker": false
+  },
+  "productionSourceUnchanged": {
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "272f1ee975218c21ba358e9d4d50dc1e7b5ec86b",
+      "HEAD",
+      "--",
+      "deployment/vps",
+      "migrations",
+      "web/vercel.json",
+      ".github/workflows"
+    ],
+    "exit": 0,
+    "legacyFilesSha256": {
+      "deployment/vps/systemd/stockinsider-research-cycle.timer": "249b32a1230490c7149b08479559711c5844b929ba504196e73de9ba6d6e1bfa",
+      "deployment/vps/systemd/stockinsider-research-cycle.service": "0d773a12f1631193a05541a16aa9f0cd55a247d10a14ad8ef96677e344921b15",
+      "deployment/vps/systemd/stockinsider-taiwan-data-final-freeze.timer": "f254eb83d2100007f17a45be46f32359ee741c3adb6cc9edca5498996e3e66c9",
+      "deployment/vps/systemd/stockinsider-taiwan-data-final-freeze.service": "77d017477ab318a6ea3882c3bd4c5a46474df9f9d8eae0b42cf5a8d640aca04f",
+      "deployment/vps/systemd/stockinsider-taiwan-data-final-reconcile.timer": "e2d6daecdc554d1ee165cf3c83e986b47370bed2d37764f9545f4bb97cee802c",
+      "deployment/vps/install-systemd-schedules.sh": "89cde9c866778ca7db47061ffce81c4a8a1110e03ddfdbaad3a8be7ae4ffbe9b",
+      "web/vercel.json": "430e27666bc3e3fd219559abbd100828dbb9793a3cd38b275c7484a9b0c84328",
+      "migrations/20261107_vnext_ranking_snapshot_v1.sql": "ed1fdb3c6ff1a0323fc8b9386b0afb27cb08804092ea3715696b4264c02507fb",
+      "web/src/lib/vnext/research-cycle.ts": "d3655969d874ac29e51a2f933c67cc69df21f7f53e774fb7f4fcd1d5ee94896e",
+      "web/src/lib/vnext/market-ai-worker.ts": "293bd010d34156cb17f264bbd0b7c58164bfdf25e40ce2a1dbc40297c4b482d8"
+    },
+    "onlyExistingAppChange": "unused disabled STAGING_SCHEDULE.postClose18:30->20:30; actualSQL18:30postcloseguard untouched"
+  },
+  "sourceFilesSha256": {
+    "web/src/lib/vnext/schedule-admission.ts": "24cf2e06a262831896fa7745d9628c2a24b0afe5ceee22c3fa1fdd791fba7455",
+    "web/src/lib/vnext/schedule-admission.test.ts": "e4682de228032b003f66ebe59b4cfe326ca923e3091fd24bb2112cd595a3b611",
+    "web/src/lib/vnext/policy.ts": "06b10f467752ad38cc8d80f5b93163aa446284f5cca5be6bb37fd186926ddab7",
+    "deployment/staging/vnext/schedule-candidate.mjs": "5614f37adc9e12323d64457b731d6ea2aaabd38e136c53ffa1b1bc1c7d2a48f0",
+    "scripts/vnext-staging-schedule-candidate.test.mjs": "42fa947e5c4de8cdc23a6f320f81592f6384fcee8137b6df09660c86477be400",
+    "deployment/staging/vnext/stockinsider-vnext-oct22-staging-rank-publish.service": "0498d0c172da48ac0dd0a604eaa544defa9d6d2c65150e7e36742c5bd97ac8d6",
+    "deployment/staging/vnext/stockinsider-vnext-oct22-staging-rank-publish.timer": "12716c4fffee9300ecc96d4faeacd75ebca929b3ae929198c0ab662ce5d6fe6e",
+    "deployment/staging/vnext/stockinsider-vnext-oct22-staging-shared-market.service": "f4e29fceee12e1aa0f795b545793bd2003e5e17166b30f313e7c56745a1db735",
+    "deployment/staging/vnext/stockinsider-vnext-oct22-staging-shared-market.timer": "b7e8a0f575173911a255df282db1701f30cfb39983a38cb28986e081a54f4ac1"
+  },
+  "resources": {
+    "serialHeavyChecks": true,
+    "minimumFilesystemFreeBytes": 8589934592,
+    "admissionReferenceBytes": 536870912,
+    "sampledTreeRssCeilingBytes": 8589934592,
+    "samplingSeconds": 0.25,
+    "sampledNotInstantaneousOrCgroupMax": true,
+    "cachedBuildAvailable": true,
+    "pruneOrDelete": false
+  },
+  "readinessNamesOnly": {
+    "environmentId": "ccarenv_b64_Y2NhcmVudl82ODU0YWE3YmQ3MjA4MTkxYjJiNTQxYTc1M2NkOTM3Zg",
+    "current": true,
+    "phase": "running",
+    "specRevision": "1",
+    "observedSpecRevision": "1",
+    "network": {
+      "mode": "restricted",
+      "state": "enforced",
+      "customAllowedHosts": [],
+      "presets": [
+        "package_managers"
+      ]
+    },
+    "secretBindingNames": [],
+    "outboundIdentityAliases": [],
+    "stagingNetworkAndIdentity": "NOT_OBSERVED_NOT_ADMITTED"
+  },
+  "protectedAuthority": {
+    "activeGraphSha256": "c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a",
+    "acceptanceVersion": "1.46.0",
+    "scriptValueRowsSha256": "77ffc8879d7cd473b2c822e1a03d310782e34e9967644a93cd5aad6fd42e5d69",
+    "sameGraphDoesNotApproveProduct": true,
+    "approvalOrRefIssued": false
+  },
+  "gates": {
+    "actualScheduleOfficialSourceConnection": "NOT_CONNECTED",
+    "fixedCutoffInExistingRankingRpc": "NOT_IMPLEMENTED",
+    "wholeEntryLedgerReplay": "NOT_PROVEN",
+    "currentLiveSchedulerInventory": "NOT_OBSERVED",
+    "actual20_30And08_15Run": "NOT_RUN",
+    "twoActualAdjacentTradingSessions": "NOT_RUN",
+    "native": "HOLD_NOT_RETRIED",
+    "formalA1ProtectedReview": "BLOCKED",
+    "realLegalSourceDistinctAuthorReviewWebsitePositive": "NOT_RUN",
+    "CI": "REQUIRED_NOT_TRIGGERED",
+    "stagingRestoreRelease": "BLOCKED"
+  },
+  "operatorReport": "Cloud VPN Configured/Draft saved/Not published; Contabo device interactive authorization pending. Not development-executor network/identity readiness.",
+  "actions": {
+    "timerInstallEnableStartReload": 0,
+    "productionServices": 0,
+    "sqlOrPgOrNativeRetry": 0,
+    "vpnOrNetworkConfigChange": 0,
+    "keyAgentEnvFileReadChange": 0,
+    "sshOrContabo": 0,
+    "newTaskExecutorOrRebuild": 0,
+    "writerQueueScheduleActivation": 0,
+    "originalPrHeadUpdate": 0,
+    "mergeOrDeploy": 0,
+    "oldVmOrIcloud": 0
+  },
+  "bytesReclaimed": 0,
+  "verifiedArchiveLocation": null
+}

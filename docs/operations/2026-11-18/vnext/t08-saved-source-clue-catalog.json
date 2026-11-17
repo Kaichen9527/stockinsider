@@ -1,0 +1,40 @@
+{
+  "schema": "stockinsider-t08-saved-source-clue-catalog-v1",
+  "dayTaipei": "2026-11-18",
+  "scope": "isolated_contabo_controlled_fixtures",
+  "baseRevision": "6d20e9b6a41d3c1d2bc5e9c1a11b0d1dc1d8ceea",
+  "codeSha256": {
+    "migrations/20261117_50_vnext_launch_candidate_clue_history_v1.sql": "a05659007399ee9f5f0d472f09f0c929341772aad31d2a1c58ea900e15d03031",
+    "web/src/lib/vnext/launch-candidate-catalog.ts": "22694786382d135fce1fd8d39310c4c4cff915d2e74fac0e5bc8212efaef7eb3",
+    "web/src/app/components/vnext/LaunchCandidateCatalog.tsx": "de05887a2662e6b971436aa90a98d1d3bf110023b71a0f0ab41abd689fe8f14c",
+    "web/src/app/candidates/page.tsx": "9422aa990e4cc8e9ec795e0c2f45a943308b92cafcc31078d8cdfad305c22487",
+    "scripts/vnext-launch-candidate-clue-postgres.test.mjs": "e769244de51f0838d8d4c245011d2fb6811fc791e0a3bb12c91d583fe2763404",
+    "web/src/lib/vnext/launch-candidate-catalog.test.ts": "174dd648a590a1e428c260ef2cf79cf7b43e2ed9e4a806f9665ec02e81cc0232",
+    "web/src/lib/vnext/launch-candidate-catalog-page.test.ts": "78fef9ca666438ca8bc314153a853219d3e70b7f84a735e6b2547ff36ac30c5b",
+    ".github/workflows/stockinsider-vnext-quality.yml": "a8d2d154e1be805605a2989a68a23d2a2766869cf9f9584ad39d1da87eee14c1",
+    "openspec/changes/stockinsider-vnext-20/source-candidate-completeness-amendment.md": "b49f32d02f668c7fdb26bc6805cbe43bb96b14bbebd2f5bae737938d45aa46b2"
+  },
+  "postgres": {
+    "version": "17.11",
+    "passed": 7,
+    "tapSha256": "b93b2294f90c8d0f00625ad88a65f8d04b44e8d949eea2efde0c02e44b1edcd9",
+    "exactPoolReaderUsed": true,
+    "withdrawalAndFourFiltersVerified": true,
+    "preWatermarkUnavailable": true,
+    "lateBackdatedInsertExcluded": true,
+    "directBrowserRoleDenials": 2,
+    "formalSignaturesMatched": true,
+    "disposableContainerRemoved": true
+  },
+  "node": {
+    "version": "22.14.0",
+    "contractAndServerRenderPassed": 21,
+    "tapSha256": "0bb6c1fce29bbb9da5d15c0c126a10e1cef4c30189874b917bb1c8c6a97eaaf1"
+  },
+  "pending": [
+    "exact_revision_ci",
+    "exact_revision_desktop_and_mobile_browser",
+    "real_authorized_source_clues_and_saved_ranked_session",
+    "independent_review_and_release"
+  ]
+}

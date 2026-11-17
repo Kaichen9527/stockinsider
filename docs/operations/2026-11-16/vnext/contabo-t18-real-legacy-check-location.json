@@ -1,0 +1,49 @@
+{
+  "schema": "stockinsider-t18-real-legacy-check-location-v1",
+  "recordedDateTaipei": "2026-11-16",
+  "sourceDate": "2026-09-19",
+  "buildSource": "bb549e859ba3ae5241eec3a14bdcd84b3ac70d55",
+  "isolatedPostgresVersion": "17.11",
+  "stagingMaxLocksPerTransaction": 256,
+  "authenticatedBackupRestored": true,
+  "databaseReceipt": {
+    "checks": {
+      "foreignKeys": 288,
+      "rlsTables": 193
+    },
+    "databaseBytes": 2258785971,
+    "lineage": null,
+    "schema": "stockinsider-owned-db-restore-v1"
+  },
+  "migrationReceipt": {
+    "financialCommitted": false,
+    "observed": {},
+    "phase": "financial",
+    "publicationCommitted": false,
+    "reason": "",
+    "sqlstate": "23514",
+    "status": "REJECTED",
+    "trace": {
+      "constraint": "legacy_evaluation_schema_v314_check",
+      "constraintReported": true,
+      "errorLine": null,
+      "migration": "migrations/20260811_actionability_recovery_v3_14.sql",
+      "migrationSha256": "43771e50c0e59d2c1e7ed310a6a204283fc782cbd7e0f10f1de87d36389874af",
+      "publicErrorToken": null,
+      "targetTable": "legacy_decision_revision_evaluations_v3_13"
+    }
+  },
+  "coreRehearsal": "CORE_INSTALLED_DISABLED",
+  "productionSignaturesIdentical": true,
+  "stagingStateCleaned": true,
+  "temporaryRunnerRemoved": true,
+  "nativeHoldRetained": true,
+  "resourceSamples": {
+    "appMemoryPeakObservedBytes": 18857984,
+    "dbMemoryPeakObservedBytes": 805310464,
+    "minimumHostAvailableMemoryBytes": 4422422528,
+    "minimumHostDiskBytes": 17337339904,
+    "minimumWorkFreeBytes": 5950541824,
+    "restMemoryPeakObservedBytes": 18702336
+  }
+}

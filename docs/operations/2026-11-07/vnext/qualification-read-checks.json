@@ -1,0 +1,202 @@
+{
+  "schemaVersion": "vnext-qualification-read-evidence-v1",
+  "sourceCommit": "07216a45095734293931046bfc34cf5b315844fe",
+  "sourceTree": "343e09052df8bf7abf4267c73de702cb31efe710",
+  "requestedAuthorModel": "gpt-6.1-sol",
+  "requestedReasoningEffort": "high",
+  "execution": "same selected VM; explicitly selected author/reviewer subagents; coordinating model not self-switched",
+  "checks": [
+    {
+      "name": "focused",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/top10-projection.test.ts",
+        "web/src/lib/vnext/published-target-read.test.ts",
+        "web/src/lib/vnext/ranking-read.test.ts",
+        "web/src/lib/vnext/candidate-page.test.ts",
+        "web/src/lib/stock-chart-calendar.test.ts",
+        "web/src/app/components/vnext/detail-source.test.mjs",
+        "scripts/vnext-ranking-snapshot-source.test.mjs",
+        "web/src/lib/stock-chart-supply.test.ts",
+        "web/src/lib/vnext/business-public.test.ts",
+        "web/src/lib/vnext/vnext.test.ts",
+        "scripts/vnext-staging-preflight.test.mjs"
+      ],
+      "start": "2026-11-07T08:41:32.428310+00:00",
+      "end": "2026-11-07T08:41:33.182884+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 36257792,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31530422272,
+        "/tmp": 9422901248
+      },
+      "resourceViolation": null,
+      "logSha256": "75fd9cfa138b918e6caad14f6035800d6e1039d8b4cbdd8b0f27bbf18a600b0f"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-07T08:41:33.183448+00:00",
+      "end": "2026-11-07T08:41:39.202973+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40001536,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31530401792,
+        "/tmp": 9422901248
+      },
+      "resourceViolation": null,
+      "logSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-07T08:41:39.203346+00:00",
+      "end": "2026-11-07T08:41:56.257366+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 41467904,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31530401792,
+        "/tmp": 9422901248
+      },
+      "resourceViolation": null,
+      "logSha256": "84df8aab33a2588ebae98ea51a5abfccb758ea53330f1013e6b9766025759b29"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-07T08:41:56.257737+00:00",
+      "end": "2026-11-07T08:42:08.299163+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40218624,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31512899584,
+        "/tmp": 9422868480
+      },
+      "resourceViolation": null,
+      "logSha256": "31ae6af5381a0c98fb0f5392c2b683a8feac3b0ef4e366b99729c72d15ed8961"
+    },
+    {
+      "name": "browser",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/vnext-ranking-browser-smoke.mjs"
+      ],
+      "start": "2026-11-07T08:42:08.299710+00:00",
+      "end": "2026-11-07T08:42:13.563157+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 146898944,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31501656064,
+        "/tmp": 9300959232
+      },
+      "resourceViolation": null,
+      "logSha256": "c1f2f3107f4a207b4fac136897da6cd6a71481ba3a1c7bf10689491ce0b1f9d7"
+    }
+  ],
+  "focusedTests": 94,
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 34
+  },
+  "browser": {
+    "scope": "actual isolated HTTP/SSR/Chromium desktop/mobile; synthetic RPC transport only, no native PG/review authority",
+    "status": "PASS",
+    "source": "07216a45095734293931046bfc34cf5b315844fe",
+    "harnessCommit": "07216a45095734293931046bfc34cf5b315844fe",
+    "runtimeWebTree": "2f47bf3638837e54de403211e4d8f1536d1d1dac",
+    "browserVersion": "151.0.7922.173",
+    "checks": [
+      "desktop:top0",
+      "desktop:top1",
+      "desktop:top10",
+      "desktop:bound-detail-invalidity",
+      "desktop:wrong-revision-closed",
+      "desktop:stable-page-private-allowlist",
+      "mobile:top0",
+      "mobile:top1",
+      "mobile:top10",
+      "mobile:bound-detail-invalidity",
+      "mobile:wrong-revision-closed",
+      "mobile:stable-page-private-allowlist"
+    ],
+    "readRpcCalls": 17,
+    "writeRpcCalls": 0,
+    "providerCalls": 0
+  },
+  "cleanup": {
+    "appPid": 9524,
+    "appExit": 143,
+    "appSignal": null,
+    "bridgeClosed": true
+  },
+  "independentReview": {
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "blocker": 0,
+    "high": 0,
+    "scope": "read qualification/calendar source and synthetic focused tests; not protected A1"
+  },
+  "qualificationScope": "recheck persisted existing proof at one current cutoff; no renewal or new financial authority",
+  "newCurrentFinancialPriceProducer": "UNIMPLEMENTED_BLOCKED_AUTHORITY_PROTOCOL",
+  "suppliedCalendarScope": "both real domain suppliers wired; completion and coverage remain unknown; full three-year/warmup NOT_COMPLETED",
+  "nativePostgresCAS": "NOT_RUN_HOLD_RETAINED",
+  "protectedReviewBinding": "BLOCKED_UNCHANGED",
+  "oldPRHead": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "realSourceModelAndTwoSessions": "BLOCKED_NOT_RUN",
+  "contaboConnection": "NOT_RUN_USER_FORBIDS_THIS_TURN",
+  "networkConfiguration": "NOT_MODIFIED",
+  "sshIdentityOrPrivateKeyGeneration": "NOT_PERFORMED",
+  "sshMetadata": {
+    "agentSocketPresent": false,
+    "readySecretBindings": [],
+    "readyOutboundIdentities": [],
+    "trustedHostFingerprint": null,
+    "supportedExactTcp22GrantObserved": false
+  },
+  "stagingLocalPreflight": {
+    "testsPassed": 3,
+    "defaultVerifierExit": 2,
+    "missing": [
+      "account_owner_ssh_alias_required",
+      "account_owner_host_name_required",
+      "trusted_host_key_fingerprint_required",
+      "isolated_candidate_writer_identity_required"
+    ]
+  },
+  "oldVmAndICloud": "NOT_TOUCHED",
+  "production": "NOT_MODIFIED_OR_DEPLOYED",
+  "nonblockingFollowup": "When introducing a real new current producer, define financial proof revision compatibility explicitly; exact live proofHash vs frozen financial binding is not additionally checked by this read helper. Current SQL contract uses immutable publication proof.",
+  "priorEvidence": "Original59source/SSR and12browser receipts retained on02b4bd5; not summed or reassigned",
+  "fullGoal": "ACTIVE_INCOMPLETE"
+}

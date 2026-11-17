@@ -1,7 +1,7 @@
 {
   "schemaVersion": "vnext-forecast-sources-source-profile-v1",
   "migration": "migrations/20261023_vnext_forecast_sources_v1.sql",
-  "migrationSha256": "72365104a2f1b258ed5421f601bc731107fac0537fc5c4a5a072d09f456ffe8e",
+  "migrationSha256": "45de5d9f23360a244c67c460a3a8de619737facab081af127ec45431ad1a4f90",
   "nativeVerified": false,
   "nativeOids": null,
   "oldSourcesUnchanged": true,

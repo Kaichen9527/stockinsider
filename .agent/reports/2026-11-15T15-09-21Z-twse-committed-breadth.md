@@ -1,0 +1,3 @@
+# TWSE committed close and breadth verification
+
+Disposable PostgreSQL staging used the official 11764 November 13 response. The verified close filled one missing price after acknowledgement. A conflicting price, changed source rights and incorrect dividend terms each gave the expected gap. A new roster manifest for the same members kept the original eligible close, and the TPEx result matched the predecessor exactly. Reusable SQL vectors for cutoff, accessibility and reconciliation passed. [OpenSpec evidence](../../openspec/changes/stockinsider-vnext-20/evidence/2026-11-15-t06-t10-twse-committed-breadth.json)

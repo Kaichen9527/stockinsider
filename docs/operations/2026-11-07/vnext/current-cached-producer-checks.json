@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "vnext-current-cached-producer-evidence-v1",
+  "sourceCommit": "d5929d1967646cfd079dd7640f27b6934dba79bf",
+  "sourceTree": "5e8c92653cdc506d85ccfdc3d7a1a7b1c8bde1c4",
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "high",
+  "sameVm": true,
+  "checks": [
+    {
+      "name": "focused",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/top10-projection.test.ts",
+        "web/src/lib/vnext/published-target-read.test.ts",
+        "web/src/lib/vnext/ranking-read.test.ts",
+        "web/src/lib/vnext/candidate-page.test.ts",
+        "web/src/lib/stock-chart-calendar.test.ts",
+        "web/src/app/components/vnext/detail-source.test.mjs",
+        "scripts/vnext-ranking-snapshot-source.test.mjs",
+        "web/src/lib/stock-chart-supply.test.ts",
+        "web/src/lib/vnext/business-public.test.ts",
+        "web/src/lib/vnext/vnext.test.ts",
+        "scripts/vnext-staging-preflight.test.mjs",
+        "web/src/lib/vnext/candidate-history-read.test.ts",
+        "scripts/vnext-candidate-history-source.test.mjs",
+        "web/src/lib/candidate-price-history.test.ts",
+        "scripts/vnext-source-window-source.test.mjs",
+        "web/src/lib/vnext/source-volume-boundary.test.ts",
+        "web/src/lib/vnext/analysis-sources.test.ts",
+        "web/src/lib/vnext/source-backlog.test.ts",
+        "web/src/lib/vnext/cached-admission.test.ts",
+        "web/src/lib/vnext/current-evidence-read.test.ts",
+        "web/src/lib/vnext/preparation-authority.test.ts",
+        "scripts/vnext-weekly-forecast-source.test.mjs",
+        "web/src/lib/vnext/forecast-active.test.ts",
+        "web/src/lib/vnext/forecast-current.test.ts",
+        "web/src/lib/vnext/thesis.test.ts"
+      ],
+      "start": "2026-11-07T09:38:51.616792+00:00",
+      "end": "2026-11-07T09:38:54.152520+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40652800,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31482658816,
+        "/tmp": 9422876672
+      },
+      "resourceViolation": null,
+      "logSha256": "a9498b34d7697287cd78b1aa7a9c59321548370b84142f551502b32378b854cb"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-07T09:38:54.152932+00:00",
+      "end": "2026-11-07T09:38:58.411456+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40792064,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31482638336,
+        "/tmp": 9422876672
+      },
+      "resourceViolation": null,
+      "logSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-07T09:38:58.411845+00:00",
+      "end": "2026-11-07T09:39:14.217409+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40624128,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31482630144,
+        "/tmp": 9422876672
+      },
+      "resourceViolation": null,
+      "logSha256": "84df8aab33a2588ebae98ea51a5abfccb758ea53330f1013e6b9766025759b29"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-07T09:39:14.217838+00:00",
+      "end": "2026-11-07T09:39:21.488673+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40202240,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31466741760,
+        "/tmp": 9422876672
+      },
+      "resourceViolation": null,
+      "logSha256": "ae4953898ee50b1068ac99153cfede8d1841341d9d0adc916f350e9ff91328df"
+    },
+    {
+      "name": "browser",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/vnext-ranking-browser-smoke.mjs"
+      ],
+      "start": "2026-11-07T09:39:21.489093+00:00",
+      "end": "2026-11-07T09:39:28.504693+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 147251200,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31463993344,
+        "/tmp": 9303687168
+      },
+      "resourceViolation": null,
+      "logSha256": "14dd87e5b615d4ed892f42e4f3548183cbdfa410ef269af5900fe6358da21e68"
+    }
+  ],
+  "focusedTests": 204,
+  "browser": {
+    "scope": "actual isolated HTTP/SSR/Chromium desktop/mobile; synthetic RPC transport only, no native PG/review authority",
+    "status": "PASS",
+    "source": "d5929d1967646cfd079dd7640f27b6934dba79bf",
+    "harnessCommit": "d5929d1967646cfd079dd7640f27b6934dba79bf",
+    "runtimeWebTree": "17700b803322a09d71ff0bd13c78ab482cc80d34",
+    "browserVersion": "151.0.7922.173",
+    "checks": [
+      "desktop:top0",
+      "desktop:top1",
+      "desktop:top10",
+      "desktop:bound-detail-invalidity",
+      "desktop:wrong-revision-closed",
+      "desktop:stable-page-private-allowlist",
+      "desktop:saved-history-version-and-observed-exit",
+      "mobile:top0",
+      "mobile:top1",
+      "mobile:top10",
+      "mobile:bound-detail-invalidity",
+      "mobile:wrong-revision-closed",
+      "mobile:stable-page-private-allowlist",
+      "mobile:saved-history-version-and-observed-exit"
+    ],
+    "readRpcCalls": 23,
+    "writeRpcCalls": 0,
+    "providerCalls": 0
+  },
+  "cleanup": {
+    "appPid": 15452,
+    "appExit": 143,
+    "appSignal": null,
+    "bridgeClosed": true
+  },
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 34
+  },
+  "review": {
+    "independent": true,
+    "unresolvedBlockerP1P2": 0,
+    "retainedFindings": [
+      "financial receipt.published_at=cutoff+1microsecond was accepted by millisecond Date.parse; original precise-clock repro now rejected",
+      "source empty-page/pre-progress rights freshness gap repaired with before/after and final rechecks"
+    ],
+    "authority": "engineering source review only, not A1"
+  },
+  "actualCurrentEvidence": "cached source comparison only; no live data/DB/model acceptance",
+  "formalQualification": "unavailable; no renewal/new proof/120s extension",
+  "weeklyAuditBehavior": "All formal AuditQuote fields null/unadjusted; technical/quote material positives stop while published current-rights/action authority unavailable. Cached comparison evidence retained separately.",
+  "sourceRevision": "publisher revision null/gap where raw ignoreDuplicates lacks authority",
+  "operatingCost": "additional current-policy reads up to approximately1000/bounded scan; actual latency/writer lease/performance not accepted",
+  "nativeHold": "UNCHANGED_NOT_RUN",
+  "protectedReviewAndOriginalPRHead": "UNCHANGED",
+  "sourceAcquisitionAndModel": "NOT_RUN",
+  "realAdjacentSessions": "NOT_RUN",
+  "network": "NOT_CHANGED; operator verified Tailscale-only path/new executor requirement; no publish/new task/host install/probe/key",
+  "contaboOldVmICloudProduction": "NOT_TOUCHED",
+  "fullGoal": "ACTIVE_INCOMPLETE"
+}

@@ -15,13 +15,13 @@ export function eligibleClue(clue: Clue, cutoff: string) {
   const catalyst = clue.catalystUntil ? Date.parse(clue.catalystUntil) : NaN;
   return age >= 0 && (age <= 30 * 86400000 || (catalyst >= Date.parse(cutoff) && catalyst <= maxCatalyst.getTime()));
 }
-/** A shared author or original root joins a single syndication family. */
+/** A shared content hash, author or original root joins one syndication family. */
 export function independentClues(clues: Clue[]) {
   const ordered = [...clues].filter((c) => c.root && c.authorRoot).sort((a, b) => a.contentHash.localeCompare(b.contentHash));
   const parent = ordered.map((_, i) => i);
   const find = (i: number): number => parent[i] === i ? i : (parent[i] = find(parent[i]));
-  const roots = new Map<string, number>(); const authors = new Map<string, number>();
-  for (const [i, clue] of ordered.entries()) for (const [map, key] of [[roots, `${clue.symbol}:${clue.root}`], [authors, `${clue.symbol}:${clue.authorRoot}`]] as const) {
+  const roots = new Map<string, number>(); const authors = new Map<string, number>(); const hashes = new Map<string, number>();
+  for (const [i, clue] of ordered.entries()) for (const [map, key] of [[roots, `${clue.symbol}:${clue.root}`], [authors, `${clue.symbol}:${clue.authorRoot}`], [hashes, `${clue.symbol}:${clue.contentHash}`]] as const) {
     const prior = map.get(key); if (prior !== undefined) parent[find(i)] = find(prior); else map.set(key, i);
   }
   const selected = new Map<number, Clue>(); for (const [i, clue] of ordered.entries()) if (!selected.has(find(i))) selected.set(find(i), clue);
@@ -44,7 +44,8 @@ export function screenRoundRobin(clues: Clue[], cutoff: string, alreadyParsed: R
   return result;
 }
 export function volumeComparison(recent7: number | null, prior21: number | null, sourceHealthy: boolean) {
-  if (!sourceHealthy || recent7 === null || prior21 === null || recent7 < 0 || prior21 < 0) return { ratio: null, state: 'gap' };
+  if (!sourceHealthy || recent7 === null || prior21 === null || !Number.isFinite(recent7) || !Number.isFinite(prior21) || recent7 < 0 || prior21 < 0) return { ratio: null, state: 'gap' };
   if (prior21 === 0) return { ratio: null, state: recent7 > 0 ? 'new' : 'zero' };
-  return { ratio: (recent7 / 7) / (prior21 / 21), state: 'measured' };
+  const ratio = (recent7 / 7) / (prior21 / 21);
+  return Number.isFinite(ratio) ? { ratio, state: 'measured' } : { ratio: null, state: 'gap' };
 }

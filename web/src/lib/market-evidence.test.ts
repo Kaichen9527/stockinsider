@@ -26,6 +26,21 @@ test('missing market component disables risk budget', () => {
   assert.equal(evidence.riskBudget, null);
   assert.ok(evidence.missingComponents.length === 4);
 });
+test('per-market diagnostics retain the approved aggregate95 scope without a new per-market95 gate',()=>{
+  // Synthetic arithmetic vectors, not official calendar/source acceptance.
+  const indices=Array.from({length:520},(_,i)=>({date:new Date(Date.UTC(2024,0,1+i)).toISOString().slice(0,10),close:100+i})),date=indices.at(-1)!.date;
+  const input={sessionDate:date,taiex:indices,tpex:indices,foreignFlows:indices.slice(-5).map(row=>({date:row.date,value:1})),breadth:[
+    {market:'TWSE' as const,numerator:800,observed:1000,eligible:1000,date},{market:'TPEX' as const,numerator:50,observed:90,eligible:100,date}]};
+  const result=deriveMarketEvidence(input);assert.equal(result.status,'complete');assert.equal(result.breadthByMarket[1].coveragePct,90);
+  assert.equal(result.breadthByMarket[1].caComparability,null);assert.equal(result.breadthByMarket[1].marketAuthority,false);
+  const below=deriveMarketEvidence({...input,breadth:[{...input.breadth[0],observed:940},{...input.breadth[1],observed:100}]});
+  assert.ok(below.missingComponents.includes('twse_tpex_breadth_95pct'));
+  for(const breadth of [[input.breadth[0]],[input.breadth[0],input.breadth[0]],
+    [input.breadth[0],{...input.breadth[0],observed:900},input.breadth[1]]]){
+    const invalid=deriveMarketEvidence({...input,breadth});assert.equal(invalid.breadthState,null);assert.equal(invalid.riskBudget,null);
+    assert.ok(invalid.missingComponents.includes('twse_tpex_breadth_95pct'));
+  }
+});
 
 test('canonical market evidence maps to the public homepage summary', () => {
   const summary = marketEvidenceToPublicSummary({

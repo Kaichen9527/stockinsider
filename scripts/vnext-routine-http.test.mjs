@@ -11,11 +11,46 @@ import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
 import {workerFixture} from './vnext-worker-fixture.mjs';
+import { installRoutineSourcePrefix } from './vnext-routine-source-prefix-fixture.mjs';
+import {rosterHeadFixtureSql} from './vnext-launch-roster-head-fixture.mjs';
 import {readResearchPublicationCatalog} from './opportunity-v3/research-publication-catalog.mjs';
 import {readTailNamespace} from './opportunity-v3/research-publication-tail-entry-namespace.mjs';
 import {tailMetadataSha} from './opportunity-v3/research-publication-tail-entry-guard.mjs';
-import {sourceNamespaceReachability,assertSourceNamespaceIdleClient} from './vnext-source-namespace-candidate.mjs';
+import {
+  SOURCE_SCOPE_SQL, sourceNamespaceReachability, projectSourceNamespaceReachability,
+  assertSourceNamespaceIdleClient,
+} from './vnext-source-namespace-candidate.mjs';
+import { inspectSourceNamespaceEntrypoints } from './vnext-source-namespace-entrypoints.mjs';
 import {extractContentBatch} from '../web/src/lib/vnext/permitted-content.ts';
+async function readSourceCatalog(client) {
+  const {scope} = (await client.query(SOURCE_SCOPE_SQL)).rows[0];
+  const namespace = await readTailNamespace(client);
+  const catalog = await readResearchPublicationCatalog(client, scope);
+  return {scope, namespace, catalog};
+}
+
+function sourceReachabilityAfterRoster(before, current) {
+  const names = ['vnext_launch_instrument_v1', 'vnext_screen_roster_heads_v1'];
+  const signatures = [
+    'vnext_launch_instrument_v1(text,timestamp with time zone)',
+    'vnext_screen_roster_heads_v1(text[],timestamp with time zone)',
+  ];
+  const priorReachability = sourceNamespaceReachability(before);
+  const addedNamespace = row => row.schema === 'public' && signatures.includes(row.signature);
+  const addedCatalog = row => signatures.includes(row.signature);
+  assert.deepEqual(current.scope.functions.filter(name => names.includes(name)).sort(), [...names].sort());
+  assert.deepEqual(current.namespace.routines.filter(addedNamespace).map(row => row.signature).sort(), [...signatures].sort());
+  assert.deepEqual(current.catalog.functions.filter(addedCatalog).map(row => row.signature).sort(), [...signatures].sort());
+  assert.deepEqual({
+    scope: {...current.scope, functions: current.scope.functions.filter(name => !names.includes(name))},
+    namespace: {...current.namespace, routines: current.namespace.routines.filter(row => !addedNamespace(row))},
+    catalog: {...current.catalog, functions: current.catalog.functions.filter(row => !addedCatalog(row))},
+  }, before, 'vnext_roster_fixture_namespace_delta_unexpected');
+  const reachability = projectSourceNamespaceReachability(current.catalog);
+  assert.deepEqual(reachability, priorReachability, 'vnext_roster_fixture_changed_source_reachability');
+  return reachability;
+}
+
 const { Client } = createRequire(import.meta.url)('pg');
 assert.equal(process.version,'v22.14.0');
 const database=process.env.VNEXT_HTTP_DATABASE||'vnext_legacy';if(!['vnext_legacy','vnext_worker'].includes(database))throw Error('closed_owned_http_database_required');
@@ -30,7 +65,12 @@ const operator = 'synthetic-worker-operator', author = 'synthetic-worker-author'
 const stage=process.env.VNEXT_HTTP_STAGE??'fresh';if(!['fresh','resume-prior-session-fk'].includes(stage))throw Error('closed_http_recovery_stage_required');
 let terminalRetryPrefix; // Immutable real first-parent prefix; never a fabricated job.
 const trace = []; let pending = 0; const releaseId='a'.repeat(40);
-const functions={vnext_forecast_active_read_v1:{keys:['p_principal'],sql:'SELECT public.vnext_forecast_active_read_v1($1) AS result'},vnext_provider_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_provider_command_v1($1,$2,$3::jsonb) AS result'},read_financial_facts_for_stocks_as_of:{keys:['p_cutoff','p_stock_ids'],sql:'SELECT * FROM public.read_financial_facts_for_stocks_as_of($1::timestamptz,$2::uuid[]) LIMIT 10000',setReturning:true},vnext_target_command_v1:{keys:['p_principal','p_request'],sql:'SELECT public.vnext_target_command_v1($1,$2::jsonb) AS result'},vnext_cached_admission_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_cached_admission_v1($1,$2,$3::jsonb) AS result'},vnext_source_withdrawal_v1:{keys:['p_principal','p_operation','p_request'],sql:'SELECT public.vnext_source_withdrawal_v1($1,$2,$3::jsonb) AS result'},vnext_thesis_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_thesis_command_v1($1,$2,$3::jsonb) AS result'},vnext_analysis_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_analysis_command_v1($1,$2,$3::jsonb) AS result'},vnext_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_command_v1($1,$2,$3::jsonb) AS result'},vnext_read_v1:{keys:['p_symbol'],sql:'SELECT public.vnext_read_v1($1) AS result'},acquire_production_write_lease:{keys:['p_lease_key','p_owner_id','p_ttl_seconds'],sql:'SELECT public.acquire_production_write_lease($1,$2::uuid,$3::integer) AS result'},release_production_write_lease:{keys:['p_lease_key','p_owner_id'],sql:'SELECT public.release_production_write_lease($1,$2::uuid) AS result'}};
+const functions={
+  vnext_screen_roster_heads_v1: {
+    keys: ['p_symbols', 'p_cutoff'],
+    sql: 'SELECT public.vnext_screen_roster_heads_v1($1::text[],$2::timestamptz) AS result',
+  },
+  vnext_forecast_active_read_v1:{keys:['p_principal'],sql:'SELECT public.vnext_forecast_active_read_v1($1) AS result'},vnext_provider_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_provider_command_v1($1,$2,$3::jsonb) AS result'},read_financial_facts_for_stocks_as_of:{keys:['p_cutoff','p_stock_ids'],sql:'SELECT * FROM public.read_financial_facts_for_stocks_as_of($1::timestamptz,$2::uuid[]) LIMIT 10000',setReturning:true},vnext_target_command_v1:{keys:['p_principal','p_request'],sql:'SELECT public.vnext_target_command_v1($1,$2::jsonb) AS result'},vnext_cached_admission_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_cached_admission_v1($1,$2,$3::jsonb) AS result'},vnext_source_withdrawal_v1:{keys:['p_principal','p_operation','p_request'],sql:'SELECT public.vnext_source_withdrawal_v1($1,$2,$3::jsonb) AS result'},vnext_thesis_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_thesis_command_v1($1,$2,$3::jsonb) AS result'},vnext_analysis_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_analysis_command_v1($1,$2,$3::jsonb) AS result'},vnext_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_command_v1($1,$2,$3::jsonb) AS result'},vnext_read_v1:{keys:['p_symbol'],sql:'SELECT public.vnext_read_v1($1) AS result'},acquire_production_write_lease:{keys:['p_lease_key','p_owner_id','p_ttl_seconds'],sql:'SELECT public.acquire_production_write_lease($1,$2::uuid,$3::integer) AS result'},release_production_write_lease:{keys:['p_lease_key','p_owner_id'],sql:'SELECT public.release_production_write_lease($1,$2::uuid) AS result'}};
 const bridge = http.createServer(async (req, res) => {
   const chunks = []; let length = 0;
   for await (const chunk of req) { length += chunk.length; if (length > 1048576) { res.writeHead(413).end(); return; } chunks.push(chunk); }
@@ -107,6 +147,7 @@ const input = symbol => ({ cutoff: now, tradingValid: true, clues: [{ symbol, so
   screening: { sourceHealthy: false, recent7: null, prior21: null, corporateActionAdjusted: false, priceReturn20: { value: null, source: '', observedAt: '' }, volumeRatio20: { value: null, source: '', observedAt: '' }, institutionalFlowRatio: { value: null, source: '', observedAt: '' }, revenueGrowth: { value: null, source: '', observedAt: '' }, catalystVerified: { value: null, source: '', observedAt: '' } } });
 await test('fresh routine-screen HTTP admits from current original receipts before expensive work',{timeout:240000},async t=>{
  const x=await workerFixture();let app,appLog,unexpectedFetch;let appStopRequested=false,observedStartedAttempts=0;const results=[];
+ let predecessorSourceCatalog;
  const stage=async(name,work)=>{let failed=false;await t.test(name,async()=>{try{await work();}catch(error){failed=true;const primitive=v=>v===null||typeof v==='number'||typeof v==='boolean'?v:'REDACTED';console.log('VNEXT_ROUTINE_FAILURE_SAFE '+JSON.stringify({stage:name,code:/^[A-Z0-9_]{1,40}$/u.test(error.code||'')?error.code:'UNKNOWN',actual:primitive(error.actual),expected:primitive(error.expected),messageHash:sha(String(error.message)),tokens:(String(error.message).match(/vnext_[a-z_]{1,120}/gu)||[]).slice(0,3)}));throw error;}});if(failed)throw Error('dependent_routine_stage_failed');};
  let contentHash;
  const observation=async()=>{const state=await x.snapshot();return {state,traceCount:trace.length};};
@@ -114,7 +155,19 @@ await test('fresh routine-screen HTTP admits from current original receipts befo
  try{
   await stage('full original candidates commit and legal original content seeds a fresh empty business ledger',async()=>{
    await x.install();
-   for(const candidate of ['migrations/20261022_vnext_analysis_sources_v1.sql','migrations/20261022_vnext_thesis_audit_v1.sql','migrations/20261022_vnext_source_withdrawals_v1.sql','migrations/20261022_vnext_cached_admission_v2.sql','migrations/20261022_vnext_terminal_failure_slots_v1.sql','migrations/20261022_vnext_financial_status_text_v1.sql','migrations/20261022_vnext_issuer_ir_sources_v1.sql','migrations/20261022_vnext_semantic_score_fence_v1.sql','migrations/20261022_vnext_catalyst_criteria_v1.sql','migrations/20261022_vnext_dimensionless_arithmetic_v1.sql','migrations/20261022_vnext_target_exit_v1.sql','migrations/20261022_vnext_preparation_read_v1.sql','migrations/20261023_vnext_trading_invalidity_exit_v1.sql','migrations/20261023_vnext_roster_current_fence_v1.sql','migrations/20261023_vnext_forecast_sources_v1.sql','migrations/20261023_vnext_forecast_active_v1.sql']){const bytes=fs.readFileSync(candidate);await x.writer.query(bytes.toString());x.save('prefix-'+path.basename(candidate),{sha256:sha(bytes),bytes:bytes.length});}
+   await installRoutineSourcePrefix(x);
+   await x.observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');
+   try {
+     predecessorSourceCatalog = await readSourceCatalog(x.observer);
+     sourceNamespaceReachability(predecessorSourceCatalog);
+     await x.observer.query('COMMIT');
+   } catch (error) {
+     await x.observer.query('ROLLBACK');
+     throw error;
+   }
+   const rosterHead = rosterHeadFixtureSql();
+   await x.writer.query(rosterHead.predecessor);
+   await x.writer.query(rosterHead.migration);
    await x.writer.query("INSERT INTO public.vnext_principals_v1(principal,role,enabled) VALUES($1,'operator',true),($2,'author',true)",[operator,author]);
    await x.writer.query("INSERT INTO public.vnext_source_policies_v1(source,scope,license_basis,rights_subject,valid_until,enabled) VALUES('official','official_original','synthetic-engineering-public-license','synthetic-current-source',clock_timestamp()+interval'1 hour',true)");
    const content={id:'synthetic-routine-original',source:'official',scope:'official_original',url:'https://www.twse.com.tw/synthetic-routine-cache-only',eventAt:now,publishedAt:now,eventBasis:'original_event',availableAt:now,symbols:['2409'],originalRoot:'https://www.twse.com.tw/synthetic-routine-cache-only',authorRoot:'official:twse-tpex',body:'Synthetic original cached document, never real acquired issuer research.'};
@@ -141,10 +194,14 @@ await test('fresh routine-screen HTTP admits from current original receipts befo
    const empty=await post('vnext-research',{symbols:[]},operatorKey);assert.equal(empty.status,200);assert.equal(empty.body.result.expensiveCalls,0);assert.deepEqual(empty.body.result.jobs,[]);assert.equal(trace.length,before.traceCount);assert.deepEqual(await x.snapshot(),before.state);
   });
   await stage('real routine HTTP derives the source receipt and atomically reserves one new researching slot without any claim',async()=>{
-   const before=await observation();const response=await post('vnext-research',{action:'screen'},operatorKey);x.save('first-screen-response',response);assert.equal(response.status,200);
+   const before=await observation();const response=await post('vnext-research',{action:'screen'},operatorKey);x.save('first-screen-response',response);
+   const errorCode = response.body.error;
+   assert.equal(response.status, 200, typeof errorCode === 'string' && /^vnext_[a-z_]{1,120}$/u.test(errorCode) ? errorCode : undefined);
    const after=await x.snapshot();assert.equal(after.vnext_jobs_v1.count,1);assert.equal(after.vnext_members_v1.count,1);const [job]=after.vnext_jobs_v1.rows,[member]=after.vnext_members_v1.rows;assert.equal(job.symbol,'2409');assert.equal(member.symbol,'2409');assert.equal(member.state,'researching');assert.equal(job.input_hash,member.input_hash);assert.equal(job.started_at,null);assert.ok(member.evidence.clues.some(clue=>clue.contentHash===contentHash));assert.equal(member.evidence.initialScore.probability,false);assert.equal(after.production_write_leases.count,0);noExpensive(after);
    const changed=Object.keys(before.state).filter(name=>JSON.stringify(before.state[name].rows)!==JSON.stringify(after[name].rows));x.save('first-screen-state',{wholeBefore:before.state,wholeAfter:after,changed,events:trace.slice(before.traceCount)});assert.ok(changed.includes('vnext_jobs_v1'));assert.ok(changed.includes('vnext_members_v1'));if(changed.includes('vnext_weekly_audits_v1')){assert.equal(before.state.vnext_weekly_audits_v1.count,0);assert.equal(after.vnext_weekly_audits_v1.count,1);const [audit]=after.vnext_weekly_audits_v1.rows;assert.equal(audit.session_date,job.session_date);assert.deepEqual(audit.symbols,[]);assert.deepEqual(audit.gaps,[]);}assert.ok(changed.every(name=>['vnext_sessions_v1','vnext_calendar_receipts_v2','vnext_jobs_v1','vnext_members_v1','vnext_screening_v1','vnext_confirmations_v1','vnext_audit_v1','vnext_home_v1','vnext_weekly_audits_v1'].includes(name)),'finite exact whole-table delta');
-   const events=trace.slice(before.traceCount);assert.ok(events.some(e=>e.rpc==='vnext_cached_admission_v1'&&e.action==='enqueue'&&e.commitObserved));assert.equal(events.some(e=>['claim','prepare','reserve'].includes(e.action)||e.rpc?.includes('provider')),false);x.save('first-screen-state',{wholeBefore:before.state,wholeAfter:after,changed,events});results.push({kind:'routine-admitted',newJobs:1,newMembers:1,startedAttempts:0,providerInvocations:0,noExternalIO:true});
+   const events=trace.slice(before.traceCount);
+   assert.ok(events.some(event => event.rpc === 'vnext_screen_roster_heads_v1' && event.commitObserved));
+   assert.ok(events.some(e=>e.rpc==='vnext_cached_admission_v1'&&e.action==='enqueue'&&e.commitObserved));assert.equal(events.some(e=>['claim','prepare','reserve'].includes(e.action)||e.rpc?.includes('provider')),false);x.save('first-screen-state',{wholeBefore:before.state,wholeAfter:after,changed,events});results.push({kind:'routine-admitted',newJobs:1,newMembers:1,startedAttempts:0,providerInvocations:0,noExternalIO:true});
   });
   await stage('actual original120second deadline expires without clock mutation, retry reserves once and consumes a second real start',async()=>{
    const before=await x.snapshot(),job=before.vnext_jobs_v1.rows[0],start=trace.length;
@@ -196,10 +253,18 @@ await test('fresh routine-screen HTTP admits from current original receipts befo
    // Read-only current-profile diagnostic. Never grant a missing predecessor
    // privilege or substitute the historical candidate36 descriptor.
    await x.observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');let sourcePrerequisite;try{const observed=(await x.observer.query("SELECT pg_backend_pid() AS pid,current_setting('transaction_read_only') AS read_only")).rows[0];assert.equal(observed.read_only,'on');assert.notEqual(observed.pid,x.writer.processID);sourcePrerequisite=(await x.observer.query("SELECT jsonb_build_object('schema',(SELECT to_jsonb(n) FROM pg_namespace n WHERE n.oid='public'::regnamespace),'sourceOwnerUsage',has_schema_privilege('research_source_fence_owner_v2','public','USAGE'),'inputOwnerUsage',has_schema_privilege('research_input_preparation_owner_v2','public','USAGE'),'targetFunctions',(SELECT jsonb_agg((to_jsonb(p)-'prosrc')||jsonb_build_object('bodySha256',encode(sha256(convert_to(p.prosrc,'UTF8')),'hex')) ORDER BY p.oid) FROM pg_proc p WHERE p.pronamespace='public'::regnamespace AND p.proname IN('research_source_fence_write_v2','research_source_fence_record_v2','research_source_root_v2')),'roles',(SELECT jsonb_agg(jsonb_build_object('name',rolname,'super',rolsuper,'login',rolcanlogin,'bypassRls',rolbypassrls,'config',rolconfig) ORDER BY rolname) FROM pg_roles WHERE rolname IN('research_source_fence_owner_v2','research_input_preparation_owner_v2'))) AS observed")).rows[0].observed;
-    const scope=(await x.observer.query("SELECT jsonb_build_object('tables',(SELECT jsonb_agg(relname ORDER BY relname) FROM pg_class WHERE relnamespace='public'::regnamespace),'functions',(SELECT jsonb_agg(DISTINCT proname ORDER BY proname) FROM pg_proc WHERE pronamespace='public'::regnamespace),'types',(SELECT jsonb_agg(typname ORDER BY typname) FROM pg_type WHERE typnamespace='public'::regnamespace),'roles',(SELECT jsonb_agg(rolname ORDER BY rolname) FROM pg_roles WHERE rolname !~ '^pg_')) AS scope")).rows[0].scope;
-    const namespace=await readTailNamespace(x.observer),catalog=await readResearchPublicationCatalog(x.observer,scope);x.save('raw-source-current-complete-catalog',{scope,namespace,catalog,codec:'original canonicalTailMetadata en-key sort',scopeHash:tailMetadataSha(scope),namespaceHash:tailMetadataSha(namespace),catalogHash:tailMetadataSha(catalog),readonlyObserver:true});
+    const {scope,namespace,catalog}=await readSourceCatalog(x.observer);x.save('raw-source-current-complete-catalog',{scope,namespace,catalog,codec:'original canonicalTailMetadata en-key sort',scopeHash:tailMetadataSha(scope),namespaceHash:tailMetadataSha(namespace),catalogHash:tailMetadataSha(catalog),readonlyObserver:true});
     sourcePrerequisite.completeCatalog={scopeHash:tailMetadataSha(scope),namespaceHash:tailMetadataSha(namespace),catalogHash:tailMetadataSha(catalog),existingReadCodecs:true};
-    const reachability={...sourceNamespaceReachability({scope,namespace,catalog}),transactionStateProbe},serialized=JSON.stringify(reachability);x.save('raw-source-reachability-safe',reachability);assert.ok(Buffer.byteLength(serialized)<=45056,'finite safe direct-rights report must fit annotation bound');await x.observer.query('COMMIT');console.log('VNEXT_SOURCE_REACHABILITY_SAFE '+serialized);}catch(error){await x.observer.query('ROLLBACK');throw error;}
+    const direct = sourceReachabilityAfterRoster(predecessorSourceCatalog, {scope, namespace, catalog});
+    const entrypoints = await inspectSourceNamespaceEntrypoints(x.observer, direct);
+    x.save('raw-source-entrypoints-safe', entrypoints);
+    const reachability = {...direct, transactionStateProbe};
+    const serialized = JSON.stringify(reachability);
+    x.save('raw-source-reachability-safe', reachability);
+    assert.ok(Buffer.byteLength(serialized)<=45056,'finite safe direct-rights report must fit annotation bound');
+    await x.observer.query('COMMIT');
+    console.log('VNEXT_SOURCE_REACHABILITY_SAFE '+serialized);
+   }catch(error){await x.observer.query('ROLLBACK');throw error;}
    x.save('raw-source-current-prerequisite',sourcePrerequisite);const prerequisiteHash=sha(JSON.stringify(sourcePrerequisite));console.log('VNEXT_SOURCE_PREREQUISITE_SAFE '+JSON.stringify({sourceOwnerUsage:sourcePrerequisite.sourceOwnerUsage,inputOwnerUsage:sourcePrerequisite.inputOwnerUsage,descriptorHash:prerequisiteHash,completeCatalog:sourcePrerequisite.completeCatalog,noGrant:true,fullPrivateDescriptorRetained:true}));
    if(sourcePrerequisite.sourceOwnerUsage!==true)throw Error('vnext_test_source_namespace_not_ready');
    const original=await x.snapshot(),setupOwner=randomUUID();await x.writer.query('BEGIN');try{

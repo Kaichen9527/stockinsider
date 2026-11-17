@@ -1,0 +1,109 @@
+{
+  "task": "T07 real company operating guidance and scenario calculation",
+  "base": "67bb1036beddede911bfc2525004606be9a6d3cb",
+  "environment": {
+    "kind": "Contabo isolated staging",
+    "node": "22.14.0",
+    "next": "16.3.4"
+  },
+  "observation": {
+    "schemaVersion": "vnext-issuer-operating-guidance-v1",
+    "symbol": "2454",
+    "period": "2026-Q4",
+    "eventDate": "2026-10-30",
+    "source": {
+      "url": "https://www.mediatek.com/hubfs/MediaTek-Assets/Pdfs/Quarterly%20Earnings%20Release/2026/Quarterly%20Earnings%20Release-2026Q3/Transcript.pdf",
+      "sha256": "991c4a867a06803b8c02db4c89e058b937902a47634cc89e2869310782342a9c",
+      "bytes": 316576,
+      "knownAt": "2026-11-16T17:33:18.168Z",
+      "locator": {
+        "page": 4,
+        "normalization": "NFKC-space-v1",
+        "normalizedPageSha256": "582c58c73b940015bbc319ea381357310e06cdc7a8cfa56a819ad4cb2b3c44b5",
+        "startCodePoint": 1060,
+        "endCodePoint": 1442
+      }
+    },
+    "sourceClass": "company_disclosed_guidance",
+    "guidance": {
+      "revenueTwd": {
+        "low": 210100000000,
+        "high": 221800000000
+      },
+      "grossMarginBps": {
+        "low": 4350,
+        "high": 4650
+      },
+      "expenseRatioBps": {
+        "low": 2400,
+        "high": 2800
+      }
+    },
+    "operatingScenarios": {
+      "method": "independent_endpoint_sensitivity_v1",
+      "class": "calculated_operating_income_sensitivity",
+      "bear": {
+        "revenueTwd": 210100000000,
+        "grossMarginBps": 4350,
+        "expenseRatioBps": 2800,
+        "operatingMarginBps": 1550,
+        "operatingIncomeTwd": 32565500000
+      },
+      "base": {
+        "revenueTwd": 215950000000,
+        "grossMarginBps": 4500,
+        "expenseRatioBps": 2600,
+        "operatingMarginBps": 1900,
+        "operatingIncomeTwd": 41030500000
+      },
+      "bull": {
+        "revenueTwd": 221800000000,
+        "grossMarginBps": 4650,
+        "expenseRatioBps": 2400,
+        "operatingMarginBps": 2250,
+        "operatingIncomeTwd": 49905000000
+      },
+      "eps": null,
+      "forwardPe": null,
+      "targetPriceTwd": null,
+      "gaps": [
+        "net_nonoperating_income_missing",
+        "tax_basis_missing",
+        "common_shareholder_attribution_missing",
+        "forecast_weighted_shares_missing",
+        "valuation_multiple_missing"
+      ]
+    }
+  },
+  "repeat": {
+    "sourceAndPageDigestsMatch": true,
+    "scenarioValuesMatch": true
+  },
+  "checks": {
+    "officialPdfCapture": "passed",
+    "typescript": "passed",
+    "eslintChangedFiles": "passed",
+    "node": {
+      "passed": 25,
+      "failed": 0,
+      "logSha256": "aedbd48390eda11d39a98a7482525adf8004e90f586a3b5208ecc91cc1e8c207"
+    },
+    "productionBuild": {
+      "status": "passed",
+      "logSha256": "6b7fbf7c6abcc60b70f66032a2c0dbc77bdaba05bb12328f378c7db342169209"
+    }
+  },
+  "authority": {
+    "productionChanged": false,
+    "providerRequests": 0,
+    "rawPdfInGit": false,
+    "frozenResearchAdmission": false,
+    "independentReview": false,
+    "existingHold": "retained"
+  },
+  "pending": [
+    "Native evidence admission through publisher and source rights",
+    "Contemporaneous EPS inputs and independently reviewed valuation hypotheses",
+    "Current ranked detail and release qualification"
+  ]
+}

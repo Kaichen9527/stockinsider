@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "stockinsider-v2-vm-checkpoint-v1",
+  "sourceCommit": "4a941ac219911949bef8044d7c1000b15a180757",
+  "sourceTree": "ec32a9918a6da7bf9841e15cee1919033baddf3b",
+  "execution": "selected stockinsider VM only",
+  "nodeVersion": "v22.14.0",
+  "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+  "checks": [
+    {
+      "name": "top10",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/top10-projection.test.ts"
+      ],
+      "start": "2026-11-07T07:59:05.835319+00:00",
+      "end": "2026-11-07T07:59:06.085998+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 0,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31599984640,
+        "/tmp": 9422905344
+      },
+      "resourceViolation": null,
+      "logSha256": "089042f9727cebc64c0fdd30d4bdb1efb3ebd57ab17f513c2969294b9e006e3d"
+    },
+    {
+      "name": "constructor",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--test",
+        "scripts/vnext-published-target-read-source.test.mjs"
+      ],
+      "start": "2026-11-07T07:59:06.086434+00:00",
+      "end": "2026-11-07T07:59:06.337231+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 0,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31599984640,
+        "/tmp": 9422905344
+      },
+      "resourceViolation": null,
+      "logSha256": "49ec70f616e4e5a59f7b5b6e777c32bfe84a7d35f92685c5eedadc4935511b2c"
+    },
+    {
+      "name": "target-reader",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/published-target-read.test.ts"
+      ],
+      "start": "2026-11-07T07:59:06.337656+00:00",
+      "end": "2026-11-07T07:59:06.588417+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 0,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31599984640,
+        "/tmp": 9422905344
+      },
+      "resourceViolation": null,
+      "logSha256": "ac95f2b36d5d088d103b5491db783319d5fcb91f28d5228bbf0f9d55326bd5cf"
+    },
+    {
+      "name": "detail-ssr",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/app/components/vnext/detail-source.test.mjs"
+      ],
+      "start": "2026-11-07T07:59:06.588763+00:00",
+      "end": "2026-11-07T07:59:07.092577+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 27734016,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31599980544,
+        "/tmp": 9422905344
+      },
+      "resourceViolation": null,
+      "logSha256": "a4754655b691b01ec16fb2a9815e4d9f2c60461271ad231c4031f281a55b3d2b"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-07T07:59:07.092907+00:00",
+      "end": "2026-11-07T07:59:18.877812+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40787968,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31599980544,
+        "/tmp": 9422905344
+      },
+      "resourceViolation": null,
+      "logSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-07T07:59:18.878203+00:00",
+      "end": "2026-11-07T07:59:34.676255+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40226816,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31599935488,
+        "/tmp": 9422905344
+      },
+      "resourceViolation": null,
+      "logSha256": "2e4118ba6e37e5c36f29b6092c6d27e0a9333942bdf1c4b34e9c77d4d4cc1d8a"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-07T07:59:34.676671+00:00",
+      "end": "2026-11-07T07:59:39.187789+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40046592,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31599935488,
+        "/tmp": 9422872576
+      },
+      "resourceViolation": null,
+      "logSha256": "3dce3cae6df363ab79fa5d97bb944d867a0b53c6a0614bb0c2181f07bfac5a25"
+    }
+  ],
+  "focusedCounts": {
+    "top10": 12,
+    "constructorSource": 6,
+    "targetReaderSource": 11,
+    "actualDetailSSR": 3,
+    "opsSourceContracts": 19
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 34,
+    "warningScope": "existing whole-repository warnings"
+  },
+  "opsContracts": {
+    "status": "PASS",
+    "command": "node --test scripts/contabo-capacity-guard.test.mjs scripts/contabo-host-resource-check.test.mjs scripts/contabo-deployment-inventory.test.mjs scripts/local-backup-preflight.test.mjs scripts/local-backup-lifecycle.test.mjs",
+    "logSha256": "bd3fae2e87dff8695fcc0be81f28414151ceef3a13a9c434a6300572e75c7502",
+    "scope": "source/synthetic contracts only, no live host/archive verification"
+  },
+  "independentEngineeringReview": "zero blocker/high and final original probes PASS; not A1 or protected approval",
+  "resourceLimit": "8GiB per filesystem original floor and process-tree sampled RSS guard; 512MiB preflight build workset reference; serial heavy work; samples are not instantaneous maximum, short commands may finish before nonzero sample",
+  "retainedInitialTop10Failure": {
+    "status": "FAIL",
+    "passed": 11,
+    "failed": 1,
+    "cause": "new exact-pool guard rejected earlier than old member-shape test expected; test now accepts either rejection code, no positive oracle relaxed",
+    "logSha256": "fcaca7d7fe9a0820e04138cc5ada69d597620be5ef2f8af95acff9cf0e4042ea"
+  },
+  "nativePostgres": "BLOCKED_HOLD_SAME_FAILURE_LIMIT_2_PENDING_PROTECTED_REVIEW",
+  "http": "NOT_RUN",
+  "desktopMobileBrowser": "BLOCKED_missing_binary_official_download_403_Domain_forbidden_and_no_desktop_control_tool",
+  "realSourceToReviewedWebsite": "BLOCKED_no_isolated_runtime_rights_provider_role_bindings",
+  "twoAdjacentRealTaiwanSessions": "NOT_RUN",
+  "contaboStaging": "BLOCKED_missing_trusted_host_and_scoped_identity",
+  "backupRestoreRollback": "NOT_RUN",
+  "iCloudCanaryAndQuota": "BLOCKED_no_authenticated_browser_verified_quota_independent_key",
+  "archiveLocation": null,
+  "reclaimedBytes": 0,
+  "productionDeployedVersion": "NOT_CHANGED_NOT_VERIFIED",
+  "originalPrHeadAtCheckpoint": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "releaseGate": "BLOCKED_INCOMPLETE",
+  "fullGoal": "ACTIVE_INCOMPLETE"
+}

@@ -1,0 +1,3 @@
+# TWSE 11764 automatic planning verification
+
+PostgreSQL 17.11 in an isolated staging cluster planned 29 close jobs on top of one existing fixture binding, added zero on replay and allocated the last shared slot to the newest missing report. Actual input used the TWSE's November 13 CSV. Calendar, roster, rights and lease were fixture dependencies. The ordinary queue excluded stale 11764 work, and 22 Node source and route tests passed. Full Codex VM tests and real market breadth remain pending. [OpenSpec evidence](../../openspec/changes/stockinsider-vnext-20/evidence/2026-11-15-t06-t10-twse-close-plan.json)

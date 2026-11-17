@@ -188,7 +188,7 @@ BEGIN
  IF (SELECT to_jsonb(p)-'prosrc' FROM pg_proc p WHERE oid=target) IS DISTINCT FROM metadata THEN RAISE EXCEPTION 'vnext_forecast_input_metadata';END IF;
 END $input_patch$;
 DO $post$
-DECLARE before_snapshot jsonb;after_snapshot jsonb;before_normal jsonb;after_normal jsonb;entry record;old_row jsonb;new_row jsonb;owner_oid oid:='opportunity_v3_rpc_owner'::regrole;stock_owner oid:='stockinsider_vnext_owner'::regrole;relation oid:='public.vnext_forecast_rights_v1'::regclass;codec oid:='public.vnext_catalog_canonical_v1(jsonb)'::regprocedure;
+DECLARE before_snapshot jsonb;after_snapshot jsonb;before_normal jsonb;after_normal jsonb;entry record;new_row jsonb;owner_oid oid:='opportunity_v3_rpc_owner'::regrole;stock_owner oid:='stockinsider_vnext_owner'::regrole;relation oid:='public.vnext_forecast_rights_v1'::regclass;codec oid:='public.vnext_catalog_canonical_v1(jsonb)'::regprocedure;
  catalog_sql constant text:=$catalog$
  SELECT jsonb_build_object(
   'namespace',(SELECT to_jsonb(n) FROM pg_namespace n WHERE n.oid='public'::regnamespace),
@@ -221,10 +221,16 @@ BEGIN
    IF after_snapshot->entry.key IS DISTINCT FROM entry.value THEN RAISE EXCEPTION 'vnext_forecast_original_catalog_changed:%',entry.key;END IF;
    CONTINUE;
   END IF;
-  FOR old_row IN SELECT value FROM jsonb_array_elements(entry.value) LOOP
-   IF NOT((after_snapshot->entry.key) @> jsonb_build_array(old_row)) THEN RAISE EXCEPTION 'vnext_forecast_original_catalog_changed:%',entry.key;END IF;
-  END LOOP;
-  FOR new_row IN SELECT value FROM jsonb_array_elements(after_snapshot->entry.key) WHERE NOT(entry.value @> jsonb_build_array(value)) LOOP
+  IF EXISTS(
+   SELECT value FROM jsonb_array_elements(entry.value)
+   EXCEPT ALL
+   SELECT value FROM jsonb_array_elements(after_snapshot->entry.key)
+  ) THEN RAISE EXCEPTION 'vnext_forecast_original_catalog_changed:%',entry.key;END IF;
+  FOR new_row IN
+   SELECT value FROM jsonb_array_elements(after_snapshot->entry.key)
+   EXCEPT ALL
+   SELECT value FROM jsonb_array_elements(entry.value)
+  LOOP
    IF entry.key='routines' AND new_row->>'proname' IN('vnext_forecast_stock_id_internal_v1','vnext_forecast_rights_guard_v1','vnext_forecast_current_internal_v1','vnext_forecast_evidence_current_internal_v1','vnext_forecast_input_current_internal_v1','vnext_forecast_read_v1') THEN CONTINUE;
    ELSIF entry.key='relations' AND new_row->>'relname' IN('vnext_forecast_rights_v1','vnext_forecast_rights_v1_pkey','vnext_forecast_rights_v1_verification_id_operation_key') THEN CONTINUE;
    ELSIF entry.key='types' AND new_row->>'typname' IN('vnext_forecast_rights_v1','_vnext_forecast_rights_v1') THEN CONTINUE;

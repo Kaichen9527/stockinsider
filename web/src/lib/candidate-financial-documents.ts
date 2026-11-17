@@ -238,11 +238,11 @@ export function candidateFinancialFactsFromValidatedManifest(input: {
     && /http:\/\/www[.]xbrl[.]org\/(?:2008|2013)\/inlineXBRL/u.test(new TextDecoder().decode(input.bytes))
     && !parse.factAcceptance?.extractedInstanceSha256) return [];
   const collectedAt = new Date(input.collectedAt).toISOString();
-  const locators = new Set(parse.locators.map((row) => `${row.xbrl_context}\u0000${row.xbrl_concept}`));
+  const locators = new Set(parse.locators.map((row) => `${row.xbrl_context}^@${row.xbrl_concept}`));
   const facts: ParsedFact[] = [];
   for (const row of parse.validatedFacts || []) {
     if (row.entity_identifier !== input.candidate.symbol || row.dimension_count !== 0
-      || row.period_end !== input.periodEnd || !locators.has(`${row.xbrl_context}\u0000${row.xbrl_concept}`)) continue;
+      || row.period_end !== input.periodEnd || !locators.has(`${row.xbrl_context}^@${row.xbrl_concept}`)) continue;
     const concept = row.xbrl_concept.split(':').at(-1)?.replace(/[^A-Za-z0-9]/gu, '').toLowerCase() || '';
     const factKey = DOCUMENT_FLOW_KEYS[concept] || DOCUMENT_INSTANT_KEYS[concept]
       || DOCUMENT_PER_SHARE_KEYS[concept] || DOCUMENT_SHARE_KEYS[concept];
@@ -271,7 +271,9 @@ export function candidateFinancialFactsFromValidatedManifest(input: {
       // public availability. Collection is the conservative known timestamp.
       filingPublishedAt: collectedAt, sourceTimestamp: collectedAt, collectedAt,
       filingRestatementId: `issuer-document:${input.documentSha256}`,
-      sourceRef: `issuer-document:${input.documentSha256}:${identity}`,
+      // The authority RPC caps source_ref at 120 characters. Keep the full
+      // document hash used by provenance lookups and 156 bits of fact identity.
+      sourceRef: `issuer-document:${input.documentSha256}:${identity.slice(0, 39)}`,
       locator: { xbrl_context: row.xbrl_context, xbrl_concept: row.xbrl_concept,
         period_semantics: periodSemantics,
         response_url: input.sourceUrl, semantic_mapper: parse.schema === 'candidate-financial-document-parser-v2'

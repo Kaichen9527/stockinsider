@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "t06-cutoff-disposition-replay-v1",
+  "signalSession": "2026-11-16",
+  "cutoff": "2026-11-16T21:30:00+08:00",
+  "stage": "isolated Contabo",
+  "baseCommit": "fbda8b98f0a0c601743c5d39a3b241fc14f724a1",
+  "runtime": {
+    "node": "22.14.0",
+    "next": "16.3.4"
+  },
+  "files": {
+    "web/src/lib/vnext/launch-disposition-status.ts": "bb373ea96557b039254d42bc11f69d55d5947019cfdc39276d3e6105349e77b8",
+    "web/src/lib/vnext/launch-disposition-status.test.ts": "18742e6b6c7e95affc4c2d280230d7531fa88c9f6cecb3f60acd00ea2751154e"
+  },
+  "previousRed": {
+    "check": "typescript",
+    "error": "TS2737",
+    "correction": "Use BigInt(1000) under the existing pre-ES2020 compilation target."
+  },
+  "corpusBinding": "Metadata and SHA-256 were recorded by the isolated 21:28 observer. The two report bodies were separately fetched after cutoff and matched those original hashes and byte counts. The code used the original observation clocks only with the exact matched bytes.",
+  "licensedDatasetPages": [
+    "https://data.gov.tw/dataset/29082",
+    "https://data.gov.tw/dataset/11396"
+  ],
+  "exchangeDefinesSeparateStopScope": "https://www.twse.com.tw/zh/listed/violations/stop.html",
+  "observations": [
+    {
+      "datasetId": 29082,
+      "market": "TWSE",
+      "session": "2026-11-16",
+      "sha256": "3e18e3b0f0d1de5c15fca10c7c534fb11afada88179e464c42cf2ae8017a2c84",
+      "bytes": 2575,
+      "observedAt": "2026-11-16T13:28:04.233502Z",
+      "recordedAt": "2026-11-16T13:28:10.418520Z",
+      "requestScope": "exact_session",
+      "publishedNotices": 2,
+      "noticesInEffect": 2,
+      "usableAtCutoff": true,
+      "completeAbsenceProved": false,
+      "originalSessionEvidence": "matching_cutoff_receipt_sha256_and_byte_count",
+      "publishedCutoff": "2026-11-16T21:30:00+08:00",
+      "lateObservationAcceptedAtCutoff": false,
+      "currentControl": "3189",
+      "futureControl": "2466",
+      "laterReplayObservedAt": "2026-11-16T15:39:47.217Z"
+    },
+    {
+      "datasetId": 11396,
+      "market": "TPEX",
+      "session": "2026-11-16",
+      "sha256": "c75339a624da52950c5d82d9c76e0992cdbaaa5e44050ef187aff83685032081",
+      "bytes": 6932,
+      "observedAt": "2026-11-16T13:28:03.649786Z",
+      "recordedAt": "2026-11-16T13:28:10.418520Z",
+      "requestScope": "current_feed",
+      "publishedNotices": 7,
+      "noticesInEffect": 5,
+      "usableAtCutoff": true,
+      "completeAbsenceProved": false,
+      "originalSessionEvidence": "matching_cutoff_receipt_sha256_and_byte_count",
+      "publishedCutoff": "2026-11-16T21:30:00+08:00",
+      "lateObservationAcceptedAtCutoff": false,
+      "currentControl": "4542",
+      "futureControl": "3441",
+      "laterReplayObservedAt": "2026-11-16T15:39:46.758Z"
+    }
+  ],
+  "publishedRawPayloads": false,
+  "tradingStatusFullyCovered": false,
+  "authorizedRankingWriteExecuted": false,
+  "productionApplied": false,
+  "validation": {
+    "focusedNodePassed": 15,
+    "focusedNodeFailed": 0,
+    "lint": "pass",
+    "types": "pass",
+    "productionBuild": "pass",
+    "staticOutputs": 92,
+    "logsSha256": {
+      "test": "bd47dce157e64d95027f2edd8b00b76072e403b682f7acdeda3baf585955c312",
+      "build": "a1fc83a69605aa901744f296415496672b4d0cef73295b560f42ffe3833fcbc2"
+    }
+  }
+}

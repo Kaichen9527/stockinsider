@@ -1,0 +1,75 @@
+{
+  "schema": "stockinsider-t18-v320-evaluation-and-diagnostic-native-v1",
+  "testedTaipeiDate": "2026-11-16",
+  "baseCommit": "b7b3cb3260589a34c94b79b4aa9946be5cc66617",
+  "unitTests": {
+    "passed": 3,
+    "failed": 0
+  },
+  "locales": [
+    {
+      "locale": "C.UTF-8",
+      "evaluation": {
+        "locale": "C.UTF-8",
+        "stage": "native_downgrade_regression",
+        "originalSqlstate": "23514",
+        "countPreserved": 3,
+        "existingConstraintOidRetained": true,
+        "unrelatedRevisionCheckInstalled": true,
+        "unknownRejected": true
+      },
+      "diagnostic": {
+        "locale": "C.UTF-8",
+        "stage": "native_diagnostic_downgrade_regression",
+        "originalSqlstate": "23514",
+        "countPreserved": 2,
+        "existingConstraintOidRetained": true,
+        "unknownRejected": true
+      },
+      "capturedSchemaFinal": {
+        "locale": "C.UTF-8",
+        "stage": "installed-state",
+        "enabled": false,
+        "legacyFenced": true,
+        "routines": 15,
+        "jobs": 0,
+        "publications": 0,
+        "rls": 18
+      },
+      "exit": 0
+    },
+    {
+      "locale": "C",
+      "evaluation": {
+        "locale": "C",
+        "stage": "native_downgrade_regression",
+        "originalSqlstate": "23514",
+        "countPreserved": 3,
+        "existingConstraintOidRetained": true,
+        "unrelatedRevisionCheckInstalled": true,
+        "unknownRejected": true
+      },
+      "diagnostic": {
+        "locale": "C",
+        "stage": "native_diagnostic_downgrade_regression",
+        "originalSqlstate": "23514",
+        "countPreserved": 2,
+        "existingConstraintOidRetained": true,
+        "unknownRejected": true
+      },
+      "capturedSchemaFinal": {
+        "locale": "C",
+        "stage": "installed-state",
+        "enabled": false,
+        "legacyFenced": true,
+        "routines": 15,
+        "jobs": 0,
+        "publications": 0,
+        "rls": 18
+      },
+      "exit": 0
+    }
+  ],
+  "temporaryClustersRemoved": true,
+  "archiveOpened": false
+}

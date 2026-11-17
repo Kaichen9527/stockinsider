@@ -1,0 +1,66 @@
+{
+  "schema": "stockinsider-t03-investanchors-notice-receiver-v1",
+  "task": "T03",
+  "baseCommit": "bc9e000ae7a9b4f1a4358a41b8714968464947b9",
+  "recordedAt": "2026-11-15T15:34:26Z",
+  "userConnectionControl": {
+    "scope": "existing connected Gmail read-only list and full MIME observation, distinct from the staged adapter tests",
+    "matches": [
+      {
+        "date": "2026-11-08",
+        "found": 1,
+        "nextPageOutstanding": false
+      },
+      {
+        "date": "2026-11-12",
+        "found": 1,
+        "nextPageOutstanding": false
+      },
+      {
+        "date": "2026-11-13",
+        "found": 0,
+        "nextPageOutstanding": false
+      },
+      {
+        "date": "2026-11-15",
+        "found": 0,
+        "nextPageOutstanding": false
+      }
+    ],
+    "repeatStable": true,
+    "november15WindowCompleteAtObservation": false,
+    "alignedReceiverReportedDkim": true,
+    "mimeType": "multipart/alternative",
+    "mimeParts": [
+      "text/plain",
+      "text/html"
+    ],
+    "directMemberLinksObserved": 0,
+    "originalMemberContentAcceptance": "previous manual test only",
+    "previousSanitizedMemberEvidence": "83270700158df0683f0eac820055cff0a1956799"
+  },
+  "automated": {
+    "environment": "Contabo staging, disposable network-isolated subprocess",
+    "node": "22.14.0",
+    "typescript": "5.9.3",
+    "strictScopedTypecheckPassed": true,
+    "syntheticTestsPassed": 7,
+    "persistentFullCiRun": false,
+    "covered": [
+      "Taipei day and provider epoch query",
+      "Gmail internalDate range and acquisition clock",
+      "page tokens and duplicate IDs",
+      "per-source caller-supplied read budget and deferred checkpoint",
+      "read-only message MIME and no tracking URL following",
+      "unverified sender, empty report, and transport failure",
+      "private digest only"
+    ]
+  },
+  "productionOAuthConfiguredByThisChange": false,
+  "memberArticleAuthority": false,
+  "sourceAuthority": false,
+  "backgroundWorkerInvoked": false,
+  "queueWrites": false,
+  "productionMutation": false,
+  "rawMailOrArticleStored": false
+}

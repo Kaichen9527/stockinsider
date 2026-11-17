@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
 import {randomUUID,randomBytes} from 'node:crypto';
+import {setTimeout as delay} from 'node:timers/promises';
 import {workerFixture,hash} from './vnext-worker-fixture.mjs';
 import {installActionTermsCandidate,proveActionTermsOriginals} from './vnext-action-terms-native-fixture.mjs';
 import {installPublishedTargetReadCandidate} from './vnext-published-target-read-native-fixture.mjs';
@@ -16,6 +17,7 @@ import {validateOfficialFinancialFact} from '../web/src/lib/official-financial-v
 import {resolveFinancialEvidenceSources} from '../web/src/lib/vnext/financial-evidence-sources.ts';
 import {loadTwEntryHistoricalPriceAuthority} from '../web/src/lib/tw-entry-plan-authority.ts';
 import {inputHash} from '../web/src/lib/vnext/policy.ts';
+import {evidenceKnownAt} from '../web/src/lib/vnext/evidence-clock.ts';
 import {binding} from './vnext-synthetic-research-vectors.mjs';
 import {PREPARATION_INSTRUMENT_COLUMNS} from '../web/src/lib/vnext/preparation-trading-identity.ts';
 export const preparationLineage={"path":"scripts/vnext-issuer-ir-postgres.test.mjs","sourceSha256":"1a61d92a43fcda82ad6fd9b6da00525c5861558701b644720e993709076db545","fragments":[{"start":24856,"end":28353,"firstLine":135,"lastLine":145,"sha256":"28b8f89c5ba24b112ddaed0c583e7b02d0a22263cfb845f809aaabbc66b8e6ee"},{"start":28359,"end":29701,"firstLine":147,"lastLine":151,"sha256":"34546104f9f8012fbc67720e735147c884aabe05cac1204582cae4a1727dc17f"}],"scope":"exact original legal RPC prefix copied; no old test entry import or execution"};
@@ -26,7 +28,7 @@ export const preparationColumns={
  candidate_financial_fact_provenance_v4:'provenance_id,fact_id,acquisition_job_id,issuer_document_id,source_url,source_sha256,locator,extracted_at,recorded_at',
  candidate_financial_document_fact_links_v8:'receipt_id,fact_id,fact_recorded_at,evidence_id,created_at',
  candidate_financial_acquisition_jobs_v4:'job_id,stock_id,period_end,status,terminal_reason,response_sha256,source_url,collected_at,created_at,updated_at',
- candidate_financial_document_receipts_v6:'receipt_id,stock_id,issuer_document_id,source_url,period_end,document_sha256,receipt_status,parser_status,published_at,accepted_at,completed_at,parser_evidence_id,financial_validation_status',
+ candidate_financial_document_receipts_v6:'receipt_id,acquisition_job_id,stock_id,issuer_document_id,source_url,period_end,document_sha256,receipt_status,parser_status,published_at,accepted_at,completed_at,parser_evidence_id,financial_validation_status',
  candidate_issuer_ir_document_queue_v4:'document_id,stock_id,document_url,document_sha256,acquisition_status,collected_at,recorded_at',
  candidate_issuer_document_domains_v6:'stock_id,host,approved_at',candidate_financial_parser_evidence_v8:'evidence_id,receipt_id,document_sha256,manifest_sha256,recorded_at',
  tw_trading_sessions_v3:'session_authority_id,session_id,market,open_at,close_at,status,provider,source_timestamp,collected_at,source_ref,recorded_at',
@@ -43,6 +45,17 @@ export async function preparationHttpFixture(){
  const x=await workerFixture();const trace=[],connections=new Set(),sockets=new Set();let pending=0,active=false,armed=false,loss=null;
  const releaseId='c'.repeat(40),keys={bridge:randomBytes(32).toString('hex'),author:randomBytes(32).toString('hex'),operator:randomBytes(32).toString('hex'),reviewer:randomBytes(32).toString('hex')};
  const clock=async()=>(await x.observer.query('SELECT to_jsonb(clock_timestamp()) AS value')).rows[0].value;
+ // PostgreSQL exposes microseconds while the app observes the same wall
+ // clock in milliseconds. Preserve the DB cutoff and wait for it to be known.
+ const historicalCutoff=async()=>{
+  const cutoff=await clock();
+  const expires=performance.now()+250;
+  while(!evidenceKnownAt(cutoff,new Date().toISOString())){
+   if(performance.now()>=expires)throw Error('preparation_historical_cutoff_not_yet_known');
+   await delay(1);
+  }
+  return cutoff;
+ };
  async function query(sql,args=[],{readonly=false,headers={}}={}){
   const c=await x.connect();connections.add(c);pending++;let transactionSettled=false;
   // Listen BEFORE each query. A rejected SELECT in an explicit transaction
@@ -128,7 +141,17 @@ export async function preparationHttpFixture(){
      preparationPhase='prepare_observer';
      committed=await x.snapshot();const preparation=committed.vnext_preparations_v1.rows.find(r=>r.job_id===claim.jobId);assert.ok(preparation);assert.equal(preparation.input_hash,body.p_request.inputHash);assert.equal(inputHash(preparation.evidence),preparation.input_hash);assert.deepEqual(preparation.evidence,body.p_request.evidence);
      const job=committed.vnext_jobs_v1.rows.find(r=>r.job_id===claim.jobId),member=committed.vnext_members_v1.rows.find(r=>r.symbol==='2408');assert.equal(job.execution_id,claim.executionId);assert.equal(job.deadline_at,claim.deadline);assert.equal(job.input_hash,preparation.input_hash);assert.equal(member.input_hash,preparation.input_hash);assert.equal(job.state,'running');assert.equal(committed.vnext_provider_invocations_v1.count,0);
-     const allowed=new Set(['vnext_preparations_v1','vnext_jobs_v1','vnext_members_v1','vnext_home_v1','vnext_audit_v1']);for(const table of Object.keys(beforeLoss))if(!allowed.has(table))assert.deepEqual(committed[table],beforeLoss[table],table);assert.equal(committed.vnext_preparations_v1.count,beforeLoss.vnext_preparations_v1.count+1);assert.equal(committed.vnext_audit_v1.count,beforeLoss.vnext_audit_v1.count+1);
+     const originalBindings=beforeLoss.vnext_financial_preparation_protocols_v1.rows;
+     const currentBindings=committed.vnext_financial_preparation_protocols_v1.rows;
+     assert.equal(currentBindings.length,originalBindings.length+1);
+     assert.deepEqual(currentBindings.filter(row=>row.job_id!==claim.jobId),originalBindings);
+     const bound=currentBindings.find(row=>row.job_id===claim.jobId);
+     assert.equal(bound.input_hash,preparation.input_hash);
+     assert.equal(bound.protocol,'vnext-financial-provider-input-v1');
+     assert.deepEqual(bound.frozen_packet,preparation.evidence);
+     assert.match(bound.packet_digest,/^[a-f0-9]{64}$/u);
+     assert.equal(bound.frozen_packet.financialProviderInput.facts.length,1);
+     const allowed=new Set(['vnext_preparations_v1','vnext_financial_preparation_protocols_v1','vnext_jobs_v1','vnext_members_v1','vnext_home_v1','vnext_audit_v1']);for(const table of Object.keys(beforeLoss))if(!allowed.has(table))assert.deepEqual(committed[table],beforeLoss[table],table);assert.equal(committed.vnext_preparations_v1.count,beforeLoss.vnext_preparations_v1.count+1);assert.equal(committed.vnext_audit_v1.count,beforeLoss.vnext_audit_v1.count+1);
      const observedAt=await clock(),uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/u;
      const within=value=>{assert.equal(typeof value,'string');assert.ok(Number.isFinite(Date.parse(value))&&Date.parse(value)>=Date.parse(prepareStartedAt)&&Date.parse(value)<=Date.parse(observedAt));};
      const omit=(row,keys)=>Object.fromEntries(Object.entries(row).filter(([key])=>!keys.includes(key)));
@@ -168,6 +191,15 @@ export async function preparationHttpFixture(){
     const oldMetadata={...target.metadata},newMetadata={...observed.metadata};delete oldMetadata.prosrc;delete newMetadata.prosrc;assert.deepEqual(newMetadata,oldMetadata);const catalogAfter=(await x.observer.query(catalog,[target.oid])).rows[0];assert.deepEqual(catalogAfter,catalogBefore);assert.deepEqual(await x.snapshot(),rowsBefore);
     x.save('preparation-read-installed-observer',{observerPid:x.observer.processID,writerPid:x.writer.processID,target,observed,catalogBefore,catalogAfter,wholeRowsUnchanged:true});assert.notEqual(x.observer.processID,x.writer.processID);
    }else await x.writer.query(bytes.toString());x.save(path.basename(file),{sha256:hash(bytes),bytes:bytes.length});}
+  // Install the current provider predecessor through the original guarded migrations.
+  const targetProfile=JSON.parse(fs.readFileSync('scripts/opportunity-v3/vnext-target-profiles-source-v1.json','utf8'));
+  const targetSql=fs.readFileSync(targetProfile.migration);
+  assert.equal(hash(targetSql),targetProfile.migrationSha256);
+  for(const file of ['migrations/20261023_vnext_catalyst_cancellation_v1.sql',targetProfile.migration,'migrations/20261023_vnext_business_criteria_v1.sql']){
+   const bytes=fs.readFileSync(file);
+   await x.writer.query(bytes.toString());
+   x.save(path.basename(file),{sha256:hash(bytes),bytes:bytes.length});
+  }
   const forecastProfile=JSON.parse(fs.readFileSync('scripts/opportunity-v3/vnext-forecast-sources-profile-v1.json','utf8')),forecastSql=fs.readFileSync(forecastProfile.migration);assert.equal(hash(forecastSql),forecastProfile.migrationSha256);
   const catalog=/catalog_sql constant text:=\$catalog\$([\s\S]*?)\$catalog\$/u.exec(forecastSql.toString())[1];
   const modified=forecastProfile.modifiedRoutines.map(r=>r.signature),oids=(await x.observer.query('SELECT unnest($1::regprocedure[])::oid AS oid',[modified])).rows.map(r=>r.oid);
@@ -188,6 +220,9 @@ export async function preparationHttpFixture(){
   await installActionTermsCandidate(x);
   await installDisclosedFiscalCandidate(x);
   await installPublishedTargetReadCandidate(x);
+  const typedProvider=fs.readFileSync('migrations/20261116_24_vnext_financial_provider_work_context_v1.sql');
+  await x.writer.query(typedProvider.toString());
+  x.save('typed-financial-provider-installed',{sha256:hash(typedProvider),bytes:typedProvider.length});
   const documentSha=hash('synthetic clean issuer parser observation; no actual stored/downloaded document'),url='https://www.nanya.com/synthetic-vnext-ir/'+documentSha+'.xhtml';
    stockId=randomUUID();runner=randomUUID();await x.writer.query('INSERT INTO public.stocks(id,symbol,name,market) VALUES($1,$2,$3,$4)',[stockId,'2408','Synthetic IR engineering issuer only','TW']);
    // Exact existing curated host recipe from 20260907_02, not an invented host.
@@ -219,7 +254,7 @@ export async function preparationHttpFixture(){
   const historicalDay=(await x.observer.query("SELECT d::date::text AS day FROM generate_series((clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date-8,(clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date,interval'1 day')d WHERE extract(isodow FROM d)<6 AND (d::date+time'13:30') AT TIME ZONE 'Asia/Taipei'<=clock_timestamp() ORDER BY d DESC LIMIT 1")).rows[0].day;
   for(const day of [...new Set([civil.today,historicalDay])])for(const [market,provider]of [['TWSE','twse'],['TPEX','tpex']])await x.writer.query("INSERT INTO public.tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,provider,source_timestamp,collected_at,source_ref) VALUES($1,$2,$3,$4,$5,'completed',$6,$7,$7,'synthetic-preparation-calendar-not-acquired')",[randomUUID(),day,market,day+'T01:00:00Z',day+'T05:30:00Z',provider,await clock()]);
   const sync=(await query("SELECT public.vnext_cached_admission_v1($1,'sync-calendar','{}'::jsonb) AS result",[preparationPrincipals.operator])).rows[0].result;const completed=Date.parse(sync.sourceCutoff)>=Date.parse(civil.today+'T05:30:00Z');const selected=(await x.observer.query('SELECT completed FROM public.vnext_sessions_v1 WHERE session_date=$1',[civil.today])).rows[0];assert.equal(selected.completed,completed);
-  const historical=await loadTwEntryHistoricalPriceAuthority(cache,{stockId,symbol:'2408',exchange:'TWSE',signalSession:sync.latestCompleted,cutoff:await clock()});assert.equal(historical.priceBasis,null);assert.ok(historical.missingData.includes('adjusted_history_below_240'));
+  const historical=await loadTwEntryHistoricalPriceAuthority(cache,{stockId,symbol:'2408',exchange:'TWSE',signalSession:sync.latestCompleted,cutoff:await historicalCutoff()});assert.equal(historical.priceBasis,null);assert.ok(historical.missingData.includes('adjusted_history_below_240'));
   assert.deepEqual((await x.observer.query('SELECT * FROM public.stockinsider_data_plane_settings_v1')).rows,[]);await x.writer.query("INSERT INTO public.production_writer_releases(release_id,writer_kind,active,activated_at) VALUES($1,'vps',true,clock_timestamp())",[releaseId]);active=true;
   x.save('preparation-fixture-authority',{lineage:preparationLineage,stockId,documentReceipt,facts,projected,historical,syntheticCalendar:{civil,historicalDay,completed,sync},actualArelle:false,acquiredFiling:false,modelInvocations:0,formalFinancialApproval:false});
  }
@@ -269,7 +304,7 @@ export async function preparationHttpFixture(){
   // The actual original provider reservation constructs its own frozen input;
   // no caller request or synthetic provider response can choose these numbers.
   const reserved=await withLease(async()=>(await query("SELECT public.vnext_provider_command_v1($1,'reserve',$2::jsonb) AS result",[preparationPrincipals.author,JSON.stringify({jobId:claim.jobId,executionId:claim.executionId})])).rows[0].result);
-  assert.equal(reserved.dispatch,true);assert.ok(reserved.invocation_id);const frozen=JSON.parse(reserved.frozen_request.input);assert.deepEqual(frozen.evidence.evidence.filter(e=>e.id.startsWith('forecast:')),estimates);assert.deepEqual(frozen.evidence.evidence.filter(e=>e.id.startsWith('forecast:')||e.id.startsWith('fiscal-forecast:')),allForecasts);assert.deepEqual(frozen.evidence.forecastSourceReceipts,preparation.evidence.forecastSourceReceipts);assert.equal(frozen.inputHash,preparation.input_hash);
+  assert.equal(reserved.dispatch,true);assert.ok(reserved.invocation_id);const frozen=JSON.parse(reserved.frozen_request.input);assert.deepEqual(frozen.evidence.evidence.filter(e=>e.id.startsWith('forecast:')),estimates);assert.deepEqual(frozen.evidence.evidence.filter(e=>e.id.startsWith('forecast:')||e.id.startsWith('fiscal-forecast:')),allForecasts);assert.equal(Object.hasOwn(frozen.evidence,'forecastSourceReceipts'),false);assert.equal(Object.hasOwn(frozen.evidence,'financialSourceReceipts'),false);assert.equal(Object.hasOwn(frozen.evidence,'financialProviderInput'),false);assert.equal(preparation.evidence.forecastSourceReceipts.length,6);assert.equal(frozen.inputHash,preparation.input_hash);
   const reservedState=await x.snapshot();assert.equal(reservedState.vnext_provider_invocations_v1.count,1);assert.equal(reservedState.vnext_jobs_v1.count,before.vnext_jobs_v1.count);assert.equal(reservedState.vnext_jobs_v1.rows[0].started_at,before.vnext_jobs_v1.rows[0].started_at);x.save('forecast-actual-provider-frozen-input',{record:reserved,providerPostCount:0,wholeState:reservedState,scope:'actual journal reservation only; no external model call or fabricated result'});
   await withLease(async()=>{await x.writer.query('BEGIN');try{await x.writer.query("SELECT set_config('request.headers',$1,true)",[JSON.stringify({'x-stockinsider-writer-release':releaseId})]);await x.writer.query("INSERT INTO public.vnext_forecast_rights_v1(policy_id,verification_id,stock_id,operation,license_basis,permitted_use,rights_evidence_ref,valid_from,valid_until) VALUES($1,$2,$3,'revoke','public_issuer_guidance','structured_numeric_forecast','https://www.nanya.com/synthetic-guidance-permission',clock_timestamp(),clock_timestamp()+interval'1 hour')",[randomUUID(),forecastSource.verification,stockId]);await x.writer.query('COMMIT');}catch(error){await x.writer.query('ROLLBACK');throw error;}});
   const revoked=await x.snapshot();assert.equal(revoked.vnext_forecast_rights_v1.count,reservedState.vnext_forecast_rights_v1.count+1);for(const table of Object.keys(reservedState))if(table!=='vnext_forecast_rights_v1')assert.deepEqual(revoked[table],reservedState[table],table);

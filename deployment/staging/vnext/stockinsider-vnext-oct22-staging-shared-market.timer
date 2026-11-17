@@ -1,0 +1,10 @@
+[Unit]
+Description=INERT source candidate for isolated vNext 08:15 shared market intent
+ConditionPathExists=!/
+
+[Timer]
+OnCalendar=*-*-* 08:15:00 Asia/Taipei
+Persistent=false
+RandomizedDelaySec=0
+AccuracySec=1s
+Unit=stockinsider-vnext-oct22-staging-shared-market.service

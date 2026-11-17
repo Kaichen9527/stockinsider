@@ -8,6 +8,8 @@ import ts from 'typescript';
 import * as snapshot from './twse-snapshot.ts';
 import * as policy from './policy.ts';
 import * as auth from './auth.ts';
+import * as cachedSourceAdmission from './cached-source-admission.ts';
+import * as permittedContent from './permitted-content.ts';
 type Row=Record<string,unknown>;
 const nativeRequire=createRequire(import.meta.url),sha=(value:string|Uint8Array)=>createHash('sha256').update(value).digest('hex');
 const context:snapshot.TwseSnapshotContext={connectorRunId:'00000000-0000-4000-8000-000000000001',endpointKey:'holding_listed',querySymbol:null,requestedAt:'2026-10-23T00:00:00.000Z'};
@@ -78,14 +80,77 @@ test('actual HTTP handler retains auth-first/default-off behavior and enabled mo
  const enabled=routeFixture();assert.equal((await enabled.route.POST(request())).status,200);assert.equal(enabled.observations.length,1);assert.deepEqual(enabled.routeTrace,['legacy-auth','acquire','source-sync','release']);assert.deepEqual(enabled.trace.slice(0,2),['writer','rpc:latest']);
  const blocked=routeFixture();blocked.block();assert.equal((await blocked.route.POST(request())).status,500);assert.equal(blocked.routeTrace.includes('acquire'),false);assert.equal(blocked.routeTrace.includes('source-sync'),false);
 });
-test('actual source worker reads the guarded snapshot projection and returns unknown volume even with three successful observations',async()=>{
- const fixture=storeFixture();const sink=await fixture.store.createTwseSnapshotSink(new Request('http://localhost',{headers:{authorization:'Bearer synthetic-operator-key'}}));await connectorFixture(sink).run();const identity={principal:'synthetic-operator',role:'operator' as const};let writerCalls=0;
- const sourceWorker=compile(new URL('source-worker.ts',import.meta.url).pathname,name=>{if(name==='./permitted-content.ts')return {extractContentBatch:async(items:unknown[])=>{assert.equal(items.length,0);return {processed:0};}};if(name==='./analysis-runtime.ts')return {analysisCommand:async()=>({policies:[]}),analysisWriter:async(work:()=>Promise<Row>)=>{writerCalls++;return work();}};if(name==='../supabase-server.ts')return {getSupabaseServerClient:()=>({from:()=>{throw Error('no permitted cache scopes');}})};if(name==='../source-policy.ts')return {sourceExecutionPolicy:()=>({disposition:'active'})};if(name==='./twse-snapshot-store.ts')return fixture.store;throw Error(`unexpected_source_worker_dependency:${name}`);}) as {runPermittedSourceWorker:(identity:auth.VnextIdentity)=>Promise<{snapshotTransport:ReturnType<typeof snapshot.snapshotCoverage>}>};
- const result=await sourceWorker.runPermittedSourceWorker(identity);assert.equal(result.snapshotTransport.observations.length,3);assert.equal(result.snapshotTransport.eventVolume,null);assert.equal(result.snapshotTransport.eventCoverage,'unknown');assert.equal(writerCalls,1);assert.equal(fixture.trace.at(-1),'rpc:latest');fixture.block();const gap=await fixture.store.readTwseSnapshotCoverage(identity);assert.equal(gap.eventVolume,null);assert.equal(gap.reason,'snapshot_receipts_or_current_rights_unavailable');
+test('actual source worker keeps event volume unknown after successful transport and current-rights refusal',async()=>{
+ const fixture=storeFixture();
+ const sink=await fixture.store.createTwseSnapshotSink(new Request('http://localhost',{headers:{authorization:'Bearer synthetic-operator-key'}}));
+ await connectorFixture(sink).run();
+ const identity={principal:'synthetic-operator',role:'operator' as const};
+ const actions:string[]=[];
+ let writerCalls=0;
+ const worker=compile(new URL('source-worker.ts',import.meta.url).pathname,name=>{
+  if(name==='./permitted-content.ts')return permittedContent;
+  if(name==='./cached-source-admission.ts')return cachedSourceAdmission;
+  if(name==='./analysis-runtime.ts')return {
+   analysisCommand:async(_identity:auth.VnextIdentity,action:string)=>{
+    assert.equal(action,'source-policies');
+    actions.push(action);
+    return {policies:[]};
+   },
+   analysisWriter:async(work:()=>Promise<Row>)=>{writerCalls++;return work();},
+  };
+  if(name==='../supabase-server.ts')return {getSupabaseServerClient:()=>({from:()=>{throw Error('no permitted cache scopes');}})};
+  if(name==='../source-policy.ts')return {sourceExecutionPolicy:()=>({disposition:'active'})};
+  if(name==='./twse-snapshot-store.ts')return fixture.store;
+  throw Error(`unexpected_source_worker_dependency:${name}`);
+ }) as unknown as typeof import('./source-worker.ts');
+
+ const result=await worker.runPermittedSourceWorker(identity);
+ assert.equal(result.snapshotTransport.observations?.length,3);
+ assert.equal(result.snapshotTransport.eventVolume,null);
+ assert.equal(result.snapshotTransport.eventCoverage,'unknown');
+ assert.equal(result.reservations,0);
+ assert.deepEqual(result.sourceAdmissions.evidence,[]);
+ assert.equal(writerCalls,1);
+ assert.equal(fixture.trace.at(-1),'rpc:latest');
+
+ fixture.block();
+ const unavailable=await worker.runPermittedSourceWorker(identity);
+ assert.deepEqual(unavailable.snapshotTransport,{
+  eventCoverage:'unknown',eventVolume:null,status:'unavailable',
+  reason:'snapshot_receipts_or_current_rights_unavailable',observations:null,
+ });
+ assert.equal(unavailable.reservations,0);
+ assert.deepEqual(actions,['source-policies','source-policies']);
+ assert.equal(writerCalls,2);
+ assert.equal(fixture.observations.length,3);
+ assert.equal(fixture.trace.at(-1),'rpc:latest');
 });
 test('source-only SQL/profile contracts retain fixed scope, append-only RLS/current rights and no legacy privileges or body replacement',()=>{
  const root=new URL('../../../../',import.meta.url),profile=JSON.parse(readFileSync(new URL('scripts/opportunity-v3/vnext-twse-snapshot-profile-v1.json',root),'utf8'));const sql=readFileSync(new URL(profile.migration,root),'utf8');assert.equal(sha(sql),profile.migrationSha256);assert.equal(profile.nativeVerified,false);assert.equal(profile.nativeOids,null);
  assert.equal((sql.match(/CREATE TABLE public\./gu)||[]).length,1);assert.equal((sql.match(/CREATE FUNCTION public\./gu)||[]).length,2);assert.equal(sql.includes('CREATE OR REPLACE'),false);assert.ok(sql.includes('REFERENCES public.connector_runs(id) ON DELETE RESTRICT'));assert.ok(sql.includes('ENABLE ROW LEVEL SECURITY'));assert.ok(sql.includes("scope='official_original' AND enabled AND valid_until>clock_timestamp()"));assert.ok(sql.includes("receipt.policy_valid_until IS DISTINCT FROM policy.valid_until"));assert.ok(sql.indexOf('PERFORM pg_advisory_xact_lock(64221022)')<sql.indexOf("WHERE enabled AND legacy_fenced"));assert.ok(sql.includes('vnext_twse_snapshot_failure_is_not_zero'));assert.ok(sql.includes('vnext_twse_snapshot_append_only'));assert.ok(sql.includes('8388608'));assert.ok(sql.includes('jsonb_array_length(item->\'manifest\')>500'));
  for(const line of sql.split('\n').filter(line=>/^(?:GRANT|REVOKE|ALTER (?:TABLE|FUNCTION))/u.test(line)))assert.ok(line.includes('vnext_twse_snapshot'),line);
- for(const source of profile.runtimeClosure)assert.equal(sha(readFileSync(new URL(source.path,root))),source.successorSha256);assert.equal(profile.legacyPrivilegeDelta,'none');assert.equal(profile.eventVolume,null);assert.equal(profile.eventWindow,null);
+ assert.equal(profile.legacyPrivilegeDelta,'none');assert.equal(profile.eventVolume,null);assert.equal(profile.eventWindow,null);
+});
+test('current TWSE source closure retains the original source profile and pins integrated runtime bytes',()=>{
+ const root=new URL('../../../../',import.meta.url);
+ const integration=JSON.parse(readFileSync(new URL('scripts/opportunity-v3/vnext-twse-snapshot-integration-profile-v1.json',root),'utf8'));
+ assert.equal(integration.schemaVersion,'vnext-twse-snapshot-integration-profile-v1');
+ assert.equal(integration.nativeEvidenceForCurrentRuntime,false);
+ assert.equal(integration.liveAcquisitionVerified,false);
+ assert.equal(integration.historicalProfile.path,'scripts/opportunity-v3/vnext-twse-snapshot-profile-v1.json');
+ assert.equal(integration.historicalProfile.originalSourceCommit,'d9a7340cb8d9c6ce332003d813f5859fcfc15f06');
+ const original=readFileSync(new URL(integration.historicalProfile.path,root));
+ assert.equal(sha(original),integration.historicalProfile.sha256);
+ const profile=JSON.parse(original.toString('utf8')) as {runtimeClosure:{path:string;successorSha256:string}[]};
+ const pins=new Map(profile.runtimeClosure.map(source=>[source.path,source.successorSha256]));
+ const revisions=integration.runtimeRevisions as {path:string;sha256:string;revision:string}[];
+ assert.deepEqual(revisions.map(source=>source.path),[
+  'web/src/lib/research-v2.ts','web/src/lib/vnext/source-worker.ts','web/src/lib/vnext/cached-source-admission.ts',
+ ]);
+ for(const source of revisions){
+  assert.match(source.revision,/^[0-9a-f]{40}$/u);
+  assert.notEqual(source.sha256,pins.get(source.path));
+  pins.set(source.path,source.sha256);
+ }
+ for(const [path,digest] of pins)assert.equal(sha(readFileSync(new URL(path,root))),digest,path);
 });

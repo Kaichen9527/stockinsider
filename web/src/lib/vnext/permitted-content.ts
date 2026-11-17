@@ -10,9 +10,13 @@ export function operatorPublicCitation(value:string){
  if(/paid|member|premium|subscription|login|authenticate/iu.test(parsed.pathname) || /^(?:\/c\/|\/joinchat\/|\/\+)/u.test(parsed.pathname) && /(^|\.)(t\.me|telegram\.me)$/u.test(parsed.hostname) || [...parsed.searchParams.keys()].some((key)=>/token|password|auth|credential|secret|signature/iu.test(key)))return null;
  return url;
 }
+// PostgreSQL source clocks retain microseconds; millisecond truncation can admit
+// an original event after publication or a cached revision after the cutoff.
+const instant=(v:unknown):v is string=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:\d{2})$/u.test(v)&&Number.isFinite(Date.parse(v));
+const precise=(v:string)=>BigInt(Date.parse(v))*BigInt(1000000)+BigInt((/\.(\d+)/u.exec(v)?.[1]||'').padEnd(9,'0').slice(3));
 function contentIdentity(item:PermittedContent,cutoff:string) {
  const allowed=new Set(['id','source','scope','url','eventAt','publishedAt','eventBasis','availableAt','symbols','authorRoot','originalRoot','title','body','statement','rightsAttested','operatorAuthored','catalystUntil']);
- if(Object.keys(item).some((key)=>!allowed.has(key)) || !Number.isFinite(Date.parse(cutoff)) || !Number.isFinite(Date.parse(item.eventAt)) || !Number.isFinite(Date.parse(item.publishedAt)) || !Number.isFinite(Date.parse(item.availableAt)) || Date.parse(item.eventAt)>Date.parse(item.publishedAt) || Date.parse(item.publishedAt)>Date.parse(item.availableAt) || Date.parse(item.availableAt)>Date.parse(cutoff))throw new Error('vnext_content_original_clocks_required');
+ if(Object.keys(item).some((key)=>!allowed.has(key)) || !instant(cutoff) || !instant(item.eventAt) || !instant(item.publishedAt) || !instant(item.availableAt) || precise(item.eventAt)>precise(item.publishedAt) || precise(item.publishedAt)>precise(item.availableAt) || precise(item.availableAt)>precise(cutoff))throw new Error('vnext_content_original_clocks_required');
  if(!item.id || item.id.length>128 || !Array.isArray(item.symbols) || item.symbols.length>12 || item.symbols.some((s)=>!/^\d{4}$/u.test(s)))throw new Error('vnext_content_scope_invalid');
  if(!['source_publication','original_event','operator_attested'].includes(item.eventBasis))throw new Error('vnext_content_event_basis_required');
  if(item.catalystUntil){const end=new Date(cutoff);end.setUTCMonth(end.getUTCMonth()+3);if(!Number.isFinite(Date.parse(item.catalystUntil)) || Date.parse(item.catalystUntil)<Date.parse(cutoff) || Date.parse(item.catalystUntil)>end.getTime())throw new Error('vnext_catalyst_original_window');}

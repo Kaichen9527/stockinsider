@@ -1,0 +1,96 @@
+{
+  "task": "T19 exact integration branch test build and browser verification",
+  "checkedCommit": "12ed65b253f2153be2b3512a6ec4866480ce4d40",
+  "packageLockSha256": "2bfbafb1d2fecd82883b0f8d2ece9e3cc1210c65efe80327210b8db4b4c48632",
+  "checkout": {
+    "source": "GitHub shallow fetch of the exact commit",
+    "trackedTreeClean": true,
+    "approximateCheckoutSizeMiB": 99
+  },
+  "environment": {
+    "kind": "Contabo isolated staging",
+    "node": "22.14.0",
+    "next": "16.3.4",
+    "dependencyStorage": "read-only mount of existing identical-lock install",
+    "network": "isolated loopback for tests"
+  },
+  "firstAttempt": {
+    "unit": "Missing generated official authority module",
+    "productionBuild": "Combined process reached 600-second limit while collecting deployment traces",
+    "lint": {
+      "status": "passed",
+      "warnings": 39,
+      "errors": 0
+    },
+    "typescript": "passed"
+  },
+  "scope": {
+    "pttBodyAuthorization": "metadata_only",
+    "pttLicensedCandidateAdmission": false,
+    "syntheticBrowserData": true,
+    "githubCiAttachedToTestedCommit": false,
+    "formalHold": "retained",
+    "productionChanged": false
+  },
+  "pending": [
+    "Rights-qualified original content sources",
+    "Genuine ranked adjacent closing sessions and provider review",
+    "GitHub CI and independent protected review",
+    "Contabo production release"
+  ],
+  "checks": {
+    "node": {
+      "passed": 106,
+      "failed": 0,
+      "logSha256": "69af63e3936fe9ba4ea447a0bb1546f2139fc7646fd8d39d55012d9af9d94452",
+      "generatedAuthoritySyncedFirst": true
+    },
+    "lint": {
+      "errors": 0,
+      "warnings": 39,
+      "logSha256": "63771fe9bd4f9bf96c4bc8be76851a9cdaebacd6e035c7b711965e7a4686676a"
+    },
+    "typescript": {
+      "status": "passed",
+      "logSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    "productionBuild": {
+      "status": "passed",
+      "logSha256": "2d00e40135711fb57bf26e7fe607bfb5d17c4494477dee4842404c8280d33450"
+    },
+    "browser": {
+      "rankingAndOutcome": {
+        "desktop": 10,
+        "mobile": 10,
+        "failed": 0,
+        "logSha256": "954ebd92863da16b1eb90523bbc831f0d03a65ec2b2af2018a7dfe95b6ccaea9"
+      },
+      "citationAndPrivateContentControls": {
+        "desktop": 3,
+        "mobile": 3,
+        "failed": 0,
+        "logSha256": "cb9803e2aa329296ed08552d102132a37f1d0aa38d88d84a10ce1ac544a8cf80"
+      }
+    },
+    "standalone": {
+      "home": 200,
+      "staticAsset": 200,
+      "ranking": 200,
+      "cacheControl": "no-store",
+      "syntheticMemberCount": 1
+    }
+  },
+  "resources": {
+    "postFetchDiskAvailableBytes": 19749314560,
+    "postVerificationDiskAvailableBytes": 19286831104,
+    "postVerificationMemoryAvailableKiB": 4266000
+  },
+  "github": {
+    "pr384": {
+      "head": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "draft": true,
+      "mergeableState": "blocked"
+    },
+    "testedCommitAttachedCheckRuns": 0
+  }
+}

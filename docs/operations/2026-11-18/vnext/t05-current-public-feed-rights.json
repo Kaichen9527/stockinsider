@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "stockinsider-t05-current-public-feed-rights-v1",
+  "recordedAt": "2026-11-17T18:19:12+00:00",
+  "parent": "655ccffecf12086a0bf8d63a40b5f81f1f1ed423",
+  "scope": "Contabo isolated synthetic fixture, public stock detail and discovery podcast projection",
+  "publishedLocatorRequiresCurrentIndexAndAnalysisPermission": true,
+  "withdrawalRegressionReproducedOnParent": true,
+  "missingFeedOrDifferentFeedRejected": true,
+  "artifactsAndPrivateLocatorInputsOmitted": true,
+  "sourceTests": {
+    "pass": 17,
+    "fail": 0,
+    "tapSha256": "d2cb2abfc7d4e65cc1323760c317b97a384338556c50561145283b4886b702c2",
+    "baselineTapSha256": "f770aba8812086d3c71207e5edd3dc90eef642a704a4b8e77f5c4c78fc1e9de1"
+  },
+  "build": {
+    "next": "16.3.4",
+    "productionBuildPassed": true,
+    "targetedLintPassed": true,
+    "requiredServerFilesSha256": "65291880cdfacb8b6906cf48fe3783c0f5171a4886adba214c42e2c51c540dca"
+  },
+  "codeSha256": {
+    "web/src/lib/podcast-public-evidence.ts": "33ea0a011a3207dc11df8b24b0d5ab276d37a93dc00821be3b4e09de824ff610",
+    "web/src/lib/podcast-public-evidence.test.ts": "e8f638a7906ef4c86fa4097236193c64764153b31eda34776b169833cca38360"
+  },
+  "productionDeployed": false,
+  "realSourceAcceptance": false,
+  "remaining": "Creator-approved timed transcript or authorized audio remains needed for the actual spoken-content acceptance."
+}

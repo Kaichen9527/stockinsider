@@ -1,0 +1,240 @@
+{
+  "schemaVersion": "vnext-v2-bounded-integration-evidence-v1",
+  "runtimeSource": "9aacbcd06d508d213d6661ef058ba5e3868cbcc2",
+  "runtimeTree": "f4760c43c38eeb4363a8b80b8dedca6061e701f9",
+  "runtimeWebTree": "d330f5b5b6cfab70acd923aa34e6fb2dfda7026f",
+  "harnessSource": "103c65020f6e47b4b8b2d7d408240af2ebf64691",
+  "checks": [
+    {
+      "name": "focused",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/top10-projection.test.ts",
+        "web/src/lib/vnext/published-target-read.test.ts",
+        "web/src/lib/vnext/ranking-read.test.ts",
+        "web/src/lib/vnext/candidate-page.test.ts",
+        "web/src/lib/stock-chart-calendar.test.ts",
+        "web/src/app/components/vnext/detail-source.test.mjs",
+        "scripts/vnext-ranking-snapshot-source.test.mjs"
+      ],
+      "start": "2026-11-07T08:15:19.784867+00:00",
+      "end": "2026-11-07T08:15:20.288558+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 33636352,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31535763456,
+        "/tmp": 9422901248
+      },
+      "resourceViolation": null,
+      "logSha256": "7823cde3a8aea4fdf13f287ca913905a65568801c7cf3eef53e66e144a4adeba"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-07T08:15:20.288941+00:00",
+      "end": "2026-11-07T08:15:30.817657+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40189952,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31535747072,
+        "/tmp": 9422901248
+      },
+      "resourceViolation": null,
+      "logSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-07T08:15:30.818054+00:00",
+      "end": "2026-11-07T08:15:47.115922+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40202240,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31535742976,
+        "/tmp": 9422901248
+      },
+      "resourceViolation": null,
+      "logSha256": "2e4118ba6e37e5c36f29b6092c6d27e0a9333942bdf1c4b34e9c77d4d4cc1d8a"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-07T08:15:47.116270+00:00",
+      "end": "2026-11-07T08:15:51.632494+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40357888,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31535747072,
+        "/tmp": 9422901248
+      },
+      "resourceViolation": null,
+      "logSha256": "af83c6401b29f76b14c54d70cad6eb93c8892a47087b5b643f41776ac3ff4e8f"
+    }
+  ],
+  "focusedCount": 59,
+  "focusedScopes": {
+    "top10Pure": 12,
+    "publishedTargetReader": 11,
+    "rankingReadAndCycleRequest": 5,
+    "candidatePaging": 10,
+    "calendarChart": 7,
+    "actualDetailSSR": 3,
+    "rankingSqlSourceConstruction": 11
+  },
+  "lintWarnings": 34,
+  "lintErrors": 0,
+  "browser": {
+    "scope": "actual isolated HTTP/SSR/Chromium desktop/mobile; synthetic RPC transport only, no native PG/review authority",
+    "status": "PASS",
+    "source": "9aacbcd06d508d213d6661ef058ba5e3868cbcc2",
+    "harnessCommit": "103c65020f6e47b4b8b2d7d408240af2ebf64691",
+    "runtimeWebTree": "d330f5b5b6cfab70acd923aa34e6fb2dfda7026f",
+    "browserVersion": "151.0.7922.173",
+    "checks": [
+      "desktop:top0",
+      "desktop:top1",
+      "desktop:top10",
+      "desktop:bound-detail-invalidity",
+      "desktop:wrong-revision-closed",
+      "desktop:stable-page-private-allowlist",
+      "mobile:top0",
+      "mobile:top1",
+      "mobile:top10",
+      "mobile:bound-detail-invalidity",
+      "mobile:wrong-revision-closed",
+      "mobile:stable-page-private-allowlist"
+    ],
+    "readRpcCalls": 17,
+    "writeRpcCalls": 0,
+    "providerCalls": 0
+  },
+  "browserResourceRun": [
+    {
+      "name": "browser-reviewed",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/vnext-ranking-browser-smoke.mjs"
+      ],
+      "start": "2026-11-07T08:21:14.680731+00:00",
+      "end": "2026-11-07T08:21:19.948761+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 155209728,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31532765184,
+        "/tmp": 9299521536
+      },
+      "resourceViolation": null,
+      "logSha256": "79b691b79f6c77a25a1d7a33a35ec3f55494785eaf62fbbeba03b00912c8e699"
+    }
+  ],
+  "cleanup": {
+    "appPid": 7151,
+    "appExit": 143,
+    "appSignal": null,
+    "bridgeClosed": true
+  },
+  "preservedBrowserFailures": [
+    {
+      "status": "FAIL",
+      "error": "Expected values to be strictly equal:\n\n4 !== 2\n",
+      "checks": [],
+      "readRpcCalls": 2,
+      "scope": "synthetic engineering browser harness failure, retained",
+      "fileSha256": "c11daab358d615355a86225f67fa3d3d9075eef9d00f5d9538f7261fae56f19d"
+    },
+    {
+      "status": "FAIL",
+      "error": "false == true",
+      "checks": [
+        "desktop:top0",
+        "desktop:top1",
+        "desktop:top10",
+        "desktop:bound-detail-invalidity",
+        "desktop:wrong-revision-closed"
+      ],
+      "readRpcCalls": 8,
+      "scope": "synthetic engineering browser harness failure, retained",
+      "fileSha256": "7bf8ae14c37661130ec17f5c853e007c4fd0bf9bfa643622bc43bfcb204b8f38"
+    },
+    {
+      "status": "FAIL",
+      "error": "locator.innerText: Error: strict mode violation: locator('main') resolved to 2 elements:\n    1) <main class=\"min-h-screen px-5 py-6 text-slate-950 dark:text-emerald-50 md:px-10 lg:px-14\">\u2026</main> aka getByRole('main')\n    2) <main data-testid=\"vnext-detail\" class=\"mx-auto max-w-4xl space-y-6 px-4 py-8 text-slate-900 dark:text-slate-100\">\u2026</main> aka getByTestId('vnext-detail')\n\nCall log:\n\u001b[2m  - waiting for locator('main')\u001b[22m\n",
+      "checks": [
+        "desktop:top0",
+        "desktop:top1",
+        "desktop:top10",
+        "desktop:bound-detail-invalidity"
+      ],
+      "readRpcCalls": 7,
+      "scope": "synthetic engineering browser harness failure, retained",
+      "fileSha256": "e195f7c5e408b9d0a2099006a2dbe7ebb241d854834d4e11f9c71bb748900060"
+    }
+  ],
+  "browserHold": {
+    "sameFailureClass": "global main locator not scoped",
+    "count": 2,
+    "initialDisposition": "HOLD",
+    "substantiveRepair": "visible named component scopes and settled content checks; no oracle disabled",
+    "independentReview": "integration_review approved one final attempt on a79db159b04debff8ea92a7fb0e9ebb4fdc18f6c92997e4b6cbf2280042feb38",
+    "finalAttempt": 4,
+    "finalDisposition": "PASS for engineering browser scope only"
+  },
+  "priorFailures": [
+    {
+      "check": "full TypeScript",
+      "status": "FAIL",
+      "cause": "negative fixture policy literal type",
+      "logSha256": "915cd03a1e9b8608b301f04f0a92c2a65b3c20d2b572f108b92d5ebf7c44dcfa"
+    },
+    {
+      "check": "lint initial fixed runtime predecessor3e742e6",
+      "status": "FAIL",
+      "cause": "JSX constructed in try/catch",
+      "logSha256": "3dc31e53ae0c25077c56a929ffc49b6709875001ee00b1dcea3315050851028b"
+    }
+  ],
+  "nativePostgres": "BLOCKED_HOLD_NOT_RUN",
+  "nativeConcurrencyCASReplayRollback": "NOT_RUN",
+  "qualifiedDailyFinancialPriceRefresh": "UNIMPLEMENTED",
+  "actualSourceAndModel": "BLOCKED_MISSING_AUTHORITY",
+  "twoRealAdjacentSessions": "NOT_RUN",
+  "protectedA1": "BLOCKED_MISSING_REF",
+  "contabo": "BLOCKED_MISSING_TRUSTED_ACCESS",
+  "iCloudVerifiedArchive": "BLOCKED_NOT_RUN",
+  "archiveLocation": null,
+  "reclaimedBytes": 0,
+  "production": "NOT_DEPLOYED_OR_MODIFIED",
+  "fullGoal": "ACTIVE_INCOMPLETE",
+  "note": "No counts transfer to native or real-source acceptance. Resource sampling is not instantaneous or an enforced cgroup maximum."
+}

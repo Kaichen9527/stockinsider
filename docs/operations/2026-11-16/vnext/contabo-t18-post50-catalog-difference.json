@@ -1,0 +1,306 @@
+{
+  "schema": "stockinsider-t18-actual-post50-catalog-difference-v1",
+  "testedTaipeiDate": "2026-11-16",
+  "comparisonSourceCommit": "e72edd8197d108124f9cba871daeb7c6aee2a223",
+  "backupSourceDate": "2026-09-19",
+  "sealedReference": {
+    "schemaOnlyReferenceCaptured": true,
+    "byteCount": 1732399,
+    "referenceSha256": "272ba774b99e13a2da1af46048472e0aaa8593b5fea30c9c1bf61a8cebbc4732"
+  },
+  "stageAdapterSha256": "bc4bce10a252e2e38dbb90e1f0f24b0953573fef737157d79d4872f0bc71b2ea",
+  "postgresql": "17.11",
+  "authenticatedClone": true,
+  "foreignKeys": 288,
+  "financialCommitted": true,
+  "publicationCommitted": false,
+  "comparison": {
+    "baseline": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+    "namespace": {
+      "relations": {
+        "additional": 2,
+        "additionalExamples": [
+          "sha256:aeca4e66fb3e16be12f8b00d7cbea698a406800d7260237b0de93d3507a9aaf6",
+          "sha256:3450893556bf798183da16022cd62cad439df52f8ee0ccb3751170a4aa16ca12"
+        ],
+        "changed": 11,
+        "changedExamples": [
+          {
+            "fields": [
+              "acl",
+              "owner"
+            ],
+            "name": "public/entry_plan_authority_jobs_v1"
+          },
+          {
+            "fields": [
+              "owner"
+            ],
+            "name": "public/entry_plan_authority_jobs_v1_pending"
+          },
+          {
+            "fields": [
+              "owner"
+            ],
+            "name": "public/entry_plan_authority_jobs_v1_pkey"
+          },
+          {
+            "fields": [
+              "owner"
+            ],
+            "name": "public/entry_plan_authority_jobs_v1_single_running"
+          },
+          {
+            "fields": [
+              "acl",
+              "owner"
+            ],
+            "name": "public/entry_plan_authority_runs_v1"
+          }
+        ],
+        "countsByChangedField": {
+          "acl": 6,
+          "owner": 7
+        },
+        "expected": 987,
+        "missing": 0,
+        "missingExamples": [],
+        "observed": 989
+      },
+      "roles": {
+        "additional": 1,
+        "additionalExamples": [
+          "sha256:c3df10d1668dafce817e4dc14ee05a80c25edc86ad5043c7dda6fcc2cacb30f5"
+        ],
+        "changed": 1,
+        "changedExamples": [
+          {
+            "fields": [
+              "bypassRls",
+              "createDb",
+              "createRole",
+              "inherit",
+              "login",
+              "replication",
+              "super"
+            ],
+            "name": "postgres"
+          }
+        ],
+        "countsByChangedField": {
+          "bypassRls": 1,
+          "createDb": 1,
+          "createRole": 1,
+          "inherit": 1,
+          "login": 1,
+          "replication": 1,
+          "super": 1
+        },
+        "expected": 30,
+        "missing": 0,
+        "missingExamples": [],
+        "observed": 31
+      },
+      "routines": {
+        "additional": 13,
+        "additionalExamples": [
+          "sha256:1e07e1a6f7267bf692d108f085a074139be42dbbd9e916f01ae35816b22bccf3",
+          "sha256:8f1dc8e1ebc568794b33d125c3266262cd749a82d8f0bc926a26d9fb3abe897e",
+          "sha256:60beada839fbaea5c9a6b4e6dd688f29aeafc054bd11f8fec1fbd98298cebc94",
+          "sha256:092b6268954c2de6f06b69b08bddd69fe81cb97d873b68c97e5004670090c88e",
+          "sha256:73035b827326e370268ccfd6f223797027bcd9f0414be0aa36ef91fa55816e71",
+          "sha256:2bd64101fa5ba7f238b3f617ba442d765eaf72f6acbea106770d147a93bd3216",
+          "sha256:38581f61712ee7c898072bb0d53870712d90d15a0a5ffab2e044e5cd9349ffa3",
+          "sha256:89a4f5dce468da425c7bb4a2ec389e904015552223a169b875ebeecd0328a80b",
+          "sha256:a8d583cb414c99299e36fc1600f054f8902fb6068fefc50f20c4f27aea4cdc34",
+          "sha256:7169e54af532f24942ac15c3d516ce95eb9709e8f64c4fc3e6ed3b0c8e721b56",
+          "sha256:83939977d9312171746952ed684fdb75dfda743744de40be95dd136e6777bf0a",
+          "sha256:880aaaf51120746deaf7dfd5a3a480dacc4a8cff6e06156a1393d44f0bcd5c11"
+        ],
+        "changed": 36,
+        "changedExamples": [
+          {
+            "fields": [
+              "acl",
+              "owner"
+            ],
+            "name": "extensions/extensions.armor(bytea)"
+          },
+          {
+            "fields": [
+              "acl",
+              "owner"
+            ],
+            "name": "extensions/extensions.armor(bytea,text[],text[])"
+          },
+          {
+            "fields": [
+              "acl",
+              "owner"
+            ],
+            "name": "extensions/extensions.crypt(text,text)"
+          },
+          {
+            "fields": [
+              "acl",
+              "owner"
+            ],
+            "name": "extensions/extensions.dearmor(text)"
+          },
+          {
+            "fields": [
+              "acl",
+              "owner"
+            ],
+            "name": "extensions/extensions.decrypt(bytea,bytea,text)"
+          }
+        ],
+        "countsByChangedField": {
+          "acl": 36,
+          "owner": 36
+        },
+        "expected": 288,
+        "missing": 0,
+        "missingExamples": [],
+        "observed": 301
+      },
+      "types": {
+        "additional": 4,
+        "additionalExamples": [
+          "sha256:20663203d25c8d0fc47a6da2d45dbd24441f6a4394d65d7e22ddfa2edb8d4b3b",
+          "sha256:4aaa06ee75cf855039d75dbae1fc3d853af8323779c2b2170820fb3808eeb930",
+          "sha256:0d256c52191321b5971670c0fd28d5314493f5c8be6e637cafdb872b9301d4e9",
+          "sha256:075fb3288e3f1bb6ed469550d38f3c6ea967103b39c4d5d41674d2dbb86e6035"
+        ],
+        "changed": 4,
+        "changedExamples": [
+          {
+            "fields": [
+              "owner"
+            ],
+            "name": "public/_entry_plan_authority_jobs_v1"
+          },
+          {
+            "fields": [
+              "owner"
+            ],
+            "name": "public/_entry_plan_authority_runs_v1"
+          },
+          {
+            "fields": [
+              "owner"
+            ],
+            "name": "public/entry_plan_authority_jobs_v1"
+          },
+          {
+            "fields": [
+              "owner"
+            ],
+            "name": "public/entry_plan_authority_runs_v1"
+          }
+        ],
+        "countsByChangedField": {
+          "owner": 4
+        },
+        "expected": 820,
+        "missing": 0,
+        "missingExamples": [],
+        "observed": 824
+      }
+    },
+    "observed": "55cbb8bcf6f5d9bad5a4147734c6ced8a0c22661072e21bb32c0ed97a11fcb15",
+    "schema": "post50-namespace-difference-v1",
+    "scopedCatalog": {
+      "functions": {
+        "additional": 0,
+        "changed": 139,
+        "expected": 242,
+        "missing": 0,
+        "observed": 242,
+        "publicExamples": [
+          "acquire_legacy_producer_lease_v3_11(text,text,text,bytea,text,uuid,integer)",
+          "append_assistive_artifact_registration_v3(assistive_artifact_registration_input_v3,uuid)",
+          "append_exchange_reported_valuation_transaction_v3_16_9(exchange_reported_valuation_input_v3_13,uuid)",
+          "append_exchange_reported_valuation_v3_13(exchange_reported_valuation_input_v3_13,uuid)",
+          "append_financial_fact_pre_history_v1(financial_fact_input_v3,uuid)",
+          "append_financial_fact_pre_v3_16_16(financial_fact_input_v3,uuid)"
+        ]
+      },
+      "roles": {
+        "additional": 0,
+        "changed": 12,
+        "expected": 30,
+        "missing": 0,
+        "observed": 30,
+        "publicExamples": [
+          "anon",
+          "authenticated",
+          "authenticator",
+          "legacy_correctness_rpc_owner",
+          "opportunity_v3_rpc_owner",
+          "pg_monitor"
+        ]
+      },
+      "schemas": {
+        "additional": 0,
+        "changed": 1,
+        "expected": 3,
+        "missing": 0,
+        "observed": 3,
+        "publicExamples": [
+          "public"
+        ]
+      },
+      "tables": {
+        "additional": 0,
+        "changed": 92,
+        "expected": 253,
+        "missing": 0,
+        "observed": 253,
+        "publicExamples": [
+          "candidate_financial_document_retry_audit",
+          "candidate_research_run_items",
+          "entry_plan_authority_jobs_v1",
+          "entry_plan_authority_runs_v1",
+          "internal_principal_nonces_v3",
+          "internal_principal_role_bindings_v3"
+        ]
+      },
+      "types": {
+        "additional": 0,
+        "changed": 0,
+        "expected": 120,
+        "missing": 0,
+        "observed": 120,
+        "publicExamples": []
+      }
+    }
+  },
+  "confirmedExtraRole": {
+    "name": "si-t18-db",
+    "objectIdentitySha256": "c3df10d1668dafce817e4dc14ee05a80c25edc86ad5043c7dda6fcc2cacb30f5"
+  },
+  "controlledExtraRoleOnly": {
+    "locale": "C",
+    "stage": "staging_identity_control",
+    "extraStagingRole": "si-t18-db",
+    "createsNamespaceMismatch": true,
+    "scopedCatalogUnchanged": true,
+    "unchangedComparatorVerified": true
+  },
+  "controlPublicationStillPassedAfterRollback": true,
+  "productionSignaturesIdentical": true,
+  "releaseHoldRetained": true,
+  "isolatedResourcesCleaned": true,
+  "cleanup": {
+    "temporaryRunnerAndPublicReferenceRemoved": true,
+    "freeBytesAfterCleanup": 26131881984
+  },
+  "limits": {
+    "rawProductionRowsExported": false,
+    "unknownObjectNamesMasked": true,
+    "perObjectMetadataCompared": true,
+    "perScopeCategoryExamplesBounded": true,
+    "publicationGuardEdited": false
+  }
+}

@@ -62,10 +62,14 @@ export default function CandidateHistoryChart({ detail }: { detail: CandidateDet
   for (const row of multiples) { const time = date(row.date); if (time && finite(row.peRatio)) pe.push({ time, value: row.peRatio }); if (time && finite(row.pbRatio)) pb.push({ time, value: row.pbRatio }); }
   const priceMonths = new Set([...dailyClose, ...monthlyClose].map((point) => String(point.time).slice(0, 7))).size;
   const priceCoverage = `${priceMonths} 個月份有資料（不代表交易日完整）`;
+  const history = detail.valuation.priceHistoryCoverage;
   const peMonths = new Set(pe.map((point) => String(point.time).slice(0, 7))).size;
   const pbMonths = new Set(pb.map((point) => String(point.time).slice(0, 7))).size;
   const multipleCoverage = `PE ${peMonths}/60、PB ${pbMonths}/60 個月；各自不足 48 月不作歷史分位比較`;
   return <section className="mt-8 space-y-4"><div><p className="research-kicker">HISTORICAL EVIDENCE</p><h2 className="mt-2 text-xl font-semibold">歷史價格與技術圖表</h2><p className="mt-1 text-sm text-slate-500">價格覆蓋：{priceCoverage}；PE/PB 覆蓋：{multipleCoverage}。日線、月線與均線分開呈現；只使用真實交易日，資料不足不補造。</p></div>
+    <p className="text-sm text-slate-500">{history
+      ? `日線顯示目標：${history.displayFrom} 至 ${history.displayThrough}（自截止日回溯三個日曆年）；依本研究版本提供的官方交易日曆，已驗證交易日 ${history.coveredSessions}/${history.expectedSessions}，均線暖機 ${history.coveredWarmupSessions}/${history.requiredWarmupSessions} 日。${history.status === 'supplied_sessions_covered' ? '提供的區間與暖機交易日均有資料。' : `覆蓋不足：顯示區間缺 ${history.missingSessions.length} 個已知交易日、暖機缺 ${history.warmupShortfallSessions} 日；${history.calendarCoverage === 'insufficient' ? '官方交易日曆或暖機範圍不足。' : ''}`}官方日曆完整性未獨立驗證。上市日期與停牌狀態尚未驗證，缺少資料不推定為上市不足或停牌。`
+      : '此研究版本尚未驗證三個日曆年的日線與均線暖機覆蓋；上市日期與停牌狀態未知。'}</p>
     <Chart id="candidate-price-history" title="日線收盤與均線" datasets={[{ label: '日收盤', color: '#1c1917', points: dailyClose }, { label: 'MA5', color: '#f59e0b', points: ma5 }, { label: 'MA20', color: '#c4531b', points: ma20 }, { label: 'MA60', color: '#2563eb', points: ma60 }, { label: 'MA120', color: '#7c3aed', points: ma120 }, { label: 'MA240', color: '#64748b', points: ma240 }]} empty="此 revision 尚無可驗證的日線／均線序列。" />
     <Chart id="candidate-monthly-price-history" title="月末交易日收盤" datasets={[{ label: '月收盤', color: '#c4531b', points: monthlyClose }]} empty="此 revision 尚無真實月末交易日序列。" />
     <Chart id="candidate-multiple-history" title="PE／PB 區間" datasets={[{ label: 'PE', color: '#2563eb', points: pe }, { label: 'PB', color: '#9333ea', points: pb }]} empty="歷史 PE／PB 序列仍待補入此 revision。" />

@@ -46,10 +46,15 @@ directory instead and takes precedence over this pointer. Never disable sandbox
 protection to work around `PermissionError: /.config`.
 
 Record the interpreter package hashes, OS package inventory, and reviewer in
-the deployment evidence.  The isolated service starts its parser without a
-shell, with a scrubbed environment, a 25-second wall timeout, and bounded stdout/stderr.
-The Python process also applies CPU, address-space, file-size, page-count, and
-input-size limits.  A missing runtime marks a receipt `partial`; it must never
+the deployment evidence. The isolated service starts its parser without a
+shell, with a scrubbed environment and a 25-second wall timeout by default.
+A server-claimed structured official filing can use the extended profile when
+its deadline has at least 155 seconds remaining. It uses the pinned taxonomy
+and issuer/period checks with a 142-second child wall limit, 115 CPU seconds,
+1,280 MiB of child address space and a 1,536 MiB service memory ceiling.
+The socket processes one request at a time. It bounds receipt of each request
+to five seconds and continues accepting requests after a caller disconnects.
+File size, output and page-count limits apply to both profiles.  A missing runtime marks a receipt `partial`; it must never
 fall through to an unvalidated regex extraction.
 
 ## Parsers and evidence boundary

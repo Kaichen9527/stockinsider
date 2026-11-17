@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "launch-disposition-range-replay-v1",
+  "day": "2026-11-16",
+  "cutoff": "2026-11-16T21:30:00+08:00",
+  "archivedInStaging": true,
+  "durableWriterReceipt": false,
+  "rankingAuthority": false,
+  "sources": [
+    {
+      "market": "TWSE",
+      "range": {
+        "market": "TWSE",
+        "day": "2026-11-16",
+        "sha256": "1db361b979093514d4abe3f9e36b5ec7f41e2fb13026b8d9f0ce290ccb690257",
+        "bytes": 3180,
+        "noticeCount": 2,
+        "symbolCount": 2,
+        "observedAt": "2026-11-16T21:14:15.498Z",
+        "recordedAt": "2026-11-16T21:14:15.513Z",
+        "timely": false,
+        "fourDigitSymbols": 2
+      },
+      "licensed": {
+        "datasetId": 29082,
+        "market": "TWSE",
+        "session": "2026-11-16",
+        "sha256": "3e18e3b0f0d1de5c15fca10c7c534fb11afada88179e464c42cf2ae8017a2c84",
+        "bytes": 2575,
+        "observedAt": "2026-11-16T21:14:15.778Z",
+        "recordedAt": "2026-11-16T21:14:15.797Z",
+        "requestScope": "exact_session",
+        "publishedNotices": 2,
+        "noticesInEffect": 2,
+        "usableAtCutoff": false,
+        "completeAbsenceProved": false
+      },
+      "reportsAgree": true,
+      "timelyOnThisReplay": false,
+      "independentlyReplayedArchive": true,
+      "comparison": {
+        "datedFourDigitCodes": 2,
+        "noticeFourDigitCodes": 2,
+        "datedOnly": 0,
+        "noticeOnly": 0
+      }
+    },
+    {
+      "market": "TPEX",
+      "range": {
+        "market": "TPEX",
+        "day": "2026-11-16",
+        "sha256": "03028772f04f007d5591403c9671a54302894b47afca25695fab28748f8c8385",
+        "bytes": 7020,
+        "noticeCount": 5,
+        "symbolCount": 5,
+        "observedAt": "2026-11-16T21:14:15.449Z",
+        "recordedAt": "2026-11-16T21:14:15.508Z",
+        "timely": false,
+        "fourDigitSymbols": 1
+      },
+      "licensed": {
+        "datasetId": 11396,
+        "market": "TPEX",
+        "session": "2026-11-16",
+        "sha256": "c2d9052ac0bda64410b9104e56af20b43c0e065390ca53ca42f43daa3a8231e5",
+        "bytes": 5991,
+        "observedAt": "2026-11-16T21:14:15.452Z",
+        "recordedAt": "2026-11-16T21:14:15.508Z",
+        "requestScope": "current_feed",
+        "publishedNotices": 6,
+        "noticesInEffect": 4,
+        "usableAtCutoff": false,
+        "completeAbsenceProved": false
+      },
+      "reportsAgree": false,
+      "timelyOnThisReplay": false,
+      "independentlyReplayedArchive": true,
+      "comparison": {
+        "datedFourDigitCodes": 1,
+        "noticeFourDigitCodes": 0,
+        "datedOnly": 1,
+        "noticeOnly": 0
+      }
+    }
+  ],
+  "sourcesNotes": {
+    "TWSE": "https://www.twse.com.tw/zh/announcement/punish.html",
+    "TPEX": "https://www.tpex.org.tw/zh-tw/announce/market/disposal.html",
+    "noticesTWSE": "https://data.gov.tw/dataset/29082",
+    "noticesTPEX": "https://data.gov.tw/dataset/11396"
+  },
+  "testScope": "Contabo isolated dynamic uid; four raw files and sanitized receipt mode 0600; no database or production credentials mounted",
+  "implementation": {
+    "scripts/vnext-disposition-range-replay.mjs": "920dd2db18216faa708f472032dcf5ba18765b366cb602628057fe369d7a8572",
+    "web/src/lib/vnext/launch-disposition-range.ts": "3a2138fc1e675315d7e37334f238c01970d7a3a126c219b0e5364ee16d7342fb",
+    "web/src/lib/vnext/launch-disposition-status.ts": "0d2f6df9a02db6b91b04e898c1979b9db93329734bcdaa85decde294b496e7e1",
+    "web/src/lib/vnext/evidence-clock.ts": "bf587d9f77289610aa3a4c45285af5337f501aa8dd90b55ab37ac45cdc91ea2e",
+    "web/src/lib/vnext/licensed-csv-decoder.ts": "23185f71bcb9f002cf3be7a0c644ef154c44c51d07d30bef26af135a3a49782d"
+  },
+  "productionServiceSignaturesMatched": true,
+  "scheduledNext": [
+    {
+      "date": "2026-11-17",
+      "startsAtTaipei": "21:24:30",
+      "targetCutoffTaipei": "21:30:00",
+      "verifiedWaiting": true,
+      "published": false
+    },
+    {
+      "date": "2026-11-18",
+      "startsAtTaipei": "21:24:30",
+      "targetCutoffTaipei": "21:30:00",
+      "verifiedWaiting": true,
+      "published": false
+    }
+  ]
+}

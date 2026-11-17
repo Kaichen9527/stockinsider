@@ -10,7 +10,12 @@ import { THREADS_CANONICAL_ORIGIN } from './source-auth';
 import { APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS, UNAVAILABLE_TELEGRAM_PUBLIC_CHANNELS, authorizedPodcastRssAllowlist, podcastContentAnalyzable } from './source-policy';
 import { bullTalkLicenseReadiness, parseLicensedBullTalkFeed } from './bulltalk-feed';
 import { THREADS_KEYWORD_SEARCH_URL, assertThreadsKeywordSearchEndpoint } from './threads-api';
-import { derivePodcastLedgerSemantics, parsePodcastNamespaceFeed, parsePublisherChapters, parsePublisherTranscript, type TimedPodcastSegment } from './podcast-rss';
+import {
+  derivePodcastLedgerSemantics, locatePodcastStockMentions, parsePodcastNamespaceFeed, podcastStockCodes,
+  configuredPodcastTranscriptTracks, podcastTranscriptTrackKey, selectTimedPublisherTranscript, type PodcastArtifactReference,
+  INVEST_J_THINGS_AUTHOR, INVEST_J_THINGS_FEED, INVEST_J_THINGS_FEED_LIMIT_BYTES, INVEST_J_THINGS_PROFILE,
+  INVEST_J_THINGS_PROGRAM, parseInvestJThingsFeed,
+} from './podcast-rss';
 import { fetchTextWithRetry, sourceFetchFailureCode } from './source-fetch';
 import { assertThreadsPublicSearchReady, threadsTokenRegistryMetadata } from './threads-token';
 import { mergeThreadsRunMetadata, normalizeThreadsAuthor, normalizeThreadsCursor, normalizeThreadsPermalink, summarizeThreadsAuthors, threadsMarketQueries } from './threads-discovery';
@@ -19,6 +24,7 @@ import { collectPagedAuthorityRows } from './candidate-research-policy';
 import { decodeSingleFileZip, gdeltGkgUrlsAfter, gdeltSearchableText, gdeltTransportReason, isRetiredNewsHost, matchGdeltStockSymbols, parseGdeltSeenDate, selectLatestGdeltGkgUrl } from './gdelt-gkg';
 import { isExpectedPttArticleMissing } from './ptt-policy';
 import { buildPttMentionProvenance, type PttBodyReadStatus } from './ptt-mention-provenance';
+import { parsePttArticleHtml, pttBodyProvenance, pttPublicationKnownAt, matchPttFinancialSummarySymbols, type PttArticleRead, type PttBodyProvenance } from './ptt-article-parser.ts';
 import { fetchPinnedHttpsText, isPublicNetworkAddress } from './pinned-https-fetch';
 
 type Row = Record<string, unknown>;
@@ -265,13 +271,17 @@ const KOL_SEEDS = [
     },
   },
   {
+    // Keep the existing profile key. The podcast collector attributes the
+    // registered program to the verified creator without duplicating this row.
     displayName: 'John 林睿閔',
     primaryPlatform: 'telegram',
     followerCount: 30000,
     contentFocus: 'tw_stocks',
-    profileUrl: 'https://t.me/johnstock888',
+    profileUrl: INVEST_J_THINGS_PROFILE,
     metadata: {
       telegramUrl: 'https://t.me/s/johnstock888',
+      podcastName: INVEST_J_THINGS_PROGRAM,
+      rssUrl: INVEST_J_THINGS_FEED,
     },
   },
   {
@@ -2217,7 +2227,7 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
         canonical_content_hash: contentHash,
         canonical_publisher_key: publisherKey,
         stance_semantics: stanceSemantics,
-        candidate_discovery_eligible: (item.contentSemantics || 'editorial_discussion') !== 'bulk_institutional_ranking',
+        candidate_discovery_eligible: item.metadata?.candidate_discovery_eligible !== false && (item.contentSemantics || 'editorial_discussion') !== 'bulk_institutional_ranking',
         content_chars: compacted.originalChars,
         content_truncated: compacted.truncated,
         content_max_chars: SOURCE_RAW_CONTENT_MAX_CHARS,
@@ -2239,6 +2249,9 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
     const availableAt = nowIso();
     const mentionRows = newItems
       .filter((item) => (item.contentSemantics || 'editorial_discussion') !== 'bulk_institutional_ranking')
+      // A PTT header gap must never acquire a fresh event via availableAt.
+      // Metadata/link retention remains available for the legacy caller.
+      .filter((item) => item.platform !== 'ptt' || item.metadata?.ptt_publication_valid === true && Boolean(item.publishedAt))
       .flatMap((item) => (item.symbols || []).flatMap((symbol) => {
       const stockId = stockIdBySymbol.get(symbol);
       if (!stockId || !item.documentUrl) return [];
@@ -2266,6 +2279,7 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
         publisher_name: item.publisherName || compactText(item.metadata?.author_name || item.metadata?.source_name) || null,
         provenance: {
           retention_mode: item.metadata?.retention_mode || 'source_document',
+          ...(item.platform === 'ptt' ? { candidate_discovery_eligible: false } : {}),
           source_entity_id: item.sourceEntityId,
           ...(item.platform === 'gdelt' ? {
             discovery_eligible: item.metadata?.discovery_eligible === true,
@@ -2679,6 +2693,23 @@ function detectCrossThemeKeys(text: string) {
   return themes;
 }
 
+/** Actual scraper composition, also exposed for isolated source integration
+ * checks. Body text is transient; the retained proof carries only metadata. */
+export function projectPttCollectorArticle(input: {
+  html: string; documentUrl: string; title: string; observedAt: string; validSymbols: Set<string>;
+  stockNamesBySymbol: Map<string, string>; aliasesBySymbol: Map<string, string[]>;
+}) {
+  const article = parsePttArticleHtml(input.html, input.documentUrl);
+  const context = { validSymbols: input.validSymbols, stockNamesBySymbol: input.stockNamesBySymbol, aliasesBySymbol: input.aliasesBySymbol };
+  const bodyText = article.bodyText ?? '';
+  const genericBodyExtracted = extractTwSymbolsWithEvidence(bodyText, context);
+  const financialSymbols = matchPttFinancialSummarySymbols(bodyText, input.validSymbols, input.stockNamesBySymbol);
+  const bodySymbols = [...new Set([...genericBodyExtracted.symbols, ...financialSymbols])];
+  const bodyExtracted = { symbols: bodySymbols, excludedFalsePositives: genericBodyExtracted.excludedFalsePositives.filter(row => !bodySymbols.includes(row.token)) };
+  const legacyExtracted = extractTwSymbolsWithEvidence(`${input.title}\n${article.bodyText ?? ''}`, context);
+  return { article, bodyExtracted, legacyExtracted, publicationValid: pttPublicationKnownAt(article, input.observedAt), provenance: pttBodyProvenance(article, bodyExtracted.symbols) };
+}
+
 async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
   const supabase = getSupabaseServerClient();
   const baseUrl = 'https://www.ptt.cc/bbs/Stock/index.html';
@@ -2793,6 +2824,10 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
     let articleBodyText = title;
     let comments: Array<{ tag: string; author: string | null; text: string }> = [];
     let articleAuthor: string | null = null;
+    let articleRead: PttArticleRead | null = null;
+    let ownBodyProvenance: PttBodyProvenance | null = null;
+    let articleObservedAt: string | null = null;
+    let publicationValid = false;
     let bodyReadStatus: PttBodyReadStatus = 'title_only_fetch_failed';
 
     try {
@@ -2803,15 +2838,14 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
       });
       articlesFetched += 1;
       comments = parsePushComments(bodyHtml);
-      articleAuthor = stripHtml(bodyHtml.match(/article-meta-tag[^>]*>作者<\/span>\s*<span[^>]*class="article-meta-value"[^>]*>([\s\S]*?)<\/span>/u)?.[1] || '') || null;
+      articleObservedAt = nowIso();
+      const parsed = projectPttCollectorArticle({ html: bodyHtml, documentUrl: articleUrl, title, observedAt: articleObservedAt, validSymbols, stockNamesBySymbol, aliasesBySymbol });
+      articleRead = parsed.article; ownBodyProvenance = parsed.provenance;
+      publicationValid = parsed.publicationValid;
+      articleAuthor = articleRead.author;
       pushCommentsParsed += comments.length;
-      const mainBlock = bodyHtml.match(/<div id="main-content">([\s\S]*?)<\/div>\s*<div id="article-polling"/)?.[1] ||
-        bodyHtml.match(/<div id="main-content">([\s\S]*?)<\/div>/)?.[1] ||
-        bodyHtml;
-      const bodyWithoutPushes = mainBlock.replace(/<div class="push">[\s\S]*?<\/div>/g, ' ');
-      const bodyText = stripHtml(bodyWithoutPushes).slice(0, 5000);
-      bodyReadStatus = bodyHtml.includes('<div id="main-content">') && bodyText
-        ? 'body_read_bounded' : 'title_only_body_missing';
+      const bodyText = articleRead.bodyText ?? '';
+      bodyReadStatus = articleRead.status === 'body_read' ? 'body_read_bounded' : 'title_only_body_missing';
       const commentText = comments.map((item) => `${item.tag} ${item.text}`).join('\n').slice(0, 3000);
       articleBodyText = bodyText || title;
       contentText = compactText([bodyText, commentText].filter(Boolean).join('\n\n推噓留言：\n')) || title;
@@ -2854,6 +2888,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
       documentUrl: articleUrl,
       title,
       summary: title,
+      publishedAt: articleRead?.sourcePublishedAt ?? null,
       // Use full text only transiently for symbol/sentiment extraction.  The
       // retained record is metadata + title + original URL, not a copied post.
       contentText: title,
@@ -2872,10 +2907,13 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
         author_name: articleAuthor,
         body_read_status: bodyReadStatus,
         body_retained: false,
+        ptt_publication_valid: publicationValid,
+        ptt_body_provenance: ownBodyProvenance,
+        ptt_body_observed_at: articleObservedAt,
+        candidate_discovery_eligible: false,
         replies_read_completeness: 'partial',
         reply_sample_truncated: comments.length > 20,
         matched_symbols: symbols,
-        comment_evidence: comments.slice(0, 20).map((item) => ({ author: item.author, tag: item.tag, excerpt: item.text.slice(0, 120) })),
         push_score: pushScore,
         push_count: pushCount,
         boo_count: booCount,
@@ -2908,6 +2946,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
         title: `PTT 留言｜${title}`,
         summary: comment.text.slice(0, 160),
         contentText: comment.text.slice(0, 240),
+        publishedAt: articleRead?.sourcePublishedAt ?? null,
         symbols: commentExtracted.symbols,
         sentimentLabel: commentSentimentLabel,
         confidence: 0.52,
@@ -2921,13 +2960,15 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
           matched_symbol_reason: 'comment_local_tw_symbol_or_name_proximity',
           matched_symbols: commentExtracted.symbols,
           body_read_status: bodyReadStatus, body_retained: false,
+          ptt_publication_valid: publicationValid,
+          candidate_discovery_eligible: false,
           replies_read_completeness: 'partial', reply_sample_truncated: comments.length > 20,
           content_semantics: 'editorial_discussion', retention_mode: 'metadata_local_excerpt',
           excluded_false_positives: commentExtracted.excludedFalsePositives,
         },
       });
     });
-    for (const symbol of symbols) {
+    for (const symbol of publicationValid ? symbols : []) {
       pttSignalRows.push({
         stock_id: stockBySymbol.get(symbol)?.id || null,
         symbol,
@@ -2946,7 +2987,9 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
           crawl_mode: symbolContext ? 'symbol_scoped' : 'board_scan',
           content_semantics: contentSemantics,
           author_name: articleAuthor,
-          comment_evidence: comments.slice(0, 20).map((item) => ({ author: item.author, tag: item.tag, excerpt: item.text.slice(0, 120) })),
+          source_published_at: articleRead?.sourcePublishedAt ?? null,
+          ptt_body_observed_at: articleObservedAt,
+          candidate_discovery_eligible: false,
           excluded_false_positives: extracted.excludedFalsePositives,
         },
         collected_at: nowIso(),
@@ -5323,7 +5366,7 @@ type PodcastEpisodeCandidate = {
   platform: 'youtube' | 'rss' | 'apple_podcast' | 'spotify' | 'other';
   sourceMode?: string;
   rssUrl?: string | null;
-  transcript?: { url: string; type: string; language: string | null } | null;
+  transcripts?: PodcastArtifactReference[];
   chapters?: { url: string; type: string; language: string | null } | null;
 };
 
@@ -5357,7 +5400,7 @@ function parseRssItems(xmlText: string) {
       description: episode.description,
       platform: 'rss',
       sourceMode: 'publisher_rss',
-      transcript: episode.transcript,
+      transcripts: episode.transcripts,
       chapters: episode.chapters,
     }));
   }
@@ -5530,6 +5573,29 @@ async function fetchExplicitRssItems(rssUrl: string) {
   }
 }
 
+async function fetchInvestJThingsItems(registeredTracks: ReadonlyMap<string, PodcastArtifactReference>) {
+  const url = new URL(INVEST_J_THINGS_FEED);
+  const response = await fetchPinnedHttpsText({
+    url,
+    allowedOrigins: new Set([url.origin]),
+    headers: { accept: 'application/atom+xml, application/xml, text/xml' },
+    maxBytes: INVEST_J_THINGS_FEED_LIMIT_BYTES,
+    timeoutMs: 12_000,
+  });
+  if (!/^(?:application\/(?:atom\+xml|xml)|text\/xml)(?:\s*;|$)/iu.test(response.contentType)) {
+    throw Error('invest_j_things_feed_invalid_media_type');
+  }
+  return parseInvestJThingsFeed(response.body, registeredTracks).map((episode): PodcastEpisodeCandidate => ({
+    title: episode.title,
+    link: episode.link,
+    pubDate: episode.publishedAt,
+    audioUrl: null,
+    platform: 'youtube',
+    sourceMode: 'creator_youtube_atom',
+    rssUrl: INVEST_J_THINGS_FEED,
+  }));
+}
+
 function approvedPodcastArtifactUrl(value: string, rssUrl: string | null | undefined): URL {
   const parsed = new URL(value);
   if (parsed.protocol !== 'https:' || parsed.username || parsed.password) throw new Error('podcast_artifact_url_not_approved');
@@ -5550,37 +5616,12 @@ function approvedPodcastArtifactUrl(value: string, rssUrl: string | null | undef
   return parsed;
 }
 
-async function fetchPublisherPodcastArtifact(
-  reference: NonNullable<PodcastEpisodeCandidate['transcript']>,
-  rssUrl: string | null | undefined,
-  parser: (type: string, body: string) => TimedPodcastSegment[],
-): Promise<TimedPodcastSegment[]> {
+async function fetchPublisherPodcastArtifact(reference: PodcastArtifactReference, rssUrl: string | null | undefined) {
   const endpoint = approvedPodcastArtifactUrl(reference.url, rssUrl);
-  const allowedOrigins = new Set<string>([endpoint.origin]);
-  const response = await fetchPinnedHttpsText({ url: endpoint, allowedOrigins, maxBytes: 2_000_000, timeoutMs: 12_000,
-    headers: { accept: reference.type, 'user-agent': 'StockInsider/2.3 Publisher-Podcast-Metadata' },
+  const response = await fetchPinnedHttpsText({ url: endpoint, allowedOrigins: new Set([endpoint.origin]),
+    maxBytes: 2_000_000, timeoutMs: 12_000, headers: { accept: reference.type, 'user-agent': 'StockInsider/2.3 Publisher-Podcast-Metadata' },
   });
-  return parser(reference.type, response.body);
-}
-
-async function loadPublisherPodcastSegments(episode: PodcastEpisodeCandidate): Promise<{
-  segments: TimedPodcastSegment[];
-  source: 'publisher_transcript' | 'publisher_chapters' | null;
-  failure: string | null;
-}> {
-  try {
-    if (episode.transcript) {
-      const segments = await fetchPublisherPodcastArtifact(episode.transcript, episode.rssUrl, parsePublisherTranscript);
-      if (segments.length > 0) return { segments, source: 'publisher_transcript', failure: null };
-    }
-    if (episode.chapters) {
-      const segments = await fetchPublisherPodcastArtifact(episode.chapters, episode.rssUrl, parsePublisherChapters);
-      if (segments.length > 0) return { segments, source: 'publisher_chapters', failure: null };
-    }
-    return { segments: [], source: null, failure: null };
-  } catch (error) {
-    return { segments: [], source: null, failure: compactText((error as Error).message).slice(0, 200) };
-  }
+  return response.body;
 }
 
 async function fetchYoutubeTranscript(videoId: string) {
@@ -5652,9 +5693,7 @@ async function transcribeWithWhisper(audioUrl: string): Promise<{ text: string; 
 function extractPodcastInsights(text: string, validSymbols: Set<string>) {
   // Publication years and episode numbers are not tickers. Metadata must
   // contain an explicit stock marker before it can create a weak signal.
-  const symbols = unique(Array.from(text.matchAll(/(?:台股|股票(?:代號)?|股號|標的|ticker|TWSE|TPEX)\s*[:：#]?\s*([1-9]\d{3})\b/giu))
-    .map((match) => match[1])
-    .filter((symbol) => validSymbols.has(symbol))).slice(0, 20);
+  const symbols = podcastStockCodes(text, validSymbols).slice(0, 20);
   const thesisPhrases = text.match(/[^。！？]*(?:看好|看多|目標|進場|買進|上漲|突破)[^。！？]*/g) || [];
   const riskPhrases = text.match(/[^。！？]*(?:風險|看空|看壞|下跌|停損|謹慎|回檔)[^。！？]*/g) || [];
   return {
@@ -5675,6 +5714,7 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
   const supabase = getSupabaseServerClient();
   const rssAllowlist = new Set(authorizedPodcastRssAllowlist());
   if (rssAllowlist.size === 0) throw new Error('podcast_rss_allowlist_missing');
+  const registeredTracks = configuredPodcastTranscriptTracks(process.env.PODCAST_AUTHORIZED_TRANSCRIPT_TRACKS, rssAllowlist);
   await ensureDefaultKolProfiles();
   const podcastRunId = await startConnectorRun('podcast-sync', 'podcast', { source: 'kol_profiles' });
   try {
@@ -5690,6 +5730,7 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
     let weakSignalsWritten = 0;
     let transcriptsReady = 0;
     let analyzableEpisodes = 0;
+    let youtubeEpisodes = 0;
     const platformsUsed = new Set<string>();
     const searchedKeywords = unique([
       ...KOL_SEEDS.map((seed) => seed.displayName),
@@ -5716,18 +5757,35 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
       const meta = (kol.metadata || {}) as Record<string, unknown>;
       const kolId = String(kol.id);
       const sourceEntityId = kol.source_entity_id ? String(kol.source_entity_id) : null;
-      const kolName = String(kol.display_name || meta.podcastName || 'KOL');
+      const john = kol.primary_platform === 'telegram' && kol.profile_url === INVEST_J_THINGS_PROFILE
+        && kol.display_name === 'John 林睿閔';
+      const kolName = john ? INVEST_J_THINGS_AUTHOR : String(kol.display_name || meta.podcastName || 'KOL');
       const searchedUrls: string[] = [];
 
       const episodeItems: PodcastEpisodeCandidate[] = [];
 
-      const podcastName = String(meta.podcastName || String(kol.display_name || ''));
-      const explicitRssUrls = arrayFromMetadata(meta.rssUrl).concat(arrayFromMetadata(meta.rssUrls)).filter((url) => rssAllowlist.has(url));
-      for (const rssUrl of unique(explicitRssUrls)) {
-        searchedUrls.push(rssUrl);
-        const rssItems = await fetchExplicitRssItems(rssUrl);
-        if (rssItems.length > 0) {
-          platformsUsed.add('rss');
+      const podcastName = john ? INVEST_J_THINGS_PROGRAM : String(meta.podcastName || String(kol.display_name || ''));
+      let johnGap: string | null = null;
+      if (john) {
+        if (!rssAllowlist.has(INVEST_J_THINGS_FEED) || !podcastContentAnalyzable(INVEST_J_THINGS_FEED)) {
+          johnGap = 'creator_program_rights_required';
+        } else if (![...registeredTracks.keys()].some(key => key.startsWith(podcastTranscriptTrackKey(INVEST_J_THINGS_FEED, '')))) {
+          johnGap = 'creator_program_episodes_unregistered';
+        } else {
+          searchedUrls.push(INVEST_J_THINGS_FEED);
+          try {
+            episodeItems.push(...await fetchInvestJThingsItems(registeredTracks));
+            if (episodeItems.length === 0) johnGap = 'creator_program_episode_not_in_feed';
+          } catch {
+            johnGap = 'creator_program_index_unavailable';
+          }
+        }
+      } else {
+        const explicitRssUrls = arrayFromMetadata(meta.rssUrl).concat(arrayFromMetadata(meta.rssUrls))
+          .filter((url) => url !== INVEST_J_THINGS_FEED && rssAllowlist.has(url));
+        for (const rssUrl of unique(explicitRssUrls)) {
+          searchedUrls.push(rssUrl);
+          const rssItems = await fetchExplicitRssItems(rssUrl);
           episodeItems.push(...rssItems.map((item) => ({ ...item, rssUrl })));
         }
       }
@@ -5736,10 +5794,17 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
       let kolWeakSignals = 0;
       let kolTranscriptsReady = 0;
       for (const ep of uniqueEpisodes) {
+        platformsUsed.add(ep.platform);
+        if (ep.platform === 'youtube') youtubeEpisodes += 1;
         const recordedContentRights = Boolean(ep.rssUrl && podcastContentAnalyzable(ep.rssUrl));
-        const publisherContent = await loadPublisherPodcastSegments(ep);
-        const contentAnalyzable = recordedContentRights || publisherContent.segments.length > 0;
-        const timedSegments = publisherContent.segments.slice(0, 1000);
+        const registeredTrack = ep.rssUrl ? registeredTracks.get(podcastTranscriptTrackKey(ep.rssUrl, ep.link)) : undefined;
+        const publisherContent = await selectTimedPublisherTranscript(
+          recordedContentRights, registeredTrack ? [registeredTrack] : ep.transcripts ?? [],
+          reference => fetchPublisherPodcastArtifact(reference, ep.rssUrl),
+        );
+        const transcript = publisherContent.status === 'ready' ? publisherContent : null;
+        const contentAnalyzable = transcript !== null;
+        const locators = transcript ? locatePodcastStockMentions(transcript.segments, validSymbols) : [];
         const { data: storedEpisode, error } = await supabase.from('podcast_episodes').upsert(
           {
             source_entity_id: sourceEntityId,
@@ -5753,7 +5818,7 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
             audio_url: null,
             external_id: extractYoutubeVideoId(ep.link) || null,
             published_at: ep.pubDate,
-            transcript_status: publisherContent.source === 'publisher_transcript' ? 'ready' : 'transcript_unavailable',
+            transcript_status: transcript ? 'ready' : 'transcript_unavailable',
             content_analyzable: contentAnalyzable,
             index_updated_at: nowIso(),
             metadata: {
@@ -5763,15 +5828,17 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
               rss_url: ep.rssUrl || null,
               index_updated: true,
               content_analyzable: contentAnalyzable,
-              content_rights_basis: publisherContent.segments.length > 0 ? 'publisher_provided_namespace_artifact'
-                : recordedContentRights ? 'recorded_creator_rights' : 'rss_index_only',
+              content_rights_basis: recordedContentRights ? 'recorded_creator_content_rights' : 'rss_index_only',
               description: ep.description || null,
               audio_reference_url: ep.audioUrl || null,
               audio_copied: false,
-              transcript_reference: ep.transcript || null,
-              chapters_reference: ep.chapters || null,
-              timed_segments: timedSegments,
-              publisher_artifact_failure: publisherContent.failure,
+              transcript_reference: transcript ? { type: transcript.reference.type, language: transcript.reference.language } : null,
+              transcript_artifact_sha256: transcript?.artifactHash ?? null,
+              transcript_binding: transcript ? (registeredTrack ? 'registered_episode' : 'publisher_rss') : null,
+              spoken_locator_version: transcript ? 'podcast-spoken-locator-v1' : null,
+              spoken_stock_mentions: locators,
+              chapter_index_available: Boolean(ep.chapters),
+              publisher_artifact_failure: transcript ? null : publisherContent.status,
             },
             updated_at: nowIso(),
           },
@@ -5780,18 +5847,18 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
         if (error && !String(error.message).includes('duplicate')) throw new Error(error.message);
         totalEpisodes += 1;
 
-        if (contentAnalyzable) analyzableEpisodes += 1;
-        const contentText = publisherContent.segments.length > 0
-          ? publisherContent.segments.map((segment) => `[${segment.startSeconds}s] ${segment.text}`).join('\n')
-          : recordedContentRights ? compactText(`${ep.title}。${ep.description || ''}`) : '';
-        if (publisherContent.source === 'publisher_transcript' && storedEpisode?.id && contentText) {
+        if (!transcript) continue;
+        analyzableEpisodes += 1;
+        const symbols = locators.map(item => item.symbol);
+        if (storedEpisode?.id) {
+          const contentText = transcript.segments.map(segment => `[${segment.startSeconds}s] ${segment.text}`).join('\n');
           const transcriptInsights = extractPodcastInsights(contentText, validSymbols);
           const { error: transcriptError } = await supabase.from('podcast_transcripts').upsert({
             podcast_episode_id: storedEpisode.id,
             transcript_text: contentText.slice(0, 50_000),
-            language: ep.transcript?.language || null,
+            language: transcript.reference.language,
             transcript_source: 'rss',
-            extracted_mentions: transcriptInsights.symbols,
+            extracted_mentions: symbols,
             extracted_thesis: transcriptInsights.thesis,
             extracted_risks: transcriptInsights.risks,
             confidence: 0.66,
@@ -5802,39 +5869,37 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
           kolTranscriptsReady += 1;
         }
 
-        // A public RSS item is an index. Claim extraction is separately
-        // permissioned by a publisher namespace artifact or recorded rights.
-        if (!contentAnalyzable) continue;
-        const weakText = compactText(contentText);
-        const weakInsights = extractPodcastInsights(weakText, validSymbols);
-        for (const symbol of weakInsights.symbols) matchedSymbols.add(symbol);
-        if (weakInsights.symbols.length > 0) {
+        for (const symbol of symbols) matchedSymbols.add(symbol);
+        if (symbols.length > 0 && ep.pubDate) {
+          // The shared source document retains only a derived mention and its
+          // position. It can link back to the public episode without carrying
+          // transcript text or an artifact URL into public or shared payloads.
+          const locatorText = locators.map(item => `股票代號 ${item.symbol}，${item.startSeconds}–${item.endSeconds} 秒`).join('。');
           const docsWritten = await upsertSourceRawDocuments([{
             sourceEntityId,
             platform: 'podcast',
             documentUrl: ep.link,
-            title: `[Podcast內容] ${kolName}: ${ep.title}`,
-            summary: weakText.slice(0, 600),
-            contentText: weakText.slice(0, 3000),
+            title: `[Podcast口述定位] ${kolName}: ${ep.title}`,
+            summary: locatorText.slice(0, 600),
+            contentText: locatorText,
             publishedAt: ep.pubDate,
-            symbols: weakInsights.symbols,
-            sentimentLabel: weakInsights.thesis.length > 0 ? 'bullish' : weakInsights.risks.length > 0 ? 'bearish' : 'neutral',
-            confidence: publisherContent.source === 'publisher_transcript' ? 0.6
-              : publisherContent.source === 'publisher_chapters' ? 0.45 : 0.34,
+            symbols,
+            sentimentLabel: 'neutral',
+            confidence: 0.6,
             metadata: {
               connector: 'podcast_sync',
-              evidence_class: publisherContent.source === 'publisher_transcript'
-                ? 'kol_av_transcript_signal' : 'kol_av_weak_signal',
+              evidence_class: 'kol_av_transcript_signal',
               kol_name: kolName,
-              weak_signal_only: publisherContent.source !== 'publisher_transcript',
+              weak_signal_only: true,
               source_mode: ep.sourceMode || null,
               rss_url: ep.rssUrl || null,
               index_updated: true,
               content_analyzable: true,
-              timed_segments: timedSegments,
-              content_source: publisherContent.source || 'recorded_rights_metadata',
-              license_basis: publisherContent.segments.length > 0
-                ? 'creator_published_podcast_namespace_artifact' : 'recorded_creator_content_rights',
+              spoken_locator_version: 'podcast-spoken-locator-v1',
+              spoken_stock_mentions: locators,
+              transcript_artifact_sha256: transcript.artifactHash,
+              content_source: 'publisher_transcript',
+              license_basis: 'recorded_creator_content_rights',
             },
           }]);
           weakSignalsWritten += docsWritten;
@@ -5843,17 +5908,18 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
       }
 
       const failureReason =
-        uniqueEpisodes.length > 0
-          ? null
-          : searchedUrls.length === 0
-            ? 'missing_creator_rss_endpoint'
-            : 'no_recent_episode_found';
+        john ? johnGap ?? (kolTranscriptsReady === 0 ? 'creator_program_transcript_unavailable' : null)
+          : uniqueEpisodes.length > 0
+            ? null
+            : searchedUrls.length === 0
+              ? 'missing_creator_rss_endpoint'
+              : 'no_recent_episode_found';
       if (failureReason) failureReasonByKol[kolName] = failureReason;
       kolBreakdown.push({
         kol: kolName,
         searchedUrls,
         episodesFound: uniqueEpisodes.length,
-        youtubeEpisodes: 0,
+        youtubeEpisodes: john ? uniqueEpisodes.length : 0,
         weakSignalsWritten: kolWeakSignals,
         transcriptsReady: kolTranscriptsReady,
         failureReason,
@@ -5873,12 +5939,13 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
         searched_targets: searchedKeywords,
         platforms: Array.from(platformsUsed),
         episodes_found: totalEpisodes,
-        youtube_episodes: 0,
+        youtube_episodes: youtubeEpisodes,
         weak_signals_written: weakSignalsWritten,
         transcripts_ready: transcriptsReady,
         matched_symbols: Array.from(matchedSymbols),
         kol_breakdown: kolBreakdown,
         failure_reason_by_kol: failureReasonByKol,
+        // Unrestricted YouTube discovery and media downloads are retired.
         youtube_retired: true,
         index_updated: ledgerSemantics.indexUpdated,
         content_analyzable: ledgerSemantics.contentAnalyzable,

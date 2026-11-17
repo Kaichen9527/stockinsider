@@ -1,0 +1,39 @@
+{
+  "task": "T10",
+  "purpose": "Schedule a one-time signed official-data write and same-cutoff visibility check on isolated Contabo staging.",
+  "targetSession": "2026-11-17",
+  "scheduledAt": "2026-11-17T21:20:00+08:00",
+  "cutoff": "2026-11-17T21:30:00+08:00",
+  "timer": "stockinsider-stage-signed-turnover-20261117.timer",
+  "observedTimer": {
+    "activeState": "active",
+    "subState": "waiting",
+    "lastTrigger": null,
+    "persistent": false,
+    "nextTrigger": "2026-11-17T21:20:00+08:00"
+  },
+  "codePin": "11adb2d4056f7f8d3df9bd6258242ce714ae68c0",
+  "runnerSha256": "78ceca2b66af545c29da8f13a5756335ebba3006ce4cf894e010f0582589efb2",
+  "bundleSha256": "7dd1a8941749cfc2cba29f4791c481e1d1d6a5fdc6e508b4d4904381ac087caf",
+  "dataset": "TWSE 11549",
+  "priorSignedWrite": "a757f0ab6a473bca2a7629791e887dd2888377dd",
+  "environment": {
+    "transient": true,
+    "dynamicUser": true,
+    "productionRuntimePathsInaccessible": true,
+    "memoryMaxMiB": 768,
+    "runtimeMaxSec": 720,
+    "isolatedDatabase": true,
+    "privateResult": true,
+    "stagingCalendarAndResearchMemberSeeded": true
+  },
+  "witnessConditions": [
+    "claim precedes fresh official HTTPS fetch",
+    "committed ready precedes cutoff",
+    "the same immutable version is visible at the scheduled cutoff in the isolated database"
+  ],
+  "resultReceiptPresent": false,
+  "actualTimedSignedWriteVerified": false,
+  "fullRankingSessionVerified": false,
+  "productionServicesChanged": false
+}

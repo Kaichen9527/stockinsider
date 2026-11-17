@@ -40,13 +40,28 @@ test('unknown revision cannot fall back to a different research version', async 
   await expect(page.getByText('Synthetic isolated research conclusion', { exact: true })).toHaveCount(0);
 });
 test('every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work', async ({ request }) => {
-  const routes = ['pipeline-run', 'pipeline-research-run', 'stock-research-refresh', 'candidate-research-run', 'research-report-build', 'deep-dive-build', 'candidate-dossier-bundle', 'candidate-dossier-outbox', 'candidate-dossier-submission', 'candidate-financial-documents', 'candidate-financial-documents/worker', 'candidate-financial-documents/retry', 'candidate-financial-queue-drain', 'thesis-refresh', 'recommendation-run', 'report-build'];
+  const routes = ['pipeline-run', 'pipeline-research-run', 'stock-research-refresh', 'candidate-research-run', 'research-report-build', 'deep-dive-build', 'candidate-dossier-bundle', 'candidate-dossier-outbox', 'candidate-dossier-submission', 'candidate-financial-documents', 'candidate-financial-documents/retry', 'thesis-refresh', 'recommendation-run', 'report-build'];
   for (const route of routes) {
     const bad = await request.post('/api/internal/' + route, { data: { symbols: [] } }); expect(bad.status(), route).toBe(401);
     const missing = await request.post('/api/internal/' + route, { headers: { authorization: `Bearer ${process.env.VNEXT_E2E_OPERATOR_KEY}` }, data: {} });
     expect(missing.status(), route).toBe(409); expect((await missing.json()).error, route).toBe('vnext_explicit_scope_required');
     const empty = await request.post('/api/internal/' + route, { headers: { authorization: `Bearer ${process.env.VNEXT_E2E_OPERATOR_KEY}` }, data: { symbols: [] } });
     expect(empty.status(), route).toBe(200); expect((await empty.json()).result).toMatchObject({ reason: 'empty_scope', expensiveCalls: 0 });
+  }
+  for (const route of ['candidate-financial-documents/worker', 'candidate-financial-queue-drain']) {
+    const url = '/api/internal/' + route;
+    const unauthorized = await request.post(url, { data: { limit: 1 } });
+    expect(unauthorized.status(), route).toBe(401);
+    expect((await unauthorized.json()).error, route).toBe('exact_internal_bearer_required');
+
+    for (const data of [{}, { symbols: [] }]) {
+      const rejected = await request.post(url, {
+        headers: { authorization: 'Bearer ' + process.env.VNEXT_E2E_OPERATOR_KEY },
+        data,
+      });
+      expect(rejected.status(), route).toBe(422);
+      expect((await rejected.json()).error, route).toBe('financial_preparation_limit_required');
+    }
   }
   const mixed = await request.post('/api/internal/vnext-research', { headers: { authorization: `Bearer ${process.env.VNEXT_E2E_OPERATOR_KEY}` }, data: { symbols: [], symbol: '2330', action: 'execute', jobId: 'must-not-run' } });
   expect(mixed.status()).toBe(200); expect((await mixed.json()).result.expensiveCalls).toBe(0);

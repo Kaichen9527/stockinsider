@@ -25,6 +25,10 @@ function loadActualVnextGate(enabled = false) {
     './store.ts': new Proxy({}, { get: () => enabledBoundary }),
     './auth.ts': { vnextIdentity: enabledBoundary },
     './request.ts': { boundedRequestBody: enabledBoundary },
+    './launch-ranking-read.ts': {
+      launchRankingEnabled: enabledBoundary,
+      get LAUNCH_RANKING_POLICY() { return enabledBoundary(); },
+    },
   };
   const gate = {};
   vm.runInNewContext(compile('../web/src/lib/vnext/http.ts'), { exports: gate,
@@ -33,7 +37,9 @@ function loadActualVnextGate(enabled = false) {
 }
 const defaultOffVnext = loadActualVnextGate();
 
-// Real route execution with synthetic document/database/lease boundaries.
+// Real upload/receipt route with synthetic document/database/lease boundaries.
+// The scheduled parser and acquisition routes use the private preparation
+// handler and have executable coverage in financial-preparation.test.ts.
 // No live request, credential, document, artifact or database is used.
 const OWNER = '10000000-0000-4000-8000-000000000001';
 const STOCK = '10000000-0000-4000-8000-000000000002';
@@ -43,7 +49,6 @@ function metadata() { return { stockId: STOCK, symbol: '2409', acquisitionJobId:
   sourceUrl: 'https://mops.twse.com.tw/fixture', exchange: 'TWSE', periodEnd: '2026-06-30', publishedAt: '2026-08-01' }; }
 async function run(options = {}) {
   const calls = []; let held = null;
-  const result = options.workerResult || { reconciliationErrors: [], results: [] };
   const db = {
     from(table) { calls.push(`read:${table}`); return { select() { return this; }, eq() { return this; },
       async maybeSingle() { return { data: table === 'stocks' ? { id: STOCK, symbol: '2409' }
@@ -82,12 +87,9 @@ async function run(options = {}) {
       async releaseProductionWriteLease(owner) { calls.push(`release:${owner}`); assert.equal(owner, OWNER); assert.equal(held, OWNER);
         held = null; if (options.releaseError) throw new Error('synthetic_release_failure'); },
     },
-    '@/lib/candidate-financial-document-worker': { async processCandidateFinancialDocumentReceipts(limit) {
-      calls.push(`process:${limit}`); assert.equal(held, OWNER); if (options.workerThrows) throw new Error('synthetic_worker_failure'); return result; } },
   };
   const exports = {};
-  const route = options.worker ? 'worker/route.ts' : 'route.ts';
-  const source = fs.readFileSync(new URL(`../web/src/app/api/internal/candidate-financial-documents/${route}`, import.meta.url), 'utf8');
+  const source = fs.readFileSync(new URL(`../web/src/app/api/internal/candidate-financial-documents/route.ts`, import.meta.url), 'utf8');
   const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   vm.runInNewContext(compiled, { exports, require: name => { assert.ok(name in adapters, `unexpected dependency ${name}`); return adapters[name]; }, URL });
   const request = { body: 'fixture', url: `https://example.com/api/internal/candidate-financial-documents?receiptId=${RECEIPT}`,
@@ -110,26 +112,23 @@ test('FDL-00 actual vNext gate defaults off without touching authority and canno
   assert.equal(enabled.enabledBoundaryCalls(), 1);
 });
 
-test('FDL-01 exact auth and active writer precede any lease/artifact operation', async () => {
-  for (const worker of [false, true]) {
-    let state = await run({ worker, unauthorized: true });
-    assert.equal(state.response.status, 401); assert.deepEqual(state.calls, ['auth']);
-    state = await run({ worker, inactive: true });
-    assert.equal(state.response.status, 409); assert.deepEqual(state.calls, ['auth', 'writer']);
-  }
+test('FDL-01 exact auth and active writer precede any upload lease or artifact operation', async () => {
+  let state = await run({ unauthorized: true });
+  assert.equal(state.response.status, 401); assert.deepEqual(state.calls, ['auth']);
+  state = await run({ inactive: true });
+  assert.equal(state.response.status, 409); assert.deepEqual(state.calls, ['auth', 'writer']);
 });
-test('FDL-02 invalid or oversized documents and invalid worker requests never acquire', async () => {
-  for (const input of [{ invalidMetadata: true }, { invalidDocument: true }, { headers: { 'content-length': '1001' } },
-    { worker: true, body: { limit: 21 } }, { worker: true, body: { unexpected: true } }]) {
+test('FDL-02 invalid or oversized uploads never acquire a lease', async () => {
+  for (const input of [{ invalidMetadata: true }, { invalidDocument: true }, { headers: { 'content-length': '1001' } }]) {
     const state = await run(input); assert.ok([413, 422].includes(state.response.status));
     assert.ok(!state.calls.some(c => c.startsWith('acquire:') || c === 'artifact'));
   }
 });
-test('FDL-03 contention and acquisition failure return explicit errors without writes or release', async () => {
-  for (const worker of [false, true]) for (const [option, status] of [['busy', 409], ['acquireError', 503]]) {
-    const state = await run({ worker, [option]: true });
+test('FDL-03 upload lease contention and acquisition failure return explicit errors without writes or release', async () => {
+  for (const [option, status] of [['busy', 409], ['acquireError', 503]]) {
+    const state = await run({ [option]: true });
     assert.equal(state.response.status, status); assert.ok(!state.error);
-    assert.ok(!state.calls.some(c => c.startsWith('release:') || c.startsWith('rpc:') || c.startsWith('process:') || c === 'artifact'));
+    assert.ok(!state.calls.some(c => c.startsWith('release:') || c.startsWith('rpc:') || c === 'artifact'));
   }
 });
 test('FDL-04 upload lease encloses private artifact, receipt and idempotent linked-job reconciliation', async () => {
@@ -146,22 +145,13 @@ test('FDL-05 storage, receipt, job-link errors and thrown mutations all release 
     else assert.equal(state.response.status, 500);
   }
 });
-test('FDL-06 bounded worker acquires its lease before processing and releases success/partial/error/throw', async () => {
-  for (const options of [{}, { workerResult: { reconciliationErrors: ['fixture'], results: [] } },
-    { workerResult: { reconciliationErrors: [], results: [{ status: 'partial' }] } }, { workerThrows: true }]) {
-    const state = await run({ worker: true, ...options }); released(state);
-    assert.deepEqual(state.calls.slice(state.calls.indexOf('acquire:3600')), ['acquire:3600', 'process:5', `release:${OWNER}`]);
-    if (options.workerThrows) assert.equal(state.error.message, 'synthetic_worker_failure');
-    else assert.equal(state.response.status, options.workerResult ? 500 : 200);
-  }
-});
 test('FDL-07 read-only receipt GET never acquires or releases a write lease', async () => {
   const state = await run({ get: true }); assert.equal(state.response.status, 200);
   assert.ok(!state.calls.some(c => c.startsWith('acquire:') || c.startsWith('release:') || c.startsWith('rpc:')));
 });
-test('FDL-08 a release failure cannot report a successful upload or worker response', async () => {
-  for (const worker of [false, true]) {
-    const state = await run({ worker, releaseError: true });
-    assert.equal(state.response, undefined); assert.equal(state.error.message, 'synthetic_release_failure'); released(state);
-  }
+test('FDL-08 a release failure cannot report a successful upload response', async () => {
+  const state = await run({ releaseError: true });
+  assert.equal(state.response, undefined);
+  assert.equal(state.error.message, 'synthetic_release_failure');
+  released(state);
 });

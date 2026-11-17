@@ -1,0 +1,11 @@
+# T06 and T10 market-level foreign cash flow
+
+[TPEx dataset 11743](https://data.gov.tw/dataset/11743) lists the Securities and Futures Bureau as the provider and the Open Government Data License 1.0. Its listed CSV endpoint accepts the explicit ROC day. Contabo staging retrieved the five requested dates, November 9–13. The report labels contain distinct foreign and mainland scopes with and without foreign dealers. The [publisher's report](https://www.tpex.org.tw/zh-tw/mainboard/trading/major-institutional/summary/day.html) states the unit is TWD.
+
+The legacy recipe reads the TPEx inclusive row and the TWSE excluding row. Keep the new raw observations explicitly labelled. The offline replay selects the excluded-dealer net for its one-day and five-date arithmetic and separately records the inclusive net. Its date, bytes, SHA-256, unit and capture clock must match. It validates all eight categories, each purchase-minus-sale identity and the three official subtotals. Dealer net happened to be zero for all five real reports. A controlled nonzero case verifies the distinction.
+
+Contabo staging passed six new parser tests and all fifteen existing replay CLI tests. The pinned Node.js 22.14.0 CLI replayed the five actual CSVs offline and an independent CSV calculation agreed. November 15 is the actual retrieval date. Replay against November 13 at 21:30 refuses the later bytes. The tracked evidence retains hashes and request dates without the raw reports.
+
+The TWSE [public daily report](https://www.twse.com.tw/zh/trading/foreign/bfi82u.html) returned a date-specific sample with an excluding-dealer row. Its [data catalogue](https://eshop.twse.com.tw/zh/product/detail/d31c1b9570ae47058ec83a0bb1ffa419) documents separately timed BFI82U and BFIBGU products with different trading coverage. Daily TWSE access and applicable reuse terms for this deployment remain unverified. The government [t19 resource](https://data.gov.tw/dataset/104035) uses monthly and cumulative figures and cannot supply the required daily operands.
+
+Required next work is the fixed official calendar, a scoped database provenance bridge for the approved input, matched TWSE coverage and reuse evidence, and CA-comparable breadth. No rank, production service, formal timer or cutoff receipt changed.

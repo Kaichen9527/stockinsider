@@ -1,0 +1,54 @@
+{
+  "schema": "stockinsider-t10-twse-precutoff-clock-v1",
+  "recordedAt": "2026-11-16T14:01:55Z",
+  "baseCommit": "1dd114323f39acffcc2df95b76460f508dce279d",
+  "environment": "isolated Contabo",
+  "rootCause": {
+    "reader": "vnext_launch_today_calendar_internal_v1",
+    "rejectsCutoffAfterStatementStart": true,
+    "previousPlanUsedLaterWallClock": true,
+    "explicitEnqueueAlsoUsedLaterWallClock": true,
+    "unchangedObservationAndReadyTimestamps": true
+  },
+  "migration": {
+    "routine": "vnext_launch_csv_command_v1(text,uuid,text,jsonb,bytea)",
+    "before": "83463af621c47a2fe07317f99cf44005dcb554c045449ae4d032533ff36f743c",
+    "after": "c168a3054ae972f3c988f187a896b101299ed6fbe181b78526b45dfa2157b417",
+    "metadataUnchanged": true
+  },
+  "verifiedSchedule": {
+    "sameInstalledUnit": "stockinsider-taiwan-data-final-freeze.timer",
+    "taipeiTime": "20:15",
+    "observedLastTrigger": "2026-11-16T20:15:00+08:00",
+    "lastServiceExitCode": 0,
+    "sourcePrepassInExistingProtectedDrain": true,
+    "timersChanged": false
+  },
+  "test": {
+    "postgresMajor": 17,
+    "networkIsolated": true,
+    "oldPlanTurnoverJobs": 0,
+    "oldDirectEnqueueRejected": true,
+    "correctedPlanTurnoverJobs": 1,
+    "directEnqueueReplayDidNotDuplicate": true,
+    "turnoverClaimPrioritized": true,
+    "actualNativeParser": true,
+    "fixtureReceiptBeforeFollowupAck": false,
+    "committedReadyAck": true,
+    "repeatAckKeptOriginalId": true,
+    "futureCutoffRejected": true,
+    "fixtureAuthority": true,
+    "liveWriterVerified": false,
+    "applicationRegressionTestsPassed": 20,
+    "scratchRemoved": true
+  },
+  "build": {
+    "next": "16.3.4",
+    "typesPassed": true,
+    "staticPages": 92,
+    "exit": 0,
+    "scratchRemoved": true
+  },
+  "productionTouched": false,
+  "releaseHoldRetained": true
+}

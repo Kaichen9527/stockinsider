@@ -1,0 +1,84 @@
+{
+  "schema": "stockinsider-t18-sealed-archive-publication-stage-v1",
+  "dayUtc": "2026-11-16",
+  "archiveDate": "2026-09-19",
+  "engineeringCommit": "2f7ef4745ab6cb6811f00930ca09f73004c02866",
+  "originalGateBlob": "3d79ffb27012d824e19bee215df55017a8d4e28e",
+  "harnessRevision": "005a94e2bd99ed4d3d8964220ef41efb7575bda6",
+  "stageAdapterSha256": "cd876442bcb59dd7dabdafff95b66a9333f7b586f2b43d96c3c481869ab92e27",
+  "verification": {
+    "focusedTests": 20,
+    "nativePeer": {
+      "nativePeerIdentity": true,
+      "wrongDatabaseRejected": true,
+      "unexpectedRuleRejected": true,
+      "actualPeerAuthentication": true,
+      "productionArchiveOpened": false
+    },
+    "productionBuild": {
+      "nextProductionBuildExit": 0,
+      "nextVersion": "16.3.4",
+      "availableDiskBytes": 24498085888,
+      "availableMemoryBytes": 4298608640
+    },
+    "writerFenceControl": {
+      "writerFenceNativeControl": true,
+      "nativeSqlstate": "42501",
+      "publicErrorToken": "production_writer_release_rejected",
+      "guardedModeRowUnchanged": true,
+      "activeReleaseFixture": true,
+      "productionBackupOpened": false,
+      "genuineErrorCauseConfirmed": false
+    }
+  },
+  "authenticRestore": {
+    "authenticated": true,
+    "checks": {
+      "foreignKeys": 288,
+      "rlsTables": 193
+    },
+    "financialCommitted": true,
+    "publicationCommitted": true,
+    "publication": {
+      "installedCatalogSha256": "da8abbcfc5aa4cf1eed9c03c4528a6dbc936d85ec6dba8d81103dd7021f8775a",
+      "namespaceSha256": "4d810effe8ca7fa2a532a3f7ab5f3e286d4f155af659ee4fb232c2eb670e18cb",
+      "productionAuthorized": false,
+      "profile": "contabo-t18-sealed-archive-2026-09-19",
+      "steps": 26
+    },
+    "evaluationPreservation": {
+      "afterRows": 72,
+      "beforeRows": 72,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    },
+    "diagnosticPreservation": {
+      "afterRows": 52,
+      "beforeRows": 52,
+      "rowContentIdentical": true,
+      "validatedV320OidIdentical": true
+    },
+    "stop": {
+      "phase": "legacy",
+      "sqlstate": "42501"
+    },
+    "launchObservation": {
+      "ranked": null,
+      "session": null,
+      "status": "SCHEMA_MISSING"
+    },
+    "nextRollback": "NOT_RUN",
+    "holdRetained": true
+  },
+  "host": {
+    "productionSignaturesMatched": true,
+    "minDiskBytes": 17311907840,
+    "minMemoryAvailableBytes": 4089581568,
+    "cleanup": {
+      "scratchRootsRemoved": 2,
+      "allStagingUnitsInactive": true,
+      "diskBytes": 26115588096,
+      "memoryAvailableBytes": 4624412672
+    }
+  }
+}

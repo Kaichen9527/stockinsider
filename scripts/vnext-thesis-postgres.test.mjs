@@ -4,7 +4,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import fs from 'node:fs';
 import {workerFixture,hash} from './vnext-worker-fixture.mjs';
-import {roles,binding,input,authorOutput,reviewerOutput,day,now,ids} from './vnext-synthetic-research-vectors.mjs';
+import {roles,binding,day,now,ids} from './vnext-synthetic-research-vectors.mjs';
+import {scalarInput as input,scalarAuthorOutput as authorOutput,scalarReviewerOutput as reviewerOutput} from './vnext-native-scalar-research-fixture.mjs';
 import {runResearchWorker} from '../web/src/lib/vnext/worker-core.ts';
 import {extractContentBatch} from '../web/src/lib/vnext/permitted-content.ts';
 import {auditThesisCycle} from '../web/src/lib/vnext/thesis-cycle.ts';
@@ -35,7 +36,7 @@ await test('actual thesis audit, current-source closure and durable retry budget
   for(const symbol of ['2409','2383'])await step(symbol+' actual configured worker consumes current extraction and retains an unqualified revision',async()=>{const jobId=await enqueue(symbol,'audit-prefix-'+symbol);const result=await runResearchWorker(jobId,deps);assert.equal(result.status,'published');const pub=await publicRead(symbol);assert.equal(pub.history.length,1);assert.equal(pub.history[0].sourceRights.current,true);x.save(symbol+'-publication',pub);});
   await step('actual all-active audit persists separate deep evidence; corrected new fact IDs cause substantive drift',async()=>{
    const context=await thesis('context',{});assert.equal(context.members.length,2);const cutoff=new Date().toISOString();
-   const inputs=context.members.map(m=>{const p=m.publication;const original=p.originalEvidence.evidence;const current=original.map(e=>e.id===ids.cfo?{...e,id:'00000000-0000-4000-8000-000000000099',value:200,contentHash:hash('synthetic-corrected-cfo200')}:e);return {symbol:m.symbol,inputHash:m.inputHash,revisionId:p.revision_id,publishedInputHash:p.input_hash,artifact:p.content,review:p.review,original,current,newContent:[],quote:{close:20,session:day,source:'https://www.twse.com.tw/synthetic-audit-price',adjusted:true,volume:1000,ma20:18,ma60:17,volumeRatio:1.1,institutionalFlow:1},cutoff,market:{risk:'selective',snapshotHash:'b'.repeat(64)},previousMarketHash:'b'.repeat(64),tradingValid:true};});
+   const inputs=context.members.map(m=>{const p=m.publication;const original=p.originalEvidence.evidence;const current=original.map(e=>e.id===ids.cfo?{...e,id:'00000000-0000-4000-8000-000000000099',value:200,contentHash:hash('synthetic-corrected-cfo200')}:e);return {symbol:m.symbol,inputHash:m.inputHash,revisionId:p.revision_id,publishedInputHash:p.input_hash,artifact:p.content,review:p.review,original,current,newContent:[],quote:{observedAt:cutoff,availableAt:cutoff,close:20,session:day,source:'https://www.twse.com.tw/synthetic-audit-price',adjusted:true,volume:1000,ma20:18,ma60:17,volumeRatio:1.1,institutionalFlow:1},cutoff,market:{risk:'selective',snapshotHash:'b'.repeat(64)},previousMarketHash:'b'.repeat(64),tradingValid:true};});
    // Intentionally reproduce an old, structurally accepted but unsupported
    // scalar-semantic score BEFORE installing the correction. This fixture's
    // private current session is explicitly synthetic/completed; it is not a

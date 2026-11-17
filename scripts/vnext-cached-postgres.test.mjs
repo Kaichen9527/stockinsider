@@ -3,7 +3,8 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {randomUUID} from 'node:crypto';
 import {workerFixture,hash} from './vnext-worker-fixture.mjs';
 import {proveTerminalFailureLifecycle} from './vnext-terminal-failure-fixture.mjs';
-import {roles,binding,input,authorOutput,reviewerOutput,day,now} from './vnext-synthetic-research-vectors.mjs';
+import {roles,binding,day,now} from './vnext-synthetic-research-vectors.mjs';
+import {scalarInput as input,scalarAuthorOutput as authorOutput,scalarReviewerOutput as reviewerOutput} from './vnext-native-scalar-research-fixture.mjs';
 import {runResearchWorker} from '../web/src/lib/vnext/worker-core.ts';import {extractContentBatch} from '../web/src/lib/vnext/permitted-content.ts';import {inputHash} from '../web/src/lib/vnext/policy.ts';import {initialFactors} from '../web/src/lib/vnext/factors.ts';import {normalizeWorkerAuthor} from '../web/src/lib/vnext/worker-output.ts';
 const phase=process.env.VNEXT_CACHED_TEST_STATE??'fresh';if(!['fresh','resume-json-recovery'].includes(phase))throw Error('closed_cached_test_state_required');
 await test('actual cached calendar/current-receipt admission and evidence-bound worker candidate',{timeout:240000},async t=>{
@@ -26,7 +27,7 @@ await test('actual cached calendar/current-receipt admission and evidence-bound 
   await step('only actual paired as-of official-calendar rows sync; caller dates/unknown roles and forged past clocks reject',async()=>{
    await cached('sync-calendar',{},/vnext_cached_official_calendar_unavailable_or_unbounded/u);await cached('sync-calendar',{completed:true},/vnext_calendar_no_caller_dates_or_flags/u);
    const sourceAt=new Date(Date.now()-60000).toISOString();for(const [market,provider]of [['TWSE','twse'],['TPEX','tpex']])await x.writer.query("INSERT INTO public.tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,provider,source_timestamp,collected_at,source_ref) VALUES($1,$2,$3,$4,$5,'completed',$6,$7,$7,$8)",[randomUUID(),day,market,day+'T01:00:00Z',day+'T05:30:00Z',provider,sourceAt,'synthetic-official-calendar-cache-not-acquired']);
-   const result=await cached('sync-calendar',{});assert.equal(result.sessions,1);sessionRows=(await x.observer.query('SELECT * FROM public.vnext_sessions_v1')).rows;assert.equal(sessionRows.length,1);assert.equal(sessionRows[0].session_date.toISOString().slice(0,10),day);assert.equal(sessionRows[0].close_at.toISOString(),day+'T05:30:00.000Z');assert.equal(sessionRows[0].completed,Date.now()>=Date.parse(day+'T05:30:00Z'));
+   const result=await cached('sync-calendar',{});assert.equal(result.sessions,1);sessionRows=(await x.observer.query('SELECT * FROM public.vnext_sessions_v1')).rows;assert.equal(sessionRows.length,1);assert.equal((await x.observer.query('SELECT session_date::text AS day FROM public.vnext_sessions_v1')).rows[0].day,day);assert.equal(sessionRows[0].close_at.toISOString(),day+'T05:30:00.000Z');assert.equal(sessionRows[0].completed,Date.now()>=Date.parse(day+'T05:30:00Z'));
    const before=await x.snapshot();await cached('sync-calendar',{});assert.deepEqual(await x.snapshot(),before);await rpc('vnext_cached_admission_v1',roles.author.principal,'sync-calendar',{},/vnext_cached_operator_mode_required/u);assert.deepEqual(await x.snapshot(),before);x.save('calendar',{result,sessionRows,fullState:before,fixture:'actualoriginaltypedrows/directDB, syntheticpublicationmetadata; no systemclock or originalguard modification'});
   });
   }else{

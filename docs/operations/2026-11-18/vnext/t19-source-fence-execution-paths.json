@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "stockinsider-t19-source-fence-execution-paths-v1",
+  "recordedAt": "2026-11-17T18:11:03+00:00",
+  "subjectParent": "b4476a1c3a8278baba111af23e1889e0dee62406",
+  "sourceTestSha256": "e064a2963bdf24418f252aeb2956abd2f45f747987729f764713ccab4de12f44",
+  "originalFailure": {
+    "runId": "44142083749",
+    "jobId": "134247266347",
+    "error": "vnext_test_source_namespace_not_ready"
+  },
+  "native": {
+    "postgres": "17.11",
+    "tests": 14,
+    "pass": 14,
+    "fail": 0,
+    "skipped": 0,
+    "tapSha256": "6a427c5980c799b0225e8fb9c5b1b137110fe90319161b08e100a855fde36860"
+  },
+  "observed": {
+    "scope": "read-only exact hardened routine fixture",
+    "routineBodiesBoundBySha256": [
+      {
+        "signature": "assert_research_source_seal_v2(uuid)",
+        "definitionSha256": "06aed61305eb8754a80733518a815953c9b79160bb20b7572fb399e561498199",
+        "reads": [
+          "research_source_seal_invalidations_v2",
+          "research_source_seals_v2",
+          "source_raw_documents"
+        ],
+        "writes": [],
+        "calls": []
+      },
+      {
+        "signature": "research_publication_source_state_v2(uuid)",
+        "definitionSha256": "0ad5b0a448cf657c188b7a099149c70b4bc0532c6a822bd8738a5a61ffe3a3c0",
+        "reads": [
+          "research_source_seal_invalidations_v2"
+        ],
+        "writes": [],
+        "calls": []
+      },
+      {
+        "signature": "research_source_fence_record_v2()",
+        "definitionSha256": "52d26abb8b812beec884a8267d40a3ef547ae6e3a3a4df528c6a6d8bfe70e7f1",
+        "reads": [
+          "research_source_seals_v2"
+        ],
+        "writes": [
+          "research_source_fence_events_v2",
+          "research_source_seal_invalidations_v2"
+        ],
+        "calls": [
+          "research_source_root_v2(jsonb)"
+        ]
+      },
+      {
+        "signature": "research_source_fence_write_v2()",
+        "definitionSha256": "fe8339c551f7c809da1f67fb438787bb296133fead41f4f07b3284196aa81522",
+        "reads": [],
+        "writes": [],
+        "calls": []
+      },
+      {
+        "signature": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+        "definitionSha256": "ff4eb006af3bde82a86a640ac8126083d78684ea6bc2947100d0f8a2ed618479",
+        "reads": [
+          "research_source_seal_invalidations_v2",
+          "research_source_seals_v2",
+          "source_raw_documents"
+        ],
+        "writes": [
+          "research_source_seals_v2"
+        ],
+        "calls": [
+          "research_source_root_v2(jsonb)"
+        ]
+      }
+    ],
+    "helper": {
+      "signature": "research_source_root_v2(jsonb)",
+      "securityDefiner": false,
+      "settings": [
+        "search_path=pg_catalog"
+      ],
+      "definitionSha256": "ada9281b7cd0673b2d4adb9e2c7be673f3959bbff3733117e50d362a569159bc"
+    },
+    "inbound": [
+      {
+        "routine": "research_source_fence_record_v2",
+        "trigger": "research_source_fence_record_v2",
+        "enabled": "O",
+        "mask": 29
+      },
+      {
+        "routine": "research_source_fence_write_v2",
+        "trigger": "research_source_fence_truncate_v2",
+        "enabled": "O",
+        "mask": 34
+      },
+      {
+        "routine": "research_source_fence_write_v2",
+        "trigger": "research_source_fence_write_v2",
+        "enabled": "O",
+        "mask": 31
+      }
+    ],
+    "insertForeignKeyHandlers": [
+      {
+        "references": "research_source_fence_events_v2",
+        "schema": "pg_catalog",
+        "handler": "RI_FKey_check_ins",
+        "language": "internal",
+        "enabled": "O"
+      },
+      {
+        "references": "research_source_seals_v2",
+        "schema": "pg_catalog",
+        "handler": "RI_FKey_check_ins",
+        "language": "internal",
+        "enabled": "O"
+      }
+    ],
+    "browserAndBackendCallers": [
+      {
+        "signature": "assert_research_source_seal_v2(uuid)",
+        "callers": []
+      },
+      {
+        "signature": "research_publication_source_state_v2(uuid)",
+        "callers": []
+      },
+      {
+        "signature": "research_source_fence_record_v2()",
+        "callers": []
+      },
+      {
+        "signature": "research_source_fence_write_v2()",
+        "callers": []
+      },
+      {
+        "signature": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+        "callers": [
+          "service_role"
+        ]
+      }
+    ],
+    "schemaGrantExecuted": false,
+    "independentReviewAccepted": false
+  },
+  "applicationRowsOrFunctionBodiesPublished": false,
+  "verifiedProductionSignaturesMatched": true,
+  "isolatedContainerAndSocketRemoved": true,
+  "remaining": [
+    "eligible independent review of exact privilege and code evidence",
+    "authorized native source-write and HTTP acceptance",
+    "production release gates"
+  ]
+}

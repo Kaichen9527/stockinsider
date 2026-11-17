@@ -1,0 +1,517 @@
+{
+  "schema": "stockinsider-source-first-candidate-checkpoint-v1",
+  "observedAt": "2026-11-14T23:39:15.141806+00:00",
+  "localValidationCommit": "b806546e25a51f84111159db54e54e3c477e0466",
+  "publicSourceCommit": "32bd9df832475111ffcf6e77574d028c31b43a5a",
+  "wholeTree": "73ff9ba6423dc82fa2ea4e448a68b454fc67bfc3",
+  "webTree": "5b550abb272614db3ee2ea434b0fbaa60b19c83f",
+  "publication": {
+    "transport": "configured GitHub connector",
+    "baseCommit": "3941e358dd5d1a17161ba328bce32d3770aa7a30",
+    "expectedParentVerified": true,
+    "treeEqualityVerified": true,
+    "force": false,
+    "testsRanLocalIdenticalTree": true,
+    "testsRanPublicCommit": false
+  },
+  "sourceInventory": [
+    {
+      "path": "web/scripts/launch-candidate-catalog-browser-smoke.mjs",
+      "sha256": "6b2a42791c84be990a0e2ff795e04fb622dacdddd87da966ff1d28c11e4123ff"
+    },
+    {
+      "path": "web/src/app/api/launch/candidates/route.ts",
+      "sha256": "8d585063c9ab189deed3a7661cf398a1bcf482ccdaa0177ec165047d60a3f5d3"
+    },
+    {
+      "path": "web/src/app/candidates/page.tsx",
+      "sha256": "02acd6cabef2bcd418bdd1c4e0977405b9b7b6c66bd290dde76eadbe3f3505f2"
+    },
+    {
+      "path": "web/src/app/components/vnext/LaunchCandidateCatalog.tsx",
+      "sha256": "65fdaf0cb1b006dc15626201cab8788854c4409171a682437d40e95b1b7dfa6b"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-candidate-catalog-page.test.ts",
+      "sha256": "5a2c1d62d1f6921d8e9ccb907d2f2ab4cf6861110c21b279daa2e304fa6f36f1"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-candidate-catalog-route.test.ts",
+      "sha256": "9609b24085dd09d960af0da43cd0ddc71017a4ab3338fcb515c41992e1c6b57a"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-candidate-catalog.test.ts",
+      "sha256": "9fd3b450f26b57aebd95c91b7c300f87e1a5d6d9680663008de6395c1d6eae25"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-candidate-catalog.ts",
+      "sha256": "4aeae2ec23d3db8e9e51b0754ca1eb37eca1cdb90a2037de1e2ece14a56e14e7"
+    }
+  ],
+  "checks": [
+    {
+      "name": "candidate_unit",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/launch-candidate-catalog.test.ts",
+        "web/src/lib/vnext/launch-candidate-catalog-route.test.ts",
+        "web/src/lib/vnext/launch-candidate-catalog-page.test.ts",
+        "web/src/lib/vnext/candidate-page.test.ts",
+        "web/src/lib/vnext/candidate-history-read.test.ts"
+      ],
+      "start": "2026-11-14T23:17:40.736207+00:00",
+      "end": "2026-11-14T23:17:42.010794+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 36769792,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29424222208,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "dcb44c09319e5d2f267b8821c1f96303fa6a9e1dab0a1088a6ca7ee7c472d142"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-14T23:17:42.016655+00:00",
+      "end": "2026-11-14T23:17:55.803943+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 80777216,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29424197632,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-14T23:17:55.804360+00:00",
+      "end": "2026-11-14T23:18:15.371747+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81809408,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29424189440,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "19c877eafdc15415f5ad90d09b41a580c102658a544d359e3d8d1998689103b4"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-14T23:18:15.372649+00:00",
+      "end": "2026-11-14T23:18:20.892447+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 82235392,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29424185344,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "1eb455842026440e3d0b680791fac072d2ae361b1031f058d5d38e0410c67beb"
+    }
+  ],
+  "browserChecks": [
+    {
+      "name": "candidate_browser",
+      "command": [
+        "python3",
+        "/workspace/stockinsider/work/ptt-official-nov15/launch-candidate-catalog-repair1/browser.py"
+      ],
+      "start": "2026-11-14T23:23:39.868351+00:00",
+      "end": "2026-11-14T23:23:44.128952+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 16908288,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29422043136,
+        "/tmp": 9306439680
+      },
+      "resourceViolation": null,
+      "logSha256": "e2a5607174e8357bee2727b798e0dc36a31592d7e767be4387b1967998f4f2b7"
+    }
+  ],
+  "actualUnavailableBrowser": {
+    "schemaVersion": "launch-candidate-loopback-browser-smoke-v1",
+    "sourceCommit": "b806546e25a51f84111159db54e54e3c477e0466",
+    "sourceIdentity": "owner_supplied_label",
+    "nodeVersion": "v22.14.0",
+    "scope": "actual_next_unavailable_boundary_only",
+    "passed": true,
+    "cases": [
+      {
+        "name": "desktop",
+        "passed": true,
+        "pageStatus": 200,
+        "apiStatus": 503,
+        "malformedStatus": 400,
+        "bridgeBefore": {
+          "reads": 1,
+          "unsupported": 0,
+          "controls": 0
+        },
+        "bridgeAfter": {
+          "reads": 1,
+          "unsupported": 0,
+          "controls": 0
+        },
+        "rpcReadDelta": 0,
+        "unsupportedDelta": 0,
+        "blockedRequests": 0,
+        "blockedNonLoopbackRequests": 0
+      },
+      {
+        "name": "mobile",
+        "passed": true,
+        "pageStatus": 200,
+        "apiStatus": 503,
+        "malformedStatus": 400,
+        "bridgeBefore": {
+          "reads": 1,
+          "unsupported": 0,
+          "controls": 0
+        },
+        "bridgeAfter": {
+          "reads": 1,
+          "unsupported": 0,
+          "controls": 0
+        },
+        "rpcReadDelta": 0,
+        "unsupportedDelta": 0,
+        "blockedRequests": 0,
+        "blockedNonLoopbackRequests": 0
+      }
+    ],
+    "blockedRequests": 0,
+    "blockedNonLoopbackRequests": 0,
+    "ownedBrowserClosed": true,
+    "producerAuthority": false,
+    "realSourceCatalog": false,
+    "synthetic21ProjectionAcceptedHere": false,
+    "serverStarted": false,
+    "sourceOrDatabaseWork": false
+  },
+  "controlledProjection": {
+    "totalRelatedUnitCases": 38,
+    "newEngineCases": 6,
+    "newActualHttpVmCases": 3,
+    "newActualPageSsrCases": 5,
+    "legacyRelatedCases": 24,
+    "clues": 21,
+    "recordedAdmissions": 20,
+    "scope": "SYNTHETIC_ONLY_NOT_REAL_PRODUCER_OR_COMPLETE_HISTORY",
+    "absenceMeaning": "admission_history_unknown_not_never_admitted",
+    "publicMetadataAuthority": false
+  },
+  "retainedFailures": [
+    {
+      "source": "dfcf1e1d834f76ddbe1996762900a727b2f007c3",
+      "checks": [
+        {
+          "name": "candidate_unit",
+          "command": [
+            "/workspace/.tools/node22/node_modules/node/bin/node",
+            "--experimental-strip-types",
+            "--test",
+            "web/src/lib/vnext/launch-candidate-catalog.test.ts",
+            "web/src/lib/vnext/launch-candidate-catalog-route.test.ts",
+            "web/src/lib/vnext/launch-candidate-catalog-page.test.ts",
+            "web/src/lib/vnext/candidate-page.test.ts",
+            "web/src/lib/vnext/candidate-history-read.test.ts"
+          ],
+          "start": "2026-11-14T22:57:25.575792+00:00",
+          "end": "2026-11-14T22:57:26.835257+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 38551552,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29467422720,
+            "/tmp": 9403478016
+          },
+          "resourceViolation": null,
+          "logSha256": "9c8ed332a39f890fddd5be1a1f8025e3f66860b32069ebc482491d592045ed29"
+        },
+        {
+          "name": "types",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "typecheck"
+          ],
+          "start": "2026-11-14T22:57:26.838843+00:00",
+          "end": "2026-11-14T22:57:31.098504+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 81960960,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29467410432,
+            "/tmp": 9403478016
+          },
+          "resourceViolation": null,
+          "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+        },
+        {
+          "name": "lint",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "lint"
+          ],
+          "start": "2026-11-14T22:57:31.098942+00:00",
+          "end": "2026-11-14T22:57:50.156373+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 81195008,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29467406336,
+            "/tmp": 9403478016
+          },
+          "resourceViolation": null,
+          "logSha256": "19c877eafdc15415f5ad90d09b41a580c102658a544d359e3d8d1998689103b4"
+        },
+        {
+          "name": "build",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "build"
+          ],
+          "start": "2026-11-14T22:57:50.156891+00:00",
+          "end": "2026-11-14T22:58:08.967047+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 81797120,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29351665664,
+            "/tmp": 9403478016
+          },
+          "resourceViolation": null,
+          "logSha256": "14b4721894bea0999c67f20369ba973d7e2eb87671754dc6b16ce2ba178af882"
+        },
+        {
+          "name": "candidate_browser",
+          "command": [
+            "python3",
+            "/workspace/stockinsider/work/ptt-official-nov15/launch-candidate-catalog-validation/browser.py"
+          ],
+          "start": "2026-11-14T22:58:08.967503+00:00",
+          "end": "2026-11-14T22:58:11.475648+00:00",
+          "exit": 1,
+          "status": "FAIL",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 16908288,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29422833664,
+            "/tmp": 9301196800
+          },
+          "resourceViolation": null,
+          "logSha256": "aac914ecccf9ca9b213f057a3446cc7376b0f2b2bfe6f094632c240849194a84"
+        }
+      ],
+      "browser": {
+        "schemaVersion": "launch-candidate-loopback-browser-smoke-v1",
+        "sourceCommit": "dfcf1e1d834f76ddbe1996762900a727b2f007c3",
+        "sourceIdentity": "owner_supplied_label",
+        "nodeVersion": "v22.14.0",
+        "scope": "actual_next_unavailable_boundary_only",
+        "passed": false,
+        "cases": [],
+        "blockedRequests": 0,
+        "blockedNonLoopbackRequests": 0,
+        "ownedBrowserClosed": true,
+        "producerAuthority": false,
+        "realSourceCatalog": false,
+        "synthetic21ProjectionAcceptedHere": false,
+        "serverStarted": false,
+        "sourceOrDatabaseWork": false,
+        "error": "candidate_browser_smoke_failed"
+      }
+    },
+    {
+      "source": "a291ea1a92e42cfcd9cb111ebfe9ca92900d5d0c",
+      "scope": "BOUNDED_DIAGNOSTIC_NOT_A_SEMANTIC_FIX",
+      "checks": [
+        {
+          "name": "build",
+          "command": [
+            "npm",
+            "--prefix",
+            "web",
+            "run",
+            "build"
+          ],
+          "start": "2026-11-14T23:10:16.930678+00:00",
+          "end": "2026-11-14T23:10:24.208573+00:00",
+          "exit": 0,
+          "status": "PASS",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 81014784,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29422768128,
+            "/tmp": 9403478016
+          },
+          "resourceViolation": null,
+          "logSha256": "9860d26fd6d3104b2c3dad56dd6d20e0fd3a5cf472ad44d39f1b1f54cb39a19f"
+        },
+        {
+          "name": "candidate_browser",
+          "command": [
+            "python3",
+            "/workspace/stockinsider/work/ptt-official-nov15/launch-candidate-catalog-diagnosis1/browser.py"
+          ],
+          "start": "2026-11-14T23:10:24.209597+00:00",
+          "end": "2026-11-14T23:10:26.463520+00:00",
+          "exit": 1,
+          "status": "FAIL",
+          "sampledNotInstantaneous": true,
+          "peakTreeRssBytes": 16908288,
+          "minimumFreeBytes": {
+            "/workspace/stockinsider-launch-ui-nov15": 29424312320,
+            "/tmp": 9301196800
+          },
+          "resourceViolation": null,
+          "logSha256": "1c9cc4d34249b2729c531b92c56359c027723a784fffd6ba8fb76cfb54fd4df8"
+        }
+      ],
+      "browser": {
+        "schemaVersion": "launch-candidate-loopback-browser-smoke-v1",
+        "sourceCommit": "a291ea1a92e42cfcd9cb111ebfe9ca92900d5d0c",
+        "sourceIdentity": "owner_supplied_label",
+        "nodeVersion": "v22.14.0",
+        "scope": "actual_next_unavailable_boundary_only",
+        "passed": false,
+        "cases": [],
+        "blockedRequests": 0,
+        "blockedNonLoopbackRequests": 0,
+        "ownedBrowserClosed": true,
+        "producerAuthority": false,
+        "realSourceCatalog": false,
+        "synthetic21ProjectionAcceptedHere": false,
+        "serverStarted": false,
+        "sourceOrDatabaseWork": false,
+        "failureStage": "api_503",
+        "profile": "desktop",
+        "errorCode": "ERR_ASSERTION",
+        "observed": {
+          "statsStatus": 200,
+          "pageStatus": 200,
+          "pageOriginMatches": true,
+          "pagePathMatches": true,
+          "unavailableText": true,
+          "notEmptyClaim": true,
+          "tableCount": 0,
+          "legacyCount": 0,
+          "rankedCount": 0,
+          "apiStatus": 400,
+          "apiCache": "no-store"
+        },
+        "actualNumber": 400,
+        "expectedNumber": 503,
+        "error": "candidate_browser_smoke_failed"
+      }
+    }
+  ],
+  "materialFix": {
+    "source": "b806546e25a51f84111159db54e54e3c477e0466",
+    "routeSha256": "8d585063c9ab189deed3a7661cf398a1bcf482ccdaa0177ec165047d60a3f5d3",
+    "scope": "Fixed-import Reflect.apply boundary preserves query validation/status/no-store and prevents production-inliner TDZ; no compiler/policy/expectation changes",
+    "beforeArtifact": {
+      "schema": "stockinsider-candidate-emitted-before-fix-observation-v1",
+      "observedSource": "a291ea1a92e42cfcd9cb111ebfe9ca92900d5d0c",
+      "artifact": "web/.next/server/chunks/_1q7uu3z._.js",
+      "capture": "EXCERPT_FROM_READ_ONLY_TOOL_OBSERVATION_FULL_ARTIFACT_HASH_NOT_CAPTURED",
+      "excerpt": "async function l(e){try{var t,l,u; ... d=[\"catalogId\",\"limit\",\"cursor\",\"date\",\"source\",\"industry\",\"status\"], ... y=l.filters, ...; let d,c,p,h,g,m,f,y,v,R={schemaVersion:\"launch-source-candidate-read-v1\",availability:\"producer_unavailable\", ...}; ...}catch{return s({ok:!1,error:\"launch_candidate_query_invalid\"},400)}}",
+      "inference": "lexical d/c/other locals assigned before let declaration; ReferenceError temporal dead zone caught as query400",
+      "actualResponseObservation": "diagnostic receipt page200/API400; private raw error was not emitted",
+      "generatedArtifactLaterRebuilt": true,
+      "notOriginalCompleteArtifactCopy": true,
+      "nativeExecution": false
+    },
+    "afterArtifact": {
+      "schema": "stockinsider-candidate-emitted-get-static-check-v1",
+      "observedAt": "2026-11-14T23:19:02.607945+00:00",
+      "source": "b806546e25a51f84111159db54e54e3c477e0466",
+      "buildLogSha256": "1eb455842026440e3d0b680791fac072d2ae361b1031f058d5d38e0410c67beb",
+      "artifacts": [
+        {
+          "artifact": "web/.next/server/chunks/_1q7uu3z._.js",
+          "sha256": "c70431a46d0bac22005f14ff006ed447dd076688265067239616e9bd26b302dd",
+          "emittedGet": "async function c(e){try{let t=Reflect.apply(s,void 0,[new URL(e.url).searchParams]),r=Reflect.apply(l,void 0,[t]),a=\"ready\"===String(r.availability);return u({ok:a,result:r},a?200:503)}catch{return u({ok:!1,error:\"launch_candidate_query_invalid\"},400)}}",
+          "reflectApplyCount": 2
+        }
+      ],
+      "scope": "STATIC_EMITTED_CODE_NO_ENDPOINT_EXECUTION_NO_BROWSER_HOLD_RELEASE_BY_MAKER"
+    },
+    "qualifiedIndependentEngineeringArtifactReview": true,
+    "localBrowserHoldAfterTwoFailures": true,
+    "localHoldResumedOnlyAfterMaterialFixAndStaticReview": true,
+    "formalNativeHoldNeverReleased": true
+  },
+  "engineeringReview": {
+    "openP0": 0,
+    "openP1": 0,
+    "formalA1": false
+  },
+  "preservation": {
+    "observedAt": "2026-11-14T23:39:15.141645+00:00",
+    "originalFiles": 283,
+    "missing": 0,
+    "changed": 0,
+    "archiveOrRecoveryVerified": false
+  },
+  "limits": {
+    "actualPublicMetadataProducer": "MISSING_HARD_DISABLED",
+    "actualMutationHooks": "NOT_CONNECTED",
+    "actualHistoricalCompleteness": false,
+    "actualNeverAdmittedPositive": "NOT_PROVEN",
+    "actualDatabase": "NOT_RUN_HOLD",
+    "nativeHold": "PRESERVED",
+    "originalPrHead": "UNCHANGED",
+    "productionActions": 0,
+    "timersChanged": false,
+    "paidCalls": 0,
+    "archiveVerified": false,
+    "reclaimedBytes": 0
+  }
+}

@@ -2,9 +2,10 @@ import { getSupabaseServerClient } from './supabase-server.ts';
 import type { MarketRiskRegime } from './stage-classifier.ts';
 import { fetchOfficialJson, fetchTwseMarketDailyRows } from './tw-market.ts';
 import { collectPagedAuthorityRows } from './candidate-research-policy.ts';
+import { breadthForRoster } from './market-breadth.ts';
 
 type Row = Record<string, unknown>;
-export const MARKET_EVIDENCE_MODEL_VERSION = 'market-evidence-v2.0.0';
+export const MARKET_EVIDENCE_MODEL_VERSION = 'market-evidence-v2.0.1-signal-close';
 const OFFICIAL_MARKET_HISTORY_MODEL_VERSION = 'official-market-history-v1.0.0';
 
 function numberOrNull(value: unknown) {
@@ -159,19 +160,6 @@ export function marketEvidenceWriteBatches<T>(rows: T[], batchSize = 100): T[][]
   return batches;
 }
 
-function breadthForRoster(history: Map<string, Array<{ date: string; close: number }>>, roster: Set<string>) {
-  let numerator = 0;
-  let observed = 0;
-  for (const symbol of roster) {
-    const rows = (history.get(symbol) || []).sort((a, b) => a.date.localeCompare(b.date)).slice(-20);
-    if (rows.length < 20) continue;
-    observed += 1;
-    const average = rows.reduce((sum, row) => sum + row.close, 0) / rows.length;
-    if (rows.at(-1)!.close > average) numerator += 1;
-  }
-  return { numerator, observed, eligible: roster.size };
-}
-
 async function loadCompletedTradingSessions(sessionDate: string) {
   const supabase = getSupabaseServerClient();
   const unique = new Set<string>();
@@ -209,7 +197,7 @@ async function loadOfficialMarketHistory(sessionDate: string, evaluatedAt: strin
   // market gate incomplete even when the authority table is fully populated.
   for (let offset = 0; offset < 3_000; offset += pageSize) {
     const page = await supabase.from('official_market_evidence_history')
-      .select('market,session_date,index_close,breadth_above_ma20,breadth_observed,breadth_eligible,foreign_net_twd,source_urls,available_at')
+      .select('market,session_date,index_close,breadth_above_ma20,breadth_observed,breadth_eligible,foreign_net_twd,source_urls,available_at,provenance')
       .lte('available_at', evaluatedAt).lte('session_date', sessionDate)
       .order('session_date', { ascending: false }).order('market', { ascending: true })
       .range(offset, offset + pageSize - 1);
@@ -249,11 +237,9 @@ async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: st
     loadOfficialMarketHistory(sessionDate, evaluatedAt),
   ]);
   if (sessions.length < 520 || sessions.at(-1) !== sessionDate) throw new Error('official_market_session_history_below_520');
-  const latestRows = existing.filter((row) => row.session_date === sessionDate);
-  const complete = ['TWSE','TPEX'].every((market) => sessions.every((date) => existing.some((row) => row.market === market && row.session_date === date && numberOrNull(row.index_close) != null)))
-    && latestRows.length === 2 && latestRows.every((row) => numberOrNull(row.breadth_observed) != null)
-    && sessions.slice(-5).every((date) => ['TWSE','TPEX'].every((market) => existing.some((row) => row.market === market && row.session_date === date && numberOrNull(row.foreign_net_twd) != null)));
-  if (complete) return;
+  // Old retained breadth does not prove the new required signal-day inclusion.
+  // Reuse genuine retained index rows, but always compute this version's
+  // current breadth; a stored pre-fix positive cannot bypass that computation.
 
   const latestInstrument = new Map<string, Row>();
   for (const row of rosterRows) {
@@ -301,8 +287,8 @@ async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: st
     }
     return result;
   };
-  const twseBreadth = breadthForRoster(histories(twseDaily), twseRoster);
-  const tpexBreadth = breadthForRoster(histories(tpexDaily), tpexRoster);
+  const twseBreadth = breadthForRoster(histories(twseDaily), twseRoster, sessionDate, last20);
+  const tpexBreadth = breadthForRoster(histories(tpexDaily), tpexRoster, sessionDate, last20);
   const flowSessions = sessions.slice(-5);
   const flows = await Promise.all(flowSessions.flatMap((date) => ([
     (async () => {
@@ -319,28 +305,27 @@ async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: st
   const flowByKey = new Map(flows.map((row) => [`${row.market}:${row.date}`, row]));
   const tpexByDate = new Map(tpexIndexPayloads.map((row) => [row.date, row]));
   const rows = sessions.flatMap((date) => (['TWSE','TPEX'] as const).map((market) => {
-    const isLatest = date === sessionDate;
     const flow = flowByKey.get(`${market}:${date}`);
-    const breadth = market === 'TWSE' ? twseBreadth : tpexBreadth;
     const retained = existingByKey.get(`${market}:${date}`);
     const fetchedIndexClose = market === 'TWSE' ? taiex.get(date) ?? null : tpexByDate.get(date)?.close ?? null;
     const indexClose = fetchedIndexClose ?? numberOrNull(retained?.index_close);
-    const fetchedBreadthAvailable = isLatest && breadth.observed > 0;
     const indexUrl = market === 'TWSE'
       ? `https://www.twse.com.tw/rwd/zh/TAIEX/MI_5MINS_HIST?date=${date.slice(0, 7).replace(/-/gu, '')}01&response=json`
       : tpexByDate.get(date)?.url;
     return {
       market, session_date: date, index_close: indexClose,
-      breadth_above_ma20: fetchedBreadthAvailable ? breadth.numerator : numberOrNull(retained?.breadth_above_ma20),
-      breadth_observed: fetchedBreadthAvailable ? breadth.observed : numberOrNull(retained?.breadth_observed),
-      breadth_eligible: fetchedBreadthAvailable ? breadth.eligible : numberOrNull(retained?.breadth_eligible),
+      // Preserve the old history columns with their original provenance. New
+      // corrected breadth belongs only to the new versioned snapshot below.
+      breadth_above_ma20: numberOrNull(retained?.breadth_above_ma20),
+      breadth_observed: numberOrNull(retained?.breadth_observed),
+      breadth_eligible: numberOrNull(retained?.breadth_eligible),
       foreign_net_twd: flow?.value ?? numberOrNull(retained?.foreign_net_twd),
       source_urls: [...new Set([
         ...(Array.isArray(retained?.source_urls) ? retained!.source_urls as unknown[] : []),
-        indexUrl, isLatest ? (market === 'TWSE' ? 'https://www.twse.com.tw/exchangeReport/MI_INDEX' : 'https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes') : null, flow?.url,
+        indexUrl, flow?.url,
       ].filter(Boolean))],
       as_of: `${date}T13:30:00+08:00`, available_at: evaluatedAt,
-      provenance: { provider: market.toLowerCase(), official_only: true, model_version: OFFICIAL_MARKET_HISTORY_MODEL_VERSION },
+      provenance: retained?.provenance??{ provider: market.toLowerCase(), official_only: true, model_version: OFFICIAL_MARKET_HISTORY_MODEL_VERSION },
     };
   }));
   // Keep each REST request comfortably below proxy/body limits. A transport
@@ -367,6 +352,9 @@ async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: st
       throw new Error(`official_market_history_write_failed:${message}`);
     }
   }
+  return {breadth:([{market:'TWSE' as const,value:twseBreadth},{market:'TPEX' as const,value:tpexBreadth}]).map(({market,value})=>({
+    market,numerator:value.numerator,observed:value.observed,eligible:value.eligible,date:sessionDate})),
+    diagnostics:{TWSE:twseBreadth.diagnostics,TPEX:tpexBreadth.diagnostics}};
 }
 
 function indexState(values: Array<{ date: string; close: number }>) {
@@ -400,7 +388,18 @@ export function deriveMarketEvidence(input: {
   const eligible = currentBreadth.reduce((sum, row) => sum + row.eligible, 0);
   const above = currentBreadth.reduce((sum, row) => sum + row.numerator, 0);
   const rosterCoveragePct = eligible ? observed / eligible * 100 : 0;
-  const breadthState = currentBreadth.length >= 2 && eligible > 0
+  // Per-market diagnostics do not introduce a per-market95% qualification.
+  // The existing approved aggregate threshold below remains unchanged.
+  const breadthByMarket = (['TWSE','TPEX'] as const).map(market=>{
+    const rows=currentBreadth.filter(row=>row.market===market),row=rows.length===1?rows[0]:null;
+    return {market,numerator:row?.numerator??null,observed:row?.observed??null,eligible:row?.eligible??null,
+      coveragePct:row&&row.eligible>0?row.observed/row.eligible*100:null,caComparability:null,
+      sourceAuthority:false,marketAuthority:false,gaps:[...(row?[]:['breadth_venue_missing_or_duplicate']),
+        'breadth_source_and_ca_proof_not_supplied_to_arithmetic']};
+  });
+  const bothBreadthVenues = currentBreadth.length===2&&(['TWSE','TPEX'] as const)
+    .every(market=>currentBreadth.filter(row=>row.market===market).length===1);
+  const breadthState = bothBreadthVenues && eligible > 0 && observed > 0
     ? { aboveMa20Pct: above / observed * 100, observed, eligible, rosterCoveragePct }
     : null;
   const flows = [...new Map(input.foreignFlows.map((row) => [row.date, row])).values()].sort((a, b) => a.date.localeCompare(b.date));
@@ -427,6 +426,7 @@ export function deriveMarketEvidence(input: {
     taiexState: taiex,
     tpexState: tpex,
     breadthState,
+    breadthByMarket,
     foreignFlowState,
     completenessPct: (4 - missingComponents.length) / 4 * 100,
     rosterCoveragePct,
@@ -437,7 +437,7 @@ export function deriveMarketEvidence(input: {
 
 export async function buildMarketEvidenceSnapshot(sessionDate: string, evaluatedAt: string, officialSessions: string[] = []) {
   const supabase = getSupabaseServerClient();
-  await ingestOfficialMarketEvidence(sessionDate, evaluatedAt, officialSessions);
+  const freshBreadth=await ingestOfficialMarketEvidence(sessionDate, evaluatedAt, officialSessions);
   const [official, market, flows] = await Promise.all([
     loadOfficialMarketHistory(sessionDate, evaluatedAt).then((data): { data: Row[]; error: { message: string } | null } => ({ data, error: null })),
     supabase.from('opportunity_market_observations_v3')
@@ -469,19 +469,8 @@ export async function buildMarketEvidenceSnapshot(sessionDate: string, evaluated
     .flatMap((row) => numberOrNull(row.value) == null ? [] : [{ date: String(row.authority_date), close: Number(row.value) }]);
   const taiex = [...new Map([...legacyTaiex, ...officialTaiex].map((row) => [row.date, row])).values()];
   const tpex = [...new Map([...legacyTpex, ...officialTpex].map((row) => [row.date, row])).values()];
-  const officialBreadth = officialRows.filter((row) => row.session_date === sessionDate && numberOrNull(row.breadth_observed) != null)
-    .map((row) => ({
-      market: row.market === 'TWSE' ? 'TWSE' as const : 'TPEX' as const,
-      numerator: Number(row.breadth_above_ma20), observed: Number(row.breadth_observed), eligible: Number(row.breadth_eligible), date: String(row.session_date),
-    }));
-  const legacyBreadth = rows.filter((row) => row.fact_key === 'above_ma20' && ['TWSE_ACTIVE_COMMON','TPEX_ACTIVE_COMMON'].includes(String(row.scope_key)))
-    .flatMap((row) => {
-      const numerator = numberOrNull(row.breadth_numerator_count);
-      const observed = numberOrNull(row.breadth_observed_count);
-      const eligible = numberOrNull(row.breadth_eligible_count);
-      return numerator == null || observed == null || eligible == null ? [] : [{ market: row.scope_key === 'TWSE_ACTIVE_COMMON' ? 'TWSE' as const : 'TPEX' as const, numerator, observed, eligible, date: String(row.authority_date) }];
-    });
-  const breadth = officialBreadth.length >= 2 ? officialBreadth : legacyBreadth;
+  // Includes explicit zero. Never resurrect pre-fix retained/legacy breadth.
+  const breadth = freshBreadth.breadth;
   const latestFlowByObservation = new Map<string, Row>();
   for (const row of (flows.data as Row[]) || []) {
     const key = `${row.stock_id}:${row.exchange}:${row.session_id}:${row.provider}`;
@@ -505,7 +494,8 @@ export async function buildMarketEvidenceSnapshot(sessionDate: string, evaluated
     foreign_flow_state: derived.foreignFlowState, completeness_pct: derived.completenessPct,
     roster_coverage_pct: derived.rosterCoveragePct, missing_components: derived.missingComponents,
     risk_budget: derived.riskBudget, as_of: `${sessionDate}T13:30:00+08:00`, available_at: evaluatedAt,
-    provenance: { sources: ['official_market_evidence_history','opportunity_market_observations_v3','opportunity_stock_flow_observations_v3'], official_only: true },
+    provenance: { sources: ['official_market_evidence_history','opportunity_market_observations_v3','opportunity_stock_flow_observations_v3'], official_only: true,
+      breadthPricePresenceDiagnostics:freshBreadth.diagnostics },
     model_version: MARKET_EVIDENCE_MODEL_VERSION,
   }, { onConflict: 'session_date,model_version' }).select('id').single();
   if (write.error || !write.data) throw new Error(`market_evidence_write_failed:${write.error?.message || 'missing_row'}`);

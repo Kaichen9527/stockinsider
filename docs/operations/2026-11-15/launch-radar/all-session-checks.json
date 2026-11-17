@@ -1,0 +1,674 @@
+{
+  "schema": "stockinsider-all-session-checkpoint-v1",
+  "observedAt": "2026-11-14T20:07:35.929030+00:00",
+  "localValidationCommit": "ea3b3c3ff6ec2b4f72edb9d186d6341d23a57567",
+  "publicSourceCommit": "ab667c9c74df974fe22fdaa37a4fbc6069a6084c",
+  "wholeTree": "f8b4e1eeb82dabf123e7ed56e5e713963cbca959",
+  "webTree": "b615b69bc530b2b945b6b1e372dbe9595c2a7a95",
+  "sourceFiles": {
+    "openspec/changes/stockinsider-vnext-20/volume-coverage-amendment.md": "ca886d8a82211b4136256c11e2559c0c3a99c5b7d402befa175a6c38091a671f",
+    "web/scripts/launch-official-replay.mjs": "f2dfd40c41119dfb77c91e32fccc0ac6d4f022aa45d27d59b27fda24aea1bc1e",
+    "web/scripts/launch-official-replay.test.mjs": "9d888be329b557b9c1e6b9eda1808125275fd4f012df1a4dbe3b67328a1c6ab8",
+    "web/src/lib/tw-entry-plan-authority.ts": "290afa255217e8a8a191a9a24b3dbbe73417585e587cab6546322bc6a5461a3c",
+    "web/src/lib/vnext/launch-institutional-selection.test.ts": "42b17990796bb9e37d2e638143d5ff262e2054ae878d322f6c30fa7d7f54c955",
+    "web/src/lib/vnext/launch-institutional-volume.test.ts": "9201797a549329bebf1f2cbedeb0a0fa6039b9bd86f1244fbf4e512efe91c68f",
+    "web/src/lib/vnext/launch-institutional-volume.ts": "4f6570419c324c64574a2bfd575eb5a07050f6efa8bdb2ae222cf5d20b005199",
+    "web/src/lib/vnext/launch-licensed-5274.test.ts": "18e973a0cd6714c38fd66f7223731a2f2486ee37c4da106834ce4133a3f2b7d5",
+    "web/src/lib/vnext/launch-native-volume.test-fixture.ts": "789ff7501b46bd0cebd459c524fc974c03fded475f517cf1183136b719ea48c0",
+    "web/src/lib/vnext/launch-official-replay.ts": "7e535f94c5f4745c39f76630b934056000271ecc5d0209410cd7e7e536fad92a",
+    "web/src/lib/vnext/launch-pattern-read.ts": "f77208a234e12204db525d8927c1ceead2e568beb08918704ea5154c33ed1a7f",
+    "web/src/lib/vnext/launch-score-rules.ts": "70df8a617e06b80edc5b83b3c10a9ed4605e7be9db092c06a000ea769e7413a9"
+  },
+  "tests": 581,
+  "checks": [
+    {
+      "name": "focused",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/top10-projection.test.ts",
+        "web/src/lib/vnext/published-target-read.test.ts",
+        "web/src/lib/vnext/ranking-read.test.ts",
+        "web/src/lib/vnext/candidate-page.test.ts",
+        "web/src/lib/stock-chart-calendar.test.ts",
+        "web/src/app/components/vnext/detail-source.test.mjs",
+        "scripts/vnext-ranking-snapshot-source.test.mjs",
+        "web/src/lib/ptt-article-parser.test.ts",
+        "web/src/lib/vnext/launch-official-replay.test.ts",
+        "web/src/lib/vnext/launch-licensed-csv.test.ts",
+        "web/src/lib/vnext/launch-native-volume.test.ts",
+        "web/src/lib/vnext/launch-institutional-volume.test.ts",
+        "web/src/lib/vnext/launch-institutional-selection.test.ts",
+        "web/src/lib/vnext/launch-licensed-5274.test.ts",
+        "web/scripts/launch-official-replay.test.mjs",
+        "web/src/lib/ptt-mention-provenance.test.ts",
+        "web/src/lib/ptt-policy.test.ts",
+        "scripts/ptt-mention-provenance-boundary.test.mjs",
+        "web/src/lib/vnext/launch-score.test.ts",
+        "web/src/lib/vnext/launch-score-rules.test.ts",
+        "web/src/lib/vnext/owner-oidc.test.ts",
+        "web/src/lib/vnext/launch-pattern-read.test.ts",
+        "web/src/lib/vnext/private-owner-read.test.ts",
+        "web/src/lib/vnext/launch-patterns.test.ts",
+        "web/src/lib/technical-indicator-adapter.test.ts",
+        "web/src/lib/technical-features-v2.test.ts",
+        "scripts/vnext-linux-restore-candidate.test.mjs",
+        "scripts/local-backup-envelope.test.mjs",
+        "scripts/local-backup-artifact.test.mjs",
+        "scripts/local-backup-lifecycle.test.mjs",
+        "scripts/build-contabo-restore-list.test.mjs",
+        "scripts/export-contabo-database-backup.test.mjs",
+        "scripts/contabo-production-restore-contract.test.mjs",
+        "scripts/contabo-local-backup-cutover.test.mjs",
+        "scripts/rehearse-contabo-database-restore.test.mjs",
+        "scripts/verify-standalone-release.test.mjs",
+        "scripts/package-standalone-release.test.mjs",
+        "web/src/lib/stock-chart-supply.test.ts",
+        "web/src/lib/vnext/business-public.test.ts",
+        "web/src/lib/vnext/vnext.test.ts",
+        "scripts/vnext-staging-preflight.test.mjs",
+        "web/src/lib/vnext/candidate-history-read.test.ts",
+        "scripts/vnext-candidate-history-source.test.mjs",
+        "web/src/lib/candidate-price-history.test.ts",
+        "scripts/vnext-source-window-source.test.mjs",
+        "web/src/lib/vnext/source-volume-boundary.test.ts",
+        "web/src/lib/vnext/analysis-sources.test.ts",
+        "web/src/lib/vnext/source-backlog.test.ts",
+        "web/src/lib/vnext/cached-source-admission.test.ts",
+        "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+        "web/src/lib/vnext/schedule-admission.test.ts",
+        "web/src/lib/vnext/schedule-replay-binding.test.ts",
+        "scripts/vnext-staging-schedule-candidate.test.mjs",
+        "scripts/vnext-candidate-epoch-source.test.mjs",
+        "web/src/lib/source-content-semantics.test.ts",
+        "web/src/lib/vnext/cached-admission.test.ts",
+        "web/src/lib/vnext/current-evidence-read.test.ts",
+        "web/src/lib/vnext/preparation-authority.test.ts",
+        "scripts/vnext-weekly-forecast-source.test.mjs",
+        "web/src/lib/vnext/forecast-active.test.ts",
+        "web/src/lib/vnext/forecast-current.test.ts",
+        "web/src/lib/vnext/thesis.test.ts",
+        "scripts/vnext-staging-execution-boundary.test.mjs",
+        "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+        "web/src/lib/tw-entry-plan-authority.test.ts"
+      ],
+      "start": "2026-11-14T19:53:17.317314+00:00",
+      "end": "2026-11-14T19:53:28.373544+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 48783360,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 30997999616,
+        "/tmp": 9420124160
+      },
+      "resourceViolation": null,
+      "logSha256": "ce9976cbb7ba28ead35ea93d798b74bccd3b751f4d2e8d7319b0f288e4a0b179"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-14T19:53:28.374317+00:00",
+      "end": "2026-11-14T19:53:31.139034+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81174528,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 30997983232,
+        "/tmp": 9421017088
+      },
+      "resourceViolation": null,
+      "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-14T19:53:31.139431+00:00",
+      "end": "2026-11-14T19:53:50.705133+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 82448384,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 30997975040,
+        "/tmp": 9421017088
+      },
+      "resourceViolation": null,
+      "logSha256": "f714a4a43ff768d13293fd895d65660cc159bf6b67738cf5ddde67bd246626ea"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-14T19:53:50.705546+00:00",
+      "end": "2026-11-14T19:53:55.473910+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81469440,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 30904061952,
+        "/tmp": 9421017088
+      },
+      "resourceViolation": null,
+      "logSha256": "bc409a2138ff1d786b75df53192ec7d4571658ef7bc0b1074d4a6d68228d8d33"
+    },
+    {
+      "name": "owner_browser",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/owner-oidc-browser-smoke.mjs"
+      ],
+      "start": "2026-11-14T19:53:55.474439+00:00",
+      "end": "2026-11-14T19:54:10.516157+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 128290816,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 30903459840,
+        "/tmp": 9305612288
+      },
+      "resourceViolation": null,
+      "logSha256": "c61c6f57fcab640f4473275e89510705acc2a52e2219220c4f38018bc9cdf043"
+    }
+  ],
+  "browserReceipt": {
+    "schema": "stockinsider-owner-oidc-local-browser-v1",
+    "buildSource": "ea3b3c3ff6ec2b4f72edb9d186d6341d23a57567",
+    "harnessCommit": "ea3b3c3ff6ec2b4f72edb9d186d6341d23a57567",
+    "runtimeWebTree": "b615b69bc530b2b945b6b1e372dbe9595c2a7a95",
+    "status": "PASS",
+    "cases": 33,
+    "receipts": [
+      "desktop:unauthenticated-http",
+      "desktop:csrf-rejected",
+      "desktop:oidc-owner-secure-cookie-private-empty-state",
+      "desktop:public-html-excludes-owner",
+      "desktop:public-api-unchanged-missing-backend-500-excludes-owner",
+      "desktop:logout-csrf-rejected",
+      "desktop:logout-revokes-server-session",
+      "desktop:nonowner-rejected",
+      "desktop:expired-rejected",
+      "desktop:nonce-rejected",
+      "desktop:issuer-rejected",
+      "desktop:audience-rejected",
+      "desktop:signature-rejected",
+      "desktop:session-real-time-expiry",
+      "desktop:disabled-zero-provider-io",
+      "mobile:unauthenticated-http",
+      "mobile:csrf-rejected",
+      "mobile:oidc-owner-secure-cookie-private-empty-state",
+      "mobile:public-html-excludes-owner",
+      "mobile:public-api-unchanged-missing-backend-500-excludes-owner",
+      "mobile:logout-csrf-rejected",
+      "mobile:logout-revokes-server-session",
+      "mobile:nonowner-rejected",
+      "mobile:expired-rejected",
+      "mobile:nonce-rejected",
+      "mobile:issuer-rejected",
+      "mobile:audience-rejected",
+      "mobile:signature-rejected",
+      "mobile:session-real-time-expiry",
+      "mobile:disabled-zero-provider-io",
+      "http:state-mismatch-zero-token-exchange",
+      "http:consumed-transaction-no-replay",
+      "http:successful-callback-cannot-redeem-twice"
+    ],
+    "counts": {
+      "authorize": 18,
+      "token": 17,
+      "jwks": 1,
+      "pkce": 17
+    },
+    "screenshots": [
+      {
+        "name": "desktop-disabled.png",
+        "sha256": "9b2690951d051dd484d00ee29fd8127c7d645d47f0b86fb1a3410c87dc1de62d"
+      },
+      {
+        "name": "desktop-owner.png",
+        "sha256": "f1213f73ca2b11e97f9de451edbc7027d3bb685780c6030531ab15cf5d9263dc"
+      },
+      {
+        "name": "mobile-disabled.png",
+        "sha256": "a8cdbb00b0f00098411980074fbe393b824c59746d10697c1c8e32f5b9843ee4"
+      },
+      {
+        "name": "mobile-owner.png",
+        "sha256": "0fe71c42418814e45a7c82a611f2d0296c455b44bcef24645c22e915b24d5a2d"
+      }
+    ],
+    "identity": "NONPRODUCTION_LOCAL_CONTROLLED_OIDC_ONLY",
+    "secureCookieOnTls": true,
+    "productionTlsVerificationDisabled": false,
+    "actualGoogleOwnerOrPrivateContent": false,
+    "publicApiDataAcceptance": "NOT_RUN_UNCONFIGURED_BACKEND_EXACT_500_UNCHANGED_BY_LOGIN",
+    "databaseOrPaidProviderCalls": 0,
+    "productionActions": 0,
+    "ownedProcessesStopped": true
+  },
+  "browserScreenshots": {
+    "desktop-owner.png": "f1213f73ca2b11e97f9de451edbc7027d3bb685780c6030531ab15cf5d9263dc",
+    "mobile-owner.png": "0fe71c42418814e45a7c82a611f2d0296c455b44bcef24645c22e915b24d5a2d",
+    "mobile-disabled.png": "a8cdbb00b0f00098411980074fbe393b824c59746d10697c1c8e32f5b9843ee4",
+    "desktop-disabled.png": "9b2690951d051dd484d00ee29fd8127c7d645d47f0b86fb1a3410c87dc1de62d"
+  },
+  "publication": {
+    "schema": "stockinsider-tested-tree-api-publication-v1",
+    "observedAt": "2026-11-14T20:00:29.750418+00:00",
+    "localValidationCommit": "ea3b3c3ff6ec2b4f72edb9d186d6341d23a57567",
+    "publicSourceCommit": "ab667c9c74df974fe22fdaa37a4fbc6069a6084c",
+    "baseCommit": "b33123d26e2f5e400781af55e6cad3b840b6450a",
+    "wholeTree": "f8b4e1eeb82dabf123e7ed56e5e713963cbca959",
+    "webTree": "b615b69bc530b2b945b6b1e372dbe9595c2a7a95",
+    "treeEqualityVerifiedBeforePublication": true,
+    "soleParentVerifiedBeforePublication": true,
+    "branch": "codex/stockinsider-v2-cloud-nov07",
+    "updateExpectedSha": "b33123d26e2f5e400781af55e6cad3b840b6450a",
+    "force": false,
+    "transport": "configured GitHub connector",
+    "normalGitPush": "FAILED_NO_HTTPS_USERNAME_IDENTITY",
+    "secretValuesRead": false,
+    "localValidationRefPreserved": "codex/all-session-local-ea3b3c3",
+    "testsRanPublicCommit": false,
+    "testsRanLocalIdenticalTree": true,
+    "formalA1": "NOT_GRANTED",
+    "nativeHold": "PRESERVED",
+    "originalPrHead": "UNCHANGED"
+  },
+  "preservedFirstAttempt": {
+    "localCommit": "1df3da62e5b6ffe4508c878ef7e124b6d52da7e6",
+    "checks": [
+      {
+        "name": "focused",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/vnext/top10-projection.test.ts",
+          "web/src/lib/vnext/published-target-read.test.ts",
+          "web/src/lib/vnext/ranking-read.test.ts",
+          "web/src/lib/vnext/candidate-page.test.ts",
+          "web/src/lib/stock-chart-calendar.test.ts",
+          "web/src/app/components/vnext/detail-source.test.mjs",
+          "scripts/vnext-ranking-snapshot-source.test.mjs",
+          "web/src/lib/ptt-article-parser.test.ts",
+          "web/src/lib/vnext/launch-official-replay.test.ts",
+          "web/src/lib/vnext/launch-licensed-csv.test.ts",
+          "web/src/lib/vnext/launch-native-volume.test.ts",
+          "web/src/lib/vnext/launch-institutional-volume.test.ts",
+          "web/src/lib/vnext/launch-institutional-selection.test.ts",
+          "web/src/lib/vnext/launch-licensed-5274.test.ts",
+          "web/scripts/launch-official-replay.test.mjs",
+          "web/src/lib/ptt-mention-provenance.test.ts",
+          "web/src/lib/ptt-policy.test.ts",
+          "scripts/ptt-mention-provenance-boundary.test.mjs",
+          "web/src/lib/vnext/launch-score.test.ts",
+          "web/src/lib/vnext/launch-score-rules.test.ts",
+          "web/src/lib/vnext/owner-oidc.test.ts",
+          "web/src/lib/vnext/launch-pattern-read.test.ts",
+          "web/src/lib/vnext/private-owner-read.test.ts",
+          "web/src/lib/vnext/launch-patterns.test.ts",
+          "web/src/lib/technical-indicator-adapter.test.ts",
+          "web/src/lib/technical-features-v2.test.ts",
+          "scripts/vnext-linux-restore-candidate.test.mjs",
+          "scripts/local-backup-envelope.test.mjs",
+          "scripts/local-backup-artifact.test.mjs",
+          "scripts/local-backup-lifecycle.test.mjs",
+          "scripts/build-contabo-restore-list.test.mjs",
+          "scripts/export-contabo-database-backup.test.mjs",
+          "scripts/contabo-production-restore-contract.test.mjs",
+          "scripts/contabo-local-backup-cutover.test.mjs",
+          "scripts/rehearse-contabo-database-restore.test.mjs",
+          "scripts/verify-standalone-release.test.mjs",
+          "scripts/package-standalone-release.test.mjs",
+          "web/src/lib/stock-chart-supply.test.ts",
+          "web/src/lib/vnext/business-public.test.ts",
+          "web/src/lib/vnext/vnext.test.ts",
+          "scripts/vnext-staging-preflight.test.mjs",
+          "web/src/lib/vnext/candidate-history-read.test.ts",
+          "scripts/vnext-candidate-history-source.test.mjs",
+          "web/src/lib/candidate-price-history.test.ts",
+          "scripts/vnext-source-window-source.test.mjs",
+          "web/src/lib/vnext/source-volume-boundary.test.ts",
+          "web/src/lib/vnext/analysis-sources.test.ts",
+          "web/src/lib/vnext/source-backlog.test.ts",
+          "web/src/lib/vnext/cached-source-admission.test.ts",
+          "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+          "web/src/lib/vnext/schedule-admission.test.ts",
+          "web/src/lib/vnext/schedule-replay-binding.test.ts",
+          "scripts/vnext-staging-schedule-candidate.test.mjs",
+          "scripts/vnext-candidate-epoch-source.test.mjs",
+          "web/src/lib/source-content-semantics.test.ts",
+          "web/src/lib/vnext/cached-admission.test.ts",
+          "web/src/lib/vnext/current-evidence-read.test.ts",
+          "web/src/lib/vnext/preparation-authority.test.ts",
+          "scripts/vnext-weekly-forecast-source.test.mjs",
+          "web/src/lib/vnext/forecast-active.test.ts",
+          "web/src/lib/vnext/forecast-current.test.ts",
+          "web/src/lib/vnext/thesis.test.ts",
+          "scripts/vnext-staging-execution-boundary.test.mjs",
+          "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+          "web/src/lib/tw-entry-plan-authority.test.ts"
+        ],
+        "start": "2026-11-14T19:47:49.455885+00:00",
+        "end": "2026-11-14T19:48:00.518989+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 48758784,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider": 30915956736,
+          "/tmp": 9419808768
+        },
+        "resourceViolation": null,
+        "logSha256": "cfebb5f1cd2d8b1fa38f3dac3ac19253403d32c40a4f87fc7bfc9764d80fcdc8"
+      },
+      {
+        "name": "types",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "typecheck"
+        ],
+        "start": "2026-11-14T19:48:00.527029+00:00",
+        "end": "2026-11-14T19:48:08.301093+00:00",
+        "exit": 2,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 81338368,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider": 30915936256,
+          "/tmp": 9421017088
+        },
+        "resourceViolation": null,
+        "logSha256": "6ef592da7f191d2f4dfdcd271a7c4dd165ca3bbf17a7b3c3fc8aed75941b64b1"
+      },
+      {
+        "name": "lint",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "lint"
+        ],
+        "start": "2026-11-14T19:48:08.301469+00:00",
+        "end": "2026-11-14T19:48:27.860479+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 81854464,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider": 30915923968,
+          "/tmp": 9421017088
+        },
+        "resourceViolation": null,
+        "logSha256": "f714a4a43ff768d13293fd895d65660cc159bf6b67738cf5ddde67bd246626ea"
+      },
+      {
+        "name": "build",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "build"
+        ],
+        "start": "2026-11-14T19:48:27.860876+00:00",
+        "end": "2026-11-14T19:48:38.404692+00:00",
+        "exit": 1,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 81489920,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider": 30915919872,
+          "/tmp": 9421017088
+        },
+        "resourceViolation": null,
+        "logSha256": "6cf2bfd7b2018602b57f4da2ec6cfe68e60fe0372649215cfc8bdfb330c5ae75"
+      },
+      {
+        "name": "owner_browser",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "scripts/owner-oidc-browser-smoke.mjs"
+        ],
+        "status": "NOT_RUN",
+        "reason": "successful_current_build_required"
+      }
+    ],
+    "summary": "581PASS/lintPASS;types/build4TS2345unknownclocksecondargs;browserNOT_RUN",
+    "independentlyReviewedRepair": "diff --git a/openspec/changes/stockinsider-vnext-20/volume-coverage-amendment.md b/openspec/changes/stockinsider-vnext-20/volume-coverage-amendment.md\nindex be7f410..3c18414 100644\n--- a/openspec/changes/stockinsider-vnext-20/volume-coverage-amendment.md\n+++ b/openspec/changes/stockinsider-vnext-20/volume-coverage-amendment.md\n@@ -1,7 +1,9 @@\n # Institutional denominator coverage correction\n \n-Authority: explicit user followup to approved Goal385, evidence\n-`fbc8c2e0d2ea3bd0c4df666aa71d12b21e0cf751`. The real11371 report excludes\n+Requirements authority: the already user-approved Goal385. Evidence\n+`fbc8c2e0d2ea3bd0c4df666aa71d12b21e0cf751` supports an engineering correction\n+implementing that Goal; it is not a separate direct-user approval or new rights\n+grant. The real11371 report excludes\n fixed-price trading;11856 institutional scope includes common shares, block and\n odd-lot trades. Four actual symbol/day comparisons differ, including5274\n November13 364000 versus390878 shares. Matching dates and integer units did not\ndiff --git a/web/src/lib/vnext/launch-institutional-volume.ts b/web/src/lib/vnext/launch-institutional-volume.ts\nindex e52b5d5..3ac9f96 100644\n--- a/web/src/lib/vnext/launch-institutional-volume.ts\n+++ b/web/src/lib/vnext/launch-institutional-volume.ts\n@@ -95,16 +95,16 @@ export function parseTpexInstitutionalVolumeReplay(value: unknown, files: Readon\n   // Reject Proxy/accessor/toJSON/function/undefined hooks before dereference.\n   rawInput(value);\n   if (!exact(value, 'schema datasetId symbol cutoff capture sessions responses') || value.schema !== INSTITUTIONAL_VOLUME_SCHEMA || value.datasetId !== 11370\n-    || typeof value.symbol !== 'string' || !/^\\d{4}$/u.test(value.symbol) || evidenceInstant(value.cutoff) === null\n+    || typeof value.symbol !== 'string' || !/^\\d{4}$/u.test(value.symbol) || typeof value.cutoff !== 'string' || evidenceInstant(value.cutoff) === null\n     || !exact(value.capture, 'repository sourceCommit workflowPath runId runAttempt startedAt completedAt')\n     || typeof value.capture.repository !== 'string' || !/^[A-Za-z0-9_.-]+\\/[A-Za-z0-9_.-]+$/u.test(value.capture.repository)\n     || typeof value.capture.sourceCommit !== 'string' || !/^[a-f0-9]{40}$/u.test(value.capture.sourceCommit)\n-    || !evidenceKnownAt(value.capture.completedAt, value.cutoff) || evidenceInstant(value.capture.completedAt)! >= evidenceInstant(value.cutoff)!\n+    || typeof value.capture.completedAt !== 'string' || !evidenceKnownAt(value.capture.completedAt, value.cutoff) || evidenceInstant(value.capture.completedAt)! >= evidenceInstant(value.cutoff)!\n     || value.capture.startedAt !== null && !evidenceKnownAt(value.capture.startedAt, value.capture.completedAt)\n     || !Array.isArray(value.sessions) || value.sessions.length < 1 || value.sessions.length > 21\n     || value.sessions.some((day, index) => !isHistoryDate(day) || index > 0 && day <= (value.sessions as string[])[index - 1])\n     || !Array.isArray(value.responses) || value.responses.length > 21) fail('institutional_volume_manifest_invalid');\n-  const capture = value.capture, cutoff = value.cutoff as string, symbol = value.symbol;\n+  const capture = value.capture, cutoff = value.cutoff, symbol = value.symbol, completedAt = value.capture.completedAt;\n   const noWorkflow = capture.workflowPath === null && capture.runId === null && capture.runAttempt === null;\n   if (!noWorkflow && !(typeof capture.workflowPath === 'string' && /^\\.github\\/workflows\\/[A-Za-z0-9_-]+\\.ya?ml$/u.test(capture.workflowPath)\n     && typeof capture.runId === 'string' && /^\\d{1,20}$/u.test(capture.runId) && Number.isSafeInteger(capture.runAttempt) && Number(capture.runAttempt) >= 1)) fail('institutional_volume_capture_invalid');\n@@ -117,7 +117,7 @@ export function parseTpexInstitutionalVolumeReplay(value: unknown, files: Readon\n       || page.sourceUrl !== tpexInstitutionalVolumeCsvUrl(page.session) || page.publisherPublishedAt !== null\n       || ![200, null].includes(page.httpStatus as number | null) || ![0, null].includes(page.redirectCount as number | null)\n       || page.contentType !== null && (typeof page.contentType !== 'string' || page.contentType.length > 128)\n-      || !evidenceKnownAt(page.observedAt, capture.completedAt) || capture.startedAt !== null && !evidenceKnownAt(capture.startedAt, page.observedAt)) fail('institutional_volume_response_invalid');\n+      || typeof page.observedAt !== 'string' || !evidenceKnownAt(page.observedAt, completedAt) || capture.startedAt !== null && !evidenceKnownAt(capture.startedAt, page.observedAt)) fail('institutional_volume_response_invalid');\n     seen.add(page.session); total += Number(page.bytes);\n     if (!Number.isSafeInteger(total) || total > MAX_TOTAL) fail('institutional_volume_total_bound');\n     const body = page.body as Record<string, unknown>;\n"
+  },
+  "independentEngineeringReview": {
+    "newOpenP0P1": 0,
+    "initialFrozenInventory": [
+      {
+        "path": "web/scripts/launch-official-replay.mjs",
+        "sha256": "f2dfd40c41119dfb77c91e32fccc0ac6d4f022aa45d27d59b27fda24aea1bc1e"
+      },
+      {
+        "path": "web/scripts/launch-official-replay.test.mjs",
+        "sha256": "9d888be329b557b9c1e6b9eda1808125275fd4f012df1a4dbe3b67328a1c6ab8"
+      },
+      {
+        "path": "web/src/lib/tw-entry-plan-authority.ts",
+        "sha256": "290afa255217e8a8a191a9a24b3dbbe73417585e587cab6546322bc6a5461a3c"
+      },
+      {
+        "path": "web/src/lib/vnext/launch-institutional-selection.test.ts",
+        "sha256": "42b17990796bb9e37d2e638143d5ff262e2054ae878d322f6c30fa7d7f54c955"
+      },
+      {
+        "path": "web/src/lib/vnext/launch-institutional-volume.test.ts",
+        "sha256": "9201797a549329bebf1f2cbedeb0a0fa6039b9bd86f1244fbf4e512efe91c68f"
+      },
+      {
+        "path": "web/src/lib/vnext/launch-institutional-volume.ts",
+        "sha256": "29abaae6779e0ed5603e6c8c830deb7463fe3035ba3e748c2372e9c5dc21220b"
+      },
+      {
+        "path": "web/src/lib/vnext/launch-licensed-5274.test.ts",
+        "sha256": "18e973a0cd6714c38fd66f7223731a2f2486ee37c4da106834ce4133a3f2b7d5"
+      },
+      {
+        "path": "web/src/lib/vnext/launch-native-volume.test-fixture.ts",
+        "sha256": "789ff7501b46bd0cebd459c524fc974c03fded475f517cf1183136b719ea48c0"
+      },
+      {
+        "path": "web/src/lib/vnext/launch-official-replay.ts",
+        "sha256": "7e535f94c5f4745c39f76630b934056000271ecc5d0209410cd7e7e536fad92a"
+      },
+      {
+        "path": "web/src/lib/vnext/launch-pattern-read.ts",
+        "sha256": "f77208a234e12204db525d8927c1ceead2e568beb08918704ea5154c33ed1a7f"
+      },
+      {
+        "path": "web/src/lib/vnext/launch-score-rules.ts",
+        "sha256": "70df8a617e06b80edc5b83b3c10a9ed4605e7be9db092c06a000ea769e7413a9"
+      }
+    ],
+    "minimalClockRepairReviewed": true,
+    "formalA1": false
+  },
+  "actualExternalParser": {
+    "receiptCommit": "b629ef98b3fc0ec5a5da623d70d4dd271482d0ce",
+    "receiptBlob": "9447f766880cf9d62fb689a944e631c136d846ee",
+    "receiptContentSha256": "2e565775b14a759d31f0bddd54c845c26b666fba00771e73b6b56a244852ecb8",
+    "receipt": {
+      "schema": "stockinsider-launch-11370-contabo-parser-replay-v1",
+      "scope": "ISOLATED_READONLY_OFFICIAL_11370_BYTE_PARSER_AND_EXTERNAL_WINDOW_CROSSCHECK",
+      "sourceCommit": "ab667c9c74df974fe22fdaa37a4fbc6069a6084c",
+      "captureReceipt": "20c961ba458428800d4234e7c33d92ebf06228a0",
+      "rawOfficials": {
+        "fileCount": 21,
+        "uniqueBytes": 40462652,
+        "retainedGit": false,
+        "stageUsedHardlinks": true
+      },
+      "runtime": {
+        "version": "v22.14.0",
+        "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+        "officialSourceGitBlobs": 19,
+        "nonRoot": true,
+        "externalNetwork": false,
+        "formalPathsUnavailable": true,
+        "readonlyRoot": true,
+        "packageLockCompared": true
+      },
+      "comparisonsPassed": 8,
+      "observations": [
+        {
+          "symbol": "5274",
+          "exit": 0,
+          "parsedSessions": 21,
+          "declaredBytes": 40462652,
+          "decodedBytes": 40462652,
+          "revisionId": "institutional-11370:e1766f2fc1ff4bc9edec8dd145b49afc7a29ec5d38335cbee270e64a93ca595a",
+          "sourceAuthority": false,
+          "publicationAuthority": false,
+          "rankingAuthority": false,
+          "gaps": [
+            "institutional_volume_capture_workflow_identity_unverified",
+            "institutional_volume_original_publication_clock_unverified",
+            "institutional_volume_parser_not_acquisition_or_publication_authority"
+          ]
+        },
+        {
+          "symbol": "6488",
+          "exit": 0,
+          "parsedSessions": 21,
+          "declaredBytes": 40462652,
+          "decodedBytes": 40462652,
+          "revisionId": "institutional-11370:d81ed24e92df5c7e3b057145f6a035d759694f93060c762c88cdc1175a7a5357",
+          "sourceAuthority": false,
+          "publicationAuthority": false,
+          "rankingAuthority": false,
+          "gaps": [
+            "institutional_volume_capture_workflow_identity_unverified",
+            "institutional_volume_original_publication_clock_unverified",
+            "institutional_volume_parser_not_acquisition_or_publication_authority"
+          ]
+        }
+      ],
+      "controls": [
+        {
+          "through": "2026-11-12",
+          "span": 5,
+          "shares": 3238369,
+          "constantIssuedShares": true,
+          "symbol": "5274",
+          "independentShares": 3238369
+        },
+        {
+          "through": "2026-11-12",
+          "span": 20,
+          "shares": 9506958,
+          "constantIssuedShares": true,
+          "symbol": "5274",
+          "independentShares": 9506958
+        },
+        {
+          "through": "2026-11-13",
+          "span": 5,
+          "shares": 3341569,
+          "constantIssuedShares": true,
+          "symbol": "5274",
+          "independentShares": 3341569
+        },
+        {
+          "through": "2026-11-13",
+          "span": 20,
+          "shares": 9527351,
+          "constantIssuedShares": true,
+          "symbol": "5274",
+          "independentShares": 9527351
+        },
+        {
+          "through": "2026-11-12",
+          "span": 5,
+          "shares": 71508167,
+          "constantIssuedShares": true,
+          "symbol": "6488",
+          "independentShares": 71508167
+        },
+        {
+          "through": "2026-11-12",
+          "span": 20,
+          "shares": 264112809,
+          "constantIssuedShares": true,
+          "symbol": "6488",
+          "independentShares": 264112809
+        },
+        {
+          "through": "2026-11-13",
+          "span": 5,
+          "shares": 66023022,
+          "constantIssuedShares": true,
+          "symbol": "6488",
+          "independentShares": 66023022
+        },
+        {
+          "through": "2026-11-13",
+          "span": 20,
+          "shares": 262105374,
+          "constantIssuedShares": true,
+          "symbol": "6488",
+          "independentShares": 262105374
+        }
+      ],
+      "footprint": {
+        "databaseConnected": false,
+        "selectedCacheBound": false,
+        "appScoreChecked": false,
+        "rankingPublished": false,
+        "productionMutation": false
+      },
+      "nativeHoldRetained": true
+    },
+    "all8PublishedWindowValuesComparedTo20c": true,
+    "rawBytesReceivedInCloud": false,
+    "originalCaptureStartedAt": "2026-11-14T19:16:04.020002+00:00",
+    "originalCaptureCompletedAt": "2026-11-14T19:16:23.533822+00:00",
+    "exactReplayCutoffInCompactB629Receipt": "NOT_PUBLISHED_NOT_INFERRED",
+    "officialOnlineClockAcceptance": false
+  },
+  "actualSelectedCacheDbAppScore": "NOT_RUN",
+  "actualNewLaunchRankingWriterReadUi": "NOT_CONNECTED_NEXT_SOURCE_VERTICAL",
+  "formalA1": "BLOCKED",
+  "nativeHold": "PRESERVED_NOT_RUN",
+  "productionActions": 0,
+  "legacyAuthorityPrefixSha256": "2b275f3de397c0574b6dbd462dbfa88d3c861346773b0f38cd98ca87bb8e406d",
+  "nextDependencies": {
+    "venue": "ae538944bc08d30012a071467e8a562a9ffe8a88",
+    "longPriceAction": "1b22f1a767c7ff9607907bbaf6a3add6b38be246",
+    "onePriceControls": "e59ddddaf1976ada43ffa3d46f2abea7d7c78c2d",
+    "TWSEMetadataOnlyRightsUnproven": "520489611e5eaefcc7cc81eda086017deed482cc",
+    "T09PricePathOnlyNotPublishedPerformance": "07dcbc23b94262bbd02aff20cb33a3906c8a9f43"
+  }
+}

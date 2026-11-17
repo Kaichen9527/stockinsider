@@ -1,3 +1,4 @@
+import {evidenceInstant} from './evidence-clock.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -77,7 +78,7 @@ test('original action tuple/hash and exact UTC fractional timestamp semantics ha
  const source=readFileSync(new URL('../tw-entry-plan-authority.ts',import.meta.url),'utf8');
  const body=/function canonicalPgTimestamp\(value: unknown\) \{[\s\S]*?\n\}/u.exec(source)![0].replace('(value: unknown)','(value)').replace('digits: string','digits');
  // Execute the unchanged original small formatter, not an alternative production codec.
- const canonical=new Function('text','timestamp','requireAuthority',`return (${body});`)((v:unknown)=>typeof v==='string'?v:'',(v:string)=>Date.parse(v),(ok:unknown)=>{if(!ok)throw Error('original timestamp rejected');}) as (value:string)=>string;
+ const canonical=new Function('text','timestamp','requireAuthority','evidenceInstant',`return (${body});`)((v:unknown)=>typeof v==='string'?v:'',(v:string)=>Date.parse(v),(ok:unknown)=>{if(!ok)throw Error('original timestamp rejected');},evidenceInstant) as (value:string)=>string;
  assert.equal(canonical('2026-10-22T06:00:00.120000+00:00'),'2026-10-22T06:00:00.12+00:00');assert.equal(canonical('2026-10-22T06:00:00.000000+00:00'),'2026-10-22T06:00:00+00:00');assert.equal(canonical('2026-10-22T06:00:00.123456+00:00'),'2026-10-22T06:00:00.123456+00:00');
  const hash=(v:unknown)=>createHash('sha256').update(JSON.stringify(v)).digest('hex');
  const rowHash=hash(['corporate-action-source-row-v3.1','TWSE','2026-10-22','2408','ex_right_dividend',100,99,'twse:twt49u:v1']);assert.equal(rowHash,'36cfbf5993af1f74137e1ee21a37407df5c8f989158cc41cb917941b271aef1d');
@@ -89,4 +90,14 @@ test('original action tuple/hash and exact UTC fractional timestamp semantics ha
 test('actual cached quote TWD permits explicit per-share scenario aliases, never financial flow units',()=>{
  for(const priceUnit of ['TWD_per_share','TWD/share']){const value=fixture();for(let i=0;i<3;i++){value.original[i].unit=priceUnit;value.artifact.claims[i].numeric!.unit=priceUnit;}value.artifact.outputHash=inputHash({...value.artifact,outputHash:undefined});value.review.authorOutputHash=value.artifact.outputHash;assert.equal(reviewedTargetBaseline(value).baseline?.base,140);}
  const flow=fixture();for(let i=0;i<3;i++){flow.original[i].unit='TWD_million';flow.artifact.claims[i].numeric!.unit='TWD_million';}flow.artifact.outputHash=inputHash({...flow.artifact,outputHash:undefined});flow.review.authorOutputHash=flow.artifact.outputHash;assert.equal(reviewedTargetBaseline(flow).baseline,null);
+});
+test('stored original quote clocks preserve baseline identity; missing/future time never becomes session midnight',()=>{
+ const input=fixture(),before=JSON.stringify(input),baseline=reviewedTargetBaseline(input).baseline;
+ assert.ok(baseline);assert.equal(baseline.quoteAt,input.artifact.quoteDate);assert.equal(baseline.inputHash,input.artifact.inputHash);
+ assert.equal(baseline.outputHash,input.artifact.outputHash);assert.equal(JSON.stringify(input),before);
+ for(const clocks of [{eventAt:''},{availableAt:''},{eventAt:'2026-10-21'},
+  {eventAt:'2026-10-21T06:01:00Z'},{availableAt:'2026-10-21T06:10:00.000001Z'}]){
+  const changed=fixture(),price=changed.original.find(e=>e.key==='current_price')!;Object.assign(price,clocks);
+  const result=reviewedTargetBaseline(changed);assert.equal(result.baseline,null);assert.ok(result.gaps.includes('valuation_quote_clock_missing_or_future'));
+ }
 });

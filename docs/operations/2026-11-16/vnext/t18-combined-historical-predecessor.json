@@ -1,0 +1,128 @@
+{
+  "schema": "stockinsider-t18-combined-historical-predecessor-v1",
+  "dayUtc": "2026-11-16",
+  "archiveDate": "2026-09-19",
+  "candidateRevision": "e784c7d0c7131280d3af650c33d61fb514e11844",
+  "harnessRevision": "005a94e2bd99ed4d3d8964220ef41efb7575bda6",
+  "stageAdapterSha256": "4df0574df54b03595a4436efdc5f2999d93813a7c0b60a833eb65f727f0e9319",
+  "reference": {
+    "engine": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "extensionReference": {
+      "nativeExtensionReference": true,
+      "bytes": 3253,
+      "sha256": "3055e7a166b4ebbc58fb684f2866dcb202734ab14f6779a51af6877e02df5b90",
+      "groupCounts": {
+        "relations": 2,
+        "routines": 13,
+        "types": 4
+      },
+      "versions": [
+        [
+          "pg_stat_statements",
+          "1.11"
+        ],
+        [
+          "uuid-ossp",
+          "1.1"
+        ]
+      ]
+    },
+    "aclReference": {
+      "nativeAclReference": true,
+      "bytes": 82898,
+      "sha256": "a59cd6b79b3194db98f536f5c028240a009192428d5edc5d3e1d3bbbf545d822"
+    },
+    "nativePublication": {
+      "locale": "C",
+      "stage": "publication-prefix",
+      "steps": 26,
+      "status": "committed",
+      "tailOrderedSha256": "edc46d48235d1542426c2ba729e24265d1722d757070a8ed5f97061ec843798e",
+      "predecessorSha256": "63677c0b92f9778f316dd5e7f68a8dd93f9d78fe2c013d7272417c1806ee33e4"
+    },
+    "cleaned": true
+  },
+  "authenticRestore": {
+    "authenticated": true,
+    "checks": {
+      "foreignKeys": 288,
+      "rlsTables": 193
+    },
+    "archivedResearchEvidence": {
+      "evaluation": {
+        "afterRows": 72,
+        "beforeRows": 72,
+        "rowContentIdentical": true,
+        "validatedV320OidIdentical": true
+      },
+      "diagnostics": {
+        "afterRows": 52,
+        "beforeRows": 52,
+        "rowContentIdentical": true,
+        "validatedV320OidIdentical": true
+      }
+    },
+    "publicSchemaCorrection": {
+      "namespaceUnchanged": true,
+      "publicUsageRemoved": true,
+      "recognized": true,
+      "reviewedRolesEquivalent": true,
+      "rollbackRestoredOriginal": true,
+      "scopedAclEqual": true,
+      "tested": true
+    },
+    "historicalComparison": {
+      "actualNamespaceUnchanged": true,
+      "afterValuationMismatch": [],
+      "beforeValuationMismatch": [
+        "tables"
+      ],
+      "historicalValuation": {
+        "rowCountsUnchanged": true,
+        "sourceSha256": "3341e1b34f0c94adad78950ebd7092af6233cdac79abb684ce739d3530314d52",
+        "status": "applied",
+        "verifiedChecks": 3
+      },
+      "namespace": {
+        "counts": {
+          "relations": 2,
+          "routines": 13,
+          "types": 4
+        },
+        "nativeExtensionProfileMatch": false,
+        "objectDifferences": {
+          "relations": 2,
+          "routines": 13,
+          "types": 0
+        }
+      },
+      "rollbackRestoredCatalog": true,
+      "scopeBeforeRollback": true
+    },
+    "trialPersisted": false,
+    "publicationPredecessor": {
+      "expectedSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+      "observedSha256": "f659690731faa2867c319824978777312b42314786655d4eb0efd9140e801528",
+      "relations": 989,
+      "roles": 30,
+      "routines": 301,
+      "types": 824
+    },
+    "publicationStop": "publication_tail_predecessor_namespace_mismatch",
+    "financialCommitted": true,
+    "publicationCommitted": false,
+    "nextRollback": "NOT_RUN",
+    "holdRetained": true
+  },
+  "host": {
+    "productionSignaturesMatched": true,
+    "minDiskBytes": 17311158272,
+    "minMemoryAvailableBytes": 4232331264,
+    "cleanup": {
+      "scratchRootsRemoved": 5,
+      "allStagingUnitsInactive": true,
+      "diskBytes": 26119237632,
+      "memoryAvailableBytes": 4577701888
+    }
+  }
+}
