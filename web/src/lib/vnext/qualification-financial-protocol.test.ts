@@ -8,23 +8,34 @@ import vm from 'node:vm';
 import {createRequire} from 'node:module';
 import {fileURLToPath} from 'node:url';
 import ts from 'typescript';
+import {inputHash} from './policy.ts';
 type Row=Record<string,unknown>;
 const nativeRequire=createRequire(import.meta.url),root=fileURLToPath(new URL('./',import.meta.url));
-function fixture(stripped:boolean,alreadyPublished=false,matchingQuote=true){
- const context=vm.createContext({});
+type FinancialChange='none'|'different_interval'|'new_valid'|'new_invalid'|'revalidated'|'mutated_fact';
+function fixture(stripped:boolean,alreadyPublished=false,matchingQuote=true,financialChange:FinancialChange='none'){
+ const context=vm.createContext({hashFact:inputHash});
  vm.runInContext(`
  const state={calls:[],proofs:[],valuationCalls:0,coverageCalls:0};
  const identity={principal:'SYNTHETIC_AUTHOR',role:'author'};
- const fact={fact_id:'SYNTHETIC_FACT',fact_key:'quarterly_revenue',value:100,unit:'TWD',period_end:'2026-06-30',recorded_at:'2026-10-22T01:00:00Z',
-  validation_status:'validated',estimate_kind:'reported',schema_valid:true,unit_valid:true,point_in_time_valid:true,consistency_valid:true};
- const evidence={id:fact.fact_id,key:fact.fact_key,value:fact.value,unit:fact.unit,period:fact.period_end,sourceTier:'official',kind:'fact',availableAt:'2026-10-22T01:00:00Z',
+ const fact={fact_id:'SYNTHETIC_FACT',stock_id:'SYNTHETIC_STOCK',fact_key:'quarterly_revenue',value:100,unit:'TWD',period_start:'2026-04-01',period_end:'2026-06-30',duration_kind:'quarterly',recorded_at:'2026-10-22T01:00:00.000001Z',
+  source_timestamp:'2026-10-22T00:00:00Z',collected_at:'2026-10-22T00:30:00Z',validation_recorded_at:'2026-10-22T01:05:00Z',
+  validation_status:'validated',estimate_kind:'reported',estimate_horizon:'reported_period',authority_tier:'official_filing',
+  schema_valid:true,unit_valid:true,point_in_time_valid:true,consistency_valid:true};
+ const change='${financialChange}';
+ const revision={...fact,fact_id:'SYNTHETIC_REVISION',recorded_at:'2026-10-23T06:00:00.000001Z',validation_recorded_at:'2026-10-23T06:00:00.000002Z',
+  period_start:change==='different_interval'?'2026-01-01':fact.period_start,
+  validation_status:change==='new_invalid'?'rejected':'validated'};
+ const currentFacts=change==='none'?[fact]:change==='revalidated'?[{...fact,validation_recorded_at:'2026-10-24T01:05:00Z'}]:
+  change==='mutated_fact'?[{...fact,period_start:'2026-01-01'}]:[revision,fact];
+ const evidence={id:fact.fact_id,key:fact.fact_key,value:fact.value,unit:fact.unit,period:fact.period_end,sourceTier:'official',kind:'fact',
+  contentHash:hashFact(fact),eventAt:fact.source_timestamp,availableAt:fact.validation_recorded_at,
   ${stripped?'':"financial:{schemaVersion:'vnext-financial-observation-v1',gaps:[]},"}};
  const quoteEvidence={id:'SYNTHETIC_QUOTE',key:'current_price',value:100,period:'2026-10-21',unit:'TWD/share',sourceTier:'official',kind:'fact',availableAt:'2026-10-21T06:00:00.123456Z'};
  const frozen={cutoff:'2026-10-23T06:00:00Z',evidence:[evidence,quoteEvidence],gaps:[],${stripped?'':"financialObservationInventory:{schemaVersion:'vnext-financial-observation-v1',count:1},"}};
  const binding={alreadyPublished:${alreadyPublished},inputHash:'${'a'.repeat(64)}',symbol:'2330',evidence:frozen};
- const client={rpc:(name)=>{
+ const client={rpc:(name,args)=>{
   state.calls.push(name);if(name==='vnext_provider_command_v1')return {data:{state:'reviewing',inputHash:binding.inputHash,authorArtifact:{},review:{}},error:null};
-  if(name==='read_financial_facts_for_stocks_as_of')return {limit:async()=>({data:[fact],error:null})};throw Error('unexpected_synthetic_rpc');
+  if(name==='read_financial_facts_for_stocks_as_of')return {limit:async()=>({data:args.p_cutoff===frozen.cutoff?[fact]:currentFacts,error:null})};throw Error('unexpected_synthetic_rpc');
  },from:(table)=>{
   state.calls.push(table);if(!['stocks','stock_instruments_v3','tw_trading_sessions_v3'].includes(table))throw Error('unexpected_synthetic_table');
   const data=table==='stocks'?{id:'SYNTHETIC_STOCK',symbol:'2330',sector:'SYNTHETIC'}:table==='stock_instruments_v3'?{exchange:'TWSE'}:{session_id:'2026-10-21',close_at:'2026-10-21T05:30:00Z'};
@@ -48,8 +59,12 @@ function fixture(stripped:boolean,alreadyPublished=false,matchingQuote=true){
    })
   },
   // Keep the valuation stub usable to isolate the independent SQL parity gate.
-  'reviewed-valuation':{reviewedValuation:({quote})=>{state.valuationCalls++;
-   state.quoteClock={observedAt:quote.observedAt??null,availableAt:quote.availableAt??null};return {usable:true,gaps:[]};}}
+  'reviewed-valuation':{reviewedValuation:({quote,current})=>{state.valuationCalls++;
+   state.quoteClock={observedAt:quote.observedAt??null,availableAt:quote.availableAt??null};
+   const currentFact=current.find(item=>item.id===evidence.id);
+   state.retainedOriginalFinancialEvidence=currentFact?.contentHash===evidence.contentHash;
+   state.financialEvidencePresent=!!currentFact;
+   return {usable:true,gaps:[]};}}
  };
  `,context);
  const cache=new Map<string,Row>(),allowed=new Set(['qualification.ts','financial-observation.ts','policy.ts','evidence-clock.ts','../candidate-price-history.ts']);
@@ -68,7 +83,7 @@ function fixture(stripped:boolean,alreadyPublished=false,matchingQuote=true){
    return load(path.relative(root,resolved));},isolated,isolated.exports);return isolated.exports;
  }
  const actual=load('qualification.ts').qualifyPublication as(actor:unknown,job:unknown)=>Promise<Row>;
- return {run:()=>actual(vm.runInContext('identity',context),'SYNTHETIC_JOB'),read:()=>JSON.parse(vm.runInContext('JSON.stringify(state)',context)) as {calls:string[];proofs:Row[];valuationCalls:number;coverageCalls:number;quoteClock?:{observedAt:string|null;availableAt:string|null}}};
+ return {run:()=>actual(vm.runInContext('identity',context),'SYNTHETIC_JOB'),read:()=>JSON.parse(vm.runInContext('JSON.stringify(state)',context)) as {calls:string[];proofs:Row[];valuationCalls:number;coverageCalls:number;retainedOriginalFinancialEvidence?:boolean;financialEvidencePresent?:boolean;quoteClock?:{observedAt:string|null;availableAt:string|null}}};
 }
 test('actual new qualification cannot clear server SQL parity gap by stripping metadata/inventory or caller gap arrays',async()=>{
  for(const stripped of [false,true]){
@@ -86,4 +101,17 @@ test('alreadyPublished historical response returns before any new qualification 
 test('an equal close for the same session cannot borrow another price observation clock',async()=>{
  const f=fixture(false,false,false);await f.run();
  assert.deepEqual(f.read().quoteClock,{observedAt:null,availableAt:null});
+});
+
+test('publication qualification keeps the exact reviewed period and does not revive a superseded or invalid revision',async()=>{
+ for(const change of ['different_interval','revalidated','new_valid','new_invalid','mutated_fact'] as const){
+  const f=fixture(false,false,true,change);
+  await f.run();
+  const state=f.read();
+  assert.equal(state.valuationCalls,1,change);
+  const retained=change==='different_interval'||change==='revalidated';
+  assert.equal(state.retainedOriginalFinancialEvidence,retained,change);
+  assert.equal(state.financialEvidencePresent,retained,change);
+  assert.equal(state.proofs[0].qualified,false,change);
+ }
 });
