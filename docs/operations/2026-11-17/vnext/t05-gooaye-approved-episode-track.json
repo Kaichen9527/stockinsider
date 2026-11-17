@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "stockinsider-t05-approved-episode-track-v1",
+  "parent": "d9c20718f32e5280b33fc9540bf0a2f2b2237f1a",
+  "liveObservation": {
+    "platform": "official YouTube player",
+    "channel": "@Gooaye",
+    "episode": "EP714",
+    "publicUrl": "https://www.youtube.com/watch?v=4eld9a5q5l0",
+    "displayedVideoDurationSeconds": 3047,
+    "captionTrackExposed": false,
+    "transcriptPanelExposed": false,
+    "chapterControlsExposed": false,
+    "spokenEvidenceVerified": false
+  },
+  "engineering": {
+    "nodeTestsPassed": 12,
+    "typeScriptSyntaxChecked": true,
+    "trackBindsAllowedFeedAndExactEpisode": true,
+    "sourceRightsRequiredBeforeFetching": true,
+    "catalogedUtf8DigestRequired": true,
+    "protectedArtifactUrlsPublished": false,
+    "authorizedEpisodeSuppliedTranscript": false,
+    "rawAudioCopied": false,
+    "asrModelInvoked": false,
+    "candidatePublished": false,
+    "validationScope": "synthetic timed track and repository guard regression, no actual transcript or candidate"
+  },
+  "remaining": "Creator-approved timed transcript or authorized captured audio with full-scope timing, candidate review and rendered acceptance."
+}

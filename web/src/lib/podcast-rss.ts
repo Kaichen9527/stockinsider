@@ -6,6 +6,7 @@ export type PodcastArtifactReference = {
   url: string;
   type: string;
   language: string | null;
+  utf8Sha256?: string;
 };
 
 export type PodcastNamespaceEpisode = {
@@ -180,6 +181,47 @@ function captionTranscript(body: string, isVtt: boolean): TimedPodcastSegment[] 
   return segments;
 }
 
+/** Register approved sidecar tracks without treating an index entry as speech.
+ * Keyed to both the allowlisted feed and its exact public episode link. */
+export function configuredPodcastTranscriptTracks(input: string | undefined, allowedFeeds: ReadonlySet<string>) {
+  const tracks = new Map<string, PodcastArtifactReference>();
+  if (!input) return tracks;
+  if (Buffer.byteLength(input, 'utf8') > 32_768) throw Error('podcast_transcript_registry_invalid');
+  let rows: unknown;
+  try { rows = JSON.parse(input); } catch { throw Error('podcast_transcript_registry_invalid'); }
+  if (!Array.isArray(rows) || rows.length > 40) throw Error('podcast_transcript_registry_invalid');
+  for (const row of rows) {
+    if (!row || typeof row !== 'object' || Array.isArray(row)
+      || Object.keys(row).sort().join('|') !== 'episodeUrl|feedUrl|language|type|url|utf8Sha256') {
+      throw Error('podcast_transcript_registry_invalid');
+    }
+    const { feedUrl, episodeUrl, url, language, type, utf8Sha256 } = row;
+    if (!allowedFeeds.has(feedUrl) || !registeredPodcastUrl(episodeUrl) || !registeredPodcastUrl(url, true)
+      || typeof type !== 'string' || type !== mediaType(type) || !timedTranscriptType(type)
+      || (language !== null && (typeof language !== 'string' || !/^[a-z]{2,3}(?:-[a-z0-9]{2,8}){0,3}$/iu.test(language)))
+      || typeof utf8Sha256 !== 'string' || !/^[a-f0-9]{64}$/u.test(utf8Sha256)) {
+      throw Error('podcast_transcript_registry_invalid');
+    }
+    const key = podcastTranscriptTrackKey(feedUrl, episodeUrl);
+    if (tracks.has(key)) throw Error('podcast_transcript_registry_duplicate_episode');
+    tracks.set(key, { url, type, language, utf8Sha256 });
+  }
+  return tracks;
+}
+
+function registeredPodcastUrl(value: unknown, forbidQuery = false): value is string {
+  if (typeof value !== 'string' || value.length > 1024) return false;
+  try {
+    const url = new URL(value);
+    return url.href === value && url.protocol === 'https:' && !url.username && !url.password
+      && !url.hash && (!forbidQuery || !url.search);
+  } catch { return false; }
+}
+
+export function podcastTranscriptTrackKey(feedUrl: string, episodeUrl: string) {
+  return feedUrl + '\n' + episodeUrl;
+}
+
 type TranscriptResult =
   | { status: 'ready'; reference: PodcastArtifactReference; artifactHash: string; segments: TimedPodcastSegment[] }
   | { status: 'rights_required' | 'timed_transcript_missing' | 'timed_transcript_unavailable' };
@@ -197,9 +239,11 @@ export async function selectTimedPublisherTranscript(
   for (const reference of candidates) {
     try {
       const body = await read(reference);
+      const artifactHash = createHash('sha256').update(body, 'utf8').digest('hex');
+      if (reference.utf8Sha256 !== undefined && artifactHash !== reference.utf8Sha256) continue;
       const segments = parsePublisherTranscript(reference.type, body);
       if (segments.length) {
-        return { status: 'ready', reference, segments, artifactHash: createHash('sha256').update(body).digest('hex') };
+        return { status: 'ready', reference, segments, artifactHash };
       }
     } catch {
       // A malformed or unavailable timed track must not suppress another

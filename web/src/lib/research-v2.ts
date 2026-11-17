@@ -12,7 +12,7 @@ import { bullTalkLicenseReadiness, parseLicensedBullTalkFeed } from './bulltalk-
 import { THREADS_KEYWORD_SEARCH_URL, assertThreadsKeywordSearchEndpoint } from './threads-api';
 import {
   derivePodcastLedgerSemantics, locatePodcastStockMentions, parsePodcastNamespaceFeed, podcastStockCodes,
-  selectTimedPublisherTranscript, type PodcastArtifactReference,
+  configuredPodcastTranscriptTracks, podcastTranscriptTrackKey, selectTimedPublisherTranscript, type PodcastArtifactReference,
 } from './podcast-rss';
 import { fetchTextWithRetry, sourceFetchFailureCode } from './source-fetch';
 import { assertThreadsPublicSearchReady, threadsTokenRegistryMetadata } from './threads-token';
@@ -5687,6 +5687,7 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
   const supabase = getSupabaseServerClient();
   const rssAllowlist = new Set(authorizedPodcastRssAllowlist());
   if (rssAllowlist.size === 0) throw new Error('podcast_rss_allowlist_missing');
+  const registeredTracks = configuredPodcastTranscriptTracks(process.env.PODCAST_AUTHORIZED_TRANSCRIPT_TRACKS, rssAllowlist);
   await ensureDefaultKolProfiles();
   const podcastRunId = await startConnectorRun('podcast-sync', 'podcast', { source: 'kol_profiles' });
   try {
@@ -5749,8 +5750,11 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
       let kolTranscriptsReady = 0;
       for (const ep of uniqueEpisodes) {
         const recordedContentRights = Boolean(ep.rssUrl && podcastContentAnalyzable(ep.rssUrl));
-        const publisherContent = await selectTimedPublisherTranscript(recordedContentRights, ep.transcripts ?? [],
-          reference => fetchPublisherPodcastArtifact(reference, ep.rssUrl));
+        const registeredTrack = ep.rssUrl ? registeredTracks.get(podcastTranscriptTrackKey(ep.rssUrl, ep.link)) : undefined;
+        const publisherContent = await selectTimedPublisherTranscript(
+          recordedContentRights, registeredTrack ? [registeredTrack] : ep.transcripts ?? [],
+          reference => fetchPublisherPodcastArtifact(reference, ep.rssUrl),
+        );
         const transcript = publisherContent.status === 'ready' ? publisherContent : null;
         const contentAnalyzable = transcript !== null;
         const locators = transcript ? locatePodcastStockMentions(transcript.segments, validSymbols) : [];
@@ -5783,6 +5787,7 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
               audio_copied: false,
               transcript_reference: transcript ? { type: transcript.reference.type, language: transcript.reference.language } : null,
               transcript_artifact_sha256: transcript?.artifactHash ?? null,
+              transcript_binding: transcript ? (registeredTrack ? 'registered_episode' : 'publisher_rss') : null,
               spoken_locator_version: transcript ? 'podcast-spoken-locator-v1' : null,
               spoken_stock_mentions: locators,
               chapter_index_available: Boolean(ep.chapters),

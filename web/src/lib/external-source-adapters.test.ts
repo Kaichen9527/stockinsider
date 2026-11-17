@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { parseLicensedBullTalkFeed, bullTalkLicenseReadiness } from './bulltalk-feed.ts';
 import {
-  derivePodcastLedgerSemantics, locatePodcastStockMentions, parsePodcastNamespaceFeed, parsePublisherChapters,
+  configuredPodcastTranscriptTracks, podcastTranscriptTrackKey, derivePodcastLedgerSemantics, locatePodcastStockMentions, parsePodcastNamespaceFeed, parsePublisherChapters,
   parsePublisherTranscript, selectTimedPublisherTranscript,
 } from './podcast-rss.ts';
 import {
@@ -176,4 +177,34 @@ test('the selector stops after three unique timed candidates and rejects a trunc
   assert.throws(() => parsePublisherTranscript('application/json',
     JSON.stringify(Array.from({ length: 5001 }, () => ({ startTime: 0, endTime: 1, body: '股票代號 2330' })))),
     /podcast_transcript_too_many_cues/u);
+});
+
+test('the registered auxiliary track is bound to one official episode and requires matching text and rights', async () => {
+  const feedUrl = 'https://creator.example/feed.xml';
+  const episodeUrl = 'https://creator.example/episode/1';
+  const speech = 'WEBVTT\n\n00:09.000 --> 00:12.000\n台股 2330 是本段討論的標的。';
+  const entry = { feedUrl, episodeUrl, url: 'https://creator.example/1.vtt', type: 'text/vtt', language: 'zh-TW',
+    utf8Sha256: createHash('sha256').update(speech).digest('hex') };
+  const allowedFeeds = new Set([feedUrl]);
+  const tracks = configuredPodcastTranscriptTracks(JSON.stringify([entry]), allowedFeeds);
+  const track = tracks.get(podcastTranscriptTrackKey(feedUrl, episodeUrl));
+  assert.ok(track);
+  assert.equal(tracks.get(podcastTranscriptTrackKey(feedUrl, 'https://creator.example/episode/2')), undefined);
+  assert.throws(() => configuredPodcastTranscriptTracks(JSON.stringify([entry, entry]), allowedFeeds), /duplicate_episode/u);
+  assert.throws(() => configuredPodcastTranscriptTracks('SYNTHETIC_PRIVATE_CONFIG', allowedFeeds), {message: 'podcast_transcript_registry_invalid'});
+  for (const bad of [{ ...entry, url: entry.url + '?token=fixture' }, { ...entry, type: 'text/plain' },
+    { ...entry, feedUrl: 'https://other.example/feed.xml' }, { ...entry, utf8Sha256: '' }]) {
+    assert.throws(() => configuredPodcastTranscriptTracks(JSON.stringify([bad]), allowedFeeds), /registry_invalid/u);
+  }
+  let fetched = 0;
+  const read = async () => { fetched++; return speech; };
+  assert.deepEqual(await selectTimedPublisherTranscript(false, [track], read), { status: 'rights_required' });
+  assert.equal(fetched, 0);
+  assert.deepEqual(await selectTimedPublisherTranscript(true, [track], async () => speech.replace('2330', '9999')),
+    { status: 'timed_transcript_unavailable' });
+  const selected = await selectTimedPublisherTranscript(true, [track], read);
+  assert.equal(selected.status, 'ready');
+  if (selected.status !== 'ready') throw Error('authorized track was not selected');
+  assert.deepEqual(locatePodcastStockMentions(selected.segments, new Set(['2330', '9999'])),
+    [{ symbol: '2330', startSeconds: 9, endSeconds: 12 }]);
 });
