@@ -96,10 +96,21 @@ test('actual body-fetch failure stores title-only status and never manufactures 
 });
 test('actual bounded collector retains minimum per-comment matches, no post body or full-coverage claim', async () => {
   const push = (author, text) => `<div class="push"><span class="push-tag">推</span><span class="push-userid">${author}</span><span class="push-content">: ${text}</span></div>`;
-  const { docs } = await collector(article(`友達 2409 股票 public synthetic body${push('a', '2409 股票未證實')}${push('b', '2409 股票有風險')}${push('c', '無關回覆')}`));
+  const { docs, signalRows } = await collector(article(`友達 2409 股票 public synthetic body${push('a', '2409 股票未證實')}${push('b', '2409 股票有風險')}${push('c', '無關回覆')}`));
   assert.equal(docs.length, 3); assert.equal(docs[0].contentText, '[情報] 2409'); assert.equal(docs[0].metadata.body_read_status, 'body_read_bounded');
-  for (const d of docs.slice(1)) { assert.equal(d.metadata.parent_document_url, parent); assert.equal(d.metadata.body_retained, false);
-    assert.equal(d.metadata.replies_read_completeness, 'partial'); assert.deepEqual(Array.from(d.metadata.matched_symbols), ['2409']); }
+  assert.equal(signalRows.length, 1);
+  assert.equal(docs[0].metadata.push_count, 3);
+  assert.equal(signalRows[0].push_count, 3);
+  for (const row of [docs[0], signalRows[0]]) {
+    assert.equal(Object.hasOwn(row.metadata, 'comment_evidence'), false);
+    assert.doesNotMatch(JSON.stringify(row.metadata), /股票未證實|股票有風險|無關回覆/u);
+  }
+  for (const [index, d] of docs.slice(1).entries()) {
+    assert.equal(d.metadata.parent_document_url, parent); assert.equal(d.metadata.body_retained, false);
+    assert.equal(d.metadata.replies_read_completeness, 'partial'); assert.deepEqual(Array.from(d.metadata.matched_symbols), ['2409']);
+    assert.equal(d.metadata.evidence_excerpt, ['2409 股票未證實', '2409 股票有風險'][index]);
+  }
+  assert.doesNotMatch(JSON.stringify(docs), /無關回覆/u);
 });
 test('actual fetched shell reports missing body instead of full text', async () => {
   const { docs } = await collector('<html><title>2409 title only</title></html>');
