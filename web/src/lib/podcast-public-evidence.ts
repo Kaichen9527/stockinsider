@@ -1,4 +1,5 @@
 import type { PodcastMentionView } from './types.ts';
+import { authorizedPodcastRssAllowlist, podcastContentAnalyzable } from './source-policy.ts';
 
 type Row = Record<string, unknown>;
 type Locator = { symbol: string; startSeconds: number; endSeconds: number };
@@ -33,6 +34,9 @@ function publicPodcastEvidence(row: Row) {
     || metadata.license_basis !== 'recorded_creator_content_rights'
     || metadata.content_source !== 'publisher_transcript'
     || metadata.content_analyzable !== true
+    || typeof metadata.rss_url !== 'string'
+    || !podcastContentAnalyzable(metadata.rss_url)
+    || !authorizedPodcastRssAllowlist().includes(metadata.rss_url)
     || metadata.weak_signal_only !== true
     || !Array.isArray(metadata.spoken_stock_mentions)
     || metadata.spoken_stock_mentions.length > 20
