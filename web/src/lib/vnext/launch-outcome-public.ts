@@ -49,7 +49,7 @@ function barrier(value:unknown,signalSession:string,observedThrough:string):Barr
 
 function horizons(value:unknown,signalSession:string,observedThrough:string,includeNet:boolean):Horizon[]{
   if(!Array.isArray(value)||value.length!==windows.length)return rejected();
-  return value.map((row,index)=>{
+  const projected=value.map((row,index)=>{
     const horizon=windows[index];
     if(!exact(row,'horizon state terminalSession grossReturnPct netReturnPct benchmarkReturnPct marketExcessPct netMarketExcessPct')||row.horizon!==horizon||
       !enumValue(row.state,states)||!futureDay(row.terminalSession,signalSession))return rejected();
@@ -64,9 +64,15 @@ function horizons(value:unknown,signalSession:string,observedThrough:string,incl
       grossReturnPct:row.grossReturnPct as number|null,netReturnPct:row.netReturnPct as number|null,
       benchmarkReturnPct:benchmarkReturnPct as number|null,marketExcessPct:marketExcessPct as number|null,netMarketExcessPct:netMarketExcessPct as number|null};
   });
+  for(let index=1;index<projected.length;index++){
+    const previous=projected[index-1],current=projected[index];
+    if((current.terminalSession!==null&&(previous.terminalSession===null||current.terminalSession<=previous.terminalSession))||
+      (current.state==='ready'&&previous.state!=='ready'))return rejected();
+  }
+  return projected;
 }
 
-function execution(value:unknown,signalSession:string,observedThrough:string):Execution{
+function execution(value:unknown,signalSession:string,observedThrough:string,researchHorizons:Horizon[]):Execution{
   if(!exact(value,'status nextSession reason grossBarrier20 netBarrier20 horizons')||
     !enumValue(value.status,executionStatuses)||!futureDay(value.nextSession,signalSession))return rejected();
   const {status,nextSession}=value;
@@ -76,6 +82,9 @@ function execution(value:unknown,signalSession:string,observedThrough:string):Ex
     const grossBarrier20=barrier(value.grossBarrier20,signalSession,observedThrough);
     const netBarrier20=barrier(value.netBarrier20,signalSession,observedThrough);
     const marks=horizons(value.horizons,signalSession,observedThrough,true);
+    // Both return paths use the same trading-session window and source bars.
+    if(marks.some((row,index)=>row.terminalSession!==researchHorizons[index].terminalSession||
+      row.state!==researchHorizons[index].state))return rejected();
     if([grossBarrier20.session,netBarrier20.session,...marks.map(row=>row.terminalSession)]
       .some(session=>session!==null&&session<nextSession))return rejected();
     return {status,nextSession,reason:null,grossBarrier20,netBarrier20,horizons:marks};
@@ -103,11 +112,11 @@ export function parsePublicLaunchOutcome(value:unknown,ref:Reference):PublicLaun
   if(value.state!=='ready'||!uuid(value.firstRankingRunId)||typeof value.asOf!=='string'||
     observed===null||observed<cutoff||!sha(value.outcomeRevision)||!exact(value.research,'barrier20 horizons'))return rejected();
   const observedThrough=taipeiSession(observed);
+  const research={barrier20:barrier(value.research.barrier20,ref.signalSession,observedThrough),
+    horizons:horizons(value.research.horizons,ref.signalSession,observedThrough,false)};
   return {...published,state:'ready',firstRankingRunId:value.firstRankingRunId,asOf:value.asOf,outcomeRevision:value.outcomeRevision,
-    costs:LAUNCH_SIMULATION_COSTS,
-    research:{barrier20:barrier(value.research.barrier20,ref.signalSession,observedThrough),
-      horizons:horizons(value.research.horizons,ref.signalSession,observedThrough,false)},
-    execution:execution(value.execution,ref.signalSession,observedThrough)};
+    costs:LAUNCH_SIMULATION_COSTS,research,
+    execution:execution(value.execution,ref.signalSession,observedThrough,research.horizons)};
 }
 
 type Reader={rpc:(name:string,args:{p_ranking_run_id:string;p_symbol:string})=>PromiseLike<{data:unknown;error:unknown}>};
