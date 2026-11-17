@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "stockinsider-t16-contabo-compiler-cache-cleanup-v1",
+  "scope": "Contabo staging generated compiler cache subtrees",
+  "expectedAllocatedBytes": 1317748736,
+  "verifiedStandalone": {
+    "nextVersion": "16.3.4",
+    "mountedReadOnly": true,
+    "privateNetworkNamespace": true,
+    "loopbackOnly": true,
+    "unprivilegedProcess": true,
+    "baseCacheNotMounted": true,
+    "homepageHttpStatus": 200,
+    "ownerLandingHttpStatus": 200,
+    "standaloneBundlesRetained": true
+  },
+  "referenceChecks": {
+    "runningProcessReferences": 0,
+    "systemdUnitReferences": 0,
+    "containerBindMountReferences": 0,
+    "workspaceSymlinkReferences": 0,
+    "allEntriesRegularFilesOrDirectories": true,
+    "noHardLinkedFiles": true
+  },
+  "excluded": [
+    {
+      "label": "stockinsider-stage-preparation-a8fbdfd/work/web/.next/cache",
+      "reason": "cache-free startup proof incomplete"
+    },
+    {
+      "label": "other staging and formal artifacts",
+      "reason": "outside generated-cache scope"
+    }
+  ],
+  "entries": [
+    {
+      "label": "stockinsider-stage-preparation-55f29e5/work/web/.next/cache/turbopack",
+      "buildIdSha256": "fa5e509f951e9ceda641e153cbdbe66d01709a90ebb187698e8ce077afa3ed8d",
+      "digest": "ab2f28d07681f0b1021da855e7d083bc796c98385fa34c81346f0c0d09ccd5f8",
+      "allocatedBytes": 188268544,
+      "regularFiles": 42
+    },
+    {
+      "label": "stockinsider-stage-preparation-55f29e5/work/web/.next/cache/webpack",
+      "buildIdSha256": "fa5e509f951e9ceda641e153cbdbe66d01709a90ebb187698e8ce077afa3ed8d",
+      "digest": "25092ebfd2c1879b928412ed1d4b2fbab9a98ed0a256fe959db794e8cd0dc567",
+      "allocatedBytes": 397991936,
+      "regularFiles": 24
+    },
+    {
+      "label": "stockinsider-stage-ci-407-build-23106ce/web/.next/cache/webpack",
+      "buildIdSha256": "886b180fb160e4dda833bf8dfe36c160e00a9949891968e195835ac9ed64889c",
+      "digest": "a9dbf0be6a46a526dc30a79948d79fb37d81d43e7aa1f65aa9771dee9b8e143e",
+      "allocatedBytes": 380424192,
+      "regularFiles": 12
+    },
+    {
+      "label": "stockinsider-stage-preparation-55f29e5/exact-12ed65b/web/.next/cache/webpack",
+      "buildIdSha256": "110c2c3d01fd5cbe442392f555eac880b1984d917d81e40245e415807e8e6e64",
+      "digest": "02b34e2ef4b10b2f5f93ce004be51051e9a1d2885c1c9aefecb7bf00753aa941",
+      "allocatedBytes": 351064064,
+      "regularFiles": 10
+    }
+  ]
+}
