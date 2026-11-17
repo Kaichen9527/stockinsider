@@ -11,6 +11,7 @@ import { execFileSync, spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { createRequire } from 'node:module';
 import { pathToFileURL } from 'node:url';
+import { launchRankingFixture } from '../web/src/lib/vnext/launch-ranking.test-fixture.ts';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('../web/node_modules/playwright');
@@ -34,6 +35,10 @@ for (const directory of [root, '/tmp']) {
 }
 const APP = 'https://127.0.0.1:34441', DISABLED = 'https://127.0.0.1:34444';
 const ISSUER = 'http://127.0.0.1:34443';
+const RANKING = 'http://127.0.0.1:34446';
+const READ_KEY = randomBytes(32).toString('hex');
+const publicRanking = launchRankingFixture();
+let publicReads = 0;
 const CLIENT = 'NONPRODUCTION-owner-client', SECRET = 'NONPRODUCTION-owner-secret';
 const OWNER = 'NONPRODUCTION_owner_subject_0001';
 const rights = 'nonproduction-owner-rights';
@@ -46,7 +51,7 @@ const sessionName = '__Host-stockinsider-owner-session';
 const transactionName = '__Host-stockinsider-owner-transaction';
 const receipts = [], failures = [], children = [], servers = [];
 const navigation = [];
-const sensitive = new Set([SECRET, OWNER, 'NONPRODUCTION-unused-access']);
+const sensitive = new Set([SECRET, OWNER, READ_KEY, 'NONPRODUCTION-unused-access']);
 let cleanupVerified = false, summary = null, primaryFailure = null;
 let activePage, failureLocation = null, failureCookiePresence = null;
 const cleanupFailures = [];
@@ -76,7 +81,10 @@ function syntheticEnvironment() {
   const env = { ...process.env };
   for (const key of Object.keys(env)) if (/^(SUPABASE_|NEXT_PUBLIC_SUPABASE_|OPPORTUNITY_V3_|STOCKINSIDER_|INTERNAL_|CRON_|OPENAI_|ANTHROPIC_|RESEARCH_)/u.test(key)) delete env[key];
   return { ...env, PATH: '/workspace/.tools/node22/node_modules/node/bin:' + env.PATH,
-    NEXT_TELEMETRY_DISABLED: '1', STOCKINSIDER_OWNER_OIDC_ENABLED: 'false' };
+    NEXT_TELEMETRY_DISABLED: '1', STOCKINSIDER_OWNER_OIDC_ENABLED: 'false',
+    NODE_TEST_CONTEXT: 'child-v8', LEGACY_RADAR_CORRECTNESS_PROJECTION: 'enabled',
+    STOCKINSIDER_VNEXT_ENABLED: 'true', STOCKINSIDER_LAUNCH_RANKING_ENABLED: 'true',
+    SUPABASE_URL: RANKING, SUPABASE_SERVICE_ROLE_KEY: READ_KEY };
 }
 async function startNext(port, preload) {
   const log = fs.openSync(path.join(out, `next-${port}.private.log`), 'wx', 0o600);
@@ -101,6 +109,44 @@ async function front(port, upstream, tls) {
   });
   server.listen(port, '127.0.0.1'); await once(server, 'listening'); servers.push(server);
 }
+async function startPublicRanking() {
+  const server = http.createServer(async (req, res) => {
+    if (req.method !== 'POST' || req.url !== '/rest/v1/rpc/vnext_launch_ranking_read_v1'
+      || req.headers.authorization !== 'Bearer ' + READ_KEY || req.headers.cookie) {
+      json(res, 403, { error: 'fixture_rank_projection_refused' }); return;
+    }
+    let body = '';
+    for await (const part of req) {
+      body += part;
+      if (Buffer.byteLength(body) > 256) { json(res, 413, { error: 'fixture_rank_request_bound' }); return; }
+    }
+    let args;
+    try { args = JSON.parse(body); } catch { json(res, 400, { error: 'fixture_rank_invalid_json' }); return; }
+    if (!args || Object.keys(args).length !== 2 || args.p_ranking_run_id !== null || args.p_symbol !== null) {
+      json(res, 400, { error: 'fixture_rank_query_refused' }); return;
+    }
+    publicReads++;
+    json(res, 200, publicRanking);
+  });
+  server.listen(34446, '127.0.0.1');
+  await once(server, 'listening');
+  servers.push(server);
+}
+
+async function checkPublicRanking(context) {
+  const response = await context.request.get(APP + '/api/launch-ranking');
+  assert.equal(response.status(), 200);
+  assert.equal(response.headers()['cache-control'], 'no-store');
+  const body = await response.text();
+  for (const value of [...sensitive, privateNote.statement, rights]) assert.ok(!body.includes(value));
+  const { ok, result } = JSON.parse(body);
+  assert.equal(ok, true);
+  assert.equal(result.availability, 'ready');
+  assert.equal(result.snapshot.rankingRunId, publicRanking.snapshot.rankingRunId);
+  assert.equal(result.snapshot.members.length, 1);
+  return result.snapshot;
+}
+
 async function checkApi(context, url, expected, options = {}) {
   const response = await context.request.get(url, options); assert.equal(response.status(), expected);
   noStore(response);
@@ -165,7 +211,7 @@ import { createOwnerNotesReader } from ${JSON.stringify(notesSource)};
 const originalFetch = globalThis.fetch;
 globalThis.fetch = (input, init) => {
   const u = new URL(typeof input === 'string' ? input : input instanceof URL ? input.href : input.url);
-  if (u.origin !== ${JSON.stringify(ISSUER)}) throw Error('nonproduction_outbound_refused');
+  if (!${JSON.stringify([ISSUER, RANKING])}.includes(u.origin)) throw Error('nonproduction_outbound_refused');
   return originalFetch(input, init);
 };
 const readNotes = createOwnerNotesReader(${JSON.stringify(JSON.stringify({ [OWNER]: rights }))}, async rightsSubject => {
@@ -178,6 +224,7 @@ installOwnerOidcRuntimeForTests(createOwnerOidcRuntime(
   readNotes,
 ));
 `, { mode: 0o600, flag: 'wx' });
+  await startPublicRanking();
   await startNext(34442, bootstrap); await startNext(34445);
   await front(34441, 34442, tls); await front(34444, 34445, tls);
   const executablePath = ['/usr/bin/chromium', '/usr/bin/google-chrome'].find(path => fs.existsSync(path));
@@ -194,12 +241,7 @@ installOwnerOidcRuntimeForTests(createOwnerOidcRuntime(
     });
     noStore(await page.goto(APP + '/private-research'), true); await state(page, 'signed_out');
     await checkApi(context, APP + '/api/owner/research', 401); record(viewport.name + ':unauthenticated-http');
-    // This isolated process has no configured data plane. The unchanged legacy
-    // reader reports its exact configuration error; compare it before/after
-    // owner login rather than inventing a usable public snapshot/backend.
-    const publicBefore = await context.request.get(APP + '/api/radar/daily');
-    assert.equal(publicBefore.status(), 500);
-    assert.deepEqual(await publicBefore.json(), { error: 'supabase_data_plane_invalid' });
+    const publicBefore = await checkPublicRanking(context);
     const csrf = await context.request.post(APP + '/api/owner/login', { headers: { Origin: 'https://attacker.invalid' }, maxRedirects: 0 });
     assert.equal(csrf.status(), 403); noStore(csrf); record(viewport.name + ':csrf-rejected');
     scenario = 'owner'; await page.getByTestId('owner-login-submit').click(); await state(page, 'authenticated');
@@ -223,6 +265,7 @@ installOwnerOidcRuntimeForTests(createOwnerOidcRuntime(
     try {
       const afterOwnerRead = await checkApi(anonymous, APP + '/api/owner/research', 401);
       assert.ok(!(await afterOwnerRead.text()).includes(privateNote.statement));
+      assert.deepEqual(await checkPublicRanking(anonymous), publicBefore);
     } finally {
       await anonymous.close();
     }
@@ -230,12 +273,10 @@ installOwnerOidcRuntimeForTests(createOwnerOidcRuntime(
     const html = await context.request.get(APP + '/'); assert.equal(html.status(), 200);
     const publicHtml = await html.text(); for (const value of [...sensitive, privateNote.statement]) assert.ok(!publicHtml.includes(value));
     assert.ok(publicHtml.includes('/private-research'));
+    assert.ok(publicHtml.includes('data-testid="vnext-ranked-member"'));
     record(viewport.name + ':public-html-excludes-owner');
-    const publicApi = await context.request.get(APP + '/api/radar/daily');
-    assert.equal(publicApi.status(), publicBefore.status());
-    assert.deepEqual(await publicApi.json(), { error: 'supabase_data_plane_invalid' });
-    const publicPayload = await publicApi.text(); for (const value of [...sensitive, privateNote.statement]) assert.ok(!publicPayload.includes(value));
-    record(viewport.name + ':public-api-unchanged-missing-backend-500-excludes-owner');
+    assert.deepEqual(await checkPublicRanking(context), publicBefore);
+    record(viewport.name + ':public-rank-200-snapshot-unchanged-after-owner-login');
     const logoutCsrf = await context.request.post(APP + '/api/owner/logout', { headers: { Origin: 'https://attacker.invalid' }, maxRedirects: 0 });
     assert.equal(logoutCsrf.status(), 403); noStore(logoutCsrf); record(viewport.name + ':logout-csrf-rejected');
     const loggedOut = page.waitForResponse(response => new URL(response.url()).pathname === '/api/owner/logout' && response.request().method() === 'POST');
@@ -289,12 +330,12 @@ installOwnerOidcRuntimeForTests(createOwnerOidcRuntime(
   assert.equal((await oneUse.request.get(successUrl, { headers: { Cookie: `${transactionName}=${tx.value}` }, maxRedirects: 0 })).status(), 401);
   assert.equal(counts.token, tokenCount); record('http:successful-callback-cannot-redeem-twice');
   await oneUse.close();
-  assert.ok(counts.jwks > 0 && counts.pkce > 0); assert.deepEqual(failures, []);
+  assert.ok(counts.jwks > 0 && counts.pkce > 0 && publicReads >= 6); assert.deepEqual(failures, []);
   const screenshots = fs.readdirSync(out).filter(name => name.endsWith('.png')).map(name => ({ name, sha256: createHash('sha256').update(fs.readFileSync(path.join(out, name))).digest('hex') }));
   summary = { schema: 'stockinsider-owner-oidc-local-browser-v1', buildSource: built,
     harnessCommit: current, runtimeWebTree: webTree, status: 'PASS', cases: receipts.length, receipts, counts, screenshots,
     identity: 'NONPRODUCTION_LOCAL_CONTROLLED_OIDC_ONLY', secureCookieOnTls: true, productionTlsVerificationDisabled: false,
-    actualGoogleOwnerOrPrivateContent: false, syntheticNoteRenderedAfterOidc: true, publicApiDataAcceptance: 'NOT_RUN_UNCONFIGURED_BACKEND_EXACT_500_UNCHANGED_BY_LOGIN',
+    actualGoogleOwnerOrPrivateContent: false, syntheticNoteRenderedAfterOidc: true, publicApiDataAcceptance: 'SYNTHETIC_ONE_MEMBER_FROZEN_RANK_200_BEFORE_AND_AFTER_OWNER_LOGIN', publicReads,
     databaseOrPaidProviderCalls: 0, productionActions: 0 };
 } catch (error) {
   primaryFailure = error;

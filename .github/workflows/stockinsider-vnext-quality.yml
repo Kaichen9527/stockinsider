@@ -903,7 +903,7 @@ jobs:
         run: |
           export OWNER_OIDC_BUILD_SOURCE_SHA="$(git rev-parse HEAD)"
           export OWNER_OIDC_SMOKE_OUTPUT=/tmp/stockinsider-vnext-ci/browser-owner
-          if node scripts/owner-oidc-browser-smoke.mjs > /tmp/stockinsider-vnext-ci/browser-owner.private.log 2>&1; then
+          if node --disable-warning=ExperimentalWarning --experimental-strip-types scripts/owner-oidc-browser-smoke.mjs > /tmp/stockinsider-vnext-ci/browser-owner.private.log 2>&1; then
             echo 'Controlled owner browser checks passed'
           else
             echo '::error title=Owner browser acceptance::See the bounded synthetic failure receipt'
