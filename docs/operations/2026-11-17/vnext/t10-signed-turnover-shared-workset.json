@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "stockinsider-t10-staging-signed-worksets-v1",
+  "postgres": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+  "worksetAllocatedBytes": {
+    "turnover": 41492480,
+    "disposition": 41574400
+  },
+  "totalAllocatedBytes": 83066880,
+  "hostFreeBefore": 18715328512,
+  "hostFreeWithBoth": 18632261632,
+  "marketDataAcquired": false,
+  "isolatedUnixSocketOnly": true,
+  "scope": "Fresh startup of two simultaneously allocated isolated PostgreSQL staging worksets after pinned SQL; no capture is claimed",
+  "scratchCleaned": true,
+  "minimumFreeBytesAtEachScheduledEntry": 18253611008,
+  "settings": {
+    "nextSession": "2026-11-18",
+    "taipeiTurnoverScheduledFor": "21:20:00",
+    "taipeiDispositionScheduledFor": "21:25:00",
+    "originalCutoff": "21:30:00",
+    "scheduledRunnerChecksAtEntry": true
+  },
+  "signedBundleSha256": "7dd1a8941749cfc2cba29f4791c481e1d1d6a5fdc6e508b4d4904381ac087caf",
+  "previousTurnoverRunnerSha256": "78ceca2b66af545c29da8f13a5756335ebba3006ce4cf894e010f0582589efb2"
+}
