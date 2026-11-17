@@ -47,6 +47,7 @@ test('v10 admits only isolated facts and never upgrades a partial document or it
     }
     const migration = fs.readFileSync(new URL('../migrations/20260911_05_financial_fact_isolation_v10.sql', import.meta.url), 'utf8');
     sql(migration); sql(migration);
+    sql(fs.readFileSync(new URL('../migrations/20261118_51_financial_claim_cursor_lock_order_v1.sql', import.meta.url), 'utf8'));
     sql(`INSERT INTO stocks VALUES('${stock}','2330')`);
     const makeCase = (label) => {
       const receipt = randomUUID(), job = randomUUID(), document = randomUUID();

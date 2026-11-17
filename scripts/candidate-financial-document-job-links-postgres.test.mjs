@@ -56,6 +56,7 @@ test('replayed financial receipts complete only exact validated current field wo
       INSERT INTO candidate_financial_document_receipts_v6(receipt_id,stock_id,document_sha256) VALUES('${receipt}','${stock}','${hash}');`);
     const migration = fs.readFileSync(new URL('../migrations/20260911_03_financial_document_job_links.sql', import.meta.url), 'utf8');
     sql(migration); sql(migration);
+    sql(fs.readFileSync(new URL('../migrations/20261118_51_financial_claim_cursor_lock_order_v1.sql', import.meta.url), 'utf8'));
     const originalReceipt = sql(`SELECT row_to_json(receipt)::text FROM candidate_financial_document_receipts_v6 receipt WHERE receipt_id='${receipt}'`);
     const job = (keys = ['quarterly_revenue'], extra = '') => {
       const id = randomUUID();

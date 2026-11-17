@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "stockinsider-t03-gmail-authorization-status-v1",
+  "sourceCommit": "328efdc186c2b423268ab38acd03dd99e716a016",
+  "baseCommit": "177f949772d61db6b8e1d0ea97be4c63a2213043",
+  "sourceSha256": {
+    "web/src/lib/vnext/investanchors-gmail.ts": "22a04da6aa1ebc270ec48250ddbb28f9b076194d44ac52e6a74bfc02cc2b6d41",
+    "web/src/lib/vnext/investanchors-gmail.test.ts": "447c8b96843d29924f05d78f4e3d77e79b1388a9e91e2de15fe3a12751b0c4c8",
+    "web/src/lib/vnext/investanchors-notice-receiver.ts": "5234a8c7c9797286911203f28ef57614f22916e21e4f87eb3f5aa6834a147a2b",
+    "web/src/lib/vnext/investanchors-notice-receiver.test.ts": "7e369097d5ae0aa77b94ee24a9de195bc7bd4d70ae377c9bdd2aadea1aae7b29",
+    "web/src/lib/vnext/investanchors-notice-progress.ts": "e45cfdd777d4360e845a46f4902701f6b99500058ae26285140c0ecac95d4dde",
+    "scripts/vnext-launch-research-policy-postgres.test.mjs": "f9bc9ff0ac5e20c1fb2c926e575c05551a13a3b1521458b69c7382c2077ec9dc",
+    "deployment/vps/launch-radar-schedule/README.md": "65a8266de27f34df22fb164cd58a6e26e30e9165eaf48a3ba8c1eeea996d4f22"
+  },
+  "runtime": {
+    "environment": "Contabo isolated staging",
+    "node": "22.14.0",
+    "next": "16.3.4",
+    "nativePostgres": "17.11",
+    "actualCodexCloudModelVerifiedForThisRun": false
+  },
+  "checks": {
+    "baselineTransportRed": {
+      "counts": {
+        "tests": 7,
+        "pass": 5,
+        "fail": 2,
+        "skipped": 0
+      },
+      "sha256": "4fee476bfcbf6bb501dba5338d4175cc2f5300bee481190aa322cc9b62301165",
+      "authenticationOutcomesConflated": true
+    },
+    "sourceAndSchedule": {
+      "counts": {
+        "tests": 50,
+        "pass": 50,
+        "fail": 0,
+        "skipped": 0
+      },
+      "sha256": "dee32a82aba1162f23d057dcd392f7dc7d5daf557a5d75795efc9bc8d4c1a8cc"
+    },
+    "nativeWriterAndProgress": {
+      "counts": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "skipped": 0
+      },
+      "sha256": "4597b65cca61306426ce0cba60ae134f566d3a3ef19f2f71c3c939a88899e6da",
+      "observation": {
+        "databaseLeaseUsed": true,
+        "sameDayCheckpointAfterResume": true,
+        "completedReadsCharged": 3,
+        "durablePrefixBeforeRetry": 1,
+        "remainingAfterInterruption": 2,
+        "repeatedVerifiedReads": 0,
+        "articleAuthority": false,
+        "syntheticProvider": true,
+        "blockedReason": "background_gmail_access_rejected",
+        "checkpointDayWhileBlocked": null
+      },
+      "containerAndOwnedSocketRemoved": true
+    },
+    "targetedLint": {
+      "passed": true,
+      "warnings": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "typecheck": {
+      "passed": true,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    "build": {
+      "passed": true,
+      "staticPages": 92,
+      "sha256": "8978b485fccec112580b8a0ae7c2bb275e9c0dfcc5c09bcc55a6cae6a890cebb"
+    }
+  },
+  "diskAndMemory": {
+    "sampleCount": 137,
+    "samplePeriodSeconds": 2,
+    "minimumDiskBytes": 17055150080,
+    "minimumMemAvailableKiB": 2928524,
+    "cleanup": {
+      "generatedDirsRemoved": [
+        "node_modules",
+        ".next"
+      ],
+      "freeBeforeBytes": 17055064064,
+      "freeAfterBytes": 18340397056,
+      "netFreeIncreaseBytes": 1285332992
+    }
+  },
+  "mailboxObservation": {
+    "source": "existing interactive read-only Gmail connector",
+    "taipeiDay": "2026-11-18",
+    "matchingNotifications": 0,
+    "nextPage": false,
+    "privateContentPublished": false
+  },
+  "realUnattendedGmailGrantVerified": false,
+  "realMemberArticleAutomationVerified": false,
+  "productionDeployedByThisWork": false
+}

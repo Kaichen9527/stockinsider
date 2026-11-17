@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { evidenceInstant } from './vnext/evidence-clock.ts';
 
 export type BullTalkLicensedRow = {
   title: string;
@@ -93,6 +94,37 @@ export function parseLicensedBullTalkFeed(contentType: string, body: string): Bu
     throw new Error('bulltalk_feed_content_type_not_licensed');
   }
   return rows.slice(0, 500).map(normalizeRow).filter((value): value is BullTalkLicensedRow => value !== null);
+}
+
+/** The legacy licensed feed supplies aggregate ranks and engagement metadata. */
+export function projectLicensedBullTalkRanking(row: BullTalkLicensedRow) {
+  return {
+    platform: 'bulltalk',
+    documentUrl: row.sourceUrl,
+    title: row.title,
+    summary: row.title,
+    contentText: '',
+    contentSemantics: 'metadata_only' as const,
+    publishedAt: evidenceInstant(row.publishedAt) === null ? null : row.publishedAt,
+    symbols: row.symbols,
+    sentimentLabel: row.stance,
+    confidence: 0.7,
+    metadata: {
+      connector: 'authorized_feed',
+      retention_mode: 'metadata_link_only',
+      candidate_discovery_eligible: false,
+      mention_count: row.mentionCount,
+      comment_count: row.commentCount,
+      engagement_count: row.engagementCount,
+      rank: row.rank,
+    },
+  };
+}
+
+export function isBullTalkRankingObservation(row: { platform?: unknown; metadata?: unknown }) {
+  const { metadata } = row;
+  return row.platform === 'bulltalk' && metadata !== null && typeof metadata === 'object'
+    && Object.hasOwn(metadata, 'connector') && 'connector' in metadata && metadata.connector === 'authorized_feed';
 }
 
 export function bullTalkLicenseReadiness(environment: Record<string, string | undefined> = process.env): {

@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "stockinsider-t07-financial-cursor-lock-order-v1",
+  "sourceCommit": "3d87588ac866bffbe01f293e1f7ed33f4c8de575",
+  "baseCommit": "177f949772d61db6b8e1d0ea97be4c63a2213043",
+  "testedProgramSha256": {
+    "migrations/20261118_51_financial_claim_cursor_lock_order_v1.sql": "d1bda6e7f4f1e695fbc87354cc0a49ce472f86cc0f1be8e077265c38d2ae782c",
+    "scripts/candidate-financial-work-fairness-postgres.test.mjs": "a1fb946bd718363dcbad4ab9dc87fad6e41685223e81b04758970ad00e57daef",
+    "scripts/candidate-financial-document-job-links-postgres.test.mjs": "10fcfbce5b0135315e50b0d72361361952f23c4915374ab5e5984ac8806fc1ed",
+    "scripts/candidate-financial-partial-admission-postgres.test.mjs": "e27d4e164afc3a340322a58be0096eb8bb003122b73d3993ca8d0660869d7473",
+    ".github/workflows/source-led-opportunity-v3.yml": "78467d4cae50b3549e1ba747e11eb3dca083828d299c9997587bdf7db1f7ca6f"
+  },
+  "historicalDiagnosticFailure": "https://github.com/Kaichen9527/stockinsider/actions/runs/44170834198/job/134349153555",
+  "migration": {
+    "predecessorBodySha256": "b5121d364e7523879e6eda8570a430943616165953e75743b714dec34892e8ec",
+    "successorBodySha256": "32e3b3203d57a4c9c7bcf46d9f614aebd15411f3ba03737389c6e488ec3f0bce",
+    "onlyBodyDelta": "ORDER BY claimed_jobs.stock_id before common cursor upsert",
+    "rejectsWrongPredecessor": true,
+    "reappliesSafely": true,
+    "ownerSecurityDefinerSearchPathAndAclPreservedInFixture": true
+  },
+  "runtime": {
+    "environment": "Contabo isolated staging",
+    "postgres": "17.11",
+    "node": "22.14.0",
+    "next": "16.3.4",
+    "network": "private",
+    "productionSocketInaccessible": true,
+    "actualCodexCloudModelVerifiedForThisRun": false
+  },
+  "nativeValidation": {
+    "exactUnpatchedBaseline": {
+      "counts": {
+        "tests": 1,
+        "pass": 0,
+        "fail": 1,
+        "skipped": 0
+      },
+      "sha256": "4ae5f31ce09d63b3b061c01ec74cfaefd706fa4877af5305f072c8dfaad27fad"
+    },
+    "baselineSortedClaims": 0,
+    "suite": {
+      "counts": {
+        "tests": 3,
+        "pass": 3,
+        "fail": 0,
+        "skipped": 0
+      },
+      "sha256": "c3ee24df9069bdc00bea8cba62315cac6e6c7d96309dd7d89aa0b8932b497f03"
+    },
+    "additionalConcurrencyReplays": [
+      {
+        "counts": {
+          "tests": 1,
+          "pass": 1,
+          "fail": 0,
+          "skipped": 0
+        },
+        "sha256": "6b24808d9fdfa4817d83bb0d641e4a199d85c59022649e3c25d66887be0d8866"
+      },
+      {
+        "counts": {
+          "tests": 1,
+          "pass": 1,
+          "fail": 0,
+          "skipped": 0
+        },
+        "sha256": "699ec107efae1689c7304c6858b70523a79b9657e4ee071bb3b8e06fcee23d2b"
+      },
+      {
+        "counts": {
+          "tests": 1,
+          "pass": 1,
+          "fail": 0,
+          "skipped": 0
+        },
+        "sha256": "2b4b3cf2ea93637939978d7a1a41f6a617614d523c4f78bca93105c3c7c41d98"
+      }
+    ],
+    "concurrentServiceRoleClaims": 4,
+    "workersTouchingMultipleKeysInStableOrder": 4,
+    "smallBatchRemainsFair": true,
+    "activeLeasesPreserved": true,
+    "pendingDirectAndLinkedReceiptsExcluded": true,
+    "jobsRecoveredAcrossWaveAndRetry": 144,
+    "duplicateLeases": 0,
+    "nativeRuntimeDirectoriesRemoved": true,
+    "dataScope": "isolated synthetic issuer jobs and receipts"
+  },
+  "checks": {
+    "lint": {
+      "passed": true,
+      "warnings": 37,
+      "sha256": "267d523eb84bb281bc4afb721e02cbf5878f3a91a5452a2ab9eef778097b777c"
+    },
+    "typecheck": {
+      "passed": true,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    "build": {
+      "passed": true,
+      "staticPages": 92,
+      "sha256": "4e09a1f9dd4c0f0b81b66347044260eb1d7e1edb32185113942be6e48a84bed0"
+    }
+  },
+  "resources": {
+    "samplePeriodSeconds": 2,
+    "minimumDiskBytes": 16958484480,
+    "minimumMemAvailableKiB": 2820592,
+    "generatedCleanup": {
+      "generatedDirsRemoved": [
+        "node_modules",
+        ".next"
+      ],
+      "freeBeforeBytes": 16958476288,
+      "freeAfterBytes": 18243989504,
+      "netFreeIncreaseBytes": 1285513216
+    }
+  },
+  "productionMigrationApplied": false,
+  "releaseReviewAccepted": false
+}

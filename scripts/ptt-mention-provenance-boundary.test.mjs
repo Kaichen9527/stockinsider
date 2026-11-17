@@ -5,6 +5,7 @@ import { createRequire } from 'node:module';
 import vm from 'node:vm';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
+import { isBullTalkRankingObservation, projectLicensedBullTalkRanking } from '../web/src/lib/bulltalk-feed.ts';
 import { buildPttMentionProvenance } from '../web/src/lib/ptt-mention-provenance.ts';
 import { parsePttArticleHtml, pttBodyProvenance, pttPublicationKnownAt, matchPttFinancialSummarySymbols } from '../web/src/lib/ptt-article-parser.ts';
 const require = createRequire(import.meta.url), ts = require('../web/node_modules/typescript');
@@ -28,8 +29,10 @@ const header = '<div class="article-metaline"><span class="article-meta-tag">作
 const article = body => `<div id="main-content">${header}${body}</div><div id="article-polling"></div>`;
 const hash = value => createHash('sha256').update(value).digest('hex');
 function upsertHarness() {
-  const writes = [];
-  const client = { from(table) { return {
+  const writes = [], tables = [];
+  const client = { from(table) {
+    tables.push(table);
+    return {
     upsert: async rows => { writes.push({ table, rows }); return { error: null }; },
     select() { return { eq() { return { in: async () => ({ data: [], error: null }) }; },
       in: async () => ({ data: [{ id: 'stock-2409', symbol: '2409' }, { id: 'stock-2383', symbol: '2383' }], error: null }) }; },
@@ -41,8 +44,8 @@ function upsertHarness() {
     truncateSourceContent: text => ({ contentText: text, originalChars: text.length, truncated: false }),
     SOURCE_RAW_CONTENT_MAX_CHARS: 4000, classifySourceStance: () => 'neutral', canonicalContentHash: hash,
     canonicalPublisherKey: x => `${x.platform}:${x.author}`, compactText, unique: x => [...new Set(x)],
-    nowIso: () => '2026-10-11T16:45:00Z', buildPttMentionProvenance });
-  return { fn, writes };
+    nowIso: () => '2026-10-11T16:45:00Z', buildPttMentionProvenance, isBullTalkRankingObservation });
+  return { fn, writes, tables };
 }
 function doc(platform = 'ptt', author = 'reader', index = 1) { return { platform, sourceEntityId: 'entity', documentUrl: `${parent}#push-${index}`,
   publishedAt,
@@ -66,6 +69,22 @@ test('actual upsert boundary retains stock-local reply provenance for two author
 test('actual mention boundary leaves non-PTT provenance unchanged', async () => {
   const { fn, writes } = upsertHarness(); await fn([doc('threads')]);
   assert.ok(writes.find(x => x.table === 'candidate_source_mentions').rows.every(row => !('ptt' in row.provenance)));
+});
+test('actual upsert retains licensed BullTalk ranks without stock lookups or candidate mention writes', async () => {
+  const { fn, writes, tables } = upsertHarness();
+  const ranking = projectLicensedBullTalkRanking({
+    title: '2409 目標價上調', sourceUrl: 'https://licensed.example/rank/1', symbols: ['2409'],
+    publishedAt: null, stance: 'neutral', mentionCount: 3, commentCount: 2, engagementCount: 5, rank: 1,
+  });
+  assert.equal(await fn([{ ...ranking, sourceEntityId: 'synthetic-bulltalk' }]), 1);
+  assert.deepEqual(tables, ['source_raw_documents', 'source_raw_documents']);
+  assert.deepEqual(writes.map(write => write.table), ['source_raw_documents']);
+  const [stored] = writes[0].rows;
+  assert.equal(stored.content_text, '');
+  assert.equal(stored.content_semantics, 'metadata_only');
+  assert.equal(stored.published_at, null);
+  assert.equal(stored.metadata.candidate_discovery_eligible, false);
+  assert.equal(stored.metadata.mention_count, 3);
 });
 test('actual upsert retains metadata but skips PTT mentions when publication header is missing or conflicting', async () => {
   for (const invalid of [{ publishedAt: null }, { metadata: { ...doc().metadata, ptt_publication_valid: false } }]) {
