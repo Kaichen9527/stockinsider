@@ -15,14 +15,15 @@
       "recorded spoken interval"
     ],
     "legacyTranscriptTextAndExtractedThesisExcluded": true,
-    "unsignedOrInvalidLocatorExcluded": true,
     "unitTests": {
       "tests": 3,
       "pass": 3,
       "fail": 0,
       "skipped": 0
     },
-    "unitTapSha256": "5f629e2c092646d8da24c421e69f1d50e2099e6c7110a0bbfa861ccdb13ab87a"
+    "unitTapSha256": "5f629e2c092646d8da24c421e69f1d50e2099e6c7110a0bbfa861ccdb13ab87a",
+    "cryptographicSourceSignatureVerified": false,
+    "missingCreatorProvenanceOrInvalidLocatorExcluded": true
   },
   "database": {
     "observed": {
