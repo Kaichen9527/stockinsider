@@ -164,6 +164,25 @@ test('ordered overlapping cues retain first per-stock ranges without cross-cue m
   ]);
 });
 
+test('timed stock codes exclude numeric values, derivative labels and embedded English markers', () => {
+  const segments = parsePublisherTranscript('text/vtt', [
+    'WEBVTT',
+    '00:00.000 --> 00:04.000\n台股 2026 年，TWSE 2612 點，股票代號 2330.5 元，metaticker 2308',
+    '00:04.000 --> 00:07.000\n期貨標的 2612，非股票代號 2308，TWSE 2,330 點',
+    '00:07.000 --> 00:12.000\n股票代號：２４５４，談 TWSE 2308 和台股 2330 股價',
+    '00:13.000 --> 00:16.000\nticker 2330.TW，台股 9999',
+  ].join('\n\n'));
+  const known = new Set(['2026', '2612', '2308', '2330', '2454']);
+  assert.deepEqual(locatePodcastStockMentions(segments, known), [
+    { symbol: '2454', startSeconds: 7, endSeconds: 12 },
+    { symbol: '2308', startSeconds: 7, endSeconds: 12 },
+    { symbol: '2330', startSeconds: 7, endSeconds: 12 },
+  ]);
+  assert.deepEqual(locatePodcastStockMentions([segments[3]], known), [
+    { symbol: '2330', startSeconds: 13, endSeconds: 16 },
+  ]);
+});
+
 test('the selector stops after three unique timed candidates and rejects a truncated cue inventory', async () => {
   const references = Array.from({ length: 5 }, (_, index) =>
     ({ url: 'https://creator.example/transcript/' + index, type: 'text/vtt', language: 'zh' }));

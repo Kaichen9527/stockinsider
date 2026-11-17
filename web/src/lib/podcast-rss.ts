@@ -254,8 +254,21 @@ export async function selectTimedPublisherTranscript(
 }
 
 export function podcastStockCodes(text: string, validSymbols: ReadonlySet<string>): string[] {
-  return [...new Set(Array.from(text.matchAll(/(?:台股|股票(?:代號)?|股號|標的|ticker|TWSE|TPEX)\s*[:：#]?\s*([1-9]\d{3})\b/giu))
-    .map(match => match[1]).filter(symbol => validSymbols.has(symbol)))];
+  const normalized = text.normalize('NFKC');
+  const stockCode = /(?<![a-z0-9_])(?:台股|股票(?:代號|代碼)?|股號|標的|ticker|TWSE|TPEX)\s*[:#]?\s*([1-9]\d{3})(?![a-z0-9_])/giu;
+  const otherInstrument = /(?:指數|期貨|期指|選擇權|不是|並非|非)\s*$/u;
+  const numericValue = /^\s*(?:[.,]\d|年|點|元|圓|倍|%|張|股(?!價))/u;
+  const symbols = new Set<string>();
+  for (const match of normalized.matchAll(stockCode)) {
+    const symbol = match[1];
+    if (!validSymbols.has(symbol)) continue;
+    const start = match.index;
+    const end = start + match[0].length;
+    if (otherInstrument.test(normalized.slice(Math.max(0, start - 20), start))
+      || numericValue.test(normalized.slice(end))) continue;
+    symbols.add(symbol);
+  }
+  return [...symbols];
 }
 
 export function locatePodcastStockMentions(segments: readonly TimedPodcastSegment[], validSymbols: ReadonlySet<string>) {
