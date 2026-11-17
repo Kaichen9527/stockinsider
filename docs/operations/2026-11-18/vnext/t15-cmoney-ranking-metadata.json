@@ -63,6 +63,18 @@
       "passed": true,
       "staticPages": 92,
       "sha256": "3b62ee5a505cb6e45e5c635032add83bfdfc0f06f426ab4d710e6e6f30c72137"
+    },
+    "actualPttAndBullTalkCollectorBoundary": {
+      "counts": {
+        "tests": 32,
+        "pass": 32,
+        "fail": 0,
+        "skipped": 0
+      },
+      "sha256": "8adb44f0822b7fca6c8b92781f885bf374a772a2f15ccf41b7614a079c285e0e",
+      "hostedRedDiagnostic": "https://github.com/Kaichen9527/stockinsider/actions/runs/44170299832/job/134347288303",
+      "redCause": "actual-function test harness did not bind the newly imported helper",
+      "greenScope": "Contabo staging, identical hosted test command with synthetic database"
     }
   },
   "hostBounds": {
@@ -91,5 +103,14 @@
     "nativePermissionGrantExecuted": false,
     "historicalProfileModified": false,
     "productionDeploymentPerformed": false
+  },
+  "generatedWorkspaceCleanup": {
+    "generatedDirsRemoved": [
+      "node_modules",
+      ".next"
+    ],
+    "freeBeforeBytes": 17152716800,
+    "freeAfterBytes": 18437943296,
+    "netFreeIncreaseBytes": 1285226496
   }
 }
