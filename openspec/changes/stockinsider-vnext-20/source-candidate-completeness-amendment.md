@@ -37,3 +37,9 @@ The existing 20:55 research dispatch captures issuer industries for the current 
 The private append-only history retains the source date, observation and database clocks, and the two source hashes. Published candidate metadata resolves this history only up to the saved cutoff. It continues to accept an existing valid sector authority when that authority was known later, or when no capture is available. This path leaves the original scoring taxonomy and schedule intact.
 
 Issuer classifications are available in the official datasets. [TWSE issuer information](https://data.gov.tw/dataset/18419) · [TPEx issuer information](https://data.gov.tw/dataset/25036)
+
+### Candidate source-disclosure journal
+
+A completed source extraction can retain a candidate clue under the same operator, lease and existing writer. The database requires an explicit disclosure clearance matching the source, extraction scope, rights subject and license basis. Clearance covers only the source label, resolved common-share code and original event clock. Initially the producer understands the existing official-original and PTT metadata scopes. Analysis rights alone do not yield a public clue. The source and share must be resolved at the original event time. The trigger reuses the same charged extraction, preserves original time on replay and excludes prior extractions when a clearance is added later.
+
+The private journal retains an immutable extraction reference, clearance reference and observation clock for authorization and withdrawal checks. Public catalog integration still requires a read-only projection bound to the saved cutoff, current disclosure status and withdrawal. Scope and membership gaps remain explicit. The service and browser roles have no direct journal-table access. This migration seeds no actual permission and makes no claim about live source coverage or ranking.

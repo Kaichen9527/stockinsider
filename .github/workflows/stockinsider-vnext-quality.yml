@@ -30,6 +30,7 @@ on:
       - 'migrations/20261117_46_vnext_auth_profile_trigger_acl_v1.sql'
       - 'migrations/20261117_47_vnext_source_guard_trigger_acl_v1.sql'
       - 'migrations/20261117_48_vnext_podcast_private_acl_v1.sql'
+      - 'migrations/20261117_49_vnext_launch_candidate_clue_journal_v1.sql'
       - 'deployment/vps/launch-radar-schedule/**'
       - 'scripts/run-launch-scheduled-cycle*.mjs'
       - 'openspec/changes/stockinsider-vnext-20/**'
@@ -544,6 +545,33 @@ jobs:
           raw=/tmp/stockinsider-vnext-ci/internal-candidate-plan-acl.tap.private.log
           if node --experimental-strip-types --test scripts/vnext-internal-candidate-plan-acl-postgres.test.mjs > "$raw" 2>&1; then test_status=0; else test_status=$?; fi
           python3 scripts/vnext-safe-tap.py "$raw" /tmp/stockinsider-vnext-ci/internal-candidate-plan-acl.tap
+          test "$test_status" = 0
+      - name: Candidate clue publication clearance through the existing source writer
+        env:
+          TZ: UTC
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-44
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-44
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/candidate-clue-journal
+        run: |
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT" "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --rm --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 \
+            --network none --memory=1g --memory-swap=1g --cpus=1 \
+            --tmpfs /var/lib/postgresql/data:rw,size=384m,nosuid,nodev \
+            -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker \
+            -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' \
+            --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" \
+            postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for attempt in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          raw=/tmp/stockinsider-vnext-ci/candidate-clue-journal.tap.private.log
+          test_status=0
+          node --experimental-strip-types --test scripts/vnext-launch-candidate-clue-postgres.test.mjs > "$raw" 2>&1 || test_status=$?
+          python3 scripts/vnext-safe-tap.py "$raw" /tmp/stockinsider-vnext-ci/candidate-clue-journal.tap
           test "$test_status" = 0
       - name: Fresh routine-screen actual HTTP admission and withdrawal (synthetic originals)
         env:

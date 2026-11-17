@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "stockinsider-t08-candidate-clue-publication-clearance-v1",
+  "recordedAt": "2026-11-17T17:37:22Z",
+  "candidateParent": "5ab58efe49c7654e56e3fbcdf3442c9aecd0b577",
+  "scope": "Contabo disposable PostgreSQL 17.11, full routine source predecessor and synthetic source documents and authority",
+  "nativeTests": {
+    "tests": 6,
+    "pass": 6,
+    "fail": 0,
+    "skipped": 0
+  },
+  "nativeTapSha256": "2172ce483798ce73da1c84b2213781f7e188966b8e4c601c7ddcaddc5228cc52",
+  "writerReuse": {
+    "mainEntry": "vnext_analysis_command_v1 source-reserve and source-complete",
+    "exactRightsBindingRequired": true,
+    "rosterUnresolvedAndEtfExcluded": true,
+    "unresolvedPttOriginalExcluded": true,
+    "replayAndWithdrawalBound": true,
+    "directRoleDenials": 6,
+    "historicClueKeptPrivately": true,
+    "exposesRawContentsOrPrivateIdentifiers": false,
+    "publicCatalogConnected": false,
+    "realSourceProcessed": false
+  },
+  "inputsSha256": {
+    "migrations/20261117_49_vnext_launch_candidate_clue_journal_v1.sql": "34a1387271a9e03789bb35f0c82bb23f24f7512672b969df5ffe8433d2841dd1",
+    "scripts/vnext-launch-candidate-clue-postgres.test.mjs": "1699f2ff1ee6d6758fbecc4d52cccf710f2d19da4821e5dc53729e7507236ee6",
+    ".github/workflows/stockinsider-vnext-quality.yml": "9322546e1225432faaae9dc178ad4a7bed4f4c43482bf3422a119a1efcb53f36",
+    "openspec/changes/stockinsider-vnext-20/source-candidate-completeness-amendment.md": "1c89c86ca6f44d7bf999927a848cd01c12421f8a701f94d5eb966e3684aaa47c"
+  },
+  "noActualDisclosureAuthorizationAdded": true,
+  "formalServiceReleaseAndTimerSignaturesMatched": true,
+  "ephemeralContainerAndSocketRemoved": true,
+  "remaining": "Bind disclosed metadata to immutable catalog cutoff, current withdrawal and stable public filters; verify with real approved source input."
+}
