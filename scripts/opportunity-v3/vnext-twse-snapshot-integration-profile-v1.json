@@ -9,8 +9,8 @@
   "runtimeRevisions": [
     {
       "path": "web/src/lib/research-v2.ts",
-      "revision": "548b89cc800feeaa700f14e1b4a15bf2c7b195c2",
-      "sha256": "ecf9ac18bcdabca50ae0f50c8882eb45b7fd9e62f1ce808e0108877d164a9c66"
+      "revision": "00350d76e98f4a7f1182ebebfcd157dd6393f672",
+      "sha256": "b219e326d630e02531cf4638bd04c36068652c4dc28309f58247a36b49440039"
     },
     {
       "path": "web/src/lib/vnext/source-worker.ts",
