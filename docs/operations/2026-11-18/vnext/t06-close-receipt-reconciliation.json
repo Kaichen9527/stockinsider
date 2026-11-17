@@ -1,0 +1,288 @@
+{
+  "schemaVersion": "stockinsider-t06-close-receipt-reconciliation-v1",
+  "recordedAt": "2026-11-17T17:20:14Z",
+  "sourceOrigin": "actual isolated captures, read after the event using original retained timestamps",
+  "previousHead": "e7fbb9df3d7a61e4845953f10e21d1c05c7d4917",
+  "stagingOnly": true,
+  "inputScope": [
+    "official observation",
+    "close supplement",
+    "listed-roster projection",
+    "dated Taiwan Stock Exchange price-limit diagnostic",
+    "dated disposition corroboration",
+    "isolated signed 11549 turnover",
+    "isolated signed disposition"
+  ],
+  "observations": [
+    {
+      "cutoff": "2026-11-16T21:30:00+08:00",
+      "dispositionRange": {
+        "durableWriterReceipt": false,
+        "markets": {
+          "TPEX": "reports_disagree",
+          "TWSE": "missed_or_unproven_cutoff"
+        },
+        "rankingAuthority": false,
+        "receiptSha256": "627bb5f745f6e2444f2cbb89f5c5e0da7602ebbab0655878eb5e7e4f0e9058fc",
+        "receiptStatus": "read"
+      },
+      "fullDispositionAbsenceEstablished": false,
+      "observer": {
+        "receiptSha256": "0faeebbec78d6dbfb109da11ed390fa5790e622cf7cb5894b790cb79648cb838",
+        "receiptStatus": "read",
+        "sources": {
+          "tpex_issuers": {
+            "datasetId": 25036,
+            "observedAt": "2026-11-16T13:26:06.129780+00:00",
+            "status": "metadata_only"
+          },
+          "tpex_market_foreign_flow": {
+            "bytes": 630,
+            "datasetId": 11743,
+            "observedAt": "2026-11-16T13:26:05.961494+00:00",
+            "recordedBy": "2026-11-16T13:26:06.332853+00:00",
+            "sha256": "26b0a4d49eaa4b352afa988e0f8611bb8e5fa45beddc1ae8de944efbe307522b",
+            "status": "timely_original_verified"
+          },
+          "tpex_quotes": {
+            "bytes": 142120,
+            "datasetId": 11371,
+            "observedAt": "2026-11-16T13:26:04.819802+00:00",
+            "recordedBy": "2026-11-16T13:26:06.332853+00:00",
+            "sha256": "cbdaf6b09fb2094558bc05b0c58ea59764d1abf80bfbe199a573f8ceb05cdbae",
+            "status": "timely_original_verified"
+          },
+          "twse_issuers": {
+            "datasetId": 18419,
+            "observedAt": "2026-11-16T13:26:04.920424+00:00",
+            "status": "metadata_only"
+          },
+          "twse_quotes": {
+            "bytes": 139108,
+            "datasetId": 11549,
+            "observedAt": "2026-11-16T13:26:04.532532+00:00",
+            "recordedBy": "2026-11-16T13:26:06.332853+00:00",
+            "sha256": "568dad96c525b1dae3f72e4fc1f94edc3491c1fee988fc8a97d0fb9e13433000",
+            "status": "timely_original_verified"
+          }
+        }
+      },
+      "officialCalendarAndRankingCertified": false,
+      "priceLimit": {
+        "receiptStatus": "missing"
+      },
+      "roster": {
+        "projectionSha256": "8f8429b69e1770dfbead06ff4d4aba564e52756e68be83ac9ba8f678ae878c1d",
+        "rankingAuthority": false,
+        "receiptSha256": "062abb31ca395ac79120444564fe491af33714563aec6f65ccd381268ee74209",
+        "receiptStatus": "timely_review_projection",
+        "registryWrite": false
+      },
+      "schema": "stockinsider-staging-close-reconciliation-v1",
+      "session": "2026-11-16",
+      "signedDisposition": {
+        "datasets": {
+          "11396": "unverified",
+          "29082": "unverified"
+        },
+        "receiptStatus": "missing"
+      },
+      "signedTurnover": {
+        "datasets": {
+          "11549": "unverified"
+        },
+        "receiptStatus": "missing"
+      },
+      "supplemental": {
+        "receiptSha256": "f9b315940a837434f2d67ae527fe294d0fe3f8af2c1ed192b7f2b3e7167779ac",
+        "receiptStatus": "read",
+        "sources": {
+          "tpex_all_session_quote": {
+            "bytes": 1994345,
+            "datasetId": 11370,
+            "observedAt": "2026-11-16T13:28:08.286656+00:00",
+            "recordedBy": "2026-11-16T13:28:10.418520+00:00",
+            "sha256": "2eec91e27c14901d8bba7c91767da1f653705a55b1d8ed14a6e88b612fa42568",
+            "status": "timely_original_verified"
+          },
+          "tpex_disposition": {
+            "datasetId": 11396,
+            "status": "source_date_or_scope_unverified"
+          },
+          "tpex_halt_notice": {
+            "datasetId": 48664,
+            "observedAt": "2026-11-16T13:28:04.491111+00:00",
+            "status": "metadata_only"
+          },
+          "tpex_stock_institutional_shares": {
+            "bytes": 148248,
+            "datasetId": 11856,
+            "observedAt": "2026-11-16T13:28:05.966655+00:00",
+            "recordedBy": "2026-11-16T13:28:10.418520+00:00",
+            "sha256": "4fef3e40d2e41c35634a99fdfa5b2cca51cbfa9e29eb958491530c5deae485b5",
+            "status": "timely_original_verified"
+          },
+          "twse_disposition": {
+            "datasetId": 29082,
+            "status": "source_date_or_scope_unverified"
+          },
+          "twse_reported_close": {
+            "bytes": 79311,
+            "datasetId": 11764,
+            "observedAt": "2026-11-16T13:28:04.221296+00:00",
+            "recordedBy": "2026-11-16T13:28:10.418520+00:00",
+            "sha256": "481fd292b4008a5fce87b2182d85a29d898a2f651c31c971323471601d7b3c19",
+            "status": "timely_original_verified"
+          }
+        }
+      },
+      "writerInvoked": false
+    },
+    {
+      "cutoff": "2026-11-17T21:30:00+08:00",
+      "dispositionRange": {
+        "receiptStatus": "missing"
+      },
+      "fullDispositionAbsenceEstablished": false,
+      "observer": {
+        "receiptSha256": "ebcddc3e9f750869862a47af2e620c76b4082d30011e27cf584829f6d56c2eb2",
+        "receiptStatus": "read",
+        "sources": {
+          "tpex_issuers": {
+            "datasetId": 25036,
+            "observedAt": "2026-11-17T13:26:19.376200+00:00",
+            "status": "metadata_only"
+          },
+          "tpex_market_foreign_flow": {
+            "bytes": 625,
+            "datasetId": 11743,
+            "observedAt": "2026-11-17T13:26:09.408559+00:00",
+            "recordedBy": "2026-11-17T13:26:19.413001+00:00",
+            "sha256": "ce58fbde068607a9e97945f1b1f477ed6c9d4e782da3be204343a41241767d35",
+            "status": "timely_original_verified"
+          },
+          "tpex_quotes": {
+            "bytes": 141707,
+            "datasetId": 11371,
+            "observedAt": "2026-11-17T13:26:05.427425+00:00",
+            "recordedBy": "2026-11-17T13:26:19.413001+00:00",
+            "sha256": "a76870c5add6af51ce28f0d4cf3fde04402766439fa71adf7f9b260418416f2b",
+            "status": "timely_original_verified"
+          },
+          "twse_issuers": {
+            "datasetId": 18419,
+            "observedAt": "2026-11-17T13:26:11.431862+00:00",
+            "status": "metadata_only"
+          },
+          "twse_quotes": {
+            "bytes": 139102,
+            "datasetId": 11549,
+            "observedAt": "2026-11-17T13:26:05.317639+00:00",
+            "recordedBy": "2026-11-17T13:26:19.413001+00:00",
+            "sha256": "a4f115d7cc58ca38928bcc4995f598e3c40d8f4e685852657840130294c181c8",
+            "status": "timely_original_verified"
+          }
+        }
+      },
+      "officialCalendarAndRankingCertified": false,
+      "priceLimit": {
+        "publicationAuthority": false,
+        "receiptSha256": "9757a20f37b41d5c3a4e6e187965fd11d44bfbcc52cc7de38866a6bbe0f4baf5",
+        "receiptStatus": "single_symbol_receipt_only",
+        "retainedOriginalBytesVerified": false
+      },
+      "roster": {
+        "projectionSha256": "ba247d42754f4fc35d3784a6c7fb1a462c8ee9396ab6a8329d7ba3d45b0d238b",
+        "rankingAuthority": false,
+        "receiptSha256": "609e0812d86e52b454a7b4604b771e8fa69e2b96bf00b21da099f947b5dd64d1",
+        "receiptStatus": "timely_review_projection",
+        "registryWrite": false
+      },
+      "schema": "stockinsider-staging-close-reconciliation-v1",
+      "session": "2026-11-17",
+      "signedDisposition": {
+        "datasets": {
+          "11396": "unverified",
+          "29082": "unverified"
+        },
+        "receiptStatus": "missing"
+      },
+      "signedTurnover": {
+        "datasets": {
+          "11549": "unverified"
+        },
+        "receiptStatus": "missing"
+      },
+      "supplemental": {
+        "receiptSha256": "6b1e8582fb7e363fa34a3a00fd4936f46fbfac00a8537be82be7fc15a063f3e4",
+        "receiptStatus": "read",
+        "sources": {
+          "tpex_all_session_quote": {
+            "bytes": 1990903,
+            "datasetId": 11370,
+            "observedAt": "2026-11-17T13:28:13.486853+00:00",
+            "recordedBy": "2026-11-17T13:28:14.875944+00:00",
+            "sha256": "a67d1e475a77afff915149ad844b10b7e06ffdf28c0008a9d151eeb81a839bdc",
+            "status": "timely_original_verified"
+          },
+          "tpex_disposition": {
+            "bytes": 10788,
+            "datasetId": 11396,
+            "observedAt": "2026-11-17T13:28:06.628789+00:00",
+            "recordedBy": "2026-11-17T13:28:14.765245+00:00",
+            "sha256": "3faa9bb078aa6ab6c63ca26b7efb5f10bb6e84955edd277081917f943916426e",
+            "status": "positive_notice_verified"
+          },
+          "tpex_halt_notice": {
+            "datasetId": 48664,
+            "observedAt": "2026-11-17T13:28:07.119797+00:00",
+            "status": "metadata_only"
+          },
+          "tpex_stock_institutional_shares": {
+            "bytes": 146937,
+            "datasetId": 11856,
+            "observedAt": "2026-11-17T13:28:08.384946+00:00",
+            "recordedBy": "2026-11-17T13:28:14.838223+00:00",
+            "sha256": "39ba68c294946973170bc01379fc45b2d7535f258f7afec9b462d3a116c3b39e",
+            "status": "timely_original_verified"
+          },
+          "twse_disposition": {
+            "bytes": 3800,
+            "datasetId": 29082,
+            "observedAt": "2026-11-17T13:28:07.125684+00:00",
+            "recordedBy": "2026-11-17T13:28:14.725174+00:00",
+            "sha256": "de12c39139ac87a04a9be0b3903ad9e01d3034c9fad7e7dddafe44b54684c9de",
+            "status": "positive_notice_verified"
+          },
+          "twse_reported_close": {
+            "bytes": 79313,
+            "datasetId": 11764,
+            "observedAt": "2026-11-17T13:28:07.421966+00:00",
+            "recordedBy": "2026-11-17T13:28:14.718863+00:00",
+            "sha256": "c2979a953a9c8a33d7cad4e9767414ccd4004ab134ae40a225bb3c9bf8ba53c8",
+            "status": "timely_original_verified"
+          }
+        }
+      },
+      "writerInvoked": false
+    }
+  ],
+  "tests": {
+    "syntheticControlsPassed": 6,
+    "actualCaptureDatesReplayed": [
+      "2026-11-16",
+      "2026-11-17"
+    ]
+  },
+  "nextCapture": {
+    "session": "2026-11-18",
+    "cutoff": "2026-11-18T21:30:00+08:00",
+    "reconciliationSlot": "2026-11-18T21:33:00+08:00",
+    "observed": false
+  },
+  "productionTouched": false,
+  "testedSourcesSha256": {
+    "scripts/staging/reconcile_launch_close_evidence.py": "9c588bc901cea5e8c715e1179243aa4f0c0a486a964b2a5fc5a25aa8a50677c9",
+    "scripts/staging/test_reconcile_launch_close_evidence.py": "8f2abe513fbcca6ac5186916a616bd071be8c1cc6bd61f759d0eaca738bcfc55"
+  }
+}
