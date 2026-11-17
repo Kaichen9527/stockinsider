@@ -133,6 +133,56 @@ async function testSubscriberScope(t, fixture) {
 }
 
 
+async function checkAuthProfileTriggerBoundary(fixture) {
+  const scope = ['anon', 'authenticated', 'service_role', 'research_source_fence_owner_v2'];
+  const read = async () => {
+    const { rows: [state] } = await fixture.observer.query(`
+      SELECT p.oid::text, pg_get_functiondef(p.oid) AS definition,
+        ARRAY(SELECT name FROM unnest($1::text[]) name WHERE has_function_privilege(name, p.oid, 'EXECUTE')) AS executable,
+        ARRAY(SELECT CASE WHEN a.grantee = 0 THEN 'PUBLIC' ELSE pg_get_userbyid(a.grantee)::text END
+          FROM aclexplode(coalesce(p.proacl, acldefault('f', p.proowner))) a
+          WHERE a.privilege_type = 'EXECUTE' ORDER BY 1) AS grants,
+        (SELECT jsonb_agg(to_jsonb(t) ORDER BY t.oid) FROM pg_trigger t WHERE t.tgfoid = p.oid) AS bindings
+      FROM pg_proc p WHERE p.oid = 'public.handle_new_user()'::regprocedure`, [scope]);
+    return state;
+  };
+  const signup = async () => {
+    const userId = '00000000-0000-4000-8000-000000000270';
+    await fixture.writer.query('BEGIN');
+    try {
+      await fixture.writer.query('INSERT INTO auth.users(id,raw_user_meta_data) VALUES ($1,$2::jsonb)',
+        [userId, JSON.stringify({ display_name: 'Synthetic signup profile' })]);
+      const { rows: [profile] } = await fixture.writer.query(
+        'SELECT display_name, role, is_subscriber FROM public.profiles WHERE user_id = $1', [userId]);
+      assert.deepEqual(profile, { display_name: 'Synthetic signup profile', role: 'Member', is_subscriber: false });
+    } finally {
+      await fixture.writer.query('ROLLBACK');
+    }
+  };
+
+  const rows = await fixture.snapshot();
+  const before = await read();
+  assert.deepEqual(before.executable, scope);
+  assert.deepEqual(before.grants, ['PUBLIC', 'anon', 'authenticated', 'postgres', 'service_role']);
+  await signup();
+
+  const migration = readFileSync(new URL('../migrations/20261117_46_vnext_auth_profile_trigger_acl_v1.sql', import.meta.url), 'utf8');
+  await fixture.writer.query(migration);
+  const after = await read();
+  assert.deepEqual(after, { ...before, executable: [], grants: ['postgres'] });
+  await signup();
+  assert.deepEqual(await fixture.snapshot(), rows);
+  fixture.save('auth-profile-trigger-acl-safe', {
+    sourceOwnerCouldExecuteUnderFunctionAclBefore: true,
+    effectiveExecuteDeniedAfter: scope,
+    procedureIdentityAndBodyRetained: true,
+    installedTriggerBindingsRetained: true,
+    syntheticAuthProfileBeforeAfter: true,
+    allPublicRowsUnchanged: true,
+    sourceNamespaceGrantApplied: false,
+  });
+}
+
 async function checkSourceOwnerBoundary(fixture) {
   const observer = fixture.observer;
   await observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');
@@ -302,6 +352,9 @@ test('planner and legacy report ACLs preserve their existing web and backend cal
       await privilegedCaller(fixture, 'opportunity_v3_rpc_owner');
     });
     await testSubscriberScope(t, fixture);
+    await t.test('auth profile hook remains attached with runtime execution privileges removed', async () => {
+      await checkAuthProfileTriggerBoundary(fixture);
+    });
     await t.test('source role retains only its known public schema capabilities', async () => {
       await checkSourceOwnerBoundary(fixture);
     });

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "stockinsider-t19-auth-profile-trigger-acl-v1",
+  "recordedAt": "2026-11-17T16:37:10Z",
+  "candidateParent": "5a825412c5d11b424836f4a6c3e89ef4c312a54c",
+  "scope": "Disposable Contabo staging fixture with a captured schema and synthetic users",
+  "postgresVersion": "17.11 (Debian 17.11-1.pgdg12+2)",
+  "fixtureImageDigest": "sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+  "networkMode": "none",
+  "authProfileHook": {
+    "sourceOwnerCouldExecuteUnderFunctionAclBefore": true,
+    "effectiveExecuteDeniedAfter": [
+      "anon",
+      "authenticated",
+      "service_role",
+      "research_source_fence_owner_v2"
+    ],
+    "procedureIdentityAndBodyRetained": true,
+    "installedTriggerBindingsRetained": true,
+    "syntheticAuthProfileBeforeAfter": true,
+    "allPublicRowsUnchanged": true,
+    "sourceNamespaceGrantApplied": false
+  },
+  "sourceWriterControl": {
+    "writerLeaseAcquired": true,
+    "sourceTriggerRan": "research_source_fence_record_v2",
+    "currentNamespaceFailureSqlstate": "42501",
+    "transactionRolledBack": true,
+    "allPublicTableRowsUnchanged": true
+  },
+  "nativeTapSha256": "10affa3b5296244faf7a10e75cc389965b709481e879d048ed4c2ba4d7b29667",
+  "nativeTests": {
+    "tests": 10,
+    "pass": 10,
+    "fail": 0,
+    "skipped": 0
+  },
+  "sourceSha256": {
+    "migrations/20261117_46_vnext_auth_profile_trigger_acl_v1.sql": "0d75e2157a0be248bc964811cd18abbc60d8bcaa0db7d5601fa4bce84e0cf710",
+    "scripts/vnext-internal-candidate-plan-acl-postgres.test.mjs": "8197e0b3ce659f102d846864d200042ccdcc993091e68a5e63884057ce88f656",
+    ".github/workflows/stockinsider-vnext-quality.yml": "049959533410c299720f92e868d161f480a1891e55dda842912b3fc199e2eb09"
+  },
+  "productionServiceReleaseAndTimerSignaturesMatched": true,
+  "ephemeralContainerAndSocketRemoved": true,
+  "remaining": [
+    "Review the remaining callable trigger and source-owned relation dependencies on the exact predecessor before considering namespace USAGE.",
+    "Obtain eligible independent review and demonstrate the actual leased source write and HTTP ingestion on the approved isolated predecessor."
+  ],
+  "protectedGateApproval": false,
+  "productionApplied": false
+}

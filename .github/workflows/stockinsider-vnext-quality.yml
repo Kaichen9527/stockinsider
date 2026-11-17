@@ -27,6 +27,7 @@ on:
       - 'migrations/20261117_43_vnext_owner_research_notes_v1.sql'
       - 'migrations/20261117_44_vnext_legacy_subscription_acl_v1.sql'
       - 'migrations/20261117_45_vnext_launch_issuer_fiscal_forecasts_v1.sql'
+      - 'migrations/20261117_46_vnext_auth_profile_trigger_acl_v1.sql'
       - 'deployment/vps/launch-radar-schedule/**'
       - 'scripts/run-launch-scheduled-cycle*.mjs'
       - 'openspec/changes/stockinsider-vnext-20/**'
