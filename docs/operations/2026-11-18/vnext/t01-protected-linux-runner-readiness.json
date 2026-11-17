@@ -1,0 +1,97 @@
+{
+  "schema": "stockinsider-protected-linux-runner-readiness-v1",
+  "recordedAt": "2026-11-17T16:30:45Z",
+  "scope": "Isolated Contabo staging feasibility probe for a possible protected runner migration",
+  "protectedGate": {
+    "pullRequest": 407,
+    "continuationOfPullRequest": 384,
+    "runId": "44124599590",
+    "candidateHead": "2944956e1218e2e99ffa94ec0709e6ea9662041d",
+    "workflowBase": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+    "bootstrap": "passed",
+    "reviewJobs": [
+      "requirements",
+      "architecture",
+      "exact-review"
+    ],
+    "reviewJobsOutcome": "Could not fetch the exact-review evidence ref for the candidate head",
+    "modelRunner": "skipped",
+    "currentRequiredHost": "Self-hosted macOS ARM64; protected worker requires Darwin and pinned Apple tooling and runtime identity",
+    "holdRetained": true
+  },
+  "previousOracle": {
+    "artifactId": "9280965835",
+    "subjectCommit": "4e1a658d0f97a32010ba0ae1e9a9eac29b617a05",
+    "expiresAt": "2026-11-15T08:04:30Z",
+    "artifactLookupHttpStatus": 404,
+    "candidatePartitionPaths": 28,
+    "previousPartitionPaths": 21,
+    "candidatePartitionComparison": {
+      "main": {
+        "unchanged": 28,
+        "changed": 0,
+        "added": 0,
+        "removed": 0
+      },
+      "hold": {
+        "unchanged": 28,
+        "changed": 0,
+        "added": 0,
+        "removed": 0
+      },
+      "prior": {
+        "unchanged": 10,
+        "changed": 11,
+        "added": 7,
+        "removed": 0
+      }
+    },
+    "reusable": false
+  },
+  "nativeProbe": {
+    "source": "scripts/opportunity-v3/linux-model-runner-boundary-probe.mjs",
+    "sourceSha256": "2ec9bc796ec8fe04f1122bee901495d3c4b6210af98b9f1e83d5f15dfa1d262e",
+    "nodeBinarySha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "invocation": {
+      "serviceMode": "Transient systemd service, DynamicUser, private devices and network, writable 16 MiB tmpfs at /scratch",
+      "addressFamilies": [
+        "AF_UNIX"
+      ],
+      "bindingsReadOnly": [
+        "glibc and dynamic loader directories",
+        "exact Node executable",
+        "exact probe source",
+        "synthetic input fixture"
+      ],
+      "fixtureOutsideRoot": true,
+      "protectSystem": "strict",
+      "protectHome": true,
+      "noNewPrivileges": true,
+      "runtimeLimitSeconds": 20,
+      "memoryLimitMiB": 160,
+      "tasksMax": 24
+    },
+    "result": {
+      "platform": "linux",
+      "architecture": "x64",
+      "node": "v22.14.0",
+      "readOnlySubject": true,
+      "privateWritableScratch": true,
+      "outsideFixtureDenied": true,
+      "dockerSocketAbsent": true,
+      "credentialEnvironmentAbsent": true,
+      "ipv4SocketDenied": true,
+      "syntheticOnly": true,
+      "modelProviderInvoked": false,
+      "protectedCheckPassed": false
+    },
+    "formalServiceReleaseAndTimerSignaturesMatched": true,
+    "scratchRemoved": true
+  },
+  "remainingAcceptance": [
+    "Independent review of an owner-controlled protected runner migration and its exact candidate isolation boundary",
+    "Pin a qualified Linux host identity and complete toolchain and preserve independent trust for code gate and authenticated provider oracle",
+    "Verify all required model partition cases and exact-head evidence with the protected workflow",
+    "Retain authentication, real provider flows, production gates and HOLD until their own acceptance checks pass"
+  ]
+}
