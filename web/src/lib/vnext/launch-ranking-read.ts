@@ -40,8 +40,13 @@ export type LaunchIssuerFiscalForecast = {
   horizon: 'annual' | 'four_quarters'; periodStart: string; periodEnd: string; shareBasis: 'basic' | 'diluted';
   shares: string; amount: number; sourceUrl: string; publishedAt: string; knownAt: string;
 };
+export type LaunchForwardPeReference = {
+  schemaVersion: 'launch-forward-pe-reference-v1';
+  cutoff: string; session: string; close: number; priceRevision: string;
+  periods: Array<Pick<LaunchIssuerFiscalForecast, 'horizon' | 'periodStart' | 'periodEnd'> & { multiple: number | null }>;
+};
 export type LaunchRankingDetail = {arithmeticVersion:typeof LAUNCH_RANKING_ARITHMETIC;rankingRunId:string;symbol:string;revisionId:string;scoreRevision:string;launchQualificationRevision:string;inputHash:string;
-  summary:string|null;scoreEvidence:LaunchRankingRule[];citations:LaunchPublicCitation[];chart:LaunchRankingChart|null;reportedEps?:LaunchReportedEps[];issuerEpsEstimates?:LaunchIssuerEpsEstimate[];issuerFiscalForecasts?:LaunchIssuerFiscalForecast[]};
+  summary:string|null;scoreEvidence:LaunchRankingRule[];citations:LaunchPublicCitation[];chart:LaunchRankingChart|null;reportedEps?:LaunchReportedEps[];issuerEpsEstimates?:LaunchIssuerEpsEstimate[];issuerFiscalForecasts?:LaunchIssuerFiscalForecast[];forwardPeReference?:LaunchForwardPeReference|null};
 export type LaunchRankingRead = {availability:'ready'|'not_published'|'producer_unavailable'|'not_found'|'schema_unavailable'|'unavailable';reason:string|null;
   readAt:string;snapshot:LaunchRankingSnapshot|null;current:LaunchRankingCurrent[];detail:LaunchRankingDetail|null};
 type Row=Record<string,unknown>;
@@ -360,6 +365,29 @@ async function readIssuerFiscalForecasts(
   } catch { return undefined; }
 }
 
+/** Uses the validated close operand from the frozen score and the allowlisted
+ * issuer forecasts. A current quote or standalone quarterly EPS cannot enter. */
+export function launchForwardPeReference(
+  detail: LaunchRankingDetail, forecasts: readonly LaunchIssuerFiscalForecast[],
+): LaunchForwardPeReference | null {
+  if (!forecasts.length) return null;
+  const closeRule = detail.scoreEvidence.find(rule => rule.id === 'trend_close_above_ma50');
+  const close = closeRule?.operands.close;
+  if (!closeRule || typeof close !== 'number' || !Number.isFinite(close) || close <= 0
+    || closeRule.revisions.score !== detail.scoreRevision) return null;
+
+  const { throughSession: session, cutoff, revisions: { price: priceRevision } } = closeRule;
+  const chart = detail.chart;
+  if (chart && (chart.priceRevision !== priceRevision || chart.throughSession !== session || chart.cutoff !== cutoff
+    || chart.candles.at(-1)?.time !== session || chart.candles.at(-1)?.close !== close)) return null;
+
+  const periods = forecasts.map(({horizon, periodStart, periodEnd, amount}) => {
+    const reference = amount > 0 && Number.isFinite(amount) ? close / amount : 0;
+    return { horizon, periodStart, periodEnd, multiple: Number.isFinite(reference) && reference > 0 ? reference : null };
+  });
+  return { schemaVersion: 'launch-forward-pe-reference-v1', cutoff, session, close, priceRevision, periods };
+}
+
 export async function readLaunchRankingSnapshot(query:{rankingRunId?:string;symbol?:string}={}):Promise<LaunchRankingRead> {
   if(!launchRankingEnabled())throw Error('launch_ranking_disabled');
   const {getSupabaseServerClient}=await import('../supabase-server.ts');
@@ -370,7 +398,8 @@ export async function readLaunchRankingSnapshot(query:{rankingRunId?:string;symb
   const [reportedEps, issuerEpsEstimates, issuerFiscalForecasts] = await Promise.all([
     readReportedEps(client, binding), readIssuerEpsEstimates(client, binding), readIssuerFiscalForecasts(client, binding),
   ]);
-  return {...result,detail:{...result.detail,reportedEps,issuerEpsEstimates,issuerFiscalForecasts}};
+  const forwardPeReference = issuerFiscalForecasts ? launchForwardPeReference(result.detail, issuerFiscalForecasts) : undefined;
+  return {...result,detail:{...result.detail,reportedEps,issuerEpsEstimates,issuerFiscalForecasts,forwardPeReference}};
 }
 /** A named launch link never becomes a legacy or latest lookup on failure. */
 export function launchDetailQuery(query:Record<string,string|string[]|undefined>) {

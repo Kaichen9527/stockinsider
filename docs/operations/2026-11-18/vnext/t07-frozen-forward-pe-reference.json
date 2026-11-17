@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "stockinsider-t07-implied-forward-pe-witness-v1",
+  "scope": "Contabo isolated Next.js standalone and synthetic public fiscal forecast and frozen ranking",
+  "node": "22.14.0",
+  "next": "16.3.4",
+  "nodeTestsPassed": 26,
+  "typescriptPassed": true,
+  "targetedLintPassed": true,
+  "productionBuildPassed": true,
+  "forwardPeMath": "frozen signal session close / issuer forecast EPS for the displayed fiscal period",
+  "invalidControls": [
+    "zero or negative EPS",
+    "nonfinite result",
+    "mismatching chart close",
+    "mismatching chart price revision",
+    "withdrawn forecast"
+  ],
+  "standaloneHttp": {
+    "rankingRead200": true,
+    "detailApiAndHtml200": true,
+    "fiscalReads": 3,
+    "immutableBinding": true,
+    "sourceWithdrawnEmpty": true,
+    "homeSelectOnly": true,
+    "referenceMultiple": 22,
+    "referenceRemovedWithForecast": true,
+    "synthetic": true
+  },
+  "sourceFileHashes": {
+    "web/src/lib/vnext/launch-ranking-read.ts": "befdaaec295150a3bdc21024f7f90a3f9f6b9d85d27e9a60c1369c4912e05dc1",
+    "web/src/app/components/vnext/LaunchDetail.tsx": "2d3f7ec977f801c486f2d42a41219d05a6e02809f58a317ab38375a110108d86",
+    "web/src/lib/vnext/launch-ranking-read.test.ts": "607e6bab865687dccb99ea2f75121e9655a79fd2483128b48cab41b49332694e",
+    "openspec/changes/stockinsider-vnext-20/launch-radar-amendment.md": "43d8c0a3f519be5e6cd77666112cb302894d493715f440ba82e6969afdaba195"
+  },
+  "disposableBuildOutput": {
+    "workspacePath": "web/.next",
+    "buildIdSha256": "6ea364813538940e8ea3862a78b9bc1474becfb3900fc8f0c155d0e84e943bd9",
+    "purpose": "disposable forward P/E build and standalone smoke",
+    "runtimeOrReleasePointerUsesIt": false,
+    "rebuildCommand": "npm run build"
+  },
+  "newMarketOrForecastProviderCalls": 0,
+  "scenarioPriceTargetsPublished": false,
+  "productionDeploymentPerformed": false
+}

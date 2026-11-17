@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {parseLaunchRankingRead,parseLaunchReportedEps,parseLaunchIssuerEpsEstimates,parseLaunchIssuerFiscalForecasts,readLaunchRankingTransport,launchRankingMemberCurrent,launchDetailQuery} from './launch-ranking-read.ts';
+import {parseLaunchRankingRead,parseLaunchReportedEps,parseLaunchIssuerEpsEstimates,parseLaunchIssuerFiscalForecasts,launchForwardPeReference,readLaunchRankingTransport,launchRankingMemberCurrent,launchDetailQuery} from './launch-ranking-read.ts';
 import {launchRankingFixture,LAUNCH_TEST_NOW,LAUNCH_TEST_RUN} from './launch-ranking.test-fixture.ts';
 
 test('new launch read acceptsTop0/1/10 and nullablefinancials under its own exact policy, neverlegacy or partial80',()=>{
@@ -224,4 +224,43 @@ test('fiscal forecasts preserve exact issuer periods and disclosed share assumpt
       { rawOriginal: 'private' }, { priceTarget: 45 },
     ].map(alteration => ({ ...packet, forecasts: [{ ...annual, ...alteration }] })),
   ]) assert.throws(() => parseLaunchIssuerFiscalForecasts(invalid, binding), /launch_ranking_contract_invalid/u);
+});
+
+
+test('implied forward P/E uses the original score close and the exact positive fiscal EPS', () => {
+  const packet = launchRankingFixture(1, true);
+  const query = { symbol: packet.snapshot.members[0].symbol, rankingRunId: LAUNCH_TEST_RUN };
+  const detail = parseLaunchRankingRead(packet, query, LAUNCH_TEST_NOW).detail!;
+  const base = {
+    horizon: 'annual' as const, periodStart: '2027-01-01', periodEnd: '2027-12-31',
+    shareBasis: 'diluted' as const, shares: '1000', amount: 5,
+    publishedAt: '2026-10-30T09:00:00Z', knownAt: '2026-11-10T04:00:00Z',
+    sourceUrl: 'https://mops.twse.com.tw/issuer-fiscal-forecast',
+  };
+  const four = { ...base, horizon: 'four_quarters' as const, periodStart: '2027-02-01', periodEnd: '2028-01-31', amount: 4 };
+  const before = structuredClone(detail);
+  const reference = launchForwardPeReference(detail, [base, four]);
+  assert.equal(reference?.close, 110);
+  assert.equal(reference?.session, packet.snapshot.session);
+  assert.equal(reference?.cutoff, packet.snapshot.cutoff);
+  assert.equal(reference?.priceRevision, packet.snapshot.members[0].revisions.price);
+  assert.deepEqual(reference?.periods, [
+    { horizon: 'annual', periodStart: base.periodStart, periodEnd: base.periodEnd, multiple: 22 },
+    { horizon: 'four_quarters', periodStart: four.periodStart, periodEnd: four.periodEnd, multiple: 27.5 },
+  ]);
+  assert.deepEqual(detail, before);
+  for (const amount of [0, -2, Infinity, Number.MIN_VALUE]) {
+    assert.equal(launchForwardPeReference(detail, [{ ...base, amount }])?.periods[0].multiple, null);
+  }
+  assert.equal(launchForwardPeReference(detail, []), null);
+  const chartPacket = launchRankingFixture(1, true, undefined, true);
+  const chartDetail = parseLaunchRankingRead(chartPacket, query, LAUNCH_TEST_NOW).detail!;
+  const close = chartDetail.chart!.candles.at(-1)!;
+  assert.equal(close.close, 102);
+  assert.equal(launchForwardPeReference(chartDetail, [base]), null);
+  close.close = 110;
+  close.high = 110;
+  assert.equal(launchForwardPeReference(chartDetail, [base])?.periods[0].multiple,22);
+  chartDetail.chart!.priceRevision='e0';
+  assert.equal(launchForwardPeReference(chartDetail, [base]), null);
 });

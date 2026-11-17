@@ -11,6 +11,7 @@ const ruleNames:Record<string,string>={trend_close_above_ma50:'收盤高於 MA50
   consolidation_distance_within5pct:'距前 25 日高點 ≤5%',consolidation_prior_atr_ratio_within08:'先前 ATR5／ATR20 ≤0.8',consolidation_volume_ratio_within08:'近期與先前均量比 ≤0.8',
   breakout_or_fixed_closing_hold:'突破或固定原突破價的收盤守穩',chips_foreign5_positive:'外資近 5 日淨買超',chips_foreign20_positive:'外資近 20 日淨買超',
   chips_trust5_positive:'投信近 5 日淨買超',chips_trust20_positive:'投信近 20 日淨買超',market_close_above_ma50:'同市場指數高於 MA50',market_close_above_ma200:'同市場指數高於 MA200'};
+const ratioFormat = new Intl.NumberFormat('zh-TW', {maximumSignificantDigits: 6});
 export default async function LaunchDetail({symbol,query}:{symbol:string;query:Record<string,string|string[]|undefined>}) {
   const selection=launchDetailQuery(query);
   let read:LaunchRankingRead|null=null,invalid=selection.status==='invalid';
@@ -19,6 +20,7 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
     try{read=await readLaunchRankingSnapshot({symbol,...(selection.status==='bound'?{rankingRunId:selection.rankingRunId}:{})});}catch{read={availability:'unavailable',reason:null,readAt:new Date().toISOString(),snapshot:null,current:[],detail:null};}
   }
   const member=read?.snapshot?.members.find(item=>item.symbol===symbol),detail=read?.detail;
+  const peReference = detail?.forwardPeReference;
   if(selection.status==='bound'&&member&&(member.revisionId!==selection.revisionId||member.scoreRevision!==selection.scoreRevision))invalid=true;
   const outcome=!disabled&&!invalid&&read?.availability==='ready'&&read.snapshot&&member&&detail
     ?await readPublicLaunchOutcome({rankingRunId:read.snapshot.rankingRunId,symbol,signalSession:read.snapshot.session}):null;
@@ -51,14 +53,23 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
         </> : <p className="mt-2">{detail.issuerEpsEstimates ? '此榜單版本無可公開的季度 EPS 預估。' : '季度 EPS 預估目前無法讀取。'}</p>}
         {detail.issuerFiscalForecasts?.length ? <>
           <h3 className="mt-4 font-medium">公司來源的年度與四季 EPS 預估</h3>
+          {peReference && <p className="mt-2 text-sm" data-testid="launch-forward-pe-reference">
+            參考本益比採用 <time dateTime={peReference.session}>{peReference.session}</time> 榜單收盤 {ratioFormat.format(peReference.close)} 元，除以該期間公司預估 EPS。
+          </p>}
           <ul className="mt-2 list-disc space-y-1 pl-5">
-            {detail.issuerFiscalForecasts.map(forecast => <li key={[forecast.horizon, forecast.periodStart, forecast.periodEnd].join('/')}>
-              {forecast.horizon === 'annual' ? '年度' : '四季'} {forecast.periodStart} 至 {forecast.periodEnd}，{forecast.shareBasis === 'basic' ? '基本' : '稀釋'} EPS 預估 {forecast.amount} 元
-              <p>公司揭露股數 {Number(forecast.shares).toLocaleString('zh-TW')} 股。<a href={forecast.sourceUrl} className="underline">公開資訊觀測站來源</a></p>
-            </li>)}
+            {detail.issuerFiscalForecasts.map((forecast, index) => {
+              const multiple = peReference?.periods[index]?.multiple;
+              return <li key={[forecast.horizon, forecast.periodStart, forecast.periodEnd].join('/')}>
+                {forecast.horizon === 'annual' ? '年度' : '四季'} {forecast.periodStart} 至 {forecast.periodEnd}，{forecast.shareBasis === 'basic' ? '基本' : '稀釋'} EPS 預估 {forecast.amount} 元
+                <p>公司揭露股數 {Number(forecast.shares).toLocaleString('zh-TW')} 股。<a href={forecast.sourceUrl} className="underline">公開資訊觀測站來源</a></p>
+                {typeof multiple === 'number'
+                  ? <p>參考本益比 {ratioFormat.format(multiple)} 倍</p>
+                  : <p>參考本益比{forecast.amount <= 0 ? '不適用於零或負 EPS' : '暫缺可核對的收盤價'}</p>}
+              </li>;
+            })}
           </ul>
         </> : <p className="mt-2">{detail.issuerFiscalForecasts ? '此榜單版本無可公開的年度或四季 EPS 預估。' : '年度與四季 EPS 預估目前無法讀取。'}</p>}
-        <p className="mt-2">本益比與目標價情境缺少可公開的估值依據。</p>
+        <p className="mt-2">假設倍數與目標價情境缺少可公開的估值依據。</p>
       </section>
       <section aria-label="榜單價格圖表" className="min-w-0 rounded-xl border border-slate-300 p-4">
         <h2 className="font-semibold">價格走勢</h2>
