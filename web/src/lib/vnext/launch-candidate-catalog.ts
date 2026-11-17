@@ -7,10 +7,10 @@ import {candidateEpochFixturePage,type CandidateEpochEvent} from './candidate-ep
 
 /** Synthetic projection only. No producer, public-metadata grant, DB or writer. */
 export const LAUNCH_CANDIDATE_FIXTURE='launch-source-candidate-projection-fixture-v1';
-const statuses=['recorded_active_epoch','recorded_exited_epoch','admission_history_unknown','snapshot_waiting','snapshot_eligible','absent_from_successor'] as const;
+const statuses=['recorded_active_epoch','recorded_exited_epoch','admission_history_unknown','snapshot_waiting','snapshot_eligible','absent_from_successor','not_in_saved_pool'] as const;
 type Status=typeof statuses[number];
 type Row=Record<string,unknown>;
-export type LaunchCandidateQuery={catalogId:string|null;limit:number;cursor:string|null;filters:{date:string|null;source:string|null;industry:string|null;status:Status|null}};
+export type LaunchCandidateQuery={view?:'sources';catalogId:string|null;limit:number;cursor:string|null;filters:{date:string|null;source:string|null;industry:string|null;status:Status|null}};
 type Industry={revisionId:string;code:string;label:string;knownAt:string};
 type Visible={position:number;state:Status;rowId:string;symbol:string;eventAt:string;source:string;industrySnapshot:Industry|null;admission:{kind:'ever_observed_admitted'|'admission_history_unknown';recordedEpochId:string|null}};
 function fail():never{throw Error('launch_candidate_projection_invalid');}
@@ -45,7 +45,7 @@ function data(value:unknown){
 }
 function parsedQuery(v:unknown):LaunchCandidateQuery{
  data(v);
- if(!exact(v,'catalogId limit cursor filters')||v.catalogId!==null&&!uuid(v.catalogId)||!Number.isInteger(v.limit)||Number(v.limit)<1||Number(v.limit)>20
+ if(!(exact(v,'catalogId limit cursor filters')||exact(v,'catalogId limit cursor filters view')&&v.view==='sources')||v.catalogId!==null&&!uuid(v.catalogId)||!Number.isInteger(v.limit)||Number(v.limit)<1||Number(v.limit)>20
   ||v.cursor!==null&&(!text(v.cursor,1000)||!/^[A-Za-z0-9_-]+$/u.test(v.cursor))||!exact(v.filters,'date source industry status'))fail();
  const f=v.filters;
  if(f.date!==null&&!date(f.date)||f.source!==null&&(!text(f.source,40)||!/^[a-z][a-z0-9_-]*$/u.test(f.source))||f.industry!==null&&!text(f.industry,60)
@@ -53,12 +53,13 @@ function parsedQuery(v:unknown):LaunchCandidateQuery{
  return v as LaunchCandidateQuery;
 }
 export function launchCandidateQuery(params:URLSearchParams):LaunchCandidateQuery{
- if(params.size>7||params.toString().length>4096)fail();
- const allowed=['catalogId','limit','cursor','date','source','industry','status'];
+ if(params.size>8||params.toString().length>4096)fail();
+ const allowed=['view','catalogId','limit','cursor','date','source','industry','status'];
  if([...params.keys()].some(key=>!allowed.includes(key)||params.getAll(key).length!==1))fail();
  const rawLimit=params.get('limit');if(rawLimit!==null&&!/^(?:[1-9]|1[0-9]|20)$/u.test(rawLimit))fail();
  const filter=(key:string)=>params.get(key)||null;
- return parsedQuery({catalogId:params.get('catalogId'),limit:rawLimit===null?10:Number(rawLimit),cursor:params.get('cursor'),
+ const view=params.get('view');if(view!==null&&view!=='sources')fail();
+ return parsedQuery({...(view ? {view} : {}),catalogId:params.get('catalogId'),limit:rawLimit===null?10:Number(rawLimit),cursor:params.get('cursor'),
   filters:{date:filter('date'),source:filter('source'),industry:filter('industry'),status:filter('status')}});
 }
 /** Reuses the existing disabled journal fixture validator. An actual admission
@@ -247,9 +248,95 @@ export function launchCandidatePoolPage(value: unknown, query: LaunchCandidateQu
 type PoolReader = { rpc: (name: 'vnext_launch_candidate_pool_history_v2', args: { p_catalog_id: string | null }) =>
   PromiseLike<{ data: unknown; error: unknown }> };
 
+const clueStates = ['not_in_saved_pool', ...poolStates] as const;
+type ClueState = typeof clueStates[number];
+type ClueReader = { rpc: (name: 'vnext_launch_candidate_clue_history_v1', args: {
+  p_catalog_id: string | null; p_after: string | null; p_limit: number; p_date: string | null;
+  p_source: string | null; p_industry: string | null; p_status: ClueState | null;
+}) => PromiseLike<{ data: unknown; error: unknown }> };
+
+function clueStart(query: LaunchCandidateQuery, filtersHash: string) {
+  if (query.cursor === null) return null;
+  let cursor: unknown;
+  try {
+    const bytes = Buffer.from(query.cursor, 'base64url');
+    if (bytes.toString('base64url') !== query.cursor) return fail();
+    cursor = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
+  } catch { return fail(); }
+  if (!exact(cursor, 'version catalogId filtersHash after') || cursor.version !== 'source-clues-v1'
+    || cursor.catalogId !== query.catalogId || cursor.filtersHash !== filtersHash || !uuid(cursor.after)) return fail();
+  return cursor.after;
+}
+
+function clueSnapshotPage(value: unknown, q: LaunchCandidateQuery, filtersHash: string) {
+  data(value);
+  if (!exact(value, 'schemaVersion catalogId cutoff previousSnapshot nextSnapshot rows nextAfter sourceAuthority entryAuthority publicationAuthority')
+    || value.schemaVersion !== 'launch-candidate-clue-history-v1' || value.sourceAuthority !== false
+    || value.entryAuthority !== false || value.publicationAuthority !== false
+    || !uuid(value.catalogId) || (q.catalogId !== null && q.catalogId !== value.catalogId) || !clock(value.cutoff)
+    || evidenceInstant(value.cutoff)! > evidenceInstant(new Date().toISOString())!
+    || (value.nextAfter !== null && !uuid(value.nextAfter)) || !Array.isArray(value.rows)
+    || value.rows.length > q.limit || (value.nextAfter !== null && value.rows.length !== q.limit)) return fail();
+  const cutoff = value.cutoff;
+  const catalogId = value.catalogId;
+  const previousSnapshot = value.previousSnapshot === null ? null : poolRef(value.previousSnapshot);
+  const nextSnapshot = value.nextSnapshot === null ? null : poolRef(value.nextSnapshot);
+  if ((previousSnapshot && (previousSnapshot.id === catalogId || evidenceInstant(previousSnapshot.cutoff)! >= evidenceInstant(cutoff)!))
+    || (nextSnapshot && (nextSnapshot.id === catalogId || nextSnapshot.id === previousSnapshot?.id
+      || evidenceInstant(nextSnapshot.cutoff)! <= evidenceInstant(cutoff)!
+      || evidenceInstant(nextSnapshot.cutoff)! > evidenceInstant(new Date().toISOString())!))) return fail();
+
+  const seen = new Set<string>();
+  const rows = value.rows.map(row => {
+    if (!exact(row, 'clueId symbol source eventAt state industrySnapshot') || !uuid(row.clueId)
+      || seen.has(row.clueId) || typeof row.symbol !== 'string' || !/^[0-9]{4}$/u.test(row.symbol)
+      || (row.source !== 'official' && row.source !== 'ptt') || !clock(row.eventAt)
+      || evidenceInstant(row.eventAt)! > evidenceInstant(cutoff)!
+      || !clueStates.includes(row.state as ClueState)) return fail();
+    const industrySnapshot = poolIndustry(row.industrySnapshot, cutoff);
+    const eventDate = new Date(Date.parse(row.eventAt) + 8 * 3600000).toISOString().slice(0, 10);
+    if ((q.filters.date && q.filters.date !== eventDate) || (q.filters.source && q.filters.source !== row.source)
+      || (q.filters.status && q.filters.status !== row.state)
+      || (q.filters.industry && ![industrySnapshot?.code,industrySnapshot?.label].includes(q.filters.industry))) return fail();
+    seen.add(row.clueId);
+    return { clueId: row.clueId, symbol: row.symbol, source: row.source, eventAt: row.eventAt,
+      state: row.state as ClueState, industrySnapshot };
+  });
+  if (value.nextAfter !== null && value.nextAfter !== rows.at(-1)?.clueId) return fail();
+  return {
+    schemaVersion: 'launch-source-candidate-read-v1' as const, scope: 'saved_cutoff_source_clues' as const,
+    availability: 'ready' as const, catalogId, cutoff, previousSnapshot, nextSnapshot, rows,
+    coverage: { sourceComplete: false, membershipComplete: false, preActivationHistory: 'unavailable' },
+    sourceAuthority: false, entryAuthority: false, publicationAuthority: false,
+    nextCursor: value.nextAfter === null ? null : Buffer.from(JSON.stringify({
+      version: 'source-clues-v1', catalogId, filtersHash, after: value.nextAfter,
+    })).toString('base64url'),
+  };
+}
+
+async function readCandidateClues(query: LaunchCandidateQuery, client: ClueReader) {
+  const filtersHash = sha256Canonical({ view: 'sources', filters: query.filters, limit: query.limit });
+  const after = clueStart(query, filtersHash);
+  const industry = query.filters.industry
+    ? Object.keys(launchPoolIndustryLabels).find(code => code === query.filters.industry || launchPoolIndustryLabels[code] === query.filters.industry)
+    : null;
+  if ((query.filters.industry && !industry)
+    || (query.filters.status && !clueStates.includes(query.filters.status as ClueState))) return fail();
+  let result;
+  try {
+    result = await client.rpc('vnext_launch_candidate_clue_history_v1', {
+      p_catalog_id: query.catalogId, p_after: after, p_limit: query.limit,
+      p_date: query.filters.date, p_source: query.filters.source, p_industry: industry ?? null,
+      p_status: query.filters.status as ClueState | null,
+    });
+  } catch { return poolProducerUnavailable(); }
+  if (result.error || result.data === null) return poolProducerUnavailable();
+  return clueSnapshotPage(result.data, query, filtersHash);
+}
+
 /** The service-role adapter reads saved observations. No source acquisitions,
  * writes, models or legacy ranking fallback are used by this path. */
-export async function readLaunchCandidateCatalog(query: LaunchCandidateQuery, client?: PoolReader) {
+export async function readLaunchCandidateCatalog(query: LaunchCandidateQuery, client?: PoolReader | ClueReader) {
   const q = parsedQuery(query);
   if (!client) {
     const { launchRankingEnabled } = await import('./launch-ranking-read.ts');
@@ -260,8 +347,9 @@ export async function readLaunchCandidateCatalog(query: LaunchCandidateQuery, cl
     } catch { return poolProducerUnavailable(); }
   }
   if (q.cursor !== null && q.catalogId === null) return fail();
+  if (q.view === 'sources') return readCandidateClues(q, client as ClueReader);
   let result;
-  try { result = await client.rpc('vnext_launch_candidate_pool_history_v2', { p_catalog_id: q.catalogId }); }
+  try { result = await (client as PoolReader).rpc('vnext_launch_candidate_pool_history_v2', { p_catalog_id: q.catalogId }); }
   catch { return poolProducerUnavailable(); }
   if (result.error || result.data === null) return poolProducerUnavailable();
   return launchCandidatePoolPage(result.data, q);

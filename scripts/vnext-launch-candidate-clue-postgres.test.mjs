@@ -38,6 +38,113 @@ async function withWriter(fixture, action) {
   }
 }
 
+async function verifySavedClueProjection(fixture) {
+  const ranking = readFileSync(new URL('../migrations/20261115_vnext_launch_ranking_v1.sql', import.meta.url), 'utf8');
+  const modeTable = ranking.indexOf('CREATE TABLE public.vnext_launch_ranking_mode_v1(');
+  const snapshotTable = ranking.indexOf('CREATE TABLE public.vnext_launch_ranking_snapshots_v1(');
+  for (const from of [modeTable, snapshotTable]) {
+    assert.ok(from >= 0);
+    await fixture.writer.query(ranking.slice(from, ranking.indexOf('\n);', from) + 3));
+  }
+  await fixture.writer.query(`
+    ALTER TABLE public.vnext_launch_ranking_snapshots_v1 OWNER TO stockinsider_vnext_owner;
+    ALTER TABLE public.vnext_launch_ranking_mode_v1 OWNER TO stockinsider_vnext_owner;
+    INSERT INTO public.vnext_launch_ranking_mode_v1(enabled,required_writer_release) VALUES(true,'${release}');
+    CREATE FUNCTION public.vnext_launch_candidate_industry_resolved_v1(text,timestamptz) RETURNS jsonb
+    LANGUAGE sql STABLE AS $$ SELECT CASE WHEN $1='2330' THEN jsonb_build_object(
+      'revisionId','00000000-0000-4000-8000-000000000290','code','24','knownAt',$2 - interval '1 minute') END $$;
+  `);
+  await fixture.writer.query(readFileSync(new URL('../migrations/20261117_38_vnext_launch_candidate_pool_history_v1.sql', import.meta.url), 'utf8'));
+  const cutoffDate = '2026-11-15';
+  const oldId = '00000000-0000-4000-8000-000000000281';
+  const currentId = '00000000-0000-4000-8000-000000000282';
+  const nextId = '00000000-0000-4000-8000-000000000283';
+  async function snapshot(id, previous, date, candidates) {
+    // Actual predecessor table and read contract, with controlled historical
+    // rows. This fixture exercises the new insert hook, never a ranked run.
+    await withWriter(fixture, async client => {
+      await client.query('RESET ROLE');
+      const cutoff = date + 'T21:30:00+08:00';
+      await client.query(`
+        INSERT INTO public.vnext_launch_ranking_snapshots_v1
+        (ranking_run_id,previous_ranking_run_id,request_hash,input_hash,input_cutoff,session_date,published_at,snapshot)
+        VALUES($1,$2,repeat('1',64),repeat('2',64),$3::timestamptz,$4::date,$3::timestamptz,$5::jsonb)`,
+        [id,previous,cutoff,date,JSON.stringify({policyVersion:'stockinsider-launch-radar-v1',candidates})]);
+      await client.query('SET LOCAL ROLE service_role');
+    });
+  }
+  const get = async (id, after = null, filter = {}) => {
+    const reader = await fixture.connect();
+    try {
+      await reader.query('SET ROLE service_role');
+      const { rows: [{ result }] } = await reader.query(
+        'SELECT public.vnext_launch_candidate_clue_history_v1($1,$2,$3,$4,$5,$6,$7) AS result',
+        [id,after,filter.limit ?? 1,filter.date ?? null,filter.source ?? null,filter.industry ?? null,filter.status ?? null]);
+      return result;
+    } finally { await fixture.close(reader); }
+  };
+
+  await snapshot(oldId,null,cutoffDate,[{symbol:'2330',state:'waiting'}]);
+  await fixture.writer.query(readFileSync(new URL('../migrations/20261117_50_vnext_launch_candidate_clue_history_v1.sql', import.meta.url), 'utf8'));
+  assert.equal(await get(oldId), null, 'pre-activation snapshot has no fabricated source catalog');
+  const { rows: [{ clearance_id: clearance }] } = await fixture.writer.query(`
+    INSERT INTO public.vnext_candidate_clue_clearance_v1
+      (source,scope,rights_subject,license_basis,authorization_sha256,recorded_at,valid_until)
+    VALUES ('official','official_original',$1,$2,repeat('b',64),'2026-11-01T00:00:00Z',clock_timestamp()+interval '1 hour')
+    RETURNING clearance_id`, [rights,license]);
+  const { rows: completed } = await fixture.writer.query(
+    "SELECT content_hash FROM public.vnext_extractions_v1 WHERE source='official' AND state='completed' ORDER BY completed_at");
+  assert.ok(completed.length>=3);
+  const evidenceAt='2026-11-16T01:00:00Z';
+  const recordedAt='2026-11-16T02:00:00Z';
+  const insert = (hash, symbol) => withWriter(fixture, async client => {
+    await client.query('RESET ROLE');
+    await client.query(`
+      INSERT INTO public.vnext_candidate_public_clues_v1(content_hash,clearance_id,symbol,source,event_at,recorded_at)
+      VALUES($1,$2,$3,'official',$4,$5)`, [hash,clearance,symbol,evidenceAt,recordedAt]);
+    await client.query('SET LOCAL ROLE service_role');
+  });
+  await insert(completed[0].content_hash,'2330');
+  await insert(completed[1].content_hash,'2308');
+  await snapshot(currentId,oldId,'2026-11-16',[{symbol:'2454',state:'eligible'}]);
+  const first = await get(currentId);
+  assert.deepEqual(first.rows.map(r=>[r.symbol,r.state]), [['2308','not_in_saved_pool']]);
+  assert.deepEqual(Object.keys(first.rows[0]).sort(), ['clueId','eventAt','industrySnapshot','source','state','symbol']);
+  assert.equal(first.nextAfter,first.rows[0].clueId);
+
+  await insert(completed[2].content_hash,'2454'); // Inserted later with an older synthetic record clock.
+  await snapshot(nextId,currentId,'2026-11-17',[{symbol:'2454',state:'eligible'}]);
+  const second = await get(currentId,first.nextAfter);
+  assert.deepEqual(second.rows.map(r=>[r.symbol,r.state]), [['2330','absent_from_successor']]);
+  assert.equal(second.nextAfter,null);
+  assert.deepEqual(second.nextSnapshot.id,nextId);
+  assert.deepEqual((await get(nextId)).rows.map(r=>[r.symbol,r.state]), [['2454','snapshot_eligible']]);
+  assert.equal((await get(currentId,null,{date:'2026-11-15'})).rows.length,0);
+  assert.equal((await get(currentId,null,{source:'ptt'})).rows.length,0);
+  assert.equal((await get(currentId,null,{status:'snapshot_eligible'})).rows.length,0);
+  assert.deepEqual((await get(currentId,null,{date:'2026-11-16',source:'official',industry:'24',status:'absent_from_successor'})).rows.map(r=>r.symbol),['2330']);
+
+  await fixture.writer.query('UPDATE public.vnext_candidate_clue_clearance_v1 SET withdrawn_at=clock_timestamp() WHERE clearance_id=$1', [clearance]);
+  assert.deepEqual((await get(currentId,first.nextAfter)).rows,[]);
+  await assert.rejects(fixture.writer.query(
+    'UPDATE public.vnext_candidate_clue_clearance_v1 SET withdrawn_at=NULL WHERE clearance_id=$1',[clearance]),
+    { message:'candidate_clue_clearance_revocation_only' });
+  for(const role of ['anon','authenticated']) {
+    const reader = await fixture.connect();
+    try {
+      await reader.query('SET ROLE '+role);
+      await assert.rejects(reader.query(
+        'SELECT public.vnext_launch_candidate_clue_history_v1(NULL,NULL,10,NULL,NULL,NULL,NULL)'), {code:'42501'});
+    } finally { await fixture.close(reader); }
+  }
+  fixture.save('saved-candidate-clue-history-safe', {
+    exactPoolReaderUsed:true, controlledRankingRows:true, controlledIndustryFixture:true,
+    excludedLateInsertFromOldCatalog:true, olderCatalogUnavailable:true,
+    pinnedWithdrawalAndFourFiltersVerified:true, directBrowserRpcDenials:2,
+    noSourceOrEntryAuthority:true, realRankingVerified:false,
+  });
+}
+
 test('the owned extraction writer derives a private, immutable catalog clue only under explicit disclosure clearance', async t => {
   const fixture = await workerFixture();
   try {
@@ -144,6 +251,7 @@ test('the owned extraction writer derives a private, immutable catalog clue only
       await assert.rejects(fixture.writer.query('DELETE FROM public.vnext_candidate_public_clues_v1'),
         { message: 'vnext_source_withdrawal_append_only' });
     });
+    await t.test('saved clue history pins the cutoff and rechecks current clearances', () => verifySavedClueProjection(fixture));
     fixture.save('candidate-clue-journal-safe', {
       mainEntry: 'vnext_analysis_command_v1 source-reserve and source-complete',
       exactRightsBindingRequired: true, rosterUnresolvedAndEtfExcluded: true, unresolvedPttOriginalExcluded: true,

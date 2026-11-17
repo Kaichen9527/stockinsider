@@ -12,7 +12,7 @@ export default async function CandidatesPage({ searchParams }: { searchParams: P
   const launch=launchRankingEnabled();
   const params=await searchParams;
   const newStatus=['recorded_active_epoch','recorded_exited_epoch','admission_history_unknown','snapshot_waiting','snapshot_eligible','absent_from_successor'];
-  const explicitlyNew=params.catalogId!==undefined||typeof params.status==='string'&&newStatus.includes(params.status);
+  const explicitlyNew=params.catalogId!==undefined||params.view!==undefined||typeof params.status==='string'&&newStatus.includes(params.status);
   if(explicitlyNew||launch&&params.rankingRunId===undefined&&params.cursor===undefined)return <LaunchCandidateCatalog searchParams={params} enabled={launch}/>;
   if (!rankingEnabled()) notFound();
   let data: Awaited<ReturnType<typeof readCandidateHistory>> | null = null;

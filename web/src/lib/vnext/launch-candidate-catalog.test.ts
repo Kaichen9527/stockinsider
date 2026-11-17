@@ -144,3 +144,42 @@ test('industry filters use the last recorded snapshot classification and report 
  assert.throws(()=>launchCandidatePoolPage({...v2,previous:{...v2.previous,rows:[{...v2.previous.rows[0], industrySnapshot:currentIndustry}]}},
    query(),poolReadAt),/projection_invalid/u);
 });
+
+test('saved source candidates use a pinned read cursor without exposing private sequence or source content', async () => {
+ const catalogId = id(970);
+ const row = { clueId:id(971), symbol:'2330', source:'ptt', eventAt:'2026-11-13T17:00:00Z',
+  state:'not_in_saved_pool', industrySnapshot:{revisionId:id(972), code:'24', knownAt:'2026-11-14T02:00:00Z'} };
+ const packet = {schemaVersion:'launch-candidate-clue-history-v1', catalogId, cutoff, rows:[row], nextAfter:row.clueId,
+  previousSnapshot:null, nextSnapshot:null, sourceAuthority:false, entryAuthority:false, publicationAuthority:false};
+ const calls: unknown[]=[];
+ const client = {rpc:async(name:string, args:{p_after:string|null}) => {
+  calls.push([name,args]);
+  return {data:args.p_after ? {...packet,rows:[],nextAfter:null} : packet,error:null};
+ }};
+ const filters = 'view=sources&limit=1&date=2026-11-14&source=ptt&industry=半導體&status=not_in_saved_pool';
+ const first = await readLaunchCandidateCatalog(query(filters),client);
+ assert.equal(first.availability,'ready');
+ assert.ok('scope' in first && first.scope==='saved_cutoff_source_clues');
+ assert.equal(first.rows[0].symbol,'2330');
+ assert.equal(first.rows[0].industrySnapshot?.label,'半導體');
+ assert.equal(first.entryAuthority,false);
+ assert.ok(first.nextCursor);
+ assert.deepEqual(JSON.parse(Buffer.from(first.nextCursor,'base64url').toString()).after,row.clueId);
+ assert.deepEqual(calls[0],['vnext_launch_candidate_clue_history_v1',{p_catalog_id:null,p_after:null,p_limit:1,
+  p_date:'2026-11-14',p_source:'ptt',p_industry:'24',p_status:'not_in_saved_pool'}]);
+ const paging = filters+'&catalogId='+catalogId+'&cursor='+first.nextCursor;
+ const second = await readLaunchCandidateCatalog(query(paging),client);
+ assert.deepEqual(second.rows,[]);
+ assert.equal(second.nextCursor,null);
+ assert.deepEqual(calls[1],['vnext_launch_candidate_clue_history_v1',{p_catalog_id:catalogId,p_after:row.clueId,p_limit:1,
+  p_date:'2026-11-14',p_source:'ptt',p_industry:'24',p_status:'not_in_saved_pool'}]);
+ await assert.rejects(()=>readLaunchCandidateCatalog(query(paging.replace('limit=1','limit=2')),client),/projection_invalid/u);
+ assert.equal(calls.length,2);
+ for (const invalid of [
+  {...packet,rows:[{...row,sourceContent:'private'}]},
+  {...packet,rows:[{...row,eventAt:'2026-11-13T15:59:59Z'}]},
+  {...packet,nextAfter:id(973)},
+ ]) {
+  await assert.rejects(()=>readLaunchCandidateCatalog(query(filters),{rpc:async()=>({data:invalid,error:null})}),/projection_invalid/u);
+ }
+});

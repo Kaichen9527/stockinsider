@@ -112,3 +112,23 @@ test('canonical page renders saved pool states and pins the next page',async()=>
  assert.match(filtered,/<td>半導體<\/td>/u);
  assert.ok(!filtered.includes('2300'));
 });
+
+test('source view renders a saved original clue and keeps its filters pinned on the next page',async()=>{
+ const packet={schemaVersion:'launch-candidate-clue-history-v1',catalogId:id(978),cutoff,
+  rows:[{clueId:id(979),symbol:'2330',source:'ptt',eventAt:'2026-11-13T17:00:00Z',
+    state:'not_in_saved_pool',industrySnapshot:null}],
+  previousSnapshot:null,nextSnapshot:null,nextAfter:id(979),
+  sourceAuthority:false,entryAuthority:false,publicationAuthority:false};
+ const f=actualPage(true,q=>readLaunchCandidateCatalog(q,{rpc:async()=>({data:packet,error:null})}));
+ const html=await f.render({view:'sources',limit:'1',source:'ptt',date:'2026-11-14'});
+ for(const pattern of [/2330/u,/PTT Stock/u,/原始提及/u,/2026-11-13T17:00:00Z/u,/未列入本版研究池/u]) assert.match(html,pattern);
+ const href=/href="([^"]+)"[^>]*>下一頁/u.exec(html)?.[1]?.replaceAll('&amp;','&');
+ assert.ok(href);
+ const params=new URL(href,'http://127.0.0.1').searchParams;
+ assert.equal(params.get('view'),'sources');
+ assert.equal(params.get('catalogId'),packet.catalogId);
+ assert.equal(params.get('source'),'ptt');
+ assert.equal(params.get('date'),'2026-11-14');
+ assert.ok(params.has('cursor'));
+ assert.deepEqual(f.counts(),{oldReads:0,newReads:1});
+});

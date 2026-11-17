@@ -31,6 +31,7 @@ on:
       - 'migrations/20261117_47_vnext_source_guard_trigger_acl_v1.sql'
       - 'migrations/20261117_48_vnext_podcast_private_acl_v1.sql'
       - 'migrations/20261117_49_vnext_launch_candidate_clue_journal_v1.sql'
+      - 'migrations/20261117_50_vnext_launch_candidate_clue_history_v1.sql'
       - 'deployment/vps/launch-radar-schedule/**'
       - 'scripts/run-launch-scheduled-cycle*.mjs'
       - 'openspec/changes/stockinsider-vnext-20/**'
@@ -74,6 +75,7 @@ jobs:
           mkdir -m 700 /tmp/stockinsider-vnext-oct22-private
           node --experimental-strip-types web/src/lib/vnext/launch-research-dispatch.test.ts | tee /tmp/stockinsider-vnext-ci/launch-research-dispatch.tap
           node --experimental-strip-types web/src/lib/vnext/launch-cutover.test.ts | tee /tmp/stockinsider-vnext-ci/launch-cutover.tap
+          node --experimental-strip-types --test web/src/lib/vnext/launch-candidate-catalog.test.ts web/src/lib/vnext/launch-candidate-catalog-page.test.ts | tee /tmp/stockinsider-vnext-ci/launch-candidate-catalog.tap
           node --experimental-strip-types --test web/src/lib/vnext/launch-disposition-range.test.ts web/src/lib/vnext/launch-disposition-status.test.ts | tee /tmp/stockinsider-vnext-ci/launch-disposition-range.tap
           node --experimental-strip-types web/src/lib/vnext/vnext.test.ts | tee /tmp/stockinsider-vnext-ci/pure.tap
           node --experimental-strip-types web/src/lib/vnext/discovery.test.ts | tee /tmp/stockinsider-vnext-ci/discovery.tap
@@ -546,7 +548,7 @@ jobs:
           if node --experimental-strip-types --test scripts/vnext-internal-candidate-plan-acl-postgres.test.mjs > "$raw" 2>&1; then test_status=0; else test_status=$?; fi
           python3 scripts/vnext-safe-tap.py "$raw" /tmp/stockinsider-vnext-ci/internal-candidate-plan-acl.tap
           test "$test_status" = 0
-      - name: Candidate clue publication clearance through the existing source writer
+      - name: Candidate clue clearance and saved catalog through the existing source writer
         env:
           TZ: UTC
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-44
