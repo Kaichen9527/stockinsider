@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "stockinsider-t16-contabo-staging-dependency-duplicate-v1",
+  "removal": {
+    "stateDirectoryRelativePath": "stockinsider-stage-ci-407-build-23106ce/web/node_modules",
+    "canonicalTreeSha256": "6ccf82d0fc2bdea30040c8f6b2f4a63323fa0d219dfa86511bbf2ca124d5e900",
+    "children": {
+      "file": 29797,
+      "directory": 2662,
+      "symbolicLink": 28
+    },
+    "allocatedBytes": 918208512
+  },
+  "recovery": {
+    "stateDirectoryRelativePath": "stockinsider-stage-preparation-55f29e5/work/web/node_modules",
+    "canonicalTreeSha256": "6ccf82d0fc2bdea30040c8f6b2f4a63323fa0d219dfa86511bbf2ca124d5e900",
+    "children": {
+      "file": 29797,
+      "directory": 2662,
+      "symbolicLink": 28
+    },
+    "allocatedBytes": 918200320,
+    "projectLockSha256": "2bfbafb1d2fecd82883b0f8d2ece9e3cc1210c65efe80327210b8db4b4c48632",
+    "npmInstallLockSha256": "76d00dc53f43bd9a1b0b6bb17e33df7d623ad01081d1d0be62110a2cbab5b858",
+    "sha256ComparedEveryRegularFile": true,
+    "symlinkTargetsAndModesMatched": true,
+    "isolatedReadOnlyDependencyRestore": true,
+    "verifiedTools": [
+      "Next.js 16.3.4",
+      "TypeScript transpilation",
+      "Playwright Chromium import",
+      "installed CLI target executable checks"
+    ]
+  },
+  "preflight": {
+    "processReferences": 0,
+    "systemdReferences": 0,
+    "containerBindReferences": 0,
+    "externalSymlinkReferences": 0,
+    "stagingStandaloneRemains": true,
+    "productionFilesInScope": false,
+    "archiveOrSourceFilesInScope": false
+  }
+}
