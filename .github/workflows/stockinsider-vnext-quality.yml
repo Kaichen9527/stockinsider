@@ -25,6 +25,7 @@ on:
       - 'migrations/20261117_41_vnext_launch_issuer_eps_estimates_v1.sql'
       - 'migrations/20261117_42_vnext_internal_candidate_plan_acl_v1.sql'
       - 'migrations/20261117_43_vnext_owner_research_notes_v1.sql'
+      - 'migrations/20261117_44_vnext_legacy_subscription_acl_v1.sql'
       - 'deployment/vps/launch-radar-schedule/**'
       - 'scripts/run-launch-scheduled-cycle*.mjs'
       - 'openspec/changes/stockinsider-vnext-20/**'
@@ -509,7 +510,7 @@ jobs:
           out=root/'forecast-current-private-inventory.json';out.write_text(json.dumps(value,indent=2)+'\n')
           print('::notice title=Forecast private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
           PYCODE
-      - name: Internal candidate planner roles and retained backend calls (synthetic PostgreSQL)
+      - name: Internal planner and legacy report role boundaries (synthetic PostgreSQL)
         env:
           TZ: UTC
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-36
