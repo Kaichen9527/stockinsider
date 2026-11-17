@@ -24,7 +24,7 @@ export async function GET(request:Request){
     const result=await readLaunchRankingSnapshot(query);
     const status=result.availability==='not_found'?404:['schema_unavailable','unavailable','producer_unavailable'].includes(result.availability)?503:200;
     if(status===200&&query.symbol&&result.detail&&result.snapshot&&result.detail.symbol===query.symbol){
-      const outcome=await readPublicLaunchOutcome({rankingRunId:result.snapshot.rankingRunId,symbol:query.symbol,signalSession:result.snapshot.session});
+      const outcome=await readPublicLaunchOutcome({rankingRunId:result.snapshot.rankingRunId,symbol:query.symbol,signalSession:result.snapshot.session,signalCutoff:result.snapshot.cutoff});
       return reply({ok:true,result,outcome},status);
     }
     return reply({ok:status===200,result},status);

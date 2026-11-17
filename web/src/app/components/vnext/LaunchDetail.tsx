@@ -23,7 +23,7 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
   const peReference = detail?.forwardPeReference;
   if(selection.status==='bound'&&member&&(member.revisionId!==selection.revisionId||member.scoreRevision!==selection.scoreRevision))invalid=true;
   const outcome=!disabled&&!invalid&&read?.availability==='ready'&&read.snapshot&&member&&detail
-    ?await readPublicLaunchOutcome({rankingRunId:read.snapshot.rankingRunId,symbol,signalSession:read.snapshot.session}):null;
+    ?await readPublicLaunchOutcome({rankingRunId:read.snapshot.rankingRunId,symbol,signalSession:read.snapshot.session,signalCutoff:read.snapshot.cutoff}):null;
   return <main className="mx-auto max-w-4xl space-y-6 px-4 py-8 text-slate-900 dark:text-slate-100" data-testid="launch-detail">
     <Link href="/" className="underline">返回強勢發動雷達</Link><h1 className="text-2xl font-semibold">{symbol} 強勢發動研究</h1>
     {disabled?<p role="status">強勢發動雷達尚未啟用。</p>:invalid?<p role="status">指定榜單與研究版本不存在或參數不一致。</p>:!member||!detail||!read?<p role="status">{read&&read.availability!=='ready'?launchAvailabilityText(read.availability):'指定研究尚無可讀取的已發布版本。'}</p>:<>

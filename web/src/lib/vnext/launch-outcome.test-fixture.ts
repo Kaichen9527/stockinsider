@@ -1,7 +1,8 @@
 /** Shared public projection data for unit and loopback browser tests. */
-const ref={rankingRunId:'00000000-0000-4000-8000-000000000003',symbol:'1234',signalSession:'2026-10-05'};
+const projectionKey={rankingRunId:'00000000-0000-4000-8000-000000000003',symbol:'1234',signalSession:'2026-10-05'};
 const firstRankingRunId='00000000-0000-4000-8000-000000000001';
-const base={...ref,schemaVersion:'vnext-launch-outcome-public-v1',policyVersion:'launch-outcomes-v1',firstRankingRunId,
+const ref={...projectionKey,signalCutoff:'2026-10-05T21:30:00+08:00'};
+const base={...projectionKey,schemaVersion:'vnext-launch-outcome-public-v1',policyVersion:'launch-outcomes-v1',firstRankingRunId,
   state:'ready',asOf:'2026-11-05T13:30:00+00:00',outcomeRevision:'a'.repeat(64)};
 const unavailableBenchmark={benchmarkReturnPct:null,marketExcessPct:null,netMarketExcessPct:null};
 const period={...unavailableBenchmark,horizon:20,state:'ready',terminalSession:'2026-11-02',grossReturnPct:0,netReturnPct:null};

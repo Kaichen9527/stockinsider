@@ -13,7 +13,7 @@ function fixture(enabled=true,availability='ready',fail=false,withDetail=false){
     if(name==='next/server')return {NextResponse:{json:(value:unknown,init:ResponseInit)=>new Response(JSON.stringify(value),init)}};
     if(name==='@/lib/vnext/launch-outcome-public')return {readPublicLaunchOutcome:async(ref:unknown)=>{outcomeCalls.push(ref);return {state:'awaiting_observation'};}};
     if(name==='@/lib/vnext/launch-ranking-read')return {launchRankingEnabled:()=>enabled,readLaunchRankingSnapshot:async(query:unknown)=>{
-      calls.push(query);if(fail)throw Error('SYNTHETIC_PRIVATE_SECRET');return {availability,reason:null,snapshot:withDetail?{rankingRunId:'00000000-0000-4000-8000-000000000001',session:'2026-11-13'}:null,current:[],detail:withDetail?{symbol:'5274'}:null,readAt:'2026-11-13T13:31:00Z'};}};
+      calls.push(query);if(fail)throw Error('SYNTHETIC_PRIVATE_SECRET');return {availability,reason:null,snapshot:withDetail?{rankingRunId:'00000000-0000-4000-8000-000000000001',session:'2026-11-13',cutoff:'2026-11-13T13:30:00Z'}:null,current:[],detail:withDetail?{symbol:'5274'}:null,readAt:'2026-11-13T13:31:00Z'};}};
     throw Error('unexpected_api_dependency');}});
   const GET=isolated.exports.GET as (request:Request)=>Promise<Response>;
   return {calls,outcomeCalls,request:(query='')=>GET(new Request('http://127.0.0.1/api/launch-ranking'+query))};
@@ -42,7 +42,7 @@ test('actual public GET reads performance only for the selected published stock'
   const detail=await f.request(`?rankingRunId=${run}&symbol=5274`);
   assert.equal(detail.status,200);
   assert.deepEqual((await detail.json()).outcome,{state:'awaiting_observation'});
-  assert.deepEqual(JSON.parse(JSON.stringify(f.outcomeCalls)),[{rankingRunId:run,symbol:'5274',signalSession:'2026-11-13'}]);
+  assert.deepEqual(JSON.parse(JSON.stringify(f.outcomeCalls)),[{rankingRunId:run,symbol:'5274',signalSession:'2026-11-13',signalCutoff:'2026-11-13T13:30:00Z'}]);
   for(const query of ['', '?symbol=6488']){
     const broad=await f.request(query);assert.equal(broad.status,200);
     assert.equal(Object.hasOwn(await broad.json(),'outcome'),false);

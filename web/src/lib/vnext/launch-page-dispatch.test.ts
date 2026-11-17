@@ -92,7 +92,7 @@ test('actual detail reads performance for its frozen member and skips a mismatch
   const f=actualPages(true,true,true);
   const rendered=await f.render(launchQuery);
   assert.equal(rendered.selected,f.newDetail);
-  assert.deepEqual(JSON.parse(JSON.stringify(f.outcomeReads)),[{rankingRunId:run,symbol:'5274',signalSession:'2026-11-13'}]);
+  assert.deepEqual(JSON.parse(JSON.stringify(f.outcomeReads)),[{rankingRunId:run,symbol:'5274',signalSession:'2026-11-13',signalCutoff:'2026-11-13T13:30:00Z'}]);
   const wrong=await f.render({...launchQuery,launchScoreRevision:research});
   assert.match(wrong.text,/參數不一致/u);
   assert.equal(f.outcomeReads.length,1);
