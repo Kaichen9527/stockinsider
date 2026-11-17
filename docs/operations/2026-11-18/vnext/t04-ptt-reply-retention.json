@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "stockinsider-t04-ptt-reply-retention-v1",
+  "recordedAt": "2026-11-17T19:44:31.879288+00:00",
+  "sourceCommit": "6394978c739e3fdeec5b383fbad2bd251b97cc64",
+  "stage": "Contabo isolated staging using synthetic article and replies, no formal write",
+  "savedPostAndSignalMetadataRetainAggregateCounts": true,
+  "bulkUnrelatedReplyTextAndAuthorsOmitted": true,
+  "sameReplyRetainsOriginalLocalStockAndBoundedExcerpt": true,
+  "historicalRowsAuditedOrModified": false,
+  "permissionsChanged": false,
+  "actualSourceAcceptance": false,
+  "tests": {
+    "passed": 55,
+    "fail": 0,
+    "currentTapSha256": "592ba59be2b02de4f02d1f585baeb3cd9c631a57501f33e2c8fc6baf472fd281",
+    "parentExpectedFailure": 1,
+    "parentTapSha256": "7720144b3d2b3cd1bb3b017fb2949d09ccd28ba727cc5dfa31ebd855170d282a"
+  },
+  "build": {
+    "node": "22.14.0",
+    "next": "16.3.4",
+    "typesPassed": true,
+    "lintPassed": true,
+    "lintWarnings": 37,
+    "productionBuildPassed": true,
+    "requiredServerFilesSha256": "606c0683cdc51a48298558396ee10de88471098cb5ee452bc90175595b584c48"
+  },
+  "sourceSha256": {
+    "web/src/lib/research-v2.ts": "50c117dcdf1759c59371695f90241321b2ac5f0709d1a8627653569c70fe7aad",
+    "scripts/ptt-mention-provenance-boundary.test.mjs": "e2a7253cf16983656d52b3e0521186b9d9bd8a2bf767eb79650be9bdde53dd88",
+    "scripts/opportunity-v3/vnext-twse-snapshot-integration-profile-v1.json": "e473145a93075af14a3afa63aaf543cfd5f746b24d8871af9b3281c092e9e27c"
+  }
+}
