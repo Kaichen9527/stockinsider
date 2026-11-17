@@ -8,8 +8,8 @@ MODE=sys.argv[1] if len(sys.argv)==2 else ''
 assert MODE in ('live','fixture'), 'one staging mode is required'
 LIVE=MODE=='live'
 STATE=Path(os.environ['STATE_DIRECTORY'])
-assert STATE.name==('stockinsider-stage-signed-disposition-20261117' if LIVE else 'stockinsider-stage-signed-disposition-test')
-EXPECTED_DAY=datetime.date(2026,11,17)
+assert STATE.name==('stockinsider-stage-signed-disposition-20261118' if LIVE else 'stockinsider-stage-signed-disposition-test')
+EXPECTED_DAY=datetime.date(2026,11,18)
 
 PG=Path('/usr/lib/postgresql/17/bin')
 POSTGREST='/usr/local/bin/postgrest'
