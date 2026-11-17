@@ -386,6 +386,110 @@ SELECT jsonb_build_object(
 }
 
 
+
+// Pin the source-owner bodies used by the fence. pg_depend alone cannot
+// identify the table and helper calls inside these PL/pgSQL bodies.
+const sourceFencePaths = [
+  {
+    signature: 'assert_research_source_seal_v2(uuid)',
+    definitionSha256: '06aed61305eb8754a80733518a815953c9b79160bb20b7572fb399e561498199',
+    reads: ['research_source_seal_invalidations_v2', 'research_source_seals_v2', 'source_raw_documents'],
+    writes: [], calls: [],
+  },
+  {
+    signature: 'research_publication_source_state_v2(uuid)',
+    definitionSha256: '0ad5b0a448cf657c188b7a099149c70b4bc0532c6a822bd8738a5a61ffe3a3c0',
+    reads: ['research_source_seal_invalidations_v2'], writes: [], calls: [],
+  },
+  {
+    signature: 'research_source_fence_record_v2()',
+    definitionSha256: '52d26abb8b812beec884a8267d40a3ef547ae6e3a3a4df528c6a6d8bfe70e7f1',
+    reads: ['research_source_seals_v2'],
+    writes: ['research_source_fence_events_v2', 'research_source_seal_invalidations_v2'],
+    calls: ['research_source_root_v2(jsonb)'],
+  },
+  {
+    signature: 'research_source_fence_write_v2()',
+    definitionSha256: 'fe8339c551f7c809da1f67fb438787bb296133fead41f4f07b3284196aa81522',
+    reads: [], writes: [], calls: [],
+  },
+  {
+    signature: 'seal_research_sources_v2(jsonb,timestamp with time zone)',
+    definitionSha256: 'ff4eb006af3bde82a86a640ac8126083d78684ea6bc2947100d0f8a2ed618479',
+    reads: ['research_source_seal_invalidations_v2', 'research_source_seals_v2', 'source_raw_documents'],
+    writes: ['research_source_seals_v2'], calls: ['research_source_root_v2(jsonb)'],
+  },
+];
+const sourceRootHelper = {
+  signature: 'research_source_root_v2(jsonb)',
+  definitionSha256: 'ada9281b7cd0673b2d4adb9e2c7be673f3959bbff3733117e50d362a569159bc',
+  securityDefiner: false,
+  settings: ['search_path=pg_catalog'],
+};
+
+async function checkSourceFenceExecutionPaths(fixture, observer, candidate) {
+  const { rows: ownedRoutines } = await observer.query(`
+    SELECT p.oid::regprocedure::text AS signature, p.prosecdef AS "securityDefiner",
+      p.proconfig AS settings,
+      encode(sha256(convert_to(pg_get_functiondef(p.oid), 'UTF8')), 'hex') AS "definitionSha256"
+    FROM pg_proc p
+    WHERE p.proowner = $1::regrole AND p.prokind = 'f'
+    ORDER BY signature`, [candidate.reviewedTarget]);
+  assert.deepEqual(ownedRoutines, sourceFencePaths.map(({ signature, definitionSha256 }) => ({
+    signature, definitionSha256, securityDefiner: true, settings: ['search_path=pg_catalog, public'],
+  })));
+
+  const { rows: [helper] } = await observer.query(`
+    SELECT p.oid::regprocedure::text AS signature, p.prosecdef AS "securityDefiner",
+      p.proconfig AS settings,
+      encode(sha256(convert_to(pg_get_functiondef(p.oid), 'UTF8')), 'hex') AS "definitionSha256"
+    FROM pg_proc p WHERE p.oid = 'public.research_source_root_v2(jsonb)'::regprocedure`);
+  assert.deepEqual(helper, sourceRootHelper);
+  const { rows: inbound } = await observer.query(`
+    SELECT p.proname AS routine, t.tgname AS trigger, t.tgenabled AS enabled, t.tgtype::int AS mask
+    FROM pg_trigger t JOIN pg_proc p ON p.oid = t.tgfoid
+    WHERE t.tgrelid = 'public.source_raw_documents'::regclass
+      AND p.proowner = $1::regrole ORDER BY t.tgname`, [candidate.reviewedTarget]);
+  assert.deepEqual(inbound, [
+    { routine: 'research_source_fence_record_v2', trigger: 'research_source_fence_record_v2', enabled: 'O', mask: 29 },
+    { routine: 'research_source_fence_write_v2', trigger: 'research_source_fence_truncate_v2', enabled: 'O', mask: 34 },
+    { routine: 'research_source_fence_write_v2', trigger: 'research_source_fence_write_v2', enabled: 'O', mask: 31 },
+  ]);
+
+  const { rows: checks } = await observer.query(`
+    SELECT c.confrelid::regclass::text AS "references",
+      n.nspname AS schema, p.proname AS handler, l.lanname AS language, t.tgenabled AS enabled
+    FROM pg_constraint c
+    JOIN pg_trigger t ON t.tgconstraint = c.oid AND t.tgrelid = c.conrelid
+    JOIN pg_proc p ON p.oid = t.tgfoid
+    JOIN pg_namespace n ON n.oid = p.pronamespace
+    JOIN pg_language l ON l.oid = p.prolang
+    WHERE c.conrelid = 'public.research_source_seal_invalidations_v2'::regclass
+      AND c.contype = 'f' AND t.tgisinternal AND (t.tgtype & 4) <> 0
+    ORDER BY "references"`);
+  assert.deepEqual(checks, ['research_source_fence_events_v2', 'research_source_seals_v2'].map(relation => ({
+    references: relation, schema: 'pg_catalog', handler: 'RI_FKey_check_ins', language: 'internal', enabled: 'O',
+  })));
+
+  const roles = ['anon', 'authenticated', 'service_role'];
+  const { rows: capabilities } = await observer.query(`
+    SELECT p.oid::regprocedure::text AS signature,
+      ARRAY(SELECT name FROM unnest($2::text[]) name
+        WHERE has_function_privilege(name, p.oid, 'EXECUTE') ORDER BY name) AS callers
+    FROM pg_proc p
+    WHERE p.proowner = $1::regrole AND p.prokind = 'f' ORDER BY signature`, [candidate.reviewedTarget, roles]);
+  assert.deepEqual(capabilities, sourceFencePaths.map(({ signature }) => ({
+    signature, callers: signature.startsWith('seal_research_sources_v2(') ? ['service_role'] : [],
+  })));
+
+  fixture.save('source-fence-execution-paths-safe', {
+    scope: 'read-only exact hardened routine fixture',
+    routineBodiesBoundBySha256: sourceFencePaths,
+    helper, inbound, insertForeignKeyHandlers: checks, browserAndBackendCallers: capabilities,
+    schemaGrantExecuted: false, independentReviewAccepted: false,
+  });
+}
+
 async function checkRawWriteRequiresNamespace(fixture) {
   const release = 'a'.repeat(40);
   const lease = '00000000-0000-4000-8000-000000000260';
@@ -647,6 +751,7 @@ test('planner and legacy report ACLs preserve their existing web and backend cal
         assert.notEqual(result.forecast.catalogHash, result.predecessor.catalogHash);
         assert.deepEqual(result.proposedPermission, ['public', 'USAGE']);
         fixture.save('source-namespace-hardened-review-safe', result);
+        await checkSourceFenceExecutionPaths(fixture, fixture.observer, result);
       } finally {
         await fixture.observer.query('ROLLBACK');
       }
