@@ -41,7 +41,10 @@ export async function continueInvestAnchorsNoticeScan(
     || typeof saved.progressId !== 'string' || !id.test(saved.progressId) || typeof saved.replay !== 'boolean') {
     throw Error('investanchors_progress_write_uncertain');
   }
-  return { scanStatus: scan.scanStatus, checkpointDay: scan.checkpointDay, checked: scan.checkedKeys.length,
+  // The ledger stores incomplete progress, while the worker still reports
+  // an actionable provider failure and does not advance to another day.
+  const scanStatus = scan.reason === 'provider_unavailable' ? 'retry_required' : scan.scanStatus;
+  return { scanStatus, checkpointDay: scan.checkpointDay, checked: scan.checkedKeys.length,
     awaiting: scan.notices.length, deferred: scan.deferred, rejected: scan.rejected, articleAuthority: false as const };
 }
 

@@ -194,11 +194,19 @@ export async function collectInvestAnchorsNotices(
     const unread = [...ids].map(id => ({ id, noticeKey: keyedId(key, 'gmail-message', id) }))
       .filter(item => !limits.checkedKeys.has(item.noticeKey));
     const batch = unread.slice(0, limits.readBudget);
-    const deferred = unread.length - batch.length;
     const notices: Notice[] = [], checkedKeys: string[] = [];
-    let rejected = 0, lastObserved = started;
+    let rejected = 0, lastObserved = started, providerInterrupted = false;
     for (const { id, noticeKey } of batch) {
-      const message = await deps.get({ id, format: 'full' });
+      let message: unknown;
+      try {
+        message = await deps.get({ id, format: 'full' });
+      } catch {
+        // The inventory is complete. Keep only previously validated messages
+        // and leave this message and the remainder pending for the next scan.
+        if (checkedKeys.length === 0) return empty('provider_unavailable');
+        providerInterrupted = true;
+        break;
+      }
       const observedAt = deps.now(), observed = evidenceInstant(observedAt);
       if (observed === null || observed < lastObserved) return empty('invalid_response');
       lastObserved = observed;
@@ -209,9 +217,11 @@ export async function collectInvestAnchorsNotices(
       if (item.kind === 'unverified_sender') rejected++;
     }
     notices.sort((a, b) => a.receivedAt.localeCompare(b.receivedAt) || a.noticeKey.localeCompare(b.noticeKey));
+    const deferred = unread.length - checkedKeys.length;
     const scanStatus = deferred > 0 ? 'deferred' as const
       : started >= BigInt(window.endMs) * BigInt(1000) ? 'scanned' as const : 'open_day' as const;
-    return { scanStatus, reason: null, checkpointDay: scanStatus === 'scanned' ? window.day : null,
+    return { scanStatus, reason: providerInterrupted ? 'provider_unavailable' as const : null,
+      checkpointDay: scanStatus === 'scanned' ? window.day : null,
       notices, checkedKeys, deferred, rejected, articleAuthority: false as const, sourceAuthority: false as const };
   } catch {
     return empty('provider_unavailable');

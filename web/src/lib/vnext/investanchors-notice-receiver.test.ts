@@ -301,3 +301,64 @@ test('Taipei morning selects early notices while explicit replay stays on closed
   assert.equal(final.notices.length, 0);
   assert.equal(g.reads(), 1);
 });
+
+
+test('a partial Gmail fetch keeps verified progress and retries only the unfinished messages', async () => {
+  const messages = [mail('first_read', window.startMs), mail('interrupt_once', window.startMs + 1), mail('then_last', window.startMs + 2)];
+  const underlying = provider(messages);
+  const reads: string[] = [];
+  let shouldFail = true;
+  const gmail = {
+    ...underlying,
+    async get(request: { id: string; format: 'full' }) {
+      reads.push(request.id);
+      if (request.id === 'interrupt_once' && shouldFail) {
+        shouldFail = false;
+        throw Error('private upstream response');
+      }
+      return underlying.get(request);
+    },
+  };
+  let progressId: string | null = null, readBudget = 3, checkpointDay: string | null = null;
+  const checkedKeys: string[] = [];
+  const acknowledged: Record<string, unknown>[] = [];
+  const progress = async (value?: Record<string, unknown>) => {
+    if (value === undefined) return { progressId, checkedKeys, checkpointDay, readBudget, articleAuthority: false };
+    assert.equal(value.baseProgressId, progressId);
+    const fresh = value.checkedKeys as string[];
+    assert.ok(fresh.every(key => !checkedKeys.includes(key)));
+    checkedKeys.push(...fresh);
+    readBudget -= fresh.length;
+    acknowledged.push(value);
+    progressId = String(acknowledged.length);
+    checkpointDay = value.scanStatus === 'scanned' ? day : null;
+    return { progressId, replay: false, articleAuthority: false };
+  };
+  const first = await continueInvestAnchorsNoticeScan(day, key, gmail, progress);
+  assert.deepEqual(first, { scanStatus: 'retry_required', checkpointDay: null, checked: 1,
+    awaiting: 1, deferred: 2, rejected: 0, articleAuthority: false });
+  assert.equal(acknowledged[0]?.scanStatus, 'deferred');
+  assert.equal(checkpointDay, null);
+  assert.deepEqual(reads, ['first_read', 'interrupt_once']);
+  assert.doesNotMatch(JSON.stringify(first), /private upstream|interrupt_once|noticeKey/u);
+  const resumed = await continueInvestAnchorsNoticeScan(day, key, gmail, progress);
+  assert.deepEqual(resumed, { scanStatus: 'scanned', checkpointDay: day, checked: 2, awaiting: 2,
+    deferred: 0, rejected: 0, articleAuthority: false });
+  assert.deepEqual(reads, ['first_read', 'interrupt_once', 'interrupt_once', 'then_last']);
+  assert.equal(readBudget, 0);
+  assert.equal(checkedKeys.length, 3);
+});
+
+test('invalid response identity does not accept a partial cache prefix', async () => {
+  const underlying = provider([mail('first_read', window.startMs), mail('wrong_identity', window.startMs + 1)]);
+  const gmail = {
+    ...underlying,
+    get: async (request: { id: string; format: 'full' }) => request.id === 'wrong_identity'
+      ? mail('different_identity', window.startMs + 1) : underlying.get(request),
+  };
+  const scan = await collectInvestAnchorsNotices(day, key, gmail, dateOptions);
+  assert.equal(scan.scanStatus, 'retry_required');
+  assert.equal(scan.reason, 'invalid_response');
+  assert.deepEqual(scan.checkedKeys, []);
+  assert.deepEqual(scan.notices, []);
+});

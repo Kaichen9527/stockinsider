@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "stockinsider-t03-gmail-partial-scan-resume-v1",
+  "recordedAt": "2026-11-17T18:52:10+00:00",
+  "parent": "49cae1b92b238e5be6dca45cb84437712bd31549",
+  "scope": "Contabo isolated synthetic Gmail inputs with the actual PostgreSQL progress RPC and shared writer lease",
+  "sourceSha256": {
+    "web/src/lib/vnext/investanchors-notice-receiver.ts": "08a16b1ee966001712852f662176f3c3f8f72f3e8f8620b9c8326d53029a47d8",
+    "web/src/lib/vnext/investanchors-notice-progress.ts": "6682569c96c8ea7ba9b9e5ba60deb7d217ad177ad137a33e5650bcf5759bd743",
+    "web/src/lib/vnext/investanchors-notice-receiver.test.ts": "a674963ec906494f00644a977677faef655168c4ff02cb8af37bd2ab173283d4",
+    "deployment/vps/launch-radar-schedule/README.md": "bafeae4d5b7ed5be43dd86fa0faed3eaa3f136bbe02b26a3c9959df492e61aa3",
+    "scripts/vnext-launch-research-policy-postgres.test.mjs": "f332f80f227277523f1fe3aeaf133f674854fed7145a6d95360803e4738a2140"
+  },
+  "sourceTests": {
+    "baselineRegressionReproduced": true,
+    "baselineTapSha256": "18e05fe9650540ade091a3233a6eed220bf6233363e02f3627b817bec8b9b7f2",
+    "pass": 47,
+    "fail": 0,
+    "tapSha256": "e0ee956c974fda4d5d31bd46f27f510fac7c77ebde07d9a569429d91170c88ed"
+  },
+  "native": {
+    "postgres": "17.11",
+    "suitePassed": true,
+    "tapSha256": "3421161c87165c7155665a3bf8282dd23924bb13710837e7be0e5cfec158ddee",
+    "observation": {
+      "databaseLeaseUsed": true,
+      "sameDayCheckpointAfterResume": true,
+      "completedReadsCharged": 3,
+      "durablePrefixBeforeRetry": 1,
+      "remainingAfterInterruption": 2,
+      "repeatedVerifiedReads": 0,
+      "articleAuthority": false,
+      "syntheticProvider": true
+    },
+    "formalProductionSignaturesMatched": true,
+    "containerRemoved": true
+  },
+  "build": {
+    "nextVersion": "16.3.4",
+    "passed": true,
+    "targetedLintPassed": true,
+    "requiredServerFilesSha256": "8f8e3bbae69e967e9f98dabe5db18d25e0c43f960e44d22e29e4cc596d8ad8fa"
+  },
+  "realUnattendedGmailGrantVerified": false,
+  "realMemberArticleSourceVerified": false
+}

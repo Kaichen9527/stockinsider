@@ -5,6 +5,8 @@ import {workerFixture} from './vnext-worker-fixture.mjs';
 import {rosterHeadFixtureSql} from './vnext-launch-roster-head-fixture.mjs';
 import {extractContentBatch} from '../web/src/lib/vnext/permitted-content.ts';
 import {inputHash,taipeiDate} from '../web/src/lib/vnext/policy.ts';
+import {continueInvestAnchorsNoticeScan} from '../web/src/lib/vnext/investanchors-notice-progress.ts';
+import {planInvestAnchorsMailboxDay} from '../web/src/lib/vnext/investanchors-notice-receiver.ts';
 
 const policy='stockinsider-launch-radar-v1';
 const migration='migrations/20261117_35_vnext_launch_research_policy_v1.sql';
@@ -171,7 +173,7 @@ await test('launch policy is bound to the shared job and its prepared revision i
     "INSERT INTO public.stockinsider_data_plane_settings_v1(singleton,identity_fence_enabled,activated_at,activated_by) VALUES (true,true,clock_timestamp(),'synthetic') ON CONFLICT(singleton) DO UPDATE SET identity_fence_enabled=true,activated_at=excluded.activated_at,activated_by=excluded.activated_by");
   await x.writer.query("INSERT INTO public.production_writer_releases(release_id,writer_kind,active,activated_at) VALUES ($1,'vps',true,clock_timestamp())",[writerRelease]);
   await x.writer.query("INSERT INTO public.production_write_leases(lease_key,owner_id,acquired_at,expires_at) VALUES ('production-data-plane',$1,clock_timestamp(),clock_timestamp()+interval '5 minutes')",[lease]);
-  const intake = async (capture=null,principal=operator,leaseOwner=lease)=>{
+  const boundService = async (sql, args) => {
    const connection=await x.connect();
    try {
     await connection.query('SET ROLE service_role');
@@ -179,10 +181,11 @@ await test('launch policy is bound to the shared job and its prepared revision i
       JSON.stringify({'x-stockinsider-backend-id':backend,'x-stockinsider-runner-principal':runner,'x-stockinsider-writer-release':writerRelease}),
       '{"role":"service_role"}',
     ]);
-    return (await connection.query('SELECT public.vnext_launch_industry_capture_command_v1($1,$2,$3,$4) AS result',
-      [principal,leaseOwner,day,capture])).rows[0].result;
+    return (await connection.query(sql, args)).rows[0].result;
    } finally { await x.close(connection); }
   };
+  const intake = (capture = null, principal = operator, leaseOwner = lease) => boundService(
+    'SELECT public.vnext_launch_industry_capture_command_v1($1,$2,$3,$4) AS result', [principal, leaseOwner, day, capture]);
   await assert.rejects(()=>intake(null,author),/launch_industry_writer_or_scope_unavailable/u);
   await assert.rejects(()=>intake(null,operator,runner),/launch_csv_exact_owned_lease_required/u);
   const intakeScope = await intake();
@@ -208,6 +211,60 @@ await test('launch policy is bound to the shared job and its prepared revision i
   assert.equal(observedIndustry.code,'36');
   assert.equal((await poolIndustry()).current.rows[0].industrySnapshot,null);
   await assert.rejects(()=>service('SELECT count(*) AS result FROM public.vnext_launch_industry_capture_v1'),{code:'42501'});
+  await x.writer.query(sourceFunction('vnext_launch_csv_hash_v1'));
+  await x.writer.query('ALTER FUNCTION public.vnext_launch_csv_hash_v1(jsonb) OWNER TO stockinsider_vnext_owner');
+  await x.writer.query(fs.readFileSync('migrations/20261116_18_vnext_investanchors_notice_progress_v1.sql', 'utf8'));
+  const { rows: [{ notice_day: noticeDay }] } = await x.observer.query(
+    "SELECT ((clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date - 1)::text AS notice_day");
+  const mailboxWindow = planInvestAnchorsMailboxDay(noticeDay);
+  const checkedIds = [];
+  const ids = ['synthetic_notice_a', 'synthetic_notice_b', 'synthetic_notice_c'];
+  let unavailable = true;
+  const mailbox = {
+    now: () => new Date().toISOString(),
+    list: async () => ({ messages: ids.map(id => ({ id })) }),
+    get: async ({ id }) => {
+      checkedIds.push(id);
+      if (id === ids[1] && unavailable) {
+        unavailable = false;
+        throw Error('synthetic provider interruption');
+      }
+      const content = Buffer.from('Synthetic notice body with no linked article.');
+      return { id, internalDate: String(mailboxWindow.startMs + ids.indexOf(id)),
+        payload: { mimeType: 'text/plain', headers: [
+          { name: 'From', value: 'fixtures@mailer.investanchors.com' },
+          { name: 'Subject', value: 'Synthetic notice only' },
+          { name: 'Authentication-Results', value: 'mx.google.com; dkim=pass header.i=@mailer.investanchors.com;' },
+        ], body: { size: content.length, data: content.toString('base64url') } } };
+    },
+  };
+  const progress = payload => boundService(
+    'SELECT public.vnext_investanchors_notice_progress_v1($1,$2,$3,$4) AS result',
+    [operator, lease, noticeDay, payload ?? null],
+  );
+  const beforeNotice = await progress();
+  assert.equal(beforeNotice.checkpointDay, null);
+  const firstNotice = await continueInvestAnchorsNoticeScan(noticeDay, Buffer.alloc(32, 7), mailbox, progress);
+  assert.equal(firstNotice.scanStatus, 'retry_required');
+  assert.equal(firstNotice.checked, 1);
+  assert.equal(firstNotice.deferred, 2);
+  const savedPrefix = await progress();
+  assert.equal(savedPrefix.checkpointDay, null);
+  assert.equal(savedPrefix.checkedKeys.length, 1);
+  assert.equal(savedPrefix.readBudget, beforeNotice.readBudget - 1);
+  const resumed = await continueInvestAnchorsNoticeScan(noticeDay, Buffer.alloc(32, 7), mailbox, progress);
+  assert.equal(resumed.scanStatus, 'scanned');
+  assert.equal(resumed.checked, 2);
+  assert.deepEqual(checkedIds, [ids[0], ids[1], ids[1], ids[2]]);
+  const afterNotice = await progress();
+  assert.equal(afterNotice.checkpointDay, noticeDay);
+  assert.equal(afterNotice.checkedKeys.length, 3);
+  assert.equal(afterNotice.readBudget, beforeNotice.readBudget - 3);
+  x.save('investanchors-native-resume-safe', {
+    databaseLeaseUsed: true, sameDayCheckpointAfterResume: true, completedReadsCharged: 3,
+    durablePrefixBeforeRetry: savedPrefix.checkedKeys.length, remainingAfterInterruption: firstNotice.deferred,
+    repeatedVerifiedReads: 0, articleAuthority: resumed.articleAuthority, syntheticProvider: true,
+  });
   await x.writer.query("DELETE FROM public.production_write_leases WHERE owner_id=$1",[lease]);
   await x.writer.query("DELETE FROM public.production_writer_releases WHERE release_id=$1",[writerRelease]);
   await x.writer.query("UPDATE public.stockinsider_data_plane_settings_v1 SET identity_fence_enabled=false,activated_at=null,activated_by=null");
