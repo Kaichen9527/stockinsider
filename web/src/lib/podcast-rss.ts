@@ -2,6 +2,14 @@ import { createHash } from 'node:crypto';
 
 export const PODCAST_NAMESPACE = 'https://podcastindex.org/namespace/1.0';
 
+const INVEST_J_THINGS_CHANNEL = 'UCXB8cCqwOHP3BmyhYLAUs0g';
+const YOUTUBE_ORIGIN = 'https://www.youtube.com';
+export const INVEST_J_THINGS_FEED = YOUTUBE_ORIGIN + '/feeds/videos.xml?channel_id=' + INVEST_J_THINGS_CHANNEL;
+export const INVEST_J_THINGS_PROGRAM = '投資 J 件事';
+export const INVEST_J_THINGS_AUTHOR = '林睿閎';
+export const INVEST_J_THINGS_PROFILE = 'https://t.me/johnstock888';
+export const INVEST_J_THINGS_FEED_LIMIT_BYTES = 262_144;
+
 export type PodcastArtifactReference = {
   url: string;
   type: string;
@@ -109,6 +117,49 @@ export function parsePodcastNamespaceFeed(xml: string): PodcastNamespaceEpisode[
   });
 }
 
+/** Use YouTube only to verify the creator's original episode identity and date.
+ * The channel mixes programs. Only an explicitly registered episode can enter
+ * this feed, and captions are supplied independently by the rightsholder. */
+export function parseInvestJThingsFeed(xml: string, registeredTracks: ReadonlyMap<string, PodcastArtifactReference>) {
+  if (Buffer.byteLength(xml, 'utf8') > INVEST_J_THINGS_FEED_LIMIT_BYTES) throw Error('podcast_feed_too_large');
+  if (/<!DOCTYPE|<!ENTITY/iu.test(xml)) throw Error('podcast_feed_unsafe_xml');
+  const feed = /^(?:<\?xml[^>]*\?>\s*)?<feed\s([^>]*)>([\s\S]*)<\/feed>\s*$/u.exec(xml.trim());
+  if (!feed || attribute(feed[1], 'xmlns') !== 'http://www.w3.org/2005/Atom'
+    || attribute(feed[1], 'xmlns:yt') !== 'http://www.youtube.com/xml/schemas/2015') {
+    throw Error('invest_j_things_feed_invalid');
+  }
+  const [, , body] = feed;
+  const header = body.split(/<entry\s*>/u, 1)[0];
+  const feedChannel = element(header, ['yt:channelId']);
+  if (feedChannel !== INVEST_J_THINGS_CHANNEL && feedChannel !== INVEST_J_THINGS_CHANNEL.slice(2)) {
+    throw Error('invest_j_things_channel_mismatch');
+  }
+  const entries = [...body.matchAll(/<entry\s*>([\s\S]*?)<\/entry>/gu)];
+  if (entries.length > 20) throw Error('invest_j_things_feed_invalid');
+  const episodes = new Map<string, { title: string; link: string; publishedAt: string }>();
+  for (const [, entry] of entries) {
+    const id = element(entry, ['yt:videoId']);
+    if (!id || !/^[A-Za-z0-9_-]{11}$/u.test(id)) continue;
+    const link = YOUTUBE_ORIGIN + '/watch?v=' + id;
+    if (!registeredTracks.has(podcastTranscriptTrackKey(INVEST_J_THINGS_FEED, link))) continue;
+    const alternate = [...entry.matchAll(/<link\s([^>]*)\/?>/gu)]
+      .filter((match) => attribute(match[1], 'rel') === 'alternate');
+    const href = alternate.length === 1 ? attribute(alternate[0][1], 'href') : null;
+    if (element(entry, ['yt:channelId']) !== INVEST_J_THINGS_CHANNEL
+      || element(entry, ['id']) !== 'yt:video:' + id
+      || (href !== link && href !== YOUTUBE_ORIGIN + '/shorts/' + id)) continue;
+    const title = element(entry, ['title']);
+    const date = element(entry, ['published']);
+    if (!title || /請\s*支\s*援\s*輸\s*贏/u.test(title.normalize('NFKC')) || !date
+      || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/u.test(date)) continue;
+    const time = Date.parse(date);
+    if (!Number.isFinite(time)) continue;
+    if (episodes.has(id)) throw Error('invest_j_things_duplicate_episode');
+    episodes.set(id, { title, link, publishedAt: new Date(time).toISOString() });
+  }
+  return [...episodes.values()];
+}
+
 function mediaType(value: string) {
   return value.split(';')[0].trim().toLowerCase();
 }
@@ -191,12 +242,14 @@ export function configuredPodcastTranscriptTracks(input: string | undefined, all
   try { rows = JSON.parse(input); } catch { throw Error('podcast_transcript_registry_invalid'); }
   if (!Array.isArray(rows) || rows.length > 40) throw Error('podcast_transcript_registry_invalid');
   for (const row of rows) {
-    if (!row || typeof row !== 'object' || Array.isArray(row)
-      || Object.keys(row).sort().join('|') !== 'episodeUrl|feedUrl|language|type|url|utf8Sha256') {
-      throw Error('podcast_transcript_registry_invalid');
-    }
+    if (!row || typeof row !== 'object' || Array.isArray(row)) throw Error('podcast_transcript_registry_invalid');
     const { feedUrl, episodeUrl, url, language, type, utf8Sha256 } = row;
-    if (!allowedFeeds.has(feedUrl) || !registeredPodcastUrl(episodeUrl) || !registeredPodcastUrl(url, true)
+    const john = feedUrl === INVEST_J_THINGS_FEED;
+    const fields = john ? 'episodeUrl|feedUrl|language|program|type|url|utf8Sha256' : 'episodeUrl|feedUrl|language|type|url|utf8Sha256';
+    if (Object.keys(row).sort().join('|') !== fields
+      || !allowedFeeds.has(feedUrl) || !registeredPodcastUrl(episodeUrl) || !registeredPodcastUrl(url, true)
+      || (john && (row.program !== INVEST_J_THINGS_PROGRAM
+        || !/^https:\/\/www\.youtube\.com\/watch\?v=[A-Za-z0-9_-]{11}$/u.test(episodeUrl)))
       || typeof type !== 'string' || type !== mediaType(type) || !timedTranscriptType(type)
       || (language !== null && (typeof language !== 'string' || !/^[a-z]{2,3}(?:-[a-z0-9]{2,8}){0,3}$/iu.test(language)))
       || typeof utf8Sha256 !== 'string' || !/^[a-f0-9]{64}$/u.test(utf8Sha256)) {

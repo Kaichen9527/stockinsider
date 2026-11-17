@@ -1,4 +1,7 @@
 import type { PodcastMentionView } from './types.ts';
+import {
+  configuredPodcastTranscriptTracks, INVEST_J_THINGS_FEED, INVEST_J_THINGS_PROGRAM, podcastTranscriptTrackKey,
+} from './podcast-rss.ts';
 import { authorizedPodcastRssAllowlist, podcastContentAnalyzable } from './source-policy.ts';
 
 type Row = Record<string, unknown>;
@@ -45,6 +48,17 @@ function publicPodcastEvidence(row: Row) {
     || !Number.isFinite(Date.parse(row.published_at))) return null;
   const episodeUrl = publicEpisodeUrl(row.document_url);
   if (!episodeUrl) return null;
+  const john = metadata.rss_url === INVEST_J_THINGS_FEED;
+  if (john) {
+    try {
+      const tracks = configuredPodcastTranscriptTracks(process.env.PODCAST_AUTHORIZED_TRANSCRIPT_TRACKS,
+        new Set(authorizedPodcastRssAllowlist()));
+      const approved = tracks.get(podcastTranscriptTrackKey(INVEST_J_THINGS_FEED, episodeUrl));
+      if (!approved || approved.utf8Sha256 !== metadata.transcript_artifact_sha256) return null;
+    } catch {
+      return null;
+    }
+  }
   const symbols = new Set(row.symbols);
   const locators: Locator[] = [];
   for (const value of metadata.spoken_stock_mentions) {
@@ -57,7 +71,7 @@ function publicPodcastEvidence(row: Row) {
     locators.push({ symbol: locator.symbol, startSeconds: locator.startSeconds, endSeconds: locator.endSeconds });
   }
   if (!locators.length) return null;
-  return { episodeUrl, publishedAt: row.published_at, locators };
+  return { episodeUrl, publishedAt: row.published_at, locators, program: john ? INVEST_J_THINGS_PROGRAM : null };
 }
 
 function spokenPosition({ symbol, startSeconds, endSeconds }: Locator): string {
@@ -69,7 +83,7 @@ export function publicPodcastMention(row: Row, symbol: string): PodcastMentionVi
   const locator = evidence?.locators.find(item => item.symbol === symbol);
   if (!evidence || !locator) return null;
   return {
-    podcastName: 'Podcast',
+    podcastName: evidence.program ?? 'Podcast',
     episodeTitle: '口述定位',
     platform: 'rss',
     episodeUrl: evidence.episodeUrl,
@@ -95,7 +109,7 @@ export function projectPublicPodcastSource(row: Row): Row | null {
   return {
     id: row.id,
     platform: 'podcast',
-    title: 'Podcast 口述定位',
+    title: (evidence.program ?? 'Podcast') + ' 口述定位',
     summary: evidence.locators.map(spokenPosition).join('。'),
     symbols: evidence.locators.map(locator => locator.symbol),
     document_url: evidence.episodeUrl,

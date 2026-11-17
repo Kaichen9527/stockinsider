@@ -13,6 +13,8 @@ import { THREADS_KEYWORD_SEARCH_URL, assertThreadsKeywordSearchEndpoint } from '
 import {
   derivePodcastLedgerSemantics, locatePodcastStockMentions, parsePodcastNamespaceFeed, podcastStockCodes,
   configuredPodcastTranscriptTracks, podcastTranscriptTrackKey, selectTimedPublisherTranscript, type PodcastArtifactReference,
+  INVEST_J_THINGS_AUTHOR, INVEST_J_THINGS_FEED, INVEST_J_THINGS_FEED_LIMIT_BYTES, INVEST_J_THINGS_PROFILE,
+  INVEST_J_THINGS_PROGRAM, parseInvestJThingsFeed,
 } from './podcast-rss';
 import { fetchTextWithRetry, sourceFetchFailureCode } from './source-fetch';
 import { assertThreadsPublicSearchReady, threadsTokenRegistryMetadata } from './threads-token';
@@ -269,13 +271,17 @@ const KOL_SEEDS = [
     },
   },
   {
+    // Keep the existing profile key. The podcast collector attributes the
+    // registered program to the verified creator without duplicating this row.
     displayName: 'John 林睿閔',
     primaryPlatform: 'telegram',
     followerCount: 30000,
     contentFocus: 'tw_stocks',
-    profileUrl: 'https://t.me/johnstock888',
+    profileUrl: INVEST_J_THINGS_PROFILE,
     metadata: {
       telegramUrl: 'https://t.me/s/johnstock888',
+      podcastName: INVEST_J_THINGS_PROGRAM,
+      rssUrl: INVEST_J_THINGS_FEED,
     },
   },
   {
@@ -5569,6 +5575,29 @@ async function fetchExplicitRssItems(rssUrl: string) {
   }
 }
 
+async function fetchInvestJThingsItems(registeredTracks: ReadonlyMap<string, PodcastArtifactReference>) {
+  const url = new URL(INVEST_J_THINGS_FEED);
+  const response = await fetchPinnedHttpsText({
+    url,
+    allowedOrigins: new Set([url.origin]),
+    headers: { accept: 'application/atom+xml, application/xml, text/xml' },
+    maxBytes: INVEST_J_THINGS_FEED_LIMIT_BYTES,
+    timeoutMs: 12_000,
+  });
+  if (!/^(?:application\/(?:atom\+xml|xml)|text\/xml)(?:\s*;|$)/iu.test(response.contentType)) {
+    throw Error('invest_j_things_feed_invalid_media_type');
+  }
+  return parseInvestJThingsFeed(response.body, registeredTracks).map((episode): PodcastEpisodeCandidate => ({
+    title: episode.title,
+    link: episode.link,
+    pubDate: episode.publishedAt,
+    audioUrl: null,
+    platform: 'youtube',
+    sourceMode: 'creator_youtube_atom',
+    rssUrl: INVEST_J_THINGS_FEED,
+  }));
+}
+
 function approvedPodcastArtifactUrl(value: string, rssUrl: string | null | undefined): URL {
   const parsed = new URL(value);
   if (parsed.protocol !== 'https:' || parsed.username || parsed.password) throw new Error('podcast_artifact_url_not_approved');
@@ -5703,6 +5732,7 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
     let weakSignalsWritten = 0;
     let transcriptsReady = 0;
     let analyzableEpisodes = 0;
+    let youtubeEpisodes = 0;
     const platformsUsed = new Set<string>();
     const searchedKeywords = unique([
       ...KOL_SEEDS.map((seed) => seed.displayName),
@@ -5729,18 +5759,35 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
       const meta = (kol.metadata || {}) as Record<string, unknown>;
       const kolId = String(kol.id);
       const sourceEntityId = kol.source_entity_id ? String(kol.source_entity_id) : null;
-      const kolName = String(kol.display_name || meta.podcastName || 'KOL');
+      const john = kol.primary_platform === 'telegram' && kol.profile_url === INVEST_J_THINGS_PROFILE
+        && kol.display_name === 'John 林睿閔';
+      const kolName = john ? INVEST_J_THINGS_AUTHOR : String(kol.display_name || meta.podcastName || 'KOL');
       const searchedUrls: string[] = [];
 
       const episodeItems: PodcastEpisodeCandidate[] = [];
 
-      const podcastName = String(meta.podcastName || String(kol.display_name || ''));
-      const explicitRssUrls = arrayFromMetadata(meta.rssUrl).concat(arrayFromMetadata(meta.rssUrls)).filter((url) => rssAllowlist.has(url));
-      for (const rssUrl of unique(explicitRssUrls)) {
-        searchedUrls.push(rssUrl);
-        const rssItems = await fetchExplicitRssItems(rssUrl);
-        if (rssItems.length > 0) {
-          platformsUsed.add('rss');
+      const podcastName = john ? INVEST_J_THINGS_PROGRAM : String(meta.podcastName || String(kol.display_name || ''));
+      let johnGap: string | null = null;
+      if (john) {
+        if (!rssAllowlist.has(INVEST_J_THINGS_FEED) || !podcastContentAnalyzable(INVEST_J_THINGS_FEED)) {
+          johnGap = 'creator_program_rights_required';
+        } else if (![...registeredTracks.keys()].some(key => key.startsWith(podcastTranscriptTrackKey(INVEST_J_THINGS_FEED, '')))) {
+          johnGap = 'creator_program_episodes_unregistered';
+        } else {
+          searchedUrls.push(INVEST_J_THINGS_FEED);
+          try {
+            episodeItems.push(...await fetchInvestJThingsItems(registeredTracks));
+            if (episodeItems.length === 0) johnGap = 'creator_program_episode_not_in_feed';
+          } catch {
+            johnGap = 'creator_program_index_unavailable';
+          }
+        }
+      } else {
+        const explicitRssUrls = arrayFromMetadata(meta.rssUrl).concat(arrayFromMetadata(meta.rssUrls))
+          .filter((url) => url !== INVEST_J_THINGS_FEED && rssAllowlist.has(url));
+        for (const rssUrl of unique(explicitRssUrls)) {
+          searchedUrls.push(rssUrl);
+          const rssItems = await fetchExplicitRssItems(rssUrl);
           episodeItems.push(...rssItems.map((item) => ({ ...item, rssUrl })));
         }
       }
@@ -5749,6 +5796,8 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
       let kolWeakSignals = 0;
       let kolTranscriptsReady = 0;
       for (const ep of uniqueEpisodes) {
+        platformsUsed.add(ep.platform);
+        if (ep.platform === 'youtube') youtubeEpisodes += 1;
         const recordedContentRights = Boolean(ep.rssUrl && podcastContentAnalyzable(ep.rssUrl));
         const registeredTrack = ep.rssUrl ? registeredTracks.get(podcastTranscriptTrackKey(ep.rssUrl, ep.link)) : undefined;
         const publisherContent = await selectTimedPublisherTranscript(
@@ -5861,17 +5910,18 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
       }
 
       const failureReason =
-        uniqueEpisodes.length > 0
-          ? null
-          : searchedUrls.length === 0
-            ? 'missing_creator_rss_endpoint'
-            : 'no_recent_episode_found';
+        john ? johnGap ?? (kolTranscriptsReady === 0 ? 'creator_program_transcript_unavailable' : null)
+          : uniqueEpisodes.length > 0
+            ? null
+            : searchedUrls.length === 0
+              ? 'missing_creator_rss_endpoint'
+              : 'no_recent_episode_found';
       if (failureReason) failureReasonByKol[kolName] = failureReason;
       kolBreakdown.push({
         kol: kolName,
         searchedUrls,
         episodesFound: uniqueEpisodes.length,
-        youtubeEpisodes: 0,
+        youtubeEpisodes: john ? uniqueEpisodes.length : 0,
         weakSignalsWritten: kolWeakSignals,
         transcriptsReady: kolTranscriptsReady,
         failureReason,
@@ -5891,12 +5941,13 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
         searched_targets: searchedKeywords,
         platforms: Array.from(platformsUsed),
         episodes_found: totalEpisodes,
-        youtube_episodes: 0,
+        youtube_episodes: youtubeEpisodes,
         weak_signals_written: weakSignalsWritten,
         transcripts_ready: transcriptsReady,
         matched_symbols: Array.from(matchedSymbols),
         kol_breakdown: kolBreakdown,
         failure_reason_by_kol: failureReasonByKol,
+        // Unrestricted YouTube discovery and media downloads are retired.
         youtube_retired: true,
         index_updated: ledgerSemantics.indexUpdated,
         content_analyzable: ledgerSemantics.contentAnalyzable,

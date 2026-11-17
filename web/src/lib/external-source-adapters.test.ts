@@ -4,7 +4,7 @@ import test from 'node:test';
 import { parseLicensedBullTalkFeed, bullTalkLicenseReadiness } from './bulltalk-feed.ts';
 import {
   configuredPodcastTranscriptTracks, podcastTranscriptTrackKey, derivePodcastLedgerSemantics, locatePodcastStockMentions, parsePodcastNamespaceFeed, parsePublisherChapters,
-  parsePublisherTranscript, selectTimedPublisherTranscript,
+  parsePublisherTranscript, selectTimedPublisherTranscript, INVEST_J_THINGS_FEED, INVEST_J_THINGS_PROGRAM, parseInvestJThingsFeed,
 } from './podcast-rss.ts';
 import {
   THREADS_KEYWORD_SEARCH_URL,
@@ -226,4 +226,56 @@ test('the registered auxiliary track is bound to one official episode and requir
   if (selected.status !== 'ready') throw Error('authorized track was not selected');
   assert.deepEqual(locatePodcastStockMentions(selected.segments, new Set(['2330', '9999'])),
     [{ symbol: '2330', startSeconds: 9, endSeconds: 12 }]);
+});
+
+test('Invest J Thing admissions use registered program, channel, original time, and canonical video identity', async () => {
+  const id = 'aBcDefGhI-0';
+  const channel = 'UCXB8cCqwOHP3BmyhYLAUs0g';
+  const episodeUrl = 'https://www.youtube.com/watch?v=' + id;
+  const transcript = 'WEBVTT\n\n00:01.000 --> 00:03.000\n00:00 台股 2330 是本段討論的標的。';
+  const track = {
+    feedUrl: INVEST_J_THINGS_FEED, episodeUrl, program: INVEST_J_THINGS_PROGRAM,
+    url: 'https://publisher.example/episode.vtt', type: 'text/vtt', language: 'zh-TW',
+    utf8Sha256: createHash('sha256').update(transcript).digest('hex'),
+  };
+  const allowed = new Set([INVEST_J_THINGS_FEED]);
+  const tracks = configuredPodcastTranscriptTracks(JSON.stringify([track]), allowed);
+  const entry = `<entry><id>yt:video:${id}</id><yt:videoId>${id}</yt:videoId><yt:channelId>${channel}</yt:channelId>
+      <title>盤後市場觀察</title><link rel="alternate" href="https://www.youtube.com/shorts/${id}" />
+      <published>2026-11-17T09:23:00+08:00</published><updated>2026-11-18T09:23:00+08:00</updated></entry>`;
+  const feed = (entries = entry) => `<?xml version="1.0" encoding="UTF-8"?>
+    <feed xmlns:yt="http://www.youtube.com/xml/schemas/2015" xmlns="http://www.w3.org/2005/Atom">
+      <yt:channelId>${channel.slice(2)}</yt:channelId>${entries}</feed>`;
+  assert.deepEqual(parseInvestJThingsFeed(feed(), new Map()), []);
+  assert.deepEqual(parseInvestJThingsFeed(feed(), tracks),
+    [{ title: '盤後市場觀察', link: episodeUrl, publishedAt: '2026-11-17T01:23:00.000Z' }]);
+  assert.deepEqual(parseInvestJThingsFeed(feed(entry.replace('/shorts/', '/watch?v=')), tracks),
+    parseInvestJThingsFeed(feed(), tracks));
+  assert.deepEqual(parseInvestJThingsFeed(feed(entry.replace('盤後市場觀察', '請支援輸贏')), tracks), []);
+  assert.deepEqual(parseInvestJThingsFeed(feed(entry.replace(channel, 'UCAnotherChannel')), tracks), []);
+  assert.deepEqual(parseInvestJThingsFeed(feed(entry.replace('www.youtube.com', 'youtube.example')), tracks), []);
+  assert.deepEqual(parseInvestJThingsFeed(feed(entry.replace(/<published>.*?<\/published>/u, '')), tracks), []);
+  assert.throws(() => parseInvestJThingsFeed(feed(entry + entry), tracks), /duplicate_episode/u);
+  assert.throws(() => parseInvestJThingsFeed(feed().replace(channel.slice(2), 'another'), tracks), /channel_mismatch/u);
+  assert.throws(() => parseInvestJThingsFeed(feed().replace('xmlns:yt=', 'xmlns:other='), tracks), /feed_invalid/u);
+  assert.throws(() => parseInvestJThingsFeed('<!DOCTYPE feed>' + feed(), tracks), /unsafe_xml/u);
+  assert.throws(() => parseInvestJThingsFeed(' '.repeat(262_145), tracks), /feed_too_large/u);
+
+  for (const bad of [{ ...track, program: undefined }, { ...track, program: '請支援輸贏' },
+    { ...track, episodeUrl: 'https://youtu.be/' + id }, { ...track, episodeUrl: episodeUrl + '&t=1' }]) {
+    assert.throws(() => configuredPodcastTranscriptTracks(JSON.stringify([bad]), allowed), /registry_invalid/u);
+  }
+  assert.throws(() => configuredPodcastTranscriptTracks(JSON.stringify([track]), new Set()), /registry_invalid/u);
+  const reference = tracks.get(podcastTranscriptTrackKey(INVEST_J_THINGS_FEED, episodeUrl));
+  assert.ok(reference);
+  let artifactRequests = 0;
+  const read = async () => { artifactRequests++; return transcript; };
+  assert.deepEqual(await selectTimedPublisherTranscript(false, [reference], read), { status: 'rights_required' });
+  assert.equal(artifactRequests, 0);
+  const selected = await selectTimedPublisherTranscript(true, [reference], read);
+  assert.equal(selected.status, 'ready');
+  if (selected.status !== 'ready') throw Error('authorized track was not selected');
+  assert.deepEqual(locatePodcastStockMentions(selected.segments, new Set(['2330'])), [
+    { symbol: '2330', startSeconds: 1, endSeconds: 3 },
+  ]);
 });

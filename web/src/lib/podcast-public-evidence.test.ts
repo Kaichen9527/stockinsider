@@ -1,3 +1,4 @@
+import { INVEST_J_THINGS_FEED, INVEST_J_THINGS_PROGRAM } from './podcast-rss.ts';
 import assert from 'node:assert/strict';
 import test, { type TestContext } from 'node:test';
 import { projectPublicPodcastSource, publicPodcastMention } from './podcast-public-evidence.ts';
@@ -108,4 +109,38 @@ test('revoking either current feed permission hides saved locators on both publi
   process.env.PODCAST_RSS_ALLOWLIST = otherFeed;
   deny(row);
   assert.equal(projectPublicPodcastSource(unrelated), unrelated);
+});
+
+test('public Invest J Things locators require the currently registered episode and transcript edition', t => {
+  allowCurrentFeed(t);
+  process.env.PODCAST_RSS_ALLOWLIST = INVEST_J_THINGS_FEED;
+  process.env.PODCAST_CONTENT_ANALYSIS_ALLOWLIST = INVEST_J_THINGS_FEED;
+  const prior = process.env.PODCAST_AUTHORIZED_TRANSCRIPT_TRACKS;
+  t.after(() => {
+    if (prior === undefined) delete process.env.PODCAST_AUTHORIZED_TRANSCRIPT_TRACKS;
+    else process.env.PODCAST_AUTHORIZED_TRANSCRIPT_TRACKS = prior;
+  });
+  const episodeUrl = 'https://www.youtube.com/watch?v=aBcDefGhI-0';
+  const track = {
+    feedUrl: INVEST_J_THINGS_FEED, episodeUrl, program: INVEST_J_THINGS_PROGRAM,
+    type: 'text/vtt', language: 'zh-TW', url: 'https://creator.example/private-artifact.vtt', utf8Sha256: 'a'.repeat(64),
+  };
+  const row = document({
+    document_url: episodeUrl,
+    metadata: { ...document().metadata, rss_url: INVEST_J_THINGS_FEED, transcript_artifact_sha256: track.utf8Sha256 },
+  });
+  process.env.PODCAST_AUTHORIZED_TRANSCRIPT_TRACKS = JSON.stringify([track]);
+  const mention = publicPodcastMention(row, '2330');
+  assert.equal(mention?.podcastName, INVEST_J_THINGS_PROGRAM);
+  const projected = projectPublicPodcastSource(row);
+  assert.equal(projected?.title, INVEST_J_THINGS_PROGRAM + ' 口述定位');
+  const publicPayload = JSON.stringify({ mention, projected });
+  for (const privateField of [privateMarker, track.url, track.utf8Sha256]) assert.ok(!publicPayload.includes(privateField));
+
+  for (const registry of ['[]', 'invalid', JSON.stringify([{ ...track, utf8Sha256: 'b'.repeat(64) }]),
+    JSON.stringify([{ ...track, episodeUrl: 'https://www.youtube.com/watch?v=bBcDefGhI-0' }])]) {
+    process.env.PODCAST_AUTHORIZED_TRANSCRIPT_TRACKS = registry;
+    assert.equal(publicPodcastMention(row, '2330'), null);
+    assert.equal(projectPublicPodcastSource(row), null);
+  }
 });
