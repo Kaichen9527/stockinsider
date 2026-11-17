@@ -155,6 +155,17 @@ export async function runLaunchOutcomesWithLease(writer:Writer,principal:string,
     backlog:batch.available-batch.references.length,written,replayed,deferred} as const;
 }
 
+/** Refresh prior signals on a retained close using the same database-owned cutoff. */
+export async function runScheduledLaunchOutcomeCycle(identity:VnextIdentity) {
+  const {readLaunchCycleAdmission}=await import('./launch-ranking-command.ts');
+  const context=await readLaunchCycleAdmission(identity);
+  if(!context.ready||!context.session||!context.cutoff){
+    return {status:'deferred',reason:context.reason??'launch_outcome_session_unavailable'} as const;
+  }
+  const outcome=await runLaunchOutcomeCycle(identity,context.cutoff);
+  return {...outcome,session:context.session};
+}
+
 /** An epilogue of the existing guarded operator cycle. The ranking receipt
  * stays valid if official outcome inputs or the later lease are unavailable. */
 export async function runLaunchOutcomeCycle(identity:VnextIdentity,asOf:string) {

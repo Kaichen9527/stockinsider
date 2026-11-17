@@ -269,17 +269,41 @@ const incompleteFinal = {
   ok: false, error: 'taiwan_refresh_scope_incomplete',
   result: { status: 'incomplete', phase: 'final', sessionDate: day, researchReady: false, scopeComplete: false, errors: [] },
 };
+const outcomeRefresh = { ok: true, policyVersion,
+  result: { status: 'evaluated', session: day, asOf: day + 'T13:30:00Z' } };
 const gmailEnabled = { ...active, STOCKINSIDER_VNEXT_INVESTANCHORS_GMAIL_ENABLED: 'true' };
 const openDayNotice = { ok: true, policyVersion, result: { scanStatus: 'open_day', checkpointDay: null, articleAuthority: false } };
 
-test('a same-session final data gap retains the prior ranking and still scans current-day notices', () => {
-  const { calls, run } = plan(day + 'T13:30:00Z', [incompleteFinal, openDayNotice], { env: gmailEnabled });
+test('a same-session final data gap retains ranking, refreshes prior outcomes and scans current-day notices', () => {
+  const { calls, run } = plan(day + 'T13:30:00Z', [incompleteFinal, outcomeRefresh, openDayNotice], { env: gmailEnabled });
   assert.deepEqual(run(), {
     slot: 'postclose', sessionDate: day, status: 'retained', weeklyAudit: 'current',
-    reason: 'launch_final_data_unready', currentNoticeScan: 'open_day',
+    reason: 'launch_final_data_unready', outcomeRefresh: 'evaluated', currentNoticeScan: 'open_day',
   });
   assert.deepEqual(calls.map(item => item.payload.action ?? item.payload.phase),
-    ['launch-weekly-audit', 'final', 'investanchors-gmail-notices']);
+    ['launch-weekly-audit', 'final', 'launch-outcome-refresh', 'investanchors-gmail-notices']);
+  assert.deepEqual(calls[2].payload, { action: 'launch-outcome-refresh' });
+});
+
+test('retained-cycle outcome receipts are bound to the same session and cutoff', () => {
+  for (const reply of [
+    null,
+    { ...outcomeRefresh, policyVersion: 'unrelated' },
+    { ...outcomeRefresh, result: { ...outcomeRefresh.result, session: '2026-11-13' } },
+    { ...outcomeRefresh, result: { ...outcomeRefresh.result, asOf: day + 'T13:31:00Z' } },
+  ]) {
+    const { calls, run } = plan(day + 'T13:30:00Z', [incompleteFinal, reply]);
+    const result = run();
+    assert.equal(result.status, 'retained');
+    assert.equal(result.outcomeRefresh, 'failed');
+    assert.equal(calls.some(item => item.payload.action === 'launch-cycle'), false);
+  }
+  const deferred = { ok: true, policyVersion, result: { status: 'deferred' } };
+  const deferredReply = plan(day + 'T13:30:00Z', [incompleteFinal, deferred]);
+  assert.equal(deferredReply.run().outcomeRefresh, 'deferred');
+  const rollover = plan([day + 'T15:57:00Z', day + 'T15:58:00Z', day + 'T16:02:00Z'], [incompleteFinal]);
+  assert.equal(rollover.run().outcomeRefresh, 'deferred');
+  assert.equal(rollover.calls.length, 2);
 });
 
 test('evening transport or policy errors remain failures and still run the separate notice scan', () => {
@@ -303,6 +327,7 @@ test('actual internal-API child keeps a bounded HTTP 503 incomplete-final respon
     import { createServer } from 'node:http';
     const weekly = ${JSON.stringify(currentWeek)};
     const incomplete = ${JSON.stringify(incompleteFinal)};
+    const outcomes = ${JSON.stringify(outcomeRefresh)};
     const current = ${JSON.stringify(openDayNotice)};
     let stage = 0;
     const listener = createServer(async (req, res) => {
@@ -317,6 +342,9 @@ test('actual internal-API child keeps a bounded HTTP 503 incomplete-final respon
         && input.phase === 'final' && input.sessionDate === incomplete.result.sessionDate && input.requireComplete === true) {
         ++stage; answer = incomplete; status = 503;
       } else if (valid && stage === 2 && req.url === '/api/internal/vnext-research'
+        && input.action === 'launch-outcome-refresh' && Object.keys(input).length === 1) {
+        ++stage; answer = outcomes; status = 200;
+      } else if (valid && stage === 3 && req.url === '/api/internal/vnext-research'
         && input.action === 'investanchors-gmail-notices' && input.scope === 'current') {
         ++stage; answer = current; status = 200;
       }
@@ -337,6 +365,7 @@ test('actual internal-API child keeps a bounded HTTP 503 incomplete-final respon
     });
     assert.equal(observation.status, 'retained');
     assert.equal(observation.reason, 'launch_final_data_unready');
+    assert.equal(observation.outcomeRefresh, 'evaluated');
     assert.equal(observation.currentNoticeScan, 'open_day');
   } finally {
     server.kill();
