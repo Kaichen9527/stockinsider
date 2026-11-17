@@ -7,7 +7,7 @@ import { rosterHeadFixtureSql } from './vnext-launch-roster-head-fixture.mjs';
 import { readResearchPublicationCatalog } from './opportunity-v3/research-publication-catalog.mjs';
 import { readTailNamespace } from './opportunity-v3/research-publication-tail-entry-namespace.mjs';
 import { tailMetadataSha } from './opportunity-v3/research-publication-tail-entry-guard.mjs';
-import { SOURCE_SCOPE_SQL, sourceNamespaceReachability } from './vnext-source-namespace-candidate.mjs';
+import { inspectHardenedSourceNamespaceReview, SOURCE_SCOPE_SQL, sourceNamespaceReachability } from './vnext-source-namespace-candidate.mjs';
 
 const planner = 'public.opportunity_candidate_plan_v3_internal(uuid,text)';
 const historicalFunctionSha256 = 'ad26cb165d6a67bdb2c8e3a38d204c3af3a3be67d180a72c4012faa1b00c32db';
@@ -629,6 +629,27 @@ test('planner and legacy report ACLs preserve their existing web and backend cal
     });
     await t.test('the complete predecessor catalog changes only the six targeted routines', async () => {
       assertSourceHardeningCatalogDelta(fixture, predecessor, await readPredecessorCatalog(fixture.observer));
+    });
+    await t.test('the hardened predecessor projects only non-grantable source schema usage with a read-only observer', async () => {
+      await assert.rejects(inspectHardenedSourceNamespaceReview(fixture.observer), { code: 'ERR_ASSERTION' });
+      await fixture.observer.query('BEGIN READ ONLY');
+      try {
+        await assert.rejects(inspectHardenedSourceNamespaceReview(fixture.observer), { code: 'ERR_ASSERTION' });
+      } finally {
+        await fixture.observer.query('ROLLBACK');
+      }
+      await fixture.observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');
+      try {
+        const result = await inspectHardenedSourceNamespaceReview(fixture.observer);
+        assert.equal(result.grantExecuted, false);
+        assert.equal(result.independentReviewAccepted, false);
+        assert.equal(result.forecast.namespaceHash, result.predecessor.namespaceHash);
+        assert.notEqual(result.forecast.catalogHash, result.predecessor.catalogHash);
+        assert.deepEqual(result.proposedPermission, ['public', 'USAGE']);
+        fixture.save('source-namespace-hardened-review-safe', result);
+      } finally {
+        await fixture.observer.query('ROLLBACK');
+      }
     });
     await t.test('podcast creator and member artifacts are private while the worker still writes', async () => {
       await checkPodcastStorageBoundary(fixture);

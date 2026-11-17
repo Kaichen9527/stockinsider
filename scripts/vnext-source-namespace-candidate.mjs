@@ -105,6 +105,59 @@ export async function inspectSourceNamespaceCandidate(client){
  const before=await read(client),post=deriveSourceNamespacePost(before,(await client.query(aclSql)).rows[0].acl);
  return {before,derivedPost:post,profile:SOURCE_NAMESPACE_PROFILE,grant:SOURCE_NAMESPACE_GRANT,applied:false};
 }
+// Independent review can inspect this exact successor of the routine test
+// predecessor. The earlier apply entry remains pinned to its original profile.
+const HARDENED_REVIEW_DIGESTS = Object.freeze({
+  scopeHash: '0fdae5ae5d60769aca8506b4cdddae93df8b93c1827a21f995187de1bf2e4c66',
+  namespaceHash: '47ffa7365ca6f06e00e10e357d3119cda0eab4ce5266664c3a78a3e4fb7bab90',
+  catalogHash: '505dc2e5eee0af4c040c4573b3e342686cbac26d5313356dce1edd94b84327ea',
+});
+
+export async function inspectHardenedSourceNamespaceReview(client) {
+  const { rows: [transaction] } = await client.query(`
+    SELECT current_setting('transaction_read_only') AS access,
+      current_setting('transaction_isolation') AS isolation`);
+  assert.deepEqual(transaction, { access: 'on', isolation: 'repeatable read' });
+  const before = await read(client);
+  const beforeHashes = {
+    scopeHash: tailMetadataSha(before.scope),
+    namespaceHash: tailMetadataSha(before.namespace),
+    catalogHash: tailMetadataSha(before.catalog),
+  };
+  assert.deepEqual(beforeHashes, HARDENED_REVIEW_DIGESTS, 'vnext_hardened_source_review_predecessor');
+
+  const { rows: [{ acl }] } = await client.query(aclSql);
+  const expected = projectSourceNamespaceCatalog(before.catalog, acl);
+  const direct = projectSourceNamespaceReachability(before.catalog);
+  const afterDirect = projectSourceNamespaceReachability(expected);
+  assert.deepEqual(direct.publicSchema.currentEffective, [[SOURCE_NAMESPACE_PROFILE.target, false, false]]);
+  assert.deepEqual(afterDirect, {
+    ...direct,
+    publicSchema: { ...direct.publicSchema, currentEffective: [[SOURCE_NAMESPACE_PROFILE.target, true, false]] },
+  });
+  assert.ok(direct.routines.every(routine => !routine.securityDefiner || routine.owner === SOURCE_NAMESPACE_PROFILE.target));
+  same(await read(client), before);
+
+  return {
+    schema: 'vnext-hardened-source-namespace-review-v1',
+    predecessor: beforeHashes,
+    forecast: { ...beforeHashes, catalogHash: tailMetadataSha(expected) },
+    reviewedTarget: SOURCE_NAMESPACE_PROFILE.target,
+    proposedPermission: ['public', 'USAGE'],
+    grantOption: false,
+    namespaceAndObjectAclUnchangedInProjection: true,
+    reachableRoutines: direct.routines.map(({ signature, owner, securityDefiner, definitionSha256 }) => ({
+      signature, owner, securityDefiner, definitionSha256,
+    })),
+    reachableRelations: direct.tables.filter(relation => relation.relationKindSupportsSelect || relation.kind === 'S')
+      .map(({ name, kind, owner, rls, forceRls }) => ({ name, kind, owner, rls, forceRls })),
+    transactionMetadataUnchanged: true,
+    grantExecuted: false,
+    independentReviewAccepted: false,
+    productionAuthorized: false,
+  };
+}
+
 /** Direct existing privileges only. This is an inspection list, not authority
  * or a proof of transitive SECURITY DEFINER safety. No SQL bodies/row values. */
 export function sourceNamespaceReachability(before){
