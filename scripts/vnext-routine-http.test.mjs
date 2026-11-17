@@ -19,6 +19,7 @@ import {
   SOURCE_SCOPE_SQL, sourceNamespaceReachability, projectSourceNamespaceReachability,
   assertSourceNamespaceIdleClient,
 } from './vnext-source-namespace-candidate.mjs';
+import { inspectSourceNamespaceEntrypoints } from './vnext-source-namespace-entrypoints.mjs';
 import {extractContentBatch} from '../web/src/lib/vnext/permitted-content.ts';
 async function readSourceCatalog(client) {
   const {scope} = (await client.query(SOURCE_SCOPE_SQL)).rows[0];
@@ -253,7 +254,16 @@ await test('fresh routine-screen HTTP admits from current original receipts befo
    await x.observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');let sourcePrerequisite;try{const observed=(await x.observer.query("SELECT pg_backend_pid() AS pid,current_setting('transaction_read_only') AS read_only")).rows[0];assert.equal(observed.read_only,'on');assert.notEqual(observed.pid,x.writer.processID);sourcePrerequisite=(await x.observer.query("SELECT jsonb_build_object('schema',(SELECT to_jsonb(n) FROM pg_namespace n WHERE n.oid='public'::regnamespace),'sourceOwnerUsage',has_schema_privilege('research_source_fence_owner_v2','public','USAGE'),'inputOwnerUsage',has_schema_privilege('research_input_preparation_owner_v2','public','USAGE'),'targetFunctions',(SELECT jsonb_agg((to_jsonb(p)-'prosrc')||jsonb_build_object('bodySha256',encode(sha256(convert_to(p.prosrc,'UTF8')),'hex')) ORDER BY p.oid) FROM pg_proc p WHERE p.pronamespace='public'::regnamespace AND p.proname IN('research_source_fence_write_v2','research_source_fence_record_v2','research_source_root_v2')),'roles',(SELECT jsonb_agg(jsonb_build_object('name',rolname,'super',rolsuper,'login',rolcanlogin,'bypassRls',rolbypassrls,'config',rolconfig) ORDER BY rolname) FROM pg_roles WHERE rolname IN('research_source_fence_owner_v2','research_input_preparation_owner_v2'))) AS observed")).rows[0].observed;
     const {scope,namespace,catalog}=await readSourceCatalog(x.observer);x.save('raw-source-current-complete-catalog',{scope,namespace,catalog,codec:'original canonicalTailMetadata en-key sort',scopeHash:tailMetadataSha(scope),namespaceHash:tailMetadataSha(namespace),catalogHash:tailMetadataSha(catalog),readonlyObserver:true});
     sourcePrerequisite.completeCatalog={scopeHash:tailMetadataSha(scope),namespaceHash:tailMetadataSha(namespace),catalogHash:tailMetadataSha(catalog),existingReadCodecs:true};
-    const reachability={...sourceReachabilityAfterRoster(predecessorSourceCatalog,{scope,namespace,catalog}),transactionStateProbe},serialized=JSON.stringify(reachability);x.save('raw-source-reachability-safe',reachability);assert.ok(Buffer.byteLength(serialized)<=45056,'finite safe direct-rights report must fit annotation bound');await x.observer.query('COMMIT');console.log('VNEXT_SOURCE_REACHABILITY_SAFE '+serialized);}catch(error){await x.observer.query('ROLLBACK');throw error;}
+    const direct = sourceReachabilityAfterRoster(predecessorSourceCatalog, {scope, namespace, catalog});
+    const entrypoints = await inspectSourceNamespaceEntrypoints(x.observer, direct);
+    x.save('raw-source-entrypoints-safe', entrypoints);
+    const reachability = {...direct, transactionStateProbe};
+    const serialized = JSON.stringify(reachability);
+    x.save('raw-source-reachability-safe', reachability);
+    assert.ok(Buffer.byteLength(serialized)<=45056,'finite safe direct-rights report must fit annotation bound');
+    await x.observer.query('COMMIT');
+    console.log('VNEXT_SOURCE_REACHABILITY_SAFE '+serialized);
+   }catch(error){await x.observer.query('ROLLBACK');throw error;}
    x.save('raw-source-current-prerequisite',sourcePrerequisite);const prerequisiteHash=sha(JSON.stringify(sourcePrerequisite));console.log('VNEXT_SOURCE_PREREQUISITE_SAFE '+JSON.stringify({sourceOwnerUsage:sourcePrerequisite.sourceOwnerUsage,inputOwnerUsage:sourcePrerequisite.inputOwnerUsage,descriptorHash:prerequisiteHash,completeCatalog:sourcePrerequisite.completeCatalog,noGrant:true,fullPrivateDescriptorRetained:true}));
    if(sourcePrerequisite.sourceOwnerUsage!==true)throw Error('vnext_test_source_namespace_not_ready');
    const original=await x.snapshot(),setupOwner=randomUUID();await x.writer.query('BEGIN');try{
