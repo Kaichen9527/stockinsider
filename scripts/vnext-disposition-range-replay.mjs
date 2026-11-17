@@ -64,22 +64,35 @@ async function capture(name, url, maxBytes, mediaType) {
   const observedAt = new Date().toISOString();
   const body = Buffer.concat(chunks, size);
   await retain(name, body);
-  return { url, body, sha256: createHash('sha256').update(body).digest('hex'), observedAt, recordedAt: new Date().toISOString() };
+  const metadata = {
+    url, bytes: body.byteLength, sha256: createHash('sha256').update(body).digest('hex'),
+    observedAt, recordedAt: new Date().toISOString(),
+  };
+  await retain(name + '.capture.json', JSON.stringify(metadata) + '\n');
+  return { ...metadata, body };
 }
 
-const rows = await Promise.all(['TWSE', 'TPEX'].map(async market => {
+const markets = ['TWSE', 'TPEX'];
+const outcomes = await Promise.allSettled(markets.map(async market => {
   const licensedSource = launchDispositionSource(market, market === 'TWSE' ? day : undefined);
-  const [range, licensed] = await Promise.all([
+  const inputs = await Promise.allSettled([
     capture(market + '-effective-range.json', launchDispositionRangeUrl(market, day), DISPOSITION_RANGE_MAX_BYTES, /^application\/json(?:;|$)/iu),
     capture(market + '-notice.csv', licensedSource.url, licensedSource.maxBytes, /^(?:text|application)\/csv(?:;|$)/iu),
   ]);
-  const evidence = compareLaunchDispositionReports(market, range, { ...licensed, datasetId: licensedSource.datasetId }, day, cutoff);
+  const [range, licensed] = inputs;
+  if (range.status === 'rejected' || licensed.status === 'rejected') {
+    throw Error('official_disposition_capture_refused');
+  }
+  const evidence = compareLaunchDispositionReports(market, range.value, { ...licensed.value, datasetId: licensedSource.datasetId }, day, cutoff);
   const { restrictedSymbols, ...rangeSummary } = evidence.report;
   return { market, range: { ...rangeSummary, fourDigitSymbols: restrictedSymbols.size },
     licensed: evidence.corroboration, reportsAgree: evidence.reportsAgree, timelyOnThisReplay: evidence.confirmed };
 }));
 
-const receipt = JSON.stringify({ schemaVersion: 'launch-disposition-range-replay-v1', day, cutoff,
-  archivedInStaging: Boolean(archive), durableWriterReceipt: false, rankingAuthority: false, sources: rows }, null, 2);
+const sources = outcomes.flatMap(result => result.status === 'fulfilled' ? [result.value] : []);
+const refusedMarkets = markets.filter((_, index) => outcomes[index].status === 'rejected');
+const receipt = JSON.stringify({ schemaVersion: 'launch-disposition-range-replay-v2', day, cutoff,
+  archivedInStaging: Boolean(archive), durableWriterReceipt: false, rankingAuthority: false, sources, refusedMarkets }, null, 2);
 await retain('sanitized-receipt.json', receipt + '\n');
 console.log(receipt);
+if (refusedMarkets.length > 0) process.exitCode = 1;

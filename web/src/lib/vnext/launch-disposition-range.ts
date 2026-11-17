@@ -44,7 +44,9 @@ export function launchDispositionRangeUrl(market: DispositionMarket, day: string
 function reportRows(raw: Row, market: DispositionMarket, day: string) {
   const roc = String(Number(day.slice(0, 4)) - 1911) + day.slice(4).replaceAll('-', '/');
   if (market === 'TWSE') {
-    if (raw.stat !== 'OK' || raw.title !== '公布處置有價證券資訊 (' + roc + ' 至 ' + roc + ')'
+    const rangeTitle = '公布處置有價證券資訊 (' + roc + ' 至 ' + roc + ')';
+    const currentTitle = rangeTitle + '\n資訊更新日期：' + roc;
+    if (raw.stat !== 'OK' || (raw.title !== rangeTitle && raw.title !== currentTitle)
         || !Number.isSafeInteger(raw.total) || !Number.isSafeInteger(raw.count)
         || Number(raw.count) < 0 || Number(raw.count) > Number(raw.total)) return invalid();
     return { report: raw, fields: TWSE_DISPOSITION_FIELDS, total: Number(raw.total), symbols: null };

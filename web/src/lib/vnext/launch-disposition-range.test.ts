@@ -45,6 +45,20 @@ test('TWSE uses the declared total and the exact date, independent of the page-s
   }
 });
 
+test('TWSE accepts the official same-day update line without accepting stale or unbound titles', () => {
+  const update = '\n資訊更新日期：';
+  const parse = (title: string) => inspectLaunchDispositionRange('TWSE', range('TWSE', { ...twse, title }), day, cutoff);
+  assert.equal(parse(twse.title + update + '115/11/16').noticeCount, 2);
+  for (const title of [
+    twse.title + update + '115/11/15',
+    twse.title + update + '115/11/17',
+    twse.title + update + '115/11/16\n其他資訊',
+    twse.title.replaceAll('11/16', '11/17') + update + '115/11/16',
+  ]) {
+    assert.throws(() => parse(title), /range_refused/u);
+  }
+});
+
 test('TPEx reports no new announcement alongside an earlier notice that is still in force', () => {
   const report = inspectLaunchDispositionRange('TPEX', range('TPEX', tpex), day, cutoff);
   assert.deepEqual([...report.restrictedSymbols], ['4567']);
