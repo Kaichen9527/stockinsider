@@ -138,6 +138,31 @@ jobs:
       - name: Full ordinary build
         id: current_build
         run: npm --prefix web run build
+      - name: Package verified standalone build for isolated rollback
+        id: rollback_package
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+        run: |
+          release_root="$(mktemp -d "$RUNNER_TEMP/stockinsider-rollback-release.XXXXXXXX")"
+          bundle_root="$(mktemp -d "$RUNNER_TEMP/stockinsider-rollback-bundle.XXXXXXXX")"
+          node scripts/package-standalone-release.mjs \
+            "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE" "$release_root" "$GITHUB_SHA" "$GITHUB_SHA"
+          node scripts/verify-standalone-release.mjs "$release_root/$GITHUB_SHA" > "$bundle_root/verification.json"
+          jq -e --arg sha "$GITHUB_SHA" \
+            '.releaseVerified == true and .sourceCommit == $sha and .packagerCommit == $sha' \
+            "$bundle_root/verification.json" > /dev/null
+          git rev-parse "$GITHUB_SHA^{tree}" > "$bundle_root/build-tree.txt"
+          tar -C "$release_root" -czf "$bundle_root/release.tar.gz" -- "$GITHUB_SHA"
+          (cd "$bundle_root" && sha256sum release.tar.gz > release.tar.gz.sha256)
+          echo "directory=$bundle_root" >> "$GITHUB_OUTPUT"
+      - name: Upload isolated rollback build
+        if: ${{ steps.rollback_package.outcome == 'success' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: isolated-rollback-standalone-${{ github.sha }}
+          path: ${{ steps.rollback_package.outputs.directory }}
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
       - name: Isolated PostgreSQL real concurrency and synthetic publication lifecycle
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-ci
