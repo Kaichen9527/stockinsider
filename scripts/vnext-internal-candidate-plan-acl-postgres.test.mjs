@@ -197,6 +197,76 @@ SELECT jsonb_build_object(
   }
 }
 
+
+async function checkRawWriteRequiresNamespace(fixture) {
+  const release = 'a'.repeat(40);
+  const lease = '00000000-0000-4000-8000-000000000260';
+  const before = await fixture.snapshot();
+  const writer = await fixture.connect();
+  try {
+    await writer.query('BEGIN ISOLATION LEVEL READ COMMITTED');
+    await writer.query(
+      "INSERT INTO public.production_writer_releases(release_id,writer_kind,active,activated_at) VALUES($1,'vps',true,clock_timestamp())",
+      [release],
+    );
+    await writer.query('SET LOCAL ROLE service_role');
+    await writer.query("SELECT set_config('request.headers',$1,true), set_config('request.jwt.claims',$2,true)", [
+      JSON.stringify({'x-stockinsider-writer-release':release}), JSON.stringify({role:'service_role'}),
+    ]);
+    const { rows: [acquire] } = await writer.query(
+      "SELECT current_user AS role, public.acquire_production_write_lease('production-data-plane',$1::uuid,300) AS acquired",
+      [lease],
+    );
+    assert.deepEqual(acquire, { role: 'service_role', acquired: true });
+
+    const write = writer.query(`
+      INSERT INTO public.source_raw_documents(platform,document_url,title,content_text,published_at,collected_at,symbols,metadata)
+      VALUES('twse_insider','https://www.twse.com.tw/synthetic-acl-boundary-only','Synthetic ACL regression fixture',
+        'Synthetic source used only in the local transaction.',clock_timestamp(),clock_timestamp(),'["2409"]'::jsonb,
+        jsonb_build_object('original_event_at',clock_timestamp()))`);
+    await assert.rejects(write, error => {
+      assert.equal(error.code, '42501');
+      assert.equal(error.message, 'permission denied for schema public');
+      assert.match(error.where, /PL\/pgSQL function (?:public\.)?research_source_fence_record_v2\(\) line /u);
+      assert.match(error.internalQuery, /public\.research_source_root_v2\(/u);
+      return true;
+    });
+  } finally {
+    await writer.query('ROLLBACK');
+    await fixture.close(writer);
+  }
+  assert.deepEqual(await fixture.snapshot(), before);
+
+  const names = [
+    'public.research_source_fence_write_v2()', 'public.research_source_fence_record_v2()',
+    'public.research_source_root_v2(jsonb)', 'public.seal_research_sources_v2(jsonb,timestamptz)',
+    'public.assert_research_source_seal_v2(uuid)', 'public.research_publication_source_state_v2(uuid)',
+  ];
+  const { rows: definitions } = await fixture.observer.query(`
+    SELECT name, pg_get_userbyid(p.proowner) AS owner, p.prosecdef AS "securityDefiner",
+      p.prorettype::regtype::text AS "resultType", p.proconfig AS settings,
+      encode(sha256(convert_to(pg_get_functiondef(p.oid),'UTF8')),'hex') AS "definitionSha256"
+    FROM unnest($1::text[]) WITH ORDINALITY calls(name,position)
+    JOIN pg_proc p ON p.oid=to_regprocedure(name)
+    ORDER BY position`, [names]);
+  assert.deepEqual(definitions.map(definition => definition.name), names);
+  assert.deepEqual(definitions.filter(definition => definition.resultType === 'trigger').map(definition => definition.name),
+    names.slice(0,2));
+  for (const definition of definitions) {
+    assert.equal(definition.securityDefiner, definition.name !== 'public.research_source_root_v2(jsonb)');
+    if (definition.securityDefiner) assert.equal(definition.owner, 'research_source_fence_owner_v2');
+  }
+  fixture.save('source-writer-namespace-block-safe', {
+    scope: 'Contabo PostgreSQL 17.11 disposable synthetic original',
+    writerRole: 'service_role', writerLeaseAcquired: true, errorCode: '42501',
+    missingPrivilege: 'public schema USAGE for the source trigger owner',
+    trigger: 'research_source_fence_record_v2',
+    firstRejectedCall: 'public.research_source_root_v2(jsonb)',
+    transactionRolledBack: true, allPublicTableRowsUnchanged: true, definitions,
+    sourceGrantExecuted: false, realSourceProcessed: false,
+  });
+}
+
 test('planner and legacy report ACLs preserve their existing web and backend calls', async t => {
   const fixture = await workerFixture();
   try {
@@ -234,6 +304,9 @@ test('planner and legacy report ACLs preserve their existing web and backend cal
     await testSubscriberScope(t, fixture);
     await t.test('source role retains only its known public schema capabilities', async () => {
       await checkSourceOwnerBoundary(fixture);
+    });
+    await t.test('an authorized source writer rolls back when the source trigger lacks the namespace prerequisite', async () => {
+      await checkRawWriteRequiresNamespace(fixture);
     });
   } finally {
     await fixture.finish();

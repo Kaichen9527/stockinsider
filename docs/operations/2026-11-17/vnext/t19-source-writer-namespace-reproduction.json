@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "stockinsider-t19-source-writer-namespace-reproduction-v1",
+  "nativeTestsPassed": 9,
+  "nativeTapSha256": "50b0c39ee2ee3cfe893b612d5ff673bc22c09e0478ab069fa6891fd69ced299b",
+  "actualNativeControl": {
+    "scope": "Contabo PostgreSQL 17.11 disposable synthetic original",
+    "writerRole": "service_role",
+    "writerLeaseAcquired": true,
+    "errorCode": "42501",
+    "missingPrivilege": "public schema USAGE for the source trigger owner",
+    "trigger": "research_source_fence_record_v2",
+    "firstRejectedCall": "public.research_source_root_v2(jsonb)",
+    "transactionRolledBack": true,
+    "allPublicTableRowsUnchanged": true,
+    "definitions": [
+      {
+        "name": "public.research_source_fence_write_v2()",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "resultType": "trigger",
+        "settings": [
+          "search_path=pg_catalog, public"
+        ],
+        "definitionSha256": "fe8339c551f7c809da1f67fb438787bb296133fead41f4f07b3284196aa81522"
+      },
+      {
+        "name": "public.research_source_fence_record_v2()",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "resultType": "trigger",
+        "settings": [
+          "search_path=pg_catalog, public"
+        ],
+        "definitionSha256": "52d26abb8b812beec884a8267d40a3ef547ae6e3a3a4df528c6a6d8bfe70e7f1"
+      },
+      {
+        "name": "public.research_source_root_v2(jsonb)",
+        "owner": "postgres",
+        "securityDefiner": false,
+        "resultType": "text",
+        "settings": [
+          "search_path=pg_catalog"
+        ],
+        "definitionSha256": "ada9281b7cd0673b2d4adb9e2c7be673f3959bbff3733117e50d362a569159bc"
+      },
+      {
+        "name": "public.seal_research_sources_v2(jsonb,timestamptz)",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "resultType": "jsonb",
+        "settings": [
+          "search_path=pg_catalog, public"
+        ],
+        "definitionSha256": "ff4eb006af3bde82a86a640ac8126083d78684ea6bc2947100d0f8a2ed618479"
+      },
+      {
+        "name": "public.assert_research_source_seal_v2(uuid)",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "resultType": "jsonb",
+        "settings": [
+          "search_path=pg_catalog, public"
+        ],
+        "definitionSha256": "06aed61305eb8754a80733518a815953c9b79160bb20b7572fb399e561498199"
+      },
+      {
+        "name": "public.research_publication_source_state_v2(uuid)",
+        "owner": "research_source_fence_owner_v2",
+        "securityDefiner": true,
+        "resultType": "text",
+        "settings": [
+          "search_path=pg_catalog, public"
+        ],
+        "definitionSha256": "0ad5b0a448cf657c188b7a099149c70b4bc0532c6a822bd8738a5a61ffe3a3c0"
+      }
+    ],
+    "sourceGrantExecuted": false,
+    "realSourceProcessed": false
+  },
+  "staticSourceDependencies": {
+    "pinnedMigrationHashes": {
+      "migrations/20261009_research_publication_source_fence_v2.sql": "b2db643e99f8ee1fcca4b8755f1e272996a84e1a228d785554d0643293880621",
+      "migrations/20261010_research_atomic_publication_v2.sql": "ed2334dc46cf73fd33f61bd00d1034b50924d5e2213474372da5b121c4f3128a"
+    },
+    "beforeWrite": [
+      "read committed isolation",
+      "shared source transaction lock"
+    ],
+    "afterWrite": [
+      "fixed root function",
+      "append hashed source event",
+      "lookup affected seals",
+      "append invalidation rows",
+      "owned event identity sequence",
+      "foreign keys to source seals and events"
+    ],
+    "sealIssuer": [
+      "fixed root function",
+      "select stored source rows",
+      "lookup or append source seal"
+    ],
+    "sealAssertion": [
+      "lookup seal and invalidations",
+      "recalculate hashes of stored source rows"
+    ],
+    "publicationSourceState": [
+      "lookup revoked seal in source invalidations"
+    ],
+    "nextVerification": "independent review of the minimum namespace permission on the exact affected subject and authentic HTTP source replay"
+  },
+  "ephemeralContainerRemoved": true,
+  "formalServiceSignaturesAndReleasePointerMatched": true
+}
