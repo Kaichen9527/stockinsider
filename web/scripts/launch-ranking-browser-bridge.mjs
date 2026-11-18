@@ -34,6 +34,8 @@ function candidatePacket(index) {
 }
 modes.add('scenario_ready');
 modes.add('scenario_private');
+modes.add('scenario_pe_ready');
+modes.add('scenario_pe_hidden');
 const outcomeModes=new Set(['outcome_ready','outcome_unfillable','outcome_evidence_gap','outcome_private']);
 for(const name of outcomeModes)modes.add(name);
 const unsafeCitations=[...unsafeCitationUrls,...unknownRightsCitationUrls];
@@ -143,13 +145,18 @@ const server=http.createServer(async(request,response)=>{
         query.p_ranking_run_id!==LAUNCH_TEST_RUN || query.p_symbol!=='5274')
         return json(response,400,{code:'SYNTHETIC_CLOSED_QUERY'});
       companionReads++;
-      if(!['scenario_ready','scenario_private'].includes(mode))return json(response,200,null);
+      if(!['scenario_ready','scenario_private','scenario_pe_ready','scenario_pe_hidden'].includes(mode))return json(response,200,null);
       const member=packet.snapshot.members[0];
       const {cutoff,session}=packet.snapshot;
       const value={schemaVersion:'vnext-launch-reviewed-valuation-v1',rankingRunId:LAUNCH_TEST_RUN,
         symbol:member.symbol,revisionId:member.revisionId,inputHash:member.inputHash,cutoff,
-        valuationDate:session,quoteDate:session,period:String(Number(session.slice(0,4))+1),method:'dcf',
-        unit:'TWD_per_share',bear:65,base:80,bull:95};
+        valuationDate:session,quoteDate:session,period:String(Number(session.slice(0,4))+1),
+        method:mode.startsWith('scenario_pe_')?'forward_pe':'dcf',unit:'TWD_per_share',bear:65,base:80,bull:95,
+        peInputs:mode==='scenario_pe_ready'?{
+          bear:{epsBasis:'next_four_quarter_eps',eps:5,multiple:13},
+          base:{epsBasis:'source_annual_forecast_eps',eps:5,multiple:16},
+          bull:{epsBasis:'source_next_four_fiscal_quarter_eps',eps:5,multiple:19},
+        }:null};
       if(mode==='scenario_private')value.rawOriginal='SYNTHETIC_PRIVATE_REVIEWED_SCENARIO';
       return json(response,200,value);
     }

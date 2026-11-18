@@ -59,6 +59,10 @@ export type LaunchForwardPeReference = {
 };
 
 const valuationMethods = ['forward_pe','normalized_pe','forward_pb','ev_ebitda','dcf'] as const;
+
+const valuationEpsBases=['next_four_quarter_eps','source_annual_forecast_eps','source_next_four_fiscal_quarter_eps','normalized_eps'] as const;
+type LaunchPeInput = { epsBasis: typeof valuationEpsBases[number]; eps: number; multiple: number };
+type LaunchPeInputs = { bear: LaunchPeInput; base: LaunchPeInput; bull: LaunchPeInput };
 export type LaunchReviewedValuation = {
   method: typeof valuationMethods[number];
   period: string;
@@ -68,6 +72,7 @@ export type LaunchReviewedValuation = {
   bear: number;
   base: number;
   bull: number;
+  peInputs: LaunchPeInputs | null;
 };
 export type LaunchRankingDetail = {arithmeticVersion:typeof LAUNCH_RANKING_ARITHMETIC;rankingRunId:string;symbol:string;revisionId:string;scoreRevision:string;launchQualificationRevision:string;inputHash:string;
   summary:string|null;scoreEvidence:LaunchRankingRule[];citations:LaunchPublicCitation[];chart:LaunchRankingChart|null;priceHighs:LaunchPriceHighs|null;reportedEps?:LaunchReportedEps[];issuerEpsEstimates?:LaunchIssuerEpsEstimate[];issuerFiscalForecasts?:LaunchIssuerFiscalForecast[];forwardPeReference?:LaunchForwardPeReference|null;reviewedValuation?:LaunchReviewedValuation|null};
@@ -448,7 +453,8 @@ export function parseLaunchReviewedValuation(
 ): LaunchReviewedValuation | null {
   if (value === null) return null;
   envelope(value);
-  if (!exact(value, 'schemaVersion rankingRunId symbol revisionId inputHash cutoff valuationDate quoteDate period method unit bear base bull')
+  const keys='schemaVersion rankingRunId symbol revisionId inputHash cutoff valuationDate quoteDate period method unit bear base bull';
+  if (!(exact(value, keys) || exact(value, keys+' peInputs'))
     || value.schemaVersion !== 'vnext-launch-reviewed-valuation-v1'
     || value.rankingRunId !== binding.rankingRunId || value.symbol !== binding.symbol
     || value.revisionId !== binding.revisionId || value.inputHash !== binding.inputHash
@@ -464,7 +470,21 @@ export function parseLaunchReviewedValuation(
   if (!method || dates.length > 2 || !dates.every(validPeriod)
     || dates.length === 2 && (dates[0].length !== dates[1].length || dates[0] >= dates[1])) invalid();
   const { period, valuationDate, quoteDate, unit, bear, base, bull }=value;
-  return { method, period, valuationDate, quoteDate, unit, bear, base, bull };
+  const projected=value.peInputs;
+  let peInputs: LaunchPeInputs | null = null;
+  if (projected !== null && projected !== undefined) {
+    if ((method!=='forward_pe' && method!=='normalized_pe') || !exact(projected, 'bear base bull')) invalid();
+    const check = (input:unknown, price:number):LaunchPeInput => {
+      if (!exact(input, 'epsBasis eps multiple') || !number(input.eps) || input.eps<=0 || !number(input.multiple) || input.multiple<=0) invalid();
+      const epsBasis=valuationEpsBases.find(candidate=>candidate===input.epsBasis);
+      if (!epsBasis || (method==='normalized_pe')!==(epsBasis==='normalized_eps')) invalid();
+      const recomputed=input.eps*input.multiple;
+      if (!Number.isFinite(recomputed) || recomputed<=0 || Math.abs(price-recomputed)>Math.max(1e-8,Math.abs(recomputed)*1e-8)) invalid();
+      return { epsBasis, eps:input.eps, multiple:input.multiple };
+    };
+    peInputs={bear:check(projected.bear,bear),base:check(projected.base,base),bull:check(projected.bull,bull)};
+  }
+  return { method, period, valuationDate, quoteDate, unit, bear, base, bull, peInputs };
 }
 
 async function readReviewedValuation(

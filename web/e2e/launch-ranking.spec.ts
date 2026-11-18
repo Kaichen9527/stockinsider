@@ -150,3 +150,22 @@ test('frozen stock scenarios show three reviewed prices and suppress a private p
     }
   }
 });
+
+test('P/E scenarios present disclosed EPS and multiples separately from prices',async({page,request})=>{
+  for(const mode of ['scenario_pe_ready','scenario_pe_hidden']){
+    expect((await request.post(bridge+'/__fixture/control',{headers,data:{mode}})).ok()).toBeTruthy();
+    await page.goto('/');
+    await page.getByRole('link',{name:'5274',exact:true}).click();
+    const scenarios=page.getByTestId('launch-reviewed-valuation');
+    await expect(scenarios).toContainText('預估本益比估值');
+    await expect(scenarios).toContainText('95 元／股');
+    if(mode==='scenario_pe_ready'){
+      await expect(scenarios).toContainText('研究採用的四季 EPS 5 元 × 13 倍');
+      await expect(scenarios).toContainText('來源年度 EPS 預估 5 元 × 16 倍');
+      await expect(scenarios).toContainText('來源四季 EPS 預估 5 元 × 19 倍');
+    }else{
+      await expect(scenarios).not.toContainText('EPS');
+      await expect(scenarios).not.toContainText('13 倍');
+    }
+  }
+});

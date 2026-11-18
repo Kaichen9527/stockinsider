@@ -20,6 +20,13 @@ const valuationMethods = {
   ev_ebitda: 'EV／EBITDA',
   dcf: '現金流量折現',
 } as const;
+
+const valuationEpsLabels = {
+  next_four_quarter_eps: '研究採用的四季 EPS',
+  source_annual_forecast_eps: '來源年度 EPS 預估',
+  source_next_four_fiscal_quarter_eps: '來源四季 EPS 預估',
+  normalized_eps: '常態化 EPS',
+} as const;
 export default async function LaunchDetail({symbol,query}:{symbol:string;query:Record<string,string|string[]|undefined>}) {
   const selection=launchDetailQuery(query);
   let read:LaunchRankingRead|null=null,invalid=selection.status==='invalid';
@@ -88,9 +95,16 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
           <h3 className="font-medium">研究股價情境</h3>
           <p className="mt-2">{valuationMethods[scenario.method]}估值，適用期間 {scenario.period}。估值日 {scenario.valuationDate}，原研究報價日 {scenario.quoteDate}。</p>
           <dl className="mt-2 grid grid-cols-3 gap-3">
-            {([['熊', scenario.bear], ['基準', scenario.base], ['牛', scenario.bull]] as const).map(([name, price]) => <div key={name}>
-              <dt>{name}</dt><dd>{ratioFormat.format(price)} 元／股</dd>
-            </div>)}
+            {([['bear', '熊'], ['base', '基準'], ['bull', '牛']] as const).map(([key, name]) => {
+              const inputs = scenario.peInputs?.[key];
+              return <div key={key}>
+                <dt>{name}</dt>
+                <dd>
+                  {ratioFormat.format(scenario[key])} 元／股
+                  {inputs && <span className="block text-sm">{valuationEpsLabels[inputs.epsBasis]} {ratioFormat.format(inputs.eps)} 元 × {ratioFormat.format(inputs.multiple)} 倍</span>}
+                </dd>
+              </div>;
+            })}
           </dl>
         </div> : <p className="mt-2">{scenario === null ? '此榜單版本無可公開的研究股價情境。' : '研究股價情境目前無法讀取。'}</p>}
       </section>

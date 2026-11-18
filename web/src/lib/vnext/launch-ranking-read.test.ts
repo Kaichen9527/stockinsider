@@ -318,7 +318,7 @@ test('reviewed scenario projection accepts ordered prices under the frozen bindi
   };
   assert.deepEqual(parseLaunchReviewedValuation(scenario,binding),{
     valuationDate:'2026-11-10',quoteDate:'2026-11-09',period:'2027-Q1/2027-Q4',method:'forward_pe',
-    unit:'TWD_per_share',bear:65,base:80,bull:95,
+    unit:'TWD_per_share',bear:65,base:80,bull:95,peInputs:null,
   });
   for (const patch of [
     {rankingRunId:'00000000-0000-4000-8000-000000000999'}, {inputHash:'f'.repeat(64)},
@@ -327,4 +327,30 @@ test('reviewed scenario projection accepts ordered prices under the frozen bindi
     {period:'2027-Q4/2027-Q1'}, {method:'raw_broker_report'}, {unit:'TWD'},
     {bear:0}, {base:96}, {bull:Number.MAX_SAFE_INTEGER+1}, {privateOriginal:'PRIVATE'},
   ]) assert.throws(()=>parseLaunchReviewedValuation({...scenario,...patch},binding),/contract_invalid/u);
+});
+
+test('disclosed P/E inputs are closed, compatible with the reviewed method and reproduce all three prices',()=>{
+  const packet=launchRankingFixture(1,true);
+  const {snapshot,detail}=packet;
+  const binding={...detail!,cutoff:snapshot.cutoff,session:snapshot.session};
+  const wire={schemaVersion:'vnext-launch-reviewed-valuation-v1',rankingRunId:snapshot.rankingRunId,
+    revisionId:detail!.revisionId,inputHash:detail!.inputHash,symbol:detail!.symbol,cutoff:snapshot.cutoff,
+    valuationDate:'2026-11-10',quoteDate:'2026-11-09',period:'2027',method:'forward_pe',
+    unit:'TWD_per_share',bear:65,base:80,bull:95};
+  const peInputs={bear:{epsBasis:'next_four_quarter_eps',eps:5,multiple:13},
+    base:{epsBasis:'source_annual_forecast_eps',eps:5,multiple:16},
+    bull:{epsBasis:'source_next_four_fiscal_quarter_eps',eps:5,multiple:19}};
+  assert.deepEqual(parseLaunchReviewedValuation({...wire,peInputs},binding)!.peInputs,peInputs);
+  assert.equal(parseLaunchReviewedValuation({...wire,peInputs:null},binding)!.peInputs,null);
+  const withBear=(change:object)=>({...peInputs,bear:{...peInputs.bear,...change}});
+  for(const invalid of [
+    {...wire,method:'dcf',peInputs},
+    {...wire,method:'normalized_pe',peInputs},
+    {...wire,peInputs:{bear:peInputs.bear,base:peInputs.base}},
+    {...wire,peInputs:withBear({eps:0})},
+    {...wire,peInputs:withBear({eps:-5,multiple:-13})},
+    {...wire,peInputs:withBear({multiple:12})},
+    {...wire,peInputs:withBear({epsBasis:'normalized_eps'})},
+    {...wire,peInputs:withBear({source:'PRIVATE'})},
+  ]) assert.throws(()=>parseLaunchReviewedValuation(invalid,binding),/contract_invalid/u);
 });

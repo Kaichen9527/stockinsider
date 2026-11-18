@@ -109,7 +109,7 @@ BEGIN
     'schemaVersion','vnext-launch-reviewed-valuation-v1','rankingRunId','00000000-0000-4000-8000-000000000011',
     'symbol','2454','revisionId','00000000-0000-4000-8000-000000000012','inputHash',repeat('a',64),
     'cutoff',to_jsonb('2026-11-16T13:30Z'::timestamptz),'valuationDate','2026-11-16','quoteDate','2026-11-13',
-    'period','2027','method','dcf','unit','TWD_per_share','bear',65,'base',80,'bull',95)
+    'period','2027','method','dcf','unit','TWD_per_share','bear',65,'base',80,'bull',95,'peInputs',NULL)
     OR packet::text ~ 'PRIVATE_|authorization|provider|reviewer|outputHash'
   THEN RAISE EXCEPTION 'scenario projection differs';END IF;
   IF public.vnext_launch_reviewed_valuation_v1('00000000-0000-4000-8000-000000000011','2330') IS NOT NULL
@@ -217,6 +217,30 @@ BEGIN
   IF fixture_scenario()->>'method' IS DISTINCT FROM 'forward_pe' THEN
     RAISE EXCEPTION 'positive EPS and reviewed multiples should supply scenarios';
   END IF;
+
+  IF fixture_scenario()->'peInputs' IS DISTINCT FROM 'null'::jsonb THEN
+    RAISE EXCEPTION 'a price grant revealed the P/E inputs';
+  END IF;
+  INSERT INTO vnext_launch_valuation_clearance_v1
+    (research_revision,output_hash,authorization_sha256,recorded_at,valid_until,disclose_pe_inputs)
+  SELECT revision_id,digest,repeat('e',64),'2026-11-16T12:40Z','2090-01-01',true
+  FROM vnext_publications_v1;
+  IF fixture_scenario()->'peInputs' IS DISTINCT FROM
+    '{"bear":{"eps":5,"epsBasis":"next_four_quarter_eps","multiple":13},
+      "base":{"eps":5,"epsBasis":"next_four_quarter_eps","multiple":16},
+      "bull":{"eps":5,"epsBasis":"next_four_quarter_eps","multiple":19}}'::jsonb THEN
+    RAISE EXCEPTION 'the disclosed P/E inputs differ from the frozen operands';
+  END IF;
+  UPDATE vnext_launch_valuation_clearance_v1 SET recorded_at='2026-11-16T13:31Z' WHERE disclose_pe_inputs;
+  IF fixture_scenario()->'peInputs' IS DISTINCT FROM 'null'::jsonb THEN
+    RAISE EXCEPTION 'P/E clearance after the cutoff leaked into the ranked version';
+  END IF;
+  UPDATE vnext_launch_valuation_clearance_v1 SET recorded_at='2026-11-16T12:40Z',withdrawn_at=clock_timestamp()
+   WHERE disclose_pe_inputs;
+  IF fixture_scenario()->'peInputs' IS DISTINCT FROM 'null'::jsonb OR fixture_scenario()->'base' IS DISTINCT FROM '80'::jsonb THEN
+    RAISE EXCEPTION 'withdrawn P/E scope altered the independently approved prices';
+  END IF;
+  UPDATE vnext_launch_valuation_clearance_v1 SET withdrawn_at=NULL WHERE disclose_pe_inputs;
   UPDATE vnext_preparations_v1 SET evidence=jsonb_set(evidence,'{evidence,0,value}','0');
   PERFORM fixture_expect_unavailable('zero EPS');
   UPDATE vnext_preparations_v1 SET evidence=jsonb_set(evidence,'{evidence,0,value}','-5');
