@@ -1,0 +1,85 @@
+{
+  "schema": "stockinsider-t06-action-market-crosscheck-v1",
+  "subject": "9b56484eaa3c2fb30d61527a9140c1fc0e95df9a",
+  "tree": "6869475603668be5f1b5bcfdc9617d462a5667da",
+  "TWSEPriceJoin": [
+    {
+      "symbol": "7780",
+      "preSession": "2026-01-08",
+      "latestCloseBeforeAction": 185,
+      "actionSession": "2026-01-19",
+      "openOnActionDay": 20.35,
+      "closeOnActionDay": 20.35,
+      "exchangeReferenceAfter": 18.5,
+      "sourceUrl": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20260101&stockNo=7780",
+      "priceFileSha256": "16c397f43e474b31938f4d7cc93ff3618cc589eeeb34b14b529aa649b4872234"
+    },
+    {
+      "symbol": "2330",
+      "preSession": "2026-06-10",
+      "latestCloseBeforeAction": 2255,
+      "actionSession": "2026-06-11",
+      "openOnActionDay": 2240,
+      "closeOnActionDay": 2250,
+      "exchangeReferenceAfter": 2248.99,
+      "sourceUrl": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20260601&stockNo=2330",
+      "priceFileSha256": "1f3d24c2d49921d29a723de582ef88f578c0b26fe69fb2f0866720d58341b813"
+    }
+  ],
+  "TPExSameSnapshotAcrossDailyAndRange": [
+    {
+      "session": "2026-01-19",
+      "collectedAt": "2026-11-18T07:27:58.352Z",
+      "feedEvidence": [
+        {
+          "feedIdentity": "tpex:exright-cal:v1",
+          "responseByteCount": 2579,
+          "responseSha256": "7f5f288e1c51f5f06112d8a154e0be55fa3aeed0b1d0ba7bc877c0ae95e7bbdd",
+          "parsedRowCount": 10
+        },
+        {
+          "feedIdentity": "tpex:reduction-reference:v1",
+          "responseByteCount": 375,
+          "responseSha256": "1737dba71d6f62bbdb6da6e59a9d3cc8e47a3db788cf8591567a69e930144bbb",
+          "parsedRowCount": 0
+        },
+        {
+          "feedIdentity": "tpex:change-reference:v1",
+          "responseByteCount": 296,
+          "responseSha256": "649e95448a1668acfe4aa4db8886bb0983aa3114670c6bccc9ddc5e2c56c6517",
+          "parsedRowCount": 0
+        }
+      ],
+      "eventCount": 10
+    },
+    {
+      "session": "2026-06-11",
+      "collectedAt": "2026-11-18T07:28:11.280Z",
+      "feedEvidence": [
+        {
+          "feedIdentity": "tpex:exright-cal:v1",
+          "responseByteCount": 2122,
+          "responseSha256": "d1f92a8e021be8ce2e4d748e853a3d94f5b707975fbc475c52233181615c82f2",
+          "parsedRowCount": 8
+        },
+        {
+          "feedIdentity": "tpex:reduction-reference:v1",
+          "responseByteCount": 375,
+          "responseSha256": "f9ab6d1865f47c517ab720fa813e015befc5e9e003b372d6621b1fd2b6043f3b",
+          "parsedRowCount": 0
+        },
+        {
+          "feedIdentity": "tpex:change-reference:v1",
+          "responseByteCount": 296,
+          "responseSha256": "b1500449f19f694a21c6ddcfa2c4b154c6b6f13e7ce65095404dd07b2c91064d",
+          "parsedRowCount": 0
+        }
+      ],
+      "eventCount": 8
+    }
+  ],
+  "scope": "read-only retrospective parsing and exchange-price comparison",
+  "originalCutoffWitness": false,
+  "productionWrites": 0,
+  "officialTermsAdjustmentApplied": false
+}
