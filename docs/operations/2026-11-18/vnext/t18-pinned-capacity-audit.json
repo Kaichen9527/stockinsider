@@ -1,0 +1,61 @@
+{
+  "schema": "stockinsider.t18.pinned-restore-capacity-audit.v1",
+  "prContext": 411,
+  "operatorBaseline": "f519b65b689a67f14bada9ecb429783de173c2f4",
+  "sourceBlobs": {
+    "stageDatabaseRestore": "07107b17bd172756f0bc8272347b88f86ffbdec6",
+    "hostCoordinator": "9b7255df35efc4668d03d7e2cdf30f415a1266e0",
+    "auditProgram": "1a386e31b412bd06a6df7e87647e00d97f4e131e"
+  },
+  "predecessorNativeObservation": "1fc7906408935494fffafd3810c3d9cf5f1162e5",
+  "calculation": {
+    "additionalWorkReserveBytes": 3892314112,
+    "backupOrKeyOpened": false,
+    "databaseSizeBytes": 2308257459,
+    "directProfileStartingDiskShortfallBytes": 6350155776,
+    "evenOptimisticSplitShortfallBytes": 2964391603,
+    "hostDiskAvailableBytes": 18345906176,
+    "hostMemoryAvailableBytes": 4217626624,
+    "manifestContextVerified": true,
+    "maxCombinedSplitBytesBeforeFilesystemOverhead": 3236179968,
+    "preKeyDiskFloorBytes": 16106127360,
+    "preKeyMemoryFloorBytes": 3221225472,
+    "productionChanged": false,
+    "requiredWorkFreeBytes": 6200571571,
+    "startupDiskFloorBytes": 24696061952,
+    "startupMemoryFloorBytes": 3221225472,
+    "testedSplitRawBytes": 3489660928,
+    "testedSplitWorkFreeBytes": 3339055104,
+    "testedSplitWorkFreeShortfallBytes": 2861516467
+  },
+  "readOnlyInventory": {
+    "docker": {
+      "containerCount": 39,
+      "imageIds": 68,
+      "stockinsiderTaggedImageIds": 0,
+      "stockinsiderUnreferencedTagIds": 0,
+      "danglingUnreferencedIdsWithUnestablishedOwnership": 8
+    },
+    "projectBuildDirectoryBytes": 4096,
+    "projectExistingRuntimeBytes": 258121728,
+    "projectArtifactStorageBytes": 1428680704,
+    "mountedPhysicalBlockTopology": "one root disk plus boot partitions",
+    "capacityReclaimedBytes": 0,
+    "noCertifiedSafeReclaimSufficient": true,
+    "containerLayerOwnershipForDanglingImagesUnestablished": true
+  },
+  "actualOutcome": "native split protocol verified, accepted staged image cannot satisfy intact original pre-key and restore capacity predicates",
+  "unchanged": {
+    "protectedCheck": true,
+    "coordinatorUnmodified": true,
+    "productionUnmodified": true,
+    "priorSyntheticEvidencePreserved": true
+  },
+  "accountInventory": {
+    "contaboPanelReachedSignIn": true,
+    "unattachedAccountStorageUnverified": true,
+    "purchaseAttempted": false
+  },
+  "unblock": "Restore currently needs more usable authorized storage. Rechecking an already provisioned Contabo volume requires panel access. No actual restore admission or requirement was lowered.",
+  "recordedAt": "2026-11-18T12:51:49+08:00"
+}
