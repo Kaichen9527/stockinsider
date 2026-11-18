@@ -1,0 +1,84 @@
+{
+  "schema": "stockinsider-staging-trading-suspension-observation-v1",
+  "subject": "9b56484eaa3c2fb30d61527a9140c1fc0e95df9a",
+  "session": "2026-11-18",
+  "cutoff": "2026-11-18T21:30:00+08:00",
+  "TPEx": {
+    "datasetId": 11736,
+    "request": {
+      "requestedAt": "2026-11-18T07:40:41.833851+00:00",
+      "observedAt": "2026-11-18T07:40:42.485651+00:00",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/cmode/chtm_result.php?l=zh-tw&o=data",
+      "bytes": 1237,
+      "sha256": "9ec5549a5ccf4f66ba6a8512fcfe990d168dd2592c29536e4b625ac9f0962456"
+    },
+    "typescript": {
+      "summary": {
+        "datasetId": 11736,
+        "reportDate": "2026-11-18",
+        "receivedAt": "2026-11-18T07:40:42.485651+00:00",
+        "bytes": 1237,
+        "sha256": "9ec5549a5ccf4f66ba6a8512fcfe990d168dd2592c29536e4b625ac9f0962456",
+        "reportedRows": 20,
+        "positiveSuspensions": 2,
+        "sameSessionByCutoff": true,
+        "completeAbsenceProved": false,
+        "market": "TPEX"
+      },
+      "codeSetSha256": "9d35ea41e6654226d8145da144177ddb2c383c357808391d978aa429370d5820",
+      "wrongSessionExcluded": true
+    },
+    "nativeDerive": {
+      "nativeRows": 20,
+      "positiveSuspensions": 2,
+      "sourceSession": "2026-11-18",
+      "typescriptAndSqlSameCodeHash": true,
+      "oldPayloadRejectedForNextSession": true,
+      "headerOnlyRejected": true,
+      "databaseEngine": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+      "rawSha256": "9ec5549a5ccf4f66ba6a8512fcfe990d168dd2592c29536e4b625ac9f0962456"
+    }
+  },
+  "TWSE": {
+    "datasetId": 11677,
+    "undatedOpenData": {
+      "requestedAt": "2026-11-18T07:40:41.051635+00:00",
+      "observedAt": "2026-11-18T07:40:41.831447+00:00",
+      "sourceUrl": "https://www.twse.com.tw/exchangeReport/TWTAWU?response=open_data",
+      "bytes": 169,
+      "sha256": "1bdd6daf1607f4485c8c021915b42ad0addc9ed4e39decbc5ee2c68c271a10f8"
+    },
+    "undatedReportDates": {
+      "suspensionDate": "2026-11-10",
+      "resumptionDate": "2026-11-11"
+    },
+    "datedPositiveControl": {
+      "requestDateCompact": "20261110",
+      "sourceUrl": "https://www.twse.com.tw/rwd/zh/afterTrading/TWTAWU?startDate=20261110&endDate=20261110&querytype=3&stockNo=&selectType=&response=json",
+      "requestedAt": "2026-11-18T07:47:54.629679Z",
+      "observedAt": "2026-11-18T07:47:59.296161Z",
+      "sha256": "edad6d996ff895bb68246927f09fa96c7ec1d9b0ca26f8a77a456b3837ca248f",
+      "status": "OK",
+      "caption": null,
+      "title": "\u66ab\u505c\u4ea4\u6613\u8b49\u5238 \u67e5\u8a62\u7bc4\u570d\uff1a\u5168\u90e8\u4e0a\u5e02\u8b49\u5238 \u671f\u9593\uff1a115/11/10 \u5230 115/11/10",
+      "count": 1
+    },
+    "datedMatchingDayZeroRows": {
+      "requestDateCompact": "20261118",
+      "sourceUrl": "https://www.twse.com.tw/rwd/zh/afterTrading/TWTAWU?startDate=20261118&endDate=20261118&querytype=3&stockNo=&selectType=&response=json",
+      "requestedAt": "2026-11-18T07:48:01.378914Z",
+      "observedAt": "2026-11-18T07:48:02.569143Z",
+      "sha256": "917f7940c3bd956412939ebb0ce9d657e581f77c1f103c08892be24aea471553",
+      "status": "\u5f88\u62b1\u6b49\uff0c\u6c92\u6709\u7b26\u5408\u689d\u4ef6\u7684\u8cc7\u6599!",
+      "caption": null,
+      "title": "\u66ab\u505c\u4ea4\u6613\u8b49\u5238 \u67e5\u8a62\u7bc4\u570d\uff1a\u5168\u90e8\u4e0a\u5e02\u8b49\u5238 \u671f\u9593\uff1a115/11/18 \u5230 115/11/18",
+      "count": 0
+    },
+    "datedPositiveMatchesOpenData": true
+  },
+  "scheduledRosterStillRequired": true,
+  "fullMarketClearance": false,
+  "rankingPublicationVerified": false,
+  "signedSourceWriterVerified": false,
+  "productionWrites": 0
+}
