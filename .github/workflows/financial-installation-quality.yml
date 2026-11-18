@@ -8,7 +8,7 @@ on:
       - 'scripts/test_candidate_financial_parser_socket.py'
       - 'scripts/candidate_financial_parser_socket.py'
       - 'scripts/candidate-financial-partial-admission-postgres.test.mjs'
-      - 'scripts/vnext-twse-opening-limit-postgres.test.mjs'
+      - 'scripts/vnext-opening-limit-postgres.test.mjs'
       - 'deployment/vps/install-official-financial-taxonomy.sh'
       - 'migrations/**'
       - 'deployment/vps/bootstrap-stockinsider-postgres.sql'
@@ -59,7 +59,7 @@ jobs:
           python3 -B -m unittest discover -s scripts -p test_candidate_financial_parser_socket.py -v
           node --test scripts/candidate-financial-partial-admission-postgres.test.mjs
       - name: Verify private official opening-limit custody in PostgreSQL 17
-        run: node --test scripts/vnext-twse-opening-limit-postgres.test.mjs
+        run: node --test scripts/vnext-opening-limit-postgres.test.mjs
       - name: Install locked dependencies without lifecycle scripts
         run: |
           npm ci --ignore-scripts

@@ -26,10 +26,13 @@ END $$;
 CREATE FUNCTION public.vnext_launch_twse_turnover_close_v1(date,timestamptz) RETURNS timestamptz LANGUAGE sql AS $$
  SELECT CASE WHEN current_setting('fixture.early')='no' THEN current_setting('fixture.close')::timestamptz END
 $$;
+CREATE FUNCTION public.vnext_launch_tpex_cash_close_v1(date,timestamptz) RETURNS timestamptz LANGUAGE sql AS $$
+ SELECT public.vnext_launch_twse_turnover_close_v1($1,$2)
+$$;
 CREATE FUNCTION public.vnext_launch_disposition_session_v1(text,date,timestamptz) RETURNS uuid LANGUAGE sql AS $$
- SELECT CASE WHEN $1='TWSE' AND $2=(clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date
+ SELECT CASE WHEN $1 IN ('TWSE','TPEX') AND $2=(clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date
   AND $3>=current_setting('fixture.close')::timestamptz
-  THEN current_setting('fixture.calendar')::uuid END
+  THEN current_setting(CASE WHEN $1='TWSE' THEN 'fixture.calendar' ELSE 'fixture.tpex_calendar' END)::uuid END
 $$;
 CREATE FUNCTION public.enforce_production_writer_fence() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
@@ -40,6 +43,8 @@ CREATE FUNCTION public.vnext_launch_csv_immutable_v1() RETURNS trigger LANGUAGE 
 BEGIN RAISE EXCEPTION 'fixture_immutable'; END $$;
 `;
 const migration = new URL('../migrations/20261118_54_vnext_twse_opening_limit_receipts_v1.sql', import.meta.url);
+const tpexMigration = new URL('../migrations/20261118_55_vnext_tpex_opening_limit_receipts_v1.sql', import.meta.url);
+const csvMigration = new URL('../migrations/20261115_vnext_launch_source_facts_v1.sql', import.meta.url);
 const authority = '00000000-0000-4000-8000-000000000002';
 const different = '00000000-0000-4000-8000-000000000003';
 const lease = '00000000-0000-4000-8000-000000000001';
@@ -49,8 +54,8 @@ const args = "'operator','" + lease + "'";
 const receipt = "public.vnext_launch_twse_opening_limits_v1";
 const signature = command + "(text,uuid,text,date,timestamptz,timestamptz,uuid,text,text,bytea,bytea)";
 
-test('PostgreSQL bounds TWSE receipt custody to an approved lease, calendar, rights and cutoff', () => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(),'si-twse-opening-'));
+test('PostgreSQL bounds TWSE and TPEx receipt custody to an approved lease, calendar, rights and cutoff', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(),'si-opening-limit-'));
   const data = path.join(root,'data'), port = String(55000 + process.pid % 5000);
   const run = (name,argv,input) => spawnSync(
     process.env.OPPORTUNITY_V3_POSTGRES_BIN ? path.join(process.env.OPPORTUNITY_V3_POSTGRES_BIN,name) : name,
@@ -66,10 +71,18 @@ test('PostgreSQL bounds TWSE receipt custody to an approved lease, calendar, rig
     check(run('pg_ctl',['-D',data,'-l',path.join(root,'server.log'),'-w','-o','-c listen_addresses= -k '+root+' -p '+port,'start']));
     started = true;
     check(psql(fixture));
+    const csvSource=fs.readFileSync(csvMigration,'utf8');
+    const start=csvSource.indexOf('CREATE FUNCTION public.vnext_launch_csv_rows_v1(');
+    const end=csvSource.indexOf('END $csv$;',start)+'END $csv$;'.length;
+    assert.ok(start>=0&&end>start);
+    check(psql(csvSource.slice(start,end)));
+    check(psql('ALTER FUNCTION public.vnext_launch_csv_rows_v1(bytea,integer) OWNER TO stockinsider_vnext_owner;'
+      +' REVOKE ALL ON FUNCTION public.vnext_launch_csv_rows_v1(bytea,integer) FROM PUBLIC,anon,authenticated,service_role;'));
     check(psql(fs.readFileSync(migration,'utf8')));
+    check(psql(fs.readFileSync(tpexMigration,'utf8')));
     const close = check(psql("SELECT clock_timestamp()-interval '30 seconds';"));
     const env = "SET fixture.early='no'; SET fixture.fence='enabled'; SET fixture.rights='a'; SET fixture.close='"+close
-      +"'; SET fixture.calendar='"+authority+"'; ";
+      +"'; SET fixture.calendar='"+authority+"'; SET fixture.tpex_calendar='"+different+"'; ";
     const admin = sql => check(psql(env+sql));
     const rpc = sql => check(psql(env+'SET ROLE service_role; '+sql));
     const rejects = (sql,reason) => {
@@ -129,6 +142,52 @@ test('PostgreSQL bounds TWSE receipt custody to an approved lease, calendar, rig
     rejects(service+'SELECT csv_body FROM '+receipt+';',/permission denied/u);
     rejects("SET ROLE stockinsider_vnext_owner; DELETE FROM "+receipt+";",/fixture_immutable/u);
     rejects("SET ROLE stockinsider_vnext_owner; TRUNCATE "+receipt+";",/fixture_immutable/u);
+
+    const otc='public.vnext_launch_tpex_opening_limit_command_v1';
+    const otcTable='public.vnext_launch_tpex_opening_limits_v1';
+    const otcSignature=otc+'(text,uuid,text,date,timestamptz,timestamptz,uuid,text,bytea)';
+    assert.equal(admin("SELECT has_function_privilege('anon','"+otcSignature+"','EXECUTE'),"
+      +"has_function_privilege('authenticated','"+otcSignature+"','EXECUTE'),"
+      +"has_function_privilege('service_role','"+otcSignature+"','EXECUTE'),"
+      +"has_table_privilege('service_role','"+otcTable+"','SELECT'),"
+      +"has_table_privilege('service_role','"+otcTable+"','INSERT');"),'f|f|t|f|f');
+    const otcAdmit="SELECT "+otc+"("+args+",'admit');";
+    assert.equal(rpc("SET fixture.early='yes'; "+otcAdmit),'');
+    const otcReady=JSON.parse(rpc(otcAdmit));
+    assert.equal(otcReady.sessionAuthorityId,different);
+    assert.equal(otcReady.alreadyCaptured,false);
+    const header='資料日期,股票代號,名稱,收盤價,漲跌,總成交張數,漲跌停成交張數,漲跌停委託張數,漲跌停未成交張數';
+    const otcAppend=(scenario='valid',id=different)=>{
+      const dayExpr=date+(scenario==='stale'?'-1':'');
+      const roc="lpad((extract(year FROM ("+dayExpr+"))::integer-1911)::text,3,'0')||to_char("+dayExpr+",'MMDD')";
+      const row=roc+"||',4174,fixture,78.40,7.1,343,313,7172,6859'||chr(10)";
+      const values=scenario==='empty'?"''":scenario==='duplicate'?row+'||'+row:row;
+      const bytes="convert_to('"+header+"'||chr(10)||"+values+",'UTF8')";
+      return "SELECT "+otc+"("+args+",'append',"+date+",NULL,clock_timestamp(),'"+id+"',"
+        +(scenario==='bad_hash'?"repeat('f',64)":"encode(sha256("+bytes+"),'hex')")+","+bytes+");";
+    };
+    rejects(service+otcAppend('valid',authority),/launch_tpex_opening_limit_capture_invalid/u);
+    rejects(service+otcAppend('stale'),/launch_tpex_opening_limit_report_invalid/u);
+    rejects(service+otcAppend('empty'),/launch_tpex_opening_limit_report_invalid/u);
+    rejects(service+otcAppend('duplicate'),/launch_tpex_opening_limit_report_invalid/u);
+    rejects(service+otcAppend('bad_hash'),/launch_tpex_opening_limit_capture_invalid/u);
+    rejects(service+"SET fixture.fence='disabled'; "+otcAppend(),/fixture_write_fenced/u);
+    const otcSaved=JSON.parse(rpc(otcAppend()));
+    assert.equal(otcSaved.session,otcReady.session);
+    assert.equal(otcSaved.replay,false);
+    assert.equal(JSON.parse(rpc(otcAppend())).replay,true);
+    assert.equal(JSON.parse(rpc(otcAdmit)).alreadyCaptured,true);
+    assert.equal(admin("SELECT count(*) FROM "+otcTable+";"),'1');
+    const otcRead=cutoff=>"SELECT "+otc+"("+args+",'read','"+otcSaved.session+"',"+cutoff+");";
+    assert.equal(rpc(otcRead("'"+otcSaved.recordedAt+"'::timestamptz-interval '1 microsecond'")),'');
+    const otcFound=JSON.parse(rpc(otcRead("'"+otcSaved.recordedAt+"'::timestamptz")));
+    assert.equal(otcFound.sha256,otcSaved.sha256);
+    assert.equal(otcFound.sessionAuthorityId,different);
+    assert.ok(Buffer.from(otcFound.bodyBase64,'base64').toString('utf8').startsWith(header));
+    assert.equal(rpc("SET fixture.rights='b'; "+otcRead('clock_timestamp()')),'');
+    assert.equal(rpc("SET fixture.tpex_calendar='"+authority+"'; "+otcRead('clock_timestamp()')),'');
+    rejects(service+'SELECT body FROM '+otcTable+';',/permission denied/u);
+    rejects("SET ROLE stockinsider_vnext_owner; DELETE FROM "+otcTable+";",/fixture_immutable/u);
   } finally {
     if (started) check(run('pg_ctl',['-D',data,'-w','-m','immediate','stop']));
     fs.rmSync(root,{recursive:true,force:true});

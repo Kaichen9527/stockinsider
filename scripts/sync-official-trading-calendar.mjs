@@ -60,7 +60,7 @@ async function syncMonth(month) {
 
 const results = [];
 for (const month of [taipeiMonth(-1), taipeiMonth(0)]) results.push(await syncMonth(month));
-let openingHalts, openingLimits;
+let openingHalts, openingLimits, tpexOpeningLimits;
 if (process.env.STOCKINSIDER_LAUNCH_RANKING_ENABLED === 'true') {
   try {
     const response = await fetch(`${appUrl}/api/internal/vnext-research`, {
@@ -79,8 +79,11 @@ if (process.env.STOCKINSIDER_LAUNCH_RANKING_ENABLED === 'true') {
     if (['written', 'replay', 'session_unready', 'deferred'].includes(payload.result.openingLimits)) {
       openingLimits = payload.result.openingLimits;
     }
+    if (['written', 'replay', 'session_unready', 'deferred'].includes(payload.result.tpexOpeningLimits)) {
+      tpexOpeningLimits = payload.result.tpexOpeningLimits;
+    }
   } catch {
     openingHalts = 'deferred';
   }
 }
-process.stdout.write(`${JSON.stringify({ ok: true, months: results, ...(openingHalts===undefined?{}:{openingHalts}), ...(openingLimits===undefined?{}:{openingLimits}) })}\n`);
+process.stdout.write(`${JSON.stringify({ ok: true, months: results, ...(openingHalts===undefined?{}:{openingHalts}), ...(openingLimits===undefined?{}:{openingLimits}), ...(tpexOpeningLimits===undefined?{}:{tpexOpeningLimits}) })}\n`);

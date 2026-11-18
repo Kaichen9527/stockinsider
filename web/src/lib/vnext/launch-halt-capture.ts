@@ -3,6 +3,7 @@ import type {VnextIdentity} from './auth.ts';
 import {evidenceInstant} from './evidence-clock.ts';
 import {readLaunchOfficialReportBody} from './launch-official-report-body.ts';
 import {captureLaunchTwseOpeningLimits} from './launch-twse-limit-capture.ts';
+import {captureLaunchTpexOpeningLimits} from './launch-tpex-limit-capture.ts';
 import {launchHaltSource,validateLaunchHaltCapture,type LaunchHaltCapture} from './launch-opening-halt.ts';
 
 type Market=LaunchHaltCapture['market'];
@@ -71,12 +72,14 @@ export async function captureLaunchOpeningHalts(identity:VnextIdentity){
   const lease=await acquireProductionWriteLease(300);
   if(!lease)throw Error('launch_halt_lease_unavailable');
   try{
-    const [captures,openingLimits]=await Promise.allSettled([
+    const [captures,openingLimits,tpexOpeningLimits]=await Promise.allSettled([
       captureLaunchHaltSlots(writer.supabase,identity.principal,lease),
       captureLaunchTwseOpeningLimits(writer.supabase,identity.principal,lease),
+      captureLaunchTpexOpeningLimits(writer.supabase,identity.principal,lease),
     ]);
     if(captures.status==='rejected')throw captures.reason;
-    return {captures:captures.value,openingLimits:openingLimits.status==='fulfilled'?openingLimits.value:'deferred'};
+    return {captures:captures.value,openingLimits:openingLimits.status==='fulfilled'?openingLimits.value:'deferred',
+      tpexOpeningLimits:tpexOpeningLimits.status==='fulfilled'?tpexOpeningLimits.value:'deferred'};
   }
   finally{await releaseProductionWriteLease(lease);}
 }

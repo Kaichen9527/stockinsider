@@ -891,7 +891,7 @@ export async function loadTwLaunchOutcomeInput(client: TwEntryAuthorityClient,
         high: outcomePrice(row.raw_high, numerator, denominator), low: outcomePrice(row.raw_low, numerator, denominator),
         close: outcomePrice(row.raw_close, numerator, denominator) };
       bars.unshift(bar);
-      if (market === 'TWSE' && day === completed[0] && typeof volume === 'number'
+      if (day === completed[0] && typeof volume === 'number'
           && Number.isSafeInteger(volume) && volume > 0
           && row.raw_open === row.raw_high && row.raw_open === row.raw_low && row.raw_open === row.raw_close) {
         onFlatOpeningQuote?.({ session: day, sessionAuthorityId: text(row.session_authority_id),

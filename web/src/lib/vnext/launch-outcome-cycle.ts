@@ -3,6 +3,8 @@ import type {VnextIdentity} from './auth.ts';
 import {readLaunchHaltCapture} from './launch-halt-capture.ts';
 import {readLaunchTwseOpeningLimits} from './launch-twse-limit-capture.ts';
 import {bindTwseOpeningLimit,type TwseOpeningLimitReceipt} from './launch-twse-daily-limit.ts';
+import {readLaunchTpexOpeningLimits} from './launch-tpex-limit-capture.ts';
+import {bindTpexOpeningLimit,type TpexOpeningLimitReceipt} from './launch-tpex-opening-limit.ts';
 import {inspectLaunchSuspendedOpening,type LaunchHaltCapture} from './launch-opening-halt.ts';
 import {evidenceInstant} from './evidence-clock.ts';
 import {evaluateLaunchOutcome,launchOutcomeBenchmarkDays,LAUNCH_OUTCOME_POLICY,type LaunchOutcomeBenchmark,type LaunchOutcomeBenchmarkPoint,type LaunchOutcomeInput} from './launch-outcomes.ts';
@@ -132,6 +134,7 @@ export async function runLaunchOutcomesWithLease(writer:Writer,principal:string,
   let written=0,replayed=0;
   const haltCaptures=new Map<Market,Promise<LaunchHaltCapture|null>>();
   const limitCaptures=new Map<string,Promise<TwseOpeningLimitReceipt|null>>();
+  const tpexLimitCaptures=new Map<string,Promise<TpexOpeningLimitReceipt|null>>();
   const deferred:Partial<Record<'official_calendar_unavailable'|'frozen_anchor_unavailable'|'official_data_unavailable'|'write_unconfirmed',number>>={};
   const defer=(reason:keyof typeof deferred)=>{deferred[reason]=(deferred[reason]??0)+1;};
   for(const ref of batch.references){
@@ -155,9 +158,15 @@ export async function runLaunchOutcomesWithLease(writer:Writer,principal:string,
         stock.opening=openingFromReceipts(stock,await haltCaptures.get(ref.market)!,previousSuspension);
         const quote=openingQuotes[0];
         if(stock.opening===null&&quote){
-          if(!limitCaptures.has(quote.session))
-            limitCaptures.set(quote.session,readLaunchTwseOpeningLimits(writer,principal,owner,quote.session,asOf));
-          stock.opening=bindTwseOpeningLimit(stock,quote,await limitCaptures.get(quote.session)!);
+          if(ref.market==='TWSE'){
+            if(!limitCaptures.has(quote.session))
+              limitCaptures.set(quote.session,readLaunchTwseOpeningLimits(writer,principal,owner,quote.session,asOf));
+            stock.opening=bindTwseOpeningLimit(stock,quote,await limitCaptures.get(quote.session)!);
+          }else{
+            if(!tpexLimitCaptures.has(quote.session))
+              tpexLimitCaptures.set(quote.session,readLaunchTpexOpeningLimits(writer,principal,owner,quote.session,asOf));
+            stock.opening=bindTpexOpeningLimit(stock,quote,await tpexLimitCaptures.get(quote.session)!);
+          }
         }
       }
       ({packet,evaluation}=await evaluateWithBenchmark(writer,signal,stock));
