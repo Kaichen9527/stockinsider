@@ -1,0 +1,120 @@
+{
+  "schema": "stockinsider.t18.encrypted-disk-ram-workspace-geometry.v1",
+  "pullRequestContext": 411,
+  "baseline": "2784faddcf12ed5333dfdd73333905308f2bfd1e",
+  "predecessorMeasuredWorkload": {
+    "gitCommit": "df3b81b40036d3ead85ff6df97621dff6e7fc7fb",
+    "imageSize": 8589934592,
+    "observedMinimumWorkFreeBytes": 5866455040,
+    "observedDatabaseBytes": 2258466483,
+    "appAndRestoreAndDatabaseMemoryObservations": [
+      96464896,
+      35827712,
+      805310464
+    ]
+  },
+  "capacityFloors": {
+    "hostDiskBytes": 16106127360,
+    "hostAvailableMemoryBytes": 1610612736,
+    "workFilesystemBytes": 536870912,
+    "unchanged": true
+  },
+  "actualKernel": {
+    "linux": "6.8.0-147-generic",
+    "scope": "Contabo isolated private mount namespace",
+    "layout": [
+      "ext4",
+      "dm-crypt",
+      "dm-linear",
+      [
+        "root-filesystem preallocated 1.75 GiB loop",
+        "noswap tmpfs preallocated 1.5 GiB loop"
+      ]
+    ],
+    "syntheticBothLegsChecks": true
+  },
+  "observations": [
+    {
+      "stage": "preflight",
+      "hostAvailableDiskBytes": 18348314624,
+      "hostAvailableMemoryBytes": 4778348544
+    },
+    {
+      "stage": "backing_preallocated",
+      "hostAvailableDiskBytes": 16469241856,
+      "hostAvailableMemoryBytes": 3169378304
+    },
+    {
+      "encryptedBothLegs": true,
+      "crossDeviceBoundaryRead": true,
+      "rawBackingCiphertext": [
+        {
+          "leg": "root",
+          "bytes": 4096,
+          "allZero": false,
+          "plaintext": false
+        },
+        {
+          "leg": "ram",
+          "bytes": 4096,
+          "allZero": false,
+          "plaintext": false
+        }
+      ]
+    },
+    {
+      "stage": "stage_mounted",
+      "hostAvailableDiskBytes": 16469225472,
+      "hostAvailableMemoryBytes": 3148910592
+    },
+    {
+      "currentObserverRejectedSplitBacking": true,
+      "reason": "work_filesystem_image_size_rejected"
+    },
+    {
+      "stage": "simultaneous_peak",
+      "hostAvailableDiskBytes": 16469221376,
+      "hostAvailableMemoryBytes": 2394083328
+    },
+    {
+      "rootImageBytes": 1879048192,
+      "ramImageBytes": 1610612736,
+      "totalEncryptedBytes": 3489660928,
+      "syntheticStorageBytes": 2723479552,
+      "syntheticMemoryBytes": 937603072,
+      "workFreeBytes": 615571456,
+      "noSwapRamMount": true,
+      "realBackupOpened": false,
+      "productionModified": false
+    },
+    {
+      "cleanupStatus": 0,
+      "rootDiskAfterBytes": 18348314624,
+      "memoryAfterBytes": 4773265408
+    },
+    {
+      "fourProductionServiceStatesUnchanged": true,
+      "twoStageReconciliationTimersUnchanged": true
+    }
+  ],
+  "admission": {
+    "currentObserverGitBlob": "1278f5118ab89f8a9751acdda904fa9650e4dec0",
+    "kernelRejection": "work_filesystem_image_size_rejected",
+    "observerUnmodified": true,
+    "prototypeReadyForRealData": false,
+    "next": "Provide independently reviewed kernel verification of the two exact backing descriptors and their no-swap and capacity bindings before permitting work. Keep current single-loop checks, original lock, cgroup limits, network isolation, backup custody and real release gates."
+  },
+  "limitations": {
+    "staticGeometryAndSyntheticAllocations": true,
+    "diskAndMemorySampledNotInstantaneous": true,
+    "doesNotMeasureActualWalOrRestoreIops": true,
+    "productionBackupOpened": false,
+    "postgresRestoreStarted": false,
+    "nextRollbackExecuted": false,
+    "iadjacentActualSessionsCompleted": false,
+    "productionUnmodified": true,
+    "verifiedUniqueArchivesRetained": true
+  },
+  "recordedAt": "2026-11-18T12:20:37+08:00",
+  "fixtureScriptSha256": "576d44880732615ae75140ce8d0fabd3f87eb5b0a813afdc6715406922b8ec4e"
+}
