@@ -778,13 +778,21 @@ function outcomePrice(value: unknown, numerator = BigInt(1), denominator = BigIn
   return `${units / OUTCOME_SCALE}.${String(units % OUTCOME_SCALE).padStart(8, '0')}`;
 }
 
+export type TwOpeningQuote = {
+  session: string;
+  sessionAuthorityId: string;
+  priceRevision: string;
+  rawPrice: string;
+  volume: number;
+};
+
 async function readOutcomePrices(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest,
   anchor: LaunchOutcomeSignalRow, calendarRows: Row[], selected: string[]) {
   const { stockId, exchange, cutoff, signalSession } = request;
   const byId = new Map(calendarRows.map(row => [row.session_authority_id, row]));
   const closes = new Set([signalSession, ...selected]);
   const result = await readRows((from, to) => client.from('opportunity_price_observations_v3')
-    .select('observation_id,stock_id,exchange,session_id,session_authority_id,raw_open,raw_high,raw_low,raw_close,provider,source_timestamp,collected_at,source_ref,recorded_at')
+    .select('observation_id,stock_id,exchange,session_id,session_authority_id,raw_open,raw_high,raw_low,raw_close,provider,source_timestamp,collected_at,source_ref,recorded_at,volume')
     .eq('stock_id', stockId).eq('exchange', exchange).eq('provider', exchange.toLowerCase())
     .gte('session_id', signalSession).lte('session_id', selected.at(-1) ?? signalSession)
     .lte('source_timestamp', cutoff).lte('collected_at', cutoff).lte('recorded_at', cutoff)
@@ -810,7 +818,8 @@ async function readOutcomePrices(client: TwEntryAuthorityClient, request: TwEntr
  * basis is pinned to the observation cutoff and never modifies the signal.
  * OHLC alone conveys no opening execution eligibility. */
 export async function loadTwLaunchOutcomeInput(client: TwEntryAuthorityClient,
-  anchor: LaunchOutcomeSignalRow, asOf: string, annual: TwEntryForwardCalendar): Promise<LaunchOutcomeInput> {
+  anchor: LaunchOutcomeSignalRow, asOf: string, annual: TwEntryForwardCalendar,
+  onFlatOpeningQuote?: (quote: TwOpeningQuote) => void): Promise<LaunchOutcomeInput> {
   const { stockId, symbol, market, session: signalSession, cutoff } = anchor;
   requireAuthority([stockId, anchor.calendarAuthorityId, anchor.closeObservationId, anchor.rankingRunId, anchor.firstRankingRunId].every(id => UUID.test(id))
     && [anchor.actionsRevision, anchor.calendarRevision, anchor.priceRevision, anchor.inputHash].every(revision => HASH.test(revision))
@@ -860,7 +869,7 @@ export async function loadTwLaunchOutcomeInput(client: TwEntryAuthorityClient,
   const { frozen, rows } = await readOutcomePrices(client, request, anchor, calendarRows, completed);
   const forwardPrices = selectedHeads(rows.filter(row => completed.includes(text(row.session_id))
     && heads.get(text(row.session_id))?.session_authority_id === row.session_authority_id),
-    'session_id', ['source_timestamp', 'collected_at', 'recorded_at'], ['raw_open', 'raw_high', 'raw_low', 'raw_close', 'session_authority_id']);
+    'session_id', ['source_timestamp', 'collected_at', 'recorded_at'], ['raw_open', 'raw_high', 'raw_low', 'raw_close', 'session_authority_id', 'volume']);
   const basisRevision = hash(['tw-launch-outcome-price-basis-v1', market, symbol, anchor.closeObservationId, anchor.actionsRevision,
     completed.map(day => {
       const snapshot = actionHeads.get(day)!;
@@ -871,12 +880,24 @@ export async function loadTwLaunchOutcomeInput(client: TwEntryAuthorityClient,
   let numerator = BigInt(1), denominator = BigInt(1);
   for (const day of [...completed].reverse()) {
     const row = forwardPrices.get(day);
-    if (row) bars.unshift({ session: day, basisRevision,
-      priceRevision: hash(['tw-launch-outcome-official-price-v1', row]),
-      availableAt: maxTime(row.recorded_at, heads.get(day)!.recorded_at, actionsKnownAt),
-      rawOpen: outcomePrice(row.raw_open), open: outcomePrice(row.raw_open, numerator, denominator),
-      high: outcomePrice(row.raw_high, numerator, denominator), low: outcomePrice(row.raw_low, numerator, denominator),
-      close: outcomePrice(row.raw_close, numerator, denominator) });
+    if (row) {
+      // Volume is additional opening evidence. Retain the identity of the
+      // existing price-only observations for outcomes that do not consume it.
+      const { volume, ...priceIdentity } = row;
+      const bar = { session: day, basisRevision,
+        priceRevision: hash(['tw-launch-outcome-official-price-v1', priceIdentity]),
+        availableAt: maxTime(row.recorded_at, heads.get(day)!.recorded_at, actionsKnownAt),
+        rawOpen: outcomePrice(row.raw_open), open: outcomePrice(row.raw_open, numerator, denominator),
+        high: outcomePrice(row.raw_high, numerator, denominator), low: outcomePrice(row.raw_low, numerator, denominator),
+        close: outcomePrice(row.raw_close, numerator, denominator) };
+      bars.unshift(bar);
+      if (market === 'TWSE' && day === completed[0] && typeof volume === 'number'
+          && Number.isSafeInteger(volume) && volume > 0
+          && row.raw_open === row.raw_high && row.raw_open === row.raw_low && row.raw_open === row.raw_close) {
+        onFlatOpeningQuote?.({ session: day, sessionAuthorityId: text(row.session_authority_id),
+          priceRevision: bar.priceRevision, rawPrice: bar.rawOpen, volume });
+      }
+    }
     const snapshot = actionHeads.get(day)!;
     const event = eventMap.get(text(snapshot.snapshot_id))!.find(item => item.symbol === symbol);
     if (event) {

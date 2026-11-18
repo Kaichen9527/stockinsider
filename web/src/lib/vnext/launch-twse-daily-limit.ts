@@ -1,13 +1,14 @@
 import { createHash } from 'node:crypto';
 import { isHistoryDate } from '../candidate-price-history.ts';
-import type { TwEntryAuthorityRequest, TwLaunchPatternReadEvidence } from '../tw-entry-plan-authority.ts';
+import type { TwEntryAuthorityRequest, TwLaunchPatternReadEvidence, TwOpeningQuote } from '../tw-entry-plan-authority.ts';
 import { evidenceInstant } from './evidence-clock.ts';
 import { decodeLicensedCsvRecords } from './licensed-csv-decoder.ts';
 import { evaluateLaunchOutcome, type LaunchOutcomeInput } from './launch-outcomes.ts';
 
 const csvUrl = 'https://www.twse.com.tw/exchangeReport/TWT84U?response=open_data';
 const jsonUrl = 'https://www.twse.com.tw/rwd/zh/variation/TWT84U';
-const maxBytes = 512 * 1024, maxRows = 4000;
+export const TWSE_LIMIT_MAX_BYTES = 512 * 1024;
+const maxRows = 4000;
 const csvFields = ['證券代號', '證券名稱', '本日漲停價', '本日開盤競價基準', '本日跌停價',
   '前日開盤競價基準', '前日收盤價', '前日買進揭示價', '前日賣出揭示價', '最近成交日', '可否零股交易'];
 const jsonFields = ['證券代號', '證券名稱', '漲停價', '開盤競價基準', '跌停價',
@@ -15,6 +16,9 @@ const jsonFields = ['證券代號', '證券名稱', '漲停價', '開盤競價�
 const groups = [[0, 2, ''], [2, 3, '本日'], [5, 4, '前日'], [9, 2, '']];
 
 export type TwseLimitCapture = { url: string; body: Uint8Array; sha256: string; observedAt: string; recordedAt: string };
+export type TwseOpeningLimitReceipt = {
+  session: string; sessionAuthorityId: string; csv: TwseLimitCapture; dated: TwseLimitCapture;
+};
 type LimitRow = { upperLimit: number; openingReference: number; lowerLimit: number };
 type Replay = LimitRow & { symbol: string; session: string; availableAt: string; revisionId: string };
 const accepted = new WeakMap<object, Replay>();
@@ -30,7 +34,7 @@ export function twseLimitReplayUrls(session: string) {
   return { csv: csvUrl + '&date=' + day, json: jsonUrl + '?date=' + day + '&selectType=ALLBUT0999&response=json' };
 }
 
-function capturedText(capture: TwseLimitCapture, url: string, maximum = maxBytes) {
+function capturedText(capture: TwseLimitCapture, url: string, maximum = TWSE_LIMIT_MAX_BYTES) {
   const observed = evidenceInstant(capture.observedAt), recorded = evidenceInstant(capture.recordedAt);
   if (capture.url !== url || !(capture.body instanceof Uint8Array) || capture.body.length < 2 ||
       capture.body.length > maximum || observed === null || recorded === null || observed > recorded) return reject();
@@ -44,9 +48,14 @@ function twseReportPrice(text: string) {
     ? Number(text.replaceAll(',', '')) : NaN;
 }
 
-function readLimit(rows: unknown, symbol: string): LimitRow {
-  if (!Array.isArray(rows) || rows.length > maxRows ||
-    rows.some(row => !Array.isArray(row) || row.length !== csvFields.length || row.some(value => typeof value !== 'string'))) return reject();
+function reportRows(rows: unknown): string[][] {
+  if (!Array.isArray(rows) || !rows.length || rows.length > maxRows ||
+    rows.some(row => !Array.isArray(row) || row.length !== csvFields.length || row.some(value => typeof value !== 'string'))
+    || new Set(rows.map(row => row[0])).size !== rows.length) return reject();
+  return rows;
+}
+
+function readLimit(rows: string[][], symbol: string): LimitRow {
   const found = rows.filter(row => row[0] === symbol);
   if (found.length !== 1) return reject();
   const [upperLimit, openingReference, lowerLimit] = found[0].slice(2, 5).map(twseReportPrice);
@@ -54,15 +63,10 @@ function readLimit(rows: unknown, symbol: string): LimitRow {
   return { upperLimit, openingReference, lowerLimit };
 }
 
-/** Pair the licensed CSV with the exchange report that explicitly declares its
- * session. Capture clocks come from the staging recorder. This replay is only
- * an input to read-only arithmetic and grants no publication authority. */
-export function parseTwseLimitReplay(session: string, symbol: string, csv: TwseLimitCapture, dated: TwseLimitCapture) {
-  if (!symbolPattern.test(symbol)) return reject();
+export function validateTwseLimitPair(session: string, csv: TwseLimitCapture, dated: TwseLimitCapture) {
   const urls = twseLimitReplayUrls(session);
   const [header, ...rows] = decodeLicensedCsvRecords(capturedText(csv, urls.csv), maxRows + 1);
   if (!sameFields(header, csvFields)) return reject();
-  const limits = readLimit(rows, symbol);
   const report = JSON.parse(capturedText(dated, urls.json));
   if (!report || report.stat !== 'OK' || report.date !== session.replaceAll('-', '') ||
       report.selectType !== 'ALLBUT0999' || !sameFields(report.fields, jsonFields) ||
@@ -71,7 +75,18 @@ export function parseTwseLimitReplay(session: string, symbol: string, csv: TwseL
         const item = report.groups[index];
         return item?.start === start && item.span === span && item.title === title;
       }) || !Array.isArray(report.data) || report.total !== report.data.length) return reject();
-  const check = readLimit(report.data, symbol);
+  const csvRows = reportRows(rows), datedRows = reportRows(report.data);
+  const datedSymbols = new Set(datedRows.map(row => row[0]));
+  if (csvRows.length !== datedSymbols.size || !csvRows.every(row => datedSymbols.has(row[0]))) return reject();
+  return { csvRows, datedRows };
+}
+
+/** Match the symbol's prices against the exchange report that explicitly
+ * declares its session. The returned proof does not confer write authority. */
+export function parseTwseLimitReplay(session: string, symbol: string, csv: TwseLimitCapture, dated: TwseLimitCapture) {
+  if (!symbolPattern.test(symbol)) return reject();
+  const { csvRows, datedRows } = validateTwseLimitPair(session, csv, dated);
+  const limits = readLimit(csvRows, symbol), check = readLimit(datedRows, symbol);
   if (check.openingReference !== limits.openingReference || check.upperLimit !== limits.upperLimit ||
       check.lowerLimit !== limits.lowerLimit) return reject();
   const availableAt = evidenceInstant(csv.recordedAt)! >= evidenceInstant(dated.recordedAt)! ? csv.recordedAt : dated.recordedAt;
@@ -95,6 +110,36 @@ export function bindTwseLimitReplay(token: unknown, request: TwEntryAuthorityReq
   if (prices.some(value => !Number.isFinite(value) || value < proof.lowerLimit || value > proof.upperLimit)) return null;
   return { market: 'TWSE' as const, session: proof.session, upperLimit: proof.upperLimit, availableAt: proof.availableAt,
     revisionId: proof.revisionId, onePriceLocked: prices.every(price => price === proof.upperLimit) };
+}
+
+/** A stored official limit and the selected, actually traded flat OHLC can
+ * establish an upper lock. An ordinary price row grants no simulated fill. */
+export function bindTwseOpeningLimit(input: LaunchOutcomeInput, quote: TwOpeningQuote,
+  receipt: TwseOpeningLimitReceipt | null): LaunchOutcomeInput['opening'] {
+  const next = input.sessions.find(day => day.status !== 'cancelled');
+  const bar = input.bars.find(row => row.session === quote.session);
+  if (!receipt || input.scope !== 'published_rank' || input.signal.market !== 'TWSE' || input.opening !== null
+    || next?.status !== 'completed' || next.session !== receipt.session || next.session !== quote.session
+    || receipt.sessionAuthorityId !== quote.sessionAuthorityId || !bar || bar.priceRevision !== quote.priceRevision
+    || bar.rawOpen !== quote.rawPrice || ![bar.high, bar.low, bar.close].every(price => price === bar.open)
+    || !Number.isSafeInteger(quote.volume) || quote.volume <= 0) return null;
+  const close = evidenceInstant(next.closeAt), cutoff = evidenceInstant(input.asOf);
+  const clocks = [receipt.csv.observedAt, receipt.dated.observedAt, receipt.csv.recordedAt,
+    receipt.dated.recordedAt, bar.availableAt];
+  if (close === null || cutoff === null || clocks.some(value => {
+    const instant = evidenceInstant(value);
+    return instant === null || instant < close || instant > cutoff;
+  })) return null;
+  try {
+    const token = parseTwseLimitReplay(next.session, input.signal.symbol, receipt.csv, receipt.dated);
+    const proof = accepted.get(token)!;
+    if (Number(quote.rawPrice) !== proof.upperLimit) return null;
+    const knownAt = evidenceInstant(bar.availableAt)! >= evidenceInstant(proof.availableAt)! ? bar.availableAt : proof.availableAt;
+    const revision = hash(JSON.stringify(['twse-published-opening-lock-v1', next.session, input.signal.symbol,
+      quote.sessionAuthorityId, quote.priceRevision, quote.rawPrice, quote.volume, proof.revisionId]));
+    return { session: next.session, knownAt, revision, status: 'unfillable',
+      reason: 'one_price_upper_limit', rawOpen: null, priceRevision: null };
+  } catch { return null; }
 }
 
 const regularQuoteFields = ['證券代號', '證券名稱', '成交股數', '成交筆數', '成交金額', '開盤價', '最高價',

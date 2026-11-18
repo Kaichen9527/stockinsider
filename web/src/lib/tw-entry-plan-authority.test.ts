@@ -437,3 +437,63 @@ test('post-close worker uses authoritative halt receipts and preserves an earlie
     assert.equal(result.written,1,kind);
   }
 });
+
+test('the post-close worker binds a traded TWSE upper lock to the first session and cutoff', async () => {
+  for (const kind of ['verified', 'late', 'wrong_authority', 'wrong_hash', 'conflicting_limit', 'below_limit', 'not_traded', 'nonflat']) {
+    const { anchor, annual, data } = outcomeFixture();
+    const session = '2026-09-28';
+    const first = data[tables.prices].find(row => row.session_id === session)!;
+    const raw = kind === 'below_limit' ? 109 : 110;
+    Object.assign(first, { raw_open: raw, raw_high: raw, raw_low: raw, raw_close: raw,
+      volume: kind === 'not_traded' ? 0 : 500 });
+    if (kind === 'nonflat') first.raw_low = 109;
+    const { client } = mockClient(data);
+    const csvFields = ['證券代號', '證券名稱', '本日漲停價', '本日開盤競價基準', '本日跌停價',
+      '前日開盤競價基準', '前日收盤價', '前日買進揭示價', '前日賣出揭示價', '最近成交日', '可否零股交易'];
+    const datedFields = ['證券代號', '證券名稱', '漲停價', '開盤競價基準', '跌停價',
+      '開盤競價基準', '收盤價', '買進揭示價', '賣出揭示價', '最近成交日', '可否零股交易'];
+    const row = [anchor.symbol, '測試', '110', '100', '90', '100', '100', '99', '100', '1150928', '是'];
+    const csv = Buffer.from(csvFields.join(',')+'\n'+row.join(',')+'\n');
+    const datedRow = [...row];
+    if (kind === 'conflicting_limit') datedRow[2] = '112';
+    const dated = Buffer.from(JSON.stringify({ stat: 'OK', date: '20260928', selectType: 'ALLBUT0999', fields: datedFields,
+      groups: [{ start: 0, span: 2, title: '' }, { start: 2, span: 3, title: '本日' },
+        { start: 5, span: 4, title: '前日' }, { start: 9, span: 2, title: '' }], data: [datedRow], total: 1 }));
+    const asOf = outcomeAsOf, recordedAt = kind === 'late' ? '2026-09-29T09:00:00.000001Z' : '2026-09-28T06:45:00Z';
+    const response = { schemaVersion: 'vnext-launch-outcome-batch-v1', asOf, available: 1,
+      signals: [{ rankingRunId: anchor.rankingRunId, symbol: anchor.symbol, market: anchor.market, session: anchor.session }],
+      calendars: { TWSE: annual } };
+    let receiptReads = 0;
+    let openingRevision: string | undefined;
+    const result = await runLaunchOutcomesWithLease({ ...client, async rpc(name, args) {
+      if (name.endsWith('batch_v1')) return { data: response, error: null };
+      if (name === 'vnext_launch_halt_command_v1' || name === 'vnext_launch_outcome_benchmark_v1')
+        return { data: null, error: null };
+      if (name === 'vnext_launch_twse_opening_limit_command_v1') {
+        receiptReads++;
+        assert.deepEqual(args, { p_principal: principal, p_lease_owner: owner, p_action: 'read', p_session: session, p_as_of: asOf });
+        return { data: { session, sessionAuthorityId: kind === 'wrong_authority' ? id(33331) : first.session_authority_id,
+          observedAt: '2026-09-28T06:44:00Z', recordedAt,
+          csvSha256: kind === 'wrong_hash' ? '0'.repeat(64) : createHash('sha256').update(csv).digest('hex'),
+          datedSha256: createHash('sha256').update(dated).digest('hex'),
+          csvBase64: csv.toString('base64'), datedBase64: dated.toString('base64') }, error: null };
+      }
+      if (!Object.hasOwn(args, 'p_input')) return { data: anchor, error: null };
+      const input = args.p_input as Parameters<typeof evaluateLaunchOutcome>[0];
+      const evaluated = evaluateLaunchOutcome(input);
+      assert.deepEqual(args.p_result, evaluated);
+      assert.equal(evaluated.execution.status, kind === 'verified' ? 'unfillable' : 'opening_evidence_gap');
+      assert.equal(evaluated.execution.reason, kind === 'verified' ? 'one_price_upper_limit' : null);
+      assert.equal(evaluated.execution.fill, null);
+      openingRevision = input.opening?.revision;
+      assert.equal(Object.hasOwn(input.bars[0], 'volume'), false);
+      return { data: { schemaVersion: 'vnext-launch-outcome-write-v1', rankingRunId: anchor.rankingRunId, symbol: anchor.symbol,
+        policyVersion: evaluated.policyVersion, inputSnapshotHash: evaluated.inputSnapshotHash, snapshotHash: '8'.repeat(64),
+        asOf, replay: false }, error: null };
+    } }, principal, owner, asOf);
+    assert.equal(result.written, 1, kind);
+    assert.equal(receiptReads, ['nonflat', 'not_traded'].includes(kind) ? 0 : 1, kind);
+    if (kind === 'verified') assert.match(openingRevision ?? '', /^[0-9a-f]{64}$/u);
+    else assert.equal(openingRevision, undefined, kind);
+  }
+});

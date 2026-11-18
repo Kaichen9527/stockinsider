@@ -1,6 +1,8 @@
-import {loadTwLaunchOutcomeInput,type TwEntryAuthorityClient,type TwEntryForwardCalendar} from '../tw-entry-plan-authority.ts';
+import {loadTwLaunchOutcomeInput,type TwEntryAuthorityClient,type TwEntryForwardCalendar,type TwOpeningQuote} from '../tw-entry-plan-authority.ts';
 import type {VnextIdentity} from './auth.ts';
 import {readLaunchHaltCapture} from './launch-halt-capture.ts';
+import {readLaunchTwseOpeningLimits} from './launch-twse-limit-capture.ts';
+import {bindTwseOpeningLimit,type TwseOpeningLimitReceipt} from './launch-twse-daily-limit.ts';
 import {inspectLaunchSuspendedOpening,type LaunchHaltCapture} from './launch-opening-halt.ts';
 import {evidenceInstant} from './evidence-clock.ts';
 import {evaluateLaunchOutcome,launchOutcomeBenchmarkDays,LAUNCH_OUTCOME_POLICY,type LaunchOutcomeBenchmark,type LaunchOutcomeBenchmarkPoint,type LaunchOutcomeInput} from './launch-outcomes.ts';
@@ -129,6 +131,7 @@ export async function runLaunchOutcomesWithLease(writer:Writer,principal:string,
   const batch=batchFrom(selected.data,asOf);
   let written=0,replayed=0;
   const haltCaptures=new Map<Market,Promise<LaunchHaltCapture|null>>();
+  const limitCaptures=new Map<string,Promise<TwseOpeningLimitReceipt|null>>();
   const deferred:Partial<Record<'official_calendar_unavailable'|'frozen_anchor_unavailable'|'official_data_unavailable'|'write_unconfirmed',number>>={};
   const defer=(reason:keyof typeof deferred)=>{deferred[reason]=(deferred[reason]??0)+1;};
   for(const ref of batch.references){
@@ -145,10 +148,17 @@ export async function runLaunchOutcomesWithLease(writer:Writer,principal:string,
     let packet:Awaited<ReturnType<typeof loadTwLaunchOutcomeInput>>;
     let evaluation:ReturnType<typeof evaluateLaunchOutcome>;
     try{
-      const stock=await loadTwLaunchOutcomeInput(writer,anchor,asOf,calendar);
+      const openingQuotes:TwOpeningQuote[]=[];
+      const stock=await loadTwLaunchOutcomeInput(writer,anchor,asOf,calendar,quote=>openingQuotes.push(quote));
       if(stock.sessions.find(day=>day.status!=='cancelled')?.status==='completed'){
         if(!haltCaptures.has(ref.market))haltCaptures.set(ref.market,readLaunchHaltCapture(writer,principal,owner,ref.market,asOf));
         stock.opening=openingFromReceipts(stock,await haltCaptures.get(ref.market)!,previousSuspension);
+        const quote=openingQuotes[0];
+        if(stock.opening===null&&quote){
+          if(!limitCaptures.has(quote.session))
+            limitCaptures.set(quote.session,readLaunchTwseOpeningLimits(writer,principal,owner,quote.session,asOf));
+          stock.opening=bindTwseOpeningLimit(stock,quote,await limitCaptures.get(quote.session)!);
+        }
       }
       ({packet,evaluation}=await evaluateWithBenchmark(writer,signal,stock));
     }catch{defer('official_data_unavailable');continue;}
