@@ -136,6 +136,9 @@ jobs:
           node --experimental-strip-types scripts/vnext-business-vectors.test.mjs | tee /tmp/stockinsider-vnext-ci/business-vectors.tap
           node scripts/candidate-financial-document-write-lease-route.test.mjs | tee /tmp/stockinsider-vnext-ci/lease-routes.tap
           node --experimental-strip-types --test \
+            web/src/lib/candidate-official-financials.test.ts \
+            web/src/lib/candidate-financial-fact-manifest.test.ts \
+            web/src/lib/candidate-financial-document-manifest.test.ts \
             web/src/lib/official-financial-validation.test.ts \
             web/src/lib/official-financial-validation-worker.test.ts \
             web/src/lib/financial-eps-reconciliation.test.ts \
