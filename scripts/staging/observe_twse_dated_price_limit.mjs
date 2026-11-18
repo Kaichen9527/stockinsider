@@ -28,9 +28,11 @@ async function capture(url) {
   }
   const body = Buffer.concat(chunks);
   const observedAt = new Date().toISOString();
-  // The parser receives an in-memory capture. The only durable output below
-  // is a diagnostic receipt. No exchange payload is persisted by this runner.
-  return { url, body, bytes, sha256: createHash('sha256').update(body).digest('hex'), observedAt, recordedAt: observedAt };
+  const sha256 = createHash('sha256').update(body).digest('hex');
+  // The recording clock marks when the in-memory bytes have been hashed.
+  // Only the diagnostic receipt is persisted.
+  const recordedAt = new Date().toISOString();
+  return { url, body, bytes, sha256, observedAt, recordedAt };
 }
 
 const captures = await Promise.all([
@@ -62,7 +64,7 @@ const checkedAt = new Date().toISOString();
 assert.ok(Date.parse(checkedAt) < Date.parse(cutoff), 'no timely receipt after actual cutoff');
 const receipt = {
   schema: 'stockinsider-actual-date-bound-limit-staging-v2', session, symbol, cutoff, checkedAt,
-  captures: captures.map(({ url, bytes, sha256, observedAt }) => ({ url, bytes, sha256, observedAt })),
+  captures: captures.map(({ url, bytes, sha256, observedAt, recordedAt }) => ({ url, bytes, sha256, observedAt, recordedAt })),
   diagnosticResult, rawBodiesPersisted: false, publicationAuthority: false,
 };
 const descriptor = openSync(join(directory, 'receipt.json'), 'wx', 0o600);
