@@ -27,6 +27,10 @@ SUPPLEMENTAL_DATASETS = {
     "tpex_all_session_quote": 11370,
 }
 POSITIVE_NOTICE_DATASETS = {29082, 11396}
+TPEX_STOPPED_TRADING_DATASET = 11736
+TPEX_STOPPED_TRADING_URL = "https://www.tpex.org.tw/web/stock/aftertrading/cmode/chtm_result.php?l=zh-tw&o=data"
+TPEX_STOPPED_TRADING_MIGRATION = "dbd0826d2e44297b5ed16bf2bf2106b4607a0d015b65b19daa2d16b2f707b0d7"
+SIGNED_ORIGINAL_LIMIT = 262_144
 
 
 def instant(value):
@@ -206,6 +210,55 @@ def reconcile_signed(path, session, cutoff, disposition):
     return {"receiptStatus": "read", "receiptSha256": digest, "datasets": outcomes}
 
 
+def reconcile_tpex_suspension(path, session, cutoff):
+    dataset = str(TPEX_STOPPED_TRADING_DATASET)
+    unverified = {"datasets": {dataset: "unverified"}}
+    found, problem = read_receipt(path)
+    if problem:
+        return {**unverified, "receiptStatus": problem}
+    receipt, digest = found
+    result = {**unverified, "receiptSha256": digest, "receiptStatus": "invalid"}
+    try:
+        verified = instant(receipt.get("verifiedAt"))
+        original_cutoff = instant(receipt.get("originalCutoff"))
+        read_clock = instant(receipt.get("readClock"))
+    except ValueError:
+        return result
+    if (receipt.get("mode") != "tpex-status-live" or receipt.get("targetSession") != session.isoformat()
+            or original_cutoff != cutoff or read_clock != cutoff or not cutoff <= verified <= cutoff + timedelta(seconds=45)
+            or receipt.get("formalServiceWrites") is not False or receipt.get("scratchRemoved") is not True
+            or receipt.get("reviewedGuardsInstalled") is not True
+            or receipt.get("tpexSuspensionMigrationSha256") != TPEX_STOPPED_TRADING_MIGRATION
+            or not signed_checks(receipt.get("signedWriterChecks"))):
+        return result
+
+    reports = receipt.get("reports")
+    if not isinstance(reports, list) or len(reports) != 1 or not isinstance(reports[0], dict):
+        return result
+    row = reports[0]
+    result = {**result, "receiptStatus": "read"}
+    rows, positives, size = row.get("reportedRows"), row.get("fourDigitFacts"), row.get("bytes")
+    if (row.get("datasetId") != TPEX_STOPPED_TRADING_DATASET or row.get("source") != TPEX_STOPPED_TRADING_URL
+            or row.get("stage") != "acknowledged" or row.get("completeAbsenceProved") is not False
+            or type(rows) is not int or not 1 <= rows <= 4000
+            or type(positives) is not int or not 0 <= positives <= rows
+            or type(size) is not int or not 2 <= size <= SIGNED_ORIGINAL_LIMIT
+            or row.get("retainedOriginal") != "original.csv"
+            or not signed_visible(row, cutoff, "readbackAtCutoff")):
+        return result
+    try:
+        retained = instant(row.get("retainedAt"))
+        if not instant(row.get("observedAt")) <= retained <= instant(row.get("availableAt")):
+            return result
+    except ValueError:
+        return result
+    if not exact_blob(path.with_name("original.csv"), row, SIGNED_ORIGINAL_LIMIT):
+        return {**result, "originalBytesVerified": False, "receiptStatus": "retained_artifact_mismatch"}
+    outcome = "signed_positive_suspensions_only" if positives else "signed_no_positive_flags"
+    return {**result, "datasets": {dataset: outcome}, "reportedRows": rows, "positiveSuspensions": positives,
+            "originalBytesVerified": True, "completeAbsenceProved": False}
+
+
 def receipt_cutoff(item, day_key, session, cutoff):
     try:
         return item.get(day_key) == session.isoformat() and instant(item.get("cutoff")) == cutoff
@@ -270,11 +323,11 @@ def reconcile_limit(path, session, cutoff):
     return result
 
 
-def exact_blob(path, row):
+def exact_blob(path, row, limit=OBSERVATION_LIMIT):
     if not isinstance(row, dict):
         return False
     try:
-        body = read_bounded(path, OBSERVATION_LIMIT)
+        body = read_bounded(path, limit)
         return len(body) == row.get("bytes") and sha256(body).hexdigest() == row.get("sha256")
     except (OSError, ValueError):
         return False
@@ -320,7 +373,7 @@ def reconcile_range(path, session, cutoff):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("session", type=date.fromisoformat)
-    for option in ("observer", "supplement", "signed-turnover", "signed-disposition", "roster", "price-limit", "disposition-range"):
+    for option in ("observer", "supplement", "signed-turnover", "signed-disposition", "signed-tpex-suspension", "roster", "price-limit", "disposition-range"):
         parser.add_argument("--" + option, type=Path)
     args = parser.parse_args()
     cutoff = datetime.combine(args.session, time(21, 30), TAIPEI)
@@ -331,6 +384,7 @@ def main():
         "supplemental": reconcile_observation(args.supplement, args.session, cutoff, True),
         "signedTurnover": reconcile_signed(args.signed_turnover, args.session, cutoff, False),
         "signedDisposition": reconcile_signed(args.signed_disposition, args.session, cutoff, True),
+        "signedTpexSuspension": reconcile_tpex_suspension(args.signed_tpex_suspension, args.session, cutoff),
         "roster": reconcile_roster(args.roster, args.session, cutoff),
         "priceLimit": reconcile_limit(args.price_limit, args.session, cutoff),
         "dispositionRange": reconcile_range(args.disposition_range, args.session, cutoff),

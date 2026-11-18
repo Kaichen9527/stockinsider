@@ -6,6 +6,7 @@ import tempfile
 import unittest
 
 from reconcile_launch_close_evidence import TAIPEI, reconcile_observation, reconcile_range, reconcile_roster, reconcile_signed
+from reconcile_launch_close_evidence import reconcile_tpex_suspension, TPEX_STOPPED_TRADING_MIGRATION, TPEX_STOPPED_TRADING_URL
 
 
 class CloseReconciliationTests(unittest.TestCase):
@@ -106,6 +107,54 @@ class CloseReconciliationTests(unittest.TestCase):
         self.write({**report, "readClock": self.stamp(31)})
         self.assertEqual(read()["29082"], "unverified")
 
+
+    def tpex_receipt(self):
+        row = {**self.row(11736), "source": TPEX_STOPPED_TRADING_URL, "stage": "acknowledged",
+               "retainedOriginal": "original.csv", "retainedAt": self.stamp(28), "availableAt": self.stamp(29),
+               "readbackAtCutoff": True, "duplicateReadySameId": True, "artifactReadbackVerified": True,
+               "completeAbsenceProved": False, "reportedRows": 20, "fourDigitFacts": 2}
+        self.receipt.with_name("original.csv").write_bytes(self.body)
+        return {**self.general_signed(), "mode": "tpex-status-live", "originalCutoff": self.cutoff.isoformat(),
+                "readClock": self.cutoff.isoformat(), "reviewedGuardsInstalled": True,
+                "tpexSuspensionMigrationSha256": TPEX_STOPPED_TRADING_MIGRATION, "signedWriterChecks": self.auth(),
+                "reports": [row]}
+
+    def read_tpex(self, report):
+        self.write(report)
+        return reconcile_tpex_suspension(self.receipt, self.session, self.cutoff)
+
+    def test_tpex_cutoff_requires_live_readback_and_matching_raw(self):
+        report = self.tpex_receipt()
+        ok = self.read_tpex(report)
+        self.assertEqual(ok["datasets"], {"11736": "signed_positive_suspensions_only"})
+        self.assertEqual(ok["positiveSuspensions"], 2)
+        self.assertIs(ok["originalBytesVerified"], True)
+        self.assertEqual(self.read_tpex({**report, "mode": "tpex-status-sample"})["datasets"]["11736"], "unverified")
+        self.assertEqual(self.read_tpex({**report, "readClock": self.stamp(29)})["datasets"]["11736"], "unverified")
+        self.assertEqual(self.read_tpex({**report, "tpexSuspensionMigrationSha256": "0" * 64})["datasets"]["11736"], "unverified")
+        original = self.receipt.with_name("original.csv")
+        original.write_bytes(b"altered original")
+        self.assertEqual(self.read_tpex(report)["receiptStatus"], "retained_artifact_mismatch")
+        original.unlink()
+        original.symlink_to(self.receipt)
+        self.assertEqual(self.read_tpex(report)["receiptStatus"], "retained_artifact_mismatch")
+
+    def test_tpex_retention_must_precede_ack_and_zero_flags_keep_unknown_absence(self):
+        report = self.tpex_receipt()
+        row = report["reports"][0]
+        for invalid in (
+            {"retainedAt": self.stamp(30)},
+            {"readbackAtCutoff": False},
+            {"availableAt": self.cutoff.isoformat()},
+            {"fourDigitFacts": 21},
+            {"reportedRows": True},
+            {"retainedOriginal": "../elsewhere.csv"},
+        ):
+            with self.subTest(invalid=invalid):
+                self.assertEqual(self.read_tpex({**report, "reports": [{**row, **invalid}]})["datasets"]["11736"], "unverified")
+        outcome = self.read_tpex({**report, "reports": [{**row, "fourDigitFacts": 0}]})
+        self.assertEqual(outcome["datasets"], {"11736": "signed_no_positive_flags"})
+        self.assertIs(outcome["completeAbsenceProved"], False)
 
     def test_roster_requires_retained_projection_hash_and_closed_clock(self):
         projection = self.receipt.with_name("listing-review.json")
