@@ -143,7 +143,7 @@ jobs:
             web/src/lib/candidate-financial-coverage.test.ts | tee /tmp/stockinsider-vnext-ci/reported-financial-validation.tap
           node --experimental-strip-types --test web/src/lib/vnext/mops-consolidated-ebook.test.ts | tee /tmp/stockinsider-vnext-ci/mops-consolidated-ebook.tap
           python3 -B -m unittest discover -s scripts -p test_mops_diluted_eps_note.py -v
-          node --experimental-strip-types --test web/src/lib/tw-entry-plan-authority.test.ts web/src/lib/vnext/launch-pattern-read.test.ts web/src/lib/vnext/launch-opening-halt.test.ts | tee /tmp/stockinsider-vnext-ci/opening-evidence.tap
+          node --experimental-strip-types --test web/src/lib/tw-entry-plan-authority.test.ts web/src/lib/vnext/launch-pattern-read.test.ts web/src/lib/vnext/launch-opening-halt.test.ts web/src/lib/vnext/launch-opening-fugle.test.ts | tee /tmp/stockinsider-vnext-ci/opening-evidence.tap
           npm --prefix web run typecheck
           npm --prefix web run lint
       - name: Full ordinary build
