@@ -4,7 +4,8 @@ import test from 'node:test';
 import { loadTwEntryHistoricalPriceAuthority, type TwEntryAuthorityClient, type TwEntryAuthorityRequest } from '../tw-entry-plan-authority.ts';
 import { evidenceInstant } from './evidence-clock.ts';
 import { readLaunchPatterns } from './launch-pattern-read.ts';
-import { parseTwseLimitReplay, twseLimitReplayUrls } from './launch-twse-daily-limit.ts';
+import { parseTwseLimitReplay, replayTwseLockedOpening, twseLimitReplayUrls, twseOpeningReplayQuoteUrl } from './launch-twse-daily-limit.ts';
+import type { LaunchOutcomeInput } from './launch-outcomes.ts';
 
 type Row = Record<string, unknown>;
 const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -355,4 +356,60 @@ test('late or unbranded TWSE limit evidence does not clear waiting uncertainty',
     assert.equal(result.arithmetic.waiting.onePriceLimitLocked, null);
     assert.ok(result.gaps.includes('twse_official_limit_replay_binding_missing'));
   }
+});
+
+function twseOpeningFixture(prices = ['110.00', '110.00', '110.00', '110.00'], volume = '8,000') {
+  const session = '2026-09-24', previous = '2026-09-23', revision = 'a'.repeat(64);
+  const rank = '00000000-0000-4000-8000-000000000001';
+  const captures = twseLimitCaptures(session);
+  const fields = ['證券代號', '證券名稱', '成交股數', '成交筆數', '成交金額', '開盤價', '最高價',
+    '最低價', '收盤價', '漲跌(+/-)', '漲跌價差', '最後揭示買價', '最後揭示買量', '最後揭示賣價', '最後揭示賣量', '本益比'];
+  const quote = (day = session) => {
+    const body = Buffer.from(JSON.stringify({ stat: 'OK', date: day.replaceAll('-', ''), tables: [{ fields,
+      data: [['2330', 'Synthetic issuer', volume, '4', '880000', ...prices, '+', '10', '-', '-', '-', '-', '-']] }] }));
+    return { url: twseOpeningReplayQuoteUrl(session), body, sha256: createHash('sha256').update(body).digest('hex'),
+      observedAt: session + 'T08:00:00Z', recordedAt: session + 'T08:01:00Z' };
+  };
+  const input: LaunchOutcomeInput = { scope: 'historical_price_replay', asOf: session + 'T13:30:00Z',
+    basisRevision: revision, calendarRevision: revision, opening: null,
+    signal: { rankingRunId: rank, firstRankingRunId: rank, symbol: '2330', market: 'TWSE', session: previous,
+      cutoff: previous + 'T13:30:00Z', inputHash: revision, priceRevision: revision, rawClose: '100', normalizedClose: '100' },
+    sessions: [{ session, openAt: session + 'T01:00:00Z', closeAt: session + 'T05:30:00Z',
+      knownAt: session + 'T06:30:00Z', status: 'completed' }],
+    bars: [{ session, availableAt: session + 'T08:00:00Z', priceRevision: revision, basisRevision: revision,
+      rawOpen: prices[0], open: prices[0], high: prices[1], low: prices[2], close: prices[3] }] };
+  return { input, captures, quote };
+}
+
+test('TWSE outcome replay marks a traded all-day upper lock as unfillable while retaining the research path', () => {
+  const { input, captures, quote } = twseOpeningFixture();
+  const result = replayTwseLockedOpening(input, captures.csv, captures.json(), quote());
+  assert.equal(result.officialUpperLimit, 110);
+  assert.equal(result.onePriceLocked, true);
+  assert.equal(result.knownAt, captures.csv.recordedAt);
+  assert.equal(result.outcome.execution.status, 'unfillable');
+  assert.equal(result.outcome.execution.reason, 'one_price_upper_limit');
+  assert.equal(result.outcome.execution.fill, null);
+  assert.equal(result.outcome.research.barrier20.state, 'pending');
+  assert.deepEqual(replayTwseLockedOpening(input, captures.csv, captures.json(), quote()), result);
+});
+
+test('TWSE one-price replay does not infer an opening fill from a two-price session', () => {
+  const { input, captures, quote } = twseOpeningFixture(['110', '110', '108', '109']);
+  const result = replayTwseLockedOpening(input, captures.csv, captures.json(), quote());
+  assert.equal(result.onePriceLocked, false);
+  assert.equal(result.outcome.execution.status, 'opening_evidence_gap');
+});
+
+test('TWSE opening lock requires a traded, matching, timely quote and replay scope', () => {
+  const { input, captures, quote } = twseOpeningFixture();
+  assert.throws(() => replayTwseLockedOpening({ ...input, scope: 'published_rank' }, captures.csv, captures.json(), quote()), /replay_only/u);
+  assert.throws(() => replayTwseLockedOpening(input, captures.csv, captures.json(), quote('2026-09-25')), /quote_scope/u);
+  assert.throws(() => replayTwseLockedOpening({ ...input, asOf: '2026-09-24T08:59:59Z' }, captures.csv, captures.json(), quote()), /locked_open_cutoff/u);
+  const previous = { ...input, bars: [{ ...input.bars[0], rawOpen: '109' }] };
+  assert.throws(() => replayTwseLockedOpening(previous, captures.csv, captures.json(), quote()), /quote_binding/u);
+  const mixed = { ...input, bars: [{ ...input.bars[0], low: '100' }] };
+  assert.throws(() => replayTwseLockedOpening(mixed, captures.csv, captures.json(), quote()), /basis_conflict/u);
+  const zero = twseOpeningFixture(undefined, '0');
+  assert.throws(() => replayTwseLockedOpening(zero.input, zero.captures.csv, zero.captures.json(), zero.quote()), /untraded/u);
 });

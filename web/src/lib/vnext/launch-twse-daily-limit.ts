@@ -3,6 +3,7 @@ import { isHistoryDate } from '../candidate-price-history.ts';
 import type { TwEntryAuthorityRequest, TwLaunchPatternReadEvidence } from '../tw-entry-plan-authority.ts';
 import { evidenceInstant } from './evidence-clock.ts';
 import { decodeLicensedCsvRecords } from './licensed-csv-decoder.ts';
+import { evaluateLaunchOutcome, type LaunchOutcomeInput } from './launch-outcomes.ts';
 
 const csvUrl = 'https://www.twse.com.tw/exchangeReport/TWT84U?response=open_data';
 const jsonUrl = 'https://www.twse.com.tw/rwd/zh/variation/TWT84U';
@@ -29,13 +30,18 @@ export function twseLimitReplayUrls(session: string) {
   return { csv: csvUrl + '&date=' + day, json: jsonUrl + '?date=' + day + '&selectType=ALLBUT0999&response=json' };
 }
 
-function capturedText(capture: TwseLimitCapture, url: string) {
+function capturedText(capture: TwseLimitCapture, url: string, maximum = maxBytes) {
   const observed = evidenceInstant(capture.observedAt), recorded = evidenceInstant(capture.recordedAt);
   if (capture.url !== url || !(capture.body instanceof Uint8Array) || capture.body.length < 2 ||
-      capture.body.length > maxBytes || observed === null || recorded === null || observed > recorded) return reject();
+      capture.body.length > maximum || observed === null || recorded === null || observed > recorded) return reject();
   const bytes = Buffer.from(capture.body);
   if (hash(bytes) !== capture.sha256) return reject();
   return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+}
+
+function twseReportPrice(text: string) {
+  return /^(?:[0-9]{1,8}|[1-9][0-9]{0,2}(?:,[0-9]{3}){1,2})(?:\.[0-9]{1,4})?$/u.test(text)
+    ? Number(text.replaceAll(',', '')) : NaN;
 }
 
 function readLimit(rows: unknown, symbol: string): LimitRow {
@@ -43,9 +49,7 @@ function readLimit(rows: unknown, symbol: string): LimitRow {
     rows.some(row => !Array.isArray(row) || row.length !== csvFields.length || row.some(value => typeof value !== 'string'))) return reject();
   const found = rows.filter(row => row[0] === symbol);
   if (found.length !== 1) return reject();
-  const price = (text: string) => /^(?:[0-9]{1,8}|[1-9][0-9]{0,2}(?:,[0-9]{3}){1,2})(?:\.[0-9]{1,4})?$/u.test(text)
-    ? Number(text.replaceAll(',', '')) : NaN;
-  const [upperLimit, openingReference, lowerLimit] = found[0].slice(2, 5).map(price);
+  const [upperLimit, openingReference, lowerLimit] = found[0].slice(2, 5).map(twseReportPrice);
   if (!(0 < lowerLimit && lowerLimit < upperLimit && lowerLimit <= openingReference && openingReference <= upperLimit)) return reject();
   return { upperLimit, openingReference, lowerLimit };
 }
@@ -91,4 +95,60 @@ export function bindTwseLimitReplay(token: unknown, request: TwEntryAuthorityReq
   if (prices.some(value => !Number.isFinite(value) || value < proof.lowerLimit || value > proof.upperLimit)) return null;
   return { market: 'TWSE' as const, session: proof.session, upperLimit: proof.upperLimit, availableAt: proof.availableAt,
     revisionId: proof.revisionId, onePriceLocked: prices.every(price => price === proof.upperLimit) };
+}
+
+const regularQuoteFields = ['證券代號', '證券名稱', '成交股數', '成交筆數', '成交金額', '開盤價', '最高價',
+  '最低價', '收盤價', '漲跌(+/-)', '漲跌價差', '最後揭示買價', '最後揭示買量', '最後揭示賣價', '最後揭示賣量', '本益比'];
+
+export function twseOpeningReplayQuoteUrl(session: string) {
+  if (!isHistoryDate(session)) throw Error('launch_twse_limit_session_invalid');
+  return 'https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?date=' + session.replaceAll('-', '')
+    + '&type=ALLBUT0999&response=json';
+}
+
+/** Use the separately dated official quote as evidence of an all-day upper
+ * lock. Below-limit OHLC never provides a positive auction execution. */
+export function replayTwseLockedOpening(input: LaunchOutcomeInput, csv: TwseLimitCapture, dated: TwseLimitCapture,
+  quote: TwseLimitCapture) {
+  if (input.scope !== 'historical_price_replay' || input.signal.market !== 'TWSE' || input.opening !== null)
+    throw Error('launch_twse_locked_open_replay_only');
+  const historical = evaluateLaunchOutcome(input);
+  const next = input.sessions.find(day => day.status !== 'cancelled');
+  const bar = input.bars.find(row => row.session === next?.session);
+  if (!next || next.status !== 'completed' || !bar) throw Error('launch_twse_locked_open_session_unverified');
+  const { session } = next;
+  const { symbol } = input.signal;
+  const limits = accepted.get(parseTwseLimitReplay(session, symbol, csv, dated))!;
+  const report = JSON.parse(capturedText(quote, twseOpeningReplayQuoteUrl(session), 2 * 1024 * 1024));
+  const closeAt = evidenceInstant(next.closeAt)!;
+  const cutoff = evidenceInstant(input.asOf)!;
+  const sourceTimes = [csv.observedAt, dated.observedAt, quote.observedAt, limits.availableAt, quote.recordedAt, bar.availableAt];
+  if (sourceTimes.some(time => evidenceInstant(time)! < closeAt || evidenceInstant(time)! > cutoff))
+    throw Error('launch_twse_locked_open_cutoff');
+  if (!report || report.stat !== 'OK' || report.date !== session.replaceAll('-', '') || !Array.isArray(report.tables)
+    || report.tables.length > 32) throw Error('launch_twse_locked_open_quote_scope');
+  const tables = report.tables.filter((table: { fields?: unknown } | null) => sameFields(table?.fields, regularQuoteFields));
+  if (tables.length !== 1 || !Array.isArray(tables[0].data) || tables[0].data.length > maxRows
+    || tables[0].data.some((row: unknown) => !Array.isArray(row) || row.length !== regularQuoteFields.length
+      || row.some(value => typeof value !== 'string'))) throw Error('launch_twse_locked_open_quote_scope');
+  const rows: string[][] = tables[0].data.filter((row: string[]) => row[0] === symbol);
+  const count = (value: string) => /^(?:[1-9]\d{0,15}|[1-9][0-9]{0,2}(?:,\d{3}){1,5})$/u.test(value)
+    && Number.isSafeInteger(Number(value.replaceAll(',', '')));
+  if (rows.length !== 1 || !count(rows[0][2]) || !count(rows[0][3])) throw Error('launch_twse_locked_open_untraded');
+  const prices = rows[0].slice(5, 9).map(twseReportPrice);
+  if (prices.some(price => !Number.isFinite(price) || price < limits.lowerLimit || price > limits.upperLimit)
+    || prices[0] !== Number(bar.rawOpen) || prices[2] > Math.min(prices[0], prices[3])
+    || prices[1] < Math.max(prices[0], prices[3])) throw Error('launch_twse_locked_open_quote_binding');
+  const locked = prices.every(price => price === limits.upperLimit);
+  if (locked && ![bar.high, bar.low, bar.close].every(price => Number(price) === Number(bar.open)))
+    throw Error('launch_twse_locked_open_price_basis_conflict');
+  const knownAt = [limits.availableAt, quote.recordedAt, bar.availableAt]
+    .reduce((latest, time) => evidenceInstant(latest)! >= evidenceInstant(time)! ? latest : time);
+  const revision = hash(JSON.stringify(['twse-opening-lock-v1', session, symbol, limits.revisionId,
+    [quote.url, quote.sha256, quote.observedAt, quote.recordedAt], bar.priceRevision]));
+  const outcome = locked ? evaluateLaunchOutcome({ ...input, opening: {
+    status: 'unfillable', reason: 'one_price_upper_limit', session, knownAt, revision, rawOpen: null, priceRevision: null,
+  } }) : historical;
+  return { scope: input.scope, session, symbol, knownAt, revision, officialUpperLimit: limits.upperLimit,
+    onePriceLocked: locked, outcome };
 }

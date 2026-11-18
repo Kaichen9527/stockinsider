@@ -411,21 +411,24 @@ test('post-close outcomes cannot run under an author identity', async () => {
 });
 
 test('post-close worker uses authoritative halt receipts and preserves an earlier same-day halt when the report has moved on', async () => {
-  for(const kind of ['current','retained','contradictory']){
+  for(const kind of ['current','retained','contradictory','same_day_removed','same_day_older']){
     const {anchor,response,client}=outcomeBatchFixture();
     response.signals=response.signals.slice(0,1);
-    const code=kind==='retained'?'1234':'2330',end=kind==='contradictory'?'080500':'110000';
+    const code=['retained','same_day_removed','same_day_older'].includes(kind)?'1234':'2330';
+    const end=kind==='contradictory'?'080500':'110000';
+    const newerSameDay=kind==='same_day_removed',olderSameDay=kind==='same_day_older';
+    const observedAt=newerSameDay?'2026-09-28T07:30:00Z':olderSameDay?'2026-09-28T06:30:00Z':'2026-09-29T07:30:00Z';
+    const recordedAt=newerSameDay?'2026-09-28T08:00:00Z':olderSameDay?'2026-09-28T06:35:00Z':'2026-09-29T08:00:00Z';
     const body=Buffer.from('編號,證券代號,證券名稱,暫停交易日期,暫停交易時間,恢復交易日期,恢復交易時間\n'
       +`1,${code},測試,1150928,080000,1150928,${end}\n`);
     const prior=kind==='current'?null:{asOf:'2026-09-28T13:30:00Z',opening:{status:'unfillable',reason:'suspended',
       session:'2026-09-28',knownAt:'2026-09-28T07:00:00Z',revision:'8'.repeat(64),rawOpen:null,priceRevision:null}};
     const result=await runLaunchOutcomesWithLease({...client,async rpc(name,args){
       if(name==='vnext_launch_outcome_batch_v1')return {data:response,error:null};
-      if(name==='vnext_launch_halt_command_v1')return {data:{market:'TWSE',observedAt:'2026-09-29T07:30:00Z',
-        recordedAt:'2026-09-29T08:00:00Z',sha256:createHash('sha256').update(body).digest('hex'),bodyBase64:body.toString('base64')},error:null};
+      if(name==='vnext_launch_halt_command_v1')return {data:{market:'TWSE',observedAt,recordedAt,sha256:createHash('sha256').update(body).digest('hex'),bodyBase64:body.toString('base64')},error:null};
       if(!Object.hasOwn(args,'p_input'))return {data:{...anchor,previousSuspension:prior},error:null};
       const evaluated=args.p_result as ReturnType<typeof evaluateLaunchOutcome>;
-      assert.equal(evaluated.execution.status,kind==='contradictory'?'opening_evidence_gap':'unfillable');
+      assert.equal(evaluated.execution.status,kind==='contradictory'||newerSameDay?'opening_evidence_gap':'unfillable');
       assert.equal(evaluated.execution.nextSession,'2026-09-28');
       assert.equal(evaluated.execution.fill,null);
       return {data:{schemaVersion:'vnext-launch-outcome-write-v1',rankingRunId:anchor.rankingRunId,symbol:anchor.symbol,

@@ -86,6 +86,14 @@ function openingFromReceipts(packet:LaunchOutcomeInput,newest:LaunchHaltCapture|
   if(priorAsOf===null||knownAt===null||cutoff===null||knownAt>priorAsOf||priorAsOf>=cutoff
     ||opening.status!=='unfillable'||opening.reason!=='suspended'||opening.session!==next.session
     ||typeof opening.knownAt!=='string'||!hash(opening.revision)||opening.rawOpen!==null||opening.priceRevision!==null)return null;
+  if(newest){
+    const observed=evidenceInstant(newest.observedAt),recorded=evidenceInstant(newest.recordedAt);
+    // A later official capture within the original session date can withdraw a
+    // previously seen record. A newer day's rolling report can omit old rows.
+    if(observed!==null&&recorded!==null&&observed<=recorded&&knownAt<recorded&&recorded<=cutoff
+      &&observed>=evidenceInstant(next.openAt)!
+      &&new Date(Number(observed/BigInt(1000))+8*60*60*1000).toISOString().slice(0,10)===next.session)return null;
+  }
   return {status:'unfillable',reason:'suspended',session:next.session,knownAt:opening.knownAt,
     revision:opening.revision,rawOpen:null,priceRevision:null};
 }
