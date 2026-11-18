@@ -1,0 +1,173 @@
+{
+  "schema": "stockinsider.t18.split-workspace-kernel-observation.v1",
+  "contextPullRequest": 411,
+  "baseline": "2784faddcf12ed5333dfdd73333905308f2bfd1e",
+  "priorGeometry": "209792638a9c4c17b21a46dea2eed7c0cc0f6e86",
+  "originalUnmodifiedObserverBlob": "1278f5118ab89f8a9751acdda904fa9650e4dec0",
+  "candidate": {
+    "gitBlob": "d2031b5ec369d0cecfb4da461a5acb06d0023a78",
+    "scope": "privileged coordinator's read-only probe in the private mount namespace; no restore admission authority",
+    "rootPrivilegeAbsentInRestoreWorkerRequired": true,
+    "activeAdmissionUnmodified": true
+  },
+  "kernel": "6.8.0-147-generic",
+  "trials": {
+    "valid": [
+      {
+        "stage": "preflight",
+        "hostAvailableDiskBytes": 18347925504,
+        "hostAvailableMemoryBytes": 4789051392
+      },
+      {
+        "stage": "backing_preallocated",
+        "hostAvailableDiskBytes": 16468852736,
+        "hostAvailableMemoryBytes": 3193491456
+      },
+      {
+        "encryptedBothLegs": true,
+        "crossDeviceBoundaryRead": true,
+        "rawBackingCiphertext": [
+          {
+            "leg": "root",
+            "bytes": 4096,
+            "allZero": false,
+            "plaintext": false
+          },
+          {
+            "leg": "ram",
+            "bytes": 4096,
+            "allZero": false,
+            "plaintext": false
+          }
+        ]
+      },
+      {
+        "stage": "stage_mounted",
+        "hostAvailableDiskBytes": 16468832256,
+        "hostAvailableMemoryBytes": 3205578752
+      },
+      {
+        "kernelObserver": {
+          "orderedKernelMappings": true,
+          "distinctBackings": true,
+          "noswapRamVerified": true,
+          "rootImageBytes": 1879048192,
+          "ramImageBytes": 1610612736,
+          "hostDiskBytes": 16468832256,
+          "hostMemoryBytes": 3197595648,
+          "workFreeBytes": 3339055104,
+          "restoreAuthorized": false
+        },
+        "rejectedDescriptorControls": [
+          "readonly_image_descriptor_required",
+          "fully_allocated_exact_image_required",
+          "distinct_storage_descriptors_required",
+          "fully_allocated_exact_image_required"
+        ]
+      },
+      {
+        "stage": "simultaneous_peak",
+        "hostAvailableDiskBytes": 16468828160,
+        "hostAvailableMemoryBytes": 2159599616
+      },
+      {
+        "rootImageBytes": 1879048192,
+        "ramImageBytes": 1610612736,
+        "totalEncryptedBytes": 3489660928,
+        "syntheticStorageBytes": 2723479552,
+        "syntheticMemoryBytes": 937603072,
+        "workFreeBytes": 615571456,
+        "noSwapRamMount": true,
+        "realBackupOpened": false,
+        "productionModified": false
+      },
+      {
+        "cleanupStatus": 0,
+        "rootDiskAfterBytes": 18347921408,
+        "memoryAfterBytes": 4594348032
+      }
+    ],
+    "reversed-mapping": [
+      {
+        "stage": "preflight",
+        "hostAvailableDiskBytes": 18347921408,
+        "hostAvailableMemoryBytes": 4593975296
+      },
+      {
+        "stage": "backing_preallocated",
+        "hostAvailableDiskBytes": 16468840448,
+        "hostAvailableMemoryBytes": 3081338880
+      },
+      {
+        "stage": "stage_mounted",
+        "hostAvailableDiskBytes": 16468832256,
+        "hostAvailableMemoryBytes": 3097477120
+      },
+      {
+        "realKernelNegative": "ordered_linear_geometry_required"
+      },
+      {
+        "cleanupStatus": 0,
+        "rootDiskAfterBytes": 18347913216,
+        "memoryAfterBytes": 4585422848
+      }
+    ],
+    "swappable-ram": [
+      {
+        "stage": "preflight",
+        "hostAvailableDiskBytes": 18347913216,
+        "hostAvailableMemoryBytes": 4584906752
+      },
+      {
+        "stage": "backing_preallocated",
+        "hostAvailableDiskBytes": 16468832256,
+        "hostAvailableMemoryBytes": 3019497472
+      },
+      {
+        "stage": "stage_mounted",
+        "hostAvailableDiskBytes": 16468811776,
+        "hostAvailableMemoryBytes": 3042127872
+      },
+      {
+        "realKernelNegative": "ram_backing_mount_noswap_required"
+      },
+      {
+        "cleanupStatus": 0,
+        "rootDiskAfterBytes": 18347900928,
+        "memoryAfterBytes": 4677353472
+      }
+    ]
+  },
+  "descriptorControls": [
+    "readonly_image_descriptor_required",
+    "fully_allocated_exact_image_required",
+    "distinct_storage_descriptors_required",
+    "fully_allocated_exact_image_required"
+  ],
+  "realKernelNegativeControls": [
+    "ordered_linear_geometry_required",
+    "ram_backing_mount_noswap_required"
+  ],
+  "ioctlProbe": {
+    "rootReadOnlyIoctlPassed": true,
+    "inheritedReadOnlyFdAfterDropDenied": "EACCES"
+  },
+  "serviceAndTimerStatesChecked": {
+    "fourProductionServiceStatesUnchanged": true,
+    "twoStageReconciliationTimersUnchanged": true
+  },
+  "bounds": {
+    "syntheticOnly": true,
+    "actualBackupRead": false,
+    "actualPostgresRestore": false,
+    "actualApplicationRollback": false,
+    "productionUnmodified": true,
+    "phaseSampledCapacity": true
+  },
+  "sourceLinks": [
+    "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/md/dm-ioctl.c",
+    "https://docs.kernel.org/6.8/filesystems/tmpfs.html",
+    "https://docs.kernel.org/admin-guide/device-mapper/linear.html"
+  ],
+  "recordedAt": "2026-11-18T12:29:20+08:00"
+}
