@@ -1,0 +1,68 @@
+{
+  "schema": "stockinsider-t16-close-capacity-v1",
+  "nodeDuplicate": {
+    "schema": "stockinsider-duplicate-staging-runtime-reclamation-v1",
+    "checkedAt": "2026-11-18T05:53:51.008339+00:00",
+    "officialRuntime": "Node.js 22.14.0",
+    "manifestSha256": "6e2c8011fd3c47a629626d4408dac3196c7620924443448b5af87c106197439a",
+    "identicalBinarySha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "restoreVerification": {
+      "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+      "mode": "0555",
+      "bytes": 120177224,
+      "separateRestoreFile": true
+    },
+    "references": {
+      "activeProcesses": 0,
+      "configuredReferences": 0,
+      "symlinksToSelectedFiles": 0,
+      "bindMounts": 0,
+      "subtreeMounts": 0
+    },
+    "removedCopyCount": 1,
+    "allocatedBytesRemoved": 120184832,
+    "availableBytesBefore": 18297577472,
+    "availableBytesAfter": 18417762304,
+    "verifiedDailyCaptureFloorBytes": 18253611008,
+    "aboveDailyCaptureFloorBytes": 164151296,
+    "productionServicesDatabaseReleaseAndTimerDefinitionsMatched": true,
+    "matchedActiveTimerDefinitions": 28,
+    "stagingTimersPerDay": 8
+  },
+  "playwrightCache": {
+    "schema": "stockinsider-playwright-cache-reclamation-v1",
+    "checkedAt": "2026-11-18T05:57:27.144764+00:00",
+    "playwrightCore": "1.58.2",
+    "packageIntegrity": "sha512-yZkEtftgwS8CsfYo7nm0KE8jsvm6i/PTgVtB8DL726wNf6H2IMsDuxCpJj59KDaxCtSnrWan2AeDqM7JBaultg==",
+    "restoredFromPinnedVendorPackages": true,
+    "restoredPayloadFiles": 289,
+    "removedEntries": 293,
+    "untouchedLinkRegistry": true,
+    "manifestSha256": "57bdde84563fe088c1e41c61c371aeb5fc81f71c4851aee6f60b20401871be15",
+    "restoredPayloadManifestSha256": "12164a0f5ffb9363eb8717df2ab9861effd4cfe6e3866fe09e4a250ff74f7ae0",
+    "references": {
+      "activeProcesses": 0,
+      "configuredReferences": 0,
+      "symlinksToSelectedFiles": 0,
+      "bindMounts": 0,
+      "subtreeMounts": 0
+    },
+    "allocatedBytesRemoved": 271142912,
+    "availableBytesBefore": 18417401856,
+    "availableBytesAfter": 18688569344,
+    "aboveDailyCaptureFloorBytes": 434958336,
+    "productionServicesDatabaseReleaseAndTimerDefinitionsMatched": true,
+    "matchedActiveTimerDefinitions": 28,
+    "stagingTimersPerDay": 8
+  },
+  "browserModeRestorationFiles": [
+    "deb.deps",
+    "rpm.deps"
+  ],
+  "otherNodeDuplicatePreserved": {
+    "configuredTransientServiceReferences": 4
+  },
+  "archiveOrApplicationDataChanged": false,
+  "netAvailableGainBytes": 390991872,
+  "browserInstallerLogSha256": "337e20505bab3194597fa71b825ed97dbbb2abda0c8eabc13ffae06fc97362da"
+}
