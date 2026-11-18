@@ -1,0 +1,52 @@
+{
+  "schema": "stockinsider-t18-fixed-candidate-package-switch-v1",
+  "candidateSubject": "f404c21bc23a08cffbbc9ee85f37a01ccad679fc",
+  "candidateTree": "b55289ee4f9720602a6f1bebd206d6d20cc39481",
+  "archiveBytes": 28995235,
+  "archiveSha256": "dac37216f99b43e77f4d82be193eaca8316c8226446d35d13ae74a672db79493",
+  "candidateVerification": {
+    "releaseVerified": true,
+    "releaseId": "f404c21bc23a08cffbbc9ee85f37a01ccad679fc",
+    "sourceCommit": "f404c21bc23a08cffbbc9ee85f37a01ccad679fc",
+    "packagerCommit": "f404c21bc23a08cffbbc9ee85f37a01ccad679fc",
+    "manifestSha256": "1b482263f04813bdef9ff7caa501af557abfa3db5f544ab249bde2d8c9489139",
+    "bytes": 83765562,
+    "entrypoint": "app/server.js"
+  },
+  "baselineVerification": {
+    "releaseVerified": true,
+    "releaseId": "dd59817f750684b093965f539dd4de466be13077",
+    "sourceCommit": "dd59817f750684b093965f539dd4de466be13077",
+    "packagerCommit": "dd59817f750684b093965f539dd4de466be13077",
+    "manifestSha256": "344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a",
+    "bytes": 79354761,
+    "entrypoint": "app/server.js"
+  },
+  "packageFileCount": 3057,
+  "reextractedManifestMatches": true,
+  "nodeVersion": "22.14.0",
+  "nextVersion": "16.3.4",
+  "packageTestsPassed": 16,
+  "httpStateTransitions": [
+    "baseline dd59817f750684b093965f539dd4de466be13077 / 200",
+    "baseline dd59817f750684b093965f539dd4de466be13077 /candidates 404",
+    "baseline dd59817f750684b093965f539dd4de466be13077 /private-research 404",
+    "candidate f404c21bc23a08cffbbc9ee85f37a01ccad679fc / 200",
+    "candidate f404c21bc23a08cffbbc9ee85f37a01ccad679fc /candidates 200",
+    "candidate f404c21bc23a08cffbbc9ee85f37a01ccad679fc /private-research 200",
+    "candidate_stop f404c21bc23a08cffbbc9ee85f37a01ccad679fc loopback_connection_refused",
+    "rolled_back dd59817f750684b093965f539dd4de466be13077 / 200",
+    "rolled_back dd59817f750684b093965f539dd4de466be13077 /candidates 404",
+    "rolled_back dd59817f750684b093965f539dd4de466be13077 /private-research 404"
+  ],
+  "controlledReadOnlyRequests": 264,
+  "dataPlane": "loopback-only read facade with a generated staging credential",
+  "priorControl": "Empty data-plane configuration returned a streamed error despite HTTP 200. Baseline route assertions were corrected against both signed release manifests.",
+  "isolatedBaselineManifestChanged": false,
+  "productionFingerprintMatched": true,
+  "originalBackupRestoredThisRun": false,
+  "protectedCIArtifact": false,
+  "productionWrites": 0,
+  "buildLogSha256": "20bd277c6f0323f89ca98d8f89624ec39019c8563d1c19e91a00813a27bcd7ad",
+  "packageTestsSha256": "38ac33049c8c5f1a9b2676edd5936df344eebf392886c869c72fa29237b33675"
+}
