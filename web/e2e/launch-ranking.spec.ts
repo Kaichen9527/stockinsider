@@ -169,3 +169,22 @@ test('P/E scenarios present disclosed EPS and multiples separately from prices',
     }
   }
 });
+
+test('reviewed falsifier remains independent of valuation and requires a closed public projection',async({page,request})=>{
+  for(const mode of ['falsifier_ready','falsifier_private','ready']){
+    expect((await request.post(bridge+'/__fixture/control',{headers,data:{mode}})).ok()).toBeTruthy();
+    await page.goto('/');
+    await page.getByRole('link',{name:'5274',exact:true}).click();
+    const section=page.getByRole('region',{name:'論點失效條件'});
+    await expect(page.getByTestId('launch-reviewed-valuation')).toHaveCount(0);
+    if(mode==='falsifier_ready'){
+      await expect(section).toContainText('如果公司未完成原定的認證，相關營收假設需要重新評估。');
+      await expect(section).toContainText('獨立審查的研究判斷');
+      await expect(section.getByRole('link',{name:'查閱原始公告'})).toHaveAttribute('href','https://www.twse.com.tw/docs/falsifier');
+    }else{
+      await expect(section.getByRole('link')).toHaveCount(0);
+      await expect(section).toContainText(mode==='ready'?'此榜單版本無可公開的失效條件。':'論點失效條件目前無法讀取。');
+    }
+    expect(await page.content()).not.toContain('SYNTHETIC_PRIVATE_FALSIFIER_ORIGINAL');
+  }
+});

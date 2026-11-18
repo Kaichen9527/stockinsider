@@ -37,6 +37,7 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
   const member=read?.snapshot?.members.find(item=>item.symbol===symbol),detail=read?.detail;
   const peReference = detail?.forwardPeReference;
   const scenario = detail?.reviewedValuation;
+  const falsifier = detail?.reviewedFalsifier;
   const priceHighs = detail?.priceHighs;
   const highComparisons = [
     ['前 25 個交易日', '高於前 25 個交易日高點', priceHighs?.prior25Sessions],
@@ -107,6 +108,14 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
             })}
           </dl>
         </div> : <p className="mt-2">{scenario === null ? '此榜單版本無可公開的研究股價情境。' : '研究股價情境目前無法讀取。'}</p>}
+      </section>
+      <section aria-label="論點失效條件" className="rounded-xl border border-slate-300 p-4">
+        <h2 className="font-semibold">論點失效條件</h2>
+        {falsifier ? <div className="mt-2 space-y-2" data-testid="launch-reviewed-falsifier">
+          <p>{falsifier.statement}</p>
+          <p className="text-sm">獨立審查的研究判斷。原論點觀察日 <time dateTime={falsifier.catalystDate}>{falsifier.catalystDate}</time>。</p>
+          <a href={falsifier.sourceUrl} target="_blank" rel="noreferrer" className="underline">查閱原始公告</a>
+        </div> : <p className="mt-2">{falsifier === null ? '此榜單版本無可公開的失效條件。' : '論點失效條件目前無法讀取。'}</p>}
       </section>
       <section aria-label="榜單價格圖表" className="min-w-0 rounded-xl border border-slate-300 p-4">
         <h2 className="font-semibold">價格走勢</h2>

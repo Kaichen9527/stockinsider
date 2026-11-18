@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {parseLaunchRankingRead,parseLaunchReportedEps,parseLaunchIssuerEpsEstimates,parseLaunchIssuerFiscalForecasts,parseLaunchReviewedValuation,launchForwardPeReference,readLaunchRankingTransport,launchRankingMemberCurrent,launchDetailQuery} from './launch-ranking-read.ts';
+import {parseLaunchRankingRead,parseLaunchReportedEps,parseLaunchIssuerEpsEstimates,parseLaunchIssuerFiscalForecasts,parseLaunchReviewedValuation,parseLaunchReviewedFalsifier,launchForwardPeReference,readLaunchRankingTransport,launchRankingMemberCurrent,launchDetailQuery} from './launch-ranking-read.ts';
 import {launchRankingFixture,LAUNCH_TEST_NOW,LAUNCH_TEST_RUN} from './launch-ranking.test-fixture.ts';
 
 test('new launch read acceptsTop0/1/10 and nullablefinancials under its own exact policy, neverlegacy or partial80',()=>{
@@ -353,4 +353,27 @@ test('disclosed P/E inputs are closed, compatible with the reviewed method and r
     {...wire,peInputs:withBear({epsBasis:'normalized_eps'})},
     {...wire,peInputs:withBear({source:'PRIVATE'})},
   ]) assert.throws(()=>parseLaunchReviewedValuation(invalid,binding),/contract_invalid/u);
+});
+
+test('frozen falsifier exposes the reviewed inference and safe original URL only',()=>{
+  const packet=launchRankingFixture(1,true);
+  const {snapshot,detail}=packet;
+  const binding={...detail!,cutoff:snapshot.cutoff,session:snapshot.session};
+  const original={schemaVersion:'vnext-launch-reviewed-falsifier-v1',rankingRunId:snapshot.rankingRunId,
+    revisionId:detail!.revisionId,inputHash:detail!.inputHash,symbol:detail!.symbol,cutoff:snapshot.cutoff,
+    statement:'如果公司未完成原定的認證，相關營收假設需要重新評估。',
+    catalystDate:'2026-11-30',sourceUrl:'https://www.twse.com.tw/docs/falsifier',
+    sourcePublishedAt:'2026-11-13T05:00:00Z'};
+  assert.equal(parseLaunchReviewedFalsifier(null,binding),null);
+  assert.deepEqual(parseLaunchReviewedFalsifier(original,binding),{
+    statement:original.statement,catalystDate:original.catalystDate,sourceUrl:original.sourceUrl,sourcePublishedAt:original.sourcePublishedAt,
+  });
+  for(const patch of [
+    {revisionId:'00000000-0000-4000-8000-000000000099'}, {symbol:'2330'},
+    {cutoff:'2026-11-13T13:31:00Z'}, {sourcePublishedAt:'2026-11-13T14:00:00Z'}, {catalystDate:'2026-11-12'},
+    {sourceUrl:'https://www.twse.com.tw/docs/../company'}, {sourceUrl:'https://www.twse.com.tw/docs/falsifier?secret=value'},
+    {sourceUrl:'https://www.twse.com.tw/member/research'}, {sourceUrl:'https://www.twse.com.tw.invalid.test/docs/falsifier'},
+    {statement:'查看這份未公開的內容 https://example.test/article。'}, {statement:original.statement.repeat(50)},
+    {reviewerNote:'PRIVATE'}, {quote:'PRIVATE ORIGINAL'},
+  ]) assert.throws(()=>parseLaunchReviewedFalsifier({...original,...patch},binding),/contract_invalid/u);
 });

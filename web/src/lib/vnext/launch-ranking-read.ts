@@ -1,3 +1,4 @@
+import { publicCitation } from './citations.ts';
 import { types } from 'node:util';
 import { vnextEnabled, taipeiDate } from './policy.ts';
 import { evidenceInstant } from './evidence-clock.ts';
@@ -75,7 +76,7 @@ export type LaunchReviewedValuation = {
   peInputs: LaunchPeInputs | null;
 };
 export type LaunchRankingDetail = {arithmeticVersion:typeof LAUNCH_RANKING_ARITHMETIC;rankingRunId:string;symbol:string;revisionId:string;scoreRevision:string;launchQualificationRevision:string;inputHash:string;
-  summary:string|null;scoreEvidence:LaunchRankingRule[];citations:LaunchPublicCitation[];chart:LaunchRankingChart|null;priceHighs:LaunchPriceHighs|null;reportedEps?:LaunchReportedEps[];issuerEpsEstimates?:LaunchIssuerEpsEstimate[];issuerFiscalForecasts?:LaunchIssuerFiscalForecast[];forwardPeReference?:LaunchForwardPeReference|null;reviewedValuation?:LaunchReviewedValuation|null};
+  summary:string|null;scoreEvidence:LaunchRankingRule[];citations:LaunchPublicCitation[];chart:LaunchRankingChart|null;priceHighs:LaunchPriceHighs|null;reportedEps?:LaunchReportedEps[];issuerEpsEstimates?:LaunchIssuerEpsEstimate[];issuerFiscalForecasts?:LaunchIssuerFiscalForecast[];forwardPeReference?:LaunchForwardPeReference|null;reviewedValuation?:LaunchReviewedValuation|null;reviewedFalsifier?:LaunchReviewedFalsifier|null};
 export type LaunchRankingRead = {availability:'ready'|'not_published'|'producer_unavailable'|'not_found'|'schema_unavailable'|'unavailable';reason:string|null;
   readAt:string;snapshot:LaunchRankingSnapshot|null;current:LaunchRankingCurrent[];detail:LaunchRankingDetail|null};
 type Row=Record<string,unknown>;
@@ -499,6 +500,50 @@ async function readReviewedValuation(
   } catch { return undefined; }
 }
 
+
+export type LaunchReviewedFalsifier = {
+  statement: string;
+  catalystDate: string;
+  sourceUrl: string;
+  sourcePublishedAt: string;
+};
+
+export function parseLaunchReviewedFalsifier(
+  value: unknown, binding: Parameters<typeof parseLaunchReportedEps>[1],
+): LaunchReviewedFalsifier | null {
+  if (value === null) return null;
+  envelope(value);
+  if (!exact(value, 'schemaVersion rankingRunId symbol revisionId inputHash cutoff statement catalystDate sourceUrl sourcePublishedAt')
+    || value.schemaVersion !== 'vnext-launch-reviewed-falsifier-v1'
+    || value.rankingRunId !== binding.rankingRunId || value.symbol !== binding.symbol
+    || value.revisionId !== binding.revisionId || value.inputHash !== binding.inputHash
+    || !stamp(value.cutoff) || evidenceInstant(value.cutoff) !== evidenceInstant(binding.cutoff)
+    || !text(value.statement,1200) || value.statement!==value.statement.trim()
+    || [...value.statement].length<12 || [...value.statement].length>600
+    || /https?:\/\/|www\.|mailto:|[\w.%+-]+@[\w.-]+\.[a-z]{2,}/iu.test(value.statement)
+    || !date(value.catalystDate) || !stamp(value.sourcePublishedAt)
+    || evidenceInstant(value.sourcePublishedAt)!>evidenceInstant(binding.cutoff)!
+    || value.catalystDate<taipeiDate(value.sourcePublishedAt)
+    || typeof value.sourceUrl!=='string'
+    || !/^https:\/\/(?:www\.(?:twse\.com\.tw|tpex\.org\.tw)|mops(?:ov)?\.twse\.com\.tw)\/[A-Za-z0-9._/-]+$/u.test(value.sourceUrl)
+    || /paid|member|premium|subscription|login|authenticate/iu.test(value.sourceUrl)
+    || publicCitation(value.sourceUrl)!==value.sourceUrl) invalid();
+  const { statement, catalystDate, sourceUrl, sourcePublishedAt }=value;
+  return { statement, catalystDate, sourceUrl, sourcePublishedAt };
+}
+
+async function readReviewedFalsifier(
+  client: {rpc:(name:'vnext_launch_reviewed_falsifier_v1',args:{p_ranking_run_id:string;p_symbol:string})=>PromiseLike<{data:unknown;error:unknown}>},
+  binding: Parameters<typeof parseLaunchReviewedFalsifier>[1],
+) {
+  try {
+    const result = await client.rpc('vnext_launch_reviewed_falsifier_v1', {
+      p_ranking_run_id:binding.rankingRunId,p_symbol:binding.symbol,
+    });
+    return result.error?undefined:parseLaunchReviewedFalsifier(result.data,binding);
+  } catch { return undefined; }
+}
+
 export async function readLaunchRankingSnapshot(query:{rankingRunId?:string;symbol?:string}={}):Promise<LaunchRankingRead> {
   if(!launchRankingEnabled())throw Error('launch_ranking_disabled');
   const {getSupabaseServerClient}=await import('../supabase-server.ts');
@@ -506,12 +551,13 @@ export async function readLaunchRankingSnapshot(query:{rankingRunId?:string;symb
   const result=await readLaunchRankingTransport(client,query);
   if(result.availability!=='ready'||!result.detail||!result.snapshot)return result;
   const binding={...result.detail,cutoff:result.snapshot.cutoff,session:result.snapshot.session};
-  const [reportedEps, issuerEpsEstimates, issuerFiscalForecasts, reviewedValuation] = await Promise.all([
+  const [reportedEps, issuerEpsEstimates, issuerFiscalForecasts, reviewedValuation, reviewedFalsifier] = await Promise.all([
     readReportedEps(client, binding), readIssuerEpsEstimates(client, binding), readIssuerFiscalForecasts(client, binding),
     readReviewedValuation(client, binding),
+    readReviewedFalsifier(client, binding),
   ]);
   const forwardPeReference = issuerFiscalForecasts ? launchForwardPeReference(result.detail, issuerFiscalForecasts) : undefined;
-  return {...result,detail:{...result.detail,reportedEps,issuerEpsEstimates,issuerFiscalForecasts,forwardPeReference,reviewedValuation}};
+  return {...result,detail:{...result.detail,reportedEps,issuerEpsEstimates,issuerFiscalForecasts,forwardPeReference,reviewedValuation,reviewedFalsifier}};
 }
 /** A named launch link never becomes a legacy or latest lookup on failure. */
 export function launchDetailQuery(query:Record<string,string|string[]|undefined>) {

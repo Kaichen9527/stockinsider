@@ -29,6 +29,13 @@ CREATE FUNCTION vnext_catalog_canonical_v1(value jsonb) RETURNS text LANGUAGE sq
 GRANT SELECT ON vnext_mode_v1,vnext_launch_ranking_mode_v1,vnext_launch_ranking_snapshots_v1,vnext_launch_ranking_members_v1,
   vnext_launch_qualifications_v1,vnext_publications_v1,vnext_jobs_v1,vnext_preparations_v1,
   vnext_provider_invocations_v1,fixture_current_rights TO stockinsider_vnext_owner;
+
+CREATE TABLE vnext_extractions_v1(content_hash text PRIMARY KEY,source text,scope text,state text,original jsonb,extraction jsonb);
+CREATE FUNCTION vnext_source_evidence_current_v1(item jsonb,symbol text) RETURNS boolean LANGUAGE sql STABLE AS
+  $$ SELECT (SELECT currently_allowed FROM fixture_current_rights) AND $2='2454'
+       AND EXISTS(SELECT FROM vnext_extractions_v1 WHERE extraction->'evidence'=$1 AND original->'symbols' ? $2) $$;
+GRANT SELECT ON vnext_extractions_v1 TO stockinsider_vnext_owner;
+-- install-exact-original-locator-function
 \ir ../migrations/20261118_58_vnext_launch_reviewed_valuation_v1.sql
 
 INSERT INTO vnext_mode_v1 VALUES(true,true);
@@ -92,6 +99,14 @@ BEGIN
   END IF;
 END $test$;
 
+
+CREATE FUNCTION fixture_falsifier() RETURNS jsonb LANGUAGE sql STABLE AS
+  $$ SELECT public.vnext_launch_reviewed_falsifier_v1('00000000-0000-4000-8000-000000000011','2454') $$;
+CREATE FUNCTION fixture_expect_falsifier_unavailable(case_name text) RETURNS void LANGUAGE plpgsql AS $test$
+BEGIN
+  IF fixture_falsifier() IS NOT NULL THEN RAISE EXCEPTION 'falsifier unexpectedly available: %',case_name; END IF;
+END $test$;
+
 SET ROLE service_role;
 SELECT fixture_expect_unavailable('no explicit grant');
 RESET ROLE;
@@ -125,6 +140,9 @@ BEGIN
     OR has_function_privilege('authenticated','public.vnext_launch_reviewed_valuation_v1(uuid,text)','EXECUTE')
     OR has_table_privilege('service_role','vnext_launch_valuation_clearance_v1','SELECT')
     OR has_table_privilege('service_role','vnext_launch_valuation_clearance_v1','INSERT')
+    OR has_function_privilege('anon','public.vnext_launch_reviewed_falsifier_v1(uuid,text)','EXECUTE')
+    OR has_function_privilege('authenticated','public.vnext_launch_reviewed_falsifier_v1(uuid,text)','EXECUTE')
+    OR has_function_privilege('service_role','public.vnext_launch_ranked_review_internal_v1(uuid,text)','EXECUTE')
   THEN RAISE EXCEPTION 'scenario privileges escaped';END IF;
 END $test$;
 
@@ -249,4 +267,105 @@ BEGIN
   PERFORM fixture_expect_unavailable('target not supported by their inputs');
 END $test$;
 ROLLBACK;
-SELECT 'frozen_reviewed_price_scenarios_verified';
+
+BEGIN;
+CREATE TEMP TABLE falsifier_review_restore(review jsonb);
+DO $test$
+DECLARE source_url text := 'https://www.twse.com.tw/docs/falsifier';
+        source_body text := 'Synthetic private original: scheduled certification decision.';
+        source_hash text := repeat('e',64);
+        claim_text text := '如果公司未完成原定的認證，相關營收假設需要重新評估。';
+        annotation jsonb;
+        original_evidence jsonb;
+        claim jsonb;
+        artifact jsonb;
+        review jsonb;
+        digest text;
+BEGIN
+  annotation:=jsonb_build_object('schemaVersion','vnext-catalyst-annotation-v1','criterion','catalyst_falsifier_defined',
+    'outcome','met','symbol','2454','evidenceId','falsifier-source','contentHash',source_hash,'field','statement',
+    'startCp',0,'endCp',char_length(source_body),'quote',source_body,'catalystAt','2026-11-30',
+    'catalystIdentity','scheduled certification decision');
+  original_evidence:=jsonb_build_object('id','falsifier-source','key','reported_event','kind','assumption','sourceTier','public',
+    'contentHash',source_hash,'source',source_url,'eventAt','2026-11-16T05:00:00Z','availableAt','2026-11-16T06:00:00Z',
+    'value',jsonb_build_object('scope','official_original','originSource','official','claimStatus','reported',
+      'originalContentHash',source_hash,'eventBasis','source_publication','statement',source_body,
+      'publishedAt','2026-11-16T05:00:00Z'));
+  claim:=jsonb_build_object('id','condition','kind','assumption','text',claim_text,
+    'evidenceIds',jsonb_build_array('falsifier-source'),'semantic',annotation);
+  SELECT jsonb_set(fixture_packet.artifact,'{claims}',fixture_packet.artifact->'claims'||jsonb_build_array(claim))
+    INTO artifact FROM fixture_packet;
+  digest:=encode(sha256(convert_to(vnext_catalog_canonical_v1(artifact-'outputHash'),'UTF8')),'hex');
+  artifact:=artifact||jsonb_build_object('outputHash',digest);
+  SELECT fixture_packet.review||jsonb_build_object('authorOutputHash',digest,'claimChecks',
+    fixture_packet.review->'claimChecks'||jsonb_build_array(jsonb_build_object(
+      'claimId','condition','verdict','supported','sources',jsonb_build_array(jsonb_build_object('id','falsifier-source','contentHash',source_hash)),
+      'semanticAssessment',jsonb_build_object('schemaVersion','vnext-catalyst-assessment-v1',
+        'annotation',annotation,'assessment','supported_inference','reason','Private reviewer proof stays outside the public packet.'))))
+    INTO review FROM fixture_packet;
+  INSERT INTO falsifier_review_restore VALUES(review);
+  INSERT INTO vnext_extractions_v1(content_hash,source,scope,state,original,extraction)
+    VALUES(source_hash,'official','official_original','completed',
+      jsonb_build_object('body',source_body,'url',source_url,'symbols',jsonb_build_array('2454'),
+        'publishedAt','2026-11-16T05:00:00Z','availableAt','2026-11-16T06:00:00Z'),
+      jsonb_build_object('evidence',original_evidence));
+  UPDATE vnext_preparations_v1 prep SET evidence=jsonb_set(prep.evidence,'{evidence}',prep.evidence->'evidence'||jsonb_build_array(original_evidence));
+  UPDATE vnext_publications_v1 SET content=artifact;
+  UPDATE vnext_jobs_v1 SET author_result=artifact,reviewer_result=review;
+  UPDATE vnext_provider_invocations_v1 SET normalized_output=CASE WHEN task='author' THEN artifact ELSE review END;
+  DELETE FROM vnext_launch_valuation_clearance_v1;
+  IF fixture_falsifier() IS NOT NULL THEN RAISE EXCEPTION 'missing falsifier clearance'; END IF;
+  INSERT INTO vnext_launch_valuation_clearance_v1
+    (research_revision,output_hash,authorization_sha256,recorded_at,valid_until,disclose_prices,disclose_falsifier)
+  SELECT revision_id,digest,repeat('d',64),'2026-11-16T12:30Z','2090-01-01',false,true
+    FROM vnext_publications_v1;
+END $test$;
+
+SET LOCAL ROLE service_role;
+DO $test$
+DECLARE packet jsonb := fixture_falsifier();
+BEGIN
+  IF packet IS DISTINCT FROM jsonb_build_object(
+    'schemaVersion','vnext-launch-reviewed-falsifier-v1','rankingRunId','00000000-0000-4000-8000-000000000011',
+    'symbol','2454','revisionId','00000000-0000-4000-8000-000000000012','inputHash',repeat('a',64),
+    'cutoff',to_jsonb('2026-11-16T13:30Z'::timestamptz),'statement','如果公司未完成原定的認證，相關營收假設需要重新評估。',
+    'catalystDate','2026-11-30','sourcePublishedAt',to_jsonb('2026-11-16T05:00Z'::timestamptz),
+    'sourceUrl','https://www.twse.com.tw/docs/falsifier')
+    OR packet::text ~ '(Synthetic private original|Private reviewer proof|startCp|contentHash|authorization)'
+    OR fixture_scenario() IS NOT NULL
+  THEN RAISE EXCEPTION 'falsifier fields or disclosure scope mismatch'; END IF;
+END $test$;
+RESET ROLE;
+
+SAVEPOINT review_scope;
+UPDATE vnext_jobs_v1 SET reviewer_result=jsonb_set(reviewer_result,'{claimChecks,3,semanticAssessment,assessment}','"unsupported"');
+UPDATE vnext_provider_invocations_v1 SET normalized_output=(SELECT reviewer_result FROM vnext_jobs_v1) WHERE task='reviewer';
+SELECT fixture_expect_falsifier_unavailable('review did not support the inference');
+ROLLBACK TO review_scope;
+
+SAVEPOINT original_match;
+UPDATE vnext_extractions_v1 SET original=jsonb_set(original,'{body}','"corrupted locator body"');
+SELECT fixture_expect_falsifier_unavailable('locator no longer matches the official original');
+ROLLBACK TO original_match;
+
+SAVEPOINT private_url;
+UPDATE vnext_extractions_v1 SET original=jsonb_set(original,'{url}','"https://www.twse.com.tw/docs/falsifier?secret=private"'),
+  extraction=jsonb_set(extraction,'{evidence,source}','"https://www.twse.com.tw/docs/falsifier?secret=private"');
+UPDATE vnext_preparations_v1 SET evidence=jsonb_set(evidence,'{evidence,3,source}','"https://www.twse.com.tw/docs/falsifier?secret=private"');
+SELECT fixture_expect_falsifier_unavailable('private query URL');
+ROLLBACK TO private_url;
+
+SAVEPOINT source_rights;
+UPDATE fixture_current_rights SET currently_allowed=false;
+SELECT fixture_expect_falsifier_unavailable('source permission expired');
+ROLLBACK TO source_rights;
+
+SAVEPOINT new_grant;
+UPDATE vnext_launch_valuation_clearance_v1 SET recorded_at='2026-11-16T13:31Z';
+SELECT fixture_expect_falsifier_unavailable('grant after ranking cutoff');
+ROLLBACK TO new_grant;
+
+UPDATE vnext_launch_valuation_clearance_v1 SET withdrawn_at=clock_timestamp();
+SELECT fixture_expect_falsifier_unavailable('disclosure withdrawn');
+ROLLBACK;
+SELECT 'frozen_reviewed_price_scenarios_and_falsifiers_verified';

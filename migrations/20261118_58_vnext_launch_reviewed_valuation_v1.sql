@@ -3,17 +3,21 @@ SET LOCAL statement_timeout = '30s';
 SET LOCAL lock_timeout = '2s';
 SELECT pg_advisory_xact_lock(64221022);
 
--- Deployment-managed, per-output approval for the numeric scenario projection.
+-- Deployment-managed, per-output approval of specific public research fields.
 -- Research, provider approval, and public-link rights are separate.
 CREATE TABLE public.vnext_launch_valuation_clearance_v1 (
   research_revision uuid NOT NULL REFERENCES public.vnext_publications_v1(revision_id),
   output_hash text NOT NULL CHECK (output_hash ~ '^[a-f0-9]{64}$'),
+  disclose_prices boolean NOT NULL DEFAULT true,
   disclose_pe_inputs boolean NOT NULL DEFAULT false,
+  disclose_falsifier boolean NOT NULL DEFAULT false,
   authorization_sha256 text NOT NULL CHECK (authorization_sha256 ~ '^[a-f0-9]{64}$'),
   recorded_at timestamptz NOT NULL DEFAULT clock_timestamp(),
   valid_until timestamptz NOT NULL,
   withdrawn_at timestamptz,
   PRIMARY KEY (research_revision, output_hash, recorded_at),
+  CHECK (disclose_prices OR disclose_falsifier),
+  CHECK (NOT disclose_pe_inputs OR disclose_prices),
   CHECK (isfinite(recorded_at) AND isfinite(valid_until) AND valid_until > recorded_at),
   CHECK (withdrawn_at IS NULL OR (isfinite(withdrawn_at) AND withdrawn_at >= recorded_at))
 );
@@ -21,15 +25,16 @@ ALTER TABLE public.vnext_launch_valuation_clearance_v1 OWNER TO stockinsider_vne
 ALTER TABLE public.vnext_launch_valuation_clearance_v1 ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON public.vnext_launch_valuation_clearance_v1 FROM PUBLIC, anon, authenticated, service_role;
 
-CREATE FUNCTION public.vnext_launch_reviewed_valuation_v1(p_ranking_run_id uuid, p_symbol text)
-RETURNS jsonb
-LANGUAGE sql STABLE SECURITY DEFINER
-SET search_path = pg_catalog, public SET timezone = 'UTC' SET statement_timeout = '5s' SET lock_timeout = '2s'
+CREATE FUNCTION public.vnext_launch_ranked_review_internal_v1(p_ranking_run_id uuid, p_symbol text)
+RETURNS TABLE(input_cutoff timestamptz,research_revision uuid,input_hash text,content jsonb,published_at timestamptz,
+  review jsonb,preparation jsonb,frozen_at timestamptz,disclose_prices boolean,disclose_pe_inputs boolean,disclose_falsifier boolean)
+LANGUAGE sql STABLE
+SET search_path = pg_catalog, public SET timezone = 'UTC'
 AS $function$
   WITH saved AS MATERIALIZED (
     SELECT s.input_cutoff, m.research_revision, m.input_hash, p.content,
       p.published_at, j.reviewer_result AS review, prep.evidence AS preparation, prep.frozen_at,
-      clearance.disclose_pe_inputs
+      clearance.disclose_prices, clearance.disclose_pe_inputs, clearance.disclose_falsifier
     FROM public.vnext_launch_ranking_members_v1 m
     JOIN public.vnext_launch_ranking_snapshots_v1 s USING (ranking_run_id)
     JOIN public.vnext_launch_qualifications_v1 qualification
@@ -49,7 +54,9 @@ AS $function$
       ON (reviewer.job_id, reviewer.task, reviewer.execution_id, reviewer.principal, reviewer.input_hash) =
          (j.job_id, 'reviewer', j.reviewer_execution, j.reviewer_principal, j.input_hash)
     JOIN LATERAL (
-      SELECT bool_or(grant_row.disclose_pe_inputs) AS disclose_pe_inputs
+      SELECT bool_or(grant_row.disclose_prices) AS disclose_prices,
+        bool_or(grant_row.disclose_pe_inputs) AS disclose_pe_inputs,
+        bool_or(grant_row.disclose_falsifier) AS disclose_falsifier
       FROM public.vnext_launch_valuation_clearance_v1 grant_row
       WHERE (grant_row.research_revision, grant_row.output_hash) = (p.revision_id, p.content->>'outputHash')
         AND grant_row.recorded_at BETWEEN p.published_at AND s.input_cutoff
@@ -79,7 +86,7 @@ AS $function$
       AND reviewer.settled_at <= p.published_at
       AND EXISTS (SELECT FROM public.vnext_mode_v1 WHERE enabled AND legacy_fenced)
       AND EXISTS (SELECT FROM public.vnext_launch_ranking_mode_v1 WHERE enabled)
-  ), permitted AS MATERIALIZED (
+  )
     SELECT * FROM saved
     WHERE content @> jsonb_build_object('schemaVersion','stockinsider-vnext-research-v1','inputHash',input_hash)
       AND content->>'outputHash' =
@@ -88,6 +95,18 @@ AS $function$
       AND jsonb_typeof(review->'claimChecks') = 'array'
       AND jsonb_typeof(preparation->'evidence') = 'array'
       AND public.vnext_input_sources_current_v1(preparation, p_symbol) IS TRUE
+$function$;
+ALTER FUNCTION public.vnext_launch_ranked_review_internal_v1(uuid,text) OWNER TO stockinsider_vnext_owner;
+REVOKE ALL ON FUNCTION public.vnext_launch_ranked_review_internal_v1(uuid,text) FROM PUBLIC,anon,authenticated,service_role;
+
+CREATE FUNCTION public.vnext_launch_reviewed_valuation_v1(p_ranking_run_id uuid, p_symbol text)
+RETURNS jsonb
+LANGUAGE sql STABLE SECURITY DEFINER
+SET search_path = pg_catalog, public SET timezone = 'UTC' SET statement_timeout = '5s' SET lock_timeout = '2s'
+AS $function$
+  WITH permitted AS MATERIALIZED (
+    SELECT * FROM public.vnext_launch_ranked_review_internal_v1(p_ranking_run_id,p_symbol)
+    WHERE disclose_prices
       AND content->>'valuationDate' ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
       AND content->>'quoteDate' ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
       AND content->>'quoteDate' <= content->>'valuationDate'
@@ -193,4 +212,68 @@ $function$;
 ALTER FUNCTION public.vnext_launch_reviewed_valuation_v1(uuid,text) OWNER TO stockinsider_vnext_owner;
 REVOKE ALL ON FUNCTION public.vnext_launch_reviewed_valuation_v1(uuid,text) FROM PUBLIC,anon,authenticated,service_role;
 GRANT EXECUTE ON FUNCTION public.vnext_launch_reviewed_valuation_v1(uuid,text) TO service_role;
+
+-- A qualitative falsifier is an independently reviewed inference. The public
+-- packet carries the approved inference and an official link, not the quote,
+-- source body, reviewer findings or private locator data.
+CREATE FUNCTION public.vnext_launch_reviewed_falsifier_v1(p_ranking_run_id uuid, p_symbol text)
+RETURNS jsonb LANGUAGE sql STABLE SECURITY DEFINER
+SET search_path = pg_catalog, public SET timezone = 'UTC' SET statement_timeout = '5s' SET lock_timeout = '2s'
+AS $function$
+  WITH claims AS MATERIALIZED (
+    SELECT context.*, claim.item, claim.item->'semantic' AS annotation
+    FROM public.vnext_launch_ranked_review_internal_v1(p_ranking_run_id,p_symbol) context
+    CROSS JOIN LATERAL jsonb_array_elements(context.content->'claims') claim(item)
+    WHERE context.disclose_falsifier AND claim.item->'semantic'->>'criterion' = 'catalyst_falsifier_defined'
+  ), bound AS MATERIALIZED (
+    SELECT c.*, original.item AS evidence, extraction.original,
+      (original.item->'value'->>'publishedAt')::timestamptz AS source_published_at,
+      (c.annotation->>'catalystAt')::date AS catalyst_date
+    FROM claims c
+    JOIN LATERAL jsonb_array_elements(c.preparation->'evidence') original(item)
+      ON original.item->>'id' = c.annotation->>'evidenceId'
+        AND original.item->>'contentHash' = c.annotation->>'contentHash'
+    JOIN public.vnext_extractions_v1 extraction ON extraction.content_hash = original.item->>'contentHash'
+      AND extraction.source = 'official' AND extraction.scope = 'official_original' AND extraction.state = 'completed'
+      AND extraction.extraction->'evidence' = original.item
+    WHERE (SELECT count(*) FROM claims) = 1
+      AND c.item->>'kind' = 'assumption' AND NOT (c.item ?| ARRAY['numeric','business','cancellation'])
+      AND c.item->'evidenceIds' = jsonb_build_array(c.annotation->>'evidenceId')
+      AND c.annotation @> jsonb_build_object('schemaVersion','vnext-catalyst-annotation-v1',
+        'outcome','met','symbol',p_symbol,'field','statement')
+      AND c.annotation->>'catalystAt' ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
+      AND char_length(btrim(c.item->>'text')) BETWEEN 12 AND 600
+      AND c.item->>'text' !~ '[[:cntrl:]]'
+      AND c.item->>'text' !~* '(https?://|www[.]|mailto:|[[:alnum:]._%+-]+@[[:alnum:].-]+[.][[:alpha:]]{2,})'
+      AND original.item->>'source' = extraction.original->>'url'
+      AND extraction.original->>'url' ~ '^https://(www[.](twse[.]com[.]tw|tpex[.]org[.]tw)|mops(ov)?[.]twse[.]com[.]tw)/[A-Za-z0-9._/-]+$'
+      AND extraction.original->>'url' !~* '(paid|member|premium|subscription|login|authenticate|/(track|tracking|click|redirect|out|go)(/|$)|/[.]{1,2}(/|$))'
+      AND public.vnext_cancellation_original_v1(original.item,
+        jsonb_build_object('evidenceId',c.annotation->'evidenceId','contentHash',c.annotation->'contentHash',
+          'field',c.annotation->'field','startCp',c.annotation->'startCp','endCp',c.annotation->'endCp','quote',c.annotation->'quote'),
+        p_symbol,c.frozen_at) IS TRUE
+      AND (SELECT count(*) FROM jsonb_array_elements(c.review->'claimChecks') checked
+           WHERE checked->>'claimId' = c.item->>'id') = 1
+      AND EXISTS (
+        SELECT FROM jsonb_array_elements(c.review->'claimChecks') checked
+        WHERE checked->>'claimId' = c.item->>'id' AND checked->>'verdict' = 'supported'
+          AND checked->'semanticAssessment' @> '{"schemaVersion":"vnext-catalyst-assessment-v1","assessment":"supported_inference"}'
+          AND checked->'semanticAssessment'->'annotation' = c.annotation
+          AND checked->'sources' @> jsonb_build_array(jsonb_build_object(
+            'id',original.item->>'id','contentHash',original.item->>'contentHash'))
+      )
+  )
+  SELECT jsonb_build_object('schemaVersion','vnext-launch-reviewed-falsifier-v1',
+    'rankingRunId',p_ranking_run_id,'symbol',p_symbol,'revisionId',b.research_revision,
+    'inputHash',b.input_hash,'cutoff',b.input_cutoff,'statement',btrim(b.item->>'text'),
+    'catalystDate',b.catalyst_date,'sourceUrl',b.original->>'url','sourcePublishedAt',b.source_published_at)
+  FROM bound b
+  WHERE (SELECT count(*) FROM bound) = 1
+    AND b.source_published_at <= b.frozen_at
+    AND b.catalyst_date >= (b.source_published_at AT TIME ZONE 'Asia/Taipei')::date
+    AND b.catalyst_date <= ((b.source_published_at AT TIME ZONE 'Asia/Taipei')::date + interval '3 months')::date
+$function$;
+ALTER FUNCTION public.vnext_launch_reviewed_falsifier_v1(uuid,text) OWNER TO stockinsider_vnext_owner;
+REVOKE ALL ON FUNCTION public.vnext_launch_reviewed_falsifier_v1(uuid,text) FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION public.vnext_launch_reviewed_falsifier_v1(uuid,text) TO service_role;
 COMMIT;

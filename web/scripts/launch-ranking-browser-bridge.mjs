@@ -36,6 +36,8 @@ modes.add('scenario_ready');
 modes.add('scenario_private');
 modes.add('scenario_pe_ready');
 modes.add('scenario_pe_hidden');
+modes.add('falsifier_ready');
+modes.add('falsifier_private');
 const outcomeModes=new Set(['outcome_ready','outcome_unfillable','outcome_evidence_gap','outcome_private']);
 for(const name of outcomeModes)modes.add(name);
 const unsafeCitations=[...unsafeCitationUrls,...unknownRightsCitationUrls];
@@ -158,6 +160,24 @@ const server=http.createServer(async(request,response)=>{
           bull:{epsBasis:'source_next_four_fiscal_quarter_eps',eps:5,multiple:19},
         }:null};
       if(mode==='scenario_private')value.rawOriginal='SYNTHETIC_PRIVATE_REVIEWED_SCENARIO';
+      return json(response,200,value);
+    }
+
+    if(request.method==='POST'&&request.url==='/rest/v1/rpc/vnext_launch_reviewed_falsifier_v1'){
+      const query=await body(request);
+      if(Object.keys(query).sort().join('|')!=='p_ranking_run_id|p_symbol' ||
+        query.p_ranking_run_id!==LAUNCH_TEST_RUN || query.p_symbol!=='5274')
+        return json(response,400,{code:'SYNTHETIC_CLOSED_QUERY'});
+      companionReads++;
+      if(!['falsifier_ready','falsifier_private'].includes(mode))return json(response,200,null);
+      const member=packet.snapshot.members[0];
+      const {cutoff,session}=packet.snapshot;
+      const catalystDate=new Date(Date.parse(session+'T00:00:00Z')+3*86400000).toISOString().slice(0,10);
+      const value={schemaVersion:'vnext-launch-reviewed-falsifier-v1',rankingRunId:LAUNCH_TEST_RUN,
+        symbol:member.symbol,revisionId:member.revisionId,inputHash:member.inputHash,cutoff,catalystDate,
+        statement:'如果公司未完成原定的認證，相關營收假設需要重新評估。',
+        sourceUrl:'https://www.twse.com.tw/docs/falsifier',sourcePublishedAt:session+'T05:00:00Z'};
+      if(mode==='falsifier_private')value.rawOriginal='SYNTHETIC_PRIVATE_FALSIFIER_ORIGINAL';
       return json(response,200,value);
     }
     const issuerEpsPath = '/rest/v1/rpc/vnext_launch_issuer_eps_estimates_v1';

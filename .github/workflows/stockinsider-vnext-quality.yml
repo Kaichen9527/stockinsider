@@ -250,6 +250,16 @@ jobs:
           migration = Path('migrations/20261118_58_vnext_launch_reviewed_valuation_v1.sql')
           marker = chr(92) + 'ir ../' + migration.as_posix()
           assert fixture.count(marker) == 1
+          locator = Path('migrations/20261023_vnext_catalyst_cancellation_v1.sql').read_text()
+          wrapper = '$create_vnext_cancellation_original_v1$'
+          assert locator.count(wrapper) == 2
+          locator = locator.split(wrapper)[1] + chr(10) + (
+            'ALTER FUNCTION public.vnext_cancellation_original_v1(jsonb,jsonb,text,timestamptz) '
+            'OWNER TO stockinsider_vnext_owner;'
+          )
+          locator_marker = '-- install-exact-original-locator-function'
+          assert fixture.count(locator_marker) == 1
+          fixture = fixture.replace(locator_marker, locator)
           print(fixture.replace(marker, migration.read_text()))
           PYCODE
       - name: Genuine captured-prefix legacy coexistence and concurrent mode fence
