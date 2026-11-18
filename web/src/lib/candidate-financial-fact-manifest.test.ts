@@ -167,19 +167,21 @@ test('regex comments cannot replace the Arelle-validated entity or period', () =
     collectedAt: '2026-05-01T00:00:00Z',
   });
   assert.deepEqual(parsed, [], 'the source extractor ignores commented contexts');
-  const falseCandidate = partialCandidate();
+  const falseCandidate = fact({ xbrl_context: 'ctx', xbrl_concept: 'tifrs-full:Assets' });
   falseCandidate.periodStart = null;
   falseCandidate.periodEnd = '2026-03-31';
   falseCandidate.durationKind = 'instant';
   falseCandidate.factKey = 'total_assets';
   falseCandidate.value = 100;
-  falseCandidate.locator = { xbrl_context: 'ctx', xbrl_concept: 'tifrs-full:Assets' };
-  const admitted = filterArelleValidatedFacts([falseCandidate], {
+  const attested: CandidateFinancialLocalParserResult = {
     schema: 'candidate-financial-document-parser-v1', status: 'complete', parser: 'arelle',
-    inputSha256: sha, missingRequirements: [], locators: [{ xbrl_context: 'ctx', xbrl_concept: 'tifrs-full:Assets' }],
+    inputSha256: sha, runtimeVersion: '2.44.7', taxonomySha256: 'a'.repeat(64), missingRequirements: [],
+    locators: [{ xbrl_context: 'ctx', xbrl_concept: 'tifrs-full:Assets' }],
     validatedFacts: [{ xbrl_context: 'ctx', xbrl_concept: 'tifrs-full:Assets', value: '100', unit: 'TWD',
       entity_identifier: '2330', period_start: null, period_end: '2025-12-31', duration_kind: 'instant', dimension_count: 0 }],
     validation: { errorCount: 0, errorCodes: [], validFactCount: 1, errorsTruncated: false },
-  });
-  assert.deepEqual(admitted, []);
+  };
+  const realCandidate = { ...falseCandidate, periodEnd: '2025-12-31' };
+  assert.deepEqual(filterArelleValidatedFacts([realCandidate], attested), [realCandidate]);
+  assert.deepEqual(filterArelleValidatedFacts([falseCandidate], attested), []);
 });
