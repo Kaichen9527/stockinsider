@@ -155,7 +155,8 @@ test('holding-company selection retains a separate source receipt and stays on t
 });
 
 test('selection of a subsidiary or change of filing period stops before any later request', async () => {
-  for (const patch of [{ co_id: '35260001' }, { seamon: '3' }, { mtype: 'F' }]) {
+  const changedFields: Record<string, string>[] = [{ co_id: '35260001' }, { seamon: '3' }, { mtype: 'F' }];
+  for (const patch of changedFields) {
     const { transport, calls } = fixture({ selection: confirmation(patch) });
     await assert.rejects(captureMopsConsolidatedEbook(input, transport, now), /holding_company_selection_invalid/u);
     assert.equal(calls.length, 1);
