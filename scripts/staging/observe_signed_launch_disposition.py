@@ -4,12 +4,19 @@ bundle_path=Path('/var/lib/stockinsider-stage-tools/signed-turnover-20261117/bun
 bundle_bytes=bundle_path.read_bytes()
 assert hashlib.sha256(bundle_bytes).hexdigest()=='7dd1a8941749cfc2cba29f4791c481e1d1d6a5fdc6e508b4d4904381ac087caf'
 bundle=json.loads(bundle_bytes)
-MODE=sys.argv[1] if len(sys.argv)==2 else ''
-assert MODE in ('live','fixture'), 'one staging mode is required'
-LIVE=MODE=='live'
+MODE=sys.argv[1] if len(sys.argv)>1 else ''
+TPEX_STATUS=MODE in ('tpex-status-live','tpex-status-sample')
+assert MODE in ('live','fixture','tpex-status-live','tpex-status-sample'), 'one staging mode is required'
+assert len(sys.argv)==(3 if TPEX_STATUS else 2)
+LIVE=MODE in ('live','tpex-status-live')
 STATE=Path(os.environ['STATE_DIRECTORY'])
-assert STATE.name==('stockinsider-stage-signed-disposition-20261118' if LIVE else 'stockinsider-stage-signed-disposition-test')
-EXPECTED_DAY=datetime.date(2026,11,18)
+EXPECTED_DAY=datetime.date.fromisoformat(sys.argv[2]) if TPEX_STATUS else datetime.date(2026,11,18)
+if TPEX_STATUS:
+ assert EXPECTED_DAY in (datetime.date(2026,11,18),datetime.date(2026,11,19))
+ suffix=EXPECTED_DAY.strftime('%Y%m%d')+('' if LIVE else '-sample-verification')
+ assert STATE.name=='stockinsider-stage-signed-tpex-status-'+suffix
+else:
+ assert STATE.name==('stockinsider-stage-signed-disposition-20261118' if LIVE else 'stockinsider-stage-signed-disposition-test')
 
 PG=Path('/usr/lib/postgresql/17/bin')
 POSTGREST='/usr/local/bin/postgrest'
@@ -39,12 +46,14 @@ class FixedSource(urllib.request.HTTPRedirectHandler):
  def redirect_request(self,*args,**kwargs):
   return None
 slot_now=now().astimezone(TAIPEI)
-assert slot_now.date()==EXPECTED_DAY and (not LIVE or datetime.time(21,25)<=slot_now.time()<datetime.time(21,27)), 'outside the fixed staging start window'
+window_start,window_end=(datetime.time(21,27),datetime.time(21,29)) if TPEX_STATUS else (datetime.time(21,25),datetime.time(21,27))
+assert slot_now.date()==EXPECTED_DAY and (not LIVE or window_start<=slot_now.time()<window_end), 'outside the fixed staging start window'
 assert STATE.is_dir() and STATE.stat().st_uid==os.getuid() and not STATE.stat().st_mode&0o077
 assert not (STATE/'receipt.json').exists(), 'staging receipt already exists'
 assert hashlib.sha256(Path(__file__).with_name('migration.sql').read_bytes()).hexdigest()=='91dfe4cfdaa85242b136af91b7b8d36fa45a6708120a6214347f2b6e00c37806'
 assert hashlib.sha256(Path(__file__).with_name('signed-support.sql').read_bytes()).hexdigest()=='6a26f0c331d08f9589ff1fc6b05e5899f3373640813b4bcae9c387eaceb65d08'
-proof={'scope':'isolated signed writer for exchange disposition reports; fixture calendar/operator',
+proof={'scope':('isolated signed writer for TPEx stopped-trading reports; fixture calendar/operator' if TPEX_STATUS
+    else 'isolated signed writer for exchange disposition reports; fixture calendar/operator'),
   'mode':MODE,'resourceStart':check_capacity(),'sourceCommit':RELEASE,'targetSession':EXPECTED_DAY.isoformat(),
   'serviceStartedAt':stamp(),'bundleSha256':'7dd1a8941749cfc2cba29f4791c481e1d1d6a5fdc6e508b4d4904381ac087caf'}
 scratch=None
@@ -88,14 +97,19 @@ with tempfile.TemporaryDirectory(prefix='si-stg-disposition-signed-') as root:
   sql(bundle['m31'])
   sql(Path(__file__).with_name('signed-support.sql').read_text(encoding='utf-8'))
   sql(Path(__file__).with_name('migration.sql').read_text(encoding='utf-8'))
+  if TPEX_STATUS:
+   status_migration=Path(__file__).with_name('tpex-suspension.sql').read_bytes()
+   assert hashlib.sha256(status_migration).hexdigest()=='dbd0826d2e44297b5ed16bf2bf2106b4607a0d015b65b19daa2d16b2f707b0d7'
+   sql(status_migration.decode('utf-8'))
+   proof['tpexSuspensionMigrationSha256']=hashlib.sha256(status_migration).hexdigest()
   proof['reviewedGuardsInstalled']=True
   identity=str(uuid.uuid4())
   principal=str(uuid.uuid4())
   owner=str(uuid.uuid4())
   operator='staging-only-turnover'
   day=now().astimezone(TAIPEI).date()
-  market_close=datetime.datetime.combine(day,datetime.time(13,30) if LIVE else datetime.time(0,0,1),TAIPEI)
-  market_open=datetime.datetime.combine(day,datetime.time(9,0) if LIVE else datetime.time(0,0),TAIPEI)
+  market_close=datetime.datetime.combine(day,datetime.time(13,30) if LIVE or TPEX_STATUS else datetime.time(0,0,1),TAIPEI)
+  market_open=datetime.datetime.combine(day,datetime.time(9,0) if LIVE or TPEX_STATUS else datetime.time(0,0),TAIPEI)
   ranking_cutoff=datetime.datetime.combine(day,datetime.time(21,30),TAIPEI)
   assert day==EXPECTED_DAY and market_close<now()<ranking_cutoff
   sql(f"""
@@ -170,6 +184,8 @@ INSERT INTO public.production_writer_releases(release_id,writer_kind,active,acti
    29082:'https://www.twse.com.tw/announcement/punish?response=open_data&startDate='+query_day+'&endDate='+query_day,
    11396:'https://www.tpex.org.tw/web/bulletin/disposal_information/disposal_information_result.php?l=zh-tw&o=data',
   }
+  if TPEX_STATUS:
+   endpoints={11736:'https://www.tpex.org.tw/web/stock/aftertrading/cmode/chtm_result.php?l=zh-tw&o=data'}
   keys=[{'datasetId':dataset,'requestKey':str(day)} for dataset in endpoints]
   auth_wrong=hdr|{'Authorization':'Bearer '+token('service_role',b'different-test-signature')}
   denial=request('/rpc/vnext_launch_csv_command_v1',payload('enqueue',keys[0]),auth_wrong)[0]
@@ -184,8 +200,8 @@ INSERT INTO public.production_writer_releases(release_id,writer_kind,active,acti
    receipt=csvrpc('enqueue',key)
    assert not receipt['replay'] and csvrpc('enqueue',key)['jobId']==receipt['jobId']
    queued[key['datasetId']]=receipt['jobId']
-  jobs=csvrpc('claim',{'limit':2})['jobs']
-  assert len(jobs)==2 and {j['datasetId']:j['jobId'] for j in jobs}==queued
+  jobs=csvrpc('claim',{'limit':len(keys)})['jobs']
+  assert len(jobs)==len(keys) and {j['datasetId']:j['jobId'] for j in jobs}==queued
 
   (scratch/'private-artifact-store.ts').write_text(bundle['privateStore'],encoding='utf-8')
   (scratch/'put.mjs').write_text("""import {privateArtifactStore} from './private-artifact-store.ts';
@@ -202,7 +218,7 @@ INSERT INTO public.production_writer_releases(release_id,writer_kind,active,acti
  """,encoding='utf-8')
 
   def capture(dataset,url):
-   if not LIVE:
+   if not LIVE and not TPEX_STATUS:
     roc=day.year-1911
     compact=f"{roc}{day.month:02d}{day.day:02d}"
     slashed=f"{roc}/{day.month:02d}/{day.day:02d}"
@@ -220,6 +236,17 @@ INSERT INTO public.production_writer_releases(release_id,writer_kind,active,acti
   def expected_symbols(dataset,content):
    rows=list(csv.reader(io.StringIO(content.decode('utf-8-sig')),strict=True))
    symbols=set()
+   if dataset==11736:
+    expected_header=['資料日期','證券代號','證券名稱','變更交易','分盤交易','管理股票',
+      '分盤或管理股票撮合循環時間','停止交易','財務重點專區']
+    assert len(rows)>1 and rows[0]==expected_header
+    roc_day=f'{day.year-1911:03}{day.month:02}{day.day:02}'
+    codes=set()
+    for row in rows[1:]:
+     assert len(row)==9 and row[0]==roc_day and row[1] not in codes
+     codes.add(row[1])
+     if row[7]=='Ｙ' and re.fullmatch('[0-9]{4}',row[1]):symbols.add(row[1])
+    return len(rows)-1,symbols
    for row in rows[1:]:
     if not row:continue
     if dataset==29082:
@@ -252,6 +279,15 @@ INSERT INTO public.production_writer_releases(release_id,writer_kind,active,acti
     digest=hashlib.sha256(content).hexdigest()
     row_count,symbols=expected_symbols(dataset,content)
     report.update(bytes=len(content),sha256=digest,observedAt=observed.isoformat(),reportedRows=row_count)
+    if TPEX_STATUS:
+     original=STATE/'original.csv'
+     with original.open('xb') as output:
+      output.write(content)
+      output.flush()
+      os.fsync(output.fileno())
+     retained=now()
+     assert observed<=retained<ranking_cutoff and hashlib.sha256(original.read_bytes()).hexdigest()==digest
+     report.update(retainedOriginal='original.csv',retainedAt=retained.isoformat())
     report['stage']='artifact'
     write=subprocess.run(['node','--experimental-strip-types',str(scratch/'put.mjs'),str(artifacts),digest],
      input=content,capture_output=True,timeout=18,cwd=scratch)
@@ -271,6 +307,8 @@ INSERT INTO public.production_writer_releases(release_id,writer_kind,active,acti
     assert csvrpc('ready',{'attemptId':job['attemptId'],'captureId':capture_id})==ready
     ready_at=datetime.datetime.fromisoformat(ready['availableAt'])
     assert observed<=ready_at<ranking_cutoff
+    if TPEX_STATUS:
+     assert retained<=ready_at
     report.update(stage='acknowledged',availableAt=ready['availableAt'],fourDigitFacts=len(symbols),
      captureId=capture_id,readyAckId=ready['readyAckId'],artifactReadbackVerified=True,
      duplicateReadySameId=True,completeAbsenceProved=False,confirmedSymbols=sorted(symbols))
@@ -301,7 +339,8 @@ INSERT INTO public.production_writer_releases(release_id,writer_kind,active,acti
    rows=(f"(SELECT unnest(ARRAY[{','.join(map(literal,symbols))}]::text[]) symbol)" if symbols else "(SELECT NULL::text symbol WHERE false)")
    assert sql("SELECT count(*) FROM "+rows+" r WHERE "+fn+"->>'captureId'="+literal(report['captureId']))==str(len(symbols))
    assert sql("SELECT "+fn.replace(',symbol,',",'0000',")+" IS NULL")=='t'
-   report['readbackAtCutoff' if LIVE else 'fixtureReadbackPassed']=True
+   readback_key='readbackAtCutoff' if LIVE else 'sameSessionReadbackBeforeCutoff' if TPEX_STATUS else 'fixtureReadbackPassed'
+   report[readback_key]=True
   assert sql('SELECT count(*) FROM public.taiwan_data_canonical_results_v5;')=='0'
   proof.update(verifiedAt=stamp(),originalCutoff=ranking_cutoff.isoformat(),readClock=read_clock,
    signedWriterChecks={'badSignatureHttp':denial,'wrongWriterReleaseHttp':wrong_release,'wrongLeaseHttp':wrong_lease,

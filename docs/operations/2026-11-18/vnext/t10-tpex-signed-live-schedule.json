@@ -1,0 +1,65 @@
+{
+  "schema": "stockinsider-t10-signed-tpex-status-schedule-v1",
+  "baseSubject": "9b56484eaa3c2fb30d61527a9140c1fc0e95df9a",
+  "observerSha256": "527ece69915ec887a226284e068acc4c2c54e187bc34a42e580de222451bc344",
+  "originalMigrationSha256": "dbd0826d2e44297b5ed16bf2bf2106b4607a0d015b65b19daa2d16b2f707b0d7",
+  "stagingOnly": true,
+  "productionServiceChanged": false,
+  "sample": {
+    "session": "2026-11-18",
+    "observedRealExchangeReport": true,
+    "fixtureCalendarAndOperator": true,
+    "readClock": "2026-11-18T07:55:38.808975+00:00",
+    "originalCutoff": "2026-11-18T21:30:00+08:00",
+    "readAtOriginalCutoff": false,
+    "scratchRemoved": true,
+    "retainedOriginalMode": "0600",
+    "negativeControls": {
+      "badSignatureHttp": 401,
+      "ephemeralPostgrestUnixOnly": true,
+      "leaseReleased": true,
+      "writesAfterNegativeRequests": 0,
+      "wrongLeaseHttp": 400,
+      "wrongWriterReleaseHttp": 400
+    },
+    "report": {
+      "artifactReadbackVerified": true,
+      "availableAt": "2026-11-18T07:55:38.584391+00:00",
+      "bytes": 1237,
+      "completeAbsenceProved": false,
+      "datasetId": 11736,
+      "duplicateReadySameId": true,
+      "fourDigitFacts": 2,
+      "observedAt": "2026-11-18T07:55:37.290788+00:00",
+      "reportedRows": 20,
+      "requestedAt": "2026-11-18T07:55:35.697159+00:00",
+      "retainedAt": "2026-11-18T07:55:37.305942+00:00",
+      "retainedOriginal": "original.csv",
+      "sameSessionReadbackBeforeCutoff": true,
+      "sha256": "9ec5549a5ccf4f66ba6a8512fcfe990d168dd2592c29536e4b625ac9f0962456",
+      "source": "https://www.tpex.org.tw/web/stock/aftertrading/cmode/chtm_result.php?l=zh-tw&o=data",
+      "stage": "acknowledged"
+    }
+  },
+  "timers": [
+    {
+      "session": "2026-11-18",
+      "trigger": "2026-11-18T21:27:05+08:00",
+      "cutoff": "2026-11-18T21:30:00+08:00",
+      "unit": "stockinsider-stage-signed-tpex-status-20261118.timer",
+      "state": "active",
+      "liveReceiptAvailable": false
+    },
+    {
+      "session": "2026-11-19",
+      "trigger": "2026-11-19T21:27:05+08:00",
+      "cutoff": "2026-11-19T21:30:00+08:00",
+      "unit": "stockinsider-stage-signed-tpex-status-20261119.timer",
+      "state": "active",
+      "liveReceiptAvailable": false
+    }
+  ],
+  "outsideWindowRefused": true,
+  "completeMarketClearance": false,
+  "rankingPublicationVerified": false
+}
