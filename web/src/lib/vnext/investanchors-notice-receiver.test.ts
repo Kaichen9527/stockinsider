@@ -409,3 +409,30 @@ test('invalid response identity does not accept a partial cache prefix', async (
   assert.deepEqual(scan.checkedKeys, []);
   assert.deepEqual(scan.notices, []);
 });
+
+test('publisher-branded mail with the observed opaque HTTP links remains a notice only', async () => {
+  const prefix = '【定錨產業筆記】';
+  const syntheticTitle = 'NONPRODUCTION company research sample';
+  const tracking = 'http://email.mailer.investanchors.com';
+  const opaqueLinks = ['synthetic-notice-1', 'synthetic-notice-2', 'synthetic-notice-3']
+    .map(token => `<a href="${tracking}/${token}">publisher notification link</a>`).join('');
+  const branded = (id: string, time: number, html: string) => {
+    const message = mail(id, time, [textPart('Placeholder notice only'), textPart(html, 'text/html')]);
+    message.payload.headers[1].value = prefix + syntheticTitle;
+    return message;
+  };
+  const opaque = branded('opaque-http', window.startMs, opaqueLinks);
+  const canonical = branded('canonical-https', window.startMs + 1, `<a href="${member}">publisher article</a>`);
+  const g = provider([opaque, canonical]);
+  const result = await collectInvestAnchorsNotices(day, key, g, dateOptions);
+
+  assert.equal(g.reads(), 2);
+  assert.equal(result.articleAuthority, false);
+  assert.equal(result.sourceAuthority, false);
+  assert.deepEqual(result.notices.map(({ status }) => status), ['awaiting_article_resolution', 'awaiting_member_article']);
+  assert.equal(result.notices[0].articleKey, null);
+  assert.match(result.notices[1].articleKey!, /^[0-9a-f]{64}$/u);
+  assert.equal(result.notices[0].subjectKey, result.notices[1].subjectKey);
+  assert.notEqual(result.notices[0].noticeKey, result.notices[1].noticeKey);
+  assert.doesNotMatch(JSON.stringify(result), /opaque-http|canonical-https|synthetic-notice-|NONPRODUCTION|vip_contents|email\.mailer/u);
+});

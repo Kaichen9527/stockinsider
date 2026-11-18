@@ -1,0 +1,147 @@
+{
+  "schema": "stockinsider.t03.publisher-notice-link-identity.v1",
+  "pullRequestContext": 411,
+  "baseline": "2784faddcf12ed5333dfdd73333905308f2bfd1e",
+  "readOnlyMailbox": {
+    "source": "existing Gmail connector",
+    "boundsTaipei": [
+      "2026-11-11",
+      "2026-11-19"
+    ],
+    "returnedMessages": 3,
+    "observation": [
+      {
+        "mailboxTaipeiDay": "2026-11-12",
+        "fromMatches": true,
+        "dkimReceiverObservation": true,
+        "htmlParts": 1,
+        "canonicalHttpsArticle": 0
+      },
+      {
+        "mailboxTaipeiDay": "2026-11-16",
+        "fromMatches": true,
+        "dkimReceiverObservation": true,
+        "htmlParts": 1,
+        "canonicalHttpsArticle": 0
+      },
+      {
+        "mailboxTaipeiDay": "2026-11-17",
+        "fromMatches": true,
+        "dkimReceiverObservation": true,
+        "htmlParts": 1,
+        "canonicalHttpsArticle": 0
+      }
+    ],
+    "exactPlatformTrackerShape": {
+      "scheme": "http",
+      "firstPartyDomain": "email.mailer.investanchors.com",
+      "hasQuery": false,
+      "hasUserinfo": false,
+      "hasVisibleEncodedPath": false,
+      "count": 9
+    },
+    "receiverAuthenticationIsObservation": true,
+    "noPrivateIdsOrBodiesRetainedInGit": true,
+    "noClickOrRedirect": true,
+    "noLabelOrProgressMutation": true
+  },
+  "issuerPublicIndex": {
+    "publicUrl": "https://investanchors.com/home/free_index",
+    "observedFrom": "Contabo isolated project staging read-only HTTPS",
+    "observationTime": "2026-11-18T12:06:34+08:00",
+    "publisherPublicIndexRows": 16,
+    "futureDatedRowsExcluded": 2,
+    "noCanonicalLinkAttributeInPublicListingRows": true,
+    "notices": [
+      {
+        "mailboxTaipeiDay": "2026-11-12",
+        "uniqueSubject": true,
+        "exactTitleSameOrPriorTwoDays": 0,
+        "boundedTitleInSubjectSameOrPriorTwoDays": 1,
+        "reflectedCatalogDayDeltas": [
+          1
+        ]
+      },
+      {
+        "mailboxTaipeiDay": "2026-11-16",
+        "uniqueSubject": true,
+        "exactTitleSameOrPriorTwoDays": 0,
+        "boundedTitleInSubjectSameOrPriorTwoDays": 1,
+        "reflectedCatalogDayDeltas": [
+          1
+        ]
+      },
+      {
+        "mailboxTaipeiDay": "2026-11-17",
+        "uniqueSubject": true,
+        "exactTitleSameOrPriorTwoDays": 0,
+        "boundedTitleInSubjectSameOrPriorTwoDays": 1,
+        "reflectedCatalogDayDeltas": [
+          0
+        ]
+      }
+    ],
+    "actualHtmlRowLocator": {
+      "rows": 16,
+      "rowAttributeTypes": [
+        {
+          "tag": "a",
+          "name": "class",
+          "count": 16
+        },
+        {
+          "tag": "a",
+          "name": "data-target",
+          "count": 16
+        },
+        {
+          "tag": "a",
+          "name": "data-toggle",
+          "count": 16
+        },
+        {
+          "tag": "a",
+          "name": "style",
+          "count": 16
+        },
+        {
+          "tag": "i",
+          "name": "class",
+          "count": 16
+        },
+        {
+          "tag": "td",
+          "name": "style",
+          "count": 48
+        }
+      ],
+      "rowAttributesCarryMemberTargetCount": 0,
+      "documentMemberPathPatternCount": 5,
+      "dataSrcExternalScriptCount": 4
+    },
+    "explicitNormalisedSubjectTemplate": "【定錨產業筆記】<publisher title>",
+    "canonicalArticleTitleMatchSuppliesIdentity": false
+  },
+  "runtime": {
+    "file": "web/src/lib/vnext/investanchors-notice-receiver.test.ts",
+    "baselineGitBlob": "4681a110066f1eab29f5a97991761850f819d642",
+    "regressionGitBlob": "0893ce9b6a86a67bef2d8c79da92531d92b434d2",
+    "passed": 28,
+    "failed": 0,
+    "actualProjectNode": "22.14.0",
+    "newCase": "synthetic title linked via first-party opaque HTTP plus canonical HTTPS positive control; no source or article authority is claimed by either"
+  },
+  "next": "Preserve the current unresolved notice status; for unattended member articles obtain an authorized first-party canonical article identifier and access to the entitled document. A title and displayed date together may guide navigation only.",
+  "open": {
+    "backgroundGmailOAuthNotVerified": true,
+    "unattendedMemberArticleSupplyNotVerified": true,
+    "trueFullPipelineNotAccepted": true,
+    "independentReviewCandidateUnmodified": true,
+    "productionUnmodified": true
+  },
+  "policySources": [
+    "https://investanchors.com/home/privacy",
+    "https://investanchors.com/home/reference"
+  ],
+  "recordedAt": "2026-11-18T12:11:28+08:00"
+}
