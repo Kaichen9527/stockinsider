@@ -166,9 +166,15 @@ test('regex comments cannot replace the Arelle-validated entity or period', () =
     periodEnd: '2026-03-31', sourceUrl: 'https://mops.twse.com.tw/server-java/FileDownLoad',
     collectedAt: '2026-05-01T00:00:00Z',
   });
-  assert.equal(parsed.length, 1, 'the legacy extractor reproduces the comment-context ambiguity');
-  assert.equal(parsed[0]?.periodEnd, '2026-03-31');
-  const admitted = filterArelleValidatedFacts(parsed, {
+  assert.deepEqual(parsed, [], 'the source extractor ignores commented contexts');
+  const falseCandidate = partialCandidate();
+  falseCandidate.periodStart = null;
+  falseCandidate.periodEnd = '2026-03-31';
+  falseCandidate.durationKind = 'instant';
+  falseCandidate.factKey = 'total_assets';
+  falseCandidate.value = 100;
+  falseCandidate.locator = { xbrl_context: 'ctx', xbrl_concept: 'tifrs-full:Assets' };
+  const admitted = filterArelleValidatedFacts([falseCandidate], {
     schema: 'candidate-financial-document-parser-v1', status: 'complete', parser: 'arelle',
     inputSha256: sha, missingRequirements: [], locators: [{ xbrl_context: 'ctx', xbrl_concept: 'tifrs-full:Assets' }],
     validatedFacts: [{ xbrl_context: 'ctx', xbrl_concept: 'tifrs-full:Assets', value: '100', unit: 'TWD',

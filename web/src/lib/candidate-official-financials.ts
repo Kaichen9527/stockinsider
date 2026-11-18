@@ -165,16 +165,38 @@ function conceptSuffix(value: string | undefined) {
   return String(value || '').split(':').at(-1)?.replace(/[^A-Za-z0-9]/gu, '').toLowerCase() || '';
 }
 
-function parseContexts(html: string) {
+export function reportedFinancialPeriodSemantics(start: string | null, end: string) {
+  if (!/^\d{4}-(?:03-31|06-30|09-30|12-31)$/u.test(end)) return null;
+  if (start === null) return 'instant';
+  const year = end.slice(0, 4);
+  const quarterStartMonth = String(Number(end.slice(5, 7)) - 2).padStart(2, '0');
+  if (start === `${year}-${quarterStartMonth}-01`) return 'discrete_quarter';
+  return start === `${year}-01-01` ? 'year_to_date' : null;
+}
+
+function parseContexts(html: string, symbol: string) {
   const output = new Map<string, { start: string | null; end: string; instant: boolean }>();
+  const seen = new Set<string>();
   for (const match of html.matchAll(/<xbrli:context\b([^>]*)>([\s\S]*?)<\/xbrli:context>/giu)) {
     const id = attributes(match[1]).id;
-    if (!id || /<(?:[A-Za-z0-9_-]+:)?(?:segment|scenario|explicitMember|typedMember)\b/iu.test(match[2])) continue;
-    const start = match[2].match(/<xbrli:startDate>(\d{4}-\d{2}-\d{2})<\/xbrli:startDate>/iu)?.[1];
-    const end = match[2].match(/<xbrli:endDate>(\d{4}-\d{2}-\d{2})<\/xbrli:endDate>/iu)?.[1];
-    const instant = match[2].match(/<xbrli:instant>(\d{4}-\d{2}-\d{2})<\/xbrli:instant>/iu)?.[1];
-    if (start && end) output.set(id, { start, end, instant: false });
-    else if (instant) output.set(id, { start: null, end: instant, instant: true });
+    if (!id) continue;
+    if (seen.has(id)) {
+      output.delete(id);
+      continue;
+    }
+    seen.add(id);
+    const body = match[2];
+    if (/<(?:[A-Za-z0-9_-]+:)?(?:segment|scenario|explicitMember|typedMember)\b/iu.test(body)) continue;
+    const entities = [...body.matchAll(/<xbrli:entity\b[^>]*>([\s\S]*?)<\/xbrli:entity>/giu)];
+    if (entities.length !== 1) continue;
+    const identifiers = [...entities[0][1].matchAll(/<xbrli:identifier\b([^>]*)>([^<]+)<\/xbrli:identifier>/giu)];
+    if (identifiers.length !== 1 || identifiers[0][2].trim() !== symbol
+      || !/^https?:\/\/www[.]twse[.]com[.]tw\/?$/u.test(attributes(identifiers[0][1]).scheme ?? '')) continue;
+    const start = body.match(/<xbrli:startDate>(\d{4}-\d{2}-\d{2})<\/xbrli:startDate>/iu)?.[1];
+    const end = body.match(/<xbrli:endDate>(\d{4}-\d{2}-\d{2})<\/xbrli:endDate>/iu)?.[1];
+    const instant = body.match(/<xbrli:instant>(\d{4}-\d{2}-\d{2})<\/xbrli:instant>/iu)?.[1];
+    if (start && end && !instant) output.set(id, { start, end, instant: false });
+    else if (instant && !start && !end) output.set(id, { start: null, end: instant, instant: true });
   }
   return output;
 }
@@ -238,9 +260,11 @@ export function parseCandidateMopsFacts(html: string, input: CandidateOfficialFi
   if (html.length < 100 || html.length > 12_000_000
     || (![MOPS_INLINE_URL,MOPS_DOWNLOAD_URL].some((url) => input.sourceUrl === url || input.sourceUrl.startsWith(`${url}?`))
       && !/^issuer-document:[0-9a-f]{64}$/u.test(input.sourceRefPrefix || ''))) return [];
-  const contexts = parseContexts(html);
-  const declaredUnits = parseUnits(html);
-  const auditDate = parseAuditDate(html);
+  if (!/^\d{4,6}$/u.test(input.symbol)) return [];
+  const filing = html.replace(/<!--[\s\S]*?-->/gu, '');
+  const contexts = parseContexts(filing, input.symbol);
+  const declaredUnits = parseUnits(filing);
+  const auditDate = parseAuditDate(filing);
   if (!auditDate) return [];
   const auditSignedAt = `${auditDate}T00:00:00Z`;
   if (Date.parse(auditSignedAt) > Date.parse(input.collectedAt)) return [];
@@ -250,7 +274,7 @@ export function parseCandidateMopsFacts(html: string, input: CandidateOfficialFi
   const filingPublishedAt = new Date(input.collectedAt).toISOString();
   const filingRestatementId = restatementId(html, auditDate);
   const rows: ParsedFact[] = [];
-  for (const match of html.matchAll(/<ix:nonFraction\b([^>]*)>([\s\S]*?)<\/ix:nonFraction>/giu)) {
+  for (const match of filing.matchAll(/<ix:nonFraction\b([^>]*)>([\s\S]*?)<\/ix:nonFraction>/giu)) {
     const attrs = attributes(match[1]);
     const context = contexts.get(attrs.contextref);
     const value = finiteFact(match[2], attrs.scale, attrs.sign);
@@ -276,6 +300,8 @@ export function parseCandidateMopsFacts(html: string, input: CandidateOfficialFi
     if (!factKey || resolvedUnit !== unit) continue;
     const isInstantFact = Boolean(BALANCE_FACTS[concept]) || SHARES_OUTSTANDING_CONCEPTS.has(concept);
     if (isInstantFact !== context.instant) continue;
+    const periodSemantics = reportedFinancialPeriodSemantics(context.start, context.end);
+    if (periodSemantics === null) continue;
     rows.push({
       stockId: input.stockId, symbol: input.symbol, factKey, periodStart: context.start, periodEnd: context.end,
       durationKind: context.instant ? 'instant' : 'quarterly', value, unit, provider: 'mops',
@@ -289,6 +315,7 @@ export function parseCandidateMopsFacts(html: string, input: CandidateOfficialFi
         xbrl_context: attrs.contextref || '',
         xbrl_concept: attrs.name || '',
         unit_ref: attrs.unitref || '',
+        period_semantics: periodSemantics,
         response_url: input.sourceUrl,
       },
     });

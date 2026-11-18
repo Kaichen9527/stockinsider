@@ -21,7 +21,7 @@ test('unit errors, invalid dates and future availability cannot be promoted',()=
   assert.equal(validateOfficialFinancialFact({...fact,recorded_at:'2026-09-09T00:00:00Z'},[fact],source,cutoff).pointInTimeValid,false);
 });
 test('regex iXBRL facts cannot bypass the structural document parser gate',()=>{
-  const malformed='<html><xbrli:context id="q"><xbrli:period><xbrli:startDate>2026-01-01</xbrli:startDate><xbrli:endDate>2026-03-31</xbrli:endDate></xbrli:period></xbrli:context><ix:nonNumeric name="tifrs-notes:ReviewAuditDate">115/05/15</ix:nonNumeric><ix:nonFraction name="ifrs-full:Revenue" contextRef="q" unitRef="TWD">1000000</ix:nonFraction></html>';
+  const malformed='<html><xbrli:context id="q"><xbrli:entity><xbrli:identifier scheme="http://www.twse.com.tw">2330</xbrli:identifier></xbrli:entity><xbrli:period><xbrli:startDate>2026-01-01</xbrli:startDate><xbrli:endDate>2026-03-31</xbrli:endDate></xbrli:period></xbrli:context><ix:nonNumeric name="tifrs-notes:ReviewAuditDate">115/05/15</ix:nonNumeric><ix:nonFraction name="ifrs-full:Revenue" contextRef="q" unitRef="TWD">1000000</ix:nonFraction></html>';
   const parsed=parseCandidateMopsFacts(malformed,{stockId:fact.stock_id,symbol:'2330',exchange:'TWSE',
     sourceUrl:'https://mopsov.twse.com.tw/server-java/FileDownLoad',collectedAt:fact.collected_at});
   assert.equal(parsed.length,1);

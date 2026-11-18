@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { parseCandidateMopsFacts, type CandidateOfficialFinancial, type ParsedFact } from './candidate-official-financials.ts';
+import { parseCandidateMopsFacts, reportedFinancialPeriodSemantics, type CandidateOfficialFinancial, type ParsedFact } from './candidate-official-financials.ts';
 import type { CandidateFinancialLocalParserResult } from './candidate-financial-local-parser.ts';
 import { candidateFinancialStructuralAdmission } from './candidate-financial-fact-acceptance.ts';
 
@@ -254,10 +254,7 @@ export function candidateFinancialFactsFromValidatedManifest(input: {
     if (row.unit !== unit || !Number.isFinite(value) || Math.abs(value) > Number.MAX_SAFE_INTEGER
       || (instant ? row.duration_kind !== 'instant' || row.period_start !== null
         : row.duration_kind !== 'quarterly' || !row.period_start || !isDate(row.period_start) || row.period_start > row.period_end)) continue;
-    const yearStart = `${row.period_end.slice(0, 4)}-01-01`;
-    const quarterStart = `${row.period_end.slice(0, 4)}-${String(Number(row.period_end.slice(5, 7)) - 2).padStart(2, '0')}-01`;
-    const periodSemantics = instant ? 'instant' : row.period_start === quarterStart ? 'discrete_quarter'
-      : row.period_start === yearStart ? 'year_to_date' : null;
+    const periodSemantics = reportedFinancialPeriodSemantics(row.period_start, row.period_end);
     if (!periodSemantics) continue;
     const identity = createHash('sha256').update(JSON.stringify({ context: row.xbrl_context,
       concept: row.xbrl_concept, unit, factKey, value: row.value, start: row.period_start, end: row.period_end,

@@ -1,0 +1,105 @@
+{
+  "schema": "stockinsider-t07-mops-issuer-scope-replay-v1",
+  "scope": "Contabo staging, TWSE originals, read-only no submission",
+  "checks": [
+    {
+      "symbol": "3526",
+      "ixbrl": {
+        "url": "https://mopsov.twse.com.tw/server-java/FileDownLoad?step=9&functionName=t164sb01&report_id=C&co_id=3526&year=2026&season=3",
+        "sha256": "215f2187a9e422b9aab5b1bfd9f51fd27069ac53e38ce8bd15405b292b9e842e",
+        "bytes": 567429,
+        "knownAt": "2026-11-18T05:33:47.648Z",
+        "mappedFacts": 62,
+        "crossIssuerRows": 0,
+        "dilutedEps": [
+          [
+            "2026-07-01",
+            "2026-09-30",
+            "discrete_quarter",
+            4.45
+          ],
+          [
+            "2026-01-01",
+            "2026-09-30",
+            "year_to_date",
+            12.38
+          ]
+        ],
+        "dilutedWeightedSharesPresent": false
+      },
+      "pdf": {
+        "url": "https://doc.twse.com.tw/server-java/t57sb01?step=1&colorchg=1&co_id=3526&year=115&seamon=3&mtype=A",
+        "sha256": "d63c8d5bf91e304e92311b6b6e5324eac6f6afb03dd61595ce3d1a16d05f692e",
+        "bytes": 1578806,
+        "knownAt": "2026-11-18T05:31:03.277Z",
+        "uploadedAt": "2026-11-11T11:22:20+08:00",
+        "status": "extracted",
+        "reason": null,
+        "values": [
+          {
+            "periodStart": "2026-07-01",
+            "periodEnd": "2026-09-30",
+            "periodKind": "discrete_quarter",
+            "dilutedEps": "4.45",
+            "dilutedEarningsNumerator": 342071000,
+            "dilutedWeightedAverageShares": 76826000,
+            "parentNetIncome": 327423000,
+            "reportPages": [
+              36,
+              37
+            ]
+          },
+          {
+            "periodStart": "2026-01-01",
+            "periodEnd": "2026-09-30",
+            "periodKind": "year_to_date",
+            "dilutedEps": "12.38",
+            "dilutedEarningsNumerator": 951033000,
+            "dilutedWeightedAverageShares": 76850000,
+            "parentNetIncome": 925837000,
+            "reportPages": [
+              36,
+              37
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "symbol": "4763",
+      "ixbrl": {
+        "url": "https://mopsov.twse.com.tw/server-java/FileDownLoad?step=9&functionName=t164sb01&report_id=C&co_id=4763&year=2026&season=3",
+        "sha256": "31640a9d254d233acc08ba66a2c80c41c97faeda0a3f9fe61416ffb7806f42c4",
+        "bytes": 586795,
+        "knownAt": "2026-11-18T05:33:36.407Z",
+        "mappedFacts": 66,
+        "crossIssuerRows": 0,
+        "dilutedEps": [
+          [
+            "2026-07-01",
+            "2026-09-30",
+            "discrete_quarter",
+            0
+          ],
+          [
+            "2026-01-01",
+            "2026-09-30",
+            "year_to_date",
+            1.85
+          ]
+        ],
+        "dilutedWeightedSharesPresent": false
+      },
+      "pdf": {
+        "url": "https://doc.twse.com.tw/server-java/t57sb01?step=1&colorchg=1&co_id=4763&year=115&seamon=3&mtype=A",
+        "sha256": "636af7171ba307d3a5b3a3c8a7524dfeb9ad9643f9f0f3051252f006d98dee98",
+        "bytes": 2504236,
+        "knownAt": "2026-11-18T05:30:52.316Z",
+        "uploadedAt": "2026-11-13T17:30:05+08:00",
+        "status": "gap",
+        "reason": "cover_scope_unverified",
+        "values": []
+      }
+    }
+  ]
+}
