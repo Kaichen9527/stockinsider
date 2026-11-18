@@ -19,6 +19,15 @@ EXTENDED_OFFICIAL_TIMEOUT_SECONDS = 142
 EXPECTED_ARELLE_VERSION = "2.44.7"
 EXPECTED_TAXONOMY_SHA256 = "4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869"
 OFFICIAL_TAXONOMY_PATH = "/opt/stockinsider/runtime/candidate-financial-parser/taxonomy/current"
+HISTORICAL_TAXONOMY_SHA256 = "8b1910ec2dff01b91227255c82dd92385d4db6664b3a5a638ac7086ebe7dad17"
+HISTORICAL_TAXONOMY_PATH = "/opt/stockinsider/runtime/candidate-financial-parser/taxonomy/tifrs-20200630-8b1910ec2dff"
+
+
+def registered_taxonomy(period_end):
+    if (period_end is not None and "2020-06-30" <= period_end <= "2025-12-31"
+            and period_end[4:] in ("-03-31", "-06-30", "-09-30", "-12-31")):
+        return HISTORICAL_TAXONOMY_PATH, HISTORICAL_TAXONOMY_SHA256
+    return OFFICIAL_TAXONOMY_PATH, EXPECTED_TAXONOMY_SHA256
 
 
 def receive_request(connection):
@@ -78,14 +87,15 @@ def serve(connection):
         command = [sys.executable, parser_script, "--format", request["format"], "--sha256", request["sha256"], "--max-bytes", str(MAX_BYTES)]
         if request.get("expectedEntity") is not None:
             command.extend(["--expected-entity", request["expectedEntity"], "--expected-period-end", request["expectedPeriodEnd"]])
-        taxonomy_path = OFFICIAL_TAXONOMY_PATH
+        expected_taxonomy_sha256 = None
         if request["format"] in ("html", "xbrl"):
+            taxonomy_path, expected_taxonomy_sha256 = registered_taxonomy(request.get("expectedPeriodEnd"))
             identity_path = os.path.join(taxonomy_path, ".archive-sha256")
             if not os.path.isdir(taxonomy_path) or not os.path.isfile(identity_path):
                 raise ValueError("official_taxonomy_unavailable")
             with open(identity_path, "r", encoding="ascii") as stream:
                 taxonomy_sha256 = stream.read(65).strip()
-            if taxonomy_sha256 != EXPECTED_TAXONOMY_SHA256:
+            if taxonomy_sha256 != expected_taxonomy_sha256:
                 raise ValueError("official_taxonomy_identity_mismatch")
             command.extend(["--taxonomy-path", taxonomy_path, "--taxonomy-sha256", taxonomy_sha256])
         extended = request.get("profile") == "extended-official"
@@ -104,7 +114,7 @@ def serve(connection):
     parsed = json.loads(completed.stdout)
     if request["format"] in ("html", "xbrl") and (
         parsed.get("runtimeVersion") != EXPECTED_ARELLE_VERSION
-        or parsed.get("taxonomySha256") != EXPECTED_TAXONOMY_SHA256
+        or parsed.get("taxonomySha256") != expected_taxonomy_sha256
     ):
         raise ValueError("parser_runtime_identity_mismatch")
     connection.sendall(completed.stdout.rstrip(b"\n") + b"\n")

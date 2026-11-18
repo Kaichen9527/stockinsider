@@ -48,20 +48,26 @@ test('v10 admits only isolated facts and never upgrades a partial document or it
     const migration = fs.readFileSync(new URL('../migrations/20260911_05_financial_fact_isolation_v10.sql', import.meta.url), 'utf8');
     sql(migration); sql(migration);
     sql(fs.readFileSync(new URL('../migrations/20261118_51_financial_claim_cursor_lock_order_v1.sql', import.meta.url), 'utf8'));
+    const taxonomyMigration = fs.readFileSync(new URL('../migrations/20261118_53_vnext_historical_financial_taxonomy_v1.sql', import.meta.url), 'utf8');
+    sql(taxonomyMigration); sql(taxonomyMigration);
     sql(`INSERT INTO stocks VALUES('${stock}','2330')`);
-    const makeCase = (label) => {
+    const makeCase = (label, start = '2026-04-01', end = '2026-06-30') => {
       const receipt = randomUUID(), job = randomUUID(), document = randomUUID();
       const report = JSON.parse(fs.readFileSync(fixtureUrl, 'utf8'));
       const hash = createHash('sha256').update(`synthetic-v10-contract:${label}`).digest('hex');
-      report.inputSha256 = hash; report.factAcceptance.documentSha256 = hash; seal(report);
-      sql(`INSERT INTO candidate_financial_acquisition_jobs_v4(job_id,stock_id,status,lease_owner,lease_expires_at)
-        VALUES('${job}','${stock}','running','runner',clock_timestamp()+interval '5 minutes');
+      report.inputSha256 = hash; report.factAcceptance.documentSha256 = hash;
+      for (const row of report.validatedFacts) {
+        row.period_start = start; row.period_end = end;
+      }
+      seal(report);
+      sql(`INSERT INTO candidate_financial_acquisition_jobs_v4(job_id,stock_id,period_end,status,lease_owner,lease_expires_at)
+        VALUES('${job}','${stock}','${end}','running','runner',clock_timestamp()+interval '5 minutes');
         INSERT INTO candidate_issuer_ir_document_queue_v4 VALUES('${document}');
         INSERT INTO candidate_financial_document_receipts_v6(receipt_id,stock_id,acquisition_job_id,issuer_document_id,
           source_url,exchange,period_end,document_sha256,receipt_status,parser_status,parser_owner,parser_lease_expires_at)
         VALUES('${receipt}','${stock}','${job}','${document}','https://mopsov.twse.com.tw/server-java/FileDownLoad',
-          'TWSE','2026-06-30','${hash}','accepted','running','runner',clock_timestamp()+interval '5 minutes');`);
-      const fact = { input: { stock_id: stock, fact_key: 'quarterly_revenue', period_start: '2026-04-01', period_end: '2026-06-30',
+          'TWSE','${end}','${hash}','accepted','running','runner',clock_timestamp()+interval '5 minutes');`);
+      const fact = { input: { stock_id: stock, fact_key: 'quarterly_revenue', period_start: start, period_end: end,
         duration_kind: 'quarterly', value: 100, unit: 'TWD', provider: 'mops', authority_tier: 'official_filing',
         estimate_kind: 'reported', estimate_horizon: 'reported_period', filing_published_at: '2026-08-10T00:00:00Z',
         source_timestamp: '2026-08-10T00:00:00Z', collected_at: '2026-08-10T01:00:00Z', filing_restatement_id: null,
@@ -218,6 +224,43 @@ test('v10 admits only isolated facts and never upgrades a partial document or it
     assert.equal(sql(`SELECT receipt_status FROM candidate_financial_document_receipts_v6 WHERE receipt_id='${complete.receipt}'`), 'accepted');
     assert.equal(sql(`SELECT status||'|'||terminal_reason FROM candidate_financial_acquisition_jobs_v4 WHERE job_id='${complete.job}'`), 'terminal|complete');
 
+    const historicalDigest = '8b1910ec2dff01b91227255c82dd92385d4db6664b3a5a638ac7086ebe7dad17';
+    const useTaxonomy = (subject, digest = historicalDigest) => {
+      subject.report.taxonomySha256 = digest; subject.report.factAcceptance.taxonomySha256 = digest;
+      seal(subject.report);
+      return subject;
+    };
+    const historical = useTaxonomy(makeCase('accepted-historical-v10', '2025-04-01', '2025-06-30'));
+    assert.match(sql(completion(historical)), /^validation_pending\|1\|0$/u);
+    assert.equal(validate(historical), 't');
+    assert.match(finalize(historical), /^validated\|1\|0\|0$/u);
+    assert.equal(sql("SELECT receipt_status FROM candidate_financial_document_receipts_v6 WHERE receipt_id=" + quote(historical.receipt)), 'partial');
+    assert.equal(sql("SELECT taxonomy_sha256 FROM candidate_financial_parser_evidence_v8 WHERE receipt_id=" + quote(historical.receipt)), historicalDigest);
+
+    for (const candidate of [
+      useTaxonomy(makeCase('old-bundle-current-filing')),
+      useTaxonomy(makeCase('old-bundle-before-coverage', '2020-01-01', '2020-03-31')),
+      useTaxonomy(makeCase('old-bundle-non-quarter-date', '2025-04-01', '2025-06-29')),
+      useTaxonomy(makeCase('unknown-historical-bundle', '2025-04-01', '2025-06-30'), '0'.repeat(64)),
+    ]) {
+      const rejected = command('psql', args, completion(candidate));
+      assert.notEqual(rejected.status, 0);
+      assert.match(rejected.stderr, /candidate_financial_taxonomy_period_mismatch/u);
+      assert.equal(sql("SELECT count(*) FROM candidate_financial_parser_evidence_v8 WHERE receipt_id=" + quote(candidate.receipt)), '0');
+    }
+    const legacyWithOldBundle = useTaxonomy(makeCase('v8-old-bundle-forbidden', '2025-04-01', '2025-06-30'));
+    legacyWithOldBundle.report.validation.errorCount = 0;
+    const v8Rejection = command('psql', args, completion(legacyWithOldBundle, {
+      schema: 'candidate-financial-parser-evidence-v8', documentSha256: legacyWithOldBundle.hash,
+      parser: 'arelle', parserVersion: '2.44.7', taxonomySha256: historicalDigest,
+      validation: legacyWithOldBundle.report.validation, validatedFacts: legacyWithOldBundle.report.validatedFacts,
+    }, 'complete_candidate_financial_document_receipt_parser_v8'));
+    assert.match(v8Rejection.stderr, /candidate_financial_parser_evidence_invalid/u);
+    const helperSignature = 'candidate_financial_taxonomy_allowed_v10(text,date,integer)';
+    for (const role of ['anon', 'authenticated', 'service_role']) {
+      assert.equal(sql("SELECT has_function_privilege(" + quote(role) + "," + quote(helperSignature) + ",'EXECUTE')"), 'f');
+    }
+
     // The reader is a second authority boundary: historical accounting flags do
     // not prove structural validity, and later evidence cannot enter an old run.
     const legacy = makeCase('clean-v8-reader-compatibility');
@@ -233,7 +276,7 @@ test('v10 admits only isolated facts and never upgrades a partial document or it
     const after = new Date(Date.now() + 900000).toISOString();
     const reader = (factId, at) => `SELECT COALESCE((SELECT validation_status::text FROM public.read_financial_facts_as_of(${quote(at)})
       WHERE fact_id='${factId}'),'absent')`;
-    for (const subject of [legacy, partial]) {
+    for (const subject of [legacy, partial, historical]) {
       const rows = JSON.parse(sql(`SELECT jsonb_build_object('fact',to_jsonb(f),'receipt',to_jsonb(r),
         'evidence',to_jsonb(e),'link',to_jsonb(l),'provenance',to_jsonb(p),'validation',to_jsonb(v))
         FROM candidate_financial_document_fact_links_v8 l
