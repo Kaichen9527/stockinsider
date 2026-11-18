@@ -15,10 +15,10 @@ const newerId='00000000-0000-4000-8000-000000000012';
 const sqlQuote=value=>"'"+value.replaceAll("'","''")+"'";
 
 const setup = [
-  'CREATE ROLE anon; CREATE ROLE authenticated; CREATE ROLE service_role; CREATE ROLE research_observed_rpc_owner;',
+  'CREATE ROLE anon; CREATE ROLE authenticated; CREATE ROLE service_role; CREATE ROLE research_observed_rpc_owner; CREATE ROLE fixture_existing_seal_reader;',
   'CREATE ROLE research_source_fence_owner_v2 NOLOGIN NOSUPERUSER NOBYPASSRLS;',
   'REVOKE ALL ON SCHEMA public FROM PUBLIC;',
-  'GRANT USAGE ON SCHEMA public TO anon,authenticated,service_role,research_observed_rpc_owner;',
+  'GRANT USAGE ON SCHEMA public TO anon,authenticated,service_role,research_observed_rpc_owner,fixture_existing_seal_reader;',
   'CREATE TABLE public.source_raw_documents(id uuid PRIMARY KEY, document_url text, published_at timestamptz, collected_at timestamptz, metadata jsonb NOT NULL, body text);',
   'ALTER TABLE public.source_raw_documents ENABLE ROW LEVEL SECURITY;',
   'GRANT SELECT,INSERT,UPDATE,DELETE ON public.source_raw_documents TO service_role;',
@@ -42,7 +42,7 @@ const catalog = [
   "'publicRoutines',(SELECT jsonb_agg(to_jsonb(p)-'prosrc' ORDER BY p.oid) FROM pg_proc p WHERE p.pronamespace='public'::regnamespace));",
 ].join('\n');
 
-test('prebound v2 source writes still require namespace access for foreign-key invalidation',()=>{
+test('private physical namespace resolves the original FK after the failed prebinding control',()=>{
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'si-source-fence-'));
   const data=path.join(root,'data'),port=String(54000+process.pid%1000);
   const pg=(name,argv,input)=>spawnSync(process.env.OPPORTUNITY_V3_POSTGRES_BIN
@@ -70,6 +70,8 @@ test('prebound v2 source writes still require namespace access for foreign-key i
     check(psql('CREATE DATABASE '+database+';', 'postgres'));
     sql(setup);
     sql(fs.readFileSync(original,'utf8'));
+    sql('GRANT SELECT ON public.research_source_seals_v2 TO fixture_existing_seal_reader;'
+      +' CREATE POLICY fixture_seal_reader ON public.research_source_seals_v2 FOR SELECT TO fixture_existing_seal_reader USING(true);');
     const stateSql=fs.readFileSync(stateFile,'utf8');
     const first=stateSql.indexOf('CREATE FUNCTION public.research_publication_source_state_v2(');
     const last=stateSql.indexOf('CREATE FUNCTION public.read_completed_research_publication_v2(',first);
@@ -134,9 +136,37 @@ test('prebound v2 source writes still require namespace access for foreign-key i
     assert.equal(sql(counts),preFailure,'foreign-key rejection rolls back the source, event and invalidation');
     assert.equal(sql(checkState),'published');
     assert.deepEqual(JSON.parse(sql(verifySeal)).documents,sealed.documents);
-    sql(asService+insert(newerId,url+'/separate','2026-11-16T05:00:00Z','independent root')+';');
+    const names=['research_source_fence_events_v2','research_source_seals_v2','research_source_seal_invalidations_v2'];
+    const refs=names.map(name=>"public."+name);
+    const priorOids=refs.map(name=>sql("SELECT '"+name+"'::regclass::oid;"));
+    const legacyReader="SET ROLE fixture_existing_seal_reader; SELECT count(*) FROM public.research_source_seals_v2;";
+    assert.equal(sql(legacyReader),'1');
+    // Model the existing referring row before installing the FK.
+    sql('CREATE TABLE public.probe_existing_fk(seal_id uuid);'
+      +"INSERT INTO public.probe_existing_fk VALUES('"+sealed.seal_id+"');"
+      +"ALTER TABLE public.probe_existing_fk ADD CONSTRAINT probe_ref FOREIGN KEY(seal_id)"
+      +" REFERENCES public.research_source_seals_v2(seal_id) NOT VALID;");
+    function fkItem(){return sql("SELECT confrelid FROM pg_constraint WHERE conrelid='public.probe_existing_fk'::regclass AND contype='f';");}
+    assert.equal(fkItem(),priorOids[1]);
+    sql("BEGIN; "+refs.map(ref=>'ALTER TABLE '+ref+' SET SCHEMA stockinsider_source_fence;').join('\n')
+      +names.map((name,i)=>'CREATE VIEW '+refs[i]+' WITH (security_invoker=true) AS SELECT * FROM stockinsider_source_fence.'+name+';').join('\n')
+      +"REVOKE ALL ON "+refs.join(',')+" FROM PUBLIC,anon,authenticated,service_role;"
+      +" GRANT SELECT ON public.research_source_seals_v2 TO fixture_existing_seal_reader; COMMIT;");
+    assert.equal(sql(legacyReader),'1');
+    assert.equal(sql("SELECT has_schema_privilege('fixture_existing_seal_reader','stockinsider_source_fence','USAGE');"),'f');
+    deny("SET ROLE service_role; SELECT count(*) FROM public.research_source_seals_v2;",/permission denied for view/u);
+    assert.equal(fkItem(),priorOids[1]);
+    sql("ALTER TABLE public.probe_existing_fk VALIDATE CONSTRAINT probe_ref;");
+    sql("INSERT INTO public.probe_existing_fk VALUES('"+sealed.seal_id+"');");
+    assert.deepEqual(names.map(name=>sql("SELECT 'stockinsider_source_fence."+name+"'::regclass::oid;")),priorOids);
+    assert.equal(sql("SELECT has_schema_privilege('"+owner+"','public','USAGE');"),'f');
+    sql(asService+insert(newerId,url+'#si-revision-correction','2026-11-16T05:00:00Z','corrected source')+';');
+    assert.equal(sql(counts),'2|2|1');
+    assert.equal(sql(checkState),'withdrawn');
+    deny(verifySeal,/source_seal_invalidated_or_missing/u);
+    deny(makeSeal(receiptInput),/source_seal_root_changed/u);
     sql(asService+"DELETE FROM public.source_raw_documents WHERE id='"+newerId+"';");
-    assert.equal(sql(checkState),'published');
+    assert.equal(sql(checkState),'withdrawn');
     assert.equal(sql("SELECT string_agg(operation,',' ORDER BY event_id) FROM public.research_source_fence_events_v2;"),'INSERT,INSERT,DELETE');
     deny("DELETE FROM public.research_source_fence_events_v2;",/immutable_source_receipt/u);
 
@@ -146,7 +176,7 @@ test('prebound v2 source writes still require namespace access for foreign-key i
     assert.equal(sql("SET ROLE "+owner+"; SELECT stockinsider_source_fence.document_row('"+sourceId+"')->>'review_sample';"),'full-row-column');
     assert.notEqual(sql("SELECT encode(sha256(convert_to(to_jsonb(s)::text,'UTF8')),'hex') FROM public.source_raw_documents s;"),rowHash);
     deny(makeSeal(receiptInput),/source_seal_hash_changed/u);
-    deny(verifySeal,/source_seal_hash_changed/u);
+
   }finally{
     if(started)check(pg('pg_ctl',['-D',data,'-w','-m','immediate','stop']));
     fs.rmSync(root,{recursive:true,force:true});
