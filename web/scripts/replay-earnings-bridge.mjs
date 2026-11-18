@@ -1,5 +1,6 @@
 import { open } from 'node:fs/promises';
 import { calculateEarningsBridge } from '../src/lib/vnext/earnings-bridge.ts';
+import { buildEarningsScenarioReview } from '../src/lib/vnext/earnings-scenario-review.ts';
 
 if (process.argv.length !== 3) throw Error('usage: replay-earnings-bridge.mjs input.json');
 const file=await open(process.argv[2],'r');
@@ -10,7 +11,10 @@ try {
   const data=await file.read(bytes,0,bytes.length,0);
   if(data.bytesRead!==count)throw Error('earnings_bridge_input_size');
   const input=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes.subarray(0,count)));
-  process.stdout.write(JSON.stringify(calculateEarningsBridge(input),null,2)+'\n');
+  const result = input?.schemaVersion === 'vnext-earnings-scenario-input-v1'
+    ? buildEarningsScenarioReview(input)
+    : calculateEarningsBridge(input);
+  process.stdout.write(JSON.stringify(result,null,2)+'\n');
 } finally {
   await file.close();
 }

@@ -1,5 +1,6 @@
 import {createHash} from 'node:crypto';
 import {calculateEarningsBridge,type EarningsBridgeInput} from './earnings-bridge.ts';
+import {buildEarningsScenarioReview} from './earnings-scenario-review.ts';
 
 const MEDIATEK={
  symbol:'2454',
@@ -126,15 +127,26 @@ export async function readMediaTekQ4OperatingGuidance(transport=fetch, assumptio
    if(supplied!==undefined && (!supplied || !['basic','diluted'].includes(supplied.shareBasis) ||
      !supplied.operands || Array.isArray(supplied.operands) || typeof supplied.operands!=='object' ||
      Object.hasOwn(supplied.operands,'operatingIncome')))fail('earnings_assumptions_invalid');
-   return calculateEarningsBridge({...scope,periodKind:'fiscal_quarter',classification:'modeled_scenario',
-    shareBasis:supplied?.shareBasis??'diluted',cutoff:receipt.knownAt,operands:{
-     ...supplied?.operands, operatingIncome:{...scope,value:operatingScenarios[key].operatingIncomeTwd,unit:'TWD',
-      basis:'issuer_guidance',knownAt:receipt.knownAt,sourceSha256:receipt.sha256,sourceRef:'mediatek-2026-q3-earnings-call:p4'},
-    }});
+   const operands: EarningsBridgeInput['operands'] = {
+    ...supplied?.operands,operatingIncome:{...scope,value:operatingScenarios[key].operatingIncomeTwd,unit:'TWD',
+     basis:'issuer_guidance',knownAt:receipt.knownAt,sourceSha256:receipt.sha256,sourceRef:'mediatek-2026-q3-earnings-call:p4'},
+   };
+   return {shareBasis:supplied?.shareBasis??'diluted',operands} as const;
   };
-  const earningsBridge=Object.fromEntries(cases.map(key=>[key,forCase(key)]));
+  const bear=forCase('bear'),base=forCase('base'),bull=forCase('bull');
+  const periodScope={...scope,periodKind:'fiscal_quarter' as const,cutoff:receipt.knownAt};
+  const sharedBasis=bear.shareBasis===base.shareBasis&&base.shareBasis===bull.shareBasis;
+  const scenarioReview=sharedBasis?buildEarningsScenarioReview({
+   ...periodScope,schemaVersion:'vnext-earnings-scenario-input-v1',shareBasis:base.shareBasis,
+   cases:{bear:bear.operands,base:base.operands,bull:bull.operands},
+  }):null;
+  const calculate=(scenario:ReturnType<typeof forCase>)=>calculateEarningsBridge({
+   ...periodScope,classification:'modeled_scenario',...scenario,
+  });
+  const earningsBridge=scenarioReview?.scenarios??{bear:calculate(bear),base:calculate(base),bull:calculate(bull)};
   return {schemaVersion:'vnext-issuer-operating-guidance-v1',symbol:MEDIATEK.symbol,period:MEDIATEK.period,eventDate:MEDIATEK.eventDate,
    source:{url:MEDIATEK.url,...receipt,locator:{page:MEDIATEK.page,...locator}},sourceClass:'company_disclosed_guidance',
-   guidance,operatingScenarios,earningsBridge};
+   guidance,operatingScenarios,earningsBridge,scenarioReview,
+   scenarioReviewGap:sharedBasis?null:'scenario_share_basis_mismatch'};
  }finally{await loading.destroy();}
 }
