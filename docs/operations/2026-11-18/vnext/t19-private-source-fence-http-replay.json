@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "stockinsider-vnext-private-source-fence-http-replay-v1",
+  "subjectCommit": "e156f782f4be8ec1f2b7b9d1cddaf2267c612df7",
+  "subjectTree": "aedee572332236995bc3aa95a00144118fe7e3e5",
+  "scope": "Contabo isolated built Next.js 16.3.4 HTTP and PostgreSQL 17.11 with synthetic source originals; loopback-only app, network-none database, closed service-role REST test facade",
+  "protectedCiComparison": {
+    "pullRequest": 411,
+    "head": "2784faddcf12ed5333dfdd73333905308f2bfd1e",
+    "workflowRunId": 44222677091,
+    "jobId": 134528151405,
+    "previousFailure": "vnext_test_source_namespace_not_ready",
+    "protectedChecksPassed": false,
+    "exactReviewEvidenceRefMissingOnCurrentProtectedHead": true
+  },
+  "testedAt": {
+    "startedAt": "2026-11-18T10:59:35.810942+00:00",
+    "finishedAt": "2026-11-18T11:04:29.694807+00:00"
+  },
+  "results": {
+    "tap": {
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "privateSourceFence": {
+      "relationsMoved": 3,
+      "relationIdsAndGrantsPreserved": true,
+      "sourceOwnerPublicUsage": false,
+      "preparationOwnerPublicUsage": false,
+      "serviceRolePrivateSchemaUsage": false,
+      "serviceRolePublicSealViewSelect": false
+    },
+    "guardedSourceExtract": {
+      "newReceipts": 2,
+      "originalEventRejected": 1,
+      "originalEventClockPreserved": true,
+      "newExtractionsOnReplay": 0,
+      "progressRows": 2
+    },
+    "terminalRetry": {
+      "actualDeadlineSeconds": 120,
+      "clockOverride": false,
+      "startedAttempts": 2,
+      "refundedAttempts": 0,
+      "furtherRetryRejected": true,
+      "activeSlotsAfterSecondExpiry": 0,
+      "historyRetained": true
+    }
+  },
+  "resource": {
+    "minimumAvailableDiskBytes": 16808415232,
+    "minimumAvailableMemoryBytes": 3553853440,
+    "sampledOwnedPeakRssBytes": 1268510720,
+    "testResourceViolation": false
+  },
+  "persistence": {
+    "noExternalFetch": true,
+    "noProviderInvocations": true,
+    "productionServiceAndReleaseFingerprintMatched": true,
+    "outerWrapperFirstExit": 3,
+    "containerAndSocketAbsentAfterFirstExit": true,
+    "cleanupRaceCorrectionProbeExit": 0,
+    "testLogSha256": "0b5077e1ebc5d163a56cbee4fc738cb7ce3f8a0f83891375314b48d03dcf4f31"
+  }
+}
