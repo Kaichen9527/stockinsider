@@ -28,6 +28,7 @@ test('frozen detail charts switch daily, calendar week and month at the original
     await section.getByRole('button',{name:label}).click();
     await expect(section.getByRole('button',{name:label})).toHaveAttribute('aria-pressed','true');
     await expect(section).toContainText(period);
+    await expect(section).toContainText('K 線與成交量只計入顯示期間內、截至榜單日的交易日');
     await expect(section.getByTestId('launch-price-chart').locator('canvas').first()).toBeVisible();
   }
   const stats=await (await request.get(bridge+'/__fixture/stats')).json();

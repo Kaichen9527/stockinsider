@@ -33,8 +33,9 @@ function periodStart(date: string, timeframe: CalendarTimeframe) {
 
 /** Aggregate real supplied sessions, never fixed five/21-row chunks. The output
  * time remains the last observed session; missing volume stays null. A historical
- * period is closed in calendar time only, not certified complete acquisition. */
-export function calendarStockCandles(data: readonly (CandlestickData & { volume?: number | null })[], timeframe: CalendarTimeframe, cutoff?: string) {
+ * period is closed in calendar time only, not certified complete acquisition.
+ * A visible window clips an opening period by session before aggregating. */
+export function calendarStockCandles(data: readonly (CandlestickData & { volume?: number | null })[], timeframe: CalendarTimeframe, cutoff?: string, displayFrom?: string) {
   if (!['weekly', 'monthly', 'quarterly', 'halfYear', 'yearly'].includes(timeframe) || data.length > 10000) throw new Error('stock_chart_calendar_scope_invalid');
   let currentPeriod: string | null = null;
   let cutoffDate: string | null = null;
@@ -43,6 +44,9 @@ export function calendarStockCandles(data: readonly (CandlestickData & { volume?
     if (!Number.isFinite(at)) throw new Error('stock_chart_cutoff_invalid');
     cutoffDate = taiwanChartDate((at / 1000) as Time);
     currentPeriod = periodStart(cutoffDate, timeframe);
+  }
+  if (displayFrom !== undefined && (!isHistoryDate(displayFrom) || (cutoffDate !== null && displayFrom > cutoffDate))) {
+    throw new Error('stock_chart_display_window_invalid');
   }
   const sessions = new Map<string, { candle: CandlestickData; volume: number | null }>();
   for (const candle of data) {
@@ -58,6 +62,7 @@ export function calendarStockCandles(data: readonly (CandlestickData & { volume?
   }
   const candles: CandlestickData<string>[] = []; const periods: CalendarPeriod[] = [];
   for (const [date, row] of [...sessions].sort(([a], [b]) => a.localeCompare(b))) {
+    if (displayFrom !== undefined && date < displayFrom) continue;
     const key = periodStart(date, timeframe); const last = periods.at(-1);
     if (last?.periodStart === key) {
       const target = candles[candles.length - 1];

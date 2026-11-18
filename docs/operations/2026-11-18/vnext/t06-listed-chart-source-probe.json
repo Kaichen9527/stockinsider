@@ -1,0 +1,32 @@
+{
+  "threshold": "Latest snapshot inspected separately from evening signed receipt",
+  "dataset": "https://data.gov.tw/dataset/11549",
+  "historicalProbeDate": "2023-11-17",
+  "records": [
+    {
+      "resource": "catalog_csv",
+      "observedAt": "2026-11-18T06:07:39.741270+00:00",
+      "rocDates": [
+        "1151118"
+      ],
+      "rows": 1391,
+      "sha256": "7cc7565c27eb514f849d3478ec41466d0b0932095b180a52f3f3b76c2cadc550"
+    },
+    {
+      "resource": "openapi_latest",
+      "rocDates": [
+        "1151117"
+      ],
+      "rows": 1391,
+      "sha256": "0c19fb502b2b7822eb7d25b7784bb041028f81f24bb05923f47caccea91b2a07"
+    },
+    {
+      "resource": "openapi_dated",
+      "rocDates": [
+        "1151117"
+      ],
+      "rows": 1391,
+      "sha256": "0c19fb502b2b7822eb7d25b7784bb041028f81f24bb05923f47caccea91b2a07"
+    }
+  ]
+}

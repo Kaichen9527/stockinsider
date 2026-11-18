@@ -77,6 +77,7 @@ jobs:
           mkdir -m 700 /tmp/stockinsider-vnext-oct22-private
           node --experimental-strip-types web/src/lib/vnext/launch-research-dispatch.test.ts | tee /tmp/stockinsider-vnext-ci/launch-research-dispatch.tap
           node --experimental-strip-types web/src/lib/vnext/launch-cutover.test.ts | tee /tmp/stockinsider-vnext-ci/launch-cutover.tap
+          node --experimental-strip-types --test web/src/lib/stock-chart-calendar.test.ts web/src/lib/stock-chart-supply.test.ts web/src/lib/candidate-price-history.test.ts | tee /tmp/stockinsider-vnext-ci/stock-chart-calendar.tap
           node --experimental-strip-types --test web/src/lib/vnext/launch-candidate-catalog.test.ts web/src/lib/vnext/launch-candidate-catalog-page.test.ts | tee /tmp/stockinsider-vnext-ci/launch-candidate-catalog.tap
           node --experimental-strip-types --test web/src/lib/vnext/launch-disposition-range.test.ts web/src/lib/vnext/launch-disposition-status.test.ts | tee /tmp/stockinsider-vnext-ci/launch-disposition-range.tap
           node --experimental-strip-types web/src/lib/vnext/vnext.test.ts | tee /tmp/stockinsider-vnext-ci/pure.tap
