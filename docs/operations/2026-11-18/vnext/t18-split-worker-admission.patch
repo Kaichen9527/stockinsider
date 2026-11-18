@@ -1,0 +1,64 @@
+--- a/deployment/staging/vnext/t17_keyfd/staging_admission.py
++++ b/deployment/staging/vnext/t17_keyfd/staging_admission.py
+@@ -9,6 +9,7 @@
+ import os
+ from pathlib import Path, PurePosixPath
+ import re
++import socket
+ import stat
+ 
+ GiB = 1024**3
+@@ -210,7 +211,7 @@
+     os.set_inheritable(backing_image_fd,False)
+ 
+ 
+-def observe_staging(work_root, lock_fd=6, host_directory_fd=7, backing_image_fd=8):
++def _observe_staging(work_root, lock_fd, host_directory_fd, backing_image_fd, storage_channel):
+     """Observe actual bindings; preserve host FDs until caller's final cleanup.
+ 
+     FD6 is an inherited root-owned host lock; EX is acquired on that actual FD
+@@ -256,7 +257,17 @@
+             raise StagingAdmissionRejected('separate_host_capacity_fd_required')
+         if fcntl.fcntl(host_directory_fd,fcntl.F_GETFL) & os.O_ACCMODE != os.O_RDONLY:
+             raise StagingAdmissionRejected('readonly_host_capacity_fd_required')
+-        _bind_encrypted_image(mount['device'],backing_image_fd,host_directory_fd,info,work_stat)
++        if storage_channel is None:
++            _bind_encrypted_image(mount['device'],backing_image_fd,host_directory_fd,info,work_stat)
++            storage = {'workStorage':'kernel_dm_crypt','backingImagePreallocationObserved':True,
++                       'backingImageDeviceBindingObserved':True}
++        else:
++            from .split_storage_handoff import SplitHandoffRejected, receive_and_bind_split_storage
++            try:
++                storage = receive_and_bind_split_storage(storage_channel,mount['device'],
++                                                         lock_fd,host_directory_fd,backing_image_fd)
++            except SplitHandoffRejected as error:
++                raise StagingAdmissionRejected(str(error)) from None
+         host_stat = os.fstatvfs(host_directory_fd)
+         host_free = host_stat.f_bavail * host_stat.f_frsize
+         if host_free < MIN_HOST_DISK_BYTES:
+@@ -270,11 +281,23 @@
+         return {'nonroot':True,'effectiveCapabilities':0,'privateLoopbackNetwork':True,
+                 'networkNamespaceComparison':namespace_comparison,
+                 'memoryLimitBytes':memory,'swapLimitBytes':0,'strictPrivateWorkMount':True,
+-                'workStorage':'kernel_dm_crypt','backingImagePreallocationObserved':True,
+-                'backingImageDeviceBindingObserved':True,'workFreeBytes':work_free,'hostFreeBytes':host_free,
++                **storage,'workFreeBytes':work_free,'hostFreeBytes':host_free,
+                 'hostAvailableMemoryBytes':available,'exclusiveHostLockObserved':True,
+                 'productionPgPathsInaccessible':True}
+     except StagingAdmissionRejected:
+         raise
+     except (OSError,ValueError,TypeError):
+         raise StagingAdmissionRejected('staging_observation_unavailable') from None
++
++
++def observe_staging(work_root, lock_fd=6, host_directory_fd=7, backing_image_fd=8):
++    return _observe_staging(work_root,lock_fd,host_directory_fd,backing_image_fd,None)
++
++
++def observe_staging_split(work_root):
++    """Proposed dedicated staging entry. The selected channel is always FD10."""
++    try:
++        with socket.socket(fileno=os.dup(10)) as channel:
++            return _observe_staging(work_root,6,7,8,channel)
++    except OSError:
++        raise StagingAdmissionRejected('split_fixed_coordinator_channel_required') from None

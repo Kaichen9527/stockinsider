@@ -1,0 +1,156 @@
+{
+  "schema": "stockinsider.t18.split-workspace-handoff.v1",
+  "source": "Contabo native systemd scopes, private mount and network, synthetic only",
+  "operatorBaseline": "f519b65b689a67f14bada9ecb429783de173c2f4",
+  "geometryCandidate": "b6ab7683620206e7582f59a199dd7a0382383067",
+  "releaseContextPr": 411,
+  "baselineFiles": {
+    "stagingAdmission": "1278f5118ab89f8a9751acdda904fa9650e4dec0",
+    "sixDescriptorTransport": "c5f91236386892f6a4044aa934fcec99e39cd95e",
+    "stageCredentials": "081f5a83d851c36d3f20c3f11571ebe95568bd33",
+    "sealedFixture": "53b7ec690e7dca46a61729d2d5b661e3acc4e948"
+  },
+  "testedFiles": {
+    "stagingAdmissionCandidate": "894f0665208f3aaa4d471938ae79123df49f6436",
+    "splitStorageHandoff": "cb009203ad591de12f16ea3fe3bbde65d65b67b6",
+    "geometryObserver": "d2031b5ec369d0cecfb4da461a5acb06d0023a78",
+    "coordinatorProbe": "c752f453fad6350b6eb52d1fe7828e7397c92e1b",
+    "worker": "b28870aa67eabbdb314c99ac1511368f9d8862c0"
+  },
+  "evidence": [
+    {
+      "stage": "preflight",
+      "hostAvailableDiskBytes": 18346610688,
+      "hostAvailableMemoryBytes": 4490960896
+    },
+    {
+      "stage": "backing_preallocated",
+      "hostAvailableDiskBytes": 16467537920,
+      "hostAvailableMemoryBytes": 2894200832
+    },
+    {
+      "encryptedBothLegs": true,
+      "crossDeviceBoundaryRead": true,
+      "rawBackingCiphertext": [
+        {
+          "leg": "root",
+          "bytes": 4096,
+          "allZero": false,
+          "plaintext": false
+        },
+        {
+          "leg": "ram",
+          "bytes": 4096,
+          "allZero": false,
+          "plaintext": false
+        }
+      ]
+    },
+    {
+      "stage": "stage_mounted",
+      "hostAvailableDiskBytes": 16467517440,
+      "hostAvailableMemoryBytes": 2871336960
+    },
+    {
+      "kernelObserver": {
+        "orderedKernelMappings": true,
+        "distinctBackings": true,
+        "noswapRamVerified": true,
+        "rootImageBytes": 1879048192,
+        "ramImageBytes": 1610612736,
+        "hostDiskBytes": 16467517440,
+        "hostMemoryBytes": 2863243264,
+        "workFreeBytes": 3339055104,
+        "restoreAuthorized": false
+      },
+      "rejectedDescriptorControls": [
+        "readonly_image_descriptor_required",
+        "fully_allocated_exact_image_required",
+        "distinct_storage_descriptors_required",
+        "fully_allocated_exact_image_required"
+      ]
+    },
+    {
+      "syntheticWorkerObservation": {
+        "nonroot": true,
+        "effectiveCapabilities": 0,
+        "privateLoopbackNetwork": true,
+        "networkNamespaceComparison": "unavailable",
+        "memoryLimitBytes": 805306368,
+        "swapLimitBytes": 0,
+        "strictPrivateWorkMount": true,
+        "workStorage": "kernel_dm_crypt_split",
+        "authenticatedRootStoragePeer": true,
+        "liveSplitMappingIdentityObserved": true,
+        "backingImagePreallocationObserved": true,
+        "backingImageDeviceBindingObserved": true,
+        "workFreeBytes": 3339055104,
+        "hostFreeBytes": 16467513344,
+        "hostAvailableMemoryBytes": 2848387072,
+        "exclusiveHostLockObserved": true,
+        "productionPgPathsInaccessible": true
+      },
+      "backupRead": false,
+      "restoreStarted": false
+    },
+    {
+      "scenario": "different_descriptors",
+      "rejected": "split_record_descriptors_do_not_match"
+    },
+    {
+      "scenario": "different_lock_description",
+      "rejected": "exclusive_host_lock_unavailable"
+    },
+    {
+      "scenario": "legacy",
+      "rejected": "work_filesystem_image_size_rejected"
+    },
+    {
+      "allSyntheticWorkersReaped": true,
+      "authorityNoRestore": true
+    },
+    {
+      "currentObserverRejectedSplitBacking": true,
+      "reason": "work_filesystem_image_size_rejected"
+    },
+    {
+      "stage": "simultaneous_peak",
+      "hostAvailableDiskBytes": 16467517440,
+      "hostAvailableMemoryBytes": 1925558272
+    },
+    {
+      "rootImageBytes": 1879048192,
+      "ramImageBytes": 1610612736,
+      "totalEncryptedBytes": 3489660928,
+      "syntheticStorageBytes": 2723479552,
+      "syntheticMemoryBytes": 937603072,
+      "workFreeBytes": 615571456,
+      "noSwapRamMount": true,
+      "realBackupOpened": false,
+      "productionModified": false
+    },
+    {
+      "cleanupStatus": 0,
+      "rootDiskAfterBytes": 18346610688,
+      "memoryAfterBytes": 4429152256
+    },
+    {
+      "productionServiceStatesUnchanged": true,
+      "closingTimersUnchanged": true,
+      "probeScopesRemoved": true,
+      "probeDirectoriesRemoved": true
+    }
+  ],
+  "applicability": {
+    "runtimeOriginalSingleLoopPathStillSelectedByOriginalFunction": true,
+    "newDedicatedVariantOnly": true,
+    "nativeActualOldSixFdTransport": true,
+    "stageAndKeyPlaceholdersOnly": true,
+    "pid1NamespaceComparisonUnavailable": true,
+    "actualOnlyLoAndZeroCapabilitiesObserved": true,
+    "productionReleaseUnmodified": true,
+    "offlineApprovalOrReceiptFlagUsed": false,
+    "stagingRealBackupAndAppRollbackPending": true
+  },
+  "recordedAt": "2026-11-18T12:41:54+08:00"
+}
