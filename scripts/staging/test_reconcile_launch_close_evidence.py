@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from reconcile_launch_close_evidence import TAIPEI, reconcile_observation, reconcile_range, reconcile_roster, reconcile_signed
+from reconcile_launch_close_evidence import TAIPEI, reconcile_limit, reconcile_observation, reconcile_range, reconcile_roster, reconcile_signed
 from reconcile_launch_close_evidence import reconcile_tpex_suspension, TPEX_STOPPED_TRADING_MIGRATION, TPEX_STOPPED_TRADING_URL
 
 
@@ -169,6 +169,28 @@ class CloseReconciliationTests(unittest.TestCase):
         self.assertEqual(reconcile_roster(self.receipt, self.session, self.cutoff)["receiptStatus"], "timely_review_projection")
         projection.write_text("{}")
         self.assertEqual(reconcile_roster(self.receipt, self.session, self.cutoff)["receiptStatus"], "projection_mismatch")
+
+    def test_limit_receipt_requires_each_capture_clock_and_grants_no_authority(self):
+        capture = {"observedAt": self.stamp(24), "recordedAt": self.stamp(24, 1)}
+        receipt = {"schema": "stockinsider-actual-date-bound-limit-staging-v2",
+                   "session": self.session.isoformat(), "cutoff": self.cutoff.isoformat(),
+                   "checkedAt": self.stamp(25), "captures": [capture] * 3,
+                   "diagnosticResult": {"onePriceLocked": True}, "rawBodiesPersisted": False,
+                   "publicationAuthority": False}
+        self.write(receipt)
+        outcome = reconcile_limit(self.receipt, self.session, self.cutoff)
+        self.assertEqual(outcome["receiptStatus"], "single_symbol_receipt_only")
+        self.assertIs(outcome["retainedOriginalBytesVerified"], False)
+        self.assertIs(outcome["publicationAuthority"], False)
+
+        for invalid in (
+            {"observedAt": self.stamp(24)},
+            {**capture, "recordedAt": self.stamp(23)},
+            {**capture, "recordedAt": self.stamp(26)},
+        ):
+            with self.subTest(invalid=invalid):
+                self.write({**receipt, "captures": [capture, capture, invalid]})
+                self.assertEqual(reconcile_limit(self.receipt, self.session, self.cutoff)["receiptStatus"], "invalid")
 
     def test_disposition_range_requires_same_day_matching_bytes_and_before_cutoff_evidence(self):
         dated = self.receipt.with_name("TWSE-effective-range.json")
