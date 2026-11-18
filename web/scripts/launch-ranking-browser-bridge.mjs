@@ -8,17 +8,41 @@ import {unsafeCitationUrls,unknownRightsCitationUrls} from '../src/lib/vnext/lau
 const args=process.argv.slice(2);
 if(args.length!==2||args[0]!=='--port'||!/^\d{4,5}$/.test(args[1])||Number(args[1])<1024||Number(args[1])>65535)throw Error('launch_test_bridge_arguments');
 const modes=new Set(['ready','chart','empty','not_published','producer_unavailable','schema_unavailable','outage','expired','short_expiry','partial','private','wrong_policy','reported_eps','reported_eps_private','issuer_forecasts','issuer_forecast_misbound']);
+modes.add('candidate_pool');
+const candidateSnapshots = [
+  ['2026-11-09', 901, [['2301', 'waiting'], ['2302', 'eligible']]],
+  ['2026-11-10', 902, [['2301', 'waiting'], ['2303', 'eligible', '24']]],
+  ['2026-11-11', 903, [['2304', 'eligible']]],
+].map(([day, id, entries]) => ({
+  id: '00000000-0000-4000-8000-' + String(id).padStart(12, '0'),
+  cutoff: day + 'T13:30:00Z',
+  rows: entries.map(([symbol, state, code]) => ({
+    symbol, state, industrySnapshot: code ? {
+      revisionId:'00000000-0000-4000-8000-000000000912', code, knownAt:day + 'T13:29:00Z',
+    } : null,
+  })),
+}));
+function candidatePacket(index) {
+  if (index < 0) return null;
+  const successor = candidateSnapshots[index + 1];
+  return {
+    schemaVersion: 'launch-candidate-pool-history-v2',
+    current: candidateSnapshots[index],
+    previous: candidateSnapshots[index - 1] ?? null,
+    next: successor ? { id: successor.id, cutoff: successor.cutoff } : null,
+  };
+}
 const outcomeModes=new Set(['outcome_ready','outcome_unfillable','outcome_evidence_gap','outcome_private']);
 for(const name of outcomeModes)modes.add(name);
 const unsafeCitations=[...unsafeCitationUrls,...unknownRightsCitationUrls];
 for(let i=0;i<unsafeCitations.length;i++)modes.add(`citation_${i}`);
 for(const name of ['missing_rights','wrong_license','wrong_binding','unknown_revision','private_extra','wrong_attribution'])modes.add(`citation_${name}`);
-let mode='ready',packet=launchRankingFixture(1,true,new Date().toISOString()),reads=0,companionReads=0,unsupported=0,controls=0;
+let mode='ready',packet=launchRankingFixture(1,true,new Date().toISOString()),reads=0,companionReads=0,unsupported=0,controls=0,candidateDayReads=0,candidatePinnedReads=0,candidateSourceReads=0;
 function json(response,status,value){response.writeHead(status,{'content-type':'application/json','cache-control':'no-store'});response.end(JSON.stringify(value));}
 async function body(request){let size=0;const chunks=[];for await(const chunk of request){size+=chunk.length;if(size>8192)throw Error('bound');chunks.push(chunk);}return size?JSON.parse(Buffer.concat(chunks).toString('utf8')):{};}
 const server=http.createServer(async(request,response)=>{
   try{
-    if(request.method==='GET'&&request.url==='/__fixture/stats')return json(response,200,{synthetic:true,reads,companionReads,unsupported,controls,mode});
+    if(request.method==='GET'&&request.url==='/__fixture/stats')return json(response,200,{synthetic:true,reads,companionReads,unsupported,controls,mode,candidateDayReads,candidatePinnedReads,candidateSourceReads});
     if(request.method==='POST'&&request.url==='/__fixture/control'){
       if(request.headers['x-test-control']!=='launch-ui-test-only')return json(response,403,{error:'synthetic_control_required'});
       const input=await body(request);if(Object.keys(input).join('|')!=='mode'||!modes.has(input.mode))return json(response,400,{error:'synthetic_mode_invalid'});
@@ -67,6 +91,47 @@ const server=http.createServer(async(request,response)=>{
       if(mode==='reported_eps_private')fact.privateSource='SYNTHETIC_PRIVATE_FINANCIAL_ONLY';
       return json(response,200,{schemaVersion:'vnext-launch-reported-eps-v1',rankingRunId:LAUNCH_TEST_RUN,
         symbol:member.symbol,revisionId:member.revisionId,inputHash:member.inputHash,cutoff:packet.snapshot.cutoff,facts:[fact]});
+    }
+    const candidateDayPath = '/rest/v1/rpc/vnext_launch_candidate_pool_day_v1';
+    const candidateVersionPath = '/rest/v1/rpc/vnext_launch_candidate_pool_history_v2';
+    if (request.method === 'POST' && request.url === candidateDayPath) {
+      const query = await body(request);
+      if (Object.keys(query).join('|') !== 'p_day' || typeof query.p_day !== 'string' || !/^\d{4}-\d{2}-\d{2}$/u.test(query.p_day))
+        return json(response, 400, {code:'SYNTHETIC_CLOSED_QUERY'});
+      candidateDayReads++;
+      if (mode !== 'candidate_pool') return json(response, 200, null);
+      if (query.p_day === '2026-11-12')
+        return json(response, 200, {...candidatePacket(1), rawBody:'SYNTHETIC_PRIVATE_CANDIDATE_ONLY'});
+      const index = candidateSnapshots.findIndex(snapshot => snapshot.cutoff.startsWith(query.p_day + 'T'));
+      return json(response, 200, candidatePacket(index));
+    }
+    if (request.method === 'POST' && request.url === candidateVersionPath) {
+      const query = await body(request);
+      if (Object.keys(query).join('|') !== 'p_catalog_id' ||
+        (query.p_catalog_id !== null && (typeof query.p_catalog_id !== 'string' || !/^[a-f0-9-]{36}$/u.test(query.p_catalog_id))))
+        return json(response, 400, {code:'SYNTHETIC_CLOSED_QUERY'});
+      candidatePinnedReads++;
+      if (mode !== 'candidate_pool') return json(response, 200, null);
+      const index = query.p_catalog_id === null ? candidateSnapshots.length - 1 :
+        candidateSnapshots.findIndex(snapshot => snapshot.id === query.p_catalog_id);
+      return json(response, 200, candidatePacket(index));
+    }
+    if (request.method === 'POST' && request.url === '/rest/v1/rpc/vnext_launch_candidate_clue_history_v1') {
+      const query = await body(request);
+      if (Object.keys(query).sort().join('|') !== 'p_after|p_catalog_id|p_date|p_industry|p_limit|p_source|p_status'
+        || query.p_after !== null || !Number.isInteger(query.p_limit) || query.p_limit < 1 || query.p_limit > 20)
+        return json(response, 400, {code:'SYNTHETIC_CLOSED_QUERY'});
+      candidateSourceReads++;
+      const snapshot = candidateSnapshots[1];
+      if (mode !== 'candidate_pool' || query.p_catalog_id !== snapshot.id) return json(response, 200, null);
+      const row = {clueId:'00000000-0000-4000-8000-000000000911', symbol:'2305', source:'ptt',
+        eventAt:'2026-11-08T17:00:00Z', state:'not_in_saved_pool', industrySnapshot:null};
+      const include = (query.p_date === null || query.p_date === '2026-11-09')
+        && (query.p_source === null || query.p_source === row.source)
+        && (query.p_status === null || query.p_status === row.state) && query.p_industry === null;
+      return json(response, 200, {schemaVersion:'launch-candidate-clue-history-v1', catalogId:snapshot.id,
+        cutoff:snapshot.cutoff, previousSnapshot:null, nextSnapshot:null,
+        rows:include?[row]:[], nextAfter:null, sourceAuthority:false, entryAuthority:false, publicationAuthority:false});
     }
     const issuerEpsPath = '/rest/v1/rpc/vnext_launch_issuer_eps_estimates_v1';
     const issuerFiscalPath = '/rest/v1/rpc/vnext_launch_issuer_fiscal_forecasts_v1';
