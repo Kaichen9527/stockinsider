@@ -11,7 +11,10 @@ const active = { STOCKINSIDER_VNEXT_ENABLED: 'true', STOCKINSIDER_LAUNCH_RANKING
 const morning = { ok: true, policyVersion, result: { session: day, status: 'published' } };
 const evening = { ok: true, policyVersion, result: { status: 'existing_reviewed_cache_only', ranking: { published: true } } };
 const currentWeek = { ok: true, policyVersion, result: { status: 'current', reviewed: 0 } };
-const complete = { ok: true, result: { sessionDate: day, researchReady: true } };
+const complete = { ok: true, result: {
+  sessionDate: day, phase: 'final', status: 'complete', scopeComplete: true, dataComplete: true,
+  researchReady: true, errors: [],
+} };
 
 function plan(at, responses = [], options = {}) {
   const calls = [];
@@ -200,6 +203,31 @@ test('incomplete or wrong-date drain never calls the cycle', () => {
   }
 });
 
+test('final readiness requires the final phase and consistent, error-free queue state', () => {
+  for (const change of [
+    { phase: 'preliminary' },
+    { phase: undefined },
+    { status: 'incomplete' },
+    { scopeComplete: false },
+    { status: 'partial_candidate_data', scopeComplete: false },
+    { errors: undefined },
+    { errors: [{ error: 'stock_data_write_failed' }] },
+  ]) {
+    const reply = { ...complete, result: { ...complete.result, ...change } };
+    const { calls, run } = plan(day + 'T13:30:00Z', [reply, evening]);
+    assert.throws(run, { message: 'launch_final_drain_wrong_scope' });
+    assert.equal(calls.some(item => item.payload.action === 'launch-cycle'), false);
+  }
+});
+
+test('final partial candidate readiness still delegates cohort publication to the writer', () => {
+  const partial = { ...complete, result: { ...complete.result, status: 'partial_candidate_data',
+    scopeComplete: false, dataComplete: false } };
+  const { calls, run } = plan(day + 'T13:30:00Z', [partial, evening]);
+  assert.equal(run().status, 'published');
+  assert.equal(calls.at(-1).payload.action, 'launch-cycle');
+});
+
 test('a date rollover while draining does not publish a different session', () => {
   const { calls, run } = plan([day + 'T15:56:00Z', day + 'T15:58:00Z', day + 'T16:02:00Z'], [complete]);
   assert.equal(run().reason, 'launch_schedule_window_changed');
@@ -267,7 +295,7 @@ test('a date rollover during the weekly audit does not start a final drain', () 
 
 const incompleteFinal = {
   ok: false, error: 'taiwan_refresh_scope_incomplete',
-  result: { status: 'incomplete', phase: 'final', sessionDate: day, researchReady: false, scopeComplete: false, errors: [] },
+  result: { status: 'incomplete', phase: 'final', sessionDate: day, researchReady: false, scopeComplete: false, dataComplete: false, errors: [] },
 };
 const outcomeRefresh = { ok: true, policyVersion,
   result: { status: 'evaluated', session: day, asOf: day + 'T13:30:00Z' } };
@@ -310,6 +338,7 @@ test('evening transport or policy errors remain failures and still run the separ
   for (const [replies, failure] of [
     [[null, openDayNotice], 'launch_final_drain_failed'],
     [[{ ...incompleteFinal, result: { ...incompleteFinal.result, sessionDate: '2026-11-13' } }, openDayNotice], 'launch_final_drain_failed'],
+    [[{ ...incompleteFinal, result: { ...incompleteFinal.result, dataComplete: true } }, openDayNotice], 'launch_final_drain_failed'],
     [[complete, { ...evening, policyVersion: 'unrelated' }, openDayNotice], 'launch_cycle_wrong_policy'],
   ]) {
     const { calls, run } = plan(day + 'T13:30:00Z', replies, { env: gmailEnabled });

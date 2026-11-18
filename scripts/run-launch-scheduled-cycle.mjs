@@ -20,12 +20,17 @@ export function launchScheduledSlot(now) {
   return { sessionDate, slot };
 }
 
+function isFinalDrainScope(result, sessionDate) {
+  return result?.phase === 'final' && result.sessionDate === sessionDate
+    && typeof result.scopeComplete === 'boolean' && result.dataComplete === result.scopeComplete
+    && Array.isArray(result.errors) && result.errors.length === 0;
+}
+
 function isIncompleteFinalDrain(response, sessionDate) {
   const { result } = response ?? {};
   return response?.ok === false && response.error === 'taiwan_refresh_scope_incomplete'
-    && result?.phase === 'final' && result.sessionDate === sessionDate
-    && result.status === 'incomplete' && result.scopeComplete === false && result.researchReady === false
-    && Array.isArray(result.errors) && result.errors.length === 0;
+    && isFinalDrainScope(result, sessionDate) && result.status === 'incomplete'
+    && result.scopeComplete === false && result.researchReady === false;
 }
 
 function callInternalApi(endpoint, payload, timeoutMs, env) {
@@ -172,7 +177,9 @@ export function runLaunchScheduledCycle({
       return { ...retained, outcomeRefresh };
     }
     if (response?.ok !== true) throw new Error('launch_final_drain_failed');
-    if (response.result?.researchReady !== true || response.result.sessionDate !== sessionDate) {
+    const { result: finalDrain } = response;
+    if (!isFinalDrainScope(finalDrain, sessionDate) || finalDrain.researchReady !== true
+      || finalDrain.status !== (finalDrain.scopeComplete ? 'complete' : 'partial_candidate_data')) {
       throw new Error('launch_final_drain_wrong_scope');
     }
     const current = launchScheduledSlot(clock());
