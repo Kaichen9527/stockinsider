@@ -132,3 +132,21 @@ test('ranked detail keeps quarterly EPS and annual forecasts distinct and omits 
   }
   expect((await (await request.get(bridge+'/__fixture/stats')).json()).unsupported).toBe(0);
 });
+
+test('frozen stock scenarios show three reviewed prices and suppress a private packet',async({page,request})=>{
+  for (const mode of ['scenario_ready','scenario_private','ready']) {
+    expect((await request.post(bridge+'/__fixture/control',{headers,data:{mode}})).ok()).toBeTruthy();
+    await page.goto('/');
+    await page.getByRole('link',{name:'5274',exact:true}).click();
+    const section=page.getByRole('region',{name:'基本面與估值'});
+    if (mode==='scenario_ready') {
+      const scenarios=section.getByTestId('launch-reviewed-valuation');
+      await expect(scenarios).toContainText('現金流量折現估值');
+      await expect(scenarios.locator('dd')).toHaveText(['65 元／股','80 元／股','95 元／股']);
+    } else {
+      await expect(section.getByTestId('launch-reviewed-valuation')).toHaveCount(0);
+      await expect(section).toContainText(mode==='ready'?'此榜單版本無可公開的研究股價情境。':'研究股價情境目前無法讀取。');
+      expect(await page.content()).not.toContain('SYNTHETIC_PRIVATE_REVIEWED_SCENARIO');
+    }
+  }
+});

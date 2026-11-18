@@ -12,6 +12,14 @@ const ruleNames:Record<string,string>={trend_close_above_ma50:'收盤高於 MA50
   breakout_or_fixed_closing_hold:'突破或固定原突破價的收盤守穩',chips_foreign5_positive:'外資近 5 日淨買超',chips_foreign20_positive:'外資近 20 日淨買超',
   chips_trust5_positive:'投信近 5 日淨買超',chips_trust20_positive:'投信近 20 日淨買超',market_close_above_ma50:'同市場指數高於 MA50',market_close_above_ma200:'同市場指數高於 MA200'};
 const ratioFormat = new Intl.NumberFormat('zh-TW', {maximumSignificantDigits: 6});
+
+const valuationMethods = {
+  forward_pe: '預估本益比',
+  normalized_pe: '常態化本益比',
+  forward_pb: '預估股價淨值比',
+  ev_ebitda: 'EV／EBITDA',
+  dcf: '現金流量折現',
+} as const;
 export default async function LaunchDetail({symbol,query}:{symbol:string;query:Record<string,string|string[]|undefined>}) {
   const selection=launchDetailQuery(query);
   let read:LaunchRankingRead|null=null,invalid=selection.status==='invalid';
@@ -21,6 +29,7 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
   }
   const member=read?.snapshot?.members.find(item=>item.symbol===symbol),detail=read?.detail;
   const peReference = detail?.forwardPeReference;
+  const scenario = detail?.reviewedValuation;
   const priceHighs = detail?.priceHighs;
   const highComparisons = [
     ['前 25 個交易日', '高於前 25 個交易日高點', priceHighs?.prior25Sessions],
@@ -75,7 +84,15 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
             })}
           </ul>
         </> : <p className="mt-2">{detail.issuerFiscalForecasts ? '此榜單版本無可公開的年度或四季 EPS 預估。' : '年度與四季 EPS 預估目前無法讀取。'}</p>}
-        <p className="mt-2">假設倍數與目標價情境缺少可公開的估值依據。</p>
+        {scenario ? <div className="mt-4" data-testid="launch-reviewed-valuation">
+          <h3 className="font-medium">研究股價情境</h3>
+          <p className="mt-2">{valuationMethods[scenario.method]}估值，適用期間 {scenario.period}。估值日 {scenario.valuationDate}，原研究報價日 {scenario.quoteDate}。</p>
+          <dl className="mt-2 grid grid-cols-3 gap-3">
+            {([['熊', scenario.bear], ['基準', scenario.base], ['牛', scenario.bull]] as const).map(([name, price]) => <div key={name}>
+              <dt>{name}</dt><dd>{ratioFormat.format(price)} 元／股</dd>
+            </div>)}
+          </dl>
+        </div> : <p className="mt-2">{scenario === null ? '此榜單版本無可公開的研究股價情境。' : '研究股價情境目前無法讀取。'}</p>}
       </section>
       <section aria-label="榜單價格圖表" className="min-w-0 rounded-xl border border-slate-300 p-4">
         <h2 className="font-semibold">價格走勢</h2>

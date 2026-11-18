@@ -32,6 +32,8 @@ function candidatePacket(index) {
     next: successor ? { id: successor.id, cutoff: successor.cutoff } : null,
   };
 }
+modes.add('scenario_ready');
+modes.add('scenario_private');
 const outcomeModes=new Set(['outcome_ready','outcome_unfillable','outcome_evidence_gap','outcome_private']);
 for(const name of outcomeModes)modes.add(name);
 const unsafeCitations=[...unsafeCitationUrls,...unknownRightsCitationUrls];
@@ -133,6 +135,23 @@ const server=http.createServer(async(request,response)=>{
       return json(response, 200, {schemaVersion:'launch-candidate-clue-history-v1', catalogId:snapshot.id,
         cutoff:snapshot.cutoff, previousSnapshot:null, nextSnapshot:null,
         rows:include?[row]:[], nextAfter:null, sourceAuthority:false, entryAuthority:false, publicationAuthority:false});
+    }
+
+    if(request.method==='POST'&&request.url==='/rest/v1/rpc/vnext_launch_reviewed_valuation_v1'){
+      const query=await body(request);
+      if(Object.keys(query).sort().join('|')!=='p_ranking_run_id|p_symbol' ||
+        query.p_ranking_run_id!==LAUNCH_TEST_RUN || query.p_symbol!=='5274')
+        return json(response,400,{code:'SYNTHETIC_CLOSED_QUERY'});
+      companionReads++;
+      if(!['scenario_ready','scenario_private'].includes(mode))return json(response,200,null);
+      const member=packet.snapshot.members[0];
+      const {cutoff,session}=packet.snapshot;
+      const value={schemaVersion:'vnext-launch-reviewed-valuation-v1',rankingRunId:LAUNCH_TEST_RUN,
+        symbol:member.symbol,revisionId:member.revisionId,inputHash:member.inputHash,cutoff,
+        valuationDate:session,quoteDate:session,period:String(Number(session.slice(0,4))+1),method:'dcf',
+        unit:'TWD_per_share',bear:65,base:80,bull:95};
+      if(mode==='scenario_private')value.rawOriginal='SYNTHETIC_PRIVATE_REVIEWED_SCENARIO';
+      return json(response,200,value);
     }
     const issuerEpsPath = '/rest/v1/rpc/vnext_launch_issuer_eps_estimates_v1';
     const issuerFiscalPath = '/rest/v1/rpc/vnext_launch_issuer_fiscal_forecasts_v1';

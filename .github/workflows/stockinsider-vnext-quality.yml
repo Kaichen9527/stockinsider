@@ -36,6 +36,7 @@ on:
       - 'migrations/20261117_50_vnext_launch_candidate_clue_history_v1.sql'
       - 'migrations/20261118_56_vnext_source_fence_private_schema_v1.sql'
       - 'migrations/20261118_57_vnext_launch_candidate_pool_day_v1.sql'
+      - 'migrations/20261118_58_vnext_launch_reviewed_valuation_v1.sql'
       - 'deployment/vps/rollback-vnext-source-fence-private-schema-v1.sql'
       - 'deployment/vps/launch-radar-schedule/**'
       - 'scripts/run-launch-scheduled-cycle*.mjs'
@@ -241,6 +242,15 @@ jobs:
               assert fixture.count(marker) == 1
               fixture = fixture.replace(marker, migration.read_text())
           print(fixture)
+          PYCODE
+          docker exec "$container" createdb -U postgres vnext_valuation
+          python3 - <<'PYCODE' | docker exec -i "$container" psql -X -q -v ON_ERROR_STOP=1 -U postgres -d vnext_valuation
+          from pathlib import Path
+          fixture = Path('scripts/vnext-launch-reviewed-valuation-native.test.sql').read_text()
+          migration = Path('migrations/20261118_58_vnext_launch_reviewed_valuation_v1.sql')
+          marker = chr(92) + 'ir ../' + migration.as_posix()
+          assert fixture.count(marker) == 1
+          print(fixture.replace(marker, migration.read_text()))
           PYCODE
       - name: Genuine captured-prefix legacy coexistence and concurrent mode fence
         env:

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {parseLaunchRankingRead,parseLaunchReportedEps,parseLaunchIssuerEpsEstimates,parseLaunchIssuerFiscalForecasts,launchForwardPeReference,readLaunchRankingTransport,launchRankingMemberCurrent,launchDetailQuery} from './launch-ranking-read.ts';
+import {parseLaunchRankingRead,parseLaunchReportedEps,parseLaunchIssuerEpsEstimates,parseLaunchIssuerFiscalForecasts,parseLaunchReviewedValuation,launchForwardPeReference,readLaunchRankingTransport,launchRankingMemberCurrent,launchDetailQuery} from './launch-ranking-read.ts';
 import {launchRankingFixture,LAUNCH_TEST_NOW,LAUNCH_TEST_RUN} from './launch-ranking.test-fixture.ts';
 
 test('new launch read acceptsTop0/1/10 and nullablefinancials under its own exact policy, neverlegacy or partial80',()=>{
@@ -303,4 +303,28 @@ test('missing charts and short display observations preserve unavailable high co
   assert.equal(partial.trailing52Weeks, null);
   assert.deepEqual(partial.knownPeriod, {fromDate:'2026-11-12', previousHigh:106, isNewHigh:false});
   assert.equal(partial.isAllTimeHigh, null);
+});
+
+test('reviewed scenario projection accepts ordered prices under the frozen binding', () => {
+  const packet=launchRankingFixture(1,true);
+  const {snapshot,detail}=packet;
+  const binding={...detail!,cutoff:snapshot.cutoff,session:snapshot.session};
+  assert.equal(parseLaunchReviewedValuation(null,binding),null);
+  const scenario={
+    schemaVersion:'vnext-launch-reviewed-valuation-v1',rankingRunId:snapshot.rankingRunId,
+    revisionId:detail!.revisionId,inputHash:detail!.inputHash,symbol:detail!.symbol,cutoff:snapshot.cutoff,
+    valuationDate:'2026-11-10',quoteDate:'2026-11-09',period:'2027-Q1/2027-Q4',method:'forward_pe',
+    unit:'TWD_per_share',bear:65,base:80,bull:95,
+  };
+  assert.deepEqual(parseLaunchReviewedValuation(scenario,binding),{
+    valuationDate:'2026-11-10',quoteDate:'2026-11-09',period:'2027-Q1/2027-Q4',method:'forward_pe',
+    unit:'TWD_per_share',bear:65,base:80,bull:95,
+  });
+  for (const patch of [
+    {rankingRunId:'00000000-0000-4000-8000-000000000999'}, {inputHash:'f'.repeat(64)},
+    {revisionId:'00000000-0000-4000-8000-000000000999'}, {cutoff:'2026-11-13T13:30:01Z'},
+    {valuationDate:'2026-11-14'}, {quoteDate:'2026-11-11'}, {period:'2027-02-30'},
+    {period:'2027-Q4/2027-Q1'}, {method:'raw_broker_report'}, {unit:'TWD'},
+    {bear:0}, {base:96}, {bull:Number.MAX_SAFE_INTEGER+1}, {privateOriginal:'PRIVATE'},
+  ]) assert.throws(()=>parseLaunchReviewedValuation({...scenario,...patch},binding),/contract_invalid/u);
 });
