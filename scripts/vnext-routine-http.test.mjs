@@ -17,7 +17,7 @@ import {readResearchPublicationCatalog} from './opportunity-v3/research-publicat
 import {readTailNamespace} from './opportunity-v3/research-publication-tail-entry-namespace.mjs';
 import {tailMetadataSha} from './opportunity-v3/research-publication-tail-entry-guard.mjs';
 import {
-  SOURCE_SCOPE_SQL, sourceNamespaceReachability, projectSourceNamespaceReachability,
+  SOURCE_SCOPE_SQL, sourceNamespaceReachability, projectSourceNamespaceReachability, inspectHardenedSourceNamespaceReview,
   assertSourceNamespaceIdleClient,
 } from './vnext-source-namespace-candidate.mjs';
 import { inspectSourceNamespaceEntrypoints } from './vnext-source-namespace-entrypoints.mjs';
@@ -266,16 +266,78 @@ await test('fresh routine-screen HTTP admits from current original receipts befo
     console.log('VNEXT_SOURCE_REACHABILITY_SAFE '+serialized);
    }catch(error){await x.observer.query('ROLLBACK');throw error;}
    x.save('raw-source-current-prerequisite',sourcePrerequisite);const prerequisiteHash=sha(JSON.stringify(sourcePrerequisite));console.log('VNEXT_SOURCE_PREREQUISITE_SAFE '+JSON.stringify({sourceOwnerUsage:sourcePrerequisite.sourceOwnerUsage,inputOwnerUsage:sourcePrerequisite.inputOwnerUsage,descriptorHash:prerequisiteHash,completeCatalog:sourcePrerequisite.completeCatalog,noGrant:true,fullPrivateDescriptorRetained:true}));
-   if(sourcePrerequisite.sourceOwnerUsage!==true)throw Error('vnext_test_source_namespace_not_ready');
+
+    assert.equal(sourcePrerequisite.sourceOwnerUsage,false);
+    assert.equal(sourcePrerequisite.inputOwnerUsage,false);
+    const sourcePrivateRoles=['research_source_fence_owner_v2','research_input_preparation_owner_v2'];
+    const expectedPrep=[
+      'assert_research_source_seal_v2(uuid)',
+      'read_research_observed_claim_v2(text,text,uuid,integer)',
+      'seal_research_sources_v2(jsonb,timestamp with time zone)',
+    ];
+    const readHardening = name => fs.readFileSync(path.join(root,'migrations',name),'utf8');
+    for (const name of [
+      '20261117_42_vnext_internal_candidate_plan_acl_v1.sql',
+      '20261117_44_vnext_legacy_subscription_acl_v1.sql',
+      '20261117_46_vnext_auth_profile_trigger_acl_v1.sql',
+      '20261117_47_vnext_source_guard_trigger_acl_v1.sql',
+    ]) await x.writer.query(readHardening(name));
+    await x.observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');
+    let hardened;
+    try { hardened=await inspectHardenedSourceNamespaceReview(x.observer); }
+    finally { await x.observer.query('ROLLBACK'); }
+    assert.equal(hardened.grantExecuted,false);
+    await x.writer.query(readHardening('20261117_48_vnext_podcast_private_acl_v1.sql'));
+    const beforeRoles=(await x.observer.query(`
+        SELECT r.rolname AS role, has_schema_privilege(r.oid,'public','USAGE') AS public,
+          ARRAY(SELECT p.proname||'('||replace(oidvectortypes(p.proargtypes),', ',',')||')'
+            FROM pg_proc p WHERE p.pronamespace='public'::regnamespace
+              AND p.prosecdef AND p.proowner<>r.oid AND has_function_privilege(r.oid,p.oid,'EXECUTE')
+            ORDER BY 1) AS callable
+        FROM pg_roles r WHERE r.rolname=ANY($1::text[]) ORDER BY r.rolname
+    `,[sourcePrivateRoles])).rows;
+    x.save('private-relocation-before-roles',beforeRoles);
+    const roleSummary=beforeRoles.map(value=>({role:value.role,public:value.public,callable:value.callable}));
+    console.log('SI_PRIVATE_RELOCATION_ROLES '+JSON.stringify(roleSummary));
+    assert.deepEqual(beforeRoles,[
+      {role:sourcePrivateRoles[1],public:false,callable:expectedPrep},
+      {role:sourcePrivateRoles[0],public:false,callable:[]},
+    ]);
+    const names=['research_source_fence_events_v2','research_source_seals_v2','research_source_seal_invalidations_v2'];
+    const refs=names.map(name=>'public.'+name);
+    const receiptMetadata = async schema => (await x.observer.query(`
+      SELECT p.relname,p.oid,p.relacl::text,p.relrowsecurity,p.relforcerowsecurity,
+        ARRAY(SELECT t.oid FROM pg_trigger t WHERE t.tgrelid=p.oid OR t.tgconstrrelid=p.oid ORDER BY t.oid) AS triggers,
+        ARRAY(SELECT k.oid FROM pg_constraint k WHERE k.conrelid=p.oid OR k.confrelid=p.oid ORDER BY k.oid) AS constraints
+      FROM pg_class p JOIN pg_namespace n ON n.oid=p.relnamespace
+      WHERE n.nspname=$1 AND p.relname=ANY($2::text[])
+      ORDER BY p.relname
+    `,[schema,names])).rows;
+    const prior=await receiptMetadata('public');
+    assert.equal(prior.length,3);
+    const atomicSql=fs.readFileSync(path.join(root,'migrations/20261118_56_vnext_source_fence_private_schema_v1.sql'),'utf8');
+    try { await x.writer.query(atomicSql); }
+    catch (error) { await x.writer.query('ROLLBACK'); throw error; }
+    assert.deepEqual(await receiptMetadata('stockinsider_source_fence'),prior);
+    const {rows:[acl]}=await x.observer.query(`
+      SELECT has_schema_privilege('research_source_fence_owner_v2','public','USAGE') AS source_public,
+        has_schema_privilege('research_input_preparation_owner_v2','public','USAGE') AS prep_public,
+        has_schema_privilege('service_role','stockinsider_source_fence','USAGE') AS service_private,
+        has_table_privilege('service_role','public.research_source_seals_v2','SELECT') AS service_view
+    `);
+    assert.deepEqual(acl,{source_public:false,prep_public:false,service_private:false,service_view:false});
+    x.save('private-relocation-safe',{hardenedPredecessor:hardened.predecessor,acl,physicalRelations:prior.length,
+      oidAndAclPreservation:true,originalPublicUsagePreconditionFalse:true,formalGateChanged:false});
+
    const original=await x.snapshot(),setupOwner=randomUUID();await x.writer.query('BEGIN');try{
     await x.writer.query("SELECT set_config('request.headers',$1,true)",[JSON.stringify({'x-stockinsider-writer-release':releaseId})]);assert.equal((await x.writer.query("SELECT public.acquire_production_write_lease('production-data-plane',$1::uuid,300) AS acquired",[setupOwner])).rows[0].acquired,true);
-   for(let n=1;n<=2;n++)await x.writer.query("INSERT INTO public.source_raw_documents(platform,document_url,title,content_text,published_at,collected_at,symbols,metadata) VALUES('twse_insider',$1,'Synthetic current cache only',$2,$3,$3,'[\"2409\"]'::jsonb,$4::jsonb)",['https://www.twse.com.tw/synthetic-routine-source-window-'+n,'Synthetic bounded permitted original '+n+', not acquired real news.',now,JSON.stringify({original_event_at:now})]);
+   for(let n=1;n<=3;n++)await x.writer.query("INSERT INTO public.source_raw_documents(platform,document_url,title,content_text,published_at,collected_at,symbols,metadata) VALUES('twse_insider',$1,'Synthetic current cache only',$2,$3,$3,'[\"2409\"]'::jsonb,$4::jsonb)",['https://www.twse.com.tw/synthetic-routine-source-window-'+n,'Synthetic bounded permitted original '+n+', not acquired real news.',now,JSON.stringify(n===3?{original_event_at:new Date(Date.parse(now)-40*86400000).toISOString()}:{} )]);
     assert.equal((await x.writer.query("SELECT public.release_production_write_lease('production-data-plane',$1::uuid) AS released",[setupOwner])).rows[0].released,true);await x.writer.query('COMMIT');
    }catch(error){await x.writer.query('ROLLBACK');const after=await x.snapshot();x.save('raw-cache-prerequisite-red',{code:error.code,messageHash:sha(String(error.message)),wholeBefore:original,wholeAfter:after,scope:'frozen original source-fence namespace prerequisite; no grant/profile/guard change'});assert.deepEqual(after,original);throw error;}
    const before=await x.snapshot(),start=trace.length;
-   const first=await post('vnext-research',{action:'source-extract'},operatorKey);x.save('cache-window-first-response',first);assert.equal(first.status,200);assert.equal(first.body.result.selected,2);assert.equal(first.body.result.upstreamCoverage,'unknown');assert.equal(first.body.result.eventVolume,null);assert.equal(first.body.result.coverage.find(r=>r.source==='official').status,'cached_window_enumerated');
-   const middle=await x.snapshot();assert.equal(middle.source_run_ledger.count-before.source_run_ledger.count,1);assert.equal(middle.vnext_extractions_v1.count,3);const cursor=middle.source_run_ledger.rows.find(r=>r.connector==='vnext-cache-official');assert.ok(cursor);assert.equal(cursor.content_analyzable,false);assert.equal(cursor.succeeded_at,null);assert.equal(cursor.metadata.enumerated,2);assert.equal(cursor.metadata.accounted,2);assert.equal(cursor.metadata.finished,true);assert.equal(cursor.metadata.cursor,null);noExpensive(middle);
-   const second=await post('vnext-research',{action:'source-extract'},operatorKey);x.save('cache-window-second-response',second);assert.equal(second.status,200);assert.equal(second.body.result.selected,0);assert.equal(second.body.result.replayed,2);const after=await x.snapshot();assert.equal(after.source_run_ledger.count-before.source_run_ledger.count,2);assert.deepEqual(after.vnext_extractions_v1.rows,middle.vnext_extractions_v1.rows);assert.equal(after.production_write_leases.count,0);noExpensive(after);assert.equal(trace.slice(start).filter(e=>e.cursorAppend&&e.commitObserved&&e.ready==='I').length,2);x.save('cache-window-states',{wholeBefore:before,wholeMiddle:middle,wholeAfter:after,actualServiceRoleLedgerCommits:2});results.push({kind:'cache-window',newExtractionReceipts:2,subsequentNewExtractions:0,progressRows:2,eventCoverage:'unknown',eventVolume:null,actualKeysetOver200:'NOT_RUN: separate source contract only',externalAcquisition:false});
+   const first=await post('vnext-research',{action:'source-extract'},operatorKey);x.save('cache-window-first-response',first);assert.equal(first.status,200);assert.equal(first.body.result.selected,2);assert.deepEqual(first.body.result.rejected.map(item=>item.reason),['vnext_cached_original_event_authority_unavailable']);const unverified=first.body.result.sourceAdmissions.evidence.find(item=>item.status==='rejected');assert.equal(unverified?.eventAt,new Date(Date.parse(now)-40*86400000).toISOString());assert.equal(unverified?.identityEventBasis,'original_event');assert.equal(first.body.result.upstreamCoverage,'unknown');assert.equal(first.body.result.eventVolume,null);assert.equal(first.body.result.coverage.find(r=>r.source==='official').status,'cached_window_enumerated');
+   const middle=await x.snapshot();assert.equal(middle.source_run_ledger.count-before.source_run_ledger.count,1);assert.equal(middle.vnext_extractions_v1.count,3);const cursor=middle.source_run_ledger.rows.find(r=>r.connector==='vnext-cache-official');assert.ok(cursor);assert.equal(cursor.content_analyzable,false);assert.equal(cursor.succeeded_at,null);assert.equal(cursor.metadata.enumerated,3);assert.equal(cursor.metadata.accounted,3);assert.equal(cursor.metadata.finished,true);assert.equal(cursor.metadata.cursor,null);noExpensive(middle);
+   const second=await post('vnext-research',{action:'source-extract'},operatorKey);x.save('cache-window-second-response',second);assert.equal(second.status,200);assert.equal(second.body.result.selected,0);assert.equal(second.body.result.replayed,2);const after=await x.snapshot();assert.equal(after.source_run_ledger.count-before.source_run_ledger.count,2);assert.deepEqual(after.vnext_extractions_v1.rows,middle.vnext_extractions_v1.rows);assert.equal(after.production_write_leases.count,0);noExpensive(after);assert.equal(trace.slice(start).filter(e=>e.cursorAppend&&e.commitObserved&&e.ready==='I').length,2);x.save('cache-window-states',{wholeBefore:before,wholeMiddle:middle,wholeAfter:after,actualServiceRoleLedgerCommits:2});results.push({kind:'cache-window',newExtractionReceipts:2,unauthorizedOriginalEventRejected:1,originalEventClockPreserved:true,subsequentNewExtractions:0,progressRows:2,eventCoverage:'unknown',eventVolume:null,actualKeysetOver200:'NOT_RUN: separate source contract only',externalAcquisition:false});
   });
  }finally{
   if(app&&app.exitCode===null){appStopRequested=true;assert.equal(app.kill('SIGTERM'),true);await new Promise(resolve=>app.once('close',resolve));}if(appLog!==undefined)fs.closeSync(appLog);
