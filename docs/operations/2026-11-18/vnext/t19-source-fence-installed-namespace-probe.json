@@ -1,0 +1,56 @@
+{
+  "scope": "isolated PostgreSQL 17.11 full published predecessor, synthetic originals",
+  "candidateAppliedInProduction": false,
+  "protectedGateChanged": false,
+  "publicUsageGranted": false,
+  "actualPredecessor": {
+    "scopeHash": "0fdae5ae5d60769aca8506b4cdddae93df8b93c1827a21f995187de1bf2e4c66",
+    "namespaceHash": "47ffa7365ca6f06e00e10e357d3119cda0eab4ce5266664c3a78a3e4fb7bab90",
+    "catalogHash": "505dc2e5eee0af4c040c4573b3e342686cbac26d5313356dce1edd94b84327ea"
+  },
+  "lockTimeoutRolledBackAllDdl": true,
+  "foreignKeysPreserved": 6,
+  "triggerBindingsPreserved": 27,
+  "sourceWriteSealWithdrawal": true,
+  "observedRoleStatus": "published",
+  "consumerNegativeControls": {
+    "inputPreparation": {
+      "result": "permission_denied",
+      "schemaPublic": true,
+      "compilingType": true,
+      "context": null
+    },
+    "author": {
+      "result": "permission_denied",
+      "schemaPublic": true,
+      "compilingType": true,
+      "context": null
+    },
+    "reviewer": {
+      "result": "permission_denied",
+      "schemaPublic": true,
+      "compilingType": true,
+      "context": null
+    }
+  },
+  "capabilities": [
+    {
+      "role": "research_input_preparation_owner_v2",
+      "public_usage": false,
+      "nonowned_definers": 3
+    },
+    {
+      "role": "research_source_fence_owner_v2",
+      "public_usage": false,
+      "nonowned_definers": 0
+    }
+  ],
+  "fullConsumerPositiveAcceptance": false,
+  "subject": "2784faddcf12ed5333dfdd73333905308f2bfd1e",
+  "priorProbe": "84a888fe61ea64ddea3f0472c26d9adb249176b7",
+  "nativePostgresImage": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+  "consumerControlsMatchBeforeAndAfter": true,
+  "httpSourceAdmissionTestStillPending": true,
+  "recordedAt": "2026-11-18T03:01:39+00:00",
+  "probeScriptSha256": "f104d1de555ed209f56792770dce441ab1e488793f329d8f780e7d16842daea8"
+}
