@@ -8,13 +8,15 @@ export function LaunchCandidateCatalogView({query,data}:{query:LaunchCandidateQu
  const pool='scope' in data&&data.scope==='saved_adjacent_launch_pool_snapshots';
  const clues='scope' in data&&data.scope==='saved_cutoff_source_clues';
  const showingClues=query.view==='sources';
+ const poolDatePicker=pool||(!showingClues&&data.availability==='producer_unavailable');
  const snapshotHref=(view:'pool'|'sources')=>{
   const params=new URLSearchParams();if(catalogId)params.set('catalogId',catalogId);
   if(view==='sources')params.set('view','sources');
   return '/candidates'+(params.size?'?'+params.toString():'');
  };
  const href=(id:string|null,cursor?:string)=>{const p=new URLSearchParams();if(showingClues)p.set('view','sources');if(id)p.set('catalogId',id);p.set('limit',String(query.limit));
-  for(const [key,value] of Object.entries(query.filters))if(value)p.set(key,value);if(cursor)p.set('cursor',cursor);return `/candidates?${p.toString()}`;};
+  for(const [key,value] of Object.entries(query.filters))if(value&&(showingClues||cursor||key!=='date'))p.set(key,value);
+  if(cursor)p.set('cursor',cursor);return `/candidates?${p.toString()}`;};
  return <main className="mx-auto max-w-5xl space-y-6 px-4 py-8" data-testid="launch-candidate-catalog">
   <Link href="/" prefetch={false} className="underline">返回市場與榜單</Link><h1 className="text-2xl font-semibold">來源先行候選紀錄</h1>
   <nav className="flex flex-wrap gap-4" aria-label="候選檢視">
@@ -25,10 +27,18 @@ export function LaunchCandidateCatalogView({query,data}:{query:LaunchCandidateQu
    :pool?<p>這裡顯示已發布榜單的研究池紀錄。產業分類取自各版本截止時已知的資料，未確認的分類會留空。</p>
    :<p>來源提及與入池紀錄分開呈現。沒有已記錄的入池事件只代表歷史未知，無法證明從未入池。來源與入池歷史仍不完整，瀏覽不會啟動研究。</p>}
   {'scope' in data&&data.scope==='synthetic_projection_only'&&<p role="status">受控合成投影示例；不是實際來源目錄、授權或正式研究證據。</p>}
+  {poolDatePicker&&<form method="get" className="flex flex-wrap items-end gap-3">
+   <input type="hidden" name="limit" value={query.limit}/>
+   {Object.entries(query.filters).map(([key,value])=>key!=='date'&&value?<input key={key} type="hidden" name={key} value={value}/>:null)}
+   <label className="grid gap-1">快照日期（台北）<input type="date" name="date" defaultValue={query.filters.date||''} required/></label>
+   <button type="submit">查看日期</button>
+  </form>}
   <form method="get" className="flex flex-wrap items-end gap-3">
    {showingClues&&<input type="hidden" name="view" value="sources"/>}
    {catalogId&&<input type="hidden" name="catalogId" value={catalogId}/>}<input type="hidden" name="limit" value={query.limit}/>
-   <label className="grid gap-1">{pool?'快照日期（台北）':'原始提及日期（台北）'}<input type="date" name="date" defaultValue={query.filters.date||''}/></label>
+   {poolDatePicker
+    ?query.filters.date&&<input type="hidden" name="date" value={query.filters.date}/>
+    :<label className="grid gap-1">原始提及日期（台北）<input type="date" name="date" defaultValue={query.filters.date||''}/></label>}
    {!pool&&<label className="grid gap-1">來源<input name="source" maxLength={40} defaultValue={query.filters.source||''}/></label>}
    {(pool||clues)?<label className="grid gap-1">快照產業<select name="industry" defaultValue={Object.keys(launchPoolIndustryLabels)
       .find(code=>code===query.filters.industry||launchPoolIndustryLabels[code]===query.filters.industry)||''}>
@@ -37,7 +47,7 @@ export function LaunchCandidateCatalogView({query,data}:{query:LaunchCandidateQu
    <label className="grid gap-1">已記錄狀態<select name="status" defaultValue={query.filters.status||''}><option value="">全部</option>{Object.entries(labels).filter(([key])=>clues||showingClues?['not_in_saved_pool','snapshot_waiting','snapshot_eligible','absent_from_successor'].includes(key):key!=='not_in_saved_pool'&&pool===['snapshot_waiting','snapshot_eligible','absent_from_successor'].includes(key)).map(([key,label])=><option key={key} value={key}>{label}</option>)}</select></label>
    <button type="submit">篩選</button>
   </form>
-  {data.availability==='producer_unavailable'?<p role="status">{showingClues?'來源候選尚無可讀取的快照，候選資料的完整性仍待確認。':'目前無法讀取已發布的新版研究池快照。這不代表沒有候選。'}</p>
+  {data.availability==='producer_unavailable'?<p role="status">{showingClues?'來源候選尚無可讀取的快照，候選資料的完整性仍待確認。':query.filters.date?'指定日期目前沒有可讀取的已發布研究池快照。':'目前無法讀取已發布的新版研究池快照。這不代表沒有候選。'}</p>
    :data.availability==='filtered_projection_unavailable'?<p role="status">此版本目前無法安全提供篩選結果；不以其他候選補齊。</p>
    :<><p>固定目錄時間：<time>{data.cutoff}</time></p><p className="break-all text-sm">目錄版本：{data.catalogId}</p>
     {(pool||clues)&&<nav className="flex flex-wrap gap-4" aria-label={showingClues?'已保存的來源候選版本':'已保存的研究池版本'}>

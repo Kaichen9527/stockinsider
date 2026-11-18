@@ -55,6 +55,9 @@ async function verifySavedClueProjection(fixture) {
       'revisionId','00000000-0000-4000-8000-000000000290','code','24','knownAt',$2 - interval '1 minute') END $$;
   `);
   await fixture.writer.query(readFileSync(new URL('../migrations/20261117_38_vnext_launch_candidate_pool_history_v1.sql', import.meta.url), 'utf8'));
+  for (const path of ['20261117_39_vnext_launch_candidate_industry_v1.sql', '20261118_57_vnext_launch_candidate_pool_day_v1.sql']) {
+    await fixture.writer.query(readFileSync(new URL('../migrations/'+path, import.meta.url), 'utf8'));
+  }
   const cutoffDate = '2026-11-15';
   const oldId = '00000000-0000-4000-8000-000000000281';
   const currentId = '00000000-0000-4000-8000-000000000282';
@@ -114,6 +117,21 @@ async function verifySavedClueProjection(fixture) {
 
   await insert(completed[2].content_hash,'2454'); // Inserted later with an older synthetic record clock.
   await snapshot(nextId,currentId,'2026-11-17',[{symbol:'2454',state:'eligible'}]);
+  const datedReader = await fixture.connect();
+  try {
+    await datedReader.query('SET ROLE service_role');
+    const byDay = async day => (await datedReader.query(
+      'SELECT public.vnext_launch_candidate_pool_day_v1($1::date) AS result', [day])).rows[0].result;
+    assert.equal((await byDay('2026-11-15')).current.id, oldId);
+    assert.equal((await byDay('2026-11-17')).current.id, nextId);
+    assert.equal(await byDay('2026-11-14'), null);
+    const selected = await byDay('2026-11-16');
+    const pinned = (await datedReader.query(
+      'SELECT public.vnext_launch_candidate_pool_history_v2($1::uuid) AS result', [currentId])).rows[0].result;
+    assert.deepEqual(selected, pinned);
+    assert.equal(selected.previous.id, oldId);
+    assert.equal(selected.next.id, nextId);
+  } finally { await fixture.close(datedReader); }
   const second = await get(currentId,first.nextAfter);
   assert.deepEqual(second.rows.map(r=>[r.symbol,r.state]), [['2330','absent_from_successor']]);
   assert.equal(second.nextAfter,null);
@@ -135,12 +153,14 @@ async function verifySavedClueProjection(fixture) {
       await reader.query('SET ROLE '+role);
       await assert.rejects(reader.query(
         'SELECT public.vnext_launch_candidate_clue_history_v1(NULL,NULL,10,NULL,NULL,NULL,NULL)'), {code:'42501'});
+      await assert.rejects(reader.query(
+        "SELECT public.vnext_launch_candidate_pool_day_v1('2026-11-16')"), {code:'42501'});
     } finally { await fixture.close(reader); }
   }
   fixture.save('saved-candidate-clue-history-safe', {
     exactPoolReaderUsed:true, controlledRankingRows:true, controlledIndustryFixture:true,
     excludedLateInsertFromOldCatalog:true, olderCatalogUnavailable:true,
-    pinnedWithdrawalAndFourFiltersVerified:true, directBrowserRpcDenials:2,
+    pinnedWithdrawalAndFourFiltersVerified:true, savedDaySelectsExistingVersion:true, directBrowserRpcDenials:4,
     noSourceOrEntryAuthority:true, realRankingVerified:false,
   });
 }

@@ -126,6 +126,22 @@ test('reader uses a single known read RPC and verifies the allowlist without ret
  assert.equal(unavailable.availability,'producer_unavailable');
 });
 
+test('reader selects a saved Taipei day then pins pagination to that version',async()=>{
+ const calls:unknown[]=[];
+ const input=poolPacket();
+ const client={rpc:async(name:string,args:unknown)=>{calls.push([name,args]);return {data:input,error:null};}};
+ const first=await readLaunchCandidateCatalog(query('date=2026-11-16&limit=1'),client);
+ assert.equal(first.availability,'ready');
+ assert.deepEqual(calls,[['vnext_launch_candidate_pool_day_v1',{p_day:'2026-11-16'}]]);
+ assert.ok(first.nextCursor);
+ const next=await readLaunchCandidateCatalog(query('date=2026-11-16&limit=1&catalogId='+input.current.id+'&cursor='+first.nextCursor),client);
+ assert.equal(next.rows[0]?.symbol,'2301');
+ assert.deepEqual(calls[1],['vnext_launch_candidate_pool_history_v2',{p_catalog_id:input.current.id}]);
+ const miss=await readLaunchCandidateCatalog(query('date=2026-11-15'),{rpc:async()=>({data:null,error:null})});
+ assert.equal(miss.availability,'producer_unavailable');
+ await assert.rejects(()=>readLaunchCandidateCatalog(query('date=2026-11-15'),client),/projection_invalid/u);
+});
+
 test('industry filters use the last recorded snapshot classification and report incomplete coverage',()=>{
  const input=poolPacket();
  const oldIndustry={revisionId:id(13),code:'24',knownAt:'2026-11-12T12:00:00Z'};

@@ -35,6 +35,7 @@ on:
       - 'migrations/20261117_49_vnext_launch_candidate_clue_journal_v1.sql'
       - 'migrations/20261117_50_vnext_launch_candidate_clue_history_v1.sql'
       - 'migrations/20261118_56_vnext_source_fence_private_schema_v1.sql'
+      - 'migrations/20261118_57_vnext_launch_candidate_pool_day_v1.sql'
       - 'deployment/vps/rollback-vnext-source-fence-private-schema-v1.sql'
       - 'deployment/vps/launch-radar-schedule/**'
       - 'scripts/run-launch-scheduled-cycle*.mjs'

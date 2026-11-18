@@ -248,6 +248,9 @@ export function launchCandidatePoolPage(value: unknown, query: LaunchCandidateQu
 type PoolReader = { rpc: (name: 'vnext_launch_candidate_pool_history_v2', args: { p_catalog_id: string | null }) =>
   PromiseLike<{ data: unknown; error: unknown }> };
 
+type PoolDayReader = { rpc: (name: 'vnext_launch_candidate_pool_day_v1', args: { p_day: string }) =>
+  PromiseLike<{ data: unknown; error: unknown }> };
+
 const clueStates = ['not_in_saved_pool', ...poolStates] as const;
 type ClueState = typeof clueStates[number];
 type ClueReader = { rpc: (name: 'vnext_launch_candidate_clue_history_v1', args: {
@@ -336,7 +339,7 @@ async function readCandidateClues(query: LaunchCandidateQuery, client: ClueReade
 
 /** The service-role adapter reads saved observations. No source acquisitions,
  * writes, models or legacy ranking fallback are used by this path. */
-export async function readLaunchCandidateCatalog(query: LaunchCandidateQuery, client?: PoolReader | ClueReader) {
+export async function readLaunchCandidateCatalog(query: LaunchCandidateQuery, client?: PoolReader | PoolDayReader | ClueReader) {
   const q = parsedQuery(query);
   if (!client) {
     const { launchRankingEnabled } = await import('./launch-ranking-read.ts');
@@ -348,9 +351,15 @@ export async function readLaunchCandidateCatalog(query: LaunchCandidateQuery, cl
   }
   if (q.cursor !== null && q.catalogId === null) return fail();
   if (q.view === 'sources') return readCandidateClues(q, client as ClueReader);
+  const requestedDay = q.catalogId === null ? q.filters.date : null;
   let result;
-  try { result = await (client as PoolReader).rpc('vnext_launch_candidate_pool_history_v2', { p_catalog_id: q.catalogId }); }
-  catch { return poolProducerUnavailable(); }
+  try {
+    result = requestedDay
+      ? await (client as PoolDayReader).rpc('vnext_launch_candidate_pool_day_v1', { p_day: requestedDay })
+      : await (client as PoolReader).rpc('vnext_launch_candidate_pool_history_v2', { p_catalog_id: q.catalogId });
+  } catch { return poolProducerUnavailable(); }
   if (result.error || result.data === null) return poolProducerUnavailable();
-  return launchCandidatePoolPage(result.data, q);
+  const page = launchCandidatePoolPage(result.data, q);
+  if (requestedDay && new Date(Date.parse(page.cutoff) + 8 * 3_600_000).toISOString().slice(0, 10) !== requestedDay) return fail();
+  return page;
 }

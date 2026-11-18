@@ -98,12 +98,23 @@ test('canonical page renders saved pool states and pins the next page',async()=>
     {symbol:'2301',state:'eligible',industrySnapshot:{revisionId:id(42),code:'24',knownAt:'2026-11-14T02:00:00Z'}}]},
   previous:{id:id(959),cutoff:'2026-11-13T13:30:00Z',rows:[{symbol:'2299',state:'eligible',industrySnapshot:null}]},next:null};
  const f=actualPage(true,q=>launchCandidatePoolPage(p,q,now));
- const first=await f.render({limit:'1'});
+ const first=await f.render({limit:'1',date:'2026-11-14'});
  for(const label of ['快照日期','本版未出現','確切離池時間與原因未保存','較早版本'])assert.ok(first.includes(label));
+ const forms=first.match(/<form[\s\S]*?<\/form>/gu);
+ assert.equal(forms?.length,2);
+ assert.match(forms![0],/查看日期/u);
+ assert.doesNotMatch(forms![0],/name="catalogId"|name="cursor"/u);
+ assert.match(forms![1],/name="catalogId"/u);
+ const older=/href="([^"]+)"[^>]*>較早版本/u.exec(first)?.[1]?.replaceAll('&amp;','&');
+ assert.ok(older);
+ const olderParams=new URL(older,'http://127.0.0.1').searchParams;
+ assert.equal(olderParams.get('catalogId'),p.previous.id);
+ assert.equal(olderParams.has('date'),false);
  const href=/href="([^"]+)"[^>]*>下一頁/u.exec(first)?.[1]?.replaceAll('&amp;','&');
  assert.ok(href);
  const params=Object.fromEntries(new URL(href,'http://127.0.0.1').searchParams);
  assert.equal(params.catalogId,p.current.id);
+ assert.equal(params.date,'2026-11-14');
  const second=await f.render(params);
  assert.match(second,/快照當時等待/u);
  assert.ok(!second.includes('2299'));
