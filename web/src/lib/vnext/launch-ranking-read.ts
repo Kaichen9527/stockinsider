@@ -34,6 +34,18 @@ export type LaunchRankingChart = {
   schemaVersion:'launch-frozen-chart-v1';priceBasis:'adjusted_to_signal_session';seriesRevision:string;priceRevision:string;calendarRevision:string;actionsRevision:string;
   cutoff:string;throughSession:string;displayFrom:string;warmupSessions:239;candles:LaunchChartCandle[];
 };
+
+type LaunchPriceHighComparison = { fromDate: string; previousHigh: number; isNewHigh: boolean };
+export type LaunchPriceHighs = {
+  schemaVersion: 'launch-frozen-price-highs-v1';
+  seriesRevision: string;
+  throughSession: string;
+  currentHigh: number;
+  prior25Sessions: LaunchPriceHighComparison | null;
+  trailing52Weeks: LaunchPriceHighComparison | null;
+  knownPeriod: LaunchPriceHighComparison | null;
+  isAllTimeHigh: null;
+};
 export type LaunchReportedEps = {basis:'basic'|'diluted';periodStart:string;periodEnd:string;amount:number;filedAt:string;knownAt:string;sourceUrl:string};
 export type LaunchIssuerEpsEstimate={periodStart:string;periodEnd:string;amount:number;publishedAt:string;knownAt:string;sourceUrl:string};
 export type LaunchIssuerFiscalForecast = {
@@ -46,7 +58,7 @@ export type LaunchForwardPeReference = {
   periods: Array<Pick<LaunchIssuerFiscalForecast, 'horizon' | 'periodStart' | 'periodEnd'> & { multiple: number | null }>;
 };
 export type LaunchRankingDetail = {arithmeticVersion:typeof LAUNCH_RANKING_ARITHMETIC;rankingRunId:string;symbol:string;revisionId:string;scoreRevision:string;launchQualificationRevision:string;inputHash:string;
-  summary:string|null;scoreEvidence:LaunchRankingRule[];citations:LaunchPublicCitation[];chart:LaunchRankingChart|null;reportedEps?:LaunchReportedEps[];issuerEpsEstimates?:LaunchIssuerEpsEstimate[];issuerFiscalForecasts?:LaunchIssuerFiscalForecast[];forwardPeReference?:LaunchForwardPeReference|null};
+  summary:string|null;scoreEvidence:LaunchRankingRule[];citations:LaunchPublicCitation[];chart:LaunchRankingChart|null;priceHighs:LaunchPriceHighs|null;reportedEps?:LaunchReportedEps[];issuerEpsEstimates?:LaunchIssuerEpsEstimate[];issuerFiscalForecasts?:LaunchIssuerFiscalForecast[];forwardPeReference?:LaunchForwardPeReference|null};
 export type LaunchRankingRead = {availability:'ready'|'not_published'|'producer_unavailable'|'not_found'|'schema_unavailable'|'unavailable';reason:string|null;
   readAt:string;snapshot:LaunchRankingSnapshot|null;current:LaunchRankingCurrent[];detail:LaunchRankingDetail|null};
 type Row=Record<string,unknown>;
@@ -189,6 +201,35 @@ function frozenChart(value:unknown,snapshot:LaunchRankingSnapshot,selected:Launc
   return {schemaVersion:'launch-frozen-chart-v1',priceBasis:'adjusted_to_signal_session',seriesRevision:value.seriesRevision,priceRevision:price,calendarRevision:calendar,actionsRevision:actions,
     cutoff,throughSession:session,displayFrom,warmupSessions:239,candles};
 }
+
+/** The frozen chart RPC already pins every completed venue session, action,
+ * and source observation in its display window. Warmup is for indicators. */
+function frozenPriceHighs(chart: LaunchRankingChart | null): LaunchPriceHighs | null {
+  if (!chart) return null;
+  const current = chart.candles.at(-1)!;
+  const prior = chart.candles.slice(0, -1).filter(candle => candle.time >= chart.displayFrom);
+  const start = new Date(chart.throughSession + 'T00:00:00Z');
+  start.setUTCDate(start.getUTCDate() - 52 * 7);
+  const trailingStart = start.toISOString().slice(0, 10);
+  const compare = (candles: LaunchChartCandle[], fromDate: string) => {
+    if (candles.length === 0) return null;
+    const previousHigh = Math.max(...candles.map(candle => candle.high));
+    return { fromDate, previousHigh, isNewHigh: current.high > previousHigh };
+  };
+  const prior25 = prior.slice(-25);
+  return {
+    schemaVersion: 'launch-frozen-price-highs-v1',
+    seriesRevision: chart.seriesRevision,
+    throughSession: chart.throughSession,
+    currentHigh: current.high,
+    prior25Sessions: prior25.length === 25 ? compare(prior25, prior25[0].time) : null,
+    trailing52Weeks: prior.length > 0 && prior[0].time <= trailingStart
+      ? compare(prior.filter(candle => candle.time >= trailingStart), trailingStart)
+      : null,
+    knownPeriod: prior.length > 0 ? compare(prior, prior[0].time) : null,
+    isAllTimeHigh: null,
+  };
+}
 export function parseLaunchRankingRead(value:unknown,query:{rankingRunId?:string;symbol?:string}={},now=new Date().toISOString()):LaunchRankingRead {
   envelope(value);
   if(!stamp(now)||query.rankingRunId!==undefined&&!uuid(query.rankingRunId)||query.symbol!==undefined&&!symbol(query.symbol))invalid();
@@ -229,8 +270,9 @@ export function parseLaunchRankingRead(value:unknown,query:{rankingRunId?:string
       ||d.arithmeticVersion!==LAUNCH_RANKING_ARITHMETIC||d.rankingRunId!==snapshot.rankingRunId||d.symbol!==selected.symbol||d.revisionId!==selected.revisionId||d.scoreRevision!==selected.scoreRevision
       ||d.launchQualificationRevision!==selected.launchQualificationRevision||d.inputHash!==selected.inputHash||d.summary!==null&&!text(d.summary,2000)||!Array.isArray(d.citations)||d.citations.length>30)invalid();
     const citations=d.citations.map(item=>{const citation=parseLaunchPublicCitation(item);if(!citation)invalid();return citation;});
+    const chart=frozenChart(d.chart,snapshot,selected);
     detail={arithmeticVersion:LAUNCH_RANKING_ARITHMETIC,rankingRunId:snapshot.rankingRunId,symbol:selected.symbol,revisionId:selected.revisionId,scoreRevision:selected.scoreRevision,launchQualificationRevision:selected.launchQualificationRevision,
-      inputHash:selected.inputHash,summary:d.summary as string|null,scoreEvidence:rules(d.scoreEvidence,snapshot,selected),citations,chart:frozenChart(d.chart,snapshot,selected)};
+      inputHash:selected.inputHash,summary:d.summary as string|null,scoreEvidence:rules(d.scoreEvidence,snapshot,selected),citations,chart,priceHighs:frozenPriceHighs(chart)};
   }
   return {availability:value.availability as LaunchRankingRead['availability'],reason:value.reason as string|null,readAt:now,snapshot,current:live,detail};
 }

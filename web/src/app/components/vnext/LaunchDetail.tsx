@@ -21,6 +21,12 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
   }
   const member=read?.snapshot?.members.find(item=>item.symbol===symbol),detail=read?.detail;
   const peReference = detail?.forwardPeReference;
+  const priceHighs = detail?.priceHighs;
+  const highComparisons = [
+    ['前 25 個交易日', '高於前 25 個交易日高點', priceHighs?.prior25Sessions],
+    ['52 週', '52 週新高', priceHighs?.trailing52Weeks],
+    ['已知期間', '已知期間新高', priceHighs?.knownPeriod],
+  ] as const;
   if(selection.status==='bound'&&member&&(member.revisionId!==selection.revisionId||member.scoreRevision!==selection.scoreRevision))invalid=true;
   const outcome=!disabled&&!invalid&&read?.availability==='ready'&&read.snapshot&&member&&detail
     ?await readPublicLaunchOutcome({rankingRunId:read.snapshot.rankingRunId,symbol,signalSession:read.snapshot.session,signalCutoff:read.snapshot.cutoff}):null;
@@ -75,6 +81,18 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
         <h2 className="font-semibold">價格走勢</h2>
         {detail.chart?<div className="mt-2 space-y-3">
           <p className="text-sm">顯示期間 {detail.chart.displayFrom} 至 {detail.chart.throughSession}。價格依榜單交易日調整。</p>
+
+          {priceHighs && <div className="text-sm" data-testid="launch-frozen-price-highs">
+            <p>榜單日調整後最高價 {ratioFormat.format(priceHighs.currentHigh)} 元。</p>
+            <ul className="mt-1 space-y-1">
+              {highComparisons.map(([label, newHighLabel, comparison]) => <li key={label}>
+                {comparison ? <>
+                  {comparison.isNewHigh ? newHighLabel : label}。比較起日 {comparison.fromDate}，前高 {ratioFormat.format(comparison.previousHigh)} 元。
+                </> : <>{label}比較資料不足。</>}
+              </li>)}
+            </ul>
+            <p className="mt-1">全交易歷史涵蓋範圍未確認。</p>
+          </div>}
           <StockChart key={detail.chart.seriesRevision} data={detail.chart.candles}
             rankingWindow={{cutoff:detail.chart.cutoff,displayFrom:detail.chart.displayFrom}}/>
         </div>:<p className="mt-2">尚無經驗證的調整後圖表資料。</p>}

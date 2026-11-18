@@ -21,6 +21,12 @@ test('frozen detail charts switch daily, calendar week and month at the original
   await page.goto('/');
   await page.getByRole('link',{name:'5274',exact:true}).click();
   const section=page.getByRole('region',{name:'榜單價格圖表'});
+  const highs=section.getByTestId('launch-frozen-price-highs');
+  await expect(highs).toContainText('榜單日調整後最高價 108 元');
+  await expect(highs).toContainText('高於前 25 個交易日高點');
+  await expect(highs).toContainText('52 週新高');
+  await expect(highs).toContainText('已知期間新高');
+  await expect(highs).toContainText('全交易歷史涵蓋範圍未確認');
   await expect(section.getByRole('button',{name:'日線'})).toHaveAttribute('aria-pressed','true');
   await expect(section.getByTestId('launch-price-chart').locator('canvas').first()).toBeVisible();
   const before=await (await request.get(bridge+'/__fixture/stats')).json();

@@ -49,6 +49,7 @@ const server=http.createServer(async(request,response)=>{
       mode=input.mode;
       const clock=outcomeModes.has(mode)?outcomeFixture.ref.signalSession+'T13:31:00Z':new Date().toISOString();
       packet=launchRankingFixture(mode==='empty'?0:1,true,clock,mode==='chart');controls++;
+      if(mode==='chart')packet.detail.chart.candles.at(-1).high=108;
       // Only an explicit test-control write replaces a synthetic packet.
       // Repeated RPC reads never refresh a proof, source or publication clock.
       if(mode==='expired')packet.current.members.forEach(member=>{member.expiresAt=new Date(Date.now()-1000).toISOString();});

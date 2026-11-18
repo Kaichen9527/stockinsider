@@ -264,3 +264,43 @@ test('implied forward P/E uses the original score close and the exact positive f
   chartDetail.chart!.priceRevision='e0';
   assert.equal(launchForwardPeReference(chartDetail, [base]), null);
 });
+
+test('frozen price highs separate 25 sessions, the exact 52-week boundary, and visible known history', () => {
+  const packet = launchRankingFixture(1, true, undefined, true);
+  const chart = packet.detail!.chart!;
+  const current = chart.candles.at(-1)!;
+  current.high = 122;
+  chart.candles.find(candle => candle.time === '2025-11-14')!.high = 121;
+  chart.candles.find(candle => candle.time === '2025-11-13')!.high = 140;
+  chart.candles[0].high = 900;
+  const high = parseLaunchRankingRead(packet, {symbol:'5274'}, LAUNCH_TEST_NOW).detail!.priceHighs!;
+  assert.equal(high.schemaVersion, 'launch-frozen-price-highs-v1');
+  assert.equal(high.seriesRevision, chart.seriesRevision);
+  assert.equal(high.throughSession, chart.throughSession);
+  assert.equal(high.currentHigh, 122);
+  const visible = chart.candles.filter(candle => candle.time >= chart.displayFrom);
+  assert.deepEqual(high.prior25Sessions, {fromDate:visible.at(-26)!.time, previousHigh:106, isNewHigh:true});
+  assert.deepEqual(high.trailing52Weeks, {fromDate:'2025-11-14', previousHigh:121, isNewHigh:true});
+  assert.deepEqual(high.knownPeriod, {fromDate:visible[0].time, previousHigh:140, isNewHigh:false});
+  assert.equal(high.isAllTimeHigh, null);
+
+  current.high = 121;
+  const tied = parseLaunchRankingRead(packet, {symbol:'5274'}, LAUNCH_TEST_NOW).detail!.priceHighs!;
+  assert.equal(tied.trailing52Weeks!.isNewHigh, false);
+  Object.assign(packet.detail!, {priceHighs:{isAllTimeHigh:true}});
+  assert.throws(() => parseLaunchRankingRead(packet, {symbol:'5274'}, LAUNCH_TEST_NOW), /contract_invalid/u);
+});
+
+test('missing charts and short display observations preserve unavailable high comparisons', () => {
+  const query = {symbol:'5274'};
+  const unavailable = launchRankingFixture(1, true);
+  assert.equal(parseLaunchRankingRead(unavailable, query, LAUNCH_TEST_NOW).detail!.priceHighs, null);
+  const packet = launchRankingFixture(1, true, undefined, true);
+  const chart = packet.detail!.chart!;
+  chart.candles = chart.candles.filter(candle => candle.time < chart.displayFrom || candle.time >= '2026-11-12');
+  const partial = parseLaunchRankingRead(packet, query, LAUNCH_TEST_NOW).detail!.priceHighs!;
+  assert.equal(partial.prior25Sessions, null);
+  assert.equal(partial.trailing52Weeks, null);
+  assert.deepEqual(partial.knownPeriod, {fromDate:'2026-11-12', previousHigh:106, isNewHigh:false});
+  assert.equal(partial.isAllTimeHigh, null);
+});
