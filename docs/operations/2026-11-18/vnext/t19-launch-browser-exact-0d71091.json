@@ -1,0 +1,31 @@
+{
+  "schema": "stockinsider-t19-launch-desktop-mobile-v1",
+  "subject": "0d710911b9c4759469fc8b510696a417747500bf",
+  "tree": "6f6338900e6194040f37e5b16e5572785e526e47",
+  "runtime": "Next.js 16.3.4 production standalone",
+  "browser": "Google Chrome for Testing 143.0.7499.4",
+  "browserBinarySha256": "20ffc88be1c6f7dc8351bebfaca965ff9a07617bddf696f0b67ef85e5868b29a",
+  "nextRequiredFilesSha256": "a9632e31f73b4c2b15fc12ddd3dfee56234d770da9f325a37fd95700454f8c07",
+  "browserRawJsonSha256": "27f7803279d4eb61c1c9ad6a8a78e63bdbedc1bfe534d1bc26ad1cbc537e899a",
+  "playwrightStartUtc": "2026-11-18T07:15:20.433Z",
+  "desktop": 11,
+  "mobile": 11,
+  "failed": 0,
+  "skipped": 0,
+  "scope": "loopback synthetic ranking and outcome transport on Contabo staging",
+  "formalSourceOrModelAcceptance": false,
+  "productionProcessAndReleaseFingerprintMatched": true,
+  "cases": [
+    "ranked detail separates tracked price, modeled fill, costs and uncertain boundaries",
+    "ranked detail separates an unfillable opening, an evidence gap and private performance data",
+    "performance page shows first and repeated signals with independent denominators",
+    "real Home/stock route reads newpolicy Top10/nullfinance/16rules through exactnewRPC withoutlegacyfallback",
+    "frozen detail charts switch daily, calendar week and month at the original cutoff",
+    "missing schema,missingproducer,notpublished and genuineTop0 remainvisiblydifferent",
+    "partialweights/mixedpolicy/privateextra reject;expiredcurrentproof preservesfrozenrankingwithouteligiblelabel",
+    "explicitunknownrun,mismatchedresearch,arrayandmixedlegacyquery neverdisplaylatestoroldpolicycontent",
+    "openpage automaticallydemotes shortqualification withoutreadingorrenewingproof andkeepsfrozenrun",
+    "ranked detail and API show only the same-run reported EPS projection",
+    "ranked detail keeps quarterly EPS and annual forecasts distinct and omits a misbound ratio"
+  ]
+}
