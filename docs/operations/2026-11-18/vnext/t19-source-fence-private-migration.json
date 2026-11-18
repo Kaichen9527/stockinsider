@@ -1,0 +1,173 @@
+{
+  "schema": "stockinsider.t19.source-receipt-schema-migration.v1",
+  "subjectPr": 411,
+  "unchangedPrHead": "2784faddcf12ed5333dfdd73333905308f2bfd1e",
+  "prototypeProof": "f52376b080495a0b6c7acc8e4006e96fe91f1ca5",
+  "testedArtifact": {
+    "githubId": 14391537130,
+    "builtMerge": "e96583719b5722f1c81078987d03bd3914a055ae",
+    "builtTree": "cd25b1b4c963557feba769e543adf38b4831d6fe",
+    "nextVersion": "16.3.4",
+    "postgresVersion": "17.11"
+  },
+  "candidateSqlSha256": "b896f0964440a168fd443547df0bdefdf2a99dc7b35920cd73e13cf841bbb603",
+  "rollbackSqlSha256": "cd8408a1ad370c4fa69031807ac1c910f09fc673536b4c98680550921e25ab52",
+  "testing": {
+    "native": {
+      "scope": "isolated PostgreSQL 17.11 full published predecessor, synthetic originals",
+      "candidateAppliedInProduction": false,
+      "protectedGateChanged": false,
+      "publicUsageGranted": false,
+      "actualPredecessor": {
+        "scopeHash": "0fdae5ae5d60769aca8506b4cdddae93df8b93c1827a21f995187de1bf2e4c66",
+        "namespaceHash": "47ffa7365ca6f06e00e10e357d3119cda0eab4ce5266664c3a78a3e4fb7bab90",
+        "catalogHash": "505dc2e5eee0af4c040c4573b3e342686cbac26d5313356dce1edd94b84327ea"
+      },
+      "lockTimeoutRolledBackAllDdl": true,
+      "foreignKeysPreserved": 6,
+      "triggerBindingsPreserved": 27,
+      "rollbackRestoredOldFailureAndPreservedReceipts": true,
+      "reapplyRetainedWithdrawal": true,
+      "sourceWriteSealWithdrawal": true,
+      "observedRoleStatus": {
+        "beforeWithdrawal": "published",
+        "afterWithdrawal": "withdrawn"
+      },
+      "secondApplyFailedClosedWithoutChanges": true,
+      "consumerNegativeControls": {
+        "inputPreparation": {
+          "result": "permission_denied",
+          "schemaPublic": true,
+          "compilingType": true,
+          "context": null
+        },
+        "author": {
+          "result": "permission_denied",
+          "schemaPublic": true,
+          "compilingType": true,
+          "context": null
+        },
+        "reviewer": {
+          "result": "permission_denied",
+          "schemaPublic": true,
+          "compilingType": true,
+          "context": null
+        }
+      },
+      "capabilities": [
+        {
+          "role": "research_input_preparation_owner_v2",
+          "public_usage": false,
+          "nonowned_definers": 3
+        },
+        {
+          "role": "research_source_fence_owner_v2",
+          "public_usage": false,
+          "nonowned_definers": 0
+        }
+      ],
+      "fullConsumerPositiveAcceptance": false
+    },
+    "actualHttp": {
+      "appliesExactForwardFile": true,
+      "actualHttpTrialGitBlob": "e212fcc615d6c45faef78cab8fad8a43d7f511c0",
+      "catalog": {
+        "hardenedPredecessor": {
+          "scopeHash": "0fdae5ae5d60769aca8506b4cdddae93df8b93c1827a21f995187de1bf2e4c66",
+          "namespaceHash": "47ffa7365ca6f06e00e10e357d3119cda0eab4ce5266664c3a78a3e4fb7bab90",
+          "catalogHash": "505dc2e5eee0af4c040c4573b3e342686cbac26d5313356dce1edd94b84327ea"
+        },
+        "acl": {
+          "source_public": false,
+          "prep_public": false,
+          "service_private": false,
+          "service_view": false
+        },
+        "physicalRelations": 3,
+        "oidAndAclPreservation": true,
+        "originalPublicUsagePreconditionFalse": true,
+        "formalGateChanged": false
+      },
+      "cache": [
+        {
+          "step": "cache-window-first-response",
+          "status": 200,
+          "rejectedReasons": [
+            "vnext_cached_original_event_authority_unavailable"
+          ],
+          "replayed": 0,
+          "upstreamCoverage": "unknown",
+          "selected": 2
+        },
+        {
+          "step": "cache-window-second-response",
+          "status": 200,
+          "rejectedReasons": [
+            "vnext_cached_original_event_authority_unavailable"
+          ],
+          "replayed": 2,
+          "upstreamCoverage": "unknown",
+          "selected": 0
+        }
+      ],
+      "passed": 8,
+      "failed": 0,
+      "actualDeadlineAndRetryTestsPassed": true,
+      "results": [
+        {
+          "kind": "routine-admitted",
+          "newJobs": 1,
+          "newMembers": 1,
+          "startedAttempts": 0,
+          "providerInvocations": 0,
+          "noExternalIO": true
+        },
+        {
+          "kind": "real-deadline-expiry",
+          "actualServer120SecondDeadline": true,
+          "noClockOverride": true,
+          "expiredAttemptsRefunded": 0,
+          "retryRows": 1,
+          "retryIdempotent": true,
+          "totalStartedAttempts": 2,
+          "providerInvocations": 0,
+          "noExternalIO": true,
+          "secondExpiryExit": "NOT_RUN"
+        },
+        {
+          "kind": "repeat-and-withdrawal",
+          "jobRowsImmutable": true,
+          "originalsRetained": true,
+          "noAdditionalStartedAttempts": true,
+          "providerInvocations": 0,
+          "noExternalIO": true
+        },
+        {
+          "kind": "cache-window",
+          "newExtractionReceipts": 2,
+          "unauthorizedOriginalEventRejected": 1,
+          "originalEventClockPreserved": true,
+          "subsequentNewExtractions": 0,
+          "progressRows": 2,
+          "eventCoverage": "unknown",
+          "eventVolume": null,
+          "actualKeysetOver200": "NOT_RUN: separate source contract only",
+          "externalAcquisition": false
+        }
+      ],
+      "pendingQueries": 0
+    },
+    "ciIntegrationPatch": {
+      "gitApplyCheckPassed": true,
+      "status": "proposal_not_run_in_protected_ci"
+    }
+  },
+  "bounds": {
+    "sourceRowsAndMarketSessions": "synthetic",
+    "originalSourceAndModelYetToBeAccepted": true,
+    "reviewRequired": true,
+    "protectedWorkflowUnmodified": true,
+    "productionUnmodified": true
+  },
+  "recordedAt": "2026-11-18T11:52:29+08:00"
+}

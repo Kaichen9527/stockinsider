@@ -9,7 +9,7 @@ const owner='research_source_fence_owner_v2';
 const prep='research_input_preparation_owner_v2';
 const release='a'.repeat(40);
 const lease='00000000-0000-4000-8000-000000000260';
-const root='https://www.twse.com.tw/synthetic-source-fence-full-prefix';
+const root='https://www.twse.com.tw/synthetic-source-fence-private-migration';
 const names=['research_source_fence_events_v2','research_source_seals_v2','research_source_seal_invalidations_v2'];
 const refs=names.map(name=>'public.'+name);
 const fn=['research_source_fence_record_v2()','seal_research_sources_v2(jsonb,timestamptz)',
@@ -146,19 +146,8 @@ try{
    "WHERE table_.oid=ANY($1::regclass[]) AND a.grantee<>table_.relowner ORDER BY name,grantee,privilege",
   ].join('\n'),[refs])).rows;
   assert.deepEqual(grantees,[{name:'research_source_seals_v2',grantee:prep,privilege:'SELECT',grantable:false}]);
-  const probe=readFile('./fixtures/source-fence-namespace/prebound-private-schema.sql');
-  assert.ok(probe.includes("current_database()<>'stockinsider_source_fence_probe'"));
-  const bound=probe.replace("current_database()<>'stockinsider_source_fence_probe'","current_database()<>'vnext_worker'");
-  assert.ok(bound.endsWith('COMMIT;\n'));
-  const atomicSql=[
-    bound.slice(0,-'COMMIT;\n'.length),
-    ...refs.map(ref=>'ALTER TABLE '+ref+' SET SCHEMA stockinsider_source_fence;'),
-    ...names.map(name=>'CREATE VIEW public.'+name+' WITH(security_invoker=true) AS SELECT * FROM stockinsider_source_fence.'+name+';'),
-    'REVOKE ALL ON '+refs.join(',')+' FROM PUBLIC,anon,authenticated,service_role;',
-    'GRANT SELECT ON public.research_source_seals_v2 TO research_input_preparation_owner_v2;',
-    'COMMIT;',
-  ].join('\n');
-  await x.writer.query("SET stockinsider.source_fence_probe='enabled';");
+  const atomicSql=readFile('../../migrations/20261118_56_vnext_source_fence_private_schema_v1.sql');
+  const rollbackSql=readFile('../../deployment/vps/rollback-vnext-source-fence-private-schema-v1.sql');
   const hold=await x.connect();
   try {
     await hold.query('BEGIN');
@@ -210,8 +199,43 @@ try{
   assert.deepEqual(await counts(x.observer),{documents:2,events:2,invalidations:1});
   assert.equal((await x.observer.query('SELECT public.research_publication_source_state_v2($1) AS state',[seal.seal_id])).rows[0].state,'withdrawn');
   await assert.rejects(x.observer.query('SELECT public.assert_research_source_seal_v2($1)',[seal.seal_id]),/source_seal_invalidated_or_missing/u);
+  stage='rollback preserves receipts, bindings and visible public names';
+  const withdrawnCounts=await counts(x.observer);
+  const rollbackHold=await x.connect();
+  try {
+    await rollbackHold.query('BEGIN');
+    await rollbackHold.query('LOCK TABLE stockinsider_source_fence.research_source_fence_events_v2 IN ACCESS SHARE MODE');
+    await assert.rejects(x.writer.query(rollbackSql),{code:'55P03'});
+    await x.writer.query('ROLLBACK');
+    assert.deepEqual(await catalog(x.observer,'stockinsider_source_fence'),prior);
+    assert.deepEqual(await counts(x.observer),withdrawnCounts);
+  }finally{await rollbackHold.query('ROLLBACK');await x.close(rollbackHold);}
+  await x.writer.query(rollbackSql);
+  assert.equal((await x.observer.query("SELECT to_regnamespace('stockinsider_source_fence') IS NULL AS removed")).rows[0].removed,true);
+  assert.deepEqual(await catalog(x.observer,'public'),prior);
+  assert.deepEqual(await counts(x.observer),withdrawnCounts);
+  assert.equal((await x.observer.query('SELECT count(*)::int AS count FROM public.research_source_seals_v2')).rows[0].count,1);
+  await assert.rejects(guardedSourceWrites(x,c=>insert(c,root+'#si-revision-rollback')),{
+    code:'42501',message:'permission denied for schema public',
+  });
+  assert.deepEqual(await counts(x.observer),withdrawnCounts);
+  proof.rollbackRestoredOldFailureAndPreservedReceipts=true;
+
+  stage='real SQL reapplies cleanly after rollback';
+  await x.writer.query(atomicSql);
+  assert.deepEqual(await catalog(x.observer,'stockinsider_source_fence'),prior);
+  assert.deepEqual(await counts(x.observer),withdrawnCounts);
+  assert.equal((await x.observer.query('SELECT public.research_publication_source_state_v2($1) AS state',[seal.seal_id])).rows[0].state,'withdrawn');
+  proof.reapplyRetainedWithdrawal=true;
   proof.sourceWriteSealWithdrawal=true;
-  proof.observedRoleStatus=callerStatus??'public_namespace_denied';
+  assert.equal(callerStatus,'published');
+  assert.equal(await serviceStatus(x,seal.seal_id),'withdrawn');
+  proof.observedRoleStatus={beforeWithdrawal:callerStatus,afterWithdrawal:'withdrawn'};
+  await assert.rejects(x.writer.query(atomicSql),/source_fence_namespace_profile_mismatch/u);
+  await x.writer.query('ROLLBACK');
+  assert.deepEqual(await catalog(x.observer,'stockinsider_source_fence'),prior);
+  assert.deepEqual(await counts(x.observer),withdrawnCounts);
+  proof.secondApplyFailedClosedWithoutChanges=true;
 
   stage='installed consumer controls retained';
   const consumerAfter=await probeConsumers(x);
