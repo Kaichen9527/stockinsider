@@ -728,6 +728,33 @@ test('V314-015b range corporate-action feed counts are scoped to each emitted se
   }
 });
 
+test('daily and range corporate-action feeds preserve exact replays and reject incomplete or conflicting rows', async () => {
+  const {CORPORATE_ACTION_FEEDS,loadCorporateActionSnapshots,loadCorporateActionSnapshotsRange}=runtime('official-twse-valuation.js');
+  const session='2026-01-19';
+  const original=['115/01/19','7780','大研生醫','185.00','18.50'];
+  const collectedAt='2026-11-18T07:21:32Z';
+  const fetchRows=(rows)=>async(url)=>{
+    const feed=CORPORATE_ACTION_FEEDS.TWSE.find((item)=>String(url).includes(item.path));
+    assert.ok(feed);
+    const data=feed.kind==='par_value_change'?rows:[];
+    return new Response(JSON.stringify({stat:'OK',fields:feed.header,data}),{status:200});
+  };
+  const loadDaily=(rows)=>loadCorporateActionSnapshots({sessions:[['TWSE',session]],fetchImpl:fetchRows(rows),collectedAt});
+  const loadRange=(rows)=>loadCorporateActionSnapshotsRange({
+    calendarSessions:[{market:'TWSE',status:'completed',session}],fetchImpl:fetchRows(rows),collectedAt,
+  });
+  for(const load of [loadDaily,loadRange]){
+    const [unique]=await load([original]);
+    const [repeated]=await load([original,[...original]]);
+    assert.equal(repeated.declaredEventCount,1);
+    assert.deepEqual(repeated.events,unique.events);
+    assert.equal(repeated.feedEvidence[2].parsedRowCount,1);
+    await assert.rejects(load([original,[...original.slice(0,4),'18.60']]),/corporate_action_row/u);
+    await assert.rejects(load([original.slice(0,4)]),/corporate_action_row/u);
+    await assert.rejects(load([original,['invalid-date',...original.slice(1)]]),/corporate_action_session_conflict/u);
+  }
+});
+
 test('market-wide action rows retain alphanumeric instruments in PostgreSQL ordinal order', async () => {
   const {CORPORATE_ACTION_FEEDS,loadCorporateActionSnapshotsRange}=runtime('official-twse-valuation.js');
   const session='2026-08-07';

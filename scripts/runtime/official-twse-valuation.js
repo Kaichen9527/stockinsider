@@ -208,30 +208,8 @@ function parseCorporateActionResponse(bytes,{exchange,session,feed}={}){
   if(!Buffer.isBuffer(bytes)||bytes.length<1||bytes.length>8_388_608||!['TWSE','TPEX'].includes(exchange)
       ||!/^\d{4}-\d{2}-\d{2}$/u.test(String(session))||!CORPORATE_ACTION_FEEDS[exchange]?.includes(feed))
     throw new Error('corporate_action_input');
-  const decoded=new TextDecoder('utf-8',{fatal:true}).decode(bytes);if(/<html|<!doctype/iu.test(decoded))throw new Error('corporate_action_html');
-  let payload;try{payload=JSON.parse(decoded);}catch{throw new Error('corporate_action_json');}
-  if(exchange==='TWSE'&&payload?.stat==='很抱歉，沒有符合條件的資料!')return [];
-  if(!/^ok$/iu.test(String(payload?.stat??'')))throw new Error(`corporate_action_status:${feed.identity}`);
-  const header=exchange==='TWSE'?payload.fields:payload?.tables?.[0]?.fields;
-  const rows=exchange==='TWSE'?payload.data:payload?.tables?.[0]?.data;
-  if(!Array.isArray(header)||!Array.isArray(rows)||!feed.header.every((value,index)=>header[index]===value))
-    throw new Error(`corporate_action_schema:${feed.identity}`);
-  const events=[];const seenRows=new Set();const seenSymbols=new Set();
-  for(const row of rows){
-    if(row.length<5||!parseActionSession(row[0]))continue;
-    const rowSession=parseActionSession(row[0]);if(rowSession!==session)throw new Error('corporate_action_session_conflict');
-    const canonicalRow=canonicalJson(row);if(seenRows.has(canonicalRow))continue;seenRows.add(canonicalRow);
-    const symbol=String(row[1]??'').trim();const preActionReferencePrice=finite(row[3]);const postActionReferencePrice=finite(row[4]);
-    if(!/^[0-9A-Za-z]{2,12}$/u.test(symbol)||!Number.isFinite(preActionReferencePrice)||preActionReferencePrice<=0
-        ||!Number.isFinite(postActionReferencePrice)||postActionReferencePrice<=0||seenSymbols.has(symbol))
-      throw new Error('corporate_action_row');
-    seenSymbols.add(symbol);
-    const sourceRow=["corporate-action-source-row-v3.1",exchange,session,symbol,feed.kind,
-      preActionReferencePrice,postActionReferencePrice,feed.identity];
-    events.push({symbol,eventKind:feed.kind,preActionReferencePrice,postActionReferencePrice,
-      feedIdentity:feed.identity,sourceRowRef:sha256(canonicalJson(sourceRow))});
-  }
-  return events.sort((left,right)=>compareActionSymbol(left.symbol,right.symbol));
+  return parseCorporateActionRangeResponse(bytes,{exchange,startSession:session,endSession:session,feed})
+    .map(({session:ignored,...event})=>event);
 }
 
 function corporateActionUrl(exchange,session,feed){
@@ -521,14 +499,21 @@ function parseCorporateActionRangeResponse(bytes,{exchange,startSession,endSessi
   const rows=exchange==='TWSE'?payload.data:payload?.tables?.[0]?.data;
   if(!Array.isArray(header)||!Array.isArray(rows)||!feed.header.every((value,index)=>header[index]===value))
     throw new Error(`corporate_action_schema:${feed.identity}`);
-  const events=[];const seen=new Set();
+  const events=[];const seen=new Map();
   for(const row of rows){
-    if(!Array.isArray(row)||row.length<5)continue;const session=parseActionSession(row[0]);
+    if(!Array.isArray(row)||row.length<5)throw new Error('corporate_action_row');
+    const session=parseActionSession(row[0]);
     if(!session||session<startSession||session>endSession)throw new Error('corporate_action_session_conflict');
     const symbol=String(row[1]??'').trim();const preActionReferencePrice=finite(row[3]);const postActionReferencePrice=finite(row[4]);
-    const identity=`${session}:${symbol}`;if(seen.has(identity))continue;seen.add(identity);
     if(!/^[0-9A-Za-z]{2,12}$/u.test(symbol)||!Number.isFinite(preActionReferencePrice)||preActionReferencePrice<=0
         ||!Number.isFinite(postActionReferencePrice)||postActionReferencePrice<=0)throw new Error('corporate_action_row');
+    const identity=session+':'+symbol;
+    const canonicalRow=canonicalJson(row);
+    if(seen.has(identity)){
+      if(seen.get(identity)===canonicalRow)continue;
+      throw new Error('corporate_action_row');
+    }
+    seen.set(identity,canonicalRow);
     const sourceRow=['corporate-action-source-row-v3.1',exchange,session,symbol,feed.kind,
       preActionReferencePrice,postActionReferencePrice,feed.identity];
     events.push({session,symbol,eventKind:feed.kind,preActionReferencePrice,postActionReferencePrice,

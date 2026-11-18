@@ -1,0 +1,154 @@
+{
+  "schema": "stockinsider-t06-real-action-feed-replay-v1",
+  "baseSubject": "0d710911b9c4759469fc8b510696a417747500bf",
+  "market": "TWSE",
+  "scope": "original exchange feeds, controlled row corruption for rejection",
+  "reports": [
+    "2026-01-19-twt49u\thttps://wwwc.twse.com.tw/rwd/zh/exRight/TWT49U?startDate=20260119&endDate=20260119&response=json",
+    "2026-01-19-twtauu\thttps://wwwc.twse.com.tw/rwd/zh/reducation/TWTAUU?startDate=20260119&endDate=20260119&response=json",
+    "2026-01-19-twtb8u\thttps://wwwc.twse.com.tw/rwd/zh/change/TWTB8U?startDate=20260119&endDate=20260119&response=json",
+    "2026-06-11-twt49u\thttps://wwwc.twse.com.tw/rwd/zh/exRight/TWT49U?startDate=20260611&endDate=20260611&response=json",
+    "2026-06-11-twtauu\thttps://wwwc.twse.com.tw/rwd/zh/reducation/TWTAUU?startDate=20260611&endDate=20260611&response=json",
+    "2026-06-11-twtb8u\thttps://wwwc.twse.com.tw/rwd/zh/change/TWTB8U?startDate=20260611&endDate=20260611&response=json"
+  ],
+  "cases": [
+    {
+      "session": "2026-01-19",
+      "symbol": "7780",
+      "originalReportEvent": {
+        "symbol": "7780",
+        "eventKind": "par_value_change",
+        "preActionReferencePrice": 185,
+        "postActionReferencePrice": 18.5,
+        "feedIdentity": "twse:twtb8u:v1",
+        "sourceRowRef": "60f46fa6031f75939b8f58cd5c3893f0ba209256efff2ddc026130af0dd36372"
+      },
+      "feedEvidence": [
+        {
+          "feedIdentity": "twse:twt49u:v1",
+          "responseByteCount": 4638,
+          "responseSha256": "d9ab08543333e32f029a0d6a98f4396bdd7144a4894030e3f86ba8f8adae7e3b",
+          "parsedRowCount": 16
+        },
+        {
+          "feedIdentity": "twse:twtauu:v1",
+          "responseByteCount": 51,
+          "responseSha256": "2bc084ac1baf83d0dcbfd05912fa194882fa4364bf03d32dfbf56a0bcd3f9098",
+          "parsedRowCount": 0
+        },
+        {
+          "feedIdentity": "twse:twtb8u:v1",
+          "responseByteCount": 580,
+          "responseSha256": "f88eab0779afec70e43f562ea058029ef4fc7d21fd7bc48638e4577f8028480e",
+          "parsedRowCount": 1
+        }
+      ],
+      "sameEventDigestBeforeAndAfter": true,
+      "collectedAt": "2026-11-18T07:21:32.270Z",
+      "snapshotRows": 17,
+      "controlledNegativeTests": {
+        "duplicateConflictRange": {
+          "before": {
+            "accepted": true,
+            "events": 17
+          },
+          "after": {
+            "accepted": false,
+            "code": "corporate_action_row"
+          }
+        },
+        "truncatedRowRange": {
+          "before": {
+            "accepted": true,
+            "events": 17
+          },
+          "after": {
+            "accepted": false,
+            "code": "corporate_action_row"
+          }
+        },
+        "truncatedRowDaily": {
+          "before": {
+            "accepted": true,
+            "events": 17
+          },
+          "after": {
+            "accepted": false,
+            "code": "corporate_action_row"
+          }
+        }
+      }
+    },
+    {
+      "session": "2026-06-11",
+      "symbol": "2330",
+      "originalReportEvent": {
+        "symbol": "2330",
+        "eventKind": "ex_right_dividend",
+        "preActionReferencePrice": 2255,
+        "postActionReferencePrice": 2248.99,
+        "feedIdentity": "twse:twt49u:v1",
+        "sourceRowRef": "914efb209e410b95ea94369debbbf061c8df14db90ca284be18b5355568cb490"
+      },
+      "feedEvidence": [
+        {
+          "feedIdentity": "twse:twt49u:v1",
+          "responseByteCount": 4170,
+          "responseSha256": "825733bbc91641df52ab104c21da97cc3e6355b7aa685820c1128d4f8e18be92",
+          "parsedRowCount": 12
+        },
+        {
+          "feedIdentity": "twse:twtauu:v1",
+          "responseByteCount": 51,
+          "responseSha256": "2bc084ac1baf83d0dcbfd05912fa194882fa4364bf03d32dfbf56a0bcd3f9098",
+          "parsedRowCount": 0
+        },
+        {
+          "feedIdentity": "twse:twtb8u:v1",
+          "responseByteCount": 479,
+          "responseSha256": "d8ea0cb8930d6d52747db32209afe669e203be5584dbb0300667e85e42493903",
+          "parsedRowCount": 0
+        }
+      ],
+      "sameEventDigestBeforeAndAfter": true,
+      "collectedAt": "2026-11-18T07:21:41.724Z",
+      "snapshotRows": 12,
+      "controlledNegativeTests": {
+        "duplicateConflictRange": {
+          "before": {
+            "accepted": true,
+            "events": 12
+          },
+          "after": {
+            "accepted": false,
+            "code": "corporate_action_row"
+          }
+        },
+        "truncatedRowRange": {
+          "before": {
+            "accepted": true,
+            "events": 12
+          },
+          "after": {
+            "accepted": false,
+            "code": "corporate_action_row"
+          }
+        },
+        "truncatedRowDaily": {
+          "before": {
+            "accepted": true,
+            "events": 12
+          },
+          "after": {
+            "accepted": false,
+            "code": "corporate_action_row"
+          }
+        }
+      }
+    }
+  ],
+  "exchangeReferenceOnly": true,
+  "originalCutoffWitness": false,
+  "corporateActionTermsOrCashPolicyApproval": false,
+  "productionWrites": 0
+}
