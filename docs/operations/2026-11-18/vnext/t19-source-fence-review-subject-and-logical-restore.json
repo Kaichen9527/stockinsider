@@ -1,0 +1,142 @@
+{
+  "schema": "stockinsider.t19.source-receipt-schema-review-subject.v1",
+  "pullRequest": 411,
+  "oldHead": "2784faddcf12ed5333dfdd73333905308f2bfd1e",
+  "candidate": {
+    "branch": "codex/launch-radar-source-fence-review",
+    "head": "ae32dbc6d847da71ca6ad0fe876f1fe87cbf802e",
+    "tree": "6a4901f655aaf6d6bae8fb94e73e1aa15a60f210",
+    "signatureVerified": true,
+    "webTree": "53da9df602cd690e22941e93b1255173f24d50b0",
+    "webTreeMatchesOldHead": true,
+    "updatedBlobs": {
+      ".github/workflows/stockinsider-vnext-quality.yml": "8a647ebf11788aa3817b6512657c104b8237ccd7",
+      "scripts/vnext-routine-http.test.mjs": "a0e73a2a2e4c96937d51784b2fa67e002ca18223",
+      "scripts/opportunity-v3/source-fence-private-migration-postgres.test.mjs": "9495875a2b9d8035c861eb9188b3dada7d763581",
+      "migrations/20261118_56_vnext_source_fence_private_schema_v1.sql": "a36131cae5019da5beea04ad12053a28a12bdc3d",
+      "deployment/vps/rollback-vnext-source-fence-private-schema-v1.sql": "7876197e288e97bd7cb68a6192787a3fe1e22a63",
+      "openspec/changes/stockinsider-vnext-20/source-fence-private-schema-amendment.md": "422a51f82e4e43f182fe94906ff5d5d9fa35eb44"
+    }
+  },
+  "migrationEngineeringReceipt": "2d1d504e84869bbf062d4e4e1b6ef7b14e8a9a7a",
+  "nativeRestore": {
+    "scope": "isolated PostgreSQL 17.11 full published predecessor, synthetic originals",
+    "candidateAppliedInProduction": false,
+    "protectedGateChanged": false,
+    "publicUsageGranted": false,
+    "actualPredecessor": {
+      "scopeHash": "0fdae5ae5d60769aca8506b4cdddae93df8b93c1827a21f995187de1bf2e4c66",
+      "namespaceHash": "47ffa7365ca6f06e00e10e357d3119cda0eab4ce5266664c3a78a3e4fb7bab90",
+      "catalogHash": "505dc2e5eee0af4c040c4573b3e342686cbac26d5313356dce1edd94b84327ea"
+    },
+    "lockTimeoutRolledBackAllDdl": true,
+    "foreignKeysPreserved": 6,
+    "triggerBindingsPreserved": 27,
+    "rollbackRestoredOldFailureAndPreservedReceipts": true,
+    "reapplyRetainedWithdrawal": true,
+    "sourceWriteSealWithdrawal": true,
+    "observedRoleStatus": {
+      "beforeWithdrawal": "published",
+      "afterWithdrawal": "withdrawn"
+    },
+    "secondApplyFailedClosedWithoutChanges": true,
+    "logicalBackupRestore": {
+      "scope": "synthetic staging only",
+      "format": "custom",
+      "bytes": 4270999,
+      "sha256": "a27e9af1d27afde0257e0fc5a86a5cbfb3689e0d17118e866fcdf03a2339822c",
+      "rowCounts": {
+        "raw": 2,
+        "seals": 1,
+        "events": 2,
+        "invalidations": 1
+      },
+      "privateTablesAndAclPreserved": true,
+      "foreignKeys": 6,
+      "invokerHelpers": 3,
+      "withdrawnReadStatus": "withdrawn",
+      "newWriteAndSeal": true,
+      "rollbackAndReapplyPreservedRestoredRows": true,
+      "sourceDatabaseUnmodified": true,
+      "backupStreamInMemory": true,
+      "originalProductionBackupUsed": false
+    },
+    "consumerNegativeControls": {
+      "inputPreparation": {
+        "result": "permission_denied",
+        "schemaPublic": true,
+        "compilingType": true,
+        "context": null
+      },
+      "author": {
+        "result": "permission_denied",
+        "schemaPublic": true,
+        "compilingType": true,
+        "context": null
+      },
+      "reviewer": {
+        "result": "permission_denied",
+        "schemaPublic": true,
+        "compilingType": true,
+        "context": null
+      }
+    },
+    "capabilities": [
+      {
+        "role": "research_input_preparation_owner_v2",
+        "public_usage": false,
+        "nonowned_definers": 3
+      },
+      {
+        "role": "research_source_fence_owner_v2",
+        "public_usage": false,
+        "nonowned_definers": 0
+      }
+    ],
+    "fullConsumerPositiveAcceptance": false
+  },
+  "testNotes": {
+    "yamlSyntaxAndBothPathFiltersPassed": true,
+    "sourceNamespaceContracts": {
+      "passed": 9,
+      "failed": 0
+    },
+    "scope": "synthetic native fixture on Contabo staging using signed forward and rollback SQL; no production backup"
+  },
+  "protectedReview": {
+    "matchedProtectedBaseWorkerBlob": "a707430e0ea1912282ab8d30c5c2fb06834fa9db",
+    "previousJobIds": [
+      134528294836,
+      134528294843,
+      134528294754
+    ],
+    "previousJobCause": "all three failed checkout of the missing exact subject review reference; stage did not emit verdicts",
+    "graph": {
+      "catalogSchema": "opportunity-active-artifact-catalog-v2",
+      "activeGraphSha256": "c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a",
+      "active": 55,
+      "incorporated": 3,
+      "historic": 1,
+      "changedProtectedGraphPaths": []
+    },
+    "carriedEvidence": [
+      {
+        "kind": "requirements",
+        "commit": "cf942588ffa03c81c4af384bb7cc4442468cf13d",
+        "blob": "d514b6acf9f088662180d5219ff1fc14882897f0"
+      },
+      {
+        "kind": "architecture",
+        "commit": "2a710eab65e8c60204493ae08848d47fec3faa9c",
+        "blob": "ce017f8032884a63215c9fe0fa6d8c18bc06cf0b"
+      }
+    ],
+    "expectedSubjectRef": "refs/heads/evidence/source-led-opportunity-v3-exact-review-ae32dbc6d847da71ca6ad0fe876f1fe87cbf802e",
+    "independentReviewProduced": false,
+    "reviewEvidenceRefCreated": false,
+    "prHeadUnchanged": true,
+    "protectedCiRerun": false,
+    "productionUnmodified": true
+  },
+  "recordedAt": "2026-11-18T12:01:54+08:00"
+}
