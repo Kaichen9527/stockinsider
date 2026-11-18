@@ -4,7 +4,7 @@ import test from 'node:test';
 import { collectPagedOfficialAuthorityRows, officialPriceBackfillBatchHash, parseOfficialPriceBackfillPage, type OfficialPriceBackfillPage } from './official-price-backfill.ts';
 
 function page(overrides: Partial<OfficialPriceBackfillPage> = {}): OfficialPriceBackfillPage {
-  const responseText = String(overrides.responseText || JSON.stringify({ stat: 'OK',
+  const responseText = String(overrides.responseText || JSON.stringify({ stat: 'OK', date: '20250801', title: '114年8月 2330 台積電           各日成交資訊',
     fields: ['日期','成交股數','成交金額','開盤價','最高價','最低價','收盤價'],
     data: [['114/08/07','1,234','100,000','100','105','99','103']] }));
   return {
@@ -23,13 +23,26 @@ test('derives an official TWSE observation from hash-bound response evidence', (
   assert.equal(officialPriceBackfillBatchHash([value]), officialPriceBackfillBatchHash([value]));
 });
 
+test('binds an official TWSE month to the issuer and date declared by the response', () => {
+  const body = JSON.parse(page().responseText);
+  for (const override of [
+    { title: body.title.replace('2330 台積電', '2317 鴻海') },
+    { title: body.title.replace('114年8月', '114年7月') },
+    { date: '20250701' },
+    { title: undefined },
+  ]) {
+    assert.equal(parseOfficialPriceBackfillPage(page({ responseText: JSON.stringify({ ...body, ...override }) })), null);
+  }
+  assert.equal(parseOfficialPriceBackfillPage(page({ sourceUrl: page().sourceUrl + '&stockNo=2317' })), null);
+});
+
 test('rejects wrong origins, hashes, query identity, geometry, dates, and extra keys', () => {
   assert.equal(parseOfficialPriceBackfillPage(page({ sourceUrl: page().sourceUrl.replace('www.twse.com.tw', 'example.com') })), null);
   assert.equal(parseOfficialPriceBackfillPage(page({ responseSha256: 'a'.repeat(64) })), null);
   assert.equal(parseOfficialPriceBackfillPage(page({ sourceUrl: page().sourceUrl.replace('2330', '2317') })), null);
-  const fields = ['日期','成交股數','成交金額','開盤價','最高價','最低價','收盤價'];
-  assert.equal(parseOfficialPriceBackfillPage(page({ responseText: JSON.stringify({ stat: 'OK', fields, data: [['114/08/07','1','1','100','101','99','103']] }) })), null);
-  assert.equal(parseOfficialPriceBackfillPage(page({ responseText: JSON.stringify({ stat: 'OK', fields, data: [['114/02/30','1','1','100','105','99','103']] }) })), null);
+  const valid = JSON.parse(page().responseText);
+  assert.equal(parseOfficialPriceBackfillPage(page({ responseText: JSON.stringify({ ...valid, data: [['114/08/07','1','1','100','101','99','103']] }) })), null);
+  assert.equal(parseOfficialPriceBackfillPage(page({ responseText: JSON.stringify({ ...valid, data: [['114/02/30','1','1','100','105','99','103']] }) })), null);
   assert.equal(parseOfficialPriceBackfillPage({ ...page(), extra: true }), null);
 });
 

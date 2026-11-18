@@ -1,5 +1,7 @@
 import { verifyAdmittedResearch } from './vnext/runtime.ts';
 import { readFinMindVaultToken } from './finmind-vault.ts';
+import { isHistoryDate } from './candidate-price-history.ts';
+import { boundTwseStockDayMonth } from './official-price-backfill.ts';
 
 type TwStockModule = {
   TwStock: new (options?: { ttl?: number; limit?: number }) => {
@@ -878,17 +880,24 @@ export async function fetchTwseMarketDailyRows(session: string): Promise<Map<str
   return request;
 }
 
-export function parseTwseStockDailyMonth(payload: Record<string, unknown>, sourceUrl: string): TwMarketDailyBar[] {
-  if (payload.stat !== 'OK' || !Array.isArray(payload.data)) return [];
-  return (payload.data as unknown[][]).flatMap((item): TwMarketDailyBar[] => {
-    const roc = String(item[0] || '').match(/^(\d{3})\/(\d{2})\/(\d{2})$/u);
+export function parseTwseStockDailyMonth(payload: Record<string, unknown>, sourceUrl: string): TwMarketDailyBar[] | null {
+  if (payload.stat === '很抱歉，沒有符合條件的資料!') return [];
+  const month = boundTwseStockDayMonth(payload, sourceUrl);
+  if (payload.stat !== 'OK' || !month || !Array.isArray(payload.data)) return null;
+  const rows: TwMarketDailyBar[] = [];
+  for (const item of payload.data) {
+    if (!Array.isArray(item)) return null;
+    const roc = String(item[0] || '').match(/^(\d{1,3})\/(\d{2})\/(\d{2})$/u);
+    const time = roc ? String(Number(roc[1]) + 1911) + '-' + roc[2] + '-' + roc[3] : '';
+    if (!isHistoryDate(time) || time.slice(0, 7) !== month) return null;
     const volume = ohlcNumber(item[1]);
     const [open, high, low, close] = [item[3], item[4], item[5], item[6]].map(ohlcNumber);
-    if (!roc || open == null || high == null || low == null || close == null) return [];
-    return [{ time: `${Number(roc[1]) + 1911}-${roc[2]}-${roc[3]}`, open, high, low, close,
+    if (open == null || high == null || low == null || close == null) continue;
+    rows.push({ time, open, high, low, close,
       volume: volume == null ? null : Math.round(volume), sourceUrl,
-      provider: 'official_primary', authorityTier: 'official_primary', integrityStatus: 'valid' }];
-  });
+      provider: 'official_primary', authorityTier: 'official_primary', integrityStatus: 'valid' });
+  }
+  return rows.length ? rows : null;
 }
 
 export function twStockHistoryMonthUrl(job: {
@@ -919,9 +928,9 @@ export async function fetchTwStockHistoryMonth(job: {
     if (job.dataset === 'price') {
       const bars = job.exchange === 'TWSE' ? parseTwseStockDailyMonth(result.payload, sourceUrl)
         : parseTpexTradingStockRows(result.payload, sourceUrl);
-      const recognized = job.exchange === 'TWSE' ? typeof result.payload.stat === 'string'
-        : Array.isArray(result.payload.tables) || Array.isArray(result.payload.aaData);
-      if (!recognized) return { ...empty, terminalReason: 'official_schema_error' };
+      const recognized = job.exchange === 'TWSE'
+        || Array.isArray(result.payload.tables) || Array.isArray(result.payload.aaData);
+      if (!bars || !recognized) return { ...empty, terminalReason: 'official_schema_error' };
       return { ...empty, bars, terminalReason: bars.length ? 'complete' : 'official_no_rows' };
     }
     const rows = job.exchange === 'TWSE' ? parseTwseStockValuationHistory(result.payload, sourceUrl)
@@ -986,27 +995,8 @@ export async function fetchTwStockDailyBars(
       endpoint.searchParams.set('response', 'json');
       endpoint.searchParams.set('date', date);
       endpoint.searchParams.set('stockNo', symbol);
-      const payload = await fetchOfficialJson<{ stat?: string; data?: string[][] }>(endpoint.toString(), 8_000);
-      if (!payload) return [];
-      if (payload.stat !== 'OK' || !Array.isArray(payload.data)) return [];
-      return payload.data.flatMap((item) => {
-        const roc = String(item[0] || '').match(/^(\d{3})\/(\d{2})\/(\d{2})$/u);
-        const volume = ohlcNumber(item[1]);
-        const open = ohlcNumber(item[3]);
-        const high = ohlcNumber(item[4]);
-        const low = ohlcNumber(item[5]);
-        const close = ohlcNumber(item[6]);
-        if (!roc || open == null || high == null || low == null || close == null) return [];
-        return [{
-          time: `${Number(roc[1]) + 1911}-${roc[2]}-${roc[3]}`,
-          open, high, low, close,
-          volume: volume == null ? null : Math.round(volume),
-          sourceUrl: endpoint.toString(),
-          provider: 'official_primary' as const,
-          authorityTier: 'official_primary' as const,
-          integrityStatus: 'valid' as const,
-        }];
-      });
+      const payload = await fetchOfficialJson<Record<string, unknown>>(endpoint.toString(), 8_000);
+      return payload ? parseTwseStockDailyMonth(payload, endpoint.toString()) || [] : [];
     } catch {
       return [];
     }

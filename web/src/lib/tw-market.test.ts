@@ -42,6 +42,34 @@ test('bounded official history fetch requests one issuer-month and reports block
   assert.equal((await fetchTwStockHistoryMonth(job)).terminalReason,'official_schema_error');
 });
 
+test('bounded TWSE history rejects wrong issuer, month, and row layout as schema errors', async (t) => {
+  const originalFetch = globalThis.fetch;
+  t.after(() => { globalThis.fetch = originalFetch; resetOfficialMarketRequestStateForTests(); });
+  const job = { symbol: '2330', exchange: 'TWSE' as const, dataset: 'price' as const, month: '2023-11-01', lastSession: '2023-11-30' };
+  const payload = {
+    stat: 'OK', date: '20231101', title: '112年11月 2330 台積電           各日成交資訊',
+    fields: ['日期', '成交股數', '成交金額', '開盤價', '最高價', '最低價', '收盤價', '漲跌價差', '成交筆數', '註記'],
+    data: [['112/11/01', '14,028,881', '7,432,561,094', '533.00', '533.00', '527.00', '528.00', '-1.00', '15,452', '']],
+  };
+  async function replay(body: unknown) {
+    resetOfficialMarketRequestStateForTests();
+    globalThis.fetch = (async () => new Response(JSON.stringify(body), { headers: { 'content-type': 'application/json' } })) as typeof fetch;
+    return fetchTwStockHistoryMonth(job);
+  }
+  assert.equal((await replay(payload)).bars[0]?.close, 528);
+  for (const override of [
+    { date: '20231001' },
+    { title: payload.title.replace('2330 台積電', '2317 鴻海') },
+    { fields: ['日期', '成交股數', '成交金額', '收盤價', '最高價', '最低價', '開盤價'] },
+    { data: [['112/10/31', ...payload.data[0].slice(1)]] },
+    { stat: 'unrecognized response' },
+  ]) {
+    const result = await replay({ ...payload, ...override });
+    assert.equal(result.terminalReason, 'official_schema_error');
+    assert.deepEqual(result.bars, []);
+  }
+});
+
 test('bounded TPEx history never makes a TWSE request and preserves real month-end valuation date', async (t) => {
   const originalFetch=globalThis.fetch; const requested:string[]=[];
   t.after(() => { globalThis.fetch=originalFetch; resetOfficialMarketRequestStateForTests(); });
