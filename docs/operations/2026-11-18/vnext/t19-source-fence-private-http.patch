@@ -1,0 +1,104 @@
+--- a/scripts/vnext-routine-http.test.mjs
++++ b/scripts/vnext-routine-http-private-relocation.lab.mjs
+@@ -17,7 +17,7 @@
+ import {readTailNamespace} from './opportunity-v3/research-publication-tail-entry-namespace.mjs';
+ import {tailMetadataSha} from './opportunity-v3/research-publication-tail-entry-guard.mjs';
+ import {
+-  SOURCE_SCOPE_SQL, sourceNamespaceReachability, projectSourceNamespaceReachability,
++  SOURCE_SCOPE_SQL, sourceNamespaceReachability, projectSourceNamespaceReachability, inspectHardenedSourceNamespaceReview,
+   assertSourceNamespaceIdleClient,
+ } from './vnext-source-namespace-candidate.mjs';
+ import { inspectSourceNamespaceEntrypoints } from './vnext-source-namespace-entrypoints.mjs';
+@@ -185,7 +185,7 @@
+    for(const name of Object.keys(env))if(/^(OPENAI_|ANTHROPIC_|VERCEL|CREDENTIALS_DIRECTORY|STOCKINSIDER_WRITER_RELEASE_ID|NEXT_PUBLIC_SUPABASE_)/u.test(name))delete env[name];env.STOCKINSIDER_WRITER_RELEASE_ID=releaseId;
+    const fetchBoundary=path.join(artifacts,'owned-fetch-boundary.mjs');unexpectedFetch=path.join(artifacts,'unexpected-fetch.jsonl');
+    fs.writeFileSync(fetchBoundary,`import fs from 'node:fs';const actual=globalThis.fetch;globalThis.fetch=(input,init)=>{const url=new URL(typeof input==='string'||input instanceof URL?input:input.url);if(url.origin!=='http://127.0.0.1:34233'||!url.pathname.startsWith('/rest/v1/')){fs.appendFileSync(${JSON.stringify(unexpectedFetch)},JSON.stringify({origin:url.origin,path:url.pathname})+'\\n',{mode:0o600});throw Error('owned_routine_http_network_scope');}return actual(input,init);};\n`,{mode:0o600,flag:'wx'});
+-   delete env.NODE_OPTIONS;appLog=fs.openSync(path.join(artifacts,'next.log'),'wx',0o600);app=spawn(process.execPath,['--import',fetchBoundary,'node_modules/next/dist/bin/next','start','--hostname','127.0.0.1','--port','34234'],{cwd:path.join(root,'web'),env,stdio:['ignore',appLog,appLog]});
++   delete env.NODE_OPTIONS;env.HOSTNAME='127.0.0.1';env.PORT='34234';appLog=fs.openSync(path.join(artifacts,'next.log'),'wx',0o600);app=spawn(process.execPath,['--import',fetchBoundary,'server.js'],{cwd:process.env.SI_ARTIFACT_APP,env,stdio:['ignore',appLog,appLog]});
+    const until=Date.now()+30000;let ready=false;while(Date.now()<until){if(app.exitCode!==null)throw Error('owned_next_exited');try{if((await post('vnext-research',{action:'screen'})).status===401){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,100));}assert.equal(ready,true);
+   });
+   await stage('auth, wrong role, extra fields and explicit empty scope perform no SQL work',async()=>{
+@@ -266,7 +266,82 @@
+     console.log('VNEXT_SOURCE_REACHABILITY_SAFE '+serialized);
+    }catch(error){await x.observer.query('ROLLBACK');throw error;}
+    x.save('raw-source-current-prerequisite',sourcePrerequisite);const prerequisiteHash=sha(JSON.stringify(sourcePrerequisite));console.log('VNEXT_SOURCE_PREREQUISITE_SAFE '+JSON.stringify({sourceOwnerUsage:sourcePrerequisite.sourceOwnerUsage,inputOwnerUsage:sourcePrerequisite.inputOwnerUsage,descriptorHash:prerequisiteHash,completeCatalog:sourcePrerequisite.completeCatalog,noGrant:true,fullPrivateDescriptorRetained:true}));
+-   if(sourcePrerequisite.sourceOwnerUsage!==true)throw Error('vnext_test_source_namespace_not_ready');
++
++    assert.equal(sourcePrerequisite.sourceOwnerUsage,false);
++    assert.equal(sourcePrerequisite.inputOwnerUsage,false);
++    const sourcePrivateRoles=['research_source_fence_owner_v2','research_input_preparation_owner_v2'];
++    const expectedPrep=[
++      'assert_research_source_seal_v2(uuid)',
++      'read_research_observed_claim_v2(text,text,uuid,integer)',
++      'seal_research_sources_v2(jsonb,timestamp with time zone)',
++    ];
++    const readHardening = name => fs.readFileSync(path.join(root,'migrations',name),'utf8');
++    for (const name of [
++      '20261117_42_vnext_internal_candidate_plan_acl_v1.sql',
++      '20261117_44_vnext_legacy_subscription_acl_v1.sql',
++      '20261117_46_vnext_auth_profile_trigger_acl_v1.sql',
++      '20261117_47_vnext_source_guard_trigger_acl_v1.sql',
++    ]) await x.writer.query(readHardening(name));
++    await x.observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');
++    let hardened;
++    try { hardened=await inspectHardenedSourceNamespaceReview(x.observer); }
++    finally { await x.observer.query('ROLLBACK'); }
++    assert.equal(hardened.grantExecuted,false);
++    await x.writer.query(readHardening('20261117_48_vnext_podcast_private_acl_v1.sql'));
++    const beforeRoles=(await x.observer.query(`
++        SELECT r.rolname AS role, has_schema_privilege(r.oid,'public','USAGE') AS public,
++          ARRAY(SELECT p.proname||'('||replace(oidvectortypes(p.proargtypes),', ',',')||')'
++            FROM pg_proc p WHERE p.pronamespace='public'::regnamespace
++              AND p.prosecdef AND p.proowner<>r.oid AND has_function_privilege(r.oid,p.oid,'EXECUTE')
++            ORDER BY 1) AS callable
++        FROM pg_roles r WHERE r.rolname=ANY($1::text[]) ORDER BY r.rolname
++    `,[sourcePrivateRoles])).rows;
++    x.save('private-relocation-before-roles',beforeRoles);
++    const roleSummary=beforeRoles.map(value=>({role:value.role,public:value.public,callable:value.callable}));
++    console.log('SI_PRIVATE_RELOCATION_ROLES '+JSON.stringify(roleSummary));
++    assert.deepEqual(beforeRoles,[
++      {role:sourcePrivateRoles[1],public:false,callable:expectedPrep},
++      {role:sourcePrivateRoles[0],public:false,callable:[]},
++    ]);
++    const names=['research_source_fence_events_v2','research_source_seals_v2','research_source_seal_invalidations_v2'];
++    const refs=names.map(name=>'public.'+name);
++    const receiptMetadata = async schema => (await x.observer.query(`
++      SELECT p.relname,p.oid,p.relacl::text,p.relrowsecurity,p.relforcerowsecurity,
++        ARRAY(SELECT t.oid FROM pg_trigger t WHERE t.tgrelid=p.oid OR t.tgconstrrelid=p.oid ORDER BY t.oid) AS triggers,
++        ARRAY(SELECT k.oid FROM pg_constraint k WHERE k.conrelid=p.oid OR k.confrelid=p.oid ORDER BY k.oid) AS constraints
++      FROM pg_class p JOIN pg_namespace n ON n.oid=p.relnamespace
++      WHERE n.nspname=$1 AND p.relname=ANY($2::text[])
++      ORDER BY p.relname
++    `,[schema,names])).rows;
++    const prior=await receiptMetadata('public');
++    assert.equal(prior.length,3);
++    const probeSql=fs.readFileSync(path.join(root,'scripts/opportunity-v3/fixtures/source-fence-namespace/prebound-private-schema.sql'),'utf8');
++    const bound=probeSql.replace("current_database()<>'stockinsider_source_fence_probe'","current_database()<>'vnext_worker'");
++    assert.notEqual(bound,probeSql);
++    assert.ok(bound.endsWith('COMMIT;\n'));
++    const atomicSql=[
++      bound.slice(0,-'COMMIT;\n'.length),
++      ...refs.map(ref=>'ALTER TABLE '+ref+' SET SCHEMA stockinsider_source_fence;'),
++      ...names.map(name=>'CREATE VIEW public.'+name+' WITH(security_invoker=true) AS SELECT * FROM stockinsider_source_fence.'+name+';'),
++      'REVOKE ALL ON '+refs.join(',')+' FROM PUBLIC,anon,authenticated,service_role;',
++      'GRANT SELECT ON public.research_source_seals_v2 TO research_input_preparation_owner_v2;',
++      'COMMIT;',
++    ].join('\n');
++    await x.writer.query("SET stockinsider.source_fence_probe='enabled'");
++    try { await x.writer.query(atomicSql); }
++    catch (error) { await x.writer.query('ROLLBACK'); throw error; }
++    finally { await x.writer.query('RESET stockinsider.source_fence_probe'); }
++    assert.deepEqual(await receiptMetadata('stockinsider_source_fence'),prior);
++    const {rows:[acl]}=await x.observer.query(`
++      SELECT has_schema_privilege('research_source_fence_owner_v2','public','USAGE') AS source_public,
++        has_schema_privilege('research_input_preparation_owner_v2','public','USAGE') AS prep_public,
++        has_schema_privilege('service_role','stockinsider_source_fence','USAGE') AS service_private,
++        has_table_privilege('service_role','public.research_source_seals_v2','SELECT') AS service_view
++    `);
++    assert.deepEqual(acl,{source_public:false,prep_public:false,service_private:false,service_view:false});
++    x.save('private-relocation-safe',{hardenedPredecessor:hardened.predecessor,acl,physicalRelations:prior.length,
++      oidAndAclPreservation:true,originalPublicUsagePreconditionFalse:true,formalGateChanged:false});
++
+    const original=await x.snapshot(),setupOwner=randomUUID();await x.writer.query('BEGIN');try{
+     await x.writer.query("SELECT set_config('request.headers',$1,true)",[JSON.stringify({'x-stockinsider-writer-release':releaseId})]);assert.equal((await x.writer.query("SELECT public.acquire_production_write_lease('production-data-plane',$1::uuid,300) AS acquired",[setupOwner])).rows[0].acquired,true);
+    for(let n=1;n<=2;n++)await x.writer.query("INSERT INTO public.source_raw_documents(platform,document_url,title,content_text,published_at,collected_at,symbols,metadata) VALUES('twse_insider',$1,'Synthetic current cache only',$2,$3,$3,'[\"2409\"]'::jsonb,$4::jsonb)",['https://www.twse.com.tw/synthetic-routine-source-window-'+n,'Synthetic bounded permitted original '+n+', not acquired real news.',now,JSON.stringify({original_event_at:now})]);

@@ -1,0 +1,84 @@
+{
+  "schema": "stockinsider.t19.source-fence-private-relocation-http.v1",
+  "recordedAt": "2026-11-18T11:27:38+08:00",
+  "pullRequest": 411,
+  "candidate": "2784faddcf12ed5333dfdd73333905308f2bfd1e",
+  "builtMerge": "e96583719b5722f1c81078987d03bd3914a055ae",
+  "builtTree": "cd25b1b4c963557feba769e543adf38b4831d6fe",
+  "nextVersion": "16.3.4",
+  "artifact": {
+    "githubId": 14391537130,
+    "manifestSha256": "8c4eef03a399ec5a01929ab42a27a3ee26561893a4160c283f01e3446d5ac557",
+    "innerTarSha256": "501bc9824cdd8108752ab7fc5763ba5d139753bf272c7039cc562377a955d9ac"
+  },
+  "baselineTestGitBlob": "ca7d1d575753ef67b9797734a89ea592df7559a2",
+  "derivativeTestGitBlob": "eef35ef396d6dba5469b45650951ce3c678010ad",
+  "derivativeTestSha256": "4c15bd5d1d182994b878aa29344a029b3b9b72696c601c5b6baa66ffa56cfde1",
+  "relocationFixtureGitBlob": "e13c922f625b16fdb1dd4808311b7c8d8238247e",
+  "predecessor": {
+    "scopeHash": "0fdae5ae5d60769aca8506b4cdddae93df8b93c1827a21f995187de1bf2e4c66",
+    "namespaceHash": "47ffa7365ca6f06e00e10e357d3119cda0eab4ce5266664c3a78a3e4fb7bab90",
+    "catalogHash": "505dc2e5eee0af4c040c4573b3e342686cbac26d5313356dce1edd94b84327ea"
+  },
+  "isolation": {
+    "realPostgresVersion": "17.11",
+    "transientUnixSocketOnlyDatabase": true,
+    "appAndFiniteRestFacadeSharePrivateLoopback": true,
+    "syntheticSourcesAndCalendar": true,
+    "externalAcquisition": false,
+    "productionMutation": false,
+    "protectedGateChanged": false
+  },
+  "metadata": {
+    "physicalReceiptTablesWithSameOidsTriggersConstraintReferencesRlsAndAcl": 3,
+    "publicSchemaUsage": {
+      "research_source_fence_owner_v2": false,
+      "research_input_preparation_owner_v2": false
+    },
+    "serviceRolePrivateUsage": false,
+    "serviceRolePublicSealViewRead": false,
+    "sourceOwnerCrossOwnerPublicDefinerAcl": [],
+    "inputPreparationOwnerCrossOwnerPublicDefinerAcl": [
+      "assert_research_source_seal_v2(uuid)",
+      "read_research_observed_claim_v2(text,text,uuid,integer)",
+      "seal_research_sources_v2(jsonb,timestamp with time zone)"
+    ]
+  },
+  "retainedChecks": {
+    "authenticationAndEmptyScopePassed": true,
+    "routineOneNewUnclaimedJobWithNoProviderInvocation": true,
+    "repeatingAndWithdrawingLeftJobClocksUnchanged": true,
+    "twoReal120SecondDeadlinesPassed": true,
+    "offsetClockUsed": false,
+    "onceOnlyRetry": true,
+    "ownedDatabaseAndNextCleanExit": true,
+    "remainingQueries": 0
+  },
+  "rawCache": {
+    "authorizedOriginalInsertWithExistingWriterLease": "PASS",
+    "rawDocumentsEnumerated": 2,
+    "actualHttpStatus": 200,
+    "selected": 0,
+    "replayed": 0,
+    "upstreamCoverage": "unknown",
+    "rejected": [
+      {
+        "count": 2,
+        "reason": "vnext_cached_original_event_authority_unavailable"
+      }
+    ],
+    "positiveAdmission": "FAIL",
+    "positiveFixtureField": "metadata.original_event_at",
+    "admissionRejectionRoot": "cached-source-admission.ts refuses declared original-event metadata as authority, even when it equals the publication clock"
+  },
+  "nextExperiment": "Preserve declared original-event refusal as a negative case. Submit two positive synthetic official cache originals identified by publication time and require exactly two admitted and replayed receipts and no additional research or provider work.",
+  "audit": {
+    "tests": 8,
+    "passed": 6,
+    "failed": 2,
+    "failureIncludesParent": true,
+    "productionGatePassed": false,
+    "formalSourceOrModelAcceptance": false,
+    "contaboDeployment": false
+  }
+}
