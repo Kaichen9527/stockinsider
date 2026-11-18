@@ -139,6 +139,7 @@ jobs:
             web/src/lib/financial-eps-reconciliation.test.ts \
             web/src/lib/candidate-valuation-inputs.test.ts \
             web/src/lib/candidate-financial-coverage.test.ts | tee /tmp/stockinsider-vnext-ci/reported-financial-validation.tap
+          node --experimental-strip-types --test web/src/lib/vnext/mops-consolidated-ebook.test.ts | tee /tmp/stockinsider-vnext-ci/mops-consolidated-ebook.tap
           npm --prefix web run typecheck
           npm --prefix web run lint
       - name: Full ordinary build
