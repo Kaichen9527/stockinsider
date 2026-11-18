@@ -133,6 +133,12 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/research-failure.test.ts | tee /tmp/stockinsider-vnext-ci/research-failure-source.tap
           node --experimental-strip-types scripts/vnext-business-vectors.test.mjs | tee /tmp/stockinsider-vnext-ci/business-vectors.tap
           node scripts/candidate-financial-document-write-lease-route.test.mjs | tee /tmp/stockinsider-vnext-ci/lease-routes.tap
+          node --experimental-strip-types --test \
+            web/src/lib/official-financial-validation.test.ts \
+            web/src/lib/official-financial-validation-worker.test.ts \
+            web/src/lib/financial-eps-reconciliation.test.ts \
+            web/src/lib/candidate-valuation-inputs.test.ts \
+            web/src/lib/candidate-financial-coverage.test.ts | tee /tmp/stockinsider-vnext-ci/reported-financial-validation.tap
           npm --prefix web run typecheck
           npm --prefix web run lint
       - name: Full ordinary build

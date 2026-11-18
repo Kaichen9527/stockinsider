@@ -68,46 +68,34 @@ test('conflicting accounting operands yield identical rejection and hash in eith
   assert.deepEqual(a,b);
 });
 
-function dilutedTriad() {
-  return [
-    { ...fact, fact_id: 'eps', fact_key: 'quarterly_diluted_eps', unit: 'TWD_per_share', value: 100 },
-    { ...fact, fact_id: 'shares', fact_key: 'diluted_weighted_average_shares', unit: 'share', value: 100_000_000 },
-    { ...fact, fact_id: 'income', fact_key: 'quarterly_net_income_attributable_to_common', value: 100_000_000 },
-  ];
-}
+// Company-published consolidated 2025 Q2 note for 3526. Net income
+// used to calculate diluted EPS was TWD 275,267,000 after note adjustments.
+const dilutedEpsFacts = [
+  { ...fact, fact_id: 'eps', fact_key: 'quarterly_diluted_eps', unit: 'TWD_per_share', value: 3.88 },
+  { ...fact, fact_id: 'shares', fact_key: 'diluted_weighted_average_shares', unit: 'share', value: 70_932_000 },
+  { ...fact, fact_id: 'income', fact_key: 'quarterly_net_income_attributable_to_common', value: 269_858_000 },
+].map((row) => ({ ...row, provider: 'mops', source_ref: `issuer-document:${source.source_sha256}:${row.fact_id}`,
+  period_start: '2025-04-01', period_end: '2025-06-30' }));
+const dilutedEpsSource = {
+  ...source, source_url: 'https://www.alltopconnector.com/data/download/merge/1755494585708088071.pdf',
+  issuer_host_approved: true,
+};
 
-test('same-context diluted EPS/share/common income contradictions reject all identity participants', () => {
-  const triad = dilutedTriad();
-  for (const participant of triad) {
-    const result = validateOfficialFinancialFact(participant, triad, source, cutoff);
-    assert.equal(result.status, 'rejected');
-    assert(result.checks.some((check) => check.startsWith('quarterly_diluted_eps*')));
-  }
-  // Cash remains a safe reported fact, not a surrogate earnings bridge.
-  const cash = { ...fact, fact_id: 'cash', fact_key: 'cash_and_equivalents', value: 10_000 };
-  assert.equal(validateOfficialFinancialFact(cash, [...triad, cash], source, cutoff).status, 'validated');
-});
-
-test('missing or different-context identity operands do not condemn standalone safe reported facts', () => {
-  const [eps, shares, income] = dilutedTriad();
-  const identity = 'quarterly_diluted_eps*diluted_weighted_average_shares=quarterly_net_income_attributable_to_common';
-  assert.equal(validateOfficialFinancialFact(eps, [eps], source, cutoff).status, 'validated');
-  for (const patch of [
-    { stock_id: '22222222-2222-2222-2222-222222222222' },
-    { provider: 'mops' }, { filing_restatement_id: 'another-filing' },
-    { period_start: '2025-01-01' }, { period_end: '2025-12-31' }, { duration_kind: 'instant' },
-  ]) {
-    const result = validateOfficialFinancialFact(eps, [eps, shares, { ...income, ...patch }], source, cutoff);
-    assert.equal(result.status, 'validated'); assert.equal(result.checks.includes(identity), false);
+test('dilution adjustments leave independent reported facts intact', () => {
+  for (const reported of dilutedEpsFacts) {
+    const result = validateOfficialFinancialFact(reported, dilutedEpsFacts, dilutedEpsSource, cutoff);
+    assert.equal(result.status, 'validated');
+    assert(result.checks.every((check) => !check.startsWith('quarterly_diluted_eps*')));
+    assert.deepEqual(result.accountingPolicyVersions, ['reported-diluted-eps-numerator-separate-v1']);
   }
 });
 
-test('reconciled and rounded diluted earnings are accepted without changing the reported values', () => {
-  const triad = dilutedTriad().map((row) => row.fact_id === 'eps' ? { ...row, value: 1 } : row);
-  assert(triad.every((row) => validateOfficialFinancialFact(row, triad, source, cutoff).status === 'validated'));
-  const rounded = triad.map((row) => row.fact_id === 'income' ? { ...row, value: 99_500_000 } : row);
-  assert(rounded.every((row) => validateOfficialFinancialFact(row, rounded, source, cutoff).status === 'validated'));
-  assert.equal(rounded[2].value, 99_500_000);
+test('reported diluted EPS and share conflicts still fail the official receipt checks', () => {
+  const [eps, shares] = dilutedEpsFacts;
+  assert.equal(validateOfficialFinancialFact(eps, [...dilutedEpsFacts, { ...eps, fact_id: 'duplicate', value: 4.14 }],
+    dilutedEpsSource, cutoff).consistencyValid, false);
+  assert.equal(validateOfficialFinancialFact({ ...shares, value: 0 }, [], dilutedEpsSource, cutoff).consistencyValid, false);
+  assert.equal(validateOfficialFinancialFact({ ...eps, unit: 'share' }, [], dilutedEpsSource, cutoff).unitValid, false);
 });
 
 test('the frozen EPS policy changes the receipt hash so legacy validation cannot suppress rechecking', () => {
