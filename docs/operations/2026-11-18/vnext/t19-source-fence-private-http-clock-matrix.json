@@ -1,0 +1,144 @@
+{
+  "schema": "stockinsider.t19.source-fence-private-relocation-clock-matrix.v1",
+  "pullRequest": 411,
+  "sourceCommit": "2784faddcf12ed5333dfdd73333905308f2bfd1e",
+  "testedArtifact": {
+    "githubId": 14391537130,
+    "sourceMerge": "e96583719b5722f1c81078987d03bd3914a055ae",
+    "tree": "cd25b1b4c963557feba769e543adf38b4831d6fe",
+    "next": "16.3.4",
+    "postgres": "17.11",
+    "releaseManifestSha256": "8c4eef03a399ec5a01929ab42a27a3ee26561893a4160c283f01e3446d5ac557",
+    "archiveSha256": "501bc9824cdd8108752ab7fc5763ba5d139753bf272c7039cc562377a955d9ac"
+  },
+  "previousObservedRed": "5563823cbe80dffff2871723389b6dcf8b198a7a",
+  "test": {
+    "baselineBlob": "ca7d1d575753ef67b9797734a89ea592df7559a2",
+    "testOnlyDerivativeBlob": "975c27babaff5c7109cbebe448cb7116962c3972",
+    "testOnlyDerivativeSha256": "169118bac4f31a9eb2b71ffab990ef2d4c70e9a5be27b3ece8835d8369058a49",
+    "relocationFixtureBlob": "e13c922f625b16fdb1dd4808311b7c8d8238247e",
+    "passed": 8,
+    "failed": 0,
+    "sourceAdmissionUnitAndContractPassed": 25
+  },
+  "isolation": {
+    "contaboStagingOnly": true,
+    "dbContainerNetworkNone": true,
+    "nextAndFiniteRestFacadePrivateLoopback": true,
+    "syntheticSourcesAndMarketCalendar": true,
+    "noRealProviderInvocation": true,
+    "stagingProcessCleanExit": true
+  },
+  "predecessorsAndAcl": {
+    "hardenedPredecessor": {
+      "scopeHash": "0fdae5ae5d60769aca8506b4cdddae93df8b93c1827a21f995187de1bf2e4c66",
+      "namespaceHash": "47ffa7365ca6f06e00e10e357d3119cda0eab4ce5266664c3a78a3e4fb7bab90",
+      "catalogHash": "505dc2e5eee0af4c040c4573b3e342686cbac26d5313356dce1edd94b84327ea"
+    },
+    "acl": {
+      "source_public": false,
+      "prep_public": false,
+      "service_private": false,
+      "service_view": false
+    },
+    "physicalRelations": 3,
+    "oidAndAclPreservation": true,
+    "originalPublicUsagePreconditionFalse": true,
+    "formalGateChanged": false
+  },
+  "nativeDefinerAclAudit": [
+    {
+      "role": "research_input_preparation_owner_v2",
+      "public": false,
+      "callable": [
+        "assert_research_source_seal_v2(uuid)",
+        "read_research_observed_claim_v2(text,text,uuid,integer)",
+        "seal_research_sources_v2(jsonb,timestamp with time zone)"
+      ]
+    },
+    {
+      "role": "research_source_fence_owner_v2",
+      "public": false,
+      "callable": []
+    }
+  ],
+  "result": {
+    "cache": [
+      {
+        "step": "cache-window-first-response",
+        "status": 200,
+        "rejectedReasons": [
+          "vnext_cached_original_event_authority_unavailable"
+        ],
+        "replayed": 0,
+        "selected": 2,
+        "upstreamCoverage": "unknown"
+      },
+      {
+        "step": "cache-window-second-response",
+        "status": 200,
+        "rejectedReasons": [
+          "vnext_cached_original_event_authority_unavailable"
+        ],
+        "replayed": 2,
+        "selected": 0,
+        "upstreamCoverage": "unknown"
+      }
+    ],
+    "negativeOriginalEventClockPreserved": true,
+    "noAdditionalExtractionOnReplay": true,
+    "bothActual120SecondDeadlinesPassed": true,
+    "nativeClockUnchanged": true,
+    "oneChargedRetry": true,
+    "routineHttpResults": [
+      {
+        "kind": "routine-admitted",
+        "newJobs": 1,
+        "newMembers": 1,
+        "startedAttempts": 0,
+        "providerInvocations": 0,
+        "noExternalIO": true
+      },
+      {
+        "kind": "real-deadline-expiry",
+        "actualServer120SecondDeadline": true,
+        "noClockOverride": true,
+        "expiredAttemptsRefunded": 0,
+        "retryRows": 1,
+        "retryIdempotent": true,
+        "totalStartedAttempts": 2,
+        "providerInvocations": 0,
+        "noExternalIO": true,
+        "secondExpiryExit": "NOT_RUN"
+      },
+      {
+        "kind": "repeat-and-withdrawal",
+        "jobRowsImmutable": true,
+        "originalsRetained": true,
+        "noAdditionalStartedAttempts": true,
+        "providerInvocations": 0,
+        "noExternalIO": true
+      },
+      {
+        "kind": "cache-window",
+        "newExtractionReceipts": 2,
+        "unauthorizedOriginalEventRejected": 1,
+        "originalEventClockPreserved": true,
+        "subsequentNewExtractions": 0,
+        "progressRows": 2,
+        "eventCoverage": "unknown",
+        "eventVolume": null,
+        "actualKeysetOver200": "NOT_RUN: separate source contract only",
+        "externalAcquisition": false
+      }
+    ],
+    "unsettledQueries": 0
+  },
+  "outstanding": {
+    "reviewOfDeploymentMigration": true,
+    "formalProtectedGateNotYetPassed": true,
+    "realSourceAndModelAcceptanceOutsideFixture": true,
+    "productionUnmodified": true
+  },
+  "recordedAt": "2026-11-18T11:38:58+08:00"
+}
