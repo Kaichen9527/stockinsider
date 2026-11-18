@@ -5,6 +5,8 @@ on:
       - '.github/workflows/stockinsider-vnext-quality.yml'
       - 'web/**'
       - 'scripts/vnext-*'
+      - 'scripts/mops_diluted_eps_note.py'
+      - 'scripts/test_mops_diluted_eps_note.py'
       - 'scripts/owner-oidc-browser-smoke.mjs'
       - 'scripts/opportunity-v3/**'
       - 'scripts/assert_canonical_vercel_project.mjs'
@@ -140,6 +142,7 @@ jobs:
             web/src/lib/candidate-valuation-inputs.test.ts \
             web/src/lib/candidate-financial-coverage.test.ts | tee /tmp/stockinsider-vnext-ci/reported-financial-validation.tap
           node --experimental-strip-types --test web/src/lib/vnext/mops-consolidated-ebook.test.ts | tee /tmp/stockinsider-vnext-ci/mops-consolidated-ebook.tap
+          python3 -B -m unittest discover -s scripts -p test_mops_diluted_eps_note.py -v
           npm --prefix web run typecheck
           npm --prefix web run lint
       - name: Full ordinary build
