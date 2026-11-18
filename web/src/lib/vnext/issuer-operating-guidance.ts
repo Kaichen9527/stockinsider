@@ -1,4 +1,5 @@
 import {createHash} from 'node:crypto';
+import {calculateEarningsBridge,type EarningsBridgeInput} from './earnings-bridge.ts';
 
 const MEDIATEK={
  symbol:'2454',
@@ -79,6 +80,12 @@ export function calculateGuidedOperatingScenarios({revenueTwd,grossMarginBps,exp
  };
 }
 
+type Case = 'bear' | 'base' | 'bull';
+export type GuidedEarningsAssumptions = Partial<Record<Case, {
+  shareBasis: EarningsBridgeInput['shareBasis'];
+  operands: Omit<EarningsBridgeInput['operands'], 'operatingIncome'>;
+}>>;
+
 async function captureTranscript(transport:typeof fetch){
  const response=await transport(MEDIATEK.url,{redirect:'error',cache:'no-store',signal:AbortSignal.timeout(15000)});
  if(!response.ok||response.url!==MEDIATEK.url||!/^application\/pdf(?:;|$)/iu.test(response.headers.get('content-type')||'')||!response.body)fail('transcript_unavailable');
@@ -99,7 +106,7 @@ async function captureTranscript(transport:typeof fetch){
  return {raw,sha256,bytes,knownAt:new Date().toISOString()};
 }
 
-export async function readMediaTekQ4OperatingGuidance(transport=fetch){
+export async function readMediaTekQ4OperatingGuidance(transport=fetch, assumptions: GuidedEarningsAssumptions = {}){
  const {raw,...receipt}=await captureTranscript(transport);
  const {getDocument}=await import('pdfjs-dist/legacy/build/pdf.mjs');
  const loading=getDocument({data:new Uint8Array(raw),isEvalSupported:false,useWasm:false,useSystemFonts:false,disableFontFace:true,stopAtErrors:true});
@@ -109,8 +116,25 @@ export async function readMediaTekQ4OperatingGuidance(transport=fetch){
   const page=await pdf.getPage(MEDIATEK.page);
   const text=await page.getTextContent();
   const {guidance,locator}=parseQuarterOperatingGuidance(text.items.map(item=>'str' in item?item.str:'').join(' '));
+  const operatingScenarios=calculateGuidedOperatingScenarios(guidance);
+  const scope={symbol:MEDIATEK.symbol,periodStart:'2026-10-01',periodEnd:'2026-12-31'};
+  const cases=['bear','base','bull'] as const;
+  if(!assumptions || typeof assumptions!=='object' || Array.isArray(assumptions)
+    || Object.keys(assumptions).some(key=>!cases.includes(key as Case)))fail('earnings_assumptions_invalid');
+  const forCase=(key:Case)=>{
+   const supplied=assumptions[key];
+   if(supplied!==undefined && (!supplied || !['basic','diluted'].includes(supplied.shareBasis) ||
+     !supplied.operands || Array.isArray(supplied.operands) || typeof supplied.operands!=='object' ||
+     Object.hasOwn(supplied.operands,'operatingIncome')))fail('earnings_assumptions_invalid');
+   return calculateEarningsBridge({...scope,periodKind:'fiscal_quarter',classification:'modeled_scenario',
+    shareBasis:supplied?.shareBasis??'diluted',cutoff:receipt.knownAt,operands:{
+     ...supplied?.operands, operatingIncome:{...scope,value:operatingScenarios[key].operatingIncomeTwd,unit:'TWD',
+      basis:'issuer_guidance',knownAt:receipt.knownAt,sourceSha256:receipt.sha256,sourceRef:'mediatek-2026-q3-earnings-call:p4'},
+    }});
+  };
+  const earningsBridge=Object.fromEntries(cases.map(key=>[key,forCase(key)]));
   return {schemaVersion:'vnext-issuer-operating-guidance-v1',symbol:MEDIATEK.symbol,period:MEDIATEK.period,eventDate:MEDIATEK.eventDate,
    source:{url:MEDIATEK.url,...receipt,locator:{page:MEDIATEK.page,...locator}},sourceClass:'company_disclosed_guidance',
-   guidance,operatingScenarios:calculateGuidedOperatingScenarios(guidance)};
+   guidance,operatingScenarios,earningsBridge};
  }finally{await loading.destroy();}
 }

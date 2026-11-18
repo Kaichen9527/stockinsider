@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "stockinsider-earnings-bridge-observation-v1",
+  "scope": "public_issuer_document_reconciliation",
+  "symbol": "2454",
+  "q3": {
+    "url": "https://www.mediatek.com/hubfs/MediaTek-Assets/Pdfs/Financial%20Reports/2026/Q3%20Consolidated%20Report.pdf",
+    "sourceSha256": "070aad29b8624a0c0c746429bdccffde4228e27805e4b578080758255676adab",
+    "pdfPages": 108,
+    "incomeStatementPage": 6,
+    "epsNotePage": 60,
+    "period": {
+      "start": "2026-07-01",
+      "end": "2026-09-30"
+    },
+    "observedAt": "2026-11-18T10:40:21Z",
+    "pretaxIncomeTwd": "33573000000",
+    "netIncomeTwd": "28198782000",
+    "parentIncomeTwd": "27882349000",
+    "basic": {
+      "numeratorTwd": "27882349000",
+      "denominatorShares": "1593616364",
+      "amount": "17.496274",
+      "roundedToCents": "17.50"
+    },
+    "diluted": {
+      "numeratorTwd": "27882349000",
+      "denominatorShares": "1596282109",
+      "amount": "17.467056",
+      "roundedToCents": "17.47"
+    },
+    "reportedBasicEps": "17.50",
+    "reportedDilutedEps": "17.47",
+    "namedInputs": {
+      "operatingIncome": 27102213000,
+      "netNonoperatingIncome": 6470787000,
+      "incomeTaxExpense": 5374218000,
+      "noncontrollingIncome": 316433000,
+      "ordinaryNumeratorAdjustment": 0,
+      "weightedAverageShares": 1596282109
+    }
+  },
+  "q4": {
+    "url": "https://www.mediatek.com/hubfs/MediaTek-Assets/Pdfs/Quarterly%20Earnings%20Release/2026/Quarterly%20Earnings%20Release-2026Q3/Transcript.pdf",
+    "sourceSha256": "991c4a867a06803b8c02db4c89e058b937902a47634cc89e2869310782342a9c",
+    "pdfPage": 4,
+    "observedAt": "2026-11-18T10:39:12.678Z",
+    "issuerEventDate": "2026-10-30",
+    "period": "2026-Q4",
+    "operatingIncomeTwd": {
+      "bear": 32565500000,
+      "base": 41030500000,
+      "bull": 49905000000
+    },
+    "eps": null,
+    "peTarget": null,
+    "missingInputs": [
+      "netNonoperatingIncome",
+      "incomeTaxExpense",
+      "noncontrollingIncome",
+      "ordinaryNumeratorAdjustment",
+      "weightedAverageShares"
+    ]
+  },
+  "controls": {
+    "actualPdfWithSyntheticBridgeInputsPassed": true,
+    "quarterlyPeTargetSuppressed": true,
+    "replayedHistoricalOperandsAsQuarterlyForecast": false,
+    "productionWrites": 0
+  }
+}
