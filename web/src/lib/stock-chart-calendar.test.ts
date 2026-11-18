@@ -70,3 +70,26 @@ test('supplied missing period stays empty rather than relabelling available dail
   assert.deepEqual(selectStockChartSeries(supplied, 'daily', daily), daily);
   assert.deepEqual(selectStockChartSeries({ ...supplied, weekly: daily }, 'weekly', []), daily);
 });
+
+test('ranked visible weekly candles exclude warmup from OHLC and volume at the date boundary', () => {
+  const warmup = { time: '2026-11-30', open: 85, high: 90, low: 2, close: 88, volume: 500 };
+  const source = [warmup, bar('2026-12-01', 12, 0), bar('2026-12-02', 13, 7)];
+  const cutoff = '2026-12-03T13:30:00Z';
+  const selected = calendarStockCandles(source, 'weekly', cutoff, '2026-12-01');
+  assert.deepEqual(selected.candles, [{ time: '2026-12-02', open: 10, high: 15, low: 8, close: 13 }]);
+  assert.deepEqual(selected.periods, [{ periodStart: '2026-11-30',
+    sourceDates: ['2026-12-01', '2026-12-02'], provisional: true, volume: 7 }]);
+  assert.equal(calendarStockCandles(source, 'weekly', cutoff).candles[0].open, 85);
+});
+
+test('ranked visible monthly candles honor a mid-month start and retain a true missing volume', () => {
+  const source = [bar('2026-12-01', 30, 100), bar('2026-12-02', 11, null), bar('2026-12-03', 12, 5)];
+  const cutoff = '2026-12-03T13:30:00Z';
+  const selected = calendarStockCandles(source, 'monthly', cutoff, '2026-12-02');
+  assert.deepEqual(selected.candles, [{ time: '2026-12-03', open: 10, high: 15, low: 8, close: 12 }]);
+  assert.deepEqual(selected.periods[0].sourceDates, ['2026-12-02', '2026-12-03']);
+  assert.equal(selected.periods[0].volume, null);
+  assert.throws(() => calendarStockCandles(source, 'monthly', cutoff, '2026-12-04'), /display_window_invalid/u);
+  assert.throws(() => calendarStockCandles(source, 'monthly', cutoff, 'not-a-day'), /display_window_invalid/u);
+  assert.throws(() => calendarStockCandles([...source, bar('2026-12-01', 9)], 'monthly', cutoff, '2026-12-02'), /conflicting_session/u);
+});

@@ -79,6 +79,7 @@ jobs:
           mkdir -m 700 /tmp/stockinsider-vnext-oct22-private
           node --experimental-strip-types web/src/lib/vnext/launch-research-dispatch.test.ts | tee /tmp/stockinsider-vnext-ci/launch-research-dispatch.tap
           node --experimental-strip-types web/src/lib/vnext/launch-cutover.test.ts | tee /tmp/stockinsider-vnext-ci/launch-cutover.tap
+          node --experimental-strip-types --test web/src/lib/stock-chart-calendar.test.ts web/src/lib/stock-chart-supply.test.ts web/src/lib/candidate-price-history.test.ts | tee /tmp/stockinsider-vnext-ci/stock-chart-calendar.tap
           node --experimental-strip-types --test web/src/lib/vnext/launch-candidate-catalog.test.ts web/src/lib/vnext/launch-candidate-catalog-page.test.ts | tee /tmp/stockinsider-vnext-ci/launch-candidate-catalog.tap
           node --experimental-strip-types --test web/src/lib/vnext/launch-disposition-range.test.ts web/src/lib/vnext/launch-disposition-status.test.ts | tee /tmp/stockinsider-vnext-ci/launch-disposition-range.tap
           node --experimental-strip-types web/src/lib/vnext/vnext.test.ts | tee /tmp/stockinsider-vnext-ci/pure.tap
@@ -138,6 +139,9 @@ jobs:
           node --experimental-strip-types scripts/vnext-business-vectors.test.mjs | tee /tmp/stockinsider-vnext-ci/business-vectors.tap
           node scripts/candidate-financial-document-write-lease-route.test.mjs | tee /tmp/stockinsider-vnext-ci/lease-routes.tap
           node --experimental-strip-types --test \
+            web/src/lib/candidate-official-financials.test.ts \
+            web/src/lib/candidate-financial-fact-manifest.test.ts \
+            web/src/lib/candidate-financial-document-manifest.test.ts \
             web/src/lib/official-financial-validation.test.ts \
             web/src/lib/official-financial-validation-worker.test.ts \
             web/src/lib/financial-eps-reconciliation.test.ts \
@@ -145,7 +149,7 @@ jobs:
             web/src/lib/candidate-financial-coverage.test.ts | tee /tmp/stockinsider-vnext-ci/reported-financial-validation.tap
           node --experimental-strip-types --test web/src/lib/vnext/mops-consolidated-ebook.test.ts | tee /tmp/stockinsider-vnext-ci/mops-consolidated-ebook.tap
           python3 -B -m unittest discover -s scripts -p test_mops_diluted_eps_note.py -v
-          node --experimental-strip-types --test web/src/lib/tw-entry-plan-authority.test.ts web/src/lib/vnext/launch-pattern-read.test.ts web/src/lib/vnext/launch-opening-halt.test.ts | tee /tmp/stockinsider-vnext-ci/opening-evidence.tap
+          node --experimental-strip-types --test web/src/lib/tw-entry-plan-authority.test.ts web/src/lib/vnext/launch-pattern-read.test.ts web/src/lib/vnext/launch-opening-halt.test.ts web/src/lib/vnext/launch-opening-fugle.test.ts | tee /tmp/stockinsider-vnext-ci/opening-evidence.tap
           npm --prefix web run typecheck
           npm --prefix web run lint
       - name: Full ordinary build

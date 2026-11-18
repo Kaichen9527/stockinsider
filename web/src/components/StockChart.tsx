@@ -61,7 +61,7 @@ export default function StockChart({ data, timeframeCharts, missingReason, ranki
   }, [data]);
 
   const dataset = useMemo(() => {
-    if (timeframeCharts) return { charts: timeframeCharts, calendar: null, calendarError: false };
+    if (timeframeCharts) return { charts: timeframeCharts, calendar: null, visibleCalendar: null, calendarError: false };
     try {
       const calendar = {
         weekly: calendarStockCandles(data, 'weekly', effectiveCutoff),
@@ -70,23 +70,31 @@ export default function StockChart({ data, timeframeCharts, missingReason, ranki
         halfYear: calendarStockCandles(data, 'halfYear', effectiveCutoff),
         yearly: calendarStockCandles(data, 'yearly', effectiveCutoff),
       };
+      const visibleCalendar = displayFrom ? {
+        weekly: calendarStockCandles(data, 'weekly', effectiveCutoff, displayFrom),
+        monthly: calendarStockCandles(data, 'monthly', effectiveCutoff, displayFrom),
+      } : null;
       return { charts: { daily: Array.from(normalizedDaily.values()), weekly: calendar.weekly.candles,
         monthly: calendar.monthly.candles, quarterly: calendar.quarterly.candles,
-        halfYear: calendar.halfYear.candles, yearly: calendar.yearly.candles }, calendar, calendarError: false };
+        halfYear: calendar.halfYear.candles, yearly: calendar.yearly.candles }, calendar, visibleCalendar, calendarError: false };
     } catch {
-      return { charts: { daily: Array.from(normalizedDaily.values()), weekly: [], monthly: [], quarterly: [], halfYear: [], yearly: [] }, calendar: null, calendarError: true };
+      return { charts: { daily: Array.from(normalizedDaily.values()), weekly: [], monthly: [], quarterly: [], halfYear: [], yearly: [] },
+        calendar: null, visibleCalendar: null, calendarError: true };
     }
-  }, [data, normalizedDaily, timeframeCharts, effectiveCutoff]);
+  }, [data, normalizedDaily, timeframeCharts, effectiveCutoff, displayFrom]);
 
   const selectedData = useMemo(() => selectStockChartSeries(dataset.charts, timeframe, Array.from(normalizedDaily.values())), [dataset, timeframe, normalizedDaily]);
 
-  const visibleData = useMemo(() => displayFrom ? selectedData.filter(row => String(row.time) >= displayFrom) : selectedData, [selectedData, displayFrom]);
+  const visiblePeriod = timeframe === 'weekly' || timeframe === 'monthly' ? dataset.visibleCalendar?.[timeframe] : null;
+  const visibleData = useMemo(() => visiblePeriod?.candles
+    ?? (displayFrom ? selectedData.filter(row => String(row.time) >= displayFrom) : selectedData),
+  [visiblePeriod, selectedData, displayFrom]);
 
   const volume = useMemo(() => {
     if (!rankingWindow) return [];
-    if (timeframe === 'daily') return Array.from(normalizedDaily.values(), row => row.volume ?? null);
-    return dataset.calendar?.[timeframe].periods.map(period => period.volume) ?? [];
-  }, [rankingWindow, timeframe, normalizedDaily, dataset.calendar]);
+    if (timeframe === 'daily') return visibleData.map(row => normalizedDaily.get(String(row.time))?.volume ?? null);
+    return visiblePeriod?.periods.map(period => period.volume) ?? [];
+  }, [rankingWindow, timeframe, visibleData, normalizedDaily, visiblePeriod]);
 
   useEffect(() => {
     if (!chartContainerRef.current) return;
@@ -123,9 +131,9 @@ export default function StockChart({ data, timeframeCharts, missingReason, ranki
     });
 
     series.setData(visibleData);
-    const volumeData = selectedData.flatMap((candle, index) => {
+    const volumeData = visibleData.flatMap((candle, index) => {
       const value = volume[index];
-      if (value == null || (displayFrom && String(candle.time) < displayFrom)) return [];
+      if (value == null) return [];
       return [{ time: candle.time, value, color: candle.close >= candle.open ? '#059669' : '#dc2626' }];
     });
     if (volumeData.length) {
@@ -187,7 +195,7 @@ export default function StockChart({ data, timeframeCharts, missingReason, ranki
       {timeframeCharts && (timeframe === 'weekly' || timeframe === 'monthly') && <p className="text-xs text-slate-500" role="status">本期完成狀態與交易日覆蓋尚未提供，請以來源資料為準。</p>}
       {!timeframeCharts && (timeframe === 'weekly' || timeframe === 'monthly') && <p className="text-xs text-slate-500" role="status">
         {dataset.calendarError ? '期別資料有衝突或格式不完整，暫不繪製。' : <>
-          依台灣曆{timeframe === 'weekly' ? '週' : '月'}聚合。{rankingWindow ? ' 最後一期只計入截至榜單日的交易日。' : ' 只含已提供交易日，歷史期別不代表資料完整。'}
+          依台灣曆{timeframe === 'weekly' ? '週' : '月'}聚合。{rankingWindow ? ' K 線與成交量只計入顯示期間內、截至榜單日的交易日。' : ' 只含已提供交易日，歷史期別不代表資料完整。'}
           {dataset.calendar?.[timeframe].periods.some(period => period.provisional === true) ? '本期尚未完成（暫定）。'
             : effectiveCutoff === undefined ? '本期完成狀態待確認。' : ''}
         </>}

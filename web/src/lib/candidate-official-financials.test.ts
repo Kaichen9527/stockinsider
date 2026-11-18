@@ -30,7 +30,7 @@ test('MOPS acquisition downloads the official filing rather than attempting to p
     assert.equal(options?.method,'POST');
     const body=new URLSearchParams(String(options?.body));
     assert.equal(body.get('co_id'),'2330');assert.equal(body.get('report_id'),'C');assert.equal(body.get('year'),'2025');
-    return new Response(`<html><xbrli:context id="q"><xbrli:period><xbrli:startDate>2025-01-01</xbrli:startDate><xbrli:endDate>2025-06-30</xbrli:endDate></xbrli:period></xbrli:context><ix:nonNumeric name="tifrs-notes:ReviewAuditDate">114/08/10</ix:nonNumeric><ix:nonFraction name="ifrs-full:Revenue" contextRef="q" unitRef="TWD">1200</ix:nonFraction></html>`,{headers:{'content-type':'text/html'}});
+    return new Response(`<html><xbrli:context id="q"><xbrli:entity><xbrli:identifier scheme="http://www.twse.com.tw">2330</xbrli:identifier></xbrli:entity><xbrli:period><xbrli:startDate>2025-01-01</xbrli:startDate><xbrli:endDate>2025-06-30</xbrli:endDate></xbrli:period></xbrli:context><ix:nonNumeric name="tifrs-notes:ReviewAuditDate">114/08/10</ix:nonNumeric><ix:nonFraction name="ifrs-full:Revenue" contextRef="q" unitRef="TWD">1200</ix:nonFraction></html>`,{headers:{'content-type':'text/html'}});
   };
   try {
     const result=await fetchCandidateMopsFiling({stockId:'10000000-0000-4000-8000-000000000001',symbol:'2330',exchange:'TWSE'},2025,2);
@@ -42,8 +42,8 @@ test('MOPS acquisition downloads the official filing rather than attempting to p
 
 test('XBRL arbitrary unit IDs resolve measures; balance values cannot silently accept USD', () => {
   const html = `
-    <xbrli:context id="q"><xbrli:period><xbrli:startDate>2026-01-01</xbrli:startDate><xbrli:endDate>2026-06-30</xbrli:endDate></xbrli:period></xbrli:context>
-    <xbrli:context id="i"><xbrli:period><xbrli:instant>2026-06-30</xbrli:instant></xbrli:period></xbrli:context>
+    <xbrli:context id="q"><xbrli:entity><xbrli:identifier scheme="http://www.twse.com.tw">2330</xbrli:identifier></xbrli:entity><xbrli:period><xbrli:startDate>2026-01-01</xbrli:startDate><xbrli:endDate>2026-06-30</xbrli:endDate></xbrli:period></xbrli:context>
+    <xbrli:context id="i"><xbrli:entity><xbrli:identifier scheme="http://www.twse.com.tw">2330</xbrli:identifier></xbrli:entity><xbrli:period><xbrli:instant>2026-06-30</xbrli:instant></xbrli:period></xbrli:context>
     <xbrli:unit id="u1"><xbrli:measure>iso4217:TWD</xbrli:measure></xbrli:unit>
     <xbrli:unit id="u2"><xbrli:measure>xbrli:shares</xbrli:measure></xbrli:unit>
     <xbrli:unit id="u3"><xbrli:divide><xbrli:unitNumerator><xbrli:measure>iso4217:TWD</xbrli:measure></xbrli:unitNumerator><xbrli:unitDenominator><xbrli:measure>xbrli:shares</xbrli:measure></xbrli:unitDenominator></xbrli:divide></xbrli:unit>
@@ -65,8 +65,8 @@ test('XBRL arbitrary unit IDs resolve measures; balance values cannot silently a
 
 test('candidate official MOPS history accepts only consolidated year-to-date facts with an auditable filing date', () => {
     const html = `
-      <xbrli:context id="good"><xbrli:period><xbrli:startDate>2026-01-01</xbrli:startDate><xbrli:endDate>2026-06-30</xbrli:endDate></xbrli:period></xbrli:context>
-      <xbrli:context id="segment"><xbrli:scenario><xbrldi:explicitMember>division</xbrldi:explicitMember></xbrli:scenario><xbrli:period><xbrli:startDate>2026-01-01</xbrli:startDate><xbrli:endDate>2026-06-30</xbrli:endDate></xbrli:period></xbrli:context>
+      <xbrli:context id="good"><xbrli:entity><xbrli:identifier scheme="http://www.twse.com.tw">2330</xbrli:identifier></xbrli:entity><xbrli:period><xbrli:startDate>2026-01-01</xbrli:startDate><xbrli:endDate>2026-06-30</xbrli:endDate></xbrli:period></xbrli:context>
+      <xbrli:context id="segment"><xbrli:entity><xbrli:identifier scheme="http://www.twse.com.tw">2330</xbrli:identifier></xbrli:entity><xbrli:scenario><xbrldi:explicitMember>division</xbrldi:explicitMember></xbrli:scenario><xbrli:period><xbrli:startDate>2026-01-01</xbrli:startDate><xbrli:endDate>2026-06-30</xbrli:endDate></xbrli:period></xbrli:context>
       <ix:nonNumeric name="tifrs-notes:ReviewAuditDate">115/08/10</ix:nonNumeric>
       <ix:nonFraction name="ifrs-full:Revenue" contextRef="good" unitRef="TWD">1,200</ix:nonFraction>
       <ix:nonFraction name="ifrs-full:GrossProfit" contextRef="good" unitRef="TWD">500</ix:nonFraction>
@@ -91,6 +91,32 @@ test('candidate official MOPS history accepts only consolidated year-to-date fac
     assert.equal(facts.find((row) => row.factKey === 'quarterly_revenue')?.value, 1200);
     assert.equal(facts.every((row) => row.periodStart === '2026-01-01' && row.filingPublishedAt === '2026-08-11T00:00:00.000Z' && row.sourceTimestamp === '2026-08-11T00:00:00.000Z'), true);
     assert.equal(facts.every((row) => row.provider === 'mops'), true);
+});
+
+test('MOPS binds actual issuer contexts and preserves distinct Q3, YTD and explicit zero', () => {
+  const context = (id: string, issuer: string, start: string, scheme = 'http://www.twse.com.tw') =>
+    '<xbrli:context id="' + id + '"><xbrli:entity><xbrli:identifier scheme="' + scheme + '">' + issuer
+    + '</xbrli:identifier></xbrli:entity><xbrli:period><xbrli:startDate>' + start
+    + '</xbrli:startDate><xbrli:endDate>2026-09-30</xbrli:endDate></xbrli:period></xbrli:context>';
+  const eps = (id: string, value: string) => '<ix:nonFraction name="ifrs-full:DilutedEarningsLossPerShare" contextRef="'
+    + id + '" unitRef="EarningsPerShare">' + value + '</ix:nonFraction>';
+  const markup = '<html><ix:nonNumeric name="tifrs-notes:ReviewAuditDate">115/11/13</ix:nonNumeric>'
+    + context('quarter', '4763', '2026-07-01') + context('ytd', '4763', '2026-01-01')
+    + context('other', '3526', '2026-07-01') + context('untrusted', '4763', '2026-07-01', 'urn:other')
+    + context('noncanonical', '4763', '2026-04-01') + context('ambiguous', '4763', '2026-07-01')
+    + context('ambiguous', '3526', '2026-07-01')
+    + '<!-- ' + context('commented', '4763', '2026-07-01') + ' -->'
+    + eps('quarter', '0.00') + eps('ytd', '1.85') + eps('other', '4.45') + eps('untrusted', '9.99')
+    + eps('noncanonical', '9.99') + eps('ambiguous', '9.99') + eps('commented', '9.99') + eps('no-context', '9.99')
+    + '</html>';
+  const request = { stockId: '10000000-0000-4000-8000-000000000001', symbol: '4763', exchange: 'TWSE' as const,
+    sourceUrl: candidateMopsDownloadUrl('4763', 2026, 3), collectedAt: '2026-11-18T05:35:00Z' };
+  const facts = parseCandidateMopsFacts(markup, request);
+  assert.deepEqual(facts.map(row => [row.periodStart, row.value, row.locator?.period_semantics]), [
+    ['2026-07-01', 0, 'discrete_quarter'], ['2026-01-01', 1.85, 'year_to_date'],
+  ]);
+  assert.ok(facts.every(row => row.durationKind === 'quarterly'));
+  assert.deepEqual(parseCandidateMopsFacts(markup, { ...request, symbol: '2330' }), []);
 });
 
 test('official financial refresh completes durable MOPS and TPEx jobs atomically', async () => {
@@ -224,7 +250,7 @@ test('official listing authority distinguishes unavailable pre-listing periods f
 
 test('instant balance and outstanding-share facts retain null periodStart', () => {
   const html = `
-    <xbrli:context id="instant"><xbrli:period><xbrli:instant>2026-06-30</xbrli:instant></xbrli:period></xbrli:context>
+    <xbrli:context id="instant"><xbrli:entity><xbrli:identifier scheme="http://www.twse.com.tw">2330</xbrli:identifier></xbrli:entity><xbrli:period><xbrli:instant>2026-06-30</xbrli:instant></xbrli:period></xbrli:context>
     <ix:nonNumeric name="tifrs-notes:ReviewAuditDate">115/08/10</ix:nonNumeric>
     <ix:nonFraction name="ifrs-full:EquityAttributableToOwnersOfParent" contextRef="instant" unitRef="TWD">1,000</ix:nonFraction>
     <ix:nonFraction name="ifrs-full:CashAndCashEquivalents" contextRef="instant" unitRef="TWD">200</ix:nonFraction>
