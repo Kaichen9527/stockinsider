@@ -50,6 +50,35 @@ test('public outcome rejects impossible time ordering and keeps unobserved sched
   assert.equal(parsePublicLaunchOutcome(sameTaipeiDay,signal).state,'ready');
 });
 
+test('frozen outcome horizons stay in date order and share the same maturity across both tracks',async()=>{
+  const withResearch=(...horizons:unknown[])=>({...completed,research:{...completed.research,horizons},
+    execution:{status:'unfillable',nextSession:completed.execution.nextSession,reason:'suspended',
+      grossBarrier20:null,netBarrier20:null,horizons:[]}});
+  const pendingDate={...waiting,terminalSession:'2026-12-29'};
+  const scheduled={...completed,research:{...completed.research,horizons:[period,pendingDate,gap]},
+    execution:{...completed.execution,horizons:[completed.execution.horizons[0],pendingDate,gap]}};
+  assert.equal(parsePublicLaunchOutcome(scheduled,ref).state,'ready');
+
+  const mismatchedSession={...completed,execution:{...completed.execution,horizons:[
+    {...completed.execution.horizons[0],terminalSession:'2026-11-03'},waiting,gap]}};
+  const mismatchedMaturity={...completed,execution:{...completed.execution,horizons:[
+    completed.execution.horizons[0],{...waiting,state:'price_data_gap'},gap]}};
+  const invalid=[
+    ['different closing days',mismatchedSession],
+    ['different maturity',mismatchedMaturity],
+    ['duplicate terminal days',withResearch(period,{...waiting,terminalSession:period.terminalSession},gap)],
+    ['missing earlier terminal day',withResearch(period,waiting,{...gap,terminalSession:'2027-03-19'})],
+    ['longer window ready before shorter window',withResearch(
+      {...period,state:'pending',grossReturnPct:null},
+      {...waiting,state:'ready',terminalSession:'2026-11-04',grossReturnPct:12},gap)],
+  ] as const;
+  for(const [label,document] of invalid){
+    assert.throws(()=>parsePublicLaunchOutcome(document,ref),/launch_outcome_public_projection_unavailable/u,label);
+  }
+  const reader={async rpc(){return {data:mismatchedSession,error:null};}};
+  assert.deepEqual(await readLaunchOutcomeProjection(reader,ref),{state:'unavailable'});
+});
+
 test('performance reader calls only the readonly RPC, sanitizes errors, and skips invalid IDs',async()=>{
   const calls:unknown[]=[];
   const expect={state:'unavailable'};

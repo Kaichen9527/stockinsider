@@ -1,0 +1,190 @@
+{
+  "schema": "stockinsider-t19-native-replay-v1",
+  "pullRequest": 411,
+  "baseHead": "1011b36803d1fc5917ab378cfeee8b62eb533825",
+  "baseTree": "fe82189549f0100ac0a14f4f8db131d876be4485",
+  "verifiedTrackedObjectsBeforeEdits": 3590,
+  "originalGithubJob": 134384851142,
+  "execution": "isolated Contabo staging",
+  "scope": "actual Node and PostgreSQL worker tests with synthetic sources, originals, sessions and model; no real source, model, valuation or market-session approval",
+  "node": {
+    "version": "22.14.0",
+    "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "lockedPgDependencyVersionsVerified": 13
+  },
+  "isolation": {
+    "postgresNetwork": "none",
+    "nodeNetworkNamespace": "private",
+    "postgresPortPublished": false,
+    "postgresMemoryLimitBytes": 1073741824,
+    "postgresData": "temporary memory filesystem",
+    "productionServiceChanges": false,
+    "productionBackupRead": false
+  },
+  "initialResults": [
+    {
+      "containerAndSocketRemoved": true,
+      "counts": {
+        "cancelled": 0,
+        "fail": 0,
+        "pass": 6,
+        "skipped": 0,
+        "tests": 6,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "failedBeforeTapCounts": false,
+      "finiteFailureTags": [],
+      "pgSha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed",
+      "pgVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+      "rejectionCodes": [],
+      "resources": {
+        "freeAfter": 18348560384,
+        "freeBefore": 18352099328,
+        "memoryAfter": 4711518208,
+        "memoryBefore": 4717096960
+      },
+      "scope": "isolated synthetic inputs",
+      "suite": "twse-snapshot",
+      "tapSha256": "6218235f8cec9fe2d06d4875b49c6bac20dd842b10a177012408d4ee8e900760"
+    },
+    {
+      "containerAndSocketRemoved": true,
+      "counts": {
+        "cancelled": 0,
+        "fail": 2,
+        "pass": 3,
+        "skipped": 0,
+        "tests": 5,
+        "todo": 0
+      },
+      "exitCode": 1,
+      "failedBeforeTapCounts": false,
+      "finiteFailureTags": [
+        {
+          "code": "ERR_ASSERTION",
+          "stage": "2409 source→actual worker receipts→current semantic receipt and fixed deep score; immutable replay"
+        }
+      ],
+      "pgSha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed",
+      "pgVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+      "rejectionCodes": [
+        "ERR_ASSERTION",
+        "ERR_TEST_FAILURE"
+      ],
+      "resources": {
+        "freeAfter": 18346840064,
+        "freeBefore": 18348560384,
+        "memoryAfter": 4721315840,
+        "memoryBefore": 4710776832
+      },
+      "scope": "isolated synthetic inputs",
+      "suite": "catalyst",
+      "tapSha256": "d564fbeddce2e7c6136b00dde196d48af6808ab1e88dd113327eef3933c707fc"
+    },
+    {
+      "containerAndSocketRemoved": true,
+      "counts": {
+        "cancelled": 0,
+        "fail": 2,
+        "pass": 2,
+        "skipped": 0,
+        "tests": 4,
+        "todo": 0
+      },
+      "exitCode": 1,
+      "failedBeforeTapCounts": false,
+      "finiteFailureTags": [
+        {
+          "code": "UNKNOWN",
+          "stage": "actual dimensionless SQL multiplication keeps EPS per-share units and rejects scalar/flow substitution"
+        }
+      ],
+      "pgSha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed",
+      "pgVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+      "rejectionCodes": [
+        "ERR_TEST_FAILURE"
+      ],
+      "resources": {
+        "freeAfter": 18290446336,
+        "freeBefore": 18346840064,
+        "memoryAfter": 4680798208,
+        "memoryBefore": 4721061888
+      },
+      "scope": "isolated synthetic inputs",
+      "suite": "target",
+      "tapSha256": "8547a93f58bc21cc87a37590c8e4b94cd13113b09c2e7b448e556c2e8752b3a8"
+    }
+  ],
+  "resultAfterFixtureChange": [
+    {
+      "containerAndSocketRemoved": true,
+      "counts": {
+        "cancelled": 0,
+        "fail": 0,
+        "pass": 8,
+        "skipped": 0,
+        "tests": 8,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "failedBeforeTapCounts": false,
+      "finiteFailureTags": [],
+      "pgSha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed",
+      "pgVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+      "rejectionCodes": [],
+      "resources": {
+        "freeAfter": 18288037888,
+        "freeBefore": 18288062464,
+        "memoryAfter": 4596498432,
+        "memoryBefore": 4618141696
+      },
+      "scope": "isolated synthetic inputs",
+      "suite": "catalyst",
+      "tapSha256": "3e79cbb4784bdacfec4eeedc490a12a0faeef7439aa06b2b86d2d964902eca7d"
+    },
+    {
+      "containerAndSocketRemoved": true,
+      "counts": {
+        "cancelled": 0,
+        "fail": 0,
+        "pass": 7,
+        "skipped": 0,
+        "tests": 7,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "failedBeforeTapCounts": false,
+      "finiteFailureTags": [],
+      "pgSha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed",
+      "pgVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+      "rejectionCodes": [],
+      "resources": {
+        "freeAfter": 18284826624,
+        "freeBefore": 18284892160,
+        "memoryAfter": 4424945664,
+        "memoryBefore": 4538130432
+      },
+      "scope": "isolated synthetic inputs",
+      "suite": "target",
+      "tapSha256": "974934664466a4ee7df502364d3e09a4bd71fe63a500e095a5a2414bd90525cb"
+    }
+  ],
+  "failureReason": "vnext_worker_author_invalid:claim_formula_financial_period_or_basis_unavailable:cash-conversion",
+  "changes": [
+    {
+      "path": "scripts/vnext-catalyst-postgres.test.mjs",
+      "sha256": "0ed8255435875ee28fbbaccc741188391a4e22eb434a08e4f6eff56eece4896b"
+    },
+    {
+      "path": "scripts/vnext-target-business-fixture.mjs",
+      "sha256": "8344e462fb068464e88d82ac4226bf2be2819e76e5a4817a64e829d5e683758e"
+    }
+  ],
+  "sharedScalarFixture": "The original provider format cannot carry the reported-flow interval metadata required for cross-quantity comparison. The test now uses the already established scalar research fixture. Reported-flow validation and SQL publication rules stay in effect.",
+  "targetSample": "Select the three dimensionless scenario terms, distinct from the synthetic ratio inputs. Preserve positive per-share multiplication, invalid unit checks, reviewed baseline, concurrent exits, and state replay.",
+  "sourceNamespaceGrantIssued": false,
+  "releaseHoldRemains": true,
+  "exactIndependentReviewAccepted": false,
+  "rerunRawSyntheticEvidenceArchivedAndCompared": true
+}

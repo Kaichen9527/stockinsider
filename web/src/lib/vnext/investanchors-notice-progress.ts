@@ -1,6 +1,6 @@
 import type { VnextIdentity } from './auth.ts';
 import { analysisWriter } from './analysis-runtime.ts';
-import { collectInvestAnchorsNotices, planInvestAnchorsMailboxDay } from './investanchors-notice-receiver.ts';
+import { collectInvestAnchorsNotices, investAnchorsGmailBlockReason, planInvestAnchorsMailboxDay } from './investanchors-notice-receiver.ts';
 import { vnextEnabled } from './policy.ts';
 
 type Mailbox = Parameters<typeof collectInvestAnchorsNotices>[2];
@@ -29,8 +29,10 @@ export async function continueInvestAnchorsNoticeScan(
   const scan = await collectInvestAnchorsNotices(day, key, mailbox, {
     readBudget: Number(before.readBudget), checkedKeys: new Set(before.checkedKeys),
   });
+  const reason = scan.reason?.startsWith('background_gmail_') ? scan.reason : null;
+  const blocked = reason ? { scanStatus: 'blocked' as const, reason } : null;
   if (scan.scanStatus === 'retry_required') {
-    return { scanStatus: scan.scanStatus, checkpointDay: null, checked: 0, awaiting: 0, rejected: 0,
+    return { ...(blocked ?? { scanStatus: scan.scanStatus }), checkpointDay: null, checked: 0, awaiting: 0, rejected: 0,
       deferred: 0, articleAuthority: false as const };
   }
   const saved = await progress({
@@ -44,7 +46,7 @@ export async function continueInvestAnchorsNoticeScan(
   // The ledger stores incomplete progress, while the worker still reports
   // an actionable provider failure and does not advance to another day.
   const scanStatus = scan.reason === 'provider_unavailable' ? 'retry_required' : scan.scanStatus;
-  return { scanStatus, checkpointDay: scan.checkpointDay, checked: scan.checkedKeys.length,
+  return { ...(blocked ?? { scanStatus }), checkpointDay: scan.checkpointDay, checked: scan.checkedKeys.length,
     awaiting: scan.notices.length, deferred: scan.deferred, rejected: scan.rejected, articleAuthority: false as const };
 }
 
@@ -70,8 +72,8 @@ export async function continueInvestAnchorsNoticeDays(
   let plan = scanPlan(await planNext());
   let checkpointDay: string | null = null;
   const counts = { checked: 0, awaiting: 0, deferred: 0, rejected: 0 };
-  const summary = (scanStatus: Scan['scanStatus'], pendingDay: string | null) => ({
-    scanStatus, checkpointDay, pendingDay, ...counts, articleAuthority: false as const,
+  const summary = (scanStatus: Scan['scanStatus'], pendingDay: string | null, reason?: string) => ({
+    scanStatus, checkpointDay, pendingDay, ...counts, ...(reason ? { reason } : {}), articleAuthority: false as const,
   });
   for (let index = 0; index < 2; index++) {
     const result = await scan(plan.day);
@@ -79,7 +81,7 @@ export async function continueInvestAnchorsNoticeDays(
     counts.awaiting += result.awaiting;
     counts.deferred += result.deferred;
     counts.rejected += result.rejected;
-    if (result.scanStatus !== 'scanned') return summary(result.scanStatus, plan.day);
+    if (result.scanStatus !== 'scanned') return summary(result.scanStatus, plan.day, 'reason' in result ? result.reason : undefined);
     if (result.checkpointDay !== plan.day) throw Error('investanchors_notice_checkpoint_mismatch');
     checkpointDay = plan.day;
     if (plan.kind === 'recheck') return summary('scanned', null);
@@ -103,13 +105,24 @@ export async function runInvestAnchorsNoticeWorker(
     const { getSupabaseServerClient } = await import('../supabase-server.ts');
     const client = getSupabaseServerClient();
     const binding = { p_principal: identity.principal, p_lease_owner: leaseOwner };
-    const scan = async (day: string) => continueInvestAnchorsNoticeScan(day, key, await openMailbox(day), async payload => {
-      const result = await client.rpc('vnext_investanchors_notice_progress_v1', {
-        ...binding, p_day: day, p_progress: payload ?? null,
+    const scan = async (day: string): Promise<Scan> => {
+      let mailbox;
+      try {
+        mailbox = await openMailbox(day);
+      } catch (error) {
+        const reason = investAnchorsGmailBlockReason(error);
+        if (!reason) throw error;
+        return { scanStatus: 'blocked', reason, checkpointDay: null, checked: 0, awaiting: 0,
+          deferred: 0, rejected: 0, articleAuthority: false };
+      }
+      return continueInvestAnchorsNoticeScan(day, key, mailbox, async payload => {
+        const result = await client.rpc('vnext_investanchors_notice_progress_v1', {
+          ...binding, p_day: day, p_progress: payload ?? null,
+        });
+        if (result.error) throw Error(payload ? 'investanchors_progress_write_uncertain' : 'investanchors_progress_unavailable');
+        return result.data;
       });
-      if (result.error) throw Error(payload ? 'investanchors_progress_write_uncertain' : 'investanchors_progress_unavailable');
-      return result.data;
-    });
+    };
     if (requestedDay !== undefined) return scan(requestedDay);
     return continueInvestAnchorsNoticeDays(async () => {
       const result = await client.rpc('vnext_investanchors_notice_plan_v1', binding);

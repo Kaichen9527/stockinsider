@@ -225,16 +225,33 @@ test('a recent share-changing action does not manufacture a comparable volume ra
 });
 
 const outcomeAsOf = '2026-09-29T09:00:00Z';
-function outcomeFixture() {
+function outcomeFixture(market:'TWSE'|'TPEX'='TWSE') {
   const { data, request } = fixture();
   const annual = request.forwardCalendar!;
   annual.availableAt = '2026-09-29T08:00:00Z';
+  const venue=market.toLowerCase();
+  const actionFeeds=market==='TWSE'?feeds:['tpex:exright-cal:v1','tpex:reduction-reference:v1','tpex:change-reference:v1'];
+  if(market==='TPEX'){
+    for(const row of annual.calendarSessions){
+      row.market=market;row.provider=venue;
+      row.sourceUrl='https://www.tpex.org.tw/fixture-calendar';
+      row.sourceRef=String(row.sourceRef).replace('twse-','tpex-');
+    }
+    for(const row of data[tables.calendar]){
+      row.market=market;row.provider=venue;
+      row.source_ref=String(row.source_ref).replace('twse-','tpex-');
+    }
+    for(const row of data[tables.prices]){
+      row.exchange=market;row.provider=venue;
+      row.source_ref=String(row.source_ref).replace('twse-','tpex-');
+    }
+  }
   const last = data[tables.calendar].at(-1)!;
   for (const [i, session] of ['2026-09-28', '2026-09-29', '2026-09-30'].entries()) {
     const source = { ...annual.calendarSessions.at(-1)!, session,
       status: i < 2 ? 'completed' : 'scheduled',
       openAt: `${session}T01:00:00Z`, scheduledCloseAt: `${session}T05:30:00Z`,
-      sourceRef: `twse-annual-calendar:2026:${session}:${'b'.repeat(64)}` };
+      sourceRef: `${venue}-annual-calendar:2026:${session}:${'b'.repeat(64)}` };
     if (i === 0) annual.calendarSessions.pop();
     annual.calendarSessions.push(source);
     if (i === 2) continue;
@@ -242,29 +259,29 @@ function outcomeFixture() {
     const observed = `${session}T06:00:00+00:00`, recordedAt = `${session}T07:00:00Z`;
     const event = i === 1 ? { snapshot_id: snapshotId, event_ordinal: 0,
       symbol: '2330', event_kind: 'par_value_change', pre_action_reference_price: 100, post_action_reference_price: 50,
-      feed_identity: feeds[2], daily_adjustment_factor: .5, source_row_ref: hash(['corporate-action-source-row-v3.1','TWSE',session,'2330','par_value_change',100,50,feeds[2]]),
+      feed_identity: actionFeeds[2], daily_adjustment_factor: .5, source_row_ref: hash(['corporate-action-source-row-v3.1',market,session,'2330','par_value_change',100,50,actionFeeds[2]]),
       recorded_at: recordedAt } : null;
-    const evidence = feeds.map((feed, ordinal) => ({ snapshot_id: snapshotId, feed_ordinal: ordinal, feed_identity: feed,
+    const evidence = actionFeeds.map((feed, ordinal) => ({ snapshot_id: snapshotId, feed_ordinal: ordinal, feed_identity: feed,
       response_byte_count: 100, response_sha256: 'c'.repeat(64), parsed_row_count: Number(event !== null && ordinal === 2), recorded_at: recordedAt }));
-    const digest = hash(['corporate-action-snapshot-v3.1','TWSE',session,calendarId,'tw-corporate-action-v3.1','twse',observed,
+    const digest = hash(['corporate-action-snapshot-v3.1',market,session,calendarId,'tw-corporate-action-v3.1',venue,observed,
       evidence.map(row => [row.feed_identity,row.response_byte_count,row.response_sha256,row.parsed_row_count]),
       event ? [[event.symbol,event.event_kind,event.pre_action_reference_price,event.post_action_reference_price,event.feed_identity,event.source_row_ref]] : []]);
     data[tables.calendar].push({ ...last, session_authority_id: calendarId, session_id: session,
       open_at: source.openAt, close_at: source.scheduledCloseAt, source_timestamp: observed, collected_at: observed,
       recorded_at: recordedAt, source_ref: source.sourceRef });
-    data[tables.prices].push({ observation_id: id(33001 + i), stock_id: stockId, exchange: 'TWSE', session_id: session,
+    data[tables.prices].push({ observation_id: id(33001 + i), stock_id: stockId, exchange: market, session_id: session,
       session_authority_id: calendarId, raw_open: i === 0 ? 104 : 55, raw_high: i === 0 ? 110 : 62, raw_low: i === 0 ? 100 : 51,
-      raw_close: i === 0 ? 108 : 60, provider: 'twse', source_timestamp: observed, collected_at: observed, recorded_at: recordedAt,
-      source_ref: `twse-openapi:${session}:2330` });
-    data[tables.snapshots].push({ snapshot_id: snapshotId, exchange: 'TWSE', session_id: session, session_authority_id: calendarId,
-      corporate_action_version: 'tw-corporate-action-v3.1', provider: 'twse', collected_at: observed,
+      raw_close: i === 0 ? 108 : 60, provider: venue, source_timestamp: observed, collected_at: observed, recorded_at: recordedAt,
+      source_ref: `${venue}-openapi:${session}:2330` });
+    data[tables.snapshots].push({ snapshot_id: snapshotId, exchange: market, session_id: session, session_authority_id: calendarId,
+      corporate_action_version: 'tw-corporate-action-v3.1', provider: venue, collected_at: observed,
       recorded_at: recordedAt, declared_event_count: Number(event !== null), dataset_hash: digest });
     data[tables.feeds].push(...evidence);
     if (event) data[tables.events].push(event);
   }
   const original = data[tables.prices].find(row => row.session_id === request.signalSession)!;
   data[tables.prices].push({ ...original, observation_id: id(34000), raw_close: 98, recorded_at: '2026-09-25T11:00:00Z' });
-  const anchor = { rankingRunId: id(35000), firstRankingRunId: id(34999), stockId, symbol: '2330', market: 'TWSE' as const,
+  const anchor = { rankingRunId: id(35000), firstRankingRunId: id(34999), stockId, symbol: '2330', market,
     session: request.signalSession, cutoff: request.cutoff, publishedAt: '2026-09-24T13:30:00Z',
     inputHash: 'a'.repeat(64), priceRevision: 'b'.repeat(64), rawClose: '100.00',
     closeObservationId: String(original.observation_id), calendarAuthorityId: String(original.session_authority_id),
@@ -411,26 +428,133 @@ test('post-close outcomes cannot run under an author identity', async () => {
 });
 
 test('post-close worker uses authoritative halt receipts and preserves an earlier same-day halt when the report has moved on', async () => {
-  for(const kind of ['current','retained','contradictory']){
+  for(const kind of ['current','retained','contradictory','same_day_removed','same_day_older']){
     const {anchor,response,client}=outcomeBatchFixture();
     response.signals=response.signals.slice(0,1);
-    const code=kind==='retained'?'1234':'2330',end=kind==='contradictory'?'080500':'110000';
+    const code=['retained','same_day_removed','same_day_older'].includes(kind)?'1234':'2330';
+    const end=kind==='contradictory'?'080500':'110000';
+    const newerSameDay=kind==='same_day_removed',olderSameDay=kind==='same_day_older';
+    const observedAt=newerSameDay?'2026-09-28T07:30:00Z':olderSameDay?'2026-09-28T06:30:00Z':'2026-09-29T07:30:00Z';
+    const recordedAt=newerSameDay?'2026-09-28T08:00:00Z':olderSameDay?'2026-09-28T06:35:00Z':'2026-09-29T08:00:00Z';
     const body=Buffer.from('編號,證券代號,證券名稱,暫停交易日期,暫停交易時間,恢復交易日期,恢復交易時間\n'
       +`1,${code},測試,1150928,080000,1150928,${end}\n`);
     const prior=kind==='current'?null:{asOf:'2026-09-28T13:30:00Z',opening:{status:'unfillable',reason:'suspended',
       session:'2026-09-28',knownAt:'2026-09-28T07:00:00Z',revision:'8'.repeat(64),rawOpen:null,priceRevision:null}};
     const result=await runLaunchOutcomesWithLease({...client,async rpc(name,args){
       if(name==='vnext_launch_outcome_batch_v1')return {data:response,error:null};
-      if(name==='vnext_launch_halt_command_v1')return {data:{market:'TWSE',observedAt:'2026-09-29T07:30:00Z',
-        recordedAt:'2026-09-29T08:00:00Z',sha256:createHash('sha256').update(body).digest('hex'),bodyBase64:body.toString('base64')},error:null};
+      if(name==='vnext_launch_halt_command_v1')return {data:{market:'TWSE',observedAt,recordedAt,sha256:createHash('sha256').update(body).digest('hex'),bodyBase64:body.toString('base64')},error:null};
       if(!Object.hasOwn(args,'p_input'))return {data:{...anchor,previousSuspension:prior},error:null};
       const evaluated=args.p_result as ReturnType<typeof evaluateLaunchOutcome>;
-      assert.equal(evaluated.execution.status,kind==='contradictory'?'opening_evidence_gap':'unfillable');
+      assert.equal(evaluated.execution.status,kind==='contradictory'||newerSameDay?'opening_evidence_gap':'unfillable');
       assert.equal(evaluated.execution.nextSession,'2026-09-28');
       assert.equal(evaluated.execution.fill,null);
       return {data:{schemaVersion:'vnext-launch-outcome-write-v1',rankingRunId:anchor.rankingRunId,symbol:anchor.symbol,
         policyVersion:evaluated.policyVersion,inputSnapshotHash:evaluated.inputSnapshotHash,snapshotHash:'8'.repeat(64),asOf:outcomeAsOf,replay:false},error:null};
     }},principal,owner,outcomeAsOf);
     assert.equal(result.written,1,kind);
+  }
+});
+
+test('the post-close worker binds a traded TWSE upper lock to the first session and cutoff', async () => {
+  for (const kind of ['verified', 'late', 'wrong_authority', 'wrong_hash', 'conflicting_limit', 'below_limit', 'not_traded', 'nonflat']) {
+    const { anchor, annual, data } = outcomeFixture();
+    const session = '2026-09-28';
+    const first = data[tables.prices].find(row => row.session_id === session)!;
+    const raw = kind === 'below_limit' ? 109 : 110;
+    Object.assign(first, { raw_open: raw, raw_high: raw, raw_low: raw, raw_close: raw,
+      volume: kind === 'not_traded' ? 0 : 500 });
+    if (kind === 'nonflat') first.raw_low = 109;
+    const { client } = mockClient(data);
+    const csvFields = ['證券代號', '證券名稱', '本日漲停價', '本日開盤競價基準', '本日跌停價',
+      '前日開盤競價基準', '前日收盤價', '前日買進揭示價', '前日賣出揭示價', '最近成交日', '可否零股交易'];
+    const datedFields = ['證券代號', '證券名稱', '漲停價', '開盤競價基準', '跌停價',
+      '開盤競價基準', '收盤價', '買進揭示價', '賣出揭示價', '最近成交日', '可否零股交易'];
+    const row = [anchor.symbol, '測試', '110', '100', '90', '100', '100', '99', '100', '1150928', '是'];
+    const csv = Buffer.from(csvFields.join(',')+'\n'+row.join(',')+'\n');
+    const datedRow = [...row];
+    if (kind === 'conflicting_limit') datedRow[2] = '112';
+    const dated = Buffer.from(JSON.stringify({ stat: 'OK', date: '20260928', selectType: 'ALLBUT0999', fields: datedFields,
+      groups: [{ start: 0, span: 2, title: '' }, { start: 2, span: 3, title: '本日' },
+        { start: 5, span: 4, title: '前日' }, { start: 9, span: 2, title: '' }], data: [datedRow], total: 1 }));
+    const asOf = outcomeAsOf, recordedAt = kind === 'late' ? '2026-09-29T09:00:00.000001Z' : '2026-09-28T06:45:00Z';
+    const response = { schemaVersion: 'vnext-launch-outcome-batch-v1', asOf, available: 1,
+      signals: [{ rankingRunId: anchor.rankingRunId, symbol: anchor.symbol, market: anchor.market, session: anchor.session }],
+      calendars: { TWSE: annual } };
+    let receiptReads = 0;
+    let openingRevision: string | undefined;
+    const result = await runLaunchOutcomesWithLease({ ...client, async rpc(name, args) {
+      if (name.endsWith('batch_v1')) return { data: response, error: null };
+      if (name === 'vnext_launch_halt_command_v1' || name === 'vnext_launch_outcome_benchmark_v1')
+        return { data: null, error: null };
+      if (name === 'vnext_launch_twse_opening_limit_command_v1') {
+        receiptReads++;
+        assert.deepEqual(args, { p_principal: principal, p_lease_owner: owner, p_action: 'read', p_session: session, p_as_of: asOf });
+        return { data: { session, sessionAuthorityId: kind === 'wrong_authority' ? id(33331) : first.session_authority_id,
+          observedAt: '2026-09-28T06:44:00Z', recordedAt,
+          csvSha256: kind === 'wrong_hash' ? '0'.repeat(64) : createHash('sha256').update(csv).digest('hex'),
+          datedSha256: createHash('sha256').update(dated).digest('hex'),
+          csvBase64: csv.toString('base64'), datedBase64: dated.toString('base64') }, error: null };
+      }
+      if (!Object.hasOwn(args, 'p_input')) return { data: anchor, error: null };
+      const input = args.p_input as Parameters<typeof evaluateLaunchOutcome>[0];
+      const evaluated = evaluateLaunchOutcome(input);
+      assert.deepEqual(args.p_result, evaluated);
+      assert.equal(evaluated.execution.status, kind === 'verified' ? 'unfillable' : 'opening_evidence_gap');
+      assert.equal(evaluated.execution.reason, kind === 'verified' ? 'one_price_upper_limit' : null);
+      assert.equal(evaluated.execution.fill, null);
+      openingRevision = input.opening?.revision;
+      assert.equal(Object.hasOwn(input.bars[0], 'volume'), false);
+      return { data: { schemaVersion: 'vnext-launch-outcome-write-v1', rankingRunId: anchor.rankingRunId, symbol: anchor.symbol,
+        policyVersion: evaluated.policyVersion, inputSnapshotHash: evaluated.inputSnapshotHash, snapshotHash: '8'.repeat(64),
+        asOf, replay: false }, error: null };
+    } }, principal, owner, asOf);
+    assert.equal(result.written, 1, kind);
+    assert.equal(receiptReads, ['nonflat', 'not_traded'].includes(kind) ? 0 : 1, kind);
+    if (kind === 'verified') assert.match(openingRevision ?? '', /^[0-9a-f]{64}$/u);
+    else assert.equal(openingRevision, undefined, kind);
+  }
+});
+
+test('the post-close worker reads a TPEx upper lock only from its dated and matching official report', async () => {
+  for(const kind of ['verified','stale','late','wrong_calendar','missing_orders','negative_side','volume_conflict','not_flat']){
+    const {anchor,annual,data}=outcomeFixture('TPEX');
+    const session='2026-09-28';
+    const quote=data[tables.prices].find(row=>row.session_id===session)!;
+    Object.assign(quote,{raw_open:110,raw_high:110,raw_low:110,raw_close:110,volume:343392});
+    if(kind==='not_flat')quote.raw_low=109;
+    const {client}=mockClient(data);
+    const header='資料日期,股票代號,名稱,收盤價,漲跌,總成交張數,漲跌停成交張數,漲跌停委託張數,漲跌停未成交張數';
+    const row=[kind==='stale'?'1150925':'1150928',anchor.symbol,'測試','110',kind==='negative_side'?'-10':'10',
+      kind==='volume_conflict'?'433':'343','313',kind==='missing_orders'?'313':'7172',kind==='missing_orders'?'0':'6859'];
+    const body=Buffer.from(header+'\r\n'+row.join(',')+'\r\n');
+    const batch={schemaVersion:'vnext-launch-outcome-batch-v1',asOf:outcomeAsOf,available:1,
+      signals:[{rankingRunId:anchor.rankingRunId,symbol:anchor.symbol,market:anchor.market,session:anchor.session}],
+      calendars:{TPEX:annual}};
+    let receiptReads=0;
+    const result=await runLaunchOutcomesWithLease({...client,async rpc(name,args){
+      if(name==='vnext_launch_outcome_batch_v1')return {data:batch,error:null};
+      if(name==='vnext_launch_halt_command_v1'||name==='vnext_launch_outcome_benchmark_v1')return {data:null,error:null};
+      if(name==='vnext_launch_tpex_opening_limit_command_v1'){
+        receiptReads++;
+        assert.deepEqual(args,{p_principal:principal,p_lease_owner:owner,p_action:'read',p_session:session,p_as_of:outcomeAsOf});
+        return {data:{session,sessionAuthorityId:kind==='wrong_calendar'?id(34001):quote.session_authority_id,
+          observedAt:'2026-09-28T06:55:00Z',recordedAt:kind==='late'?'2026-09-29T09:00:00.000001Z':'2026-09-28T07:10:00Z',
+          sha256:createHash('sha256').update(body).digest('hex'),bodyBase64:body.toString('base64')},error:null};
+      }
+      assert.equal(name,'vnext_launch_outcome_command_v1');
+      if(!Object.hasOwn(args,'p_input'))return {data:anchor,error:null};
+      const packet=args.p_input as Parameters<typeof evaluateLaunchOutcome>[0];
+      const result=evaluateLaunchOutcome(packet);
+      assert.equal(result.execution.status,kind==='verified'?'unfillable':'opening_evidence_gap');
+      assert.equal(result.execution.reason,kind==='verified'?'one_price_upper_limit':null);
+      assert.equal(result.execution.fill,null);
+      assert.deepEqual(result,args.p_result);
+      assert.equal(Object.hasOwn(packet.bars[0],'volume'),false);
+      return {data:{schemaVersion:'vnext-launch-outcome-write-v1',rankingRunId:anchor.rankingRunId,symbol:anchor.symbol,
+        policyVersion:result.policyVersion,inputSnapshotHash:result.inputSnapshotHash,snapshotHash:'8'.repeat(64),
+        asOf:outcomeAsOf,replay:false},error:null};
+    }},principal,owner,outcomeAsOf);
+    assert.equal(result.written,1,kind);
+    assert.equal(receiptReads,kind==='not_flat'?0:1,kind);
   }
 });

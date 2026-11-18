@@ -95,6 +95,45 @@ class SocketEnvironmentTest(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "parser_socket_profile_invalid"):
                     worker.receive_request(server)
 
+    def test_registered_taxonomy_uses_closed_quarter_boundaries(self):
+        for period in ('2020-06-30', '2025-12-31', '2024-09-30'):
+            self.assertEqual(worker.registered_taxonomy(period), (worker.HISTORICAL_TAXONOMY_PATH,
+                             worker.HISTORICAL_TAXONOMY_SHA256))
+        for period in (None, '2020-03-31', '2026-03-31', '2025-06-29'):
+            self.assertEqual(worker.registered_taxonomy(period), (worker.OFFICIAL_TAXONOMY_PATH,
+                             worker.EXPECTED_TAXONOMY_SHA256))
+
+    def test_historical_bundle_and_child_digest_are_both_bound(self):
+        payload = b"exact source bytes"
+        digest = hashlib.sha256(payload).hexdigest()
+        for installed, returned in (
+            (worker.HISTORICAL_TAXONOMY_SHA256, worker.HISTORICAL_TAXONOMY_SHA256),
+            (worker.EXPECTED_TAXONOMY_SHA256, worker.HISTORICAL_TAXONOMY_SHA256),
+            (worker.HISTORICAL_TAXONOMY_SHA256, worker.EXPECTED_TAXONOMY_SHA256),
+        ):
+            with self.subTest(installed=installed, returned=returned), tempfile.TemporaryDirectory() as directory, _pair() as (client, server):
+                Path(directory, '.archive-sha256').write_text(installed + "\n", encoding='ascii')
+                request = {"format": "xbrl", "byteLength": len(payload), "sha256": digest,
+                           "expectedEntity": "3526", "expectedPeriodEnd": "2025-06-30", "profile": "extended-official"}
+                client.sendall(json.dumps(request).encode() + b"\n" + payload)
+                child = Mock(return_value=Mock(returncode=0, stdout=json.dumps({
+                    "taxonomySha256": returned, "runtimeVersion": worker.EXPECTED_ARELLE_VERSION,
+                }).encode()))
+                with patch.object(worker, "HISTORICAL_TAXONOMY_PATH", directory), patch.object(worker.subprocess, "run", child):
+                    if installed != worker.HISTORICAL_TAXONOMY_SHA256:
+                        with self.assertRaisesRegex(ValueError, "official_taxonomy_identity_mismatch"):
+                            worker.serve(server)
+                        child.assert_not_called()
+                    elif returned != installed:
+                        with self.assertRaisesRegex(ValueError, "parser_runtime_identity_mismatch"):
+                            worker.serve(server)
+                    else:
+                        worker.serve(server)
+                        self.assertEqual(json.loads(client.recv(1024))["taxonomySha256"], worker.HISTORICAL_TAXONOMY_SHA256)
+                        self.assertEqual(child.call_args.args[0][8:12], ["--expected-entity", "3526", "--expected-period-end", "2025-06-30"])
+                        self.assertIn(worker.HISTORICAL_TAXONOMY_SHA256, child.call_args.args[0])
+                        self.assertEqual(child.call_args.kwargs["input"], payload)
+
     def test_xbrl_fails_closed_without_installed_taxonomy_identity(self):
         payload = (ROOT / "fixtures/candidate-financial-document-parser/validated-instance.xbrl").read_bytes()
         digest = hashlib.sha256(payload).hexdigest()

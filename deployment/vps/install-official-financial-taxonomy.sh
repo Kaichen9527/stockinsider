@@ -6,10 +6,10 @@ set -euo pipefail
 test "$(id -u)" = 0
 test "$#" = 1
 archive="$1"
-expected_sha256='4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869'
-version='tifrs-20260331-4e44e67647b1'
+current_sha256='4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869'
+historical_sha256='8b1910ec2dff01b91227255c82dd92385d4db6664b3a5a638ac7086ebe7dad17'
 root='/opt/stockinsider/runtime/candidate-financial-parser/taxonomy'
-target="$root/$version"
+
 
 test -f "$archive"
 test ! -L "$archive"
@@ -21,7 +21,21 @@ private_archive="$staging/taxonomy.zip"
 payload="$staging/payload"
 install -m 0600 -o root -g root -- "$archive" "$private_archive"
 actual_sha256="$(sha256sum "$private_archive" | cut -d ' ' -f 1)"
-test "$actual_sha256" = "$expected_sha256"
+case "$actual_sha256" in
+  "$current_sha256")
+    version='tifrs-20260331-4e44e67647b1'
+    set -- 'tifrs-ci-cr-2026-03-31.xsd' 'tifrs-basi-cr-2026-03-31.xsd' 'tifrs-basi-ir-2026-03-31.xsd'
+    ;;
+  "$historical_sha256")
+    version='tifrs-20200630-8b1910ec2dff'
+    set -- 'tifrs-ci-cr-2020-06-30.xsd' 'tifrs-basi-cr-2020-06-30.xsd' 'tifrs-basi-ir-2020-06-30.xsd'
+    ;;
+  *)
+    echo 'taxonomy_archive_digest_unreviewed' >&2
+    exit 1
+    ;;
+esac
+target="$root/$version"
 install -d -m 0755 -o root -g root "$payload"
 
 python3 - "$private_archive" "$payload" <<'PY'
@@ -46,23 +60,28 @@ with zipfile.ZipFile(archive) as source:
     source.extractall(destination)
 PY
 
-test "$(find "$payload" -type f -name 'tifrs-ci-cr-2026-03-31.xsd' | wc -l | tr -d ' ')" = 1
-test "$(find "$payload" -type f -name 'tifrs-basi-cr-2026-03-31.xsd' | wc -l | tr -d ' ')" = 1
-test "$(find "$payload" -type f -name 'tifrs-basi-ir-2026-03-31.xsd' | wc -l | tr -d ' ')" = 1
+for entrypoint; do
+  test "$(find "$payload" -type f -name "$entrypoint" | wc -l | tr -d ' ')" = 1
+done
 printf '%s\n' "$actual_sha256" > "$payload/.archive-sha256"
 find "$payload" -type d -exec chmod 0755 {} +
 find "$payload" -type f -exec chmod 0644 {} +
 chown -R root:root "$payload"
 
+# Serialize installations, including the atomic current pointer update.
+exec 9>"$root/.install.lock"
+flock -x 9
 if [ -e "$target" ]; then
   test -d "$target"
   test ! -L "$target"
-  test "$(head -n 1 "$target/.archive-sha256")" = "$expected_sha256"
+  test "$(head -n 1 "$target/.archive-sha256")" = "$actual_sha256"
 else
   mv -- "$payload" "$target"
 fi
-ln -sfn -- "$version" "$root/.current-next"
-mv -Tf -- "$root/.current-next" "$root/current"
+if [ "$actual_sha256" = "$current_sha256" ]; then
+  ln -sfn -- "$version" "$root/.current-next"
+  mv -Tf -- "$root/.current-next" "$root/current"
+fi
 trap - EXIT
 if [ -d "$staging" ]; then rm -rf -- "${staging:?}"; fi
 printf '%s\n' "$actual_sha256"

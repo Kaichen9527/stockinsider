@@ -154,7 +154,22 @@ export function runLaunchScheduledCycle({
       drainEndpoint, { ...drainScope, phase: 'final', sessionDate }, 2_700_000, env,
     );
     if (isIncompleteFinalDrain(response, sessionDate)) {
-      return { ...base, status: 'retained', reason: 'launch_final_data_unready' };
+      const retained = { ...base, status: 'retained', reason: 'launch_final_data_unready' };
+      const afterDrain = launchScheduledSlot(clock());
+      if (afterDrain.slot !== slot || afterDrain.sessionDate !== sessionDate) {
+        return { ...retained, outcomeRefresh: 'deferred' };
+      }
+      let outcomeRefresh = 'failed';
+      try {
+        const receipt = call(researchEndpoint, { action: 'launch-outcome-refresh' }, 300_000, env);
+        if (receipt?.ok === true && receipt.policyVersion === launchPolicy) {
+          const result = receipt.result;
+          if (result?.status === 'evaluated' && result.session === sessionDate &&
+            Date.parse(result.asOf) === Date.parse(sessionDate + 'T21:30:00+08:00')) outcomeRefresh = 'evaluated';
+          if (result?.status === 'deferred' && (result.session === undefined || result.session === sessionDate)) outcomeRefresh = 'deferred';
+        }
+      } catch { /* The prior ranking remains retained if outcome transport fails. */ }
+      return { ...retained, outcomeRefresh };
     }
     if (response?.ok !== true) throw new Error('launch_final_drain_failed');
     if (response.result?.researchReady !== true || response.result.sessionDate !== sessionDate) {
@@ -195,7 +210,7 @@ if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) 
   try {
     const result = runLaunchScheduledCycle({ mode: process.argv[2] });
     console.log(JSON.stringify(result));
-    if (result.weeklyAudit === 'failed' || [result.noticeScan, result.currentNoticeScan].some(
+    if (result.weeklyAudit === 'failed' || result.outcomeRefresh === 'failed' || [result.noticeScan, result.currentNoticeScan].some(
       state => ['failed', 'blocked', 'retry_required'].includes(state),
     )) process.exitCode = 1;
   } catch (error) {

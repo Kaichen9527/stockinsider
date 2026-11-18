@@ -45,6 +45,15 @@ test('twenty reported or legacy-validated EPS labels cannot bypass missing or co
   assert.equal(buildCandidateValuationInputs(singleMissing).normalizedCycle.status, 'insufficient');
 });
 
+test('an issuer dilution adjustment does not let unadjusted income prove a normalized EPS quarter', () => {
+  const disclosed = { quarterly_diluted_eps: 3.88, diluted_weighted_average_shares: 70_932_000,
+    quarterly_net_income_attributable_to_common: 269_858_000 };
+  const facts = normalizedTriads().map((row) => row.periodEnd === '2025-06-30'
+    ? { ...row, value: disclosed[row.factKey as keyof typeof disclosed] }
+    : row);
+  assert.equal(buildCandidateValuationInputs(facts).normalizedCycle.status, 'insufficient');
+});
+
 test('normalized identities require the same discrete period, provider, restatement and units', () => {
   for (const patch of [
     { provider: 'twse' }, { authorityTier: 'mirror' }, { filingRestatementId: 'another-filing' },

@@ -88,7 +88,7 @@ test('ranked detail and API show only the same-run reported EPS projection',asyn
     await page.goto(href!);
     const region=page.getByRole('region',{name:'基本面與估值'});
     await expect(region).toBeVisible();
-    await expect(region).toContainText('尚無可公開的 EPS 預估');
+    await expect(region).toContainText('此榜單版本無可公開的季度 EPS 預估。');
     const run=new URL(href!,page.url()).searchParams.get('launchRunId');
     const response=await request.get('/api/launch-ranking',{params:{rankingRunId:run!,symbol:'5274'}});
     expect(response.ok()).toBeTruthy();
@@ -106,4 +106,22 @@ test('ranked detail and API show only the same-run reported EPS projection',asyn
       expect(payload.result.detail.reportedEps).toBeUndefined();
     }
   }
+});
+
+test('ranked detail keeps quarterly EPS and annual forecasts distinct and omits a misbound ratio',async({page,request})=>{
+  for (const mode of ['issuer_forecasts','issuer_forecast_misbound']) {
+    expect((await request.post(bridge+'/__fixture/control',{headers,data:{mode}})).ok()).toBeTruthy();
+    await page.goto('/');
+    await page.getByRole('link',{name:'5274',exact:true}).click();
+    const region=page.getByRole('region',{name:'基本面與估值'});
+    await expect(region).toContainText('稀釋 EPS 預估 2.5');
+    if (mode==='issuer_forecasts') {
+      await expect(region.getByRole('heading',{name:'公司來源的年度與四季 EPS 預估'})).toBeVisible();
+      await expect(region).toContainText('參考本益比 22 倍');
+    } else {
+      await expect(region).toContainText('年度與四季 EPS 預估目前無法讀取。');
+      await expect(region.getByTestId('launch-forward-pe-reference')).toHaveCount(0);
+    }
+  }
+  expect((await (await request.get(bridge+'/__fixture/stats')).json()).unsupported).toBe(0);
 });

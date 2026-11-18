@@ -1,0 +1,41 @@
+{
+  "workItem": "T09",
+  "scope": "contabo_offline_replay_with_verified_exchange_bytes",
+  "replayedAt": "2026-11-18T02:19:58.094Z",
+  "source": {
+    "dataset": 17247,
+    "catalog": "https://data.gov.tw/dataset/17247",
+    "licensedCsv": "https://www.tpex.org.tw/web/stock/aftertrading/ceil_non_trading/ceil_ord_result.php?l=zh-tw&o=data",
+    "openApi": "https://www.tpex.org.tw/openapi/v1/tpex_ceil_non_trading",
+    "licensedCsvSha256": "5271e3db4c638ee43c879dbe450efda12e7299e347a22badec4c62f05113accb",
+    "openApiSha256": "5c55e9bb55d9018f1a958d001713bf6628b5248ec76b5c09fcdb97c729ba2462",
+    "matchedRows": 48,
+    "dailyQuoteSha256": "fffb1099ae206294ac1c316cae846da0b3e97ea1f524b2d4f2b41de123afb650",
+    "priorQuoteSha256": "c0872325e33d042609aa50f3ecbf74bf57b9641e2630d96b3c65643a38f2bdb0"
+  },
+  "observation": {
+    "session": "2026-11-17",
+    "symbol": "4174",
+    "rawOhlc": [
+      "78.40",
+      "78.40",
+      "78.40",
+      "78.40"
+    ],
+    "volumeShares": 343392,
+    "reportedDailyLots": 343,
+    "reportedLimitLots": 313,
+    "remainingLimitLots": 6859,
+    "priorOfficialNextUpper": "78.40"
+  },
+  "result": {
+    "originalCutoffRejected": true,
+    "wrongReportDateRejected": true,
+    "receiptWireChecked": true,
+    "simulatedExecution": "unfillable",
+    "reason": "one_price_upper_limit",
+    "liveSchedulerProven": false,
+    "productionWrites": 0,
+    "actualTradePlaced": false
+  }
+}

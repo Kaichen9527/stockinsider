@@ -7,7 +7,7 @@ import {launchRankingFixture,LAUNCH_TEST_RUN} from '../src/lib/vnext/launch-rank
 import {unsafeCitationUrls,unknownRightsCitationUrls} from '../src/lib/vnext/launch-citation.test-fixture.ts';
 const args=process.argv.slice(2);
 if(args.length!==2||args[0]!=='--port'||!/^\d{4,5}$/.test(args[1])||Number(args[1])<1024||Number(args[1])>65535)throw Error('launch_test_bridge_arguments');
-const modes=new Set(['ready','chart','empty','not_published','producer_unavailable','schema_unavailable','outage','expired','short_expiry','partial','private','wrong_policy','reported_eps','reported_eps_private']);
+const modes=new Set(['ready','chart','empty','not_published','producer_unavailable','schema_unavailable','outage','expired','short_expiry','partial','private','wrong_policy','reported_eps','reported_eps_private','issuer_forecasts','issuer_forecast_misbound']);
 const outcomeModes=new Set(['outcome_ready','outcome_unfillable','outcome_evidence_gap','outcome_private']);
 for(const name of outcomeModes)modes.add(name);
 const unsafeCitations=[...unsafeCitationUrls,...unknownRightsCitationUrls];
@@ -67,6 +67,31 @@ const server=http.createServer(async(request,response)=>{
       if(mode==='reported_eps_private')fact.privateSource='SYNTHETIC_PRIVATE_FINANCIAL_ONLY';
       return json(response,200,{schemaVersion:'vnext-launch-reported-eps-v1',rankingRunId:LAUNCH_TEST_RUN,
         symbol:member.symbol,revisionId:member.revisionId,inputHash:member.inputHash,cutoff:packet.snapshot.cutoff,facts:[fact]});
+    }
+    const issuerEpsPath = '/rest/v1/rpc/vnext_launch_issuer_eps_estimates_v1';
+    const issuerFiscalPath = '/rest/v1/rpc/vnext_launch_issuer_fiscal_forecasts_v1';
+    if (request.method === 'POST' && [issuerEpsPath, issuerFiscalPath].includes(request.url)) {
+      const query = await body(request);
+      if (Object.keys(query).sort().join('|') !== 'p_ranking_run_id|p_symbol' ||
+        query.p_ranking_run_id !== LAUNCH_TEST_RUN || query.p_symbol !== '5274') {
+        return json(response, 400, {code:'SYNTHETIC_CLOSED_QUERY'});
+      }
+      companionReads++;
+      if (!['issuer_forecasts', 'issuer_forecast_misbound'].includes(mode)) return json(response, 200, null);
+      const member = packet.snapshot.members[0];
+      const { cutoff, session } = packet.snapshot;
+      const year = Number(session.slice(0, 4)) + 1;
+      const binding = { rankingRunId: LAUNCH_TEST_RUN, symbol: member.symbol, revisionId: member.revisionId,
+        inputHash: member.inputHash, cutoff };
+      const common = { periodStart: year + '-01-01', publishedAt: cutoff, knownAt: cutoff,
+        sourceUrl: 'https://mops.twse.com.tw/synthetic-forecast' };
+      if (request.url === issuerEpsPath) {
+        return json(response, 200, {schemaVersion:'vnext-launch-issuer-eps-estimates-v1', ...binding,
+          estimates:[{ ...common, periodEnd:year + '-03-31', amount:2.5 }]});
+      }
+      if (mode === 'issuer_forecast_misbound') binding.inputHash = 'f'.repeat(64);
+      return json(response, 200, {schemaVersion:'vnext-launch-issuer-fiscal-forecasts-v1', ...binding,
+        forecasts:[{ ...common, periodEnd:year + '-12-31', horizon:'annual', shareBasis:'diluted', shares:'1000000', amount:5 }]});
     }
     if(request.method==='POST'&&request.url==='/rest/v1/rpc/vnext_launch_morning_public_v1'){
       const query=await body(request);

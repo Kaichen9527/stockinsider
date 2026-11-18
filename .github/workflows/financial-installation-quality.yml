@@ -4,6 +4,12 @@ on:
     paths:
       - '.github/workflows/financial-installation-quality.yml'
       - 'scripts/opportunity-v3/**'
+      - 'scripts/test_vnext_financial_formula_postgres.py'
+      - 'scripts/test_candidate_financial_parser_socket.py'
+      - 'scripts/candidate_financial_parser_socket.py'
+      - 'scripts/candidate-financial-partial-admission-postgres.test.mjs'
+      - 'scripts/vnext-opening-limit-postgres.test.mjs'
+      - 'deployment/vps/install-official-financial-taxonomy.sh'
       - 'migrations/**'
       - 'deployment/vps/bootstrap-stockinsider-postgres.sql'
       - 'package.json'
@@ -46,6 +52,14 @@ jobs:
           "$bin/pg_config" --version | grep -E '^PostgreSQL 17\.'
           echo "$bin" >> "$GITHUB_PATH"
           echo "USER=$(id -un)" >> "$GITHUB_ENV"
+      - name: Verify frozen financial formula windows in PostgreSQL 17
+        run: python3 -B scripts/test_vnext_financial_formula_postgres.py -v
+      - name: Verify registered historical taxonomy through the private completion and as-of reader
+        run: |
+          python3 -B -m unittest discover -s scripts -p test_candidate_financial_parser_socket.py -v
+          node --test scripts/candidate-financial-partial-admission-postgres.test.mjs
+      - name: Verify private official opening-limit custody in PostgreSQL 17
+        run: node --test scripts/vnext-opening-limit-postgres.test.mjs
       - name: Install locked dependencies without lifecycle scripts
         run: |
           npm ci --ignore-scripts

@@ -53,6 +53,14 @@ export async function vnextRoute(request: Request, entrypoint: string) {
         : await(await import('./research-cycle.ts')).runPostcloseResearchCycle(identity);
       return NextResponse.json({ok:true,policyVersion:LAUNCH_RANKING_POLICY,result});
     }
+    if(action==='launch-outcome-refresh'){
+      if(entrypoint!=='vnext-research'||identity.role!=='operator'||!(await import('../internal-auth.ts')).requireExactInternalBearer(request))
+        throw Error('vnext_internal_bearer_required');
+      if(Object.keys(body).some(key=>key!=='action'))throw Error('vnext_cycle_closed_body');
+      if(!launchRankingEnabled())return NextResponse.json({ok:false,error:'launch_ranking_disabled'},{status:503});
+      const result=await(await import('./launch-outcome-cycle.ts')).runScheduledLaunchOutcomeCycle(identity);
+      return NextResponse.json({ok:true,policyVersion:LAUNCH_RANKING_POLICY,result},{headers:{'cache-control':'no-store'}});
+    }
     if(action==='capture-opening-halts'){
       if(identity.role!=='operator'||!(await import('../internal-auth.ts')).requireExactInternalBearer(request))
         throw Error('vnext_internal_bearer_required');

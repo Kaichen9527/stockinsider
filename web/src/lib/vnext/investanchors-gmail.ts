@@ -41,14 +41,40 @@ export async function openInvestAnchorsGmail(
     } catch {
       throw Error('investanchors_gmail_unavailable');
     }
-    if (result.status !== 200 || result.redirected || result.url !== url
+    if (result.redirected || result.url !== url
       || !/^application\/json(?:\s*;[^\r\n]*)?$/iu.test(result.headers.get('content-type') ?? '')) {
       await result.body?.cancel().catch(() => {});
-      if (result.status === 401 || result.status === 403 || url === googleToken && result.status === 400) {
-        throw Error('investanchors_gmail_authorization_required');
-      }
       throw Error('investanchors_gmail_unavailable');
     }
+    if (result.status === 200) return readJson(result, maxBytes);
+
+    const oauth = url === googleToken;
+    if (!oauth && result.status === 401) {
+      await result.body?.cancel().catch(() => {});
+      throw Error('investanchors_gmail_access_rejected');
+    }
+    if (oauth && (result.status === 400 || result.status === 401)) {
+      const payload = await readJson(result, 8192);
+      if (payload?.error === 'invalid_grant') throw Error('investanchors_gmail_authorization_required');
+      if (payload?.error === 'invalid_client') throw Error('investanchors_gmail_client_rejected');
+    } else if (!oauth && result.status === 403) {
+      const payload = await readJson(result, 8192);
+      const errors = object(payload?.error)?.errors;
+      if (Array.isArray(errors)) {
+        if (errors.some(entry => object(entry)?.reason === 'domainPolicy')) {
+          throw Error('investanchors_gmail_domain_policy');
+        }
+        if (errors.some(entry => object(entry)?.reason === 'insufficientPermissions')) {
+          throw Error('investanchors_gmail_readonly_grant_required');
+        }
+      }
+    } else {
+      await result.body?.cancel().catch(() => {});
+    }
+    throw Error('investanchors_gmail_unavailable');
+  }
+
+  async function readJson(result: Response, maxBytes: number) {
     const reader = result.body?.getReader();
     if (!reader) throw Error('investanchors_gmail_unavailable');
     try {

@@ -1,6 +1,9 @@
 import {createHash} from 'node:crypto';
 import type {VnextIdentity} from './auth.ts';
 import {evidenceInstant} from './evidence-clock.ts';
+import {readLaunchOfficialReportBody} from './launch-official-report-body.ts';
+import {captureLaunchTwseOpeningLimits} from './launch-twse-limit-capture.ts';
+import {captureLaunchTpexOpeningLimits} from './launch-tpex-limit-capture.ts';
 import {launchHaltSource,validateLaunchHaltCapture,type LaunchHaltCapture} from './launch-opening-halt.ts';
 
 type Market=LaunchHaltCapture['market'];
@@ -11,24 +14,6 @@ const hash=(body:Uint8Array)=>createHash('sha256').update(body).digest('hex');
 const market=(value:unknown):value is Market=>value==='TWSE'||value==='TPEX';
 const object=(value:unknown):value is Row=>!!value&&typeof value==='object'&&!Array.isArray(value);
 
-async function readLimited(response:Response){
-  const reader=response.body?.getReader();
-  if(!reader)throw Error('launch_halt_body_unavailable');
-  const pieces:Uint8Array[]=[];
-  let bytes=0;
-  try{
-    for(;;){
-      const next=await reader.read();
-      if(next.done)break;
-      bytes+=next.value.byteLength;
-      if(bytes>limit)throw Error('launch_halt_body_bound');
-      pieces.push(next.value);
-    }
-    return Buffer.concat(pieces,bytes);
-  }catch(error){await reader.cancel().catch(()=>{});throw error;}
-  finally{reader.releaseLock();}
-}
-
 async function capture(market:Market,fetchPage:typeof fetch){
   const url=launchHaltSource(market);
   const response=await fetchPage(url,{redirect:'error',cache:'no-store',signal:AbortSignal.timeout(12_000),
@@ -38,7 +23,7 @@ async function capture(market:Market,fetchPage:typeof fetch){
     await response.body?.cancel().catch(()=>{});
     throw Error('launch_halt_authority_unavailable');
   }
-  const body=await readLimited(response),observedAt=new Date().toISOString(),sha256=hash(body);
+  const body=await readLaunchOfficialReportBody(response,limit),observedAt=new Date().toISOString(),sha256=hash(body);
   // Database assigns the authoritative recordedAt when it stores the receipt.
   validateLaunchHaltCapture({market,url,observedAt,recordedAt:observedAt,sha256,body});
   return {body,observedAt,sha256};
@@ -86,6 +71,15 @@ export async function captureLaunchOpeningHalts(identity:VnextIdentity){
   const {acquireProductionWriteLease,releaseProductionWriteLease}=await import('../production-write-lease.ts');
   const lease=await acquireProductionWriteLease(300);
   if(!lease)throw Error('launch_halt_lease_unavailable');
-  try{return {captures:await captureLaunchHaltSlots(writer.supabase,identity.principal,lease)};}
+  try{
+    const [captures,openingLimits,tpexOpeningLimits]=await Promise.allSettled([
+      captureLaunchHaltSlots(writer.supabase,identity.principal,lease),
+      captureLaunchTwseOpeningLimits(writer.supabase,identity.principal,lease),
+      captureLaunchTpexOpeningLimits(writer.supabase,identity.principal,lease),
+    ]);
+    if(captures.status==='rejected')throw captures.reason;
+    return {captures:captures.value,openingLimits:openingLimits.status==='fulfilled'?openingLimits.value:'deferred',
+      tpexOpeningLimits:tpexOpeningLimits.status==='fulfilled'?tpexOpeningLimits.value:'deferred'};
+  }
   finally{await releaseProductionWriteLease(lease);}
 }

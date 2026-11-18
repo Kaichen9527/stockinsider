@@ -1,6 +1,10 @@
-import {loadTwLaunchOutcomeInput,type TwEntryAuthorityClient,type TwEntryForwardCalendar} from '../tw-entry-plan-authority.ts';
+import {loadTwLaunchOutcomeInput,type TwEntryAuthorityClient,type TwEntryForwardCalendar,type TwOpeningQuote} from '../tw-entry-plan-authority.ts';
 import type {VnextIdentity} from './auth.ts';
 import {readLaunchHaltCapture} from './launch-halt-capture.ts';
+import {readLaunchTwseOpeningLimits} from './launch-twse-limit-capture.ts';
+import {bindTwseOpeningLimit,type TwseOpeningLimitReceipt} from './launch-twse-daily-limit.ts';
+import {readLaunchTpexOpeningLimits} from './launch-tpex-limit-capture.ts';
+import {bindTpexOpeningLimit,type TpexOpeningLimitReceipt} from './launch-tpex-opening-limit.ts';
 import {inspectLaunchSuspendedOpening,type LaunchHaltCapture} from './launch-opening-halt.ts';
 import {evidenceInstant} from './evidence-clock.ts';
 import {evaluateLaunchOutcome,launchOutcomeBenchmarkDays,LAUNCH_OUTCOME_POLICY,type LaunchOutcomeBenchmark,type LaunchOutcomeBenchmarkPoint,type LaunchOutcomeInput} from './launch-outcomes.ts';
@@ -86,6 +90,14 @@ function openingFromReceipts(packet:LaunchOutcomeInput,newest:LaunchHaltCapture|
   if(priorAsOf===null||knownAt===null||cutoff===null||knownAt>priorAsOf||priorAsOf>=cutoff
     ||opening.status!=='unfillable'||opening.reason!=='suspended'||opening.session!==next.session
     ||typeof opening.knownAt!=='string'||!hash(opening.revision)||opening.rawOpen!==null||opening.priceRevision!==null)return null;
+  if(newest){
+    const observed=evidenceInstant(newest.observedAt),recorded=evidenceInstant(newest.recordedAt);
+    // A later official capture within the original session date can withdraw a
+    // previously seen record. A newer day's rolling report can omit old rows.
+    if(observed!==null&&recorded!==null&&observed<=recorded&&knownAt<recorded&&recorded<=cutoff
+      &&observed>=evidenceInstant(next.openAt)!
+      &&new Date(Number(observed/BigInt(1000))+8*60*60*1000).toISOString().slice(0,10)===next.session)return null;
+  }
   return {status:'unfillable',reason:'suspended',session:next.session,knownAt:opening.knownAt,
     revision:opening.revision,rawOpen:null,priceRevision:null};
 }
@@ -121,6 +133,8 @@ export async function runLaunchOutcomesWithLease(writer:Writer,principal:string,
   const batch=batchFrom(selected.data,asOf);
   let written=0,replayed=0;
   const haltCaptures=new Map<Market,Promise<LaunchHaltCapture|null>>();
+  const limitCaptures=new Map<string,Promise<TwseOpeningLimitReceipt|null>>();
+  const tpexLimitCaptures=new Map<string,Promise<TpexOpeningLimitReceipt|null>>();
   const deferred:Partial<Record<'official_calendar_unavailable'|'frozen_anchor_unavailable'|'official_data_unavailable'|'write_unconfirmed',number>>={};
   const defer=(reason:keyof typeof deferred)=>{deferred[reason]=(deferred[reason]??0)+1;};
   for(const ref of batch.references){
@@ -137,10 +151,23 @@ export async function runLaunchOutcomesWithLease(writer:Writer,principal:string,
     let packet:Awaited<ReturnType<typeof loadTwLaunchOutcomeInput>>;
     let evaluation:ReturnType<typeof evaluateLaunchOutcome>;
     try{
-      const stock=await loadTwLaunchOutcomeInput(writer,anchor,asOf,calendar);
+      const openingQuotes:TwOpeningQuote[]=[];
+      const stock=await loadTwLaunchOutcomeInput(writer,anchor,asOf,calendar,quote=>openingQuotes.push(quote));
       if(stock.sessions.find(day=>day.status!=='cancelled')?.status==='completed'){
         if(!haltCaptures.has(ref.market))haltCaptures.set(ref.market,readLaunchHaltCapture(writer,principal,owner,ref.market,asOf));
         stock.opening=openingFromReceipts(stock,await haltCaptures.get(ref.market)!,previousSuspension);
+        const quote=openingQuotes[0];
+        if(stock.opening===null&&quote){
+          if(ref.market==='TWSE'){
+            if(!limitCaptures.has(quote.session))
+              limitCaptures.set(quote.session,readLaunchTwseOpeningLimits(writer,principal,owner,quote.session,asOf));
+            stock.opening=bindTwseOpeningLimit(stock,quote,await limitCaptures.get(quote.session)!);
+          }else{
+            if(!tpexLimitCaptures.has(quote.session))
+              tpexLimitCaptures.set(quote.session,readLaunchTpexOpeningLimits(writer,principal,owner,quote.session,asOf));
+            stock.opening=bindTpexOpeningLimit(stock,quote,await tpexLimitCaptures.get(quote.session)!);
+          }
+        }
       }
       ({packet,evaluation}=await evaluateWithBenchmark(writer,signal,stock));
     }catch{defer('official_data_unavailable');continue;}
@@ -153,6 +180,17 @@ export async function runLaunchOutcomesWithLease(writer:Writer,principal:string,
   }
   return {status:'evaluated',asOf,available:batch.available,attempted:batch.references.length,
     backlog:batch.available-batch.references.length,written,replayed,deferred} as const;
+}
+
+/** Refresh prior signals on a retained close using the same database-owned cutoff. */
+export async function runScheduledLaunchOutcomeCycle(identity:VnextIdentity) {
+  const {readLaunchCycleAdmission}=await import('./launch-ranking-command.ts');
+  const context=await readLaunchCycleAdmission(identity);
+  if(!context.ready||!context.session||!context.cutoff){
+    return {status:'deferred',reason:context.reason??'launch_outcome_session_unavailable'} as const;
+  }
+  const outcome=await runLaunchOutcomeCycle(identity,context.cutoff);
+  return {...outcome,session:context.session};
 }
 
 /** An epilogue of the existing guarded operator cycle. The ranking receipt
