@@ -10,22 +10,24 @@ import subprocess
 import sys
 import tempfile
 
-BEGIN = "<!-- project-delivery-resume:v5:begin -->"
-END = "<!-- project-delivery-resume:v5:end -->"
-ENTRY = """\n<!-- project-delivery-resume:v5:begin -->
+BEGIN = "<!-- project-delivery-resume:v6:begin -->"
+END = "<!-- project-delivery-resume:v6:end -->"
+ENTRY = """\n<!-- project-delivery-resume:v6:begin -->
 ## Project delivery continuation
 Use `.agents/skills/project-delivery-resume/SKILL.md` and its selected project profile.
+Apply `.agents/skills/project-storage-guard/SKILL.md` before heavy output or storage recovery.
 Read the existing authoritative tracker/current-state entry first. Preserve applicable
 product, data and release rules. New/resume/change/triage/closeout follows the recorded user decision.
 Codex and Antigravity share the .agents skill; use the actual client's tools and host capabilities.
 The delivery kit is workflow support, not a replacement task tracker or a daemon.
-<!-- project-delivery-resume:v5:end -->\n"""
-CLAUDE_ENTRY = """\n<!-- project-delivery-resume:v5:begin -->
+<!-- project-delivery-resume:v6:end -->\n"""
+CLAUDE_ENTRY = """\n<!-- project-delivery-resume:v6:begin -->
 ## Project delivery continuation
 Read `AGENTS.md` and `.agents/skills/project-delivery-resume/SKILL.md`.
 Use the existing authoritative tracker/current state and this project's profile.
-The project skill is available through `.claude/skills/project-delivery-resume`.
-<!-- project-delivery-resume:v5:end -->\n"""
+The project skills are available through `.claude/skills/project-delivery-resume`
+and `.claude/skills/project-storage-guard`; preserve their shared execution controls.
+<!-- project-delivery-resume:v6:end -->\n"""
 
 
 def sha(data):
@@ -54,7 +56,9 @@ def local_path(root, rel, allow_leaf_symlink=False):
 
 def safe_destination(root, rel):
     dest = local_path(root, rel)
-    if not (rel.startswith(".agents/skills/project-delivery-resume/") or rel.startswith("docs/delivery-v5/")):
+    if not (rel.startswith(".agents/skills/project-delivery-resume/")
+            or rel.startswith(".agents/skills/project-storage-guard/")
+            or rel.startswith("docs/delivery-v6/")):
         raise ValueError("payload path outside allowed kit locations")
     return dest
 
@@ -110,8 +114,9 @@ def main():
                     conflicts.append(rel)
             else:
                 actions.append((rel, dest, data, None, 0o644))
-        if ".agents/skills/project-delivery-resume/SKILL.md" not in seen:
-            raise ValueError("manifest must include the project skill SKILL.md")
+        for skill_name in ("project-delivery-resume", "project-storage-guard"):
+            if f".agents/skills/{skill_name}/SKILL.md" not in seen:
+                raise ValueError("manifest must include both v6 project skills")
         for name, entry in (("AGENTS.md", ENTRY), ("CLAUDE.md", CLAUDE_ENTRY)):
             dest = local_path(root, name, allow_leaf_symlink=True)
             if dest.is_symlink() or (dest.exists() and not dest.is_file()):
@@ -135,17 +140,23 @@ def main():
                 data = existing + separator + entry.encode("utf-8")
                 mode = stat.S_IMODE(dest.stat().st_mode) if previous is not None else 0o644
                 actions.append((name, dest, data, previous, mode))
-        link = local_path(root, ".claude/skills/project-delivery-resume", allow_leaf_symlink=True)
-        target = "../../.agents/skills/project-delivery-resume"
-        make_link = not link.exists() and not link.is_symlink()
-        if not make_link:
-            if link.is_symlink() and os.readlink(link) == target:
-                identical.append(str(link.relative_to(root)))
-            else:
-                conflicts.append(str(link.relative_to(root)))
+        links = []
+        for skill_name in ("project-delivery-resume", "project-storage-guard"):
+            rel = f".claude/skills/{skill_name}"
+            link = local_path(root, rel, allow_leaf_symlink=True)
+            target = f"../../.agents/skills/{skill_name}"
+            make_link = not link.exists() and not link.is_symlink()
+            links.append((rel, link, target, make_link))
+            if not make_link:
+                if link.is_symlink() and os.readlink(link) == target:
+                    identical.append(rel)
+                else:
+                    conflicts.append(rel)
         report = {"project": manifest["project"], "mode": "apply" if args.apply else "preview",
                   "copy_or_append": [a[0] for a in actions], "already_identical": identical,
-                  "create_relative_claude_link": make_link, "conflicts": conflicts,
+                  "create_relative_claude_link": links[0][3],
+                  "create_relative_claude_links": [rel for rel, _, _, create in links if create],
+                  "conflicts": conflicts,
                   "git_push_performed": False, "agent_started": False}
         if conflicts:
             report["status"] = "blocked_no_changes"
@@ -173,12 +184,13 @@ def main():
                 finally:
                     if os.path.exists(temporary):
                         os.unlink(temporary)
-            if make_link:
-                local_path(root, ".claude/skills/project-delivery-resume")
-                mutation_started = True
-                link.parent.mkdir(parents=True, exist_ok=True)
-                link.symlink_to(target, target_is_directory=True)
-                written.append(str(link.relative_to(root)))
+            for rel, link, target, make_link in links:
+                if make_link:
+                    local_path(root, rel)
+                    mutation_started = True
+                    link.parent.mkdir(parents=True, exist_ok=True)
+                    link.symlink_to(target, target_is_directory=True)
+                    written.append(rel)
             for item in manifest["files"]:
                 if sha(safe_destination(root, item["path"]).read_bytes()) != item["sha256"]:
                     raise ValueError("post-install integrity mismatch")

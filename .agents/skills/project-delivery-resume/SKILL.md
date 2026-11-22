@@ -16,7 +16,7 @@ Read `references/lifecycle-and-decisions.md` for new-project intake, existing-pr
 - New demand: discuss in the current capable Codex/Claude/Antigravity/dot session, not necessarily the original old conversation. Preserve question, user answer, decision and source reference; revise only affected requirements/cards. A Site entry alone does not invoke a model.
 - Blocked task: the coordinator assigns a bounded triage role to diagnose and prepare an actionable decision packet. Ask the user where a product, budget, credential, resource or destructive choice remains; do not guess. Preserve stage, evidence and cumulative attempts, then return to the ready queue only after the applicable decision and actual unblock conditions are satisfied.
 
-The 2026-11-22 runtime preference is Codex VM first, then suitable isolated Contabo development for portable work. It supersedes older environment-only preferences only to that extent. Preserve unique WIP, source/artifact checkpoints, attempts, research clocks, release/data/financial gates and single ownership before moving; never develop against production merely because Contabo is available. Platform-specific iOS work still needs a suitable Mac. Refresh this project's actual internal/workspace free space and applicable stop/resume/peak rules before heavy work; historical readings do not authorize a new build. The user's planned 1 TB external disk is not yet verified as mounted. Read `references/external-disk.md` before adopting it; external free space never substitutes for an internal-volume reserve.
+Prefer capable Codex VM, then isolated Contabo for portable work; use a suitable Mac for iOS platform gates. Preserve unique WIP, checkpoints, attempts, research clocks and release/data/financial gates across moves. Refresh disk evidence before heavy work. A planned 1 TB disk is not a verified mount; read `references/external-disk.md` and keep internal/external peak plus reserve separate. Apply `project-storage-guard` for bounded inventory, output budgets and protected retention; use this skill's existing runner, not a second implementation.
 
 ## Establish the continuation point
 
@@ -27,6 +27,8 @@ The 2026-11-22 runtime preference is Codex VM first, then suitable isolated Cont
 5. Normally limit initial resume inventory to 10–20 minutes. Record a specific inaccessible fact and advance independent authorized work. Do not spend another session collecting context without a next action.
 
 Use the existing state authority specified by `references/project.md`. Do not create a competing HANDOFF if a designated memory entry already owns current state. A short handoff may point to the existing tracker. Only one integrator writes common state.
+
+Read `references/coordination-and-knowledge.md` for independent shared policy, Obsidian knowledge and cross-client ownership. Keep this product's state in its own repo and established authority. Do not store portfolio-wide state in a product repo or copy other projects' profiles into this kit.
 
 ## Select and advance finite work
 
@@ -46,6 +48,8 @@ After a checkpoint choose the next ready task. Continue until the finite scope i
 
 Activate only needed roles. Do not keep eight expensive agents running or stack multiple schedulers on one worker. Pin worktree base explicitly; do not assume it equals parent HEAD. Do not enable experimental teams to repair a blocked workflow.
 
+Allow one writer per actual worktree. Separate worktrees may run independent scoped work with separate shared resources. Register stable host/path identity and use a cooperative lease where implemented; discover the actual schema first. Expiry or a silent heartbeat does not prove the old writer stopped. Preserve/checkpoint the unique state and confirm that process stopped before an explicit lease resolution. Site fencing cannot prevent an uninstrumented IDE from editing files.
+
 ## Bound execution mechanically
 
 Read `references/runner.md` before `scripts/bounded_run.py`. Use it only for newly owned commands, with actual project disk/budget values. It does not stop existing Goal/Claude/Codex sessions or cap all token usage. Use real platform controls when available and report missing controls.
@@ -62,7 +66,7 @@ Read `references/runner.md` before `scripts/bounded_run.py`. Use it only for new
 
 Use the existing tracker as authority; the office is its view and change-request inbox. Read `references/office-and-events.md` when connecting it.
 
-Stages: New Demand → Backlog → Plan → UIUX(optional) → Developing → QA/Integration → Ready for User → Test by User → Done. Blocked/Waiting are flags retaining the stage. Technical tasks can finish on their agreed internal gate; actual user/release acceptance remains explicit.
+Stages: New Demand → Backlog → Plan → UIUX(optional) → Developing → QA/Integration → Ready for User → Test by User → Done. Blocked/Waiting retain their stage and appear in a distinct Triage/Needs You view, never silently back in Backlog. Assign a triage owner, exact blocker and next action. Technical tasks can finish on their agreed internal gate; actual user/release acceptance remains explicit.
 
 Separate active time, external wait, state age, heartbeat and last evidence-backed progress. Heartbeats do not advance progress or reset no-progress timers. Warn at the upper estimate; investigate beyond 1.5× with no meaningful progress. Command/run hard deadlines are separate and enforced by runner/watchdog.
 
@@ -78,7 +82,7 @@ At an observable increment, useful diagnosis, handoff or interruption:
 2. Commit on the authorized work branch; label incomplete work honestly. Push when authorized and verify the remote SHA. Local commit, remote checkpoint, built candidate, verified feature and released App are distinct states.
 3. Update the existing live state entry with task/revision/scope, branch/SHA, candidate/evidence, rejected hypotheses, attempts, owned live processes, blocker/unblock condition, runtime and exact next action. Link long history instead of copying it.
 4. If remote save fails, mark checkpoint_pending, retain the unique workspace and use bounded retries. Do not wipe it or claim safe cross-VM handoff.
-5. Release ownership. The next model verifies the same state before becoming writer. Only the integrator updates common files and integrates reviewed work.
+5. Confirm owned write processes have stopped, then release ownership. A quota-exhausted model may not provide a final reply: preserve the last verified remote checkpoint and mark later unseen changes UNKNOWN. The next model restores the same attempts/deadline and verifies state before becoming writer. Only the integrator updates common files and integrates reviewed work.
 
 Read `references/runtime-model-storage.md` for runtime/model/artifact policy. Do not auto-migrate projects or assume Linux proves an iOS build. Record requested and observed model; recommend manual switching when no real switching capability exists.
 

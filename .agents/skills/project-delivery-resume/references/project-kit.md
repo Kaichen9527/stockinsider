@@ -10,8 +10,10 @@ Claude Code uses the project `.claude/skills/project-delivery-resume` entry; Cod
 
 A project kit ZIP is not automatically a Claude.ai custom-Skill upload. Claude.ai has its own capability and upload format; an attached ZIP also does not grant local filesystem or CLI access. For ordinary Claude chat, attach/read the selected prompt and current GitHub state and use discussion/review unless a real coding environment is attached. Avoid globally installing multiple same-name project variants: choose the current project-scoped kit.
 
-Do not copy the private portfolio report or other projects' profiles into a public repo. For a public project use only that project's redacted state and generic workflow. The private office source/portfolio archive belongs in an authorized private GitHub location.
+Do not copy the private portfolio report or other projects' profiles into a public repo. For a public project use only that project's redacted state and generic workflow. The private office source/portfolio archive belongs in the independent private shared-policy repository, not a product repository.
 
 Antigravity App/CLI/IDE discover the same project `.agents/skills` entry. Its Google-managed remote sessions do not inherit local installation; verify repository files and remote capabilities explicitly. Each of the four project prompts includes new/resume/change/triage/closeout modes. Existing half-finished projects default to resume.
 
 The consolidated all-in-one delivery ZIP is an index and transport envelope. Select only one project kit. Keep private portfolio files outside any public project. An existing v4 installation that differs must be reconciled through a reviewed version-control diff; do not delete original files merely to pass the conflict-refusing installer.
+
+The v6 manifest includes both `.agents/skills/project-delivery-resume/SKILL.md` and `.agents/skills/project-storage-guard/SKILL.md`, plus their required resources. The v6 installer accepts only these two skill roots and `docs/delivery-v6/`, adds a v6 managed block and creates one relative Claude link per skill. It refuses earlier/different managed blocks or existing differing files without changing the target; reconcile an existing v4/v5 adoption with a reviewed scoped diff instead of overwriting it.

@@ -27,3 +27,5 @@ Claude Code invocation: `/project-delivery-resume 接續本專案；沿用同一
 If discovery is unavailable, explicitly read the repo SKILL.md. Do not pretend a slash command or tool was executed. Personal installation does not imply per-project adoption has occurred.
 
 Antigravity entry: open the actual repository root, invoke `/project-delivery-resume` where discovered or explicitly read `.agents/skills/project-delivery-resume/SKILL.md`; state the selected lifecycle mode. Read `antigravity.md` before configuring MCP or hooks. Do not overwrite an existing mcp_config.json or force continued execution in observability hooks. For managed remote, attach the correct GitHub source and verify its independent tools; a local installation is not inherited.
+
+For capacity policy, install the generic `project-storage-guard` beside the delivery skill when requested. Keep its generic files separate from private project profiles; it reuses the delivery runner instead of forking one. A new workspace appears in the Site only after authenticated registration; register real host/path ownership and verify actual adapter availability.

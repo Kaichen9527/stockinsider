@@ -1,0 +1,13 @@
+interface:
+  display_name: 專案容量護欄
+  short_description: 有界盤點與日誌保存規則，保護唯一成果並限制本機及雲端的開發輸出
+  default_prompt: 使用 $project-storage-guard，先核對本案磁碟與產出預算，保留唯一成果，再選擇可用環境繼續。
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

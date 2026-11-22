@@ -70,3 +70,7 @@ The v5 extension adds `antigravity` to provider and optional `client` / `model` 
 Actors are keyed per real agent/run, not only per role, so a reviewer and implementer from different clients remain distinguishable. Walking routes and meeting/QA/blocked stations are deterministic UI representations of reported states; they neither call a model nor prove literal agent-to-agent communication. The explicit local demo is isolated from persistence, events, acceptance and percentages; real mode starts unobserved without events. Pause/reduced-motion controls must remain available.
 
 A dated partial recovery frontier is not a frozen full-product denominator. Keep scoped acceptance measures separate from whole-product completion. Do not refresh source observation dates merely because the UI is republished; record actual publication/version and connection receipts separately.
+
+## v6 registry and coordination
+
+Read `coordination-and-knowledge.md` for explicit project/workspace registration, same-worktree cooperative leases, finite attempts and knowledge authority. A dated partial recovery profile does not define whole-product scope. Discover the currently published tool schema and verify source/version plus client authentication before reporting a v6 connection. No registry or lease feature proves arbitrary IDE writes are physically blocked.
