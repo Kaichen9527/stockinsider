@@ -14,7 +14,7 @@ For complete approved scope, verified percentage = accepted criterion weights wi
 
 ## Connection boundaries
 
-- A Site may have D1 and MCP; its Worker cannot run Xcode/emulator/Codex/Claude CLI.
+- A Site may have D1 and MCP; its Worker cannot run Xcode/emulator/Codex/Claude/Antigravity CLI.
 - Collect actual Codex App Server/SDK or Claude hook events from each execution environment. Verify installed version and permission. A Mac hook does not automatically exist in Cloud.
 - Private service access is separate from visitor identity and connector consent. Keep tokens off browser/source; do not make a private Site public to connect a collector.
 - Runner background checkpoints use authorized git/gh or a scoped GitHub App. Sites visitor connector writes require the interactive consent/action path; they are not an unattended GitHub sync daemon.
@@ -24,11 +24,11 @@ Integrate incrementally: persistent cards → one genuine run event → one veri
 
 ## Project office connection
 
-Read the approved office endpoint and authentication configuration from the user's protected settings. Do not place private portfolio URLs, service tokens, unrelated source-card inventories or other projects' connection receipts in this repository.
+Read the approved office endpoint and authentication configuration from the user's protected settings. Do not place private portfolio URLs, service tokens, unrelated inventories or other projects' connection receipts in this repository.
 
-A published endpoint, installed Plugin or configuration entry does not prove this client is connected. Discover actual tools and make a read-only `get_portfolio` call; use only the selected project returned by it. Verify Claude HTTP MCP/OAuth separately. If tools are absent or authentication is unavailable, preserve the same work through this project's GitHub state authority and label office synchronization pending. Do not make a private office public to bypass authentication.
+A published endpoint, installed Plugin or configuration entry does not prove this client is connected. Discover actual tools and make a read-only `get_portfolio` call; use only the selected project returned by it. Verify each client's HTTP MCP/OAuth independently. If tools or authentication are unavailable, preserve the same work through this project's GitHub authority and label synchronization pending. Never make a private office public to bypass authentication.
 
-The v4 discussion extension adds one durable discussion table. Deployment, host-hook installation and authenticated create/edit/drag/reload UI acceptance are separate receipts. Record only the checks actually performed in this environment. Source tests are not end-to-end UI evidence. No host collector, model API, background alert or Agent is installed merely by reading this kit.
+Deployment, source checks, host-hook installation and authenticated create/edit/drag/reload acceptance are separate receipts. Record only what was actually observed in this environment. Reading this kit does not install a collector, model API, background alert, dispatcher or Agent. Provider/client/model fields and motion effects do not certify work or product acceptance.
 
 ### Actual tools and sequence
 
@@ -62,3 +62,11 @@ Discussion text is limited to 4,000 characters; a thread to 200 entries and 512 
 The UI refreshes every 30 seconds while open. No 24-hour background alert service or collectors on project hosts were installed by publication. The Site cannot kill an old Goal or enforce host timeouts. Use the bounded runner only for commands it owns; preserve original Goal/runtime controls.
 
 Recent raw events are capped at 100 per project. Durable run summaries preserve start, last evidence and ending beyond heartbeat retention, with at most 32 unfinished and the latest 50 ended runs per project. A limit rejection is a reconciliation signal, not permission to delete a live run or rotate IDs. No fake events were seeded. An office actor remains gray/unobserved until a real event arrives.
+
+## v5 client-aware office contract
+
+The v5 extension adds `antigravity` to provider and optional `client` / `model` metadata. Provider means reporting platform; client distinguishes codex_chat, codex_vm, claude, antigravity, human or other. Underlying model is separately reported, never inferred from provider. Historical events with absent metadata remain legacy/unknown, not rewritten as one client. Discover the actual deployed schema before sending new fields.
+
+Actors are keyed per real agent/run, not only per role, so a reviewer and implementer from different clients remain distinguishable. Walking routes and meeting/QA/blocked stations are deterministic UI representations of reported states; they neither call a model nor prove literal agent-to-agent communication. The explicit local demo is isolated from persistence, events, acceptance and percentages; real mode starts unobserved without events. Pause/reduced-motion controls must remain available.
+
+A dated partial recovery frontier is not a frozen full-product denominator. Keep scoped acceptance measures separate from whole-product completion. Do not refresh source observation dates merely because the UI is republished; record actual publication/version and connection receipts separately.

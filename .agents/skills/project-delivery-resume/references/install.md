@@ -1,4 +1,4 @@
-# Repository and Claude adoption
+# Repository, Claude and Antigravity adoption
 
 Personal installation makes this skill available in this ChatGPT/Codex skill directory. It does not modify the Mac, Claude, project repos or VMs. Read-only audits do not install anything on a host. GitHub support-branch adoption and actual host installation are separate receipts.
 
@@ -6,7 +6,7 @@ Personal installation makes this skill available in this ChatGPT/Codex skill dir
 2. Place common SKILL.md, shared references and scripts in `.agents/skills/project-delivery-resume/`. Copy only the selected project's profile as `references/project.md`; never copy other projects' private profiles into this repo, especially if it is public. Pin a version/hash in the existing provenance manifest.
 3. Add a short reference in the existing AGENTS.md, retaining current rules. Reconcile a real conflict with a small explicit amendment. Do not import multi-megabyte memory history as permanent instructions.
 4. In existing CLAUDE.md add `@AGENTS.md` if absent, retaining Claude-specific rules. If the Claude skill path is absent, create `.claude/skills/project-delivery-resume` as a repo-relative symlink to `../../.agents/skills/project-delivery-resume`. Do not overwrite an existing skill/plugin.
-5. Commit actual files and relative link. Verify both clients discover the same skill. Do not link to a Mac absolute path.
+5. Commit actual files and relative link. Verify Codex, Claude Code and Antigravity App/CLI/IDE each discover the same skill in the actual host. Do not link to a Mac absolute path.
 6. On other hosts check out the verified commit; configure host tools/secrets/hooks separately. Preserve task/retry state.
 
 Example AGENTS entry:
@@ -25,3 +25,5 @@ Codex invocation: `使用 $project-delivery-resume 的 resume 模式接續本專
 Claude Code invocation: `/project-delivery-resume 接續本專案；沿用同一張卡、revision、checkpoint與累計嘗試，確認本次剩餘範圍後續作，不重新規劃整個產品。` For Claude chat without a coding environment, read the selected prompt and current state for discussion/review; do not claim this slash command installed a CLI or connected a VM.
 
 If discovery is unavailable, explicitly read the repo SKILL.md. Do not pretend a slash command or tool was executed. Personal installation does not imply per-project adoption has occurred.
+
+Antigravity entry: open the actual repository root, invoke `/project-delivery-resume` where discovered or explicitly read `.agents/skills/project-delivery-resume/SKILL.md`; state the selected lifecycle mode. Read `antigravity.md` before configuring MCP or hooks. Do not overwrite an existing mcp_config.json or force continued execution in observability hooks. For managed remote, attach the correct GitHub source and verify its independent tools; a local installation is not inherited.

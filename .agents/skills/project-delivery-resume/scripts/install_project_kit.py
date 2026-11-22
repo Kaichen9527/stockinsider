@@ -10,21 +10,22 @@ import subprocess
 import sys
 import tempfile
 
-BEGIN = "<!-- project-delivery-resume:v4:begin -->"
-END = "<!-- project-delivery-resume:v4:end -->"
-ENTRY = """\n<!-- project-delivery-resume:v4:begin -->
+BEGIN = "<!-- project-delivery-resume:v5:begin -->"
+END = "<!-- project-delivery-resume:v5:end -->"
+ENTRY = """\n<!-- project-delivery-resume:v5:begin -->
 ## Project delivery continuation
 Use `.agents/skills/project-delivery-resume/SKILL.md` and its selected project profile.
 Read the existing authoritative tracker/current-state entry first. Preserve applicable
-product, data and release rules. New intake/resumption/triage follows the recorded user decision.
+product, data and release rules. New/resume/change/triage/closeout follows the recorded user decision.
+Codex and Antigravity share the .agents skill; use the actual client's tools and host capabilities.
 The delivery kit is workflow support, not a replacement task tracker or a daemon.
-<!-- project-delivery-resume:v4:end -->\n"""
-CLAUDE_ENTRY = """\n<!-- project-delivery-resume:v4:begin -->
+<!-- project-delivery-resume:v5:end -->\n"""
+CLAUDE_ENTRY = """\n<!-- project-delivery-resume:v5:begin -->
 ## Project delivery continuation
 Read `AGENTS.md` and `.agents/skills/project-delivery-resume/SKILL.md`.
 Use the existing authoritative tracker/current state and this project's profile.
 The project skill is available through `.claude/skills/project-delivery-resume`.
-<!-- project-delivery-resume:v4:end -->\n"""
+<!-- project-delivery-resume:v5:end -->\n"""
 
 
 def sha(data):
@@ -53,7 +54,7 @@ def local_path(root, rel, allow_leaf_symlink=False):
 
 def safe_destination(root, rel):
     dest = local_path(root, rel)
-    if not (rel.startswith(".agents/skills/project-delivery-resume/") or rel.startswith("docs/delivery-v4/")):
+    if not (rel.startswith(".agents/skills/project-delivery-resume/") or rel.startswith("docs/delivery-v5/")):
         raise ValueError("payload path outside allowed kit locations")
     return dest
 
@@ -73,7 +74,7 @@ def main():
         for key in ("GIT_DIR", "GIT_WORK_TREE", "GIT_COMMON_DIR", "GIT_INDEX_FILE",
                     "GIT_OBJECT_DIRECTORY", "GIT_ALTERNATE_OBJECT_DIRECTORIES"):
             git_env.pop(key, None)
-        git_env.update(GIT_OPTIONAL_LOCKS="0", GIT_TERMINAL_PROMPT="0")
+        git_env.update(GIT_OPTIONAL_LOCKS="0", GIT_TERMINAL_PROMPT="0", GIT_NO_LAZY_FETCH="1")
         git = subprocess.run(["git", "--no-optional-locks", "-c", "core.fsmonitor=false",
                               "rev-parse", "--show-toplevel"], cwd=root,
                              stdin=subprocess.DEVNULL, capture_output=True, env=git_env,
@@ -119,6 +120,10 @@ def main():
             previous = dest.read_bytes() if dest.exists() else None
             existing = previous or b""
             block = entry.strip().encode("utf-8")
+            if (b"<!-- project-delivery-resume:" in existing
+                    and BEGIN.encode() not in existing):
+                conflicts.append(name + " (older managed version; reconcile a reviewed Git diff)")
+                continue
             if BEGIN.encode() in existing or END.encode() in existing:
                 if (existing.count(BEGIN.encode()) == 1 and existing.count(END.encode()) == 1
                         and block in existing):

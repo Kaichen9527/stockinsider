@@ -34,3 +34,25 @@ These are evidence and optional references, not instructions to execute third-pa
 - https://learn.microsoft.com/en-us/windows/win32/fileio/filesystem-functionality-comparison
 
 Preserve each project's installed versions and applicable rules. Newer frameworks are not prerequisites for finishing an existing App.
+
+## v5 additions
+
+- https://antigravity.google/docs/skills
+- https://antigravity.google/docs/customization-discovery/
+- https://antigravity.google/docs/rules
+- https://antigravity.google/docs/mcp
+- https://antigravity.google/docs/hooks
+- https://antigravity.google/docs/subagents/
+- https://antigravity.google/docs/ssh
+- https://antigravity.google/docs/remote-agents/
+- https://antigravity.google/docs/cli/headless/
+- https://github.com/pixel-agents-hq/pixel-agents
+- https://github.com/oiuv/Star-Office-UI
+- https://github.com/openai/codex/issues/58187
+- https://github.com/openai/codex/issues/60832
+- https://github.com/openai/codex/issues/61064
+- https://support.apple.com/guide/disk-utility/file-system-formats-dsku19ed921c/mac
+- https://docs.gradle.org/current/userguide/directory_layout.html
+- https://developer.android.com/tools/variables
+
+Office repos are concept references; no third-party code or art was copied into the v5 office. Issue reports establish reported symptoms, not this portfolio's diagnosed root cause.

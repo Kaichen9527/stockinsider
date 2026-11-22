@@ -65,4 +65,4 @@ python3 "$DELIVERY_SKILL/scripts/bounded_run.py" \
 
 這是前景命令護欄。磁碟與 artifact 大小採樣不是 filesystem quota；掃描超過有限工作量會阻擋，且程式若在取樣間高速寫入，可能短暫超限。log 截留有精確位元組上限。程序若自行 daemonize／建立另一個 session，或把檔案寫到監看目錄之外，不在完整控制範圍內；使用前景模式，必要時用容器／主機 quota 補強。沒有包在此 runner 內的命令也不會受它限制。
 
-此版已在 Linux 做短合成 success、timeout、log cap、持久 retry／corrupt-state、disk preflight、artifact、並行鎖驗證。本機或 VM 仍須另核實測，不能宣稱已保護既有建置、測試或其他 Agent 任務。可先用專案允許的輕量 smoke check 驗證，再包裝重型命令。
+此版已在 Linux 做短合成 success、timeout、log cap、持久 retry／corrupt-state、disk preflight、artifact、並行鎖驗證。本機或VM仍須另核實測，不能宣稱已保護既有建置、測試或其他Agent任務。可先用專案允許的輕量 smoke check 驗證，再包裝重型命令。

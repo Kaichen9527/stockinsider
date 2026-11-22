@@ -8,7 +8,7 @@ Recommendations checked 2026-11-22; current project instructions and actual auth
 - Use compatible macOS/Xcode for iOS platform build, simulator and signing. Linux can handle portable/backend/Web work but its pass is not an iOS pass.
 - Android Gradle/JVM work can use suitable Linux/Mac. Instrumentation needs a real device or usable emulator; check acceleration once instead of repeatedly relaunching an incapable VM.
 - The user now prefers capable Codex VM first and isolated Contabo development second for portable tasks. This updates earlier VM-only preferences without authorizing writes to production or loss of unique WIP. Read `clients-and-cloud.md`, preserve checkpoints/attempts/owner, and use one heavy owner on a constrained host.
-- Measure the actual checkout filesystem before heavy work. Removable-card capacity is separate from internal free space. Respect this project's stop/resume thresholds and the next phase's peak storage need.
+- Measure the actual checkout filesystem and internal reserve before heavy work. Removable capacity is separate from internal free space; preserve this project's stop/resume thresholds and next phase's peak.
 - Prefer verified secondary archives on a small FAT32 card, not the sole repo, build/cache, simulator or database. Single-file and filesystem semantics differ from an appropriate development filesystem. Do not format or delete the card based on an inspection request.
 
 ## Model routing
@@ -42,3 +42,9 @@ Clean only exact, owned, stopped, superseded, recoverable paths under an applica
 iCloud sync does not expand local working capacity; active builds need real free space. Do not move a live build/DB into a sync directory as a fix. Verify actual offload and measure the checkout filesystem.
 
 Store code/small state/receipts in Git. Large retained artifacts need bounded retention, hash-verified remote storage and expiry awareness. GitHub artifacts/cache also cost storage; transferring 100 GB of unfiltered output is not growth control.
+
+## Planned 1 TB external disk
+
+Read `external-disk.md`. The planned disk is not observed hardware. Verify UUID/mount/filesystem, resolved workspace, separate internal/external reserves and next-phase peak before adoption. Use the read-only `external_disk_preflight.py` when applicable. Never silently write into an unmounted /Volumes path, auto-format, move live data or assume Mac disk capacity exists in Codex VM or managed Antigravity remote.
+
+For Antigravity, separate client, environment and underlying model. An actual hook may report modelName; otherwise record unknown. Four clients share one task ledger and source checkpoint, not one hidden conversation. Prefer smaller available models for routine work and independent stronger review only for a demonstrated need, using current account availability and observed cost; names alone do not establish price or automatic switching.

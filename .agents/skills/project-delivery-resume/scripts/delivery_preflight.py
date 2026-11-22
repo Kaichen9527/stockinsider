@@ -29,7 +29,7 @@ def probe(argv, cwd, seconds=PROBE_SECONDS, max_output_bytes=PROBE_OUTPUT_BYTES)
     for key in ("GIT_DIR", "GIT_WORK_TREE", "GIT_COMMON_DIR", "GIT_INDEX_FILE",
                 "GIT_OBJECT_DIRECTORY", "GIT_ALTERNATE_OBJECT_DIRECTORIES"):
         env.pop(key, None)
-    env.update(GIT_OPTIONAL_LOCKS="0", GIT_TERMINAL_PROMPT="0")
+    env.update(GIT_OPTIONAL_LOCKS="0", GIT_TERMINAL_PROMPT="0", GIT_NO_LAZY_FETCH="1")
     try:
         process = subprocess.Popen(argv, cwd=cwd, stdin=subprocess.DEVNULL,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -113,6 +113,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", required=True)
     parser.add_argument("--root", default=".")
+    parser.add_argument("--identity-only", action="store_true",
+                        help="Skip whole-tree Git status for partial/sparse repos; dirty remains unknown and the gate incomplete")
     parser.add_argument("--required-free-bytes", required=True, type=int,
                         help="Actual phase reserve, including estimated new peak, from project policy")
     args = parser.parse_args()
@@ -139,7 +141,7 @@ def main():
                          "max_git_probes": 5},
         "tools": {name: shutil.which(name) is not None for name in
                   ("git", "python3", "node", "pnpm", "java", "docker", "adb",
-                   "emulator", "xcodebuild", "codex", "claude", "gh")},
+                   "emulator", "xcodebuild", "codex", "claude", "agy", "gh")},
         "git": {"state": "unavailable", "worktree_confirmed": False, **unknown_status},
         "execution_approved": False,
         "note": "Read-only inventory; scope confirmation, live owner, auth, capabilities and peak estimate still require verification."
@@ -163,7 +165,9 @@ def main():
                     git_state[key + "_state"] = item["state"]
                     if item["state"] != "ok" or not git_state[key]:
                         git_state["state"] = "incomplete"
-                status = probe(GIT + ["status", "--porcelain=v1", "-z", "--untracked-files=normal"], root)
+                status = ({"state": "skipped_identity_only", "stdout": b""}
+                          if args.identity_only else
+                          probe(GIT + ["status", "--porcelain=v1", "-z", "--untracked-files=normal"], root))
                 git_state["status_state"] = status["state"]
                 if status["state"] == "ok":
                     try:

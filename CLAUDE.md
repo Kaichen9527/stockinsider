@@ -120,9 +120,9 @@ To run a skill: read the skill file, follow its instructions, output report to `
 - Create a branch and PR for non-trivial changes; never push directly to main
 - Write reports to `.agent/reports/` with ISO timestamp prefix
 
-<!-- project-delivery-resume:v4:begin -->
+<!-- project-delivery-resume:v5:begin -->
 ## Project delivery continuation
 Read `AGENTS.md` and `.agents/skills/project-delivery-resume/SKILL.md`.
 Use the existing authoritative tracker/current state and this project's profile.
 The project skill is available through `.claude/skills/project-delivery-resume`.
-<!-- project-delivery-resume:v4:end -->
+<!-- project-delivery-resume:v5:end -->

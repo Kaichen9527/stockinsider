@@ -1,6 +1,6 @@
 ---
 name: project-delivery-resume
-description: 規劃新專案、接續半完成專案、討論新需求與處理卡住任務；協調 Codex Chat、Codex VM、Claude，保存 GitHub 交接、限制重試與容量，依真證據交付。Use for project intake, user-confirmed resumption, blocker triage and cross-agent handoffs in this project.
+description: 規劃新專案、接手半成品、處理新需求與卡點並收尾交付；協調 Codex Chat、Codex VM、Claude、Antigravity，以 GitHub 交接、真實進度與有限重試完成工作。Use for intake, resumption, change, triage, closeout and cross-agent handoffs in this project.
 ---
 
 # 專案續作與交付
@@ -9,14 +9,14 @@ Continue the approved finite product scope toward executable delivery. A ticket 
 
 ## Choose the lifecycle and actual client
 
-Read `references/lifecycle-and-decisions.md` for new-project intake, existing-project resumption, new demands and blocked-card triage. Read `references/clients-and-cloud.md` to distinguish Codex Chat, Codex VM, Claude Code and Claude chat. A prompt or installed skill does not provide missing tools, credentials, a VM, a scheduler or cross-provider conversation access.
+Read `references/lifecycle-and-decisions.md` for new-project intake, existing-project resumption, new demands, blocked-card triage and closeout. Read `references/clients-and-cloud.md` to distinguish Codex Chat, Codex VM, Claude Code/chat and Antigravity App/CLI/IDE/managed remote. Read `references/antigravity.md` for its actual discovery, hooks and remote limits. A prompt or installed skill does not provide missing tools, credentials, a VM, a scheduler or cross-provider conversation access.
 
 - New project: discuss concrete user journeys, constraints and observable acceptance; synthesize a finite specification, confirm the consequential choices, then create dependency-linked vertical cards and execute.
 - Half-finished project: inspect the current frontier, show the user what is done, what remains and the proposed next scope/runtime, then obtain the requested one-time resumption confirmation. Reuse an explicit confirmation already given for that same proposal. Do not re-interview the entire approved product or ask again before every card.
-- New demand: discuss in the current capable Codex/Claude/dot session, not necessarily the original old conversation. Preserve question, user answer, decision and source reference; revise only affected requirements/cards. A Site entry alone does not invoke a model.
+- New demand: discuss in the current capable Codex/Claude/Antigravity/dot session, not necessarily the original old conversation. Preserve question, user answer, decision and source reference; revise only affected requirements/cards. A Site entry alone does not invoke a model.
 - Blocked task: the coordinator assigns a bounded triage role to diagnose and prepare an actionable decision packet. Ask the user where a product, budget, credential, resource or destructive choice remains; do not guess. Preserve stage, evidence and cumulative attempts, then return to the ready queue only after the applicable decision and actual unblock conditions are satisfied.
 
-The 2026-11-22 runtime preference is Codex VM first, then suitable isolated Contabo development for portable work. It supersedes older environment-only preferences only to that extent. Preserve unique WIP, source/artifact checkpoints, attempts, research clocks, release/data/financial gates and single ownership before moving; never develop against production merely because Contabo is available. Platform-specific iOS work still needs a suitable Mac. Refresh the actual workspace free space and this project's stop/resume/peak rules before heavy work; a historical capacity reading is not permission to build.
+The 2026-11-22 runtime preference is Codex VM first, then suitable isolated Contabo development for portable work. It supersedes older environment-only preferences only to that extent. Preserve unique WIP, source/artifact checkpoints, attempts, research clocks, release/data/financial gates and single ownership before moving; never develop against production merely because Contabo is available. Platform-specific iOS work still needs a suitable Mac. Refresh this project's actual internal/workspace free space and applicable stop/resume/peak rules before heavy work; historical readings do not authorize a new build. The user's planned 1 TB external disk is not yet verified as mounted. Read `references/external-disk.md` before adopting it; external free space never substitutes for an internal-volume reserve.
 
 ## Establish the continuation point
 
@@ -41,7 +41,7 @@ After a checkpoint choose the next ready task. Continue until the finite scope i
 - Coordinator: task selection, dependencies, leases, shared state and integration.
 - UIUX: relevant screens/interactions/loading/error/empty states when needed; reuse approved designs and skip for nonvisual work.
 - Frontend/native and backend implementers: disjoint files with a pinned interface. Start with at most two independent writers per project; preserve stricter rules and one heavy job per resource-constrained host.
-- Reviewer/QA: independently inspect the exact candidate against existing criteria. A different Codex/Claude session is useful; cross-model agreement alone proves nothing.
+- Reviewer/QA: independently inspect the exact candidate against existing criteria. A different Codex/Claude/Antigravity session is useful; cross-model agreement alone proves nothing.
 - Release integrator: reproducible candidate, required integration gates and an actual preview/APK/iOS test build under current merge/deploy authority.
 
 Activate only needed roles. Do not keep eight expensive agents running or stack multiple schedulers on one worker. Pin worktree base explicitly; do not assume it equals parent HEAD. Do not enable experimental teams to repair a blocked workflow.
@@ -51,6 +51,7 @@ Activate only needed roles. Do not keep eight expensive agents running or stack 
 Read `references/runner.md` before `scripts/bounded_run.py`. Use it only for newly owned commands, with actual project disk/budget values. It does not stop existing Goal/Claude/Codex sessions or cap all token usage. Use real platform controls when available and report missing controls.
 
 - Classify failures as code, environment, auth/provider, disk, dependency, tool/runtime or unobserved. Escalating models only addresses reasoning problems.
+- An unknown-result create/deploy call is not a confirmed failure. Inspect the same operation/task ID before any retry; avoid duplicate workers or charges. After bounded Cloud diagnosis, preserve and relay instead of provisioning repeatedly. A new client, host or hook never renews an expired attempt budget. Observability hooks must not force execution to continue.
 - Never rerun an unchanged failure. First diagnose and record a real new input/correction. Two same-cause failures stop that item unless an applicable existing policy specifies a reviewed finite continuation.
 - Preserve counts across chats/models/worktrees and nominal revisions. Do not rename a task or reset a ledger to obtain more attempts.
 - Reuse valid evidence for unchanged inputs. Run focused checks for focused changes; broader integration belongs to a fixed candidate at a meaningful integration point.
@@ -87,8 +88,8 @@ Report what the user can now do, where to open/install it, candidate/version, ex
 
 ## Install and references
 
-Read `references/install.md` for per-repo/Claude adoption. Personal installation is not installation on the Mac, six repos or VMs. Copy only the selected project profile to a target repo; never leak the private portfolio catalog into public repositories. Read `references/sources.md` for origins and recheck changing tool/model details before actual setup.
+Read `references/install.md` for per-repo/Claude/Antigravity adoption. Personal installation is not installation on any project host or VM. Copy only the selected project profile to a target repo; never leak the private portfolio catalog into public repositories. Read `references/sources.md` for origins and recheck changing tool/model details before actual setup.
 
-For this portable distribution, read `references/project-kit.md`. It uses a versioned common core and contains only the selected project's profile plus its three client prompts. ZIPs are transport snapshots; update the versioned GitHub files and readback receipts, not a growing pile of renamed ZIPs. GitHub support-branch publication is distinct from adoption on an active work branch.
+For this portable distribution, read `references/project-kit.md`. It uses a versioned common core and contains only the selected project's profile plus four client prompts. Each prompt covers new, resume, change, triage and closeout. ZIPs are transport snapshots; update the versioned GitHub files and readback receipts, not a growing pile of renamed ZIPs. GitHub support-branch publication is distinct from adoption on an active work branch.
 
-Project entry point: [Selected project profile](references/project.md). This distribution contains only this project; do not infer another project's state or permissions from it.
+Project entry point: [Selected project profile](references/project.md). This distribution contains only this project. Do not infer other projects' state or permissions from it.

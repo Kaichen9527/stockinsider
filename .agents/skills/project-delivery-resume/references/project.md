@@ -1,6 +1,6 @@
 # StockInsider 續作 profile（可公開版）
 
-版本：2026-11-22。本文件僅含StockInsider公開GitHub已有資訊與通用工作規則；私人進度室網址、主機／帳戶資料、其他專案狀態及個人Mac路徑不在此保存。這是有日期的接手線索，開工必須刷新實際來源與授權環境。
+版本：v5-20261122。本文件僅含StockInsider公開GitHub已有資訊與通用工作規則；私人進度室網址、主機／帳戶資料、其他專案狀態及個人Mac路徑不在此保存。這是有日期的接手線索，開工必須刷新實際來源與授權環境。
 
 ## 原權威來源與版本
 
@@ -27,7 +27,7 @@
 
 切換前建立一張可審查migration卡：保存可讀回的source、固定包及manifest、未推差異、attempts與owner；以獨立dev帳號／目錄／port／資源額度隔離production，確認原owner退出再接手。未保全唯一成果，不終止原VM。搬機不能重置失敗計數、改驗收oracle或解除發布HOLD。
 
-Codex Chat、Codex VM、Claude共用這份來源與卡片契約，但各自先核實工具能力。沒有shell／SSH的client只做討論、協調與review；不聲稱已啟動背景工作。私人辦公室MCP與網址由使用者於受保護設定提供，不寫進公開文件。
+Codex Chat、Codex VM、Claude、Antigravity共用這份來源與卡片契約，但各自先核實工具能力。沒有shell／SSH的client只做討論、協調與review；不聲稱已啟動背景工作。私人辦公室MCP與網址由使用者於受保護設定提供，不寫進公開文件。
 
 ## 接手確認、分工與解卡
 
@@ -52,3 +52,9 @@ Coordinator唯一整合；環境owner處理受限移交；DB/release writer處�
 保留#385完整研究產品範圍與後續來源，不新增下單／持倉／盤中交易系統。單票Done需要相符候選與原AC；產品Ready、使用者接受、合併與正式部署分開。HOLD僅能由真證據及原正式程序解除。
 
 一次切片完成並保存後繼續已確認DAG，不只做第一張便宣稱全案完成。有限scope完成、所有剩餘前沿具體blocked或真執行預算到達時，交付可操作版本、實測範圍、剩餘門檻與下一步。三個月成效由持久服務累積，不讓開發Goal空轉等待。
+
+## 第四client與外接磁碟
+
+Antigravity從正確repo root讀同一份`.agents/skills/project-delivery-resume`。本機App／CLI／IDE、SSH與Google-managed remote各自核版本、權限、Skill／MCP與真事件；managed remote不繼承本機已安裝設定。模型為實際觀測值或unknown，不以平台名猜模型。
+
+五情境new／resume／change／triage／closeout沿同卡、決策與GitHub checkpoint，本案預設resume。可攜工作優先具能力Codex VM，有限診斷後才隔離Contabo。新外接1TB仍為計畫，採用須核實UUID、掛載、解析後路徑與內外容量；不將外接free代替內部reserve，不新增自動格式化或搬動production的授權。詳見共用external-disk規則。

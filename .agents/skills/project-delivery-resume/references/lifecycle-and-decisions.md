@@ -42,3 +42,9 @@ Return the task to ready after the user's applicable decision, original-tracker 
 ## Version discipline
 
 Changing an active card creates a new revision and impact review. The old runner checkpoints and closes its own run; it must not count old evidence against new AC. Retain valid unaffected evidence with provenance. New discussion that changes a confirmed proposal needs a fresh decision/version; an old GitHub sync receipt cannot approve new content. A report of completion is not card acceptance or release.
+
+## Closeout and relay
+
+Keep the same task IDs, specification revision, cumulative attempts and fixed candidate. Compare every agreed acceptance ID with existing matching evidence; reuse unchanged valid evidence. Run only remaining affected/integration/release gates. Do not re-plan the whole product or mark missing device/provider/user approval as passed. A complete prototype, agent Stop, pushed commit or packaged ZIP alone is not a usable released App.
+
+Save exact source SHA, build/artifact hash, environment recipe, installation/preview instructions, tested user journeys, outstanding limitations, rollback pointer and an explicit next owner. Verify the remote checkpoint. Hand off to another client with the same state, including unknown or inaccessible originals. Report implementation-verified, ready-for-user, user-accepted and released separately. Scope completion stops the finite run; it does not authorize invented new requirements, automatic deployment, a new paid service or unbounded Stop-hook continuation.

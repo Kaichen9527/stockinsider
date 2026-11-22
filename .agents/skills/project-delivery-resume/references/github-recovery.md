@@ -1,6 +1,6 @@
 # GitHub recovery contract
 
-GitHub is the final recoverable source for ordinary-sized code and durable development knowledge. Keep the existing tracker/current-state authority recorded in `project.md`. A convenience handoff may point there but must not become a second independent truth.
+GitHub is the final recoverable source for ordinary-sized code and durable development knowledge. Keep the existing tracker/current-state authority specified in `project.md`. Use the existing state authority specified by `references/project.md`. Do not create a competing HANDOFF if a designated memory entry already owns current state. A short handoff may point to the existing tracker. Only one integrator writes common state. A convenience handoff must not become a second independent truth.
 
 ## Store and index
 
