@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "project": "StockInsider",
+  "project_id": "stockinsider",
+  "core_version": "v4-20261122",
+  "canonical_core_sha256": "4900490296a1befbb417e8da88e66acd0086f63da64f4bced0e0ba9079d563c6",
+  "adapted_core_sha256": "8503062c8428a098ba5a99c185314202fada18f951ca980e644514daa938a1ae",
+  "profile_sha256": "8388638f50381d2183912fed3dadafc4c57750637fb44a9b64b6cf95230edeb5",
+  "prompt_sha256": {
+    "Codex_Chat": "1e2a2dee1d053743c6eeeb22a2fb6bb431ef512d0fee7ca7d37154138f940584",
+    "Codex_VM": "71f4c8dcfaca4522f93eb4a33cf9bf7be040f9815bc519d8de7c5eeb7bd151ff",
+    "Claude": "c44d11a6913893727647ad73601cebdbd305de57eb0b11b61bff78617fb88b60"
+  },
+  "source_state": "content_snapshot",
+  "profile_observed_date": "2026-11-22",
+  "repository": "Kaichen9527/stockinsider",
+  "runtime_adoption_verified": false,
+  "public_safe_variant": true,
+  "notes": "Profile is dated orientation. GitHub final receipt and actual host/client adoption are separate."
+}

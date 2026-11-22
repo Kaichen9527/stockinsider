@@ -133,3 +133,11 @@ active acquisition.
 - Always run `cd web && npm run build` after code changes to verify compilation
 - Create a branch and PR for non-trivial changes; never push directly to main
 - Write reports to `.agent/reports/` with ISO timestamp prefix
+
+<!-- project-delivery-resume:v4:begin -->
+## Project delivery continuation
+Use `.agents/skills/project-delivery-resume/SKILL.md` and its selected project profile.
+Read the existing authoritative tracker/current-state entry first. Preserve applicable
+product, data and release rules. New intake/resumption/triage follows the recorded user decision.
+The delivery kit is workflow support, not a replacement task tracker or a daemon.
+<!-- project-delivery-resume:v4:end -->
