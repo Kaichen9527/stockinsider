@@ -1,0 +1,13 @@
+interface:
+  display_name: 專案續作與交付
+  short_description: 本案接手、解卡與收尾，跨 Codex／Claude／Antigravity 保存真實交接
+  default_prompt: 使用 $project-delivery-resume，核對本案既有成果與寫入權，按有限預算續作並保存 GitHub 交接。
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

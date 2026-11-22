@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "project": "StockInsider",
+  "project_id": "stockinsider",
+  "core_version": "v6-20261122",
+  "canonical_core_sha256": "c19809199a0ec18c5bc7c0f92d244a130f46b891172d3f7d3347e271acbe132c",
+  "canonical_storage_sha256": "eb2dd1052bcaa251c048dda7f5a51830f6b9834732865fd3b9dda2550f20f095",
+  "personal_skill_source_commit": "ac260cccbf1282032c1faff9b4bb81d4260f1326",
+  "adapted_core_sha256": "1f4d867a3b0c1463c865765122d745fc59e9464dc15860c63ef65c1dffa77058",
+  "adapted_storage_sha256": "4bebd107cac411ac6086a04abf8954583a882edef9e275bec5803c8797771917",
+  "profile_sha256": "129489a93eda1716009bbf0b74d0ad73aba610ab65012c555b19eb2b412bbbe0",
+  "prompt_sha256": {
+    "Codex_Chat": "785fa58fc5325efe3df36542bdef6e4e98bafdfa70efb7cf9dc899c119c4c027",
+    "Codex_VM": "ac897078a2acfebebe8fc7945c4f10a88bc08b405a5b3231b12a418ce533072f",
+    "Claude": "8d2aa978e3e284990dce790210baa0aba4292babd561cb2c4adc317090198d04",
+    "Antigravity": "c460abba795bcfaf22801a5d8129a5d29fde12698b2c5850cafc61995adc74d3"
+  },
+  "source_state": "frozen_content_snapshot",
+  "profile_observed_date": "2026-11-22",
+  "repository": "Kaichen9527/stockinsider",
+  "runtime_adoption_verified": false,
+  "public_safe_variant": true,
+  "notes": "Dated profile and exact tool-content snapshot; remote publication, runtime adoption and product acceptance are separate."
+}

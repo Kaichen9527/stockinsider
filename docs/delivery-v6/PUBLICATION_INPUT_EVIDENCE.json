@@ -1,0 +1,25 @@
+{
+  "project": "StockInsider",
+  "recorded_at": "2026-11-22T15:48:46.021117+08:00",
+  "base_commit": "3e125e182c8d8c9c6dd15196426836a9edce6ac3",
+  "base_tree": "e6e249182f3b20da29e8d33baeb1aa1625408dbf",
+  "scope": "workflow support only; original product refs unchanged",
+  "root_policy_preservation": [
+    {
+      "path": "AGENTS.md",
+      "operation": "replace_one_v5_managed_block_only",
+      "old_sha256": "a9fe818e5dfce5e5706fdf61fa0898bec39e59ae50672f8d2bf6ed17a387e1db",
+      "new_sha256": "0480649341831da787f5d0640fbf354ff8c817d386440f1b264c3fd6efa6496c",
+      "preserved_prefix_sha256": "de8d0945802800fde544ff639a89c39a78e41f5f2870394c799e22948320b042",
+      "preserved_suffix_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "CLAUDE.md",
+      "operation": "replace_one_v5_managed_block_only",
+      "old_sha256": "19ba6294f85562f3cdfafaf409e79ab1c28350455bcd8d1a862a76caccafa2aa",
+      "new_sha256": "7871a7ae05f8e595a1d131eba2dfa5a30617f471495abaf304c7b42e57bf79e7",
+      "preserved_prefix_sha256": "5f716a16e0512a74389e2e8d8581814e2f73724318579d8881088420d9ede7e4",
+      "preserved_suffix_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    }
+  ]
+}

@@ -133,3 +133,13 @@ active acquisition.
 - Always run `cd web && npm run build` after code changes to verify compilation
 - Create a branch and PR for non-trivial changes; never push directly to main
 - Write reports to `.agent/reports/` with ISO timestamp prefix
+
+<!-- project-delivery-resume:v6:begin -->
+## Project delivery continuation
+Use `.agents/skills/project-delivery-resume/SKILL.md` and its selected project profile.
+Apply `.agents/skills/project-storage-guard/SKILL.md` before heavy output or storage recovery.
+Read the existing authoritative tracker/current-state entry first. Preserve applicable
+product, data and release rules. New/resume/change/triage/closeout follows the recorded user decision.
+Codex and Antigravity share the .agents skill; use the actual client's tools and host capabilities.
+The delivery kit is workflow support, not a replacement task tracker or a daemon.
+<!-- project-delivery-resume:v6:end -->
