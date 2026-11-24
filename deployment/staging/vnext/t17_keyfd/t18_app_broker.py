@@ -26,7 +26,7 @@ from .portable_sql_fixture_adapter import _tools
 from .staging_admission import _namespace_and_privileges, _production_pg_inaccessible, _mounts, StagingAdmissionRejected
 from .t18_host_plan import BROKER_REFUSAL_TAGS,broker_refusal_bytes
 from .stage_credentials import APP_CREDENTIALS,APP_CREDENTIAL_NAME,MAX_TOKEN,create_stage_jwt,validate_stage_token,StageCredentialRejected
-from .t18_release_assets import observe_fixed_release_assets, RELEASE_PINS,is_launch_release_pair
+from .t18_release_assets import ReleaseAssetsRejected, fixed_release_probe_contracts, observe_fixed_release_assets
 from .t18_broker_transport import observe_network_namespace_cookie
 
 APP_USER='si-t18-app'
@@ -314,15 +314,21 @@ class _FixedChildren:
             self.next=None
         if self.role==APP_USER:self._require_no_children()
     def start(self,index):
-        if not self.configured or self.role!=APP_USER:raise AppBrokerRejected()
-        self.stop_next();self.release=self.assets.releases[index]
+        if not self.configured or self.role != APP_USER or type(index) is not int or index not in (0, 1):
+            raise AppBrokerRejected()
+        try:
+            contract = fixed_release_probe_contracts(self.assets.releases)[index]
+        except ReleaseAssetsRejected:
+            raise AppBrokerRejected() from None
+        self.stop_next()
+        self.release = self.assets.releases[index]
         env=self._env();env.update(STOCKINSIDER_DATA_PLANE='contabo',STOCKINSIDER_POSTGREST_URL='http://127.0.0.1:3302/',
             STOCKINSIDER_BACKEND_ID='00000000-0000-4000-8000-000000000018',
             OPPORTUNITY_V3_RUNNER_PRINCIPAL_ID='00000000-0000-4000-8000-000000000019',
             STOCKINSIDER_WRITER_RELEASE_ID=self.release['sourceCommit'],CREDENTIALS_DIRECTORY=CREDENTIALS,
             STOCKINSIDER_POSTGREST_JWT_SHA256=hashlib.sha256(self.token.encode()).hexdigest(),
             RADAR_PUBLIC_SNAPSHOTS_ENABLED='enabled')
-        if is_launch_release_pair(self.assets.releases):
+        if contract == 'launch':
             env.update(STOCKINSIDER_VNEXT_ENABLED='true',STOCKINSIDER_LAUNCH_RANKING_ENABLED='true')
         self.next=self._spawn([str(self.node),'--max-old-space-size=256',self.release['serverPath']],env)
     def close(self):

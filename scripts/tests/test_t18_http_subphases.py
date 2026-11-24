@@ -124,6 +124,16 @@ class HttpSubphaseTests(unittest.TestCase):
    self.assertTrue(handle.closed);self.assertTrue(m._port_closed(3302))
    self.assertEqual(caught.exception.diagnostic['httpSubphase'],'aba_b_home' if body_fails else 'proxy_stop')
    self.assertEqual(caught.exception.diagnostic['errorClass'],'os_error' if body_fails else 'timeout')
+ def test_projection_body_transport_is_closed_to_other_ports_methods_and_targets(self):
+  route='/rest/v1/rpc/vnext_launch_reported_eps_v1'
+  with patch.object(m.http.client,'HTTPConnection') as connect:
+   for port,method,path,body in ((3000,'POST',route,b'{}'),(3302,'GET',route,b'{}'),
+                                 (3302,'POST','/rest/v1/rpc/unknown',b'{}'),
+                                 (3302,'POST',route,'{}'),(3302,'POST',route,b'*'*129)):
+    with self.assertRaisesRegex(m.FixedRollbackRejected,'fixed_projection_request_rejected'):
+     m._http(port,method,path,request_body=body)
+   connect.assert_not_called()
+
  def test_low_level_http_cleanup_cannot_replace_primary_timeout(self):
   attempted=[]
   class Timer:

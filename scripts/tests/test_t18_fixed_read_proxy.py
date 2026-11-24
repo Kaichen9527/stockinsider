@@ -8,11 +8,16 @@ import time
 import unittest
 from unittest.mock import patch
 from urllib.parse import parse_qs,urlencode,urlsplit
-from deployment.staging.vnext.t17_keyfd import fixed_read_proxy as m
+from deployment.staging.vnext.t17_keyfd import fixed_read_proxy as m, t18_same_clone as exercise
+from deployment.staging.vnext.t17_keyfd.t18_launch_detail_projections import DETAIL_PROJECTIONS
 
 TOKEN='PUBLIC_HEADER.'+'PUBLIC_STAGING_CLAIM_'*4+'.'+'PUBLIC_SIGNATURE_'*3
 SNAP='/rest/v1/radar_public_snapshots?'+urlencode({'select':m.SNAPSHOT_SELECT,'window_key':'eq.daily','status':'eq.valid','order':'published_at.desc','limit':'1'})
 STATE='/rest/v1/radar_publication_state?'+urlencode({'select':m.STATE_SELECT,'window_key':'eq.home'})
+RUN='00000000-0000-4000-8000-000000000018'
+REVISION='00000000-0000-4000-8000-000000000019'
+CUTOFF='2026-11-24T13:30:00Z'
+INPUT_HASH='a'*64
 
 
 class FixedReadProxyTests(unittest.TestCase):
@@ -25,6 +30,30 @@ class FixedReadProxyTests(unittest.TestCase):
             def do_HEAD(self):self.answer()
             def answer(self):
                 cls.seen.append((self.command,self.path,self.headers.get('Authorization'),self.headers.get('apikey')))
+                if cls.mode.startswith('projection_witness'):
+                    args = parse_qs(urlsplit(self.path).query)
+                    rpc = urlsplit(self.path).path.rsplit('/', 1)[-1]
+                    value = {'schemaVersion': rpc.replace('_','-'), 'rankingRunId': args['p_ranking_run_id'][0],
+                             'symbol': args['p_symbol'][0], 'revisionId': REVISION, 'inputHash': INPUT_HASH,
+                             'cutoff': CUTOFF}
+                    if rpc == 'vnext_launch_reviewed_falsifier_v1':
+                        mutation = cls.mode.removeprefix('projection_witness_')
+                        wrong = {'wrong_run': ('rankingRunId', REVISION), 'wrong_symbol': ('symbol','2330'),
+                                 'wrong_revision': ('revisionId',RUN), 'wrong_hash': ('inputHash','b'*64),
+                                 'wrong_cutoff': ('cutoff','2026-11-24T13:29:00Z'),
+                                 'wrong_schema': ('schemaVersion','other')}
+                        if mutation == 'empty':
+                            value = None
+                        elif mutation in wrong:
+                            field, replacement = wrong[mutation]
+                            value[field] = replacement
+                    body = json.dumps(value).encode()
+                    self.send_response(403 if cls.mode == 'projection_witness_refusal' else 200)
+                    self.send_header('Content-Type','application/json')
+                    self.send_header('Content-Length',str(len(body)))
+                    self.end_headers()
+                    self.wfile.write(body)
+                    return
                 if cls.mode=='bound_detail':
                     args=parse_qs(urlsplit(self.path).query)
                     body=json.dumps({'rankingRunId':args['p_ranking_run_id'][0],
@@ -173,6 +202,36 @@ class FixedReadProxyTests(unittest.TestCase):
             '/rpc/vnext_launch_outcome_public_v1?p_ranking_run_id='+run+'&p_symbol=6488',
         ])
         self.assertTrue(all(row[2]=='Bearer '+TOKEN and row[3] is None for row in self.seen))
+
+    def test_exercise_witness_uses_five_scoped_reads_and_only_projects_statuses(self):
+        type(self).mode = 'projection_witness_empty'
+        expected = {'rankingRunId': RUN, 'cutoff': CUTOFF,
+                    'members': [{'symbol':'6488','revisionId':REVISION,'inputHash':INPUT_HASH}]}
+        with m.start_fixed_read_proxy(TOKEN, allow_launch_reads=True,
+                                      launch_detail_scope=(RUN, frozenset({'6488'}))) as handle:
+            result = exercise._read_frozen_launch_detail_proxy(TOKEN, expected)
+            self.assertEqual(result, {name: 'NO_DATA' if name=='reviewedFalsifier' else 'BOUND'
+                                      for name, _, _ in DETAIL_PROJECTIONS})
+            self.assertEqual(handle.metrics['allowedReads'], 5)
+        for found, (_, rpc, _) in zip(self.seen, DETAIL_PROJECTIONS):
+            method, path, auth, apikey = found
+            self.assertEqual((method, urlsplit(path).path), ('GET', '/rpc/' + rpc))
+            self.assertEqual(parse_qs(urlsplit(path).query), {'p_ranking_run_id': [RUN], 'p_symbol': ['6488']})
+            self.assertEqual(auth, 'Bearer ' + TOKEN)
+            self.assertIsNone(apikey)
+
+    def test_exercise_witness_rejects_wrong_binding_or_upstream_refusal(self):
+        expected = {'rankingRunId': RUN, 'cutoff': CUTOFF,
+                    'members': [{'symbol':'6488','revisionId':REVISION,'inputHash':INPUT_HASH}]}
+        with m.start_fixed_read_proxy(TOKEN, allow_launch_reads=True,
+                                      launch_detail_scope=(RUN, frozenset({'6488'}))):
+            for mutation in ('wrong_run', 'wrong_symbol', 'wrong_revision', 'wrong_hash',
+                             'wrong_cutoff', 'wrong_schema', 'refusal'):
+                with self.subTest(mutation=mutation):
+                    type(self).mode = 'projection_witness_' + mutation
+                    with self.assertRaisesRegex(exercise.FixedRollbackRejected,
+                                                'fixed_projection_(binding|response)_rejected'):
+                        exercise._read_frozen_launch_detail_proxy(TOKEN, expected)
 
     def test_five_details_use_only_the_frozen_run_and_ranked_symbols(self):
         headers={'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'}

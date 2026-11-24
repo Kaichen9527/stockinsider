@@ -5,6 +5,7 @@ from .radar_reader_observation import project_radar_reader_observation
 from .t18_reader_roles import ROLE_COUNTS,LAUNCH_ROLE_COUNTS,LAUNCH_DETAIL_ROLE_COUNTS
 from .fixed_read_proxy import METRICS
 from .t18_release_assets import RELEASE_PINS,LAUNCH_RELEASE_PINS
+from .t18_launch_detail_projections import DETAIL_PROJECTION_KEYS
 from .t18_same_clone import project_launch_detail_projections,project_launch_migration_markers
 from .t18_core_migration_rehearsal import project_core_rehearsal
 
@@ -62,6 +63,15 @@ def _project_launch_exercise(value):
     if 'launchDetailProjections' in value:
         expected.add('launchDetailProjections')
         if project_launch_detail_projections(value['launchDetailProjections']) is None:return None
+    if 'launchDetailProxyReads' in value:
+        expected.add('launchDetailProxyReads')
+        reads = value['launchDetailProxyReads']
+        if (type(reads) is not dict or set(reads) != DETAIL_PROJECTION_KEYS
+            or any(type(state) is not str or state not in ('BOUND', 'NO_DATA') for state in reads.values())):
+            return None
+        catalog = value.get('launchDetailProjections')
+        if catalog is None or any(state != 'PINNED' for state in catalog.values()):
+            return None
     if set(value)!=expected:
         return None
     if any(type(value[k]) is not type(v) or value[k]!=v for k,v in _LAUNCH_EXERCISE_CONSTANTS.items()):return None
@@ -75,8 +85,9 @@ def _project_launch_exercise(value):
     denied=value['negativeHttpChecks']
     if type(denied) is not dict or denied!={'proxyDenied':6,'postgrestDenied':2}:return None
     metrics=value['proxyMetrics']
+    minimum_reads = 13 if 'launchDetailProxyReads' in value else 8
     if (type(metrics) is not dict or set(metrics)!=set(METRICS) or any(not _count(v) for v in metrics.values())
-        or metrics['allowedReads']<8 or metrics['blockedRequests']<6):return None
+        or metrics['allowedReads'] < minimum_reads or metrics['blockedRequests'] < 6):return None
     result=value['rollback']
     if (type(result) is not dict or set(result)!={'sequence','steps','faultHealthFailed','automaticRollback','recovered'}
         or result['sequence']!='A_B_A' or result['faultHealthFailed'] is not True or result['automaticRollback']!='A'

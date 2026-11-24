@@ -19,7 +19,10 @@ import time
 from urllib.parse import urlencode
 from .stage_credentials import read_stage_credentials,validate_stage_token,StageCredentialRejected
 from .t18_reader_roles import install_fixed_reader_roles
-from .t18_launch_detail_projections import DETAIL_PROJECTION_KEYS as LAUNCH_DETAIL_PROJECTION_KEYS, DETAIL_CATALOG_ROWS
+from .t18_launch_detail_projections import (
+    DETAIL_CATALOG_ROWS, DETAIL_PROJECTIONS, DETAIL_PROJECTION_PATHS,
+    DETAIL_PROJECTION_KEYS as LAUNCH_DETAIL_PROJECTION_KEYS,
+)
 from .t18_release_assets import ReleaseAssetsRejected, fixed_release_probe_contracts
 from .fixed_read_proxy import start_fixed_read_proxy,SNAPSHOT_SELECT,STATE_SELECT,_BoundedResponse
 from .t18_readpoint_diagnostics import http_trace,http_subphase,http_completed
@@ -220,9 +223,12 @@ class FixedRollbackRejected(Exception):
     def __init__(self,code='fixed_same_clone_rollback_rejected'):super().__init__(code)
 
 
-def _http(port,method,target,headers=None):
+def _http(port,method,target,headers=None,*,request_body=None):
     # Internal fixed operations only; never exposed as a URL/request API.
     if port not in (3000,3301,3302) or method not in ('GET','POST','PATCH','DELETE'):raise FixedRollbackRejected()
+    if request_body is not None and (port != 3302 or method != 'POST' or target not in DETAIL_PROJECTION_PATHS
+                                     or type(request_body) is not bytes or not 1 <= len(request_body) <= 128):
+        raise FixedRollbackRejected('fixed_projection_request_rejected')
     connection=http.client.HTTPConnection('127.0.0.1',port,timeout=3)
     connection.response_class=_BoundedResponse
     active=[None];expired=threading.Event()
@@ -235,7 +241,8 @@ def _http(port,method,target,headers=None):
     timer=threading.Timer(8,stop);timer.start()
     primary_error=None
     try:
-        connection.request(method,target,headers={'Accept-Encoding':'identity','Connection':'close',**(headers or {})})
+        wire_headers = {'Accept-Encoding':'identity','Connection':'close',**(headers or {})}
+        connection.request(method,target,body=request_body,headers=wire_headers)
         active[0]=connection.sock
         response=connection.getresponse()
         if len(response.headers)>32 or response.getheader('Content-Encoding','identity')!='identity':raise FixedRollbackRejected('http_headers_rejected')
@@ -395,6 +402,33 @@ def _launch_result(response,expected):
         if type(member) is not dict or any(member.get(key)!=v for key,v in pin.items()):
             raise FixedRollbackRejected('launch_http_member_pin_mismatch')
     return result
+
+
+def _read_frozen_launch_detail_proxy(stage_token, expected):
+    """Observe the existing five scoped reads without recording their payloads."""
+    member = expected['members'][0]
+    run = expected['rankingRunId']
+    payload = json.dumps({'p_ranking_run_id': run, 'p_symbol': member['symbol']}, separators=(',', ':')).encode('ascii')
+    headers = {'Authorization': 'Bearer ' + stage_token, 'Content-Type': 'application/json'}
+    observed = {}
+    for name, rpc, _ in DETAIL_PROJECTIONS:
+        status, _, body = _http(3302, 'POST', '/rest/v1/rpc/' + rpc, headers, request_body=payload)
+        if status != 200:
+            raise FixedRollbackRejected('fixed_projection_response_rejected')
+        try:
+            result = json.loads(body)
+        except (ValueError, UnicodeError):
+            raise FixedRollbackRejected('fixed_projection_response_rejected') from None
+        if result is None:
+            observed[name] = 'NO_DATA'
+            continue
+        if (type(result) is not dict or result.get('schemaVersion') != rpc.replace('_', '-')
+            or result.get('rankingRunId') != run
+            or any(result.get(key) != member[key] for key in ('symbol', 'revisionId', 'inputHash'))
+            or _timestamp(result.get('cutoff')) != _timestamp(expected['cutoff'])):
+            raise FixedRollbackRejected('fixed_projection_binding_rejected')
+        observed[name] = 'BOUND'
+    return observed
 
 
 def _launch_health(release,expected,deadline,step):
@@ -611,6 +645,7 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     with readpoint_phase('reader_role_install'):
         roles=install_fixed_reader_roles(sql,allow_launch_reads=launch,allow_launch_detail_reads=launch_details)
     detail_read,detail_http=None,{'status':'GAP_DETAIL_SCOPE'}
+    launch_proxy_reads = None
     if not launch:
         with readpoint_phase('candidate_detail_prepare'):
             from .t18_detail_read_adapter import prepare_detail_read
@@ -643,6 +678,9 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
                     with readpoint_phase('fixed_http_exercise'):
                         with start_fixed_read_proxy(token,detail_read=detail_read,allow_launch_reads=launch,launch_detail_scope=detail_scope) as proxy:
                             negatives=_negative_http(token)
+                            if launch_details:
+                                with http_subphase('launch_detail_proxy_reads'):
+                                    launch_proxy_reads = _read_frozen_launch_detail_proxy(token, dates)
                             probe_dates = {'launch': dates} if launch else dates
                             sequence = _execute_fixed_sequence(fresh_app, rest, assets.releases, probe_dates,
                                                                probe_contracts=probe_contracts)
@@ -692,6 +730,7 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     if launch:
         return {'candidateDetailHttp':detail_http,'status':'FIXED_LAUNCH_RELEASE_ROLLBACK_VERIFIED',
             'launchReadpoint':observation,'launchDetailProjections':detail_projections,
+            **({'launchDetailProxyReads':launch_proxy_reads} if launch_proxy_reads is not None else {}),
             'readerRoleChecks':roles,'negativeHttpChecks':negatives,
             'proxyMetrics':metrics,'rollback':sequence,'snapshotDataAndConstraintBitsUnchanged':True,
             'postgrestAcceptance':'FIXED_LAUNCH_READER_ONLY','nextRollback':'FIXED_LAUNCH_PAIR_VERIFIED',
