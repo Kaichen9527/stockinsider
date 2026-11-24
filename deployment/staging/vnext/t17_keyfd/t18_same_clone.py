@@ -36,6 +36,74 @@ SELECT (
 )::text;
 COMMIT;
 """
+
+# Exact PostgreSQL 17 definitions from the candidate 41f2415 migrations
+# 20261117_34, 20261117_41, 20261117_45 and 20261118_58. This readpoint
+# observes catalog readiness only. The separate reader grants stay unchanged.
+LAUNCH_DETAIL_PROJECTION_KEYS = frozenset((
+    'reportedEps', 'issuerEpsEstimates', 'issuerFiscalForecasts', 'reviewedValuation', 'reviewedFalsifier',
+))
+LAUNCH_DETAIL_PROJECTION_SQL = br"""
+\set QUIET 1
+BEGIN READ ONLY;
+SET LOCAL search_path=pg_catalog;
+SET LOCAL statement_timeout='2s';
+WITH expected(marker,signature,definition_hash) AS (VALUES
+ ('reportedEps','public.vnext_launch_reported_eps_v1(uuid,text)',
+  '3347d9275749f0ea9426b27414e8e1607c35b0af26904c61d6c24780267897e3'),
+ ('issuerEpsEstimates','public.vnext_launch_issuer_eps_estimates_v1(uuid,text)',
+  '1f14b4ba2c7b95620b68b99380afe84ef85b33ad8b558a08897413502175a396'),
+ ('issuerFiscalForecasts','public.vnext_launch_issuer_fiscal_forecasts_v1(uuid,text)',
+  'eab04107e14796c4e84b58e57f8d16568d6c4ed5ee0c8777b0a43c4e263a4832'),
+ ('reviewedValuation','public.vnext_launch_reviewed_valuation_v1(uuid,text)',
+  '7d5c702c61397c333e48b2a4365a57c655acd16b5c7f9ae3cf569c62446787c5'),
+ ('reviewedFalsifier','public.vnext_launch_reviewed_falsifier_v1(uuid,text)',
+  '60f354f971368120219171257e6782b99e43de8de731631fd3a8fd2a897a4536')
+)
+SELECT jsonb_object_agg(e.marker, CASE
+ WHEN p.oid IS NULL THEN 'MISSING'
+ WHEN p.prokind='f' AND p.provolatile='s' AND p.prosecdef
+  AND p.prorettype='pg_catalog.jsonb'::regtype AND NOT p.proretset AND p.pronargdefaults=0
+  AND r.rolname='stockinsider_vnext_owner'
+  AND NOT (r.rolcanlogin OR r.rolsuper OR r.rolcreatedb OR r.rolcreaterole OR r.rolreplication OR r.rolbypassrls)
+  AND r.rolconfig IS NULL
+  AND NOT EXISTS (SELECT FROM pg_auth_members WHERE member=r.oid OR roleid=r.oid)
+  AND NOT EXISTS (SELECT FROM pg_db_role_setting WHERE setrole=r.oid AND setconfig IS NOT NULL)
+  AND CASE WHEN p.prokind='f' THEN
+   encode(sha256(convert_to(pg_get_functiondef(p.oid),'UTF8')),'hex')=e.definition_hash
+  ELSE false END
+ THEN 'PINNED'
+ ELSE 'DEFINITION_OR_OWNER_MISMATCH'
+ END)
+FROM expected e
+LEFT JOIN pg_proc p ON p.oid=to_regprocedure(e.signature)
+LEFT JOIN pg_roles r ON r.oid=p.proowner
+WHERE current_database()='t17_restored' AND inet_server_addr() IS NULL;
+COMMIT;
+"""
+
+
+def project_launch_detail_projections(value):
+    if type(value) is not dict or set(value) != LAUNCH_DETAIL_PROJECTION_KEYS:
+        return None
+    states = ('MISSING', 'DEFINITION_OR_OWNER_MISMATCH', 'PINNED')
+    if any(type(status) is not str or status not in states for status in value.values()):
+        return None
+    return dict(value)
+
+
+def _observe_launch_detail_projections(sql):
+    raw = sql(LAUNCH_DETAIL_PROJECTION_SQL)
+    if not isinstance(raw, (str, bytes)) or len(raw) > 1024:
+        raise FixedRollbackRejected('launch_clone_detail_projection_probe_rejected')
+    try:
+        observed = project_launch_detail_projections(json.loads(raw))
+    except (ValueError, UnicodeError):
+        observed = None
+    if observed is None:
+        raise FixedRollbackRejected('launch_clone_detail_projection_probe_rejected')
+    return observed
+
 LAUNCH_HEAD_SQL=br"""
 \set QUIET 1
 BEGIN READ ONLY;
@@ -511,9 +579,12 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     from .t18_readpoint_diagnostics import readpoint_phase
     launch=is_launch_release_pair(assets.releases)
     if launch:
-        with readpoint_phase('radar_readpoint'):observation=_observe_launch_readpoint(sql)
+        with readpoint_phase('radar_readpoint'):
+            observation=_observe_launch_readpoint(sql)
+            detail_projections=_observe_launch_detail_projections(sql)
         if observation['status']!='FROZEN_RANK_ROWS_OBSERVED':
             gap={'status':'LAUNCH_CLONE_READPOINT_ONLY','launchReadpoint':observation,
+                 'launchDetailProjections':detail_projections,
                  'postgrestAcceptance':'NOT_RUN','nextRollback':'NOT_RUN',
                  'candidateDetailHttp':{'status':'GAP_DETAIL_SCOPE'}}
             if observation['status']=='SCHEMA_MISSING':
@@ -613,7 +684,8 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
             raise FixedRollbackRejected('launch_frozen_clone_binding_changed')
     if launch:
         return {'candidateDetailHttp':detail_http,'status':'FIXED_LAUNCH_RELEASE_ROLLBACK_VERIFIED',
-            'launchReadpoint':observation,'readerRoleChecks':roles,'negativeHttpChecks':negatives,
+            'launchReadpoint':observation,'launchDetailProjections':detail_projections,
+            'readerRoleChecks':roles,'negativeHttpChecks':negatives,
             'proxyMetrics':metrics,'rollback':sequence,'snapshotDataAndConstraintBitsUnchanged':True,
             'postgrestAcceptance':'FIXED_LAUNCH_READER_ONLY','nextRollback':'FIXED_LAUNCH_PAIR_VERIFIED',
             'namespaceKernelCookiesMatched':True,'threeDistinctOsUidsObserved':True,

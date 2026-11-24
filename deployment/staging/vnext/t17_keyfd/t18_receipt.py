@@ -5,7 +5,7 @@ from .radar_reader_observation import project_radar_reader_observation
 from .t18_reader_roles import ROLE_COUNTS,LAUNCH_ROLE_COUNTS
 from .fixed_read_proxy import METRICS
 from .t18_release_assets import RELEASE_PINS,LAUNCH_RELEASE_PINS
-from .t18_same_clone import project_launch_migration_markers
+from .t18_same_clone import project_launch_detail_projections,project_launch_migration_markers
 from .t18_core_migration_rehearsal import project_core_rehearsal
 
 MAX_COUNT=8*1024**3
@@ -58,7 +58,11 @@ _LAUNCH_EXERCISE_CONSTANTS={'status':'FIXED_LAUNCH_RELEASE_ROLLBACK_VERIFIED',
 
 
 def _project_launch_exercise(value):
-    if set(value)!=set(_LAUNCH_EXERCISE_CONSTANTS)|{'launchReadpoint','readerRoleChecks','negativeHttpChecks','proxyMetrics','rollback'}:
+    expected=set(_LAUNCH_EXERCISE_CONSTANTS)|{'launchReadpoint','readerRoleChecks','negativeHttpChecks','proxyMetrics','rollback'}
+    if 'launchDetailProjections' in value:
+        expected.add('launchDetailProjections')
+        if project_launch_detail_projections(value['launchDetailProjections']) is None:return None
+    if set(value)!=expected:
         return None
     if any(type(value[k]) is not type(v) or value[k]!=v for k,v in _LAUNCH_EXERCISE_CONSTANTS.items()):return None
     observed=_project_launch_readpoint(value['launchReadpoint'])
@@ -97,6 +101,9 @@ def project_exercise(value):
         launch=_project_launch_readpoint(value.get('launchReadpoint'))
         if launch is None or value.get('postgrestAcceptance')!='NOT_RUN' or value.get('nextRollback')!='NOT_RUN':return None
         expected={'status','launchReadpoint','postgrestAcceptance','nextRollback'}
+        if 'launchDetailProjections' in value:
+            expected.add('launchDetailProjections')
+            if project_launch_detail_projections(value['launchDetailProjections']) is None:return None
         if launch['status']=='SCHEMA_MISSING':
             expected.add('migrationPrerequisites')
             if project_launch_migration_markers(value.get('migrationPrerequisites')) is None:return None
