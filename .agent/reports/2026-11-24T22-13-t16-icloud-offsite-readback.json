@@ -1,0 +1,27 @@
+{
+  "schema": "stockinsider-t16-icloud-offsite-verification-v1",
+  "checkedAt": "2026-11-24T22:12:59.245278+08:00",
+  "externalVerifiedMembers": 26,
+  "authenticatedEnvelopeCount": 11,
+  "externalVerifiedBytes": 502549253,
+  "fullSetSha256": "646b32c5b36daf667266311aa0ae1f10304331bd315f3fab7fe022ad87cd8eb0",
+  "setInnerSha256": "4ca7ef80ac7bea6047a61913a1caa06109ed5c06617f4646c9235db18263b5bb",
+  "privateFullSetReceiptSha256": "bd48bc740cf23382318cec6c4e4970ec2be255b2e83532615f37f759c386dc66",
+  "primaryDatabaseCiphertextSha256": "f0845866ae749e88cbc0b9d0370e982ad8f5e9c98ce754cc68e45551f02202d4",
+  "newlyHydratedSourcesReturnedToPlaceholderCount": 25,
+  "eligibleHydratedSources": 25,
+  "allocatedBytesBeforeCacheEviction": 502607872,
+  "allocatedBytesAfterCacheEviction": 0,
+  "localAllocatedBytesReleased": 502607872,
+  "iCloudContentsPreserved": true,
+  "originalBackupFilesDeleted": 0,
+  "previousIsolatedDatabaseRestoreReused": true,
+  "freshDatabaseRestorePerformed": false,
+  "restoreEvidence": "https://github.com/Kaichen9527/stockinsider/issues/402",
+  "scope": "Latest 26-member backup set, original database restore bound to matching ciphertext; application rollback remains separate.",
+  "verifierSourceCommit": "41f2415f664b01b845870fc27e52de806de3e986",
+  "verifierSourceFiles": [
+    "scripts/local-backup-envelope.mjs",
+    "scripts/local-backup-file-key.mjs"
+  ]
+}
