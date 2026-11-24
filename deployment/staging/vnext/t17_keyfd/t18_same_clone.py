@@ -20,7 +20,7 @@ from urllib.parse import urlencode
 from .stage_credentials import read_stage_credentials,validate_stage_token,StageCredentialRejected
 from .t18_reader_roles import install_fixed_reader_roles
 from .t18_launch_detail_projections import DETAIL_PROJECTION_KEYS as LAUNCH_DETAIL_PROJECTION_KEYS, DETAIL_CATALOG_ROWS
-from .t18_release_assets import is_launch_release_pair
+from .t18_release_assets import ReleaseAssetsRejected, fixed_release_probe_contracts
 from .fixed_read_proxy import start_fixed_read_proxy,SNAPSHOT_SELECT,STATE_SELECT,_BoundedResponse
 from .t18_readpoint_diagnostics import http_trace,http_subphase,http_completed
 
@@ -466,33 +466,44 @@ def _port_closed(port):
         sock.settimeout(.5);return sock.connect_ex(('127.0.0.1',port))!=0
 
 
-def _execute_fixed_sequence(app,rest,releases,dates,*,launch=False):
+def _execute_fixed_sequence(app,rest,releases,dates,*,probe_contracts=('daily','daily')):
     """Private mechanics helper. Tests are not kernel/broker admission."""
-    health=_launch_health if launch else _health
-    expected=dates if launch else dates['daily']
-    target=LAUNCH_API if launch else '/api/radar/daily'
+    health_by_contract = {'daily': _health, 'launch': _launch_health}
+    target_by_contract = {'daily': '/api/radar/daily', 'launch': LAUNCH_API}
+    probes = [(health_by_contract[contract], dates[contract]) for contract in probe_contracts]
+    fault_target = target_by_contract[probe_contracts[1]]
+
+    def start_bound(op, index):
+        response = app.request(op)
+        if not isinstance(response, dict) or response.get('sourceCommit') != releases[index]['sourceCommit']:
+            raise FixedRollbackRejected('broker_release_binding_rejected')
+
     steps=[];deadline=time.monotonic()+180
     primary_error=None
     try:
         for op,index,step,flag in (('START_A',0,'aba_first_a','firstAHealthPassed'),('START_B',1,'aba_b','bHealthPassed'),('START_A',0,'aba_return_a','returnAHealthPassed')):
             with http_subphase(step+'_start'):
-                response=app.request(op)
-                if response['sourceCommit']!=releases[index]['sourceCommit']:raise FixedRollbackRejected('broker_release_binding_rejected')
+                start_bound(op, index)
+            health, expected = probes[index]
             steps.append(health(releases[index],expected,deadline,step))
             http_completed(flag)
             with http_subphase(step+'_stop'):app.request('STOP_NEXT')
-        with http_subphase('fault_b_start'):app.request('START_B')
+        with http_subphase('fault_b_start'):
+            start_bound('START_B', 1)
+        health, expected = probes[1]
         health(releases[1],expected,deadline,'fault_b');http_completed('faultBReady')
         with http_subphase('fault_inject'):app.request('FAULT_NEXT')
         with http_subphase('fault_observe'):
             try:
-                status,_,_=_http(3000,'GET',target)
+                status,_,_=_http(3000,'GET',fault_target)
                 failed=status!=200
             except (OSError,http.client.HTTPException):failed=True
             if not failed:raise FixedRollbackRejected('injected_fault_not_observed')
         http_completed('faultObserved')
         # Fixed automatic rollback; no operator assertion substitutes for HTTP.
-        with http_subphase('rollback_a_start'):app.request('START_A')
+        with http_subphase('rollback_a_start'):
+            start_bound('START_A', 0)
+        health, expected = probes[0]
         recovered=health(releases[0],expected,deadline,'rollback_a');http_completed('rollbackAHealthPassed')
         return {'sequence':'A_B_A','steps':steps,'faultHealthFailed':True,
             'automaticRollback':'A','recovered':recovered}
@@ -564,7 +575,11 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     from .t18_broker_transport import connect_fixed_app_broker
     from .t18_runtime_observation import observe_three_uid_budget
     from .t18_readpoint_diagnostics import readpoint_phase
-    launch=is_launch_release_pair(assets.releases)
+    try:
+        probe_contracts = fixed_release_probe_contracts(assets.releases)
+    except ReleaseAssetsRejected:
+        raise FixedRollbackRejected('exact_pinned_release_pair_required') from None
+    launch = probe_contracts == ('launch', 'launch')
     if launch:
         with readpoint_phase('radar_readpoint'):
             observation=_observe_launch_readpoint(sql)
@@ -628,7 +643,9 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
                     with readpoint_phase('fixed_http_exercise'):
                         with start_fixed_read_proxy(token,detail_read=detail_read,allow_launch_reads=launch,launch_detail_scope=detail_scope) as proxy:
                             negatives=_negative_http(token)
-                            sequence=_execute_fixed_sequence(fresh_app,rest,assets.releases,dates,launch=launch)
+                            probe_dates = {'launch': dates} if launch else dates
+                            sequence = _execute_fixed_sequence(fresh_app, rest, assets.releases, probe_dates,
+                                                               probe_contracts=probe_contracts)
                             if detail_read is not None:
                                 from .t18_detail_http import exercise_detail_http
                                 detail_http=exercise_detail_http(fresh_app,assets.releases,detail_read)

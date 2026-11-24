@@ -370,8 +370,24 @@ def _fixed_release_pins_at_root(rootfd):
     raise ReleaseAssetsRejected('exact_pinned_release_pair_required')
 
 
+def fixed_release_probe_contracts(releases):
+    """Select probes only for an ordered, pinned release pair."""
+    try:
+        identities = tuple((row['sourceCommit'], row['manifestSha256']) for row in releases)
+    except (KeyError, TypeError):
+        raise ReleaseAssetsRejected('exact_pinned_release_pair_required') from None
+    if identities == RELEASE_PINS:
+        return ('daily', 'daily')
+    if identities == LAUNCH_RELEASE_PINS:
+        return ('launch', 'launch')
+    raise ReleaseAssetsRejected('exact_pinned_release_pair_required')
+
+
 def is_launch_release_pair(releases):
-    return tuple((row['sourceCommit'],row['manifestSha256']) for row in releases)==LAUNCH_RELEASE_PINS
+    try:
+        return fixed_release_probe_contracts(releases) == ('launch', 'launch')
+    except ReleaseAssetsRejected:
+        return False
 
 
 @contextmanager
