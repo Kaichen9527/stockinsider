@@ -1,0 +1,14 @@
+interface:
+  display_name: 專案容量護欄
+  short_description: 依序清理本案、評估 iCloud、外接碟與指定 Drive，保護唯一成果
+  default_prompt: 使用 $project-storage-guard，依本次是盤點、清理或容量解卡，先整理本案，再依序核對 iCloud、外接碟與指定
+    Drive，驗證保存及實際釋放空間。
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true
