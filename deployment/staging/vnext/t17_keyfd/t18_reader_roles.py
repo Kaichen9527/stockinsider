@@ -5,6 +5,7 @@ admission flag. Parent separately binds peer-auth to an observed nonroot broker
 UID. This changes clone catalogs/ACLs, never original rows or constraint bits.
 """
 import json
+from .t18_launch_detail_projections import DETAIL_SIGNATURE_PINS
 
 ROLE_COUNTS={'createdRoles':2,'elevatedRoles':0,'readOnlyRoleSettings':2,
  'membershipEdges':1,'unexpectedMemberships':0,'allowedSelectColumns':11,
@@ -95,12 +96,16 @@ COMMIT;
 """
 FIXED_READER_ROLE_SQL=_FIXED_READER_ROLE_SETUP_SQL+_FIXED_READER_RECEIPT_SQL
 
-# PostgreSQL 17 definitions installed by 20261115 launch ranking (including
-# 20261116_23 chart reader patch) and 20261116_04 launch outcome public.
-# This pins the two entrypoints, not the restored dependency/data closure.
-_LAUNCH_READER_GRANTS_SQL=br"""
+# Clone-only PG17 routine pins from the launch ranking and outcome migrations.
+_LAUNCH_PINS = (
+    ('public.vnext_launch_ranking_read_v1(uuid,text)',
+     '6acbe1a334f15419d3293c8d5384ff61b732112ec40f0ace0db4088eb96ab189'),
+    ('public.vnext_launch_outcome_public_v1(uuid,text)',
+     '79690d17c3ba526eef7a5804636667422e33c526777f83b530625d3f7bf3e51a'),
+)
+_LAUNCH_READER_GRANTS_SQL = br"""
 DO $launch_reader_admission$
-DECLARE owner_oid oid; ranking_oid oid; outcome_oid oid; pinned integer; allowed integer;
+DECLARE owner_oid oid; granted_oids oid[]; routine_oid oid; allowed integer;
 BEGIN
  IF inet_server_addr() IS NOT NULL OR current_database()<>'t17_restored' THEN
   RAISE EXCEPTION 'launch_reader_clone_socket_required';
@@ -112,48 +117,65 @@ BEGIN
   OR EXISTS(SELECT FROM pg_db_role_setting WHERE setrole=owner_oid AND setconfig IS NOT NULL) THEN
   RAISE EXCEPTION 'launch_reader_definer_role_rejected';
  END IF;
- ranking_oid:=to_regprocedure('public.vnext_launch_ranking_read_v1(uuid,text)');
- outcome_oid:=to_regprocedure('public.vnext_launch_outcome_public_v1(uuid,text)');
- WITH expected(func_oid,definition_sha256) AS (VALUES
-  (ranking_oid,'6acbe1a334f15419d3293c8d5384ff61b732112ec40f0ace0db4088eb96ab189'),
-  (outcome_oid,'79690d17c3ba526eef7a5804636667422e33c526777f83b530625d3f7bf3e51a')
+ WITH expected(signature,definition_sha256) AS (VALUES
+   __FIXED_PINS__
  )
- SELECT count(*) INTO pinned FROM expected e JOIN pg_proc p ON p.oid=e.func_oid
+ SELECT array_agg(p.oid) INTO granted_oids FROM expected e JOIN pg_proc p ON p.oid=to_regprocedure(e.signature)
  WHERE p.prokind='f' AND p.provolatile='s' AND p.prosecdef AND p.proowner=owner_oid
   AND p.prorettype='pg_catalog.jsonb'::regtype AND NOT p.proretset
-  AND encode(sha256(convert_to(pg_get_functiondef(p.oid),'UTF8')),'hex')=e.definition_sha256;
- IF pinned<>2 THEN RAISE EXCEPTION 'launch_reader_projection_definition_rejected'; END IF;
+  AND CASE WHEN p.prokind='f' THEN
+   encode(sha256(convert_to(pg_get_functiondef(p.oid),'UTF8')),'hex')=e.definition_sha256
+  ELSE false END;
+ IF cardinality(granted_oids) IS DISTINCT FROM __FIXED_COUNT__ THEN
+  RAISE EXCEPTION 'launch_reader_projection_definition_rejected';
+ END IF;
 
- GRANT EXECUTE ON FUNCTION public.vnext_launch_ranking_read_v1(uuid,text),
-  public.vnext_launch_outcome_public_v1(uuid,text) TO t18_reader;
+ FOREACH routine_oid IN ARRAY granted_oids LOOP
+  EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO t18_reader',routine_oid::regprocedure);
+ END LOOP;
  SELECT count(*) INTO allowed FROM pg_proc p
- WHERE p.oid IN (ranking_oid,outcome_oid) AND has_function_privilege('t18_reader',p.oid,'EXECUTE')
+ WHERE p.oid=ANY(granted_oids) AND has_function_privilege('t18_reader',p.oid,'EXECUTE')
   AND NOT has_function_privilege('t18_authenticator',p.oid,'EXECUTE');
- IF allowed<>2 OR EXISTS(
+ IF allowed<>__FIXED_COUNT__ OR EXISTS(
   SELECT FROM pg_roles r CROSS JOIN pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
   WHERE r.rolname IN ('t18_reader','t18_authenticator')
    AND n.nspname NOT IN ('pg_catalog','information_schema') AND n.nspname NOT LIKE 'pg\_%' ESCAPE '\'
    AND has_function_privilege(r.oid,p.oid,'EXECUTE')
-   AND NOT (r.rolname='t18_reader' AND p.oid IN (ranking_oid,outcome_oid))
+   AND NOT (r.rolname='t18_reader' AND p.oid=ANY(granted_oids))
  ) THEN RAISE EXCEPTION 'launch_reader_projection_privileges_rejected'; END IF;
  PERFORM set_config('stockinsider.t18_fixed_reader_roles',
   (current_setting('stockinsider.t18_fixed_reader_roles')::jsonb||
-   jsonb_build_object('publicRoutineExecutions',allowed,'launchProjectionDefinitionsPinned',pinned))::text,true);
+   jsonb_build_object('publicRoutineExecutions',allowed,'launchProjectionDefinitionsPinned',cardinality(granted_oids)))::text,true);
 END $launch_reader_admission$;
 """
-LAUNCH_READER_ROLE_SQL=_FIXED_READER_ROLE_SETUP_SQL+_LAUNCH_READER_GRANTS_SQL+_FIXED_READER_RECEIPT_SQL
-LAUNCH_ROLE_COUNTS={**ROLE_COUNTS,'publicRoutineExecutions':2,'launchProjectionDefinitionsPinned':2}
+
+
+def _launch_role_profile(pins):
+    values = b',\n'.join(f"('{signature}','{digest}')".encode('ascii') for signature, digest in pins)
+    grants = _LAUNCH_READER_GRANTS_SQL.replace(b'__FIXED_PINS__',values).replace(
+        b'__FIXED_COUNT__',str(len(pins)).encode('ascii'))
+    counts = {**ROLE_COUNTS,'publicRoutineExecutions':len(pins),'launchProjectionDefinitionsPinned':len(pins)}
+    return _FIXED_READER_ROLE_SETUP_SQL + grants + _FIXED_READER_RECEIPT_SQL, counts
+
+
+LAUNCH_READER_ROLE_SQL, LAUNCH_ROLE_COUNTS = _launch_role_profile(_LAUNCH_PINS)
+LAUNCH_DETAIL_READER_ROLE_SQL, LAUNCH_DETAIL_ROLE_COUNTS = _launch_role_profile(_LAUNCH_PINS + DETAIL_SIGNATURE_PINS)
 
 
 class FixedReaderRolesRejected(Exception):
     def __init__(self):super().__init__('fixed_reader_role_installation_rejected')
 
 
-def install_fixed_reader_roles(sql, *, allow_launch_reads=False):
+def install_fixed_reader_roles(sql, *, allow_launch_reads=False, allow_launch_detail_reads=False):
     """Install one fixed privilege set using the trusted clone-only SQL callback."""
-    if not callable(sql) or type(allow_launch_reads) is not bool:raise FixedReaderRolesRejected()
-    statement=LAUNCH_READER_ROLE_SQL if allow_launch_reads else FIXED_READER_ROLE_SQL
-    expected=LAUNCH_ROLE_COUNTS if allow_launch_reads else ROLE_COUNTS
+    if (not callable(sql) or type(allow_launch_reads) is not bool or type(allow_launch_detail_reads) is not bool
+            or allow_launch_detail_reads and not allow_launch_reads):raise FixedReaderRolesRejected()
+    if allow_launch_detail_reads:
+        statement,expected=LAUNCH_DETAIL_READER_ROLE_SQL,LAUNCH_DETAIL_ROLE_COUNTS
+    elif allow_launch_reads:
+        statement,expected=LAUNCH_READER_ROLE_SQL,LAUNCH_ROLE_COUNTS
+    else:
+        statement,expected=FIXED_READER_ROLE_SQL,ROLE_COUNTS
     raw=sql(statement)
     if not isinstance(raw,(str,bytes)) or len(raw)>4096:raise FixedReaderRolesRejected()
     try:result=json.loads(raw)

@@ -7,7 +7,7 @@ import threading
 import time
 import unittest
 from unittest.mock import patch
-from urllib.parse import urlencode
+from urllib.parse import parse_qs,urlencode,urlsplit
 from deployment.staging.vnext.t17_keyfd import fixed_read_proxy as m
 
 TOKEN='PUBLIC_HEADER.'+'PUBLIC_STAGING_CLAIM_'*4+'.'+'PUBLIC_SIGNATURE_'*3
@@ -25,6 +25,18 @@ class FixedReadProxyTests(unittest.TestCase):
             def do_HEAD(self):self.answer()
             def answer(self):
                 cls.seen.append((self.command,self.path,self.headers.get('Authorization'),self.headers.get('apikey')))
+                if cls.mode=='bound_detail':
+                    args=parse_qs(urlsplit(self.path).query)
+                    body=json.dumps({'rankingRunId':args['p_ranking_run_id'][0],
+                                     'symbol':args['p_symbol'][0]}).encode()
+                    if self.path.startswith('/rpc/vnext_launch_reviewed_falsifier_v1'):
+                        body=body.replace(b'6488',b'0000')
+                    self.send_response(200)
+                    self.send_header('Content-Type','application/json')
+                    self.send_header('Content-Length',str(len(body)))
+                    self.end_headers()
+                    self.wfile.write(body)
+                    return
                 if cls.mode=='redirect':
                     self.send_response(302);self.send_header('Location','http://PUBLIC_FORBIDDEN_TARGET/');self.end_headers();return
                 if cls.mode in ('missing_projection','private_projection_failure'):
@@ -161,6 +173,34 @@ class FixedReadProxyTests(unittest.TestCase):
             '/rpc/vnext_launch_outcome_public_v1?p_ranking_run_id='+run+'&p_symbol=6488',
         ])
         self.assertTrue(all(row[2]=='Bearer '+TOKEN and row[3] is None for row in self.seen))
+
+    def test_five_details_use_only_the_frozen_run_and_ranked_symbols(self):
+        headers={'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'}
+        run='00000000-0000-4000-8000-000000000018'
+        request=lambda run,symbol:json.dumps({'p_ranking_run_id':run,'p_symbol':symbol})
+        routes=sorted(m.DETAIL_PROJECTION_PATHS)
+        self.assertEqual(len(routes),5)
+        type(self).mode='bound_detail'
+        with m.start_fixed_read_proxy(TOKEN,allow_launch_reads=True):
+            for route in routes:
+                self.assertEqual(self.request('POST',route,headers,request(run,'6488'))[0],403)
+        self.assertEqual(self.seen,[])
+        with m.start_fixed_read_proxy(TOKEN,allow_launch_reads=True,launch_detail_scope=(run,frozenset({'6488'}))) as h:
+            for route in routes:
+                for rejected in (request(run,'2330'),request(None,'6488'),request(run,None),
+                                 request('00000000-0000-4000-8000-000000000019','6488')):
+                    self.assertEqual(self.request('POST',route,headers,rejected)[0],403)
+                status,body,_=self.request('POST',route,headers,request(run,'6488'))
+                if route.endswith('reviewed_falsifier_v1'):
+                    self.assertEqual(status,502)
+                    self.assertNotIn(b'0000',body)
+                else:
+                    self.assertEqual(status,200)
+                    self.assertEqual(json.loads(body),{'rankingRunId':run,'symbol':'6488'})
+            self.assertEqual(h.metrics['upstreamFailures'],1)
+        self.assertEqual([row[:2] for row in self.seen],[
+            ('GET',route.removeprefix('/rest/v1')+'?p_ranking_run_id='+run+'&p_symbol=6488')
+            for route in routes])
 
     def test_launch_projection_is_default_off_and_bounded(self):
         headers={'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'}

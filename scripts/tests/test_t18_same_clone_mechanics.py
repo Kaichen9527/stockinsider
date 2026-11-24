@@ -136,6 +136,7 @@ class SameCloneMechanicsOnlyTests(unittest.TestCase):
             releases=[{'sourceCommit':sha,'manifestSha256':pin} for sha,pin in LAUNCH_RELEASE_PINS]
         def unexpected(*_):
             self.fail('launch_readpoint_triggered_runtime')
+        detail_projections=dict.fromkeys(m.LAUNCH_DETAIL_PROJECTION_KEYS,'MISSING')
         for schema,head,wanted in (
             ('false',None,{'status':'SCHEMA_MISSING','session':None,'ranked':None}),
             ('true',{'enabled':True,'session':None,'ranked':0,'valid':True},
@@ -149,6 +150,7 @@ class SameCloneMechanicsOnlyTests(unittest.TestCase):
             def query(statement):
                 calls.append(statement)
                 if statement==m.LAUNCH_SCHEMA_SQL:return schema
+                if statement==m.LAUNCH_DETAIL_PROJECTION_SQL:return json.dumps(detail_projections)
                 if statement==m.LAUNCH_HEAD_SQL and head is not None:return json.dumps(head)
                 if statement==m.LAUNCH_MIGRATION_PROBE_SQL and schema=='false':
                     return json.dumps({name:False for name in m.LAUNCH_MIGRATION_MARKERS})
@@ -158,13 +160,23 @@ class SameCloneMechanicsOnlyTests(unittest.TestCase):
             projected=project_exercise(raw)
             self.assertEqual(projected['launchReadpoint'],wanted)
             self.assertEqual(projected['nextRollback'],'NOT_RUN')
-            self.assertEqual(len(calls),2)
+            self.assertEqual(projected['launchDetailProjections'],detail_projections)
+            self.assertEqual(len(calls),3)
+            self.assertIsNone(project_exercise({**raw,'launchDetailProjections':{**detail_projections,'extra':'MISSING'}}))
+            self.assertIsNone(project_exercise({**raw,'launchDetailProjections':{**detail_projections,'reportedEps':[]}}))
             if schema=='false':
                 self.assertEqual(projected['migrationPrerequisites'],{name:False for name in m.LAUNCH_MIGRATION_MARKERS})
                 stale=projected['migrationPrerequisites'].copy();stale['writerFence']=1
                 self.assertIsNone(project_exercise({**raw,'migrationPrerequisites':stale}))
             raw['launchReadpoint']['unreviewed']='PUBLIC_TEST_REJECTED'
             self.assertIsNone(project_exercise(raw))
+
+    def test_launch_detail_projection_probe_rejects_invalid_catalog_response(self):
+        pinned=dict.fromkeys(m.LAUNCH_DETAIL_PROJECTION_KEYS,'PINNED')
+        self.assertEqual(m._observe_launch_detail_projections(lambda _:json.dumps(pinned)),pinned)
+        for value in (None,b'null',b'not-json',b'X'*1025,json.dumps({'reportedEps':'PINNED'})):
+            with self.subTest(value=type(value)),self.assertRaisesRegex(m.FixedRollbackRejected,'detail_projection_probe_rejected'):
+                m._observe_launch_detail_projections(lambda _:value)
 
     def test_core_rehearsal_projects_only_disabled_install_and_exact_predecessors(self):
         from deployment.staging.vnext.t17_keyfd import t18_core_migration_rehearsal as core
@@ -201,7 +213,7 @@ class SameCloneMechanicsOnlyTests(unittest.TestCase):
             with self.assertRaises(m.FixedRollbackRejected):m._launch_result(request(changed),expected)
 
     def test_launch_success_receipt_rejects_frozen_b_drift_and_legacy_acl(self):
-        from deployment.staging.vnext.t17_keyfd.t18_reader_roles import ROLE_COUNTS,LAUNCH_ROLE_COUNTS
+        from deployment.staging.vnext.t17_keyfd.t18_reader_roles import ROLE_COUNTS,LAUNCH_ROLE_COUNTS,LAUNCH_DETAIL_ROLE_COUNTS
         step={'sourceCommit':LAUNCH_RELEASE_PINS[0][0],'buildId':'build-a','nextVersion':'16.3.4',
             'homeStatus':200,'detailStatus':200,'staticStatus':200,'staticSha256':'a'*64,
             'snapshotSha256':'b'*64,'detailSha256':'c'*64,'session':'2026-11-13','ranked':1}
@@ -216,6 +228,16 @@ class SameCloneMechanicsOnlyTests(unittest.TestCase):
             'negativeHttpChecks':{'proxyDenied':6,'postgrestDenied':2},'proxyMetrics':{'requests':20,
             'allowedReads':14,'blockedRequests':6,'upstreamFailures':0,'responseBytes':14000},'rollback':sequence}
         self.assertEqual(project_exercise(result),result)
+        detail_projections=dict.fromkeys(m.LAUNCH_DETAIL_PROJECTION_KEYS,'PINNED')
+        with_diagnostic={**result,'launchDetailProjections':detail_projections}
+        self.assertIsNone(project_exercise(with_diagnostic))
+        with_diagnostic['readerRoleChecks']=LAUNCH_DETAIL_ROLE_COUNTS
+        self.assertEqual(project_exercise(with_diagnostic),with_diagnostic)
+        partial={**detail_projections,'reviewedFalsifier':'MISSING'}
+        self.assertIsNone(project_exercise({**with_diagnostic,'launchDetailProjections':partial}))
+        compatible={**result,'launchDetailProjections':partial}
+        self.assertEqual(project_exercise(compatible),compatible)
+        self.assertIsNone(project_exercise({**result,'launchDetailProjections':{'reportedEps':'PINNED'}}))
         self.assertIsNone(project_exercise({**result,'readerRoleChecks':ROLE_COUNTS}))
         drift={**switched,'detailSha256':'0'*64}
         self.assertIsNone(project_exercise({**result,'rollback':{**sequence,'steps':[step,drift,step]}}))

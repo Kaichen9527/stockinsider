@@ -19,6 +19,7 @@ import time
 from urllib.parse import urlencode
 from .stage_credentials import read_stage_credentials,validate_stage_token,StageCredentialRejected
 from .t18_reader_roles import install_fixed_reader_roles
+from .t18_launch_detail_projections import DETAIL_PROJECTION_KEYS as LAUNCH_DETAIL_PROJECTION_KEYS, DETAIL_CATALOG_ROWS
 from .t18_release_assets import is_launch_release_pair
 from .fixed_read_proxy import start_fixed_read_proxy,SNAPSHOT_SELECT,STATE_SELECT,_BoundedResponse
 from .t18_readpoint_diagnostics import http_trace,http_subphase,http_completed
@@ -36,6 +37,60 @@ SELECT (
 )::text;
 COMMIT;
 """
+
+# This readpoint observes catalog readiness; grants independently recheck the pins.
+LAUNCH_DETAIL_PROJECTION_SQL = br"""
+\set QUIET 1
+BEGIN READ ONLY;
+SET LOCAL search_path=pg_catalog;
+SET LOCAL statement_timeout='2s';
+WITH expected(marker,signature,definition_hash) AS (VALUES
+""" + DETAIL_CATALOG_ROWS + br"""
+)
+SELECT jsonb_object_agg(e.marker, CASE
+ WHEN p.oid IS NULL THEN 'MISSING'
+ WHEN p.prokind='f' AND p.provolatile='s' AND p.prosecdef
+  AND p.prorettype='pg_catalog.jsonb'::regtype AND NOT p.proretset AND p.pronargdefaults=0
+  AND r.rolname='stockinsider_vnext_owner'
+  AND NOT (r.rolcanlogin OR r.rolsuper OR r.rolcreatedb OR r.rolcreaterole OR r.rolreplication OR r.rolbypassrls)
+  AND r.rolconfig IS NULL
+  AND NOT EXISTS (SELECT FROM pg_auth_members WHERE member=r.oid OR roleid=r.oid)
+  AND NOT EXISTS (SELECT FROM pg_db_role_setting WHERE setrole=r.oid AND setconfig IS NOT NULL)
+  AND CASE WHEN p.prokind='f' THEN
+   encode(sha256(convert_to(pg_get_functiondef(p.oid),'UTF8')),'hex')=e.definition_hash
+  ELSE false END
+ THEN 'PINNED'
+ ELSE 'DEFINITION_OR_OWNER_MISMATCH'
+ END)
+FROM expected e
+LEFT JOIN pg_proc p ON p.oid=to_regprocedure(e.signature)
+LEFT JOIN pg_roles r ON r.oid=p.proowner
+WHERE current_database()='t17_restored' AND inet_server_addr() IS NULL;
+COMMIT;
+"""
+
+
+def project_launch_detail_projections(value):
+    if type(value) is not dict or set(value) != LAUNCH_DETAIL_PROJECTION_KEYS:
+        return None
+    states = ('MISSING', 'DEFINITION_OR_OWNER_MISMATCH', 'PINNED')
+    if any(type(status) is not str or status not in states for status in value.values()):
+        return None
+    return dict(value)
+
+
+def _observe_launch_detail_projections(sql):
+    raw = sql(LAUNCH_DETAIL_PROJECTION_SQL)
+    if not isinstance(raw, (str, bytes)) or len(raw) > 1024:
+        raise FixedRollbackRejected('launch_clone_detail_projection_probe_rejected')
+    try:
+        observed = project_launch_detail_projections(json.loads(raw))
+    except (ValueError, UnicodeError):
+        observed = None
+    if observed is None:
+        raise FixedRollbackRejected('launch_clone_detail_projection_probe_rejected')
+    return observed
+
 LAUNCH_HEAD_SQL=br"""
 \set QUIET 1
 BEGIN READ ONLY;
@@ -511,9 +566,12 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     from .t18_readpoint_diagnostics import readpoint_phase
     launch=is_launch_release_pair(assets.releases)
     if launch:
-        with readpoint_phase('radar_readpoint'):observation=_observe_launch_readpoint(sql)
+        with readpoint_phase('radar_readpoint'):
+            observation=_observe_launch_readpoint(sql)
+            detail_projections=_observe_launch_detail_projections(sql)
         if observation['status']!='FROZEN_RANK_ROWS_OBSERVED':
             gap={'status':'LAUNCH_CLONE_READPOINT_ONLY','launchReadpoint':observation,
+                 'launchDetailProjections':detail_projections,
                  'postgrestAcceptance':'NOT_RUN','nextRollback':'NOT_RUN',
                  'candidateDetailHttp':{'status':'GAP_DETAIL_SCOPE'}}
             if observation['status']=='SCHEMA_MISSING':
@@ -532,8 +590,11 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
             return {'status':'GAP_GENUINE_SNAPSHOT_OR_SCHEMA','readerObservation':observation,
                 'postgrestAcceptance':'NOT_RUN','nextRollback':'NOT_RUN','candidateDetailHttp':{'status':'GAP_DETAIL_SCOPE'}}
         with readpoint_phase('snapshot_dates'):dates=_expected_dates(sql)
+    launch_details = launch and all(state == 'PINNED' for state in detail_projections.values())
+    detail_scope = (dates['rankingRunId'], frozenset(member['symbol'] for member in dates['members'])) if launch_details else None
     with readpoint_phase('snapshot_fingerprint'):before=_fingerprint(sql)
-    with readpoint_phase('reader_role_install'):roles=install_fixed_reader_roles(sql,allow_launch_reads=launch)
+    with readpoint_phase('reader_role_install'):
+        roles=install_fixed_reader_roles(sql,allow_launch_reads=launch,allow_launch_detail_reads=launch_details)
     detail_read,detail_http=None,{'status':'GAP_DETAIL_SCOPE'}
     if not launch:
         with readpoint_phase('candidate_detail_prepare'):
@@ -565,7 +626,7 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
                     with readpoint_phase('rest_configure'):rest.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
                     with readpoint_phase('app_configure'):fresh_app.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
                     with readpoint_phase('fixed_http_exercise'):
-                        with start_fixed_read_proxy(token,detail_read=detail_read,allow_launch_reads=launch) as proxy:
+                        with start_fixed_read_proxy(token,detail_read=detail_read,allow_launch_reads=launch,launch_detail_scope=detail_scope) as proxy:
                             negatives=_negative_http(token)
                             sequence=_execute_fixed_sequence(fresh_app,rest,assets.releases,dates,launch=launch)
                             if detail_read is not None:
@@ -613,7 +674,8 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
             raise FixedRollbackRejected('launch_frozen_clone_binding_changed')
     if launch:
         return {'candidateDetailHttp':detail_http,'status':'FIXED_LAUNCH_RELEASE_ROLLBACK_VERIFIED',
-            'launchReadpoint':observation,'readerRoleChecks':roles,'negativeHttpChecks':negatives,
+            'launchReadpoint':observation,'launchDetailProjections':detail_projections,
+            'readerRoleChecks':roles,'negativeHttpChecks':negatives,
             'proxyMetrics':metrics,'rollback':sequence,'snapshotDataAndConstraintBitsUnchanged':True,
             'postgrestAcceptance':'FIXED_LAUNCH_READER_ONLY','nextRollback':'FIXED_LAUNCH_PAIR_VERIFIED',
             'namespaceKernelCookiesMatched':True,'threeDistinctOsUidsObserved':True,

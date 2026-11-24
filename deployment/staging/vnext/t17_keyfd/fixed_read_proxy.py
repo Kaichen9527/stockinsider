@@ -16,6 +16,7 @@ import socket
 import threading
 from urllib.parse import parse_qsl, urlencode
 from .t18_readpoint_diagnostics import http_subphase,http_completed
+from .t18_launch_detail_projections import DETAIL_PROJECTION_PATHS
 
 REQUEST_LINE_LIMIT=4096
 HEADER_BYTES_LIMIT=8192
@@ -77,9 +78,10 @@ def _fixed_target(raw):
     return path.removeprefix('/rest/v1')+'?'+urlencode(sorted(fields.items()))
 
 
-def _launch_target(path, body):
+def _launch_target(path, body, launch_detail_scope=None):
     """Accept one frontend call shape and rebuild a fixed PostgREST GET."""
-    if path not in LAUNCH_PATHS or not 1<=len(body)<=128:return None
+    detail=path in DETAIL_PROJECTION_PATHS
+    if not (path in LAUNCH_PATHS or detail and launch_detail_scope is not None) or not 1<=len(body)<=128:return None
 
     def unique_object(items):
         fields={}
@@ -96,6 +98,7 @@ def _launch_target(path, body):
     if run_id is not None and (type(run_id) is not str or LAUNCH_UUID.fullmatch(run_id) is None):return None
     if symbol is not None and (type(symbol) is not str or LAUNCH_SYMBOL.fullmatch(symbol) is None):return None
     if path==LAUNCH_OUTCOME_PATH and (run_id is None or symbol is None):return None
+    if detail and (run_id!=launch_detail_scope[0] or symbol not in launch_detail_scope[1]):return None
     query=urlencode([(key,arguments[key]) for key in ('p_ranking_run_id','p_symbol') if arguments[key] is not None])
     return path.removeprefix('/rest/v1')+('?' + query if query else '')
 
@@ -109,7 +112,7 @@ class _Handle:
 
 
 @contextmanager
-def start_fixed_read_proxy(stage_jwt,detail_read=None,*,allow_launch_reads=False):
+def start_fixed_read_proxy(stage_jwt,detail_read=None,*,allow_launch_reads=False,launch_detail_scope=None):
     """Own/reap a fixed HTTP server thread; no listener or token in receipts.
 
     The token is an internal stage credential, not an admission flag. Caller
@@ -121,6 +124,13 @@ def start_fixed_read_proxy(stage_jwt,detail_read=None,*,allow_launch_reads=False
                 or not re.fullmatch(r'[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+',stage_jwt)):
             raise FixedReadProxyRejected()
         if type(allow_launch_reads) is not bool:raise FixedReadProxyRejected()
+        if launch_detail_scope is not None:
+            if not allow_launch_reads or type(launch_detail_scope) is not tuple or len(launch_detail_scope)!=2:
+                raise FixedReadProxyRejected()
+            run_id,symbols=launch_detail_scope
+            if (type(run_id) is not str or LAUNCH_UUID.fullmatch(run_id) is None or type(symbols) is not frozenset
+                    or not 1<=len(symbols)<=10 or any(type(symbol) is not str or LAUNCH_SYMBOL.fullmatch(symbol) is None for symbol in symbols)):
+                raise FixedReadProxyRejected()
         if detail_read is not None:
             from .t18_detail_read_adapter import _DetailRead
             if type(detail_read) is not _DetailRead:raise FixedReadProxyRejected()
@@ -220,7 +230,7 @@ def start_fixed_read_proxy(stage_jwt,detail_read=None,*,allow_launch_reads=False
             count=int(lengths[0])
             body=self.rfile.read(count)
             if len(body)!=count or self.server.request_expired(self.request):return None
-            return _launch_target(self.path,body)
+            return _launch_target(self.path,body,launch_detail_scope)
         def _read(self):
             if self.server.request_expired(self.request):self._blocked(408);return
             if (len(self.headers)>HEADER_COUNT_LIMIT
@@ -230,7 +240,8 @@ def start_fixed_read_proxy(stage_jwt,detail_read=None,*,allow_launch_reads=False
                 or self.command!='POST' and self.headers.get_all('Content-Length',[]) not in ([],['0'])):
                 self._blocked(400);return
             target=_fixed_target(self.path)
-            projection=allow_launch_reads and self.path in LAUNCH_PATHS
+            detail_projection=self.path in DETAIL_PROJECTION_PATHS
+            projection=allow_launch_reads and (self.path in LAUNCH_PATHS or detail_projection)
             if projection:
                 target=self._launch_read_target()
                 if target is None:self._blocked();return
@@ -275,6 +286,12 @@ def start_fixed_read_proxy(stage_jwt,detail_read=None,*,allow_launch_reads=False
                 content_type=response.getheader('Content-Type','application/json')
                 if (len(content_type)>128 or content_type.split(';',1)[0].strip() not in ('application/json','application/problem+json','application/vnd.pgrst.object+json')
                     or any(not 32<=ord(c)<127 for c in content_type)):raise FixedReadProxyRejected()
+                if detail_projection and response.status==200:
+                    value=json.loads(body)
+                    if value is not None and (type(value) is not dict
+                            or type(value.get('rankingRunId')) is not str or type(value.get('symbol')) is not str or urlencode([
+                            ('p_ranking_run_id',value.get('rankingRunId')),('p_symbol',value.get('symbol'))
+                    ])!=target.partition('?')[2]):raise FixedReadProxyRejected()
                 if projection and response.status>=400:
                     code='fixed_launch_reader_unavailable'
                     if response.status==404:
