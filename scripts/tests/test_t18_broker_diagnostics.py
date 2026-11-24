@@ -9,7 +9,7 @@ import sys
 import time
 from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 from deployment.staging.vnext.t17_keyfd import t18_app_broker as b,t18_host_plan as d
 from deployment.staging.vnext.t17_keyfd.staging_admission import StagingAdmissionRejected
 
@@ -19,6 +19,56 @@ host=importlib.util.module_from_spec(spec);spec.loader.exec_module(host)
 
 
 class BrokerDiagnosticTests(unittest.TestCase):
+    def broker_fixture(self, pins):
+        from types import SimpleNamespace
+        children = b._FixedChildren.__new__(b._FixedChildren)
+        children.assets = SimpleNamespace(releases=tuple(
+            {'sourceCommit': commit, 'manifestSha256': manifest, 'serverPath': f'/public-fixture/{index}/server.js'}
+            for index, (commit, manifest) in enumerate(pins)
+        ))
+        children.configured, children.role = True, b.APP_USER
+        children.token, children.node = 'PUBLIC_TOKEN', '/public-fixture/node'
+        children._env = lambda: {'NODE_ENV': 'production'}
+        children.stop_next = Mock()
+        children._spawn = Mock()
+        return children
+
+    def test_start_selects_flags_for_each_compiled_profile_and_does_not_carry_them_over(self):
+        from deployment.staging.vnext.t17_keyfd.t18_release_assets import LAUNCH_RELEASE_PINS, RELEASE_PINS
+        for pins, flag in ((RELEASE_PINS, None), (LAUNCH_RELEASE_PINS, 'true')):
+            with self.subTest(flag=flag):
+                children = self.broker_fixture(pins)
+                for index in (0, 1, 0):
+                    children.start(index)
+                    argv, env = children._spawn.call_args.args
+                    self.assertEqual(argv[-1], children.assets.releases[index]['serverPath'])
+                    self.assertEqual(env['STOCKINSIDER_WRITER_RELEASE_ID'], pins[index][0])
+                    self.assertEqual(env.get('STOCKINSIDER_VNEXT_ENABLED'), flag)
+                    self.assertEqual(env.get('STOCKINSIDER_LAUNCH_RANKING_ENABLED'), flag)
+                self.assertEqual(children.stop_next.call_count, 3)
+
+        # Mechanical slot proof only. The production matcher still rejects mixed asset identities.
+        children = self.broker_fixture((RELEASE_PINS[1], LAUNCH_RELEASE_PINS[1]))
+        with patch.object(b, 'fixed_release_probe_contracts', return_value=('daily', 'launch')):
+            for index in (0, 1, 0):
+                children.start(index)
+                _, env = children._spawn.call_args.args
+                self.assertEqual(env.get('STOCKINSIDER_LAUNCH_RANKING_ENABLED'), 'true' if index else None)
+                self.assertEqual(env.get('STOCKINSIDER_VNEXT_ENABLED'), 'true' if index else None)
+
+    def test_start_rejects_invalid_slot_or_pair_without_stopping_any_process(self):
+        from deployment.staging.vnext.t17_keyfd.t18_release_assets import LAUNCH_RELEASE_PINS, RELEASE_PINS
+        mixed = (RELEASE_PINS[1], LAUNCH_RELEASE_PINS[1])
+        bad_digest = (RELEASE_PINS[0], (RELEASE_PINS[1][0], '0' * 64))
+        for pins, index in ((RELEASE_PINS, True), (RELEASE_PINS, -1), (RELEASE_PINS, 2),
+                            (mixed, 0), (mixed, 1), (bad_digest, 1)):
+            with self.subTest(index=index, pins=pins):
+                children = self.broker_fixture(pins)
+                with self.assertRaises(b.AppBrokerRejected):
+                    children.start(index)
+                children.stop_next.assert_not_called()
+                children._spawn.assert_not_called()
+
     def test_success_and_cleanup_do_not_become_refusals_and_wrapper_lag_is_observed(self):
         child=subprocess.Popen([sys.executable,'-I','-B','-c','pass'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,bufsize=0)
         capture=host._Capture(child,512);self.assertEqual(child.wait(timeout=5),0)

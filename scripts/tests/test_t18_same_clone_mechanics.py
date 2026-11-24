@@ -233,6 +233,17 @@ class SameCloneMechanicsOnlyTests(unittest.TestCase):
         self.assertIsNone(project_exercise(with_diagnostic))
         with_diagnostic['readerRoleChecks']=LAUNCH_DETAIL_ROLE_COUNTS
         self.assertEqual(project_exercise(with_diagnostic),with_diagnostic)
+        reads=dict.fromkeys(m.LAUNCH_DETAIL_PROJECTION_KEYS,'BOUND')
+        reads['reviewedFalsifier']='NO_DATA'
+        with_reads={**with_diagnostic,'launchDetailProxyReads':reads}
+        self.assertEqual(project_exercise(with_reads),with_reads)
+        too_few_reads={**with_reads,'proxyMetrics':{**with_reads['proxyMetrics'],'allowedReads':12}}
+        self.assertIsNone(project_exercise(too_few_reads))
+        for rejected in ({**reads,'reviewedFalsifier':{'content':'PUBLIC_TEST_DO_NOT_EXPORT'}},
+                         {k:v for k,v in reads.items() if k!='reviewedFalsifier'},
+                         {**reads,'extra':'BOUND'}):
+            self.assertIsNone(project_exercise({**with_reads,'launchDetailProxyReads':rejected}))
+        self.assertIsNone(project_exercise({**result,'launchDetailProxyReads':reads}))
         partial={**detail_projections,'reviewedFalsifier':'MISSING'}
         self.assertIsNone(project_exercise({**with_diagnostic,'launchDetailProjections':partial}))
         compatible={**result,'launchDetailProjections':partial}

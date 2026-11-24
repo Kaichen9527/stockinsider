@@ -15,6 +15,7 @@ from deployment.staging.vnext.t17_keyfd import t18_detail_read_adapter as m
 from deployment.staging.vnext.t17_keyfd.fixed_read_proxy import start_fixed_read_proxy
 from deployment.staging.vnext.t17_keyfd.stage_credentials import create_stage_jwt
 from deployment.staging.vnext.t17_keyfd.t18_detail_http import project_detail_http,_check_payload
+from deployment.staging.vnext.t17_keyfd.t18_release_assets import RELEASE_PINS
 
 ROOT=Path(__file__).resolve().parents[2]
 
@@ -151,7 +152,8 @@ class DetailReadAdapterTests(unittest.TestCase):
          patch.object(controller,'_execute_fixed_sequence',return_value={}), \
          patch.object(detail_http,'exercise_detail_http',side_effect=probe) as exercise, \
          patch.object(controller,'validate_stage_token',wraps=credentials.validate_stage_token) as expires:
-     result=controller.run_fixed_same_clone(self.sql,lambda:None,app,rest,type('PublicAssets',(),{'releases':[]})())
+     releases=[{'sourceCommit':commit,'manifestSha256':pin} for commit,pin in RELEASE_PINS]
+     result=controller.run_fixed_same_clone(self.sql,lambda:None,app,rest,type('PublicAssets',(),{'releases':releases})())
      self.assertEqual(exercise.call_count,int(projection[0] is not None))
      expires.assert_called_once();self.assertIn('proxyMetrics',result)
     self.assertTrue(controller._port_closed(3302));self.assertEqual(secret,bytes(32))

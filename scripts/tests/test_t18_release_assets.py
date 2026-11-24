@@ -5,7 +5,7 @@ import os
 import stat
 import subprocess
 import sys
-from types import SimpleNamespace
+from types import MappingProxyType, SimpleNamespace
 from unittest.mock import patch
 from pathlib import Path
 import tempfile
@@ -58,6 +58,9 @@ class ReleaseAssetTests(unittest.TestCase):
                 finally:os.close(fd)
         exact=[{'sourceCommit':commit,'manifestSha256':pin} for commit,pin in launch]
         self.assertTrue(m.is_launch_release_pair(exact))
+        self.assertEqual(m.fixed_release_probe_contracts(exact),('launch','launch'))
+        legacy=tuple(MappingProxyType({'sourceCommit':commit,'manifestSha256':pin}) for commit,pin in original)
+        self.assertEqual(m.fixed_release_probe_contracts(legacy),('daily','daily'))
         tampered=[{**exact[0],'manifestSha256':'0'*64},exact[1]]
         self.assertFalse(m.is_launch_release_pair(tampered))
         self.assertFalse(m.is_launch_release_pair(list(reversed(exact))))

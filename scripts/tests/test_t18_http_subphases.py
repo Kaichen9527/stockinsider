@@ -8,20 +8,21 @@ import subprocess
 import tempfile
 import types
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 import test_t18_candidate_detail_observation as fixture
 from test_t18_same_clone_mechanics import PublicFixtureBroker,EXPECTED
 from test_t18_fixed_read_proxy import TOKEN
 from deployment.staging.vnext.t17_keyfd import t18_same_clone as m,t18_readpoint_diagnostics as d,fixed_read_proxy as proxy
 from deployment.staging.vnext.t17_keyfd import t18_detail_read_adapter as adapter,t18_detail_http as detail
 from deployment.staging.vnext.t17_keyfd.stage_credentials import create_stage_jwt,StageCredentialRejected
-from deployment.staging.vnext.t17_keyfd.t18_release_assets import RELEASE_PINS
+from deployment.staging.vnext.t17_keyfd.t18_release_assets import LAUNCH_RELEASE_PINS, RELEASE_PINS
 
 CANARY='PUBLIC_SQL_URL_STRING_ID_FILE_SECRET_MUST_NOT_ESCAPE'
 STATIC=b'PUBLIC_STATIC_FIXTURE'
 DAILY=json.dumps({'asOf':EXPECTED['payloadAsOf'],'snapshotPublishedAt':EXPECTED['publishedAt'],'snapshotStale':True,'stages':{'actionable':[]},'projectionHealth':{'status':'stale_readonly','freshnessStatus':'stale_readonly','actionAuthority':'disabled','acquisitionAuthority':'disabled','actionsEnabled':False,'contentAsOf':EXPECTED['payloadAsOf']}}).encode()
 HEADERS={'x-stockinsider-snapshot-stale':'true','cache-control':'no-store','x-stockinsider-snapshot-published-at':EXPECTED['publishedAt']}
-RELEASES=[{'sourceCommit':pin[0],'buildId':'PUBLIC_A' if index==0 else 'PUBLIC_B'} for index,pin in enumerate(RELEASE_PINS)]
+RELEASES=[{'sourceCommit':commit,'manifestSha256':pin,'buildId':'PUBLIC_A' if index==0 else 'PUBLIC_B'}
+          for index,(commit,pin) in enumerate(RELEASE_PINS)]
 
 
 class HttpSubphaseTests(unittest.TestCase):
@@ -123,6 +124,16 @@ class HttpSubphaseTests(unittest.TestCase):
    self.assertTrue(handle.closed);self.assertTrue(m._port_closed(3302))
    self.assertEqual(caught.exception.diagnostic['httpSubphase'],'aba_b_home' if body_fails else 'proxy_stop')
    self.assertEqual(caught.exception.diagnostic['errorClass'],'os_error' if body_fails else 'timeout')
+ def test_projection_body_transport_is_closed_to_other_ports_methods_and_targets(self):
+  route='/rest/v1/rpc/vnext_launch_reported_eps_v1'
+  with patch.object(m.http.client,'HTTPConnection') as connect:
+   for port,method,path,body in ((3000,'POST',route,b'{}'),(3302,'GET',route,b'{}'),
+                                 (3302,'POST','/rest/v1/rpc/unknown',b'{}'),
+                                 (3302,'POST',route,'{}'),(3302,'POST',route,b'*'*129)):
+    with self.assertRaisesRegex(m.FixedRollbackRejected,'fixed_projection_request_rejected'):
+     m._http(port,method,path,request_body=body)
+   connect.assert_not_called()
+
  def test_low_level_http_cleanup_cannot_replace_primary_timeout(self):
   attempted=[]
   class Timer:
@@ -163,6 +174,61 @@ class HttpSubphaseTests(unittest.TestCase):
     if isinstance(old,ast.Assign) and all(isinstance(n,ast.Name) and n.id.isupper() for n in old.targets):
      new=next(n for n in after.body if isinstance(n,ast.Assign) and ast.dump(n.targets[0])==ast.dump(old.targets[0]))
      self.assertEqual(ast.dump(old,include_attributes=False),ast.dump(new,include_attributes=False))
+ def test_each_release_uses_its_probe_and_only_b_is_used_to_observe_fault(self):
+  app=Mock()
+  app.request.side_effect=lambda op: {'sourceCommit':RELEASES[op=='START_B']['sourceCommit']}
+  daily={'identity':'daily'}
+  launch={'identity':'launch'}
+  expected=[]
+  def observe(contract):
+   def health(release, facts, deadline, step):
+    expected.append((release['sourceCommit'], facts, step))
+    return contract
+   return health
+  with patch.object(m,'_health',side_effect=observe('daily')), \
+       patch.object(m,'_launch_health',side_effect=observe('launch')), \
+       patch.object(m,'_http',return_value=(503,{},b'')) as http:
+   with d.http_trace():
+    result=m._execute_fixed_sequence(app,object(),RELEASES,{'daily':daily,'launch':launch},
+                                     probe_contracts=('daily','launch'))
+  a,b=(release['sourceCommit'] for release in RELEASES)
+  self.assertEqual(expected,[(a,daily,'aba_first_a'),(b,launch,'aba_b'),(a,daily,'aba_return_a'),
+                             (b,launch,'fault_b'),(a,daily,'rollback_a')])
+  http.assert_called_once_with(3000,'GET',m.LAUNCH_API)
+  self.assertEqual(result['steps'],['daily','launch','daily'])
+  self.assertEqual(result['recovered'],'daily')
+
+ def test_fault_and_recovery_commit_mismatch_reject_before_http_read(self):
+  for subphase in ('fault_b_start','rollback_a_start'):
+   with self.subTest(subphase=subphase):
+    app=Mock()
+    def request(op):
+     wrong=d._HTTP_SUBPHASE.get()==subphase
+     return {'sourceCommit':RELEASES[(op=='START_B') != wrong]['sourceCommit']}
+    app.request.side_effect=request
+    with patch.object(m,'_health') as health, patch.object(m,'_http',return_value=(503,{},b'')) as http:
+     with self.assertRaises(d.ReadpointRejected) as caught:
+      with d.http_trace():
+       m._execute_fixed_sequence(app,object(),RELEASES,{'daily':EXPECTED})
+    self.assertEqual(caught.exception.diagnostic['httpSubphase'],subphase)
+    self.assertEqual(health.call_count,3 if subphase=='fault_b_start' else 4)
+    self.assertEqual(http.call_count,0 if subphase=='fault_b_start' else 1)
+    self.assertEqual(app.request.call_args.args,('STOP_NEXT',))
+
+ def test_unpinned_pair_rejects_before_readpoint_or_broker_access(self):
+  launch_commit,launch_pin=LAUNCH_RELEASE_PINS[1]
+  mixed=[RELEASES[0],{'sourceCommit':launch_commit,'manifestSha256':launch_pin}]
+  tampered=[RELEASES[0],{**RELEASES[1],'manifestSha256':'0'*64}]
+  for releases in (mixed,tampered,list(reversed(RELEASES)),[{}],[]):
+   sql,activate,app,rest=(Mock() for _ in range(4))
+   assets=type('AssetFixture',(),{'releases':releases})()
+   with self.assertRaisesRegex(m.FixedRollbackRejected,'exact_pinned_release_pair_required'):
+    m.run_fixed_same_clone(sql,activate,app,rest,assets)
+   sql.assert_not_called()
+   activate.assert_not_called()
+   app.request.assert_not_called()
+   rest.request.assert_not_called()
+
  def test_success_request_and_operation_sequence_matches_exact_baseline(self):
   baseline=types.ModuleType('deployment.staging.vnext.t17_keyfd._public_http_baseline');baseline.__package__='deployment.staging.vnext.t17_keyfd'
   source=subprocess.check_output(['git','cat-file','blob','f355b632579b7c3058a90ba912739c3bc54496c8']).decode();exec(compile(source,'PUBLIC_BASELINE','exec'),baseline.__dict__)
@@ -214,7 +280,7 @@ class HttpSubphasePgTests(unittest.TestCase):
     try:yield broker
     finally:raise OSError(CANARY)
    with patch.object(m,'install_fixed_reader_roles',return_value=roles.ROLE_COUNTS),patch.object(late,'request_fresh_stage',return_value=(secret,token)),patch.object(transport,'connect_fixed_app_broker',connection),patch.object(budget,'observe_three_uid_budget',return_value=None),patch.object(m,'_port_closed',side_effect=port_probe),patch.object(m,'_http',side_effect=TimeoutError(CANARY)),patch.object(detail,'exercise_detail_http',side_effect=AssertionError('detail_must_not_run')) as exercise:
-    with self.assertRaises(d.ReadpointRejected) as caught:m.run_fixed_same_clone(self.sql,lambda:None,broker,broker,type('PublicAssets',(),{'releases':[]})())
+    with self.assertRaises(d.ReadpointRejected) as caught:m.run_fixed_same_clone(self.sql,lambda:None,broker,broker,type('PublicAssets',(),{'releases':RELEASES})())
    diag=caught.exception.diagnostic;self.assertEqual(diag['httpSubphase'],'proxy_denial_probes');self.assertEqual(diag['errorClass'],'timeout')
    self.assertEqual(diag['completedStages']['detailPreparationGap'],bound_gap);self.assertEqual(diag['completedStages']['detailReadPrepared'],not bound_gap)
    self.assertEqual(diag['completedStages']['detailBoundsGap'],bound_gap)

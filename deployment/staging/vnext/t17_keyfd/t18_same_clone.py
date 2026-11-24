@@ -19,8 +19,11 @@ import time
 from urllib.parse import urlencode
 from .stage_credentials import read_stage_credentials,validate_stage_token,StageCredentialRejected
 from .t18_reader_roles import install_fixed_reader_roles
-from .t18_launch_detail_projections import DETAIL_PROJECTION_KEYS as LAUNCH_DETAIL_PROJECTION_KEYS, DETAIL_CATALOG_ROWS
-from .t18_release_assets import is_launch_release_pair
+from .t18_launch_detail_projections import (
+    DETAIL_CATALOG_ROWS, DETAIL_PROJECTIONS, DETAIL_PROJECTION_PATHS,
+    DETAIL_PROJECTION_KEYS as LAUNCH_DETAIL_PROJECTION_KEYS,
+)
+from .t18_release_assets import ReleaseAssetsRejected, fixed_release_probe_contracts
 from .fixed_read_proxy import start_fixed_read_proxy,SNAPSHOT_SELECT,STATE_SELECT,_BoundedResponse
 from .t18_readpoint_diagnostics import http_trace,http_subphase,http_completed
 
@@ -220,9 +223,12 @@ class FixedRollbackRejected(Exception):
     def __init__(self,code='fixed_same_clone_rollback_rejected'):super().__init__(code)
 
 
-def _http(port,method,target,headers=None):
+def _http(port,method,target,headers=None,*,request_body=None):
     # Internal fixed operations only; never exposed as a URL/request API.
     if port not in (3000,3301,3302) or method not in ('GET','POST','PATCH','DELETE'):raise FixedRollbackRejected()
+    if request_body is not None and (port != 3302 or method != 'POST' or target not in DETAIL_PROJECTION_PATHS
+                                     or type(request_body) is not bytes or not 1 <= len(request_body) <= 128):
+        raise FixedRollbackRejected('fixed_projection_request_rejected')
     connection=http.client.HTTPConnection('127.0.0.1',port,timeout=3)
     connection.response_class=_BoundedResponse
     active=[None];expired=threading.Event()
@@ -235,7 +241,8 @@ def _http(port,method,target,headers=None):
     timer=threading.Timer(8,stop);timer.start()
     primary_error=None
     try:
-        connection.request(method,target,headers={'Accept-Encoding':'identity','Connection':'close',**(headers or {})})
+        wire_headers = {'Accept-Encoding':'identity','Connection':'close',**(headers or {})}
+        connection.request(method,target,body=request_body,headers=wire_headers)
         active[0]=connection.sock
         response=connection.getresponse()
         if len(response.headers)>32 or response.getheader('Content-Encoding','identity')!='identity':raise FixedRollbackRejected('http_headers_rejected')
@@ -397,6 +404,33 @@ def _launch_result(response,expected):
     return result
 
 
+def _read_frozen_launch_detail_proxy(stage_token, expected):
+    """Observe the existing five scoped reads without recording their payloads."""
+    member = expected['members'][0]
+    run = expected['rankingRunId']
+    payload = json.dumps({'p_ranking_run_id': run, 'p_symbol': member['symbol']}, separators=(',', ':')).encode('ascii')
+    headers = {'Authorization': 'Bearer ' + stage_token, 'Content-Type': 'application/json'}
+    observed = {}
+    for name, rpc, _ in DETAIL_PROJECTIONS:
+        status, _, body = _http(3302, 'POST', '/rest/v1/rpc/' + rpc, headers, request_body=payload)
+        if status != 200:
+            raise FixedRollbackRejected('fixed_projection_response_rejected')
+        try:
+            result = json.loads(body)
+        except (ValueError, UnicodeError):
+            raise FixedRollbackRejected('fixed_projection_response_rejected') from None
+        if result is None:
+            observed[name] = 'NO_DATA'
+            continue
+        if (type(result) is not dict or result.get('schemaVersion') != rpc.replace('_', '-')
+            or result.get('rankingRunId') != run
+            or any(result.get(key) != member[key] for key in ('symbol', 'revisionId', 'inputHash'))
+            or _timestamp(result.get('cutoff')) != _timestamp(expected['cutoff'])):
+            raise FixedRollbackRejected('fixed_projection_binding_rejected')
+        observed[name] = 'BOUND'
+    return observed
+
+
 def _launch_health(release,expected,deadline,step):
     with http_subphase(step+'_static_select'):target,asset_hash=_static_asset(release)
     with http_subphase(step+'_daily'):
@@ -466,33 +500,44 @@ def _port_closed(port):
         sock.settimeout(.5);return sock.connect_ex(('127.0.0.1',port))!=0
 
 
-def _execute_fixed_sequence(app,rest,releases,dates,*,launch=False):
+def _execute_fixed_sequence(app,rest,releases,dates,*,probe_contracts=('daily','daily')):
     """Private mechanics helper. Tests are not kernel/broker admission."""
-    health=_launch_health if launch else _health
-    expected=dates if launch else dates['daily']
-    target=LAUNCH_API if launch else '/api/radar/daily'
+    health_by_contract = {'daily': _health, 'launch': _launch_health}
+    target_by_contract = {'daily': '/api/radar/daily', 'launch': LAUNCH_API}
+    probes = [(health_by_contract[contract], dates[contract]) for contract in probe_contracts]
+    fault_target = target_by_contract[probe_contracts[1]]
+
+    def start_bound(op, index):
+        response = app.request(op)
+        if not isinstance(response, dict) or response.get('sourceCommit') != releases[index]['sourceCommit']:
+            raise FixedRollbackRejected('broker_release_binding_rejected')
+
     steps=[];deadline=time.monotonic()+180
     primary_error=None
     try:
         for op,index,step,flag in (('START_A',0,'aba_first_a','firstAHealthPassed'),('START_B',1,'aba_b','bHealthPassed'),('START_A',0,'aba_return_a','returnAHealthPassed')):
             with http_subphase(step+'_start'):
-                response=app.request(op)
-                if response['sourceCommit']!=releases[index]['sourceCommit']:raise FixedRollbackRejected('broker_release_binding_rejected')
+                start_bound(op, index)
+            health, expected = probes[index]
             steps.append(health(releases[index],expected,deadline,step))
             http_completed(flag)
             with http_subphase(step+'_stop'):app.request('STOP_NEXT')
-        with http_subphase('fault_b_start'):app.request('START_B')
+        with http_subphase('fault_b_start'):
+            start_bound('START_B', 1)
+        health, expected = probes[1]
         health(releases[1],expected,deadline,'fault_b');http_completed('faultBReady')
         with http_subphase('fault_inject'):app.request('FAULT_NEXT')
         with http_subphase('fault_observe'):
             try:
-                status,_,_=_http(3000,'GET',target)
+                status,_,_=_http(3000,'GET',fault_target)
                 failed=status!=200
             except (OSError,http.client.HTTPException):failed=True
             if not failed:raise FixedRollbackRejected('injected_fault_not_observed')
         http_completed('faultObserved')
         # Fixed automatic rollback; no operator assertion substitutes for HTTP.
-        with http_subphase('rollback_a_start'):app.request('START_A')
+        with http_subphase('rollback_a_start'):
+            start_bound('START_A', 0)
+        health, expected = probes[0]
         recovered=health(releases[0],expected,deadline,'rollback_a');http_completed('rollbackAHealthPassed')
         return {'sequence':'A_B_A','steps':steps,'faultHealthFailed':True,
             'automaticRollback':'A','recovered':recovered}
@@ -564,7 +609,11 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     from .t18_broker_transport import connect_fixed_app_broker
     from .t18_runtime_observation import observe_three_uid_budget
     from .t18_readpoint_diagnostics import readpoint_phase
-    launch=is_launch_release_pair(assets.releases)
+    try:
+        probe_contracts = fixed_release_probe_contracts(assets.releases)
+    except ReleaseAssetsRejected:
+        raise FixedRollbackRejected('exact_pinned_release_pair_required') from None
+    launch = probe_contracts == ('launch', 'launch')
     if launch:
         with readpoint_phase('radar_readpoint'):
             observation=_observe_launch_readpoint(sql)
@@ -596,6 +645,7 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     with readpoint_phase('reader_role_install'):
         roles=install_fixed_reader_roles(sql,allow_launch_reads=launch,allow_launch_detail_reads=launch_details)
     detail_read,detail_http=None,{'status':'GAP_DETAIL_SCOPE'}
+    launch_proxy_reads = None
     if not launch:
         with readpoint_phase('candidate_detail_prepare'):
             from .t18_detail_read_adapter import prepare_detail_read
@@ -628,7 +678,12 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
                     with readpoint_phase('fixed_http_exercise'):
                         with start_fixed_read_proxy(token,detail_read=detail_read,allow_launch_reads=launch,launch_detail_scope=detail_scope) as proxy:
                             negatives=_negative_http(token)
-                            sequence=_execute_fixed_sequence(fresh_app,rest,assets.releases,dates,launch=launch)
+                            if launch_details:
+                                with http_subphase('launch_detail_proxy_reads'):
+                                    launch_proxy_reads = _read_frozen_launch_detail_proxy(token, dates)
+                            probe_dates = {'launch': dates} if launch else dates
+                            sequence = _execute_fixed_sequence(fresh_app, rest, assets.releases, probe_dates,
+                                                               probe_contracts=probe_contracts)
                             if detail_read is not None:
                                 from .t18_detail_http import exercise_detail_http
                                 detail_http=exercise_detail_http(fresh_app,assets.releases,detail_read)
@@ -675,6 +730,7 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     if launch:
         return {'candidateDetailHttp':detail_http,'status':'FIXED_LAUNCH_RELEASE_ROLLBACK_VERIFIED',
             'launchReadpoint':observation,'launchDetailProjections':detail_projections,
+            **({'launchDetailProxyReads':launch_proxy_reads} if launch_proxy_reads is not None else {}),
             'readerRoleChecks':roles,'negativeHttpChecks':negatives,
             'proxyMetrics':metrics,'rollback':sequence,'snapshotDataAndConstraintBitsUnchanged':True,
             'postgrestAcceptance':'FIXED_LAUNCH_READER_ONLY','nextRollback':'FIXED_LAUNCH_PAIR_VERIFIED',
