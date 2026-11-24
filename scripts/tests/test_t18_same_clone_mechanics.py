@@ -213,7 +213,7 @@ class SameCloneMechanicsOnlyTests(unittest.TestCase):
             with self.assertRaises(m.FixedRollbackRejected):m._launch_result(request(changed),expected)
 
     def test_launch_success_receipt_rejects_frozen_b_drift_and_legacy_acl(self):
-        from deployment.staging.vnext.t17_keyfd.t18_reader_roles import ROLE_COUNTS,LAUNCH_ROLE_COUNTS
+        from deployment.staging.vnext.t17_keyfd.t18_reader_roles import ROLE_COUNTS,LAUNCH_ROLE_COUNTS,LAUNCH_DETAIL_ROLE_COUNTS
         step={'sourceCommit':LAUNCH_RELEASE_PINS[0][0],'buildId':'build-a','nextVersion':'16.3.4',
             'homeStatus':200,'detailStatus':200,'staticStatus':200,'staticSha256':'a'*64,
             'snapshotSha256':'b'*64,'detailSha256':'c'*64,'session':'2026-11-13','ranked':1}
@@ -230,7 +230,13 @@ class SameCloneMechanicsOnlyTests(unittest.TestCase):
         self.assertEqual(project_exercise(result),result)
         detail_projections=dict.fromkeys(m.LAUNCH_DETAIL_PROJECTION_KEYS,'PINNED')
         with_diagnostic={**result,'launchDetailProjections':detail_projections}
+        self.assertIsNone(project_exercise(with_diagnostic))
+        with_diagnostic['readerRoleChecks']=LAUNCH_DETAIL_ROLE_COUNTS
         self.assertEqual(project_exercise(with_diagnostic),with_diagnostic)
+        partial={**detail_projections,'reviewedFalsifier':'MISSING'}
+        self.assertIsNone(project_exercise({**with_diagnostic,'launchDetailProjections':partial}))
+        compatible={**result,'launchDetailProjections':partial}
+        self.assertEqual(project_exercise(compatible),compatible)
         self.assertIsNone(project_exercise({**result,'launchDetailProjections':{'reportedEps':'PINNED'}}))
         self.assertIsNone(project_exercise({**result,'readerRoleChecks':ROLE_COUNTS}))
         drift={**switched,'detailSha256':'0'*64}

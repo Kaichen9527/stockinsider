@@ -2,7 +2,7 @@
 import datetime
 import re
 from .radar_reader_observation import project_radar_reader_observation
-from .t18_reader_roles import ROLE_COUNTS,LAUNCH_ROLE_COUNTS
+from .t18_reader_roles import ROLE_COUNTS,LAUNCH_ROLE_COUNTS,LAUNCH_DETAIL_ROLE_COUNTS
 from .fixed_read_proxy import METRICS
 from .t18_release_assets import RELEASE_PINS,LAUNCH_RELEASE_PINS
 from .t18_same_clone import project_launch_detail_projections,project_launch_migration_markers
@@ -67,9 +67,11 @@ def _project_launch_exercise(value):
     if any(type(value[k]) is not type(v) or value[k]!=v for k,v in _LAUNCH_EXERCISE_CONSTANTS.items()):return None
     observed=_project_launch_readpoint(value['launchReadpoint'])
     if observed is None or observed['status']!='FROZEN_RANK_ROWS_OBSERVED':return None
+    details=value.get('launchDetailProjections')
+    expected_roles=LAUNCH_DETAIL_ROLE_COUNTS if details and all(state=='PINNED' for state in details.values()) else LAUNCH_ROLE_COUNTS
     roles=value['readerRoleChecks']
-    if (type(roles) is not dict or set(roles)!=set(LAUNCH_ROLE_COUNTS)
-        or any(type(roles[k]) is not int or roles[k]!=v for k,v in LAUNCH_ROLE_COUNTS.items())):return None
+    if (type(roles) is not dict or set(roles)!=set(expected_roles)
+        or any(type(roles[k]) is not int or roles[k]!=v for k,v in expected_roles.items())):return None
     denied=value['negativeHttpChecks']
     if type(denied) is not dict or denied!={'proxyDenied':6,'postgrestDenied':2}:return None
     metrics=value['proxyMetrics']

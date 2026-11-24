@@ -19,6 +19,7 @@ import time
 from urllib.parse import urlencode
 from .stage_credentials import read_stage_credentials,validate_stage_token,StageCredentialRejected
 from .t18_reader_roles import install_fixed_reader_roles
+from .t18_launch_detail_projections import DETAIL_PROJECTION_KEYS as LAUNCH_DETAIL_PROJECTION_KEYS, DETAIL_CATALOG_ROWS
 from .t18_release_assets import is_launch_release_pair
 from .fixed_read_proxy import start_fixed_read_proxy,SNAPSHOT_SELECT,STATE_SELECT,_BoundedResponse
 from .t18_readpoint_diagnostics import http_trace,http_subphase,http_completed
@@ -37,28 +38,14 @@ SELECT (
 COMMIT;
 """
 
-# Exact PostgreSQL 17 definitions from the candidate 41f2415 migrations
-# 20261117_34, 20261117_41, 20261117_45 and 20261118_58. This readpoint
-# observes catalog readiness only. The separate reader grants stay unchanged.
-LAUNCH_DETAIL_PROJECTION_KEYS = frozenset((
-    'reportedEps', 'issuerEpsEstimates', 'issuerFiscalForecasts', 'reviewedValuation', 'reviewedFalsifier',
-))
+# This readpoint observes catalog readiness; grants independently recheck the pins.
 LAUNCH_DETAIL_PROJECTION_SQL = br"""
 \set QUIET 1
 BEGIN READ ONLY;
 SET LOCAL search_path=pg_catalog;
 SET LOCAL statement_timeout='2s';
 WITH expected(marker,signature,definition_hash) AS (VALUES
- ('reportedEps','public.vnext_launch_reported_eps_v1(uuid,text)',
-  '3347d9275749f0ea9426b27414e8e1607c35b0af26904c61d6c24780267897e3'),
- ('issuerEpsEstimates','public.vnext_launch_issuer_eps_estimates_v1(uuid,text)',
-  '1f14b4ba2c7b95620b68b99380afe84ef85b33ad8b558a08897413502175a396'),
- ('issuerFiscalForecasts','public.vnext_launch_issuer_fiscal_forecasts_v1(uuid,text)',
-  'eab04107e14796c4e84b58e57f8d16568d6c4ed5ee0c8777b0a43c4e263a4832'),
- ('reviewedValuation','public.vnext_launch_reviewed_valuation_v1(uuid,text)',
-  '7d5c702c61397c333e48b2a4365a57c655acd16b5c7f9ae3cf569c62446787c5'),
- ('reviewedFalsifier','public.vnext_launch_reviewed_falsifier_v1(uuid,text)',
-  '60f354f971368120219171257e6782b99e43de8de731631fd3a8fd2a897a4536')
+""" + DETAIL_CATALOG_ROWS + br"""
 )
 SELECT jsonb_object_agg(e.marker, CASE
  WHEN p.oid IS NULL THEN 'MISSING'
@@ -603,8 +590,11 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
             return {'status':'GAP_GENUINE_SNAPSHOT_OR_SCHEMA','readerObservation':observation,
                 'postgrestAcceptance':'NOT_RUN','nextRollback':'NOT_RUN','candidateDetailHttp':{'status':'GAP_DETAIL_SCOPE'}}
         with readpoint_phase('snapshot_dates'):dates=_expected_dates(sql)
+    launch_details = launch and all(state == 'PINNED' for state in detail_projections.values())
+    detail_scope = (dates['rankingRunId'], frozenset(member['symbol'] for member in dates['members'])) if launch_details else None
     with readpoint_phase('snapshot_fingerprint'):before=_fingerprint(sql)
-    with readpoint_phase('reader_role_install'):roles=install_fixed_reader_roles(sql,allow_launch_reads=launch)
+    with readpoint_phase('reader_role_install'):
+        roles=install_fixed_reader_roles(sql,allow_launch_reads=launch,allow_launch_detail_reads=launch_details)
     detail_read,detail_http=None,{'status':'GAP_DETAIL_SCOPE'}
     if not launch:
         with readpoint_phase('candidate_detail_prepare'):
@@ -636,7 +626,7 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
                     with readpoint_phase('rest_configure'):rest.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
                     with readpoint_phase('app_configure'):fresh_app.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
                     with readpoint_phase('fixed_http_exercise'):
-                        with start_fixed_read_proxy(token,detail_read=detail_read,allow_launch_reads=launch) as proxy:
+                        with start_fixed_read_proxy(token,detail_read=detail_read,allow_launch_reads=launch,launch_detail_scope=detail_scope) as proxy:
                             negatives=_negative_http(token)
                             sequence=_execute_fixed_sequence(fresh_app,rest,assets.releases,dates,launch=launch)
                             if detail_read is not None:
