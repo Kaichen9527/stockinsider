@@ -1,0 +1,12 @@
+{
+  "release": "v6.6",
+  "project": "StockInsider",
+  "project_id": "stockinsider",
+  "profile_sha256": "878607a1b0a30ae616bbe1a8ebac0023f85a60a6ef0404e41e4217584c3a17a8",
+  "core_sha256": "e227724902ddfad815b7d7b3b247b8bf69783ca71b34e05726a3eac10865f978",
+  "core_distribution": "single_source_project_scoped_profile_private_portfolio_receipts_omitted",
+  "source_backup": false,
+  "client_installation_performed": false,
+  "watcher_installed": false,
+  "git_push_performed": false
+}

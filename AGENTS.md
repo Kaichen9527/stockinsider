@@ -1,5 +1,18 @@
 # StockInsider — Codex Agent Guide
 
+## Current development environment
+
+Per the 2026-11-26 handoff, use the local Mac for StockInsider development
+and isolated staging while Contabo staging capacity is unverified. Keep the
+checkout outside cloud-synced folders. Use the verified external disk for
+large artifacts, local database files, and archives. Reuse the sealed Linux
+candidate for runtime acceptance and keep the first-release review and CI
+hold in effect. Continue from the approved scope and current [#386
+handoff](https://github.com/Kaichen9527/stockinsider/issues/386). Keep the
+original Cloud artifact and unique VM work until verified recovery. Contabo
+is the production release target after local acceptance and the applicable
+release gates.
+
 ## Project Overview
 
 台股投資研究平台。Next.js App Router 前端部署在 Vercel，Supabase 作為資料庫，GitHub Actions 執行夜間排程。
@@ -133,3 +146,13 @@ active acquisition.
 - Always run `cd web && npm run build` after code changes to verify compilation
 - Create a branch and PR for non-trivial changes; never push directly to main
 - Write reports to `.agent/reports/` with ISO timestamp prefix
+
+<!-- project-delivery-resume:v6:begin -->
+## Project delivery continuation
+Use `.agents/skills/project-delivery-resume/SKILL.md` and its selected project profile.
+Apply `.agents/skills/project-storage-guard/SKILL.md` before heavy output or storage recovery.
+Read the existing authoritative tracker/current-state entry first. Preserve applicable
+product, data and release rules. New/resume/change/triage/closeout follows the recorded user decision.
+Codex and Antigravity share the .agents skill; use the actual client's tools and host capabilities.
+The delivery kit is workflow support, not a replacement task tracker or a daemon.
+<!-- project-delivery-resume:v6:end -->
