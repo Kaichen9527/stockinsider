@@ -2,12 +2,16 @@
 
 ## Current development environment
 
-Per the 2026-11-24 handoff, develop and build StockInsider on the local Mac.
-Use a checkout outside cloud-synced folders and keep the first-release review
-and CI hold in effect. Continue from the approved scope and current [#386
+Per the 2026-11-26 handoff, use the local Mac for StockInsider development
+and isolated staging while Contabo staging capacity is unverified. Keep the
+checkout outside cloud-synced folders. Use the verified external disk for
+large artifacts, local database files, and archives. Reuse the sealed Linux
+candidate for runtime acceptance and keep the first-release review and CI
+hold in effect. Continue from the approved scope and current [#386
 handoff](https://github.com/Kaichen9527/stockinsider/issues/386). Keep the
-original Cloud artifact and any unique VM work until verified recovery.
-Contabo remains the isolated acceptance and deployment environment.
+original Cloud artifact and unique VM work until verified recovery. Contabo
+is the production release target after local acceptance and the applicable
+release gates.
 
 ## Project Overview
 
