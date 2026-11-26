@@ -9,7 +9,15 @@ export function LaunchHomeView({read,morning}:{read:LaunchRankingRead;morning?:L
   const market=read.snapshot?.market;
   const labels={risk_on:'依個股證據評估',selective:'選擇性評估',risk_off:'等待市場風險緩和',breakdown:'等待市場條件修復',unknown:'無法判定'};
   return <main className="mx-auto max-w-6xl space-y-8 px-4 py-8 text-slate-900 dark:text-slate-100" data-testid="launch-home" data-policy-version="stockinsider-launch-radar-v1">
-    <header><Link href="/" className="text-2xl font-semibold">StockInsider</Link><p className="mt-2 text-sm">強勢發動雷達 · 有證據才有判斷</p></header>
+    <header className="flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <Link href="/" className="text-2xl font-semibold">StockInsider</Link>
+        <p className="mt-2 text-sm">強勢發動雷達 · 有證據才有判斷</p>
+      </div>
+      <nav aria-label="研究導覽">
+        <Link href="/candidates" prefetch={false} className="text-sm underline">候選研究紀錄</Link>
+      </nav>
+    </header>
     <section aria-label="原榜單市場判斷" className="rounded-2xl border border-slate-300 p-5" data-testid="launch-market">
       {morning&&<div className="mb-4 border-b border-slate-300 pb-4 dark:border-slate-700">
         <h2 className="font-semibold">08:15 盤前市場背景 · <time dateTime={morning.cutoff}>{morning.session}</time></h2>

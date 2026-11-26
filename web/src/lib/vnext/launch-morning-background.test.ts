@@ -5,6 +5,7 @@ import vm from 'node:vm';
 import {createRequire} from 'node:module';
 import ts from 'typescript';
 import {parseLaunchMorningBackground,readLaunchMorningBackground,publishLaunchMorningBackground} from './launch-morning-background.ts';
+import {launchRankingFixture} from './launch-ranking.test-fixture.ts';
 
 const row={schemaVersion:'vnext-launch-morning-public-v1',session:'2026-11-09',previousSession:'2026-11-06',
  cutoff:'2026-11-09T00:15:00+00:00',twseClose:42000,tpexClose:330.12,revision:'a'.repeat(64)};
@@ -23,7 +24,7 @@ test('morning public read invokes only the whitelist RPC and an author cannot st
   await assert.rejects(publishLaunchMorningBackground({principal:'test-author',role:'author'}),/launch_morning_operator_required/u);
 });
 
-test('home displays latest stored morning and prior completed day alongside original ranking',()=>{
+test('home displays the morning background and links to candidates with or without a published ranking',()=>{
   const require=createRequire(import.meta.url);
   const {createElement}=require('react') as typeof import('react');
   const {renderToStaticMarkup}=require('react-dom/server') as typeof import('react-dom/server');
@@ -34,7 +35,8 @@ test('home displays latest stored morning and prior completed day alongside orig
   const component={__esModule:true,default:()=>null};
   vm.runInNewContext(js,{Intl,module:isolated,exports:isolated.exports,require:(name:string)=>{
     if(name==='@/lib/vnext/launch-morning-background'||name==='@/lib/vnext/launch-ranking-read')return {};
-    if(name==='next/link'||name==='./LaunchTop10')return component;
+    if(name==='next/link')return {__esModule:true,default:({href,children}:{href:string;children:import('react').ReactNode})=>createElement('a',{href},children)};
+    if(name==='./LaunchTop10')return component;
     return require(name);
   }});
   const view=isolated.exports.LaunchHomeView as import('react').ComponentType<{read:object;morning:unknown}>;
@@ -44,4 +46,7 @@ test('home displays latest stored morning and prior completed day alongside orig
     assert.ok(markup.includes(label),label);
   assert.equal((markup.match(/<section\b/gu)||[]).length,2);
   assert.doesNotMatch(renderToStaticMarkup(createElement(view,{read,morning:null})),/盤前市場背景/u);
+  assert.match(markup,/<a href="\/candidates">候選研究紀錄<\/a>/u);
+  const published=renderToStaticMarkup(createElement(view,{read:launchRankingFixture(),morning:null}));
+  assert.match(published,/<a href="\/candidates">候選研究紀錄<\/a>/u);
 });
