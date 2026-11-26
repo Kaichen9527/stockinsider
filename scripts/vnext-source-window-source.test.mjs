@@ -49,7 +49,13 @@ test('rights changes restart cache enumeration without resetting original extrac
 
 test('actual keyset page retains PostgreSQL microsecond ordering and refuses clock drift beyond its frozen cutoff',async()=>{
  const rows=[],f=lab({rows});const before=new Date(Date.now()-86400000).toISOString().replace(/\.\d{3}Z$/u,'.123000Z');rows.push(f.seed(1,{published_at:before.replace('123000','123999'),collected_at:before.replace('123000','124000')}),f.seed(2,{published_at:before.replace('123000','123001'),collected_at:before.replace('123000','124000')}));const result=await f.run();assert.equal(result.selected,2);assert.equal(f.progress[0].metadata.accounted,2);assert.equal(f.progress[0].metadata.finished,true);
- const malformed=[],bad=lab({rows:malformed});malformed.push(bad.seed(1,{collected_at:'2026-10-22T00:00:00.000001Z',published_at:'2026-10-22T00:00:00.000002Z'}));await assert.rejects(bad.run,/cache_window_row/);assert.equal(bad.progress.length,0);assert.equal(bad.reservations,0);
+ const malformed=[],bad=lab({rows:malformed});
+ // Keep the reversed clock inside the scan window so the worker must reject it.
+ malformed.push(bad.seed(1,{
+  collected_at:before.replace('.123000Z','.123001Z'),
+  published_at:before.replace('.123000Z','.123002Z'),
+ }));
+ await assert.rejects(bad.run,/cache_window_row/);assert.equal(bad.progress.length,0);assert.equal(bad.reservations,0);
 });
 
 // Run the configured producer twice: unresolved receipts must never become
