@@ -10,10 +10,13 @@ import ResearchOnlyDetail from './ResearchOnlyDetail';
 import CandidateDetailView from './CandidateDetailView';
 import { loadCandidateDetail } from '@/lib/candidate-detail';
 import { parseCandidateRevision } from '@/lib/candidate-revision-query';
-import { vnextEnabled } from '@/lib/vnext/policy';
+import { legacyDailyRankingHomeEnabled, vnextEnabled } from '@/lib/vnext/policy';
 import VnextDetail from '@/app/components/vnext/Detail';
 import LaunchDetail from '@/app/components/vnext/LaunchDetail';
 import { launchRankingEnabled } from '@/lib/vnext/launch-ranking-read';
+import { loadLatestRadarPublicSnapshot } from '@/lib/radar-public-snapshot';
+import { CandidateStageCardView } from '@/app/components/RadarTabs';
+import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,8 +49,10 @@ export default async function StockDetail({
   const normalizedSymbol = symbol.toUpperCase();
   if (['launchRunId','launchResearchRevision','launchScoreRevision'].some(key=>query[key]!==undefined)) return <LaunchDetail symbol={normalizedSymbol} query={query}/>;
   if (vnextEnabled() && (query.vnextRevision!==undefined || query.rankingRunId!==undefined)) return <VnextDetail symbol={normalizedSymbol} revision={query.vnextRevision} rankingRunId={query.rankingRunId}/>;
-  if (launchRankingEnabled()) return <LaunchDetail symbol={normalizedSymbol} query={query}/>;
-  if (vnextEnabled()) return <VnextDetail symbol={normalizedSymbol} revision={query.vnextRevision} rankingRunId={query.rankingRunId} />;
+  if (vnextEnabled() && !legacyDailyRankingHomeEnabled()) {
+    if (launchRankingEnabled()) return <LaunchDetail symbol={normalizedSymbol} query={query}/>;
+    return <VnextDetail symbol={normalizedSymbol} revision={query.vnextRevision} rankingRunId={query.rankingRunId} />;
+  }
   const revisionQuery=parseDecisionRevisionQuery(query);
   const revisionParameterPresent=revisionQuery.status!=='absent';
   const validRequestedRevision=revisionQuery.status==='valid'?revisionQuery.revisionId:null;
@@ -57,12 +62,31 @@ export default async function StockDetail({
       return <RevisionBoundDecisionUnavailable symbol={normalizedSymbol} revisionId="invalid"
         reason="candidate_revision_parameter_invalid_or_ambiguous"/>;
     }
+    const requestedSnapshot = query.radarSnapshotPublishedAt;
+    const snapshot = typeof requestedSnapshot === 'string'
+      ? await loadLatestRadarPublicSnapshot('home').catch(() => null)
+      : null;
+    const stageRows = snapshot?.publishedAt === requestedSnapshot && snapshot?.payload.stages;
+    const card = stageRows ? [...stageRows.found, ...stageRows.waiting, ...stageRows.actionable].find(item =>
+      item.symbol === normalizedSymbol && item.detailRevisionId === candidateRevision.revisionId) : null;
+    if (requestedSnapshot !== undefined && !card) {
+      return <RevisionBoundDecisionUnavailable symbol={normalizedSymbol} revisionId={candidateRevision.revisionId}
+        reason="candidate_detail_snapshot_unavailable"/>;
+    }
     try {
       const detail = await loadCandidateDetail(normalizedSymbol, candidateRevision.revisionId);
       if (detail) return <CandidateDetailView detail={detail}/>;
     } catch {
-      return <RevisionBoundDecisionUnavailable symbol={normalizedSymbol} revisionId={candidateRevision.revisionId}
+      if (!card) return <RevisionBoundDecisionUnavailable symbol={normalizedSymbol} revisionId={candidateRevision.revisionId}
         reason="candidate_detail_temporarily_unavailable"/>;
+    }
+    if (card && snapshot) {
+      return <main className="mx-auto max-w-4xl space-y-5 px-4 py-8">
+        <Link className="text-accent underline" href="/">返回首頁</Link>
+        <h1 className="text-xl font-semibold">已發布候選摘要</h1>
+        <p className="text-sm">交易資料日期 <time dateTime={snapshot.payload.asOf}>{snapshot.payload.asOf}</time> · 完整研究明細暫缺</p>
+        <CandidateStageCardView card={card} snapshotPublishedAt={snapshot.publishedAt} />
+      </main>;
     }
     return <RevisionBoundDecisionUnavailable symbol={normalizedSymbol} revisionId={candidateRevision.revisionId}
       reason="candidate_detail_revision_unavailable"/>;

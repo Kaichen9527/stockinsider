@@ -107,6 +107,10 @@ Reusable skill definitions in `.agent/skills/`:
 
 To run a skill: read the skill file, follow its instructions, output report to `.agent/reports/`.
 
+## OpenSpec for product development
+
+For product changes, read `.agents/skills/openspec/SKILL.md` and the matching active change in `openspec/changes/` before editing. Apply the existing change workflow when its tasks cover the work. Use the proposal workflow for a new scope and keep approval and release gates in the existing tracker.
+
 ## Loop Engineering v5
 
 This repository is initialized with Loop Engineering v5 using the `codex-only` profile. For Loop workflow commands and gates, read `AGENTS.loop-engineering.md`, `docs/engineering/LOOP_ENGINEERING.md`, and `.loop-engineering/policy.yaml`. These Loop instructions are additive: preserve this StockInsider guide, existing `.agent/skills/`, OpenSpec artifacts, Supabase/Vercel rules, and secrets protections.

@@ -8,7 +8,8 @@ import { loadPublishedRadarProjection } from '@/lib/radar-projection-read';
 import { loadLatestRadarPublicSnapshot, radarPublicSnapshotsEnabled } from '@/lib/radar-public-snapshot';
 import { hasCandidateStageCards } from '@/lib/candidate-stage-contract';
 import { isHealthySourceTerminal } from '@/lib/source-terminal-policy';
-import { vnextEnabled } from '@/lib/vnext/policy';
+import { legacyDailyRankingHomeEnabled, vnextEnabled } from '@/lib/vnext/policy';
+import LegacyDailyRanking from './components/LegacyDailyRanking';
 import VnextHome from './components/vnext/Home';
 
 export const dynamic = 'force-dynamic';
@@ -127,7 +128,8 @@ function wholeSecondUtcOrNow(value: string | null | undefined) {
 }
 
 export default async function Home() {
-  if (vnextEnabled()) return <VnextHome />;
+  const showDailyRanking = legacyDailyRankingHomeEnabled();
+  if (vnextEnabled() && !showDailyRanking) return <VnextHome />;
   const publicSnapshot = await loadLatestRadarPublicSnapshot('home');
   const publishedRadar = publicSnapshot ? null : await loadPublishedRadarProjection('home');
   const legacyRadar = (publicSnapshot?.payload ?? publishedRadar ?? await getDailyRadarData()) as Awaited<ReturnType<typeof getDailyRadarData>>;
@@ -430,7 +432,12 @@ export default async function Home() {
         </section> : null}
 
         <section className="rounded-[2rem] border border-line bg-surface p-6 backdrop-blur">
-          <RadarTabs radar={homeRadar} hydrateFromDaily initialStageCounts={initialStageCounts} />
+          <RadarTabs
+            radar={homeRadar}
+            hydrateFromDaily
+            initialStageCounts={initialStageCounts}
+            dailyRanking={showDailyRanking ? <LegacyDailyRanking publishedRadar={publicSnapshot?.payload} /> : undefined}
+          />
         </section>
 
         <section className="rounded-[2rem] border border-line bg-surface p-6 backdrop-blur">

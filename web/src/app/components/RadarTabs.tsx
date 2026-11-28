@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { CandidateStageCard, DiscoveredStockCard, RadarDailyPayload, RecommendationCard, SourceSignalCard, ThemeHeatCard } from '@/lib/types';
 import { validatePublishedDecisionCard } from '@/lib/opportunity-v3/decision-publication';
 import { displayResearchDiagnostic } from '@/lib/opportunity-v3/research-display';
 import { sourceSignalLifecycleStage, type CandidateLifecycleStage } from '@/lib/stage-classifier';
 import { hasCandidateStageCards } from '@/lib/candidate-stage-contract';
+import { publishedRadarCandidateHref } from '@/lib/candidate-revision-query';
 import type { CandidateStageKey, CandidateStagePage } from '@/lib/radar-stage-pagination';
 import { DEFAULT_CANDIDATE_STAGE_FILTERS, candidateStageFilterOptions, filterAndSortCandidateStages, shouldShowClosestWaiting, type CandidateStageFilters } from '@/lib/radar-stage-view';
 import { LOCAL_RESEARCH_STORAGE_KEY, decodeLocalResearchState } from '@/lib/local-research-state';
@@ -17,6 +18,7 @@ import { admissionForLegacyCard, discoveryCardPresentation, pageDiscoveryClues, 
 type Props = {
   radar: RadarDailyPayload;
   hydrateFromDaily?: boolean;
+  dailyRanking?: ReactNode;
   initialStageCounts?: { found: number; waiting: number; actionable: number };
 };
 
@@ -166,7 +168,7 @@ function formatTaipeiDateTime(value: string | null | undefined, mode: 'full' | '
   return `${dateText} ${pad(taipei.getUTCHours())}:${pad(taipei.getUTCMinutes())}`;
 }
 
-type TabKey = 'stocks' | 'themes' | 'discovery';
+type TabKey = 'daily-ranking' | 'stocks' | 'themes' | 'discovery';
 
 const researchMaturityLabels = {
   source_signal: '來源訊號',
@@ -462,7 +464,7 @@ const candidateConditionLabel: Record<string, string> = {
   market_regime_missing: '缺少可用的大盤狀態',
 };
 
-export function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
+export function CandidateStageCardView({ card, snapshotPublishedAt }: { card: CandidateStageCard; snapshotPublishedAt?: string | null }) {
   const presentation = discoveryCardPresentation(card);
   const admission = admissionForLegacyCard(card);
   const stanceLabel = { positive: '支持', negative: '保留／負向', neutral: '中性', mixed: '多空混合' } as const;
@@ -471,7 +473,7 @@ export function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="research-kicker">{card.symbol} · {card.lifecycleStage.toUpperCase()}</p>
-          <Link href={card.detailHref || `/stock/${card.symbol}`} className="mt-1 block text-xl font-semibold tracking-[-0.02em] hover:text-accent">{card.chineseName}</Link>
+          <Link href={publishedRadarCandidateHref(card, snapshotPublishedAt)} className="mt-1 block text-xl font-semibold tracking-[-0.02em] hover:text-accent">{card.chineseName}</Link>
           <p className="mt-1 text-xs text-stone-500">{card.sector || '產業待補'} · 來源線索與研究摘要</p>
           <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">來源 {card.effectiveMentionCount}/{card.rawMentionCount} 筆有效／原始 · {card.publisherCount} 個發布者 · {card.platformCount} 個平台</p>
           <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">正向提及 {card.positivePublisherCount} · 負向 {card.negativePublisherCount} · 一般討論 {card.generalPublisherCount}（展示統計，非獨立根源確認）</p>
@@ -647,7 +649,7 @@ export function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyP
       </section>
       {selected === 'actionable' ? <p className="mb-4 rounded-2xl border border-amber-500/25 bg-amber-500/8 px-5 py-4 text-sm text-amber-800 dark:text-amber-200">逐檔驗證估值、資料與進場條件，並確認兩個相鄰交易日收盤。{showClosestWaiting && closest.length ? `目前未達完整硬門檻，以下顯示最接近的 ${closest.length} 檔等待標的。` : ''}</p> : null}
       <div className="grid min-w-0 gap-3 xl:grid-cols-2">
-        {displayed.map((card) => <CandidateStageCardView key={`${selected}-${card.symbol}`} card={card} />)}
+        {displayed.map((card) => <CandidateStageCardView key={`${selected}-${card.symbol}`} card={card} snapshotPublishedAt={radar.snapshotPublishedAt} />)}
       </div>
       {selected === 'found' && discoveryMode === 'all' ? <nav aria-label="線索分頁" className="mt-4 flex flex-wrap items-center justify-center gap-3 text-sm">
         <button type="button" disabled={cluePage.pageIndex === 0} onClick={() => setCluePageIndex(cluePage.pageIndex - 1)} className="min-h-11 rounded-lg border border-line px-4 disabled:opacity-40">上一頁</button>
@@ -1538,8 +1540,8 @@ function DiscoveryTab({ radar }: { radar: RadarDailyPayload }) {
   );
 }
 
-export function RadarTabs({ radar, hydrateFromDaily = false, initialStageCounts }: Props) {
-  const [activeTab, setActiveTab] = useState<TabKey>('stocks');
+export function RadarTabs({ radar, hydrateFromDaily = false, initialStageCounts, dailyRanking }: Props) {
+  const [activeTab, setActiveTab] = useState<TabKey>(dailyRanking ? 'daily-ranking' : 'stocks');
   const [liveRadar, setLiveRadar] = useState(radar);
   const [loadingFullSnapshot, setLoadingFullSnapshot] = useState(hydrateFromDaily);
 
@@ -1549,11 +1551,14 @@ export function RadarTabs({ radar, hydrateFromDaily = false, initialStageCounts 
     let mounted = true;
     // The initial RSC index has at most 40 cards.  The JSON endpoint follows
     // the same compact contract; it never carries detail dossiers.
-    void fetch('/api/radar/daily', { signal: controller.signal, headers: { accept: 'application/json' } })
+    const snapshotPublishedAt = radar.snapshotPublishedAt;
+    const query = snapshotPublishedAt ? '?' + new URLSearchParams({ snapshotPublishedAt }).toString() : '';
+    void fetch('/api/radar/daily' + query, { signal: controller.signal, headers: { accept: 'application/json' } })
       .then(async (response) => {
-        if (!response.ok) throw new Error(`radar_daily_${response.status}`);
+        if (!response.ok) throw new Error('radar_daily_' + response.status);
         const payload = await response.json() as RadarDailyPayload;
-        if (mounted && hasCandidateStageCards(payload)) setLiveRadar(payload);
+        if (mounted && hasCandidateStageCards(payload)
+          && (!snapshotPublishedAt || payload.snapshotPublishedAt === snapshotPublishedAt)) setLiveRadar(payload);
       })
       .catch(() => undefined)
       .finally(() => { if (mounted) setLoadingFullSnapshot(false); });
@@ -1561,7 +1566,7 @@ export function RadarTabs({ radar, hydrateFromDaily = false, initialStageCounts 
       mounted = false;
       controller.abort();
     };
-  }, [hydrateFromDaily]);
+  }, [hydrateFromDaily, radar.snapshotPublishedAt]);
 
   const displayRadar = liveRadar;
 
@@ -1569,7 +1574,8 @@ export function RadarTabs({ radar, hydrateFromDaily = false, initialStageCounts 
     ...(displayRadar.opportunities || []), ...(displayRadar.scenarioUpsideCandidates || []),
     ...(displayRadar.earlyWatchlist || []), ...(displayRadar.hotTracking || []), ...(displayRadar.sourceSignals || []), ...(displayRadar.stages?.found || []),
   ].filter((item) => Boolean(item.symbol)).map((item) => item.symbol)).size;
-  const tabs: { key: TabKey; label: string; count: number }[] = [
+  const tabs: { key: TabKey; label: string; count?: number }[] = [
+    ...(dailyRanking ? [{ key: 'daily-ranking' as const, label: '每日榜單' }] : []),
     {
       key: 'stocks',
       label: '股票研究',
@@ -1612,18 +1618,19 @@ export function RadarTabs({ radar, hydrateFromDaily = false, initialStageCounts 
             }`}
           >
             {tab.label}
-            <span
+            {tab.count !== undefined && <span
               className={`rounded-full px-2 py-0.5 text-xs ${
                 activeTab === tab.key ? 'bg-accent/15 text-accent' : 'bg-slate-950/8 text-slate-500 dark:bg-emerald-100/10 dark:text-emerald-100/60'
               }`}
             >
               {tab.count}
-            </span>
+            </span>}
           </button>
         ))}
       </div>
 
       <div id={`radar-panel-${activeTab}`} role="tabpanel" aria-labelledby={`radar-tab-${activeTab}`} tabIndex={0}>
+        {activeTab === 'daily-ranking' && dailyRanking}
         {activeTab === 'stocks' && <StocksTab radar={displayRadar} stageCounts={initialStageCounts} />}
         {activeTab === 'themes' && <ThemesTab radar={displayRadar} />}
         {activeTab === 'discovery' && <DiscoveryTab radar={displayRadar} />}
