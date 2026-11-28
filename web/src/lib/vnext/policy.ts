@@ -6,6 +6,10 @@ export const POLICY = Object.freeze({ version: 'stockinsider-vnext-20-v1', activ
 export const INITIAL_SCORE_VERSION='vnext-initial-cached-v2';
 export const INITIAL_WEIGHTS = { recency: 20, sourceVolume: 25, priceVolume: 25, chips: 15, operationsCatalyst: 15 } as const;
 export const DEEP_WEIGHTS = { valuation: 30, profitability: 25, technicalChips: 20, catalysts: 15, marketLiquidity: 10 } as const;
+export function legacyDailyRankingHomeEnabled() {
+  return process.env.STOCKINSIDER_LEGACY_DAILY_RANKING_HOME_ENABLED === 'true';
+}
+
 export function vnextEnabled() { return process.env.STOCKINSIDER_VNEXT_ENABLED === 'true'; }
 export type Factor = { raw: unknown; value: number | null; provenance: string[]; reason: string; components?: Record<string, Factor> };
 export type Factors = Record<string, Factor>;
